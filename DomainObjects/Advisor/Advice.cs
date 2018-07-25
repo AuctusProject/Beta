@@ -3,24 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Auctus.DomainObjects.Asset
+namespace Auctus.DomainObjects.Advisor
 {
-    public class Asset
+    public class Advice
     {
         [DapperKey(true)]
         [DapperType(System.Data.DbType.Int32)]
         public int Id { get; set; }
-        [DapperType(System.Data.DbType.AnsiString)]
-        public string Name { get; set; }
-        [DapperType(System.Data.DbType.AnsiString)]
-        public string Code { get; set; }
         [DapperType(System.Data.DbType.Int32)]
-        public int Type { get; set; }
+        public int AssetId { get; set; }
         [DapperType(System.Data.DbType.Int32)]
-        public int CoinMarketCapId { get; set; }
+        public int UserId { get; set; }
+        [DapperType(System.Data.DbType.DateTime)]
+        public DateTime CreationDate { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]
         public string UrlPhoto { get; set; }
+        [DapperType(System.Data.DbType.Int32)]
+        public int Type { get; set; }
 
-        public AssetType AssetType { get { return AssetType.Get(Type); } }
+        public AdviceType AdviceType { get { return AdviceType.Get(Type); } }
     }
 }

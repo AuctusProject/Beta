@@ -5,14 +5,16 @@ using System.Text;
 
 namespace Auctus.DomainObjects.Account
 {
-    public class PasswordRecovery
+    public class Wallet
     {
-        [DapperKey]
-        [DapperType(System.Data.DbType.AnsiString)]
-        public string Token { get; set; }
+        [DapperKey(true)]
         [DapperType(System.Data.DbType.Int32)]
-        public int UserId { get; set; }
+        public int Id { get; set; }
+        [DapperType(System.Data.DbType.AnsiString)]
+        public string Address { get; set; }
         [DapperType(System.Data.DbType.DateTime)]
         public DateTime CreationDate { get; set; }
+        [DapperType(System.Data.DbType.Int32)]
+        public int UserId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Auctus.DomainObjects.Advisor;
+﻿using Auctus.DataAccess.Core;
+using Auctus.DomainObjects.Advisor;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Auctus.DataAccess.Advisor
         public override string TableName => "RequestToBeAdvisor";
 
         private const string SELECT_BY_USER = @"SELECT r.* FROM 
-                                                RequestToBeAdvisor r
+                                                [RequestToBeAdvisor] r
                                                 WHERE
                                                 r.UserId = @UserId
                                                 AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = r.UserId) ";

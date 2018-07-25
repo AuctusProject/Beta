@@ -9,7 +9,7 @@ using System.Text;
 using Auctus.DataAccess.Core;
 using Auctus.Util.NotShared;
 
-namespace Auctus.DataAccess
+namespace Auctus.DataAccess.Core
 {
     public abstract class BaseSQL<T> : DapperRepositoryBase, IBaseData<T>
     {

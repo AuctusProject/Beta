@@ -1,16 +1,13 @@
 ﻿using Auctus.DataAccess.Core;
 using Auctus.DomainObjects.Advisor;
-using Dapper;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Text;
 
 namespace Auctus.DataAccess.Advisor
 {
-    public class AdvisorData : BaseSQL<DomainObjects.Advisor.Advisor>
+    public class AdviceData : BaseSQL<Advice>
     {
-        public override string TableName => "Advisor";
+        public override string TableName => "Advice";
     }
 }

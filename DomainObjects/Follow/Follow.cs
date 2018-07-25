@@ -17,5 +17,7 @@ namespace Auctus.DomainObjects.Follow
         public int UserId { get; set; }
         [DapperType(System.Data.DbType.Int32)]
         public int ActionType { get; set; }
+
+        public FollowActionType FollowActionType { get { return FollowActionType.Get(ActionType); } }
     }
 }

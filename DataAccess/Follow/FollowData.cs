@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Auctus.DataAccess.Core;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -21,21 +21,8 @@ namespace Auctus.Business.Asset
             {
                 assets = Data.SelectAll().ToList();
                 if (assets != null)
-                    MemoryCache.Set<List<Auctus.DomainObjects.Asset.Asset>>(cacheKey, assets, 1440);
+                    MemoryCache.Set<List<Auctus.DomainObjects.Asset.Asset>>(cacheKey, assets, 720);
             }
-            return assets;
-        }
-
-        public List<Auctus.DomainObjects.Asset.Asset> ListAssetsIncludingUsd()
-        {
-            var assets = ListAssets();
-            assets.Add(new DomainObjects.Asset.Asset()
-            {
-                Code = "USD",
-                Id = 0,
-                Name = "Dolar",
-                Type = DomainObjects.Asset.AssetType.Traditional.Value
-            });
             return assets;
         }
 

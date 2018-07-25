@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auctus.DataAccess
+namespace Auctus.DataAccess.Core
 {
     public abstract class BaseMongo<T> : MongoDBRepository, IBaseData<T>
     {

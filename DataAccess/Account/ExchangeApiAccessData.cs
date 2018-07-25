@@ -1,4 +1,5 @@
-﻿using Auctus.DomainObjects.Account;
+﻿using Auctus.DataAccess.Core;
+using Auctus.DomainObjects.Account;
 using Dapper;
 using System;
 using System.Collections.Generic;
