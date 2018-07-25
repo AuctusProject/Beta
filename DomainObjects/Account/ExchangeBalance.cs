@@ -9,8 +9,6 @@ namespace Auctus.DomainObjects.Portfolio
     {
         public string CurrencyCode { get; set; }
         public double Amount { get; set; }
-
-        public Asset.Asset Asset { get; set; }
         public double? CurrentUsdValue { get; set; }
     }
 }
