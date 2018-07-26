@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{7D0ACDB6-F39F-4A54-8463-706B0EF4E5D9}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{BBAB5AB6-FDA8-4E94-8A67-6B3FAA814ADC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{9A45913C-D8DD-438A-AA7A-4F84CEB69069}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{F8C63F21-B542-4EF2-AF21-82B6E8AEEAF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +59,10 @@ Global
 		{BBAB5AB6-FDA8-4E94-8A67-6B3FAA814ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBAB5AB6-FDA8-4E94-8A67-6B3FAA814ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBAB5AB6-FDA8-4E94-8A67-6B3FAA814ADC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A45913C-D8DD-438A-AA7A-4F84CEB69069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A45913C-D8DD-438A-AA7A-4F84CEB69069}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A45913C-D8DD-438A-AA7A-4F84CEB69069}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A45913C-D8DD-438A-AA7A-4F84CEB69069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8C63F21-B542-4EF2-AF21-82B6E8AEEAF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8C63F21-B542-4EF2-AF21-82B6E8AEEAF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8C63F21-B542-4EF2-AF21-82B6E8AEEAF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8C63F21-B542-4EF2-AF21-82B6E8AEEAF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
