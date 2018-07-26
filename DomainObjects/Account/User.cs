@@ -1,4 +1,5 @@
-﻿using Auctus.Util.DapperAttributes;
+﻿using Auctus.DomainObjects.Advisor;
+using Auctus.Util.DapperAttributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,5 +21,9 @@ namespace Auctus.DomainObjects.Account
         public DateTime? ConfirmationDate { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]
         public string ConfirmationCode { get; set; }
+
+        public bool IsAdvisor { get; set; }
+        public Wallet Wallet { get; set; }
+        public RequestToBeAdvisor RequestToBeAdvisor { get; set; }
     }
 }
