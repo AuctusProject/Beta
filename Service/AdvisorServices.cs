@@ -1,4 +1,5 @@
-﻿using Auctus.DomainObjects.Advisor;
+﻿using Auctus.Business.Advisor;
+using Auctus.DomainObjects.Advisor;
 using Auctus.Model;
 using Auctus.Util;
 using Microsoft.Extensions.Logging;
@@ -12,5 +13,10 @@ namespace Auctus.Service
     public class AdvisorServices : BaseServices
     {
         public AdvisorServices(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+
+        public void Advise(int userId, int assetId, AdviceType type)
+        {
+           AdvisorBusiness.Advise(userId, assetId, type);
+        }
     }
 }
