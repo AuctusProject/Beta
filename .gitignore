@@ -81,7 +81,12 @@ orleans.codegen.cs
 /Web/wwwroot/images/Thumbs.db
 
 /node_modules
-**/node_modules
+**/node_modules/**/*
+!**/node_modules/*
+!**/node_modules/@types/*
+!**/node_modules/@types/highcharts/*
+!**/node_modules/@types/highcharts/**/*
+
 /Web/wwwroot
 Node/.env
 Node/config/environments/
