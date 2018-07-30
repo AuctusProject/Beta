@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RecommendationDistribution } from './model/recommendationDistribution';
 
 
 @Component({
@@ -8,4 +9,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  data: RecommendationDistribution[] = [{
+    type: "BUY",
+    total: 30
+  },{
+    type: "SELL",
+    total: 15
+  },{
+    type: "HOLD",
+    total: 75
+  }
+]
+
 }

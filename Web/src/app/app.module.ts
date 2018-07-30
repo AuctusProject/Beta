@@ -16,11 +16,13 @@ import { Web3Service } from './services/web3.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { HttpService } from './services/http.service';
 import { AssetHistoryChartComponent } from './components/asset/asset-history-chart/asset-history-chart.component';
+import { RecommendationDistributionComponent } from './components/recommendation-distribution/recommendation-distribution.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AssetHistoryChartComponent
+    AssetHistoryChartComponent,
+    RecommendationDistributionComponent
   ],
   imports: [
     BrowserModule,
