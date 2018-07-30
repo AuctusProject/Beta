@@ -18,7 +18,12 @@ namespace Auctus.Business.Account
 {
     public class UserBusiness : BaseBusiness<User, UserData>
     {
-        public UserBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public UserBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+
+        public User GetByEmail(string email)
+        {
+            return Data.GetByEmail(email);
+        }
 
         public Login Login(string email, string password)
         {
@@ -107,9 +112,58 @@ namespace Auctus.Business.Account
             };
         }
 
-        public void ChangePassword(string email, string currentPassword, string newPassword)
+        public Login ValidateSignature(string address, string signature)
         {
-            var user = GetValidUser(email);
+            BaseEmailValidation(LoggedEmail);
+            var user = Data.GetForNewWallet(LoggedEmail);
+            if (user == null)
+                throw new ArgumentException("User cannot be found.");
+            if (!user.ConfirmationDate.HasValue)
+                throw new ArgumentException("Email was not confirmed.");
+            if (string.IsNullOrWhiteSpace(signature))
+                throw new ArgumentException("Signature cannot be empty.");
+
+            address = WalletBusiness.GetAddressFormatted(address);
+
+            var wallet = WalletBusiness.GetByAddress(address);
+            if (wallet != null)
+            {
+                if (wallet.UserId == user.Id)
+                    throw new ArgumentException("The wallet is already linked to your account.");
+                else
+                    throw new ArgumentException("The wallet is already on used.");
+            }
+
+            var message = $"{address} is my address.\n{DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}";
+            var recoveryAddress = Signature.HashAndEcRecover(message, signature);
+            if (address != recoveryAddress)
+                throw new ArgumentException("Invalid signature.");
+
+            decimal? aucAmount = null;
+            if (!user.IsAdvisor)
+            {
+                aucAmount = WalletBusiness.GetAucAmount(address);
+                if (aucAmount < Config.MINUMIM_AUC_TO_LOGIN)
+                    throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
+            }
+
+            var creationDate = DateTime.UtcNow;
+            WalletBusiness.InsertNew(creationDate, user.Id, address);
+            ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
+
+            return new Login()
+            {
+                Email = user.Email,
+                HasInvestment = true,
+                IsAdvisor = user.IsAdvisor,
+                PendingConfirmation = false,
+                ResquestedToBeAdvisor = user.RequestToBeAdvisor != null
+            };
+        }
+
+        public void ChangePassword(string currentPassword, string newPassword)
+        {
+            var user = GetValidUser();
             if (user.Password != Security.Hash(currentPassword))
                 throw new ArgumentException("Current password is incorrect.");
 
@@ -118,34 +172,6 @@ namespace Auctus.Business.Account
 
             user.Password = Security.Hash(newPassword);
             Data.Update(user);
-        }
-
-        public User GetValidUser(string email)
-        {
-            BaseEmailValidation(email);
-            var cacheKey = email.ToLower().Trim();
-            var user = MemoryCache.Get<User>(cacheKey);
-            if (user == null)
-            {
-                EmailValidation(email);
-                user = Data.GetByEmail(email);
-                if (user == null)
-                    throw new ArgumentException("User cannot be found.");
-                if (!user.ConfirmationDate.HasValue)
-                    throw new ArgumentException("Email was not confirmed.");
-
-                if (!user.IsAdvisor)
-                    WalletBusiness.ValidateUserWallet(user);
-
-                MemoryCache.Set<User>(cacheKey, user);
-                return user;
-            }
-            else
-            {
-                if (!user.IsAdvisor)
-                    WalletBusiness.ValidateUserWallet(user);
-                return user;
-            }
         }
 
         private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
@@ -164,13 +190,13 @@ Thanks,
 Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
         }
 
-        private void BaseEmailValidation(string email)
+        public static void BaseEmailValidation(string email)
         {
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException("Email must be filled.");
         }
 
-        private void EmailValidation(string email)
+        public static void EmailValidation(string email)
         {
             if (!Email.IsValidEmail(email))
                 throw new ArgumentException("Email informed is invalid.");

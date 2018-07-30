@@ -13,7 +13,7 @@ namespace Auctus.Business.Advisor
 {
     public class RequestToBeAdvisorBusiness : BaseBusiness<RequestToBeAdvisor, RequestToBeAdvisorData>
     {
-        public RequestToBeAdvisorBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public RequestToBeAdvisorBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
         public RequestToBeAdvisor GetByUser(int userId)
         {
@@ -35,7 +35,7 @@ namespace Auctus.Business.Advisor
             if (previousExperience.Length > 4000)
                 throw new ArgumentException("Previous experience cannot have more than 4000 characters.");
 
-            var user = UserBusiness.GetValidUser(email);
+            var user = GetValidUser();
             var request = GetByUser(user.Id);
             if (request?.Approved ?? false)
                 throw new ArgumentException("User was already approved as advisor.");

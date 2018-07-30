@@ -11,7 +11,7 @@ namespace Auctus.Service
 {
     public class AssetServices : BaseServices
     {
-        public AssetServices(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public AssetServices(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
         public void UpdateAllAssetsValues()
         {

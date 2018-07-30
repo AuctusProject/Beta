@@ -13,7 +13,7 @@ namespace Auctus.Business.Asset
 {
     public class AssetValueBusiness : BaseBusiness<AssetValue, AssetValueData>
     {
-        public AssetValueBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public AssetValueBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
         internal AssetValue LastAssetValue(int assetId)
         {
