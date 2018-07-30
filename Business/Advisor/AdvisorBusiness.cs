@@ -16,13 +16,17 @@ namespace Auctus.Business.Advisor
     {
         public AdvisorBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
 
-        public void Advise(int userId, int assetId, AdviceType type)
+        public void Advise(string userEmail, int assetId, AdviceType type)
         {
-            AdvisorBusiness.
+            var user = UserBusiness.GetValidUser(userEmail);
+
+            if (!user.IsAdvisor)
+                throw new Exception("Logged user is not an Advisor");
+
             AdviceBusiness.Insert(
                 new Advice()
                 {
-                    UserId = userId,
+                    UserId = user.Id,
                     AssetId = assetId,
                     Type = type.Value,
                     CreationDate = DateTime.UtcNow,
