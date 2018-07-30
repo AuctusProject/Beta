@@ -1,6 +1,8 @@
-﻿using Auctus.DataAccess.Account;
+﻿using Auctus.Business.Web3;
+using Auctus.DataAccess.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
+using Auctus.Util.NotShared;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,9 +23,9 @@ namespace Auctus.Business.Account
             {
                 var wallet = Data.GetByUser(user.Id);
                 if (wallet == null)
-                    throw new ArgumentException("Wallet was not defined.");
+                    throw new UnauthorizedAccessException("Wallet was not defined.");
                 if (!IsValidAucAmount(wallet.Address))
-                    throw new ArgumentException("Wallet does not have enough AUC.");
+                    throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
 
                 MemoryCache.Set<object>(cacheKey, true, 10);
             }
@@ -34,8 +36,15 @@ namespace Auctus.Business.Account
             if (string.IsNullOrEmpty(address))
                 return false;
 
-            //TODO: check AUC amount
-            return true;
+            return Web3Business.GetAucAmount(address) >= Config.MINUMIM_AUC_TO_LOGIN;
+        }
+
+        public bool IsValidSignature(string address, string signature)
+        {
+            if (string.IsNullOrEmpty(address) || string.IsNullOrEmpty(signature))
+                return false;
+
+            return Signature.HashAndEcRecover($"{address} is my address.\n{DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}", signature) == address;
         }
 
         private bool IsValidAddress(string address)
