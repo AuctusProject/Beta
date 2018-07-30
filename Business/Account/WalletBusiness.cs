@@ -1,6 +1,7 @@
 ﻿using Auctus.Business.Web3;
 using Auctus.DataAccess.Account;
 using Auctus.DomainObjects.Account;
+using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ namespace Auctus.Business.Account
 {
     public class WalletBusiness : BaseBusiness<Wallet, WalletData>
     {
-        public WalletBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public WalletBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
         public void ValidateUserWallet(User user)
         {
@@ -24,35 +25,52 @@ namespace Auctus.Business.Account
                 var wallet = Data.GetByUser(user.Id);
                 if (wallet == null)
                     throw new UnauthorizedAccessException("Wallet was not defined.");
-                if (!IsValidAucAmount(wallet.Address))
+
+                var aucAmount = GetAucAmount(wallet.Address);
+                if (aucAmount < Config.MINUMIM_AUC_TO_LOGIN)
                     throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
 
                 MemoryCache.Set<object>(cacheKey, true, 10);
+                ActionBusiness.InsertNewAucVerification(user.Id, aucAmount.Value);
             }
         }
 
         public bool IsValidAucAmount(string address)
         {
-            if (string.IsNullOrEmpty(address))
-                return false;
-
-            return Web3Business.GetAucAmount(address) >= Config.MINUMIM_AUC_TO_LOGIN;
+            return GetAucAmount(address) >= Config.MINUMIM_AUC_TO_LOGIN;
         }
 
-        public bool IsValidSignature(string address, string signature)
+        public decimal? GetAucAmount(string address)
         {
-            if (string.IsNullOrEmpty(address) || string.IsNullOrEmpty(signature))
-                return false;
+            if (string.IsNullOrEmpty(address))
+                return null;
 
-            return Signature.HashAndEcRecover($"{address} is my address.\n{DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}", signature) == address;
+            return Web3Business.GetAucAmount(address);
         }
 
-        private bool IsValidAddress(string address)
+        public bool IsValidAddress(string address)
         {
             return Regex.IsMatch(address, "^(0x)?[0-9a-f]{40}$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
         }
 
-        private string GetAddressFormatted(string address)
+        public Wallet InsertNew(DateTime creationDate, int userId, string address)
+        {
+            var wallet = new Wallet()
+            {
+                Address = address,
+                UserId = userId,
+                CreationDate = creationDate
+            };
+            Data.Insert(wallet);
+            return wallet;
+        }
+
+        public Wallet GetByAddress(string address)
+        {
+            return Data.GetByAddress(address);
+        }
+
+        public string GetAddressFormatted(string address)
         {
             if (string.IsNullOrWhiteSpace(address))
                 throw new ArgumentException("Address cannot be empty.");

@@ -14,7 +14,7 @@ namespace Auctus.Business.Advisor
 {
     public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, AdvisorData>
     {
-        public AdvisorBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public AdvisorBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
         public void Advise(int userId, int assetId, AdviceType type)
         {

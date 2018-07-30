@@ -16,5 +16,20 @@ namespace Api.Controllers
     public class AccountBaseController : BaseController
     {
         protected AccountBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+
+        protected virtual IActionResult ValidateSignature(ValidateSignatureRequest signatureRequest)
+        {
+            if (signatureRequest == null)
+                return BadRequest();
+            
+            try
+            {
+                return Ok(AccountServices.ValidateSignature(signatureRequest.Address, signatureRequest.Signature));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

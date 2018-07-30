@@ -9,7 +9,7 @@ namespace Auctus.DomainObjects.Account
         public DateTime CreationDate { get; set; }
         public string Ip { get; set; }
         public int UserId { get; set; }
-        public double? AucAmount { get; set; }
+        public decimal? AucAmount { get; set; }
         public int Type { get; set; }
         public string Message { get; set; }
     }

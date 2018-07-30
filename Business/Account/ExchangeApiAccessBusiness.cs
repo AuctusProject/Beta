@@ -13,6 +13,6 @@ namespace Auctus.Business.Account
 {
     public class ExchangeApiAccessBusiness : BaseBusiness<ExchangeApiAccess, ExchangeApiAccessData>
     {
-        public ExchangeApiAccessBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public ExchangeApiAccessBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
     }
 }

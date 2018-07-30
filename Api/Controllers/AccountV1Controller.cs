@@ -1,5 +1,6 @@
 ﻿using Api.Model.Account;
 using Auctus.DomainObjects.Account;
+using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
 using Microsoft.AspNetCore.Authorization;
@@ -24,5 +25,13 @@ namespace Api.Controllers
     public class AccountV1Controller : AccountBaseController
     {
         public AccountV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+
+        [Route("validate")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ValidateSignature([FromBody]ValidateSignatureRequest signatureRequest)
+        {
+            return base.ValidateSignature(signatureRequest);
+        }
     }
 }

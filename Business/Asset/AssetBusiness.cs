@@ -11,7 +11,7 @@ namespace Auctus.Business.Asset
 {
     public class AssetBusiness : BaseBusiness<Auctus.DomainObjects.Asset.Asset, AssetData>
     {
-        public AssetBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public AssetBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
         public List<Auctus.DomainObjects.Asset.Asset> ListAssets()
         {

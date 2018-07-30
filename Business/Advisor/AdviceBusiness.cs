@@ -10,6 +10,6 @@ namespace Auctus.Business.Advisor
 {
     public class AdviceBusiness : BaseBusiness<Advice, AdviceData>
     {
-        public AdviceBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public AdviceBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
     }
 }

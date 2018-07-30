@@ -10,6 +10,6 @@ namespace Auctus.Business.Follow
 {
     public class FollowAdvisorBusiness : BaseBusiness<FollowAdvisor, FollowAdvisorData>
     {
-        public FollowAdvisorBusiness(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public FollowAdvisorBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
     }
 }
