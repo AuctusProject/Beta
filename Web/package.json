@@ -20,8 +20,14 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "@types/highcharts": "^5.0.25",
+    "angular-highcharts": "^6.2.6",
+    "angular2-notifications": "^1.0.2",
     "core-js": "^2.5.4",
+    "highcharts": "^6.1.1",
     "rxjs": "^6.0.0",
+    "web3": "^0.19",
+    "web3-utils": "^1.0.0-beta.30",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
