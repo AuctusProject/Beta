@@ -16,7 +16,7 @@ namespace Api.Controllers
     {
         protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { } 
 
-        protected IActionResult Advise (int advisorId, AdviseRequest adviseRequest)
+        protected IActionResult Advise(int advisorId, AdviseRequest adviseRequest)
         {
             try
             {

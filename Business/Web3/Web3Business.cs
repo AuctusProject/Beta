@@ -1,4 +1,5 @@
 ﻿using Auctus.DomainObjects.Web3;
+using Auctus.Util;
 using Auctus.Util.NotShared;
 using Newtonsoft.Json;
 using System;
@@ -13,64 +14,58 @@ namespace Auctus.Business.Web3
 {
     public class Web3Business
     {
-        public static Transaction CheckTransaction(string transactionHash, string eventCompleteName = null)
+        private const string BASE_ROUTE = "v1/jsonrpc/mainnet/";
+
+        public static decimal GetAucAmount(string address)
         {
-            var route = $"api/v1/transaction/{transactionHash}";
-            if (!string.IsNullOrEmpty(eventCompleteName))
-                route += $"?eventCompleteName={HttpUtility.UrlEncode(eventCompleteName)}";
-            return Get<Transaction>(route, 429, 404);
+            address = address.ToLower().StartsWith("0x") ? address.Substring(2) : address;
+            var response = Get(string.Format("eth_call?params=[{{\"to\":\"0xc12d099be31567add4e4e4d0d45691c3f58f5663\",\"data\":\"0x70a08231000000000000000000000000{0}\"}},\"latest\"]", address));
+            return Util.Util.ConvertHexaBigNumber(response.ToString(), 18);
         }
 
-        public static Transaction FaucetTransaction(string address)
+        private static object PostWithRetry(string route, object contentObject)
         {
-            return Post<Transaction>("api/v1/faucet", new { address }, 429);
+            return Retry.Get().Execute<object>((Func<string, object, object >)Post, route, contentObject);
         }
 
-        public static Transaction MakeEscrowResultTransaction(string from, string to, decimal value)
-        {
-            return Post<Transaction>("api/v1/escrowresult", new { from , to, value }, 429);
-        }
-
-        private static T Post<T>(string route, object contentObject, params int[] expectedErrors)
+        private static object Post(string route, object contentObject)
         {
             using (var client = CreateWeb3Client())
             {
                 var content = contentObject != null ? new StringContent(JsonConvert.SerializeObject(contentObject), Encoding.UTF8, "application/json") : null;
-                using (HttpResponseMessage response = client.PostAsync(route, content).Result)
+                using (HttpResponseMessage response = client.PostAsync(BASE_ROUTE + route, content).Result)
                 {
-                    return HandleResponse<T>(response, expectedErrors);
+                    return HandleResponse(response);
                 }
             }
         }
 
-        private static T Get<T>(string route, params int[] expectedErrors)
+        private static object GetWithRetry(string route)
+        {
+            return Retry.Get().Execute<object>((Func<string, object>)Get, route);
+        }
+
+        private static object Get(string route)
         {
             using (var client = CreateWeb3Client())
             {
-                using (HttpResponseMessage response = client.GetAsync(route).Result)
+                using (HttpResponseMessage response = client.GetAsync(BASE_ROUTE + route).Result)
                 {
-                    return HandleResponse<T>(response, expectedErrors);
+                    return HandleResponse(response);
                 }
             }
         }
 
-        private static T HandleResponse<T>(HttpResponseMessage response, params int[] expectedErrors)
+        private static object HandleResponse(HttpResponseMessage response)
         {
             var responseContent = response.Content.ReadAsStringAsync().Result;
             if (response.IsSuccessStatusCode)
-                return JsonConvert.DeserializeObject<T>(responseContent);
-            else if (expectedErrors != null && expectedErrors.Contains((int)response.StatusCode))
             {
-                string message;
-                try
-                {
-                    message = JsonConvert.DeserializeObject<Error>(responseContent).Message;
-                }
-                catch
-                {
-                    message = responseContent;
-                }
-                throw new Web3Exception((int)response.StatusCode, message);
+                var infuraResponse = JsonConvert.DeserializeObject<InfuraResponse>(responseContent);
+                if (infuraResponse.Error != null)
+                    throw new Web3Exception(infuraResponse.Error.Code ?? 400, infuraResponse.Error.Message);
+                else
+                    return infuraResponse.Result;
             }
             else
                 throw new Exception(responseContent);
@@ -82,7 +77,6 @@ namespace Auctus.Business.Web3
             client.BaseAddress = new Uri(Config.WEB3_URL);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("x-api-key", Config.WEB3_API_KEY);
             return client;
         }
     }

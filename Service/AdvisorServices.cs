@@ -12,7 +12,7 @@ namespace Auctus.Service
 {
     public class AdvisorServices : BaseServices
     {
-        public AdvisorServices(ILoggerFactory loggerFactory, Cache cache) : base(loggerFactory, cache) { }
+        public AdvisorServices(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
         public void Advise(int userId, int assetId, AdviceType type)
         {

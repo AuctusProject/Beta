@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { StockChart } from 'angular-highcharts';
+import { StockChart, Chart } from 'angular-highcharts';
 import { AssetValue } from '../../../model/asset/AssetValue';
 import { Advice } from '../../../model/advisor/Advice';
 
@@ -13,6 +13,7 @@ export class AssetHistoryChartComponent implements OnInit {
   @Input() assetValues : AssetValue[];
   @Input() advices : Advice[];
   assetChart: StockChart;
+  
   advicesData: any=[
     {
       x:1512604800000,
@@ -52,6 +53,9 @@ export class AssetHistoryChartComponent implements OnInit {
       rangeSelector: {
         selected: 1
       },
+      credits:{
+        enabled: false
+      },
       title: {
         text: 'AAPL Stock Price'
       },
@@ -67,7 +71,7 @@ export class AssetHistoryChartComponent implements OnInit {
           onSeries:'dataseries'
         }
       ]
-    });
+    });  
   }
 
   addData(){

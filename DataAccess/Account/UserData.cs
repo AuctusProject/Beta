@@ -23,12 +23,20 @@ namespace Auctus.DataAccess.Account
                                                 WHERE 
                                                 u.Email = @Email";
 
-        private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, a.*, r.*, w.* 
+        private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, r.*
                                                 FROM 
                                                 [User] u
                                                 LEFT JOIN [RequestToBeAdvisor] r ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = u.Id)
                                                 WHERE 
                                                 u.ConfirmationCode = @Code";
+
+        private const string SQL_FOR_NEW_WALLET = @"SELECT u.*, a.*, r.*
+                                                FROM 
+                                                [User] u
+                                                LEFT JOIN [Advisor] a ON a.Id = u.Id
+                                                LEFT JOIN [RequestToBeAdvisor] r ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = u.Id)
+                                                WHERE 
+                                                u.Email = @Email";
 
         private const string SQL_BY_EMAIL = @"SELECT u.*, a.*
                                                 FROM 
@@ -70,12 +78,39 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Code", code, DbType.AnsiString);
-            return Query<User, RequestToBeAdvisor, User>(SQL_FOR_LOGIN,
+            return Query<User, RequestToBeAdvisor, User>(SQL_FOR_CONFIRMATION,
                         (user, request) =>
                         {
                             user.RequestToBeAdvisor = request;
                             return user;
                         }, "Id", parameters).SingleOrDefault();
+        }
+
+        public User GetForNewWallet(string email)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Email", email.ToLower().Trim(), DbType.AnsiString);
+            return Query<User, Auctus.DomainObjects.Advisor.Advisor, RequestToBeAdvisor, User>(SQL_FOR_NEW_WALLET,
+                        (user, advisor, request) =>
+                        {
+                            if (advisor != null)
+                            {
+                                advisor.Id = user.Id;
+                                advisor.Email = user.Email;
+                                advisor.Password = user.Password;
+                                advisor.CreationDate = user.CreationDate;
+                                advisor.ConfirmationCode = user.ConfirmationCode;
+                                advisor.ConfirmationDate = user.ConfirmationDate;
+                                advisor.IsAdvisor = true;
+                                advisor.RequestToBeAdvisor = request;
+                                return advisor;
+                            }
+                            else
+                            {
+                                user.RequestToBeAdvisor = request;
+                                return user;
+                            }
+                        }, "Id,Id", parameters).SingleOrDefault();
         }
 
         public User GetByEmail(string email)
