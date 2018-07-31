@@ -19,7 +19,7 @@ namespace Auctus.Business.Web3
         public static decimal GetAucAmount(string address)
         {
             address = address.ToLower().StartsWith("0x") ? address.Substring(2) : address;
-            var response = Get(string.Format("eth_call?params=[{{\"to\":\"0xc12d099be31567add4e4e4d0d45691c3f58f5663\",\"data\":\"0x70a08231000000000000000000000000{0}\"}},\"latest\"]", address));
+            var response = GetWithRetry(string.Format("eth_call?params=[{{\"to\":\"0xc12d099be31567add4e4e4d0d45691c3f58f5663\",\"data\":\"0x70a08231000000000000000000000000{0}\"}},\"latest\"]", address));
             return Util.Util.ConvertHexaBigNumber(response.ToString(), 18);
         }
 

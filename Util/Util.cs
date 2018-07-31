@@ -55,7 +55,7 @@ namespace Auctus.Util
 
         public static decimal ConvertHexaBigNumber(string hexaNumber, int decimals)
         {
-            return ConvertBigNumber(BigInteger.Parse(hexaNumber.ToLower().StartsWith("0x") ? hexaNumber : "0x" + hexaNumber, NumberStyles.AllowHexSpecifier).ToString(), decimals);
+            return ConvertBigNumber(BigInteger.Parse("0" + hexaNumber.TrimStart('0', 'x'), NumberStyles.AllowHexSpecifier).ToString(), decimals);
         }
     }
 }
