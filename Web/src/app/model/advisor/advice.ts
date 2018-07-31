@@ -3,5 +3,5 @@ export class Advice {
   assetId: number;
   userId: number;
   creationDate: Date;
-  type: number;
+  type: string;
 }
