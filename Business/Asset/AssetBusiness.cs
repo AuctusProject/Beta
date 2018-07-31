@@ -26,6 +26,11 @@ namespace Auctus.Business.Asset
             return assets;
         }
 
+        public Auctus.DomainObjects.Asset.Asset GetById(int id)
+        {
+            return ListAssets().Where(x => x.Id == id).FirstOrDefault();
+        }
+
         public void UpdateAllAssetsValues()
         {
             var assets = ListAssets();

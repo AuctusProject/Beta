@@ -14,9 +14,9 @@ namespace Auctus.Service
     {
         public AdvisorServices(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
-        public void Advise(int userId, int assetId, AdviceType type)
+        public void Advise(int assetId, AdviceType type)
         {
-           AdvisorBusiness.Advise(userId, assetId, type);
+           AdvisorBusiness.Advise(assetId, type);
         }
     }
 }

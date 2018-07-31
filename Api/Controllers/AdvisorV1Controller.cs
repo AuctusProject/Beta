@@ -21,12 +21,12 @@ namespace Api.Controllers
     {
         public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
 
-        [Route("{advisorId}/advise/")]
+        [Route("advise/")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult Advise([FromRoute]int advisorId, [FromBody]AdviseRequest adviseRequest)
+        public new IActionResult Advise([FromBody]AdviseRequest adviseRequest)
         {
-            return base.Advise(advisorId, adviseRequest);
+            return base.Advise(adviseRequest);
         }
     }
 }

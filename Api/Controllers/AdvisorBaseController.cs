@@ -16,14 +16,14 @@ namespace Api.Controllers
     {
         protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { } 
 
-        protected IActionResult Advise(int advisorId, AdviseRequest adviseRequest)
+        protected IActionResult Advise(AdviseRequest adviseRequest)
         {
             try
             {
-                if (advisorId == 0 || adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
+                if (adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
                     return BadRequest();
 
-                AdvisorServices.Advise(advisorId, adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
+                AdvisorServices.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
             }
             catch (ArgumentException ex)
             {
