@@ -23,6 +23,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AdvisorService } from './services/advisor.service';
 import { HttpModule } from '../../node_modules/@angular/http';
 import { HttpClientModule } from '../../node_modules/@angular/common/http';
+import { TopAssetsComponent } from './components/asset/top-assets/top-assets.component';
+import { AssetService } from './services/asset.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { HttpClientModule } from '../../node_modules/@angular/common/http';
     AssetHistoryChartComponent,
     RecommendationDistributionComponent,
     AdvisorCardComponent,
-    TopAdvisorsComponent
+    TopAdvisorsComponent,
+    TopAssetsComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { HttpClientModule } from '../../node_modules/@angular/common/http';
     LocalStorageService,
     Web3Service,
     AdvisorService,
+    AssetService,
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules} 
   ],
   bootstrap: [AppComponent]
