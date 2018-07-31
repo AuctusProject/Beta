@@ -37,7 +37,14 @@ namespace Auctus.Business.Account
             else if (user.Password != Security.Hash(password))
                 throw new ArgumentException("Password is invalid.");
 
-            var hasInvestment = user.IsAdvisor || WalletBusiness.IsValidAucAmount(user.Wallet?.Address);
+            bool hasInvestment = true;
+            decimal? aucAmount = null;
+            if (!user.IsAdvisor)
+            {
+                aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
+                hasInvestment = aucAmount >= Config.MINUMIM_AUC_TO_LOGIN;
+            }
+            ActionBusiness.InsertNewLogin(user.Id, aucAmount);
             return new Model.Login()
             {
                 Email = user.Email,
@@ -134,8 +141,8 @@ namespace Auctus.Business.Account
                     throw new ArgumentException("The wallet is already on used.");
             }
 
-            var message = $"{address} is my address.\n{DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}";
-            var recoveryAddress = Signature.HashAndEcRecover(message, signature);
+            var message = $"{address} is my address.\n{DateTime.Today.Year}-{DateTime.Today.Month.ToString().PadLeft(2, '0')}-{DateTime.Today.Day.ToString().PadLeft(2, '0')}";
+            var recoveryAddress = Signature.HashAndEcRecover(message, signature)?.ToLower();
             if (address != recoveryAddress)
                 throw new ArgumentException("Invalid signature.");
 

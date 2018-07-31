@@ -35,11 +35,6 @@ namespace Auctus.Business.Account
             }
         }
 
-        public bool IsValidAucAmount(string address)
-        {
-            return GetAucAmount(address) >= Config.MINUMIM_AUC_TO_LOGIN;
-        }
-
         public decimal? GetAucAmount(string address)
         {
             if (string.IsNullOrEmpty(address))

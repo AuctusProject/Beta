@@ -24,13 +24,25 @@ namespace Auctus.Business.Account
             });
         }
 
-        public void InsertNewAucVerification(int userId, decimal aucAmount)
+        public void InsertNewLogin(int userId, decimal? aucAmount)
         {
             Data.InsertOneAsync(new DomainObjects.Account.Action()
             {
                 CreationDate = DateTime.UtcNow,
                 UserId = userId,
                 Type = 2,
+                AucAmount = aucAmount,
+                Ip = LoggedIp
+            });
+        }
+
+        public void InsertNewAucVerification(int userId, decimal aucAmount)
+        {
+            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            {
+                CreationDate = DateTime.UtcNow,
+                UserId = userId,
+                Type = 3,
                 AucAmount = aucAmount,
                 Ip = LoggedIp
             });
