@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Auctus.Model
 {
-    public class Login
+    public class LoginResponse
     {
         public string Email { get; set; }
         public bool HasInvestment { get; set; }
