@@ -20,7 +20,7 @@ namespace Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/jobs/v1/")]
-    [Authorize("Bearer")]
+    //[Authorize("Bearer")]
     [EnableCors("Default")]
     public class JobV1Controller : JobBaseController
     {
@@ -38,6 +38,12 @@ namespace Api.Controllers
         public new IActionResult CreateAssets()
         {
             return base.CreateAssets();
+        }
+        [Route("assets/icons")]
+        [HttpGet]
+        public new IActionResult UpdateAllAssetsIcons()
+        {
+            return base.UpdateAllAssetsIcons();
         }
     }
 }
