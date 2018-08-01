@@ -13,7 +13,7 @@ namespace Auctus.Service
     {
         public AccountServices(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
-        public Login ValidateSignature(string address, string signature)
+        public LoginResponse ValidateSignature(string address, string signature)
         {
             return UserBusiness.ValidateSignature(address, signature);
         }

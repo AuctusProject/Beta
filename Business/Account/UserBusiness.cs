@@ -25,7 +25,7 @@ namespace Auctus.Business.Account
             return Data.GetByEmail(email);
         }
 
-        public Login Login(string email, string password)
+        public LoginResponse Login(string email, string password)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
@@ -45,7 +45,7 @@ namespace Auctus.Business.Account
                 hasInvestment = aucAmount >= Config.MINUMIM_AUC_TO_LOGIN;
             }
             ActionBusiness.InsertNewLogin(user.Id, aucAmount);
-            return new Model.Login()
+            return new Model.LoginResponse()
             {
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
@@ -55,7 +55,7 @@ namespace Auctus.Business.Account
             };
         }
 
-        public async Task<Login> SimpleRegister(string email, string password, bool requestedToBeAdvisor)
+        public async Task<LoginResponse> SimpleRegister(string email, string password, bool requestedToBeAdvisor)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
@@ -75,7 +75,7 @@ namespace Auctus.Business.Account
 
             await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
 
-            return new Model.Login()
+            return new Model.LoginResponse()
             {
                 Email = user.Email,
                 HasInvestment = false,
@@ -100,7 +100,7 @@ namespace Auctus.Business.Account
             await SendEmailConfirmation(email, user.ConfirmationCode, false);
         }
 
-        public Login ConfirmEmail(string code)
+        public LoginResponse ConfirmEmail(string code)
         {
             var user = Data.GetByConfirmationCode(code);
             if (user == null)
@@ -109,7 +109,7 @@ namespace Auctus.Business.Account
             user.ConfirmationDate = DateTime.UtcNow;
             Data.Update(user);
 
-            return new Model.Login()
+            return new Model.LoginResponse()
             {
                 Email = user.Email,
                 HasInvestment = false,
@@ -119,7 +119,7 @@ namespace Auctus.Business.Account
             };
         }
 
-        public Login ValidateSignature(string address, string signature)
+        public LoginResponse ValidateSignature(string address, string signature)
         {
             BaseEmailValidation(LoggedEmail);
             var user = Data.GetForNewWallet(LoggedEmail);
@@ -158,7 +158,7 @@ namespace Auctus.Business.Account
             WalletBusiness.InsertNew(creationDate, user.Id, address);
             ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
 
-            return new Login()
+            return new LoginResponse()
             {
                 Email = user.Email,
                 HasInvestment = true,

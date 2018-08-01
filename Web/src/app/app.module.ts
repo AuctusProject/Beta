@@ -17,15 +17,29 @@ import { LocalStorageService } from './services/local-storage.service';
 import { HttpService } from './services/http.service';
 import { AssetHistoryChartComponent } from './components/asset/asset-history-chart/asset-history-chart.component';
 import { RecommendationDistributionComponent } from './components/recommendation-distribution/recommendation-distribution.component';
+import { AdvisorCardComponent } from './components/advisor/advisor-card/advisor-card.component';
+import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
+import { AppRoutingModule } from './app-routing.module';
+import { AdvisorService } from './services/advisor.service';
+import { HttpModule } from '../../node_modules/@angular/http';
+import { HttpClientModule } from '../../node_modules/@angular/common/http';
+import { TopAssetsComponent } from './components/asset/top-assets/top-assets.component';
+import { AssetService } from './services/asset.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     AssetHistoryChartComponent,
-    RecommendationDistributionComponent
+    RecommendationDistributionComponent,
+    AdvisorCardComponent,
+    TopAdvisorsComponent,
+    TopAssetsComponent
   ],
   imports: [
     BrowserModule,
+    HttpModule,
+    HttpClientModule,
+    AppRoutingModule,
     SimpleNotificationsModule.forRoot(),
     ChartModule
   ],
@@ -33,6 +47,8 @@ import { RecommendationDistributionComponent } from './components/recommendation
     HttpService,
     LocalStorageService,
     Web3Service,
+    AdvisorService,
+    AssetService,
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules} 
   ],
   bootstrap: [AppComponent]

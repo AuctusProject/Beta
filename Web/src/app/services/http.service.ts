@@ -5,14 +5,15 @@ import { of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { NotificationsService } from "angular2-notifications";
-//import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { LocalStorageService } from "./local-storage.service";
 
 @Injectable()
 export class HttpService {
-
-  constructor(private http: HttpClient, private notificationService: NotificationsService, private router: Router,
+  constructor(private http: HttpClient, 
+    private notificationService: NotificationsService, 
+    private router: Router,
     private localStorageService: LocalStorageService) { }
 
   private jwt: string = "auc_jwt";
@@ -49,7 +50,7 @@ export class HttpService {
   }
 
   apiUrl(route: string): string {
-    return route;
+    return environment.apiUrl + route;
   }
 
   baseHttpHeaders(): any {
