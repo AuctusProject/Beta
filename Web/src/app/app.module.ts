@@ -25,6 +25,7 @@ import { HttpModule } from '../../node_modules/@angular/http';
 import { HttpClientModule } from '../../node_modules/@angular/common/http';
 import { TopAssetsComponent } from './components/asset/top-assets/top-assets.component';
 import { AssetService } from './services/asset.service';
+import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AssetService } from './services/asset.service';
     RecommendationDistributionComponent,
     AdvisorCardComponent,
     TopAdvisorsComponent,
-    TopAssetsComponent
+    TopAssetsComponent,
+    MessageSignatureComponent
   ],
   imports: [
     BrowserModule,

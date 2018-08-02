@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import Web3 from 'web3';
 import Web3Utils from 'web3-utils';
-import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { of } from 'rxjs';
 
 declare let window: any;
 
@@ -13,7 +11,8 @@ export class Web3Service {
 
   private web3: Web3;
 
-  constructor(private router: Router) {
+  constructor() {
+    this.getWeb3().subscribe();
   }
 
   public getWeb3(): Observable<Web3> {
