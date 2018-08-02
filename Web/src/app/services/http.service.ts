@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { URLSearchParams } from '@angular/http'
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { NotificationsService } from "angular2-notifications";
@@ -144,7 +142,7 @@ export class HttpService {
         }
       }
 
-      return Observable.throw("error");
+      return throwError("error");
     };
   }
 
