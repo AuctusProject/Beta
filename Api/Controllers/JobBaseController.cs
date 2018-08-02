@@ -25,6 +25,11 @@ namespace Api.Controllers
             return Ok();
         }
 
+        internal IActionResult UpdateAllAssetsIcons()
+        {
+            RunJobSync(AssetServices.UpdateAllAssetsIcons);
+            return Ok();
+        }
         private void RunJobAsync(Action action)
         {
             Task.Factory.StartNew(() =>
@@ -46,5 +51,7 @@ namespace Api.Controllers
             action();
             Logger.LogTrace($"Job {action.Method.Name} ended.");
         }
+
+       
     }
 }
