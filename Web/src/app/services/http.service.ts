@@ -6,6 +6,7 @@ import { NotificationsService } from "angular2-notifications";
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { LocalStorageService } from "./local-storage.service";
+import { LoginData } from '../model/account/loginData';
 
 @Injectable()
 export class HttpService {
@@ -29,11 +30,11 @@ export class HttpService {
     this.localStorageService.setLocalStorage(this.jwt, newJwt);
   }
 
-  public setLoginData(loginData: string): void {
+  public setLoginData(loginData: LoginData): void {
     this.localStorageService.setLocalStorage(this.login, JSON.stringify(loginData));
   }
 
-  public getLoginData(): any {
+  public getLoginData(): LoginData {
     let loginData = this.localStorageService.getLocalStorage(this.login);
     return JSON.parse(loginData);
   }

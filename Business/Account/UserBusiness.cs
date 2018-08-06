@@ -47,6 +47,7 @@ namespace Auctus.Business.Account
             ActionBusiness.InsertNewLogin(user.Id, aucAmount);
             return new Model.LoginResponse()
             {
+                Id = user.Id,
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 IsAdvisor = user.IsAdvisor,

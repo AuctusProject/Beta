@@ -33,5 +33,14 @@ namespace Api.Controllers
         {
             return base.ValidateSignature(signatureRequest);
         }
+
+
+        [Route("login")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult Login([FromBody]LoginRequest loginRequest)
+        {
+            return base.Login(loginRequest);
+        }
     }
 }

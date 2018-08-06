@@ -6,6 +6,7 @@ namespace Auctus.Model
 {
     public class LoginResponse
     {
+        public int Id { get; set; }
         public string Email { get; set; }
         public bool HasInvestment { get; set; }
         public bool IsAdvisor { get; set; }
