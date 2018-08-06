@@ -17,5 +17,10 @@ namespace Auctus.Service
         {
             return UserBusiness.ValidateSignature(address, signature);
         }
+
+        public LoginResponse Login(string email, string password)
+        {
+            return UserBusiness.Login(email, password);
+        }
     }
 }

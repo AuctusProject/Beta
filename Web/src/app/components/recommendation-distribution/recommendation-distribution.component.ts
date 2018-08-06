@@ -10,12 +10,23 @@ import { RecommendationDistribution } from '../../model/recommendationDistributi
 export class RecommendationDistributionComponent implements OnInit {
   pieChart: Chart;
   @Input() data : RecommendationDistribution[];
-  pieData:any;
+  pieData: any;
+
   constructor() { }
 
   ngOnInit() {
-    this.calculateRecommendationPercentages();
+    this.fillPieData();
     this.createPieChart();
+  }
+
+  fillPieData(){
+    this.pieData = [];
+    for(var i =0;i<this.data.length;i++){
+        this.pieData.push({
+            name: this.data[i].getTypeDescription(),
+            y: this.data[i].total
+        });
+    }
   }
 
   createPieChart(){
@@ -57,15 +68,5 @@ export class RecommendationDistributionComponent implements OnInit {
           data: this.pieData
       }]
       });
-  }
-
-  calculateRecommendationPercentages(){
-    this.pieData = [];
-    for(var i =0;i<this.data.length;i++){
-        this.pieData.push({
-            name: this.data[i].type,
-            y: this.data[i].total
-        });
-    }
   }
 }

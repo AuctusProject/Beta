@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { URLSearchParams } from '@angular/http'
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { NotificationsService } from "angular2-notifications";
-//import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { LocalStorageService } from "./local-storage.service";
+import { LoginData } from '../model/account/loginData';
 
 @Injectable()
 export class HttpService {
-
-  constructor(private http: HttpClient, private notificationService: NotificationsService, private router: Router,
+  constructor(private http: HttpClient, 
+    private notificationService: NotificationsService, 
+    private router: Router,
     private localStorageService: LocalStorageService) { }
 
   private jwt: string = "auc_jwt";
@@ -30,11 +30,11 @@ export class HttpService {
     this.localStorageService.setLocalStorage(this.jwt, newJwt);
   }
 
-  public setLoginData(loginData: string): void {
+  public setLoginData(loginData: LoginData): void {
     this.localStorageService.setLocalStorage(this.login, JSON.stringify(loginData));
   }
 
-  public getLoginData(): any {
+  public getLoginData(): LoginData {
     let loginData = this.localStorageService.getLocalStorage(this.login);
     return JSON.parse(loginData);
   }
@@ -49,7 +49,7 @@ export class HttpService {
   }
 
   apiUrl(route: string): string {
-    return route;
+    return environment.apiUrl + route;
   }
 
   baseHttpHeaders(): any {
@@ -143,7 +143,7 @@ export class HttpService {
         }
       }
 
-      return Observable.throw("error");
+      return throwError("error");
     };
   }
 

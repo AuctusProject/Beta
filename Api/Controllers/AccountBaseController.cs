@@ -31,5 +31,21 @@ namespace Api.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        protected virtual IActionResult Login(LoginRequest loginRequest)
+        {
+            if (loginRequest == null)
+                return BadRequest();
+
+            try
+            {
+                var loginResponse = AccountServices.Login(loginRequest.Email, loginRequest.Password);
+                return Ok(new { logged = true, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }
