@@ -31,6 +31,11 @@ namespace Auctus.Business.Asset
             CreateAssetValueForPendingDates(asset, lastUpdatedValue, assetDateAndValues);
         }
 
+        internal List<AssetValue> List(IEnumerable<int> assetsIds, DateTime startDate)
+        {
+            return Data.List(assetsIds, startDate);
+        }
+
         internal Dictionary<DateTime, List<AssetValue>> GetAssetValuesGroupedByDate(IEnumerable<int> assetsIds, DateTime startDate)
         {
             var assetValues = Data.List(assetsIds, startDate);

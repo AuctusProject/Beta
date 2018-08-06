@@ -12,5 +12,12 @@ namespace Auctus.DataAccess.Advisor
     public class AdvisorData : BaseSQL<DomainObjects.Advisor.Advisor>
     {
         public override string TableName => "Advisor";
+
+        public List<DomainObjects.Advisor.Advisor> ListEnabled()
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Enabled", true, DbType.Boolean);
+            return SelectByParameters<DomainObjects.Advisor.Advisor>(parameters).ToList();
+        }
     }
 }

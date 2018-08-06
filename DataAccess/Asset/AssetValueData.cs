@@ -21,7 +21,7 @@ namespace Auctus.DataAccess.Asset
             return value;
         }
 
-        public IEnumerable<AssetValue> List(IEnumerable<int> assetsIds, DateTime? startDate = null)
+        public List<AssetValue> List(IEnumerable<int> assetsIds, DateTime? startDate = null)
         {
             var filterBuilder = Builders<AssetValue>.Filter;
             var filter = filterBuilder.In(x => x.AssetId, assetsIds.ToArray());

@@ -80,7 +80,7 @@ namespace Auctus.Business
                 if (!user.ConfirmationDate.HasValue)
                     throw new ArgumentException("Email was not confirmed.");
 
-                if (!user.IsAdvisor)
+                if (!UserBusiness.IsValidAdvisor(user))
                 {
                     WalletBusiness.ValidateUserWallet(user);
                     MemoryCache.Set<User>(cacheKey, user);
@@ -91,7 +91,7 @@ namespace Auctus.Business
             }
             else
             {
-                if (!user.IsAdvisor)
+                if (!UserBusiness.IsValidAdvisor(user))
                     WalletBusiness.ValidateUserWallet(user);
                 else
                     user = MemoryCache.Get<DomainObjects.Advisor.Advisor>(cacheKey);

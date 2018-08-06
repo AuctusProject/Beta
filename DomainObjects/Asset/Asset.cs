@@ -18,8 +18,6 @@ namespace Auctus.DomainObjects.Asset
         public int Type { get; set; }
         [DapperType(System.Data.DbType.Int32)]
         public int CoinMarketCapId { get; set; }
-        [DapperType(System.Data.DbType.AnsiString)]
-        public string UrlPhoto { get; set; }
 
         public AssetType AssetType { get { return AssetType.Get(Type); } }
     }
