@@ -27,6 +27,12 @@ import { TopAssetsComponent } from './components/asset/top-assets/top-assets.com
 import { AssetService } from './services/asset.service';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { AccountService } from './services/account.service';
+import { LoginComponent } from './components/account/login/login.component';
+// import { MatModule } from './mat.module';
+import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/forms';
+import { AuthGuard } from './providers/authGuard';
+import { AuthRedirect } from './providers/authRedirect';
+
 
 @NgModule({
   declarations: [
@@ -36,7 +42,8 @@ import { AccountService } from './services/account.service';
     AdvisorCardComponent,
     TopAdvisorsComponent,
     TopAssetsComponent,
-    MessageSignatureComponent
+    MessageSignatureComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +51,10 @@ import { AccountService } from './services/account.service';
     HttpClientModule,
     AppRoutingModule,
     SimpleNotificationsModule.forRoot(),
-    ChartModule
+    ChartModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SimpleNotificationsModule.forRoot()
   ],
   providers: [
     HttpService,
@@ -53,6 +63,8 @@ import { AccountService } from './services/account.service';
     AdvisorService,
     AssetService,
     AccountService,
+    AuthGuard,
+    AuthRedirect,
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules} 
   ],
   bootstrap: [AppComponent]

@@ -13,6 +13,11 @@ namespace Auctus.Business.Follow
     {
         public FollowAdvisorBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
 
+        public List<FollowAdvisor> List(IEnumerable<int> advisorIds = null)
+        {
+            return Data.List(advisorIds);
+        }
+
         public void Create(int userId, int advisorId, FollowActionType actionType)
         {
             using (var transaction = new TransactionalDapperCommand())
