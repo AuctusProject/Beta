@@ -40,6 +40,7 @@ namespace Auctus.DataAccess.Follow
             }
             return Query<FollowAdvisor>(string.Format(SQL_LIST, complement), parameters).ToList();
         }
+
         public FollowAdvisor GetLastByUserForAdvisor(int userId, int advisorId)
         {
             var parameters = new DynamicParameters();

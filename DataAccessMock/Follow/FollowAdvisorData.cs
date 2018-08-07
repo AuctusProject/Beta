@@ -47,5 +47,10 @@ namespace Auctus.DataAccessMock.Follow
         {
             throw new NotImplementedException();
         }
+
+        public FollowAdvisor GetLastByUserForAdvisor(int userId, int advisorId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
