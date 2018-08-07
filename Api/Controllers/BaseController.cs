@@ -16,8 +16,11 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 using Auctus.Util;
 using Api.Model;
-using Auctus.Service;
 using Microsoft.Extensions.Primitives;
+using Auctus.Business.Account;
+using Auctus.Business.Advisor;
+using Auctus.Business.Follow;
+using Auctus.Business.Asset;
 
 namespace Api.Controllers
 {
@@ -135,8 +138,19 @@ namespace Api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        protected AccountServices AccountServices { get { return new AccountServices(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected AdvisorServices AdvisorServices { get { return new AdvisorServices(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected AssetServices AssetServices { get { return new AssetServices(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected UserBusiness UserBusiness { get { return new UserBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected WalletBusiness WalletBusiness { get { return new WalletBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected ActionBusiness ActionBusiness { get { return new ActionBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected PasswordRecoveryBusiness PasswordRecoveryBusiness { get { return new PasswordRecoveryBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdvisorBusiness AdvisorBusiness { get { return new AdvisorBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdviceBusiness AdviceBusiness { get { return new AdviceBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected FollowBusiness FollowBusiness { get { return new FollowBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected FollowAssetBusiness FollowAssetBusiness { get { return new FollowAssetBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected FollowAdvisorBusiness FollowAdvisorBusiness { get { return new FollowAdvisorBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AssetBusiness AssetBusiness { get { return new AssetBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AssetValueBusiness AssetValueBusiness { get { return new AssetValueBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected ExchangeApiAccessBusiness ExchangeApiAccessBusiness { get { return new ExchangeApiAccessBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected RequestToBeAdvisorBusiness RequestToBeAdvisorBusiness { get { return new RequestToBeAdvisorBusiness(LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+
     }
 }

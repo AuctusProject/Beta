@@ -74,7 +74,7 @@ namespace Auctus.Business.Advisor
             {
                 assetsIds = assetsIds.Distinct();
                 var assets = AssetBusiness.ListAssets(assetsIds);
-                var minimumDate = allAdvices.Min(c => c.CreationDate).AddDays(-2);
+                var minimumDate = allAdvices.Min(c => c.CreationDate).AddDays(-7);
                 var assetValues = AssetValueBusiness.List(assetsIds, minimumDate);
 
                 var adviceDetails = new List<AdviceDetail>();
