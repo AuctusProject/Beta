@@ -47,5 +47,21 @@ namespace Api.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        protected virtual async Task<IActionResult> Register(RegisterRequest registerRequest)
+        {
+            if (registerRequest == null)
+                return BadRequest();
+            
+            try
+            {
+                var loginResponse = await AccountServices.Register(registerRequest.Email, registerRequest.Password, registerRequest.RequestedToBeAdvisor);
+                return Ok(new { logged = true, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }
