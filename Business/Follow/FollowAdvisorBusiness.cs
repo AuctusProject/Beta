@@ -19,15 +19,22 @@ namespace Auctus.Business.Follow
             return Data.List(advisorIds);
         }
 
+        public FollowAdvisor GetLastByUser(int userId, int advisorId)
+        {
+            return Data.GetLastByUserForAdvisor(userId, advisorId);
+        }
+
         public void Create(int userId, int advisorId, FollowActionType actionType)
         {
             using (var transaction = new TransactionalDapperCommand())
             {
                 var follow = FollowBusiness.Create(userId, actionType);
 
-                var followAdvisor = new FollowAdvisor();
-                followAdvisor.Id = follow.Id;
-                followAdvisor.AdvisorId = advisorId;
+                var followAdvisor = new FollowAdvisor
+                {
+                    Id = follow.Id,
+                    AdvisorId = advisorId
+                };
 
                 Data.Insert(followAdvisor);
             }

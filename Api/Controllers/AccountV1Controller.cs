@@ -44,13 +44,13 @@ namespace Api.Controllers
             return base.Login(loginRequest);
         }
 
-        //[Route("register")]
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async new Task<IActionResult> Register([FromBody]RegisterRequest registerRequest)
-        //{
-        //    return await base.Register(registerRequest);
-        //}
+        [Route("register")]
+        [HttpPost]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async new Task<IActionResult> Register([FromBody]RegisterRequest registerRequest)
+        {
+            return await base.Register(registerRequest);
+        }
     }
 }
