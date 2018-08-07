@@ -32,8 +32,8 @@ export class AccountService {
     return this.httpService.getLoginData();
   }
 
-  getUser(): string {
-    return this.httpService.getUser();
+  getUserEmail(): string {
+    return this.httpService.getUserEmail();
   }
 
   logout(): void {

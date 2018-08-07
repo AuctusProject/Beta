@@ -32,6 +32,7 @@ import { LoginComponent } from './components/account/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/forms';
 import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
+import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { AuthRedirect } from './providers/authRedirect';
     TopAdvisorsComponent,
     TopAssetsComponent,
     MessageSignatureComponent,
-    LoginComponent
+    LoginComponent,
+    ConfirmEmailComponent
   ],
   imports: [
     BrowserModule,

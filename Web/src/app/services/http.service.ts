@@ -39,7 +39,7 @@ export class HttpService {
     return JSON.parse(loginData);
   }
 
-  getUser(): string {
+  getUserEmail(): string {
     return this.getLoginData().email;
   }
 

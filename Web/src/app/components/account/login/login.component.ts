@@ -45,6 +45,9 @@ export class LoginComponent implements OnInit {
             this.accountService.setLoginData(response.data);
             this.router.navigateByUrl('');
           }
+          else if(response.data &&  response.data.pendingConfirmation) {
+            this.router.navigateByUrl('confirm-email');
+          }
           else {
             this.notificationsService.info("Info", response.error);
           }

@@ -40,7 +40,7 @@ namespace Api.Controllers
             try
             {
                 var loginResponse = AccountServices.Login(loginRequest.Email, loginRequest.Password);
-                return Ok(new { logged = true, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
+                return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
             }
             catch (ArgumentException ex)
             {
