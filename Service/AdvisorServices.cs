@@ -16,7 +16,7 @@ namespace Auctus.Service
 
         public void Advise(int assetId, AdviceType type)
         {
-           AdvisorBusiness.Advise(assetId, type);
+           AdviceBusiness.Advise(assetId, type);
         }
     }
 }

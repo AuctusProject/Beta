@@ -39,7 +39,7 @@ namespace Auctus.Business.Account
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
-            if (!user.IsAdvisor)
+            if (!IsValidAdvisor(user))
             {
                 aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
                 hasInvestment = aucAmount >= Config.MINUMIM_AUC_TO_LOGIN;
@@ -47,12 +47,18 @@ namespace Auctus.Business.Account
             ActionBusiness.InsertNewLogin(user.Id, aucAmount);
             return new Model.LoginResponse()
             {
+                Id = user.Id,
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
-                IsAdvisor = user.IsAdvisor,
+                IsAdvisor = IsValidAdvisor(user),
                 HasInvestment = hasInvestment,
                 ResquestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
+        }
+
+        public bool IsValidAdvisor(User user)
+        {
+            return !user.IsAdvisor || !((DomainObjects.Advisor.Advisor)user).Enabled;
         }
 
         public async Task<LoginResponse> SimpleRegister(string email, string password, bool requestedToBeAdvisor)
@@ -147,7 +153,7 @@ namespace Auctus.Business.Account
                 throw new ArgumentException("Invalid signature.");
 
             decimal? aucAmount = null;
-            if (!user.IsAdvisor)
+            if (!IsValidAdvisor(user))
             {
                 aucAmount = WalletBusiness.GetAucAmount(address);
                 if (aucAmount < Config.MINUMIM_AUC_TO_LOGIN)
@@ -162,7 +168,7 @@ namespace Auctus.Business.Account
             {
                 Email = user.Email,
                 HasInvestment = true,
-                IsAdvisor = user.IsAdvisor,
+                IsAdvisor = IsValidAdvisor(user),
                 PendingConfirmation = false,
                 ResquestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
