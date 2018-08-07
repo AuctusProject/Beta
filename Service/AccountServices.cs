@@ -22,5 +22,10 @@ namespace Auctus.Service
         {
             return UserBusiness.Login(email, password);
         }
+
+        public async Task<LoginResponse> Register(string email, string password, bool requestedToBeAdvisor)
+        {
+            return await UserBusiness.Register(email, password, requestedToBeAdvisor);
+        }
     }
 }

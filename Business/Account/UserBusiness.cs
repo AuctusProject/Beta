@@ -2,6 +2,7 @@
 using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Exchanges;
 using Auctus.DomainObjects.Account;
+using Auctus.DomainObjects.Follow;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
@@ -58,10 +59,10 @@ namespace Auctus.Business.Account
 
         public bool IsValidAdvisor(User user)
         {
-            return !user.IsAdvisor || !((DomainObjects.Advisor.Advisor)user).Enabled;
+            return user.IsAdvisor && ((DomainObjects.Advisor.Advisor)user).Enabled;
         }
 
-        public async Task<LoginResponse> SimpleRegister(string email, string password, bool requestedToBeAdvisor)
+        public async Task<LoginResponse> Register(string email, string password, bool requestedToBeAdvisor)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
@@ -229,6 +230,13 @@ Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new ArgumentException("Password cannot have more than 100 characters.");
             if (password.Contains(" "))
                 throw new ArgumentException("Password cannot have spaces.");
+        }
+
+        public void FollowAdvisor(int advisorId)
+        {
+            var user = GetValidUser();
+
+            FollowAdvisorBusiness.Create(user.Id, advisorId, FollowActionType.Follow);
         }
     }
 }
