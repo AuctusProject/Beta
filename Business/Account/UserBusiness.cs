@@ -59,10 +59,10 @@ namespace Auctus.Business.Account
 
         public bool IsValidAdvisor(User user)
         {
-            return !user.IsAdvisor || !((DomainObjects.Advisor.Advisor)user).Enabled;
+            return user.IsAdvisor && ((DomainObjects.Advisor.Advisor)user).Enabled;
         }
 
-        public async Task<LoginResponse> SimpleRegister(string email, string password, bool requestedToBeAdvisor)
+        public async Task<LoginResponse> Register(string email, string password, bool requestedToBeAdvisor)
         {
             BaseEmailValidation(email);
             EmailValidation(email);

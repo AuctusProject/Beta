@@ -23,7 +23,7 @@ namespace Api.Controllers
                 if (adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
                     return BadRequest();
 
-                AdvisorServices.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
+                AdviceBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
             }
             catch (ArgumentException ex)
             {
