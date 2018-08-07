@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Account;
+using Auctus.DataAccessInterfaces.Account;
 using Auctus.Util;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,9 +8,9 @@ using System.Text;
 
 namespace Auctus.Business.Account
 {
-    public class ActionBusiness : BaseBusiness<DomainObjects.Account.Action, ActionData>
+    public class ActionBusiness : BaseBusiness<DomainObjects.Account.Action, IActionData<DomainObjects.Account.Action>>
     {
-        public ActionBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public ActionBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public void InsertNewWallet(DateTime dateTime, int userId, string message, decimal? aucAmount)
         {

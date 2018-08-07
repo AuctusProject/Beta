@@ -1,5 +1,6 @@
 ﻿using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Follow;
+using Auctus.DataAccessInterfaces.Follow;
 using Auctus.DomainObjects.Follow;
 using Auctus.Util;
 using Microsoft.Extensions.Logging;
@@ -9,9 +10,9 @@ using System.Text;
 
 namespace Auctus.Business.Follow
 {
-    public class FollowAdvisorBusiness : BaseBusiness<FollowAdvisor, FollowAdvisorData>
+    public class FollowAdvisorBusiness : BaseBusiness<FollowAdvisor, IFollowAdvisorData<FollowAdvisor>>
     {
-        public FollowAdvisorBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public FollowAdvisorBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public List<FollowAdvisor> List(IEnumerable<int> advisorIds = null)
         {

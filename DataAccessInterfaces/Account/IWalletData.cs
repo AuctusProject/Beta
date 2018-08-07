@@ -1,5 +1,4 @@
 ﻿using Auctus.DomainObjects.Account;
-using DataAccessInterfaces;
 
 namespace Auctus.DataAccessInterfaces.Account
 {

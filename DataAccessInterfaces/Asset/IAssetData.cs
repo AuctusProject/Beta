@@ -1,6 +1,4 @@
-﻿using DataAccessInterfaces;
-
-namespace Auctus.DataAccessInterfaces.Asset
+﻿namespace Auctus.DataAccessInterfaces.Asset
 {
     public interface IAssetData<T> : IBaseData<T>
     {

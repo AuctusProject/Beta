@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DataAccessInterfaces
+namespace Auctus.DataAccessInterfaces
 {
     public interface IBaseData<T>
     {
@@ -9,5 +10,7 @@ namespace DataAccessInterfaces
         void Insert(T obj);
         void Update(T obj);
         void Delete(T obj);
+        Task InsertOneAsync(T obj);
+        Task InsertManyAsync(IEnumerable<T> objs);
     }
 }

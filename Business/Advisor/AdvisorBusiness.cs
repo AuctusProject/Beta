@@ -1,5 +1,6 @@
 ﻿using Auctus.DataAccess.Advisor;
 using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
@@ -14,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace Auctus.Business.Advisor
 {
-    public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, AdvisorData>
+    public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, IAdvisorData<DomainObjects.Advisor.Advisor>>
     {
         public enum CalculationMode : int { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3 }
 
-        public AdvisorBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public AdvisorBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public IEnumerable<AdvisorResponse> ListAdvisorsData()
         {

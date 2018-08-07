@@ -1,5 +1,6 @@
 ﻿using Auctus.DataAccess.Asset;
 using Auctus.DataAccess.Exchanges;
+using Auctus.DataAccessInterfaces.Asset;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Azure;
@@ -12,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Auctus.Business.Asset
 {
-    public class AssetBusiness : BaseBusiness<Auctus.DomainObjects.Asset.Asset, AssetData>
+    public class AssetBusiness : BaseBusiness<DomainObjects.Asset.Asset, IAssetData<DomainObjects.Asset.Asset>>
     {
         public readonly static string COINMARKETCAP_ICONS_BASE_URL = @"https://s2.coinmarketcap.com/static/img/coins/32x32/{0}";
         public readonly static string ICON_CONTAINER_NAME = "assetsicons";
-        public AssetBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public AssetBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public IEnumerable<AssetResponse> ListAssetData()
         {

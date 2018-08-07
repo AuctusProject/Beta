@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Dapper;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace Auctus.DataAccess.Account
 {
-    public class UserData : BaseSQL<User>
+    public class UserData : BaseSQL<User>, IUserData<User>
     {
         public override string TableName => "User";
 

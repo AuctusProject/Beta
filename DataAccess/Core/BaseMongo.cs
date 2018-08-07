@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces;
 using Auctus.DomainObjects;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -24,12 +25,12 @@ namespace Auctus.DataAccess.Core
             }
         }
 
-        public Task InsertOneAsync(MongoDomainObject document)
+        public Task InsertOneAsync(T document)
         {
             return base.InsertOneAsync(CollectionName, document);
         }
 
-        public Task InsertManyAsync(IEnumerable<MongoDomainObject> documents)
+        public Task InsertManyAsync(IEnumerable<T> documents)
         {
             return base.InsertManyAsync(CollectionName, documents);
         }

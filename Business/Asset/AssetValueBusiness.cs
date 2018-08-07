@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccess.Asset;
 using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Exchanges;
+using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
 using Auctus.Util;
 using Microsoft.Extensions.Logging;
@@ -11,9 +12,9 @@ using System.Linq;
 
 namespace Auctus.Business.Asset
 {
-    public class AssetValueBusiness : BaseBusiness<AssetValue, AssetValueData>
+    public class AssetValueBusiness : BaseBusiness<AssetValue, IAssetValueData<AssetValue>>
     {
-        public AssetValueBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public AssetValueBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         internal AssetValue LastAssetValue(int assetId)
         {

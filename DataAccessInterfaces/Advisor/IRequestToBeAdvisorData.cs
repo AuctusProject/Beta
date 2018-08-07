@@ -1,5 +1,4 @@
 ﻿using Auctus.DomainObjects.Advisor;
-using DataAccessInterfaces;
 
 namespace Auctus.DataAccessInterfaces.Advisor
 {

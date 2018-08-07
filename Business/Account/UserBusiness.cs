@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccess.Account;
 using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Exchanges;
+using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Follow;
 using Auctus.Model;
@@ -17,9 +18,9 @@ using System.Transactions;
 
 namespace Auctus.Business.Account
 {
-    public class UserBusiness : BaseBusiness<User, UserData>
+    public class UserBusiness : BaseBusiness<User, IUserData<User>>
     {
-        public UserBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public UserBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public User GetByEmail(string email)
         {

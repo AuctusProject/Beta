@@ -1,6 +1,4 @@
-﻿using DataAccessInterfaces;
-
-namespace Auctus.DataAccessInterfaces.Follow
+﻿namespace Auctus.DataAccessInterfaces.Follow
 {
     public interface IFollowData<T> : IBaseData<T>
     {

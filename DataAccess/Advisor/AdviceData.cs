@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Advisor;
 using Dapper;
 using System;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace Auctus.DataAccess.Advisor
 {
-    public class AdviceData : BaseSQL<Advice>
+    public class AdviceData : BaseSQL<Advice>, IAdviceData<Advice>
     {
         public override string TableName => "Advice";
 
