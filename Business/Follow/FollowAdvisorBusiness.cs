@@ -18,9 +18,9 @@ namespace Auctus.Business.Follow
             return Data.List(advisorIds);
         }
 
-        public FollowAdvisor GetLastByUser(int userId)
+        public FollowAdvisor GetLastByUser(int userId, int advisorId)
         {
-            return Data.GetLastByUser(userId);
+            return Data.GetLastByUserForAdvisor(userId, advisorId);
         }
 
         public void Create(int userId, int advisorId, FollowActionType actionType)

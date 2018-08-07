@@ -236,7 +236,7 @@ Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
         {
             var user = GetValidUser();
 
-            FollowAdvisor lastState = FollowAdvisorBusiness.GetLastByUser(user.Id);
+            FollowAdvisor lastState = FollowAdvisorBusiness.GetLastByUser(user.Id, advisorId);
             FollowActionType newStateType = lastState == null || lastState.FollowActionType == FollowActionType.Unfollow ? FollowActionType.Follow : FollowActionType.Unfollow;
 
             FollowAdvisorBusiness.Create(user.Id, advisorId, newStateType);

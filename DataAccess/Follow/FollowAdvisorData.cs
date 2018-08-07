@@ -24,7 +24,8 @@ namespace Auctus.DataAccess.Follow
                                         INNER JOIN [Follow] f ON f.Id = fa.Id
                                         INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
                                             ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-                                         WHERE f.UserId = @UserId";
+                                         WHERE f.UserId = @UserId
+                                            AND fa.AdvisorId = @AdvisorId";
 
         public List<FollowAdvisor> List(IEnumerable<int> advisorIds)
         {
@@ -38,12 +39,13 @@ namespace Auctus.DataAccess.Follow
             }
             return Query<FollowAdvisor>(string.Format(SQL_LIST, complement), parameters).ToList();
         }
-        public FollowAdvisor GetLastByUser(int userId)
+        public FollowAdvisor GetLastByUserForAdvisor(int userId, int advisorId)
         {
             var parameters = new DynamicParameters();
             parameters.Add("UserId", userId, DbType.Int32);
+            parameters.Add("AdvisorId", advisorId, DbType.Int32);
 
-            return null;
+            return Query<FollowAdvisor>(SQL_GET_LAST_BY_USER, parameters).SingleOrDefault();
         }
     }
 }
