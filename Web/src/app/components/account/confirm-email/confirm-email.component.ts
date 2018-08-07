@@ -15,8 +15,8 @@ export class ConfirmEmailComponent implements OnInit {
     this.loggedUserEmail = this.accountService.getUserEmail();
   }
 
-  resendConfirmationEmail(){
-    this.accountService.resendConfirmationEmail();
+  resendEmailConfirmation(){
+    this.accountService.resendEmailConfirmation();
   }
 
 }

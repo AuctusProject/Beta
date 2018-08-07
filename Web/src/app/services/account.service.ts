@@ -13,6 +13,7 @@ export class AccountService {
   private baseGetAccountsUrl = this.httpService.apiUrl("accounts/v1");
   private validateSignatureUrl = this.httpService.apiUrl("accounts/v1/validate");
   private loginUrl = this.httpService.apiUrl("accounts/v1/login");
+  private confirmationEmailUrl = this.httpService.apiUrl("accounts/v1/email/confirmation");
 
   constructor(private httpService : HttpService, private router : Router) { }
 
@@ -47,5 +48,9 @@ export class AccountService {
 
   isLoggedIn() : boolean{
     return this.httpService.isLoggedIn();
+  }
+
+  resendEmailConfirmation() : Observable<void>{
+    return this.httpService.get(this.confirmationEmailUrl);
   }
 }
