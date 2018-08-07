@@ -12,11 +12,23 @@ namespace Auctus.DataAccess.Core
 {
     public class MongoDBRepository
     {
+        private static MongoClient _client;
+
+        private static MongoClient Client
+        {
+            get
+            {
+                if (_client == null)
+                {
+                    _client = new MongoClient(Config.MONGO_CONNECTION_STRING);
+                }
+                return _client;
+            }
+        }
         private const string DATABASE_NAME = "AucutusPlatform";
         internal static IMongoDatabase GetDataBase()
         {
-            MongoClient client = new MongoClient(Config.MONGO_CONNECTION_STRING);
-            IMongoDatabase database = client.GetDatabase(DATABASE_NAME);
+            IMongoDatabase database = Client.GetDatabase(DATABASE_NAME);
             return database;
         }
         protected Task InsertOneAsync(string collectionName, MongoDomainObject document)
