@@ -225,7 +225,7 @@ namespace Auctus.DataAccess.Core
         private static PropertyContainer ParseProperties<T>(T obj)
         {
             PropertyContainer propertyContainer = new PropertyContainer();
-            IEnumerable<PropertyInfo> properties = typeof(T).GetProperties().Where(c => c.DeclaringType == typeof(T)); ;
+            IEnumerable<PropertyInfo> properties = typeof(T).GetProperties().Where(c => c.DeclaringType == typeof(T) || c.IsDefined(typeof(DapperKeyAttribute), false));
             foreach (PropertyInfo property in properties)
             {
                 // Skip reference types (but still include string!)

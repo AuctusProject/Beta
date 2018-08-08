@@ -70,5 +70,14 @@ namespace Api.Controllers
         {
             return base.ConfirmEmail(confirmEmailRequest);
         }
+
+        [Route("advisor/{id}/follow")]
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ToggleFollowAdvisor([FromRoute]int id)
+        {
+            return base.ToggleFollowAdvisor(id);
+        }
     }
 }
