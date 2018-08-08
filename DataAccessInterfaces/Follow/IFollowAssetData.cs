@@ -5,6 +5,6 @@ namespace Auctus.DataAccessInterfaces.Follow
 {
     public interface IFollowAssetData<T> : IBaseData<T>
     {
-        List<FollowAsset> List(IEnumerable<int> assetsIds);
+        List<FollowAsset> ListFollowers(IEnumerable<int> assetsIds);
     }
 }

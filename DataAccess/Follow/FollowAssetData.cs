@@ -19,15 +19,16 @@ namespace Auctus.DataAccess.Follow
                                         INNER JOIN [Follow] f ON f.Id = fa.Id
                                         INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
                                             ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-                                         {0}";
+                                        WHERE f.ActionType = @ActionType {0}";
 
-        public List<FollowAsset> List(IEnumerable<int> assetsIds)
+        public List<FollowAsset> ListFollowers(IEnumerable<int> assetsIds)
         {
             var complement = "";
             DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("ActionType", FollowActionType.Follow.Value, DbType.Int32);
             if (assetsIds?.Count() > 0)
             {
-                complement = $"WHERE {string.Join(" OR ", assetsIds.Select((c, i) => $"fa.AssetId = @AssetId{i}"))}";
+                complement = $" AND ({string.Join(" OR ", assetsIds.Select((c, i) => $"fa.AssetId = @AssetId{i}"))})";
                 for (int i = 0; i < assetsIds.Count(); ++i)
                     parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
             }

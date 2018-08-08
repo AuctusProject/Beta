@@ -244,14 +244,14 @@ Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new ArgumentException("Password cannot have spaces.");
         }
 
-        public void ToggleFollowAdvisor(int advisorId)
+        public FollowAdvisor ToggleFollowAdvisor(int advisorId)
         {
             var user = GetValidUser();
 
             FollowAdvisor lastState = FollowAdvisorBusiness.GetLastByUser(user.Id, advisorId);
             FollowActionType newStateType = lastState == null || lastState.FollowActionType == FollowActionType.Unfollow ? FollowActionType.Follow : FollowActionType.Unfollow;
 
-            FollowAdvisorBusiness.Create(user.Id, advisorId, newStateType);
+            return FollowAdvisorBusiness.Create(user.Id, advisorId, newStateType);
         }
     }
 }

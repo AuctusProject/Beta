@@ -44,7 +44,7 @@ namespace Auctus.Business.Advisor
             var user = GetValidUser();
             var advisors = GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.List(advisors.Select(c => c.Id).Distinct()));
+            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
             Task.WaitAll(advices, advisorFollowers);
 
             Calculation(mode, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, null);

@@ -14,9 +14,9 @@ namespace Auctus.Business.Follow
     {
         public FollowAdvisorBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
-        public List<FollowAdvisor> List(IEnumerable<int> advisorIds = null)
+        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds = null)
         {
-            return Data.List(advisorIds);
+            return Data.ListFollowers(advisorIds);
         }
 
         public FollowAdvisor GetLastByUser(int userId, int advisorId)
@@ -24,19 +24,24 @@ namespace Auctus.Business.Follow
             return Data.GetLastByUserForAdvisor(userId, advisorId);
         }
 
-        public void Create(int userId, int advisorId, FollowActionType actionType)
+        public FollowAdvisor Create(int userId, int advisorId, FollowActionType actionType)
         {
             using (var transaction = new TransactionalDapperCommand())
             {
                 var follow = FollowBusiness.Create(userId, actionType);
-
-                var followAdvisor = new FollowAdvisor
+                transaction.Insert(follow);
+                FollowAdvisor followAdvisor = new FollowAdvisor()
                 {
                     Id = follow.Id,
-                    AdvisorId = advisorId
+                    AdvisorId = advisorId,
+                    ActionType = follow.ActionType,
+                    UserId = follow.UserId,
+                    CreationDate = follow.CreationDate
                 };
+                transaction.Insert(followAdvisor);
+                transaction.Commit();
 
-                Data.Insert(followAdvisor);
+                return followAdvisor;
             }
         }
     }

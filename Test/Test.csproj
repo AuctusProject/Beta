@@ -31,4 +31,10 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Account\" />
+    <Folder Include="Asset\" />
+    <Folder Include="Follow\" />
+  </ItemGroup>
+
 </Project>
