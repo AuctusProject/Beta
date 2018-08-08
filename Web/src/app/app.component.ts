@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { RecommendationDistribution } from './model/recommendationDistribution';
 import { AssetValue } from './model/asset/AssetValue';
 import { Advisor } from './model/advisor/advisor';
 import { AdvisorDetails } from './model/advisor/advisorDetails';
+import { Router, ActivatedRoute } from '../../node_modules/@angular/router';
+import { AuthRedirect } from './providers/authRedirect';
+import { Route } from '../../node_modules/@angular/compiler/src/core';
 
 
 @Component({
@@ -10,7 +13,21 @@ import { AdvisorDetails } from './model/advisor/advisorDetails';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+
+  constructor(){}
+
+  ngOnInit(){
+  }
+
+  public notificationOptions = {
+    position: ["bottom", "left"],
+    maxStack: 1,
+    preventDuplicates: true,
+    preventLastDuplicates: "visible",
+    clickToClose: true
+  }
+
   title = 'app';
 
   data: RecommendationDistribution[] = [

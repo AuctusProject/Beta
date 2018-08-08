@@ -6,6 +6,7 @@ import { LoginResponse } from '../model/account/loginResponse';
 import { LoginRequest } from '../model/account/loginRequest';
 import { Router } from '../../../node_modules/@angular/router';
 import { LoginData } from '../model/account/loginData';
+import { ConfirmEmailRequest } from '../model/account/confirmEmailRequest';
 
 
 @Injectable()
@@ -52,5 +53,9 @@ export class AccountService {
 
   resendEmailConfirmation() : Observable<void>{
     return this.httpService.get(this.confirmationEmailUrl);
+  }
+
+  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginData>{
+    return this.httpService.post(this.confirmationEmailUrl, confirmEmailRequest);
   }
 }

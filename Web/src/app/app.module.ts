@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
@@ -49,6 +50,7 @@ import { ConfirmEmailComponent } from './components/account/confirm-email/confir
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
     AppRoutingModule,

@@ -52,5 +52,23 @@ namespace Api.Controllers
         {
             return await base.Register(registerRequest);
         }
+
+        [Route("email/confirmation")]
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async new Task<IActionResult> ResendEmailConfirmation()
+        {
+            return await base.ResendEmailConfirmation();
+        }
+
+        [Route("email/confirmation")]
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ConfirmEmail([FromBody]ConfirmEmailRequest confirmEmailRequest)
+        {
+            return base.ConfirmEmail(confirmEmailRequest);
+        }
     }
 }
