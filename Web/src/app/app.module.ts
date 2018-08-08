@@ -46,7 +46,9 @@ import { RegisterComponent } from './components/account/register/register.compon
     TopAdvisorsComponent,
     TopAssetsComponent,
     MessageSignatureComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    ConfirmEmailComponent
   ],
   imports: [
     BrowserModule,
