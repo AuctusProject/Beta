@@ -21,7 +21,7 @@ using System;
 
 namespace Auctus.Test
 {
-    public abstract class BaseTest
+    public abstract class BaseTest : IDisposable
     {
         private readonly IServiceProvider ServiceProvider;
         private readonly ILoggerFactory LoggerFactory;
@@ -52,8 +52,12 @@ namespace Auctus.Test
             ServiceProvider = services.BuildServiceProvider();
             MemoryCache = ServiceProvider.GetService<Cache>();
             LoggerFactory = new LoggerFactory();
-            LoggedEmail = "thiagomvaruajo@gmail.com";
+            LoggedEmail = "test@auctus.org";
             LoggedIp = "10.0.0.1";
+        }
+
+        public virtual void Dispose()
+        {
         }
 
         private UserBusiness _userBusiness;
