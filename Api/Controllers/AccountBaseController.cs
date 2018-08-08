@@ -40,7 +40,7 @@ namespace Api.Controllers
             try
             {
                 var loginResponse = UserBusiness.Login(loginRequest.Email, loginRequest.Password);
-                return Ok(new { logged = true, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
+                return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
             }
             catch (ArgumentException ex)
             {
@@ -56,12 +56,39 @@ namespace Api.Controllers
             try
             {
                 var loginResponse = await UserBusiness.Register(registerRequest.Email, registerRequest.Password, registerRequest.RequestedToBeAdvisor);
-                return Ok(new { logged = true, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
+                return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        protected virtual async Task<IActionResult> ResendEmailConfirmation()
+        {
+            try
+            {
+                await UserBusiness.ResendEmailConfirmation(GetUser());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual IActionResult ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)
+        {
+            try
+            {
+                var loginResponse = UserBusiness.ConfirmEmail(confirmEmailRequest.Code);
+                return Ok(loginResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
     }
 }

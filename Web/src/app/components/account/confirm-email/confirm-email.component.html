@@ -1,4 +1,8 @@
-<p>
-An email was sent to {{loggedUserEmail}}. 
-</p>
-<button (click)="resendEmailConfirmation()"></button>
+<div *ngIf="!confirmationCode">
+<p>Please click on the link sent to {{loggedUserEmail}} to confirm your email. 
+  </p>
+<button (click)="resendEmailConfirmation()">RESEND EMAIL</button>
+</div>
+<div *ngIf="confirmationCode">
+  Your email is being confirmed and you will be redirected
+</div>

@@ -5,6 +5,7 @@ import { Router } from '../../../../../node_modules/@angular/router';
 import { Subscription } from '../../../../../node_modules/rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { AuthRedirect } from '../../../providers/authRedirect';
 
 @Component({
   selector: 'login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, 
     private accountService: AccountService, 
     private router: Router,
-    private notificationsService: NotificationsService) { 
+    private notificationsService: NotificationsService,
+    private authRedirect : AuthRedirect) { 
     this.buildForm();
   }
 
@@ -41,12 +43,9 @@ export class LoginComponent implements OnInit {
     this.loginPromise = this.accountService.login(this.loginRequest)
       .subscribe(response => {
         if (response){
-          if (response.logged) {
+          if (!response.error && response.data) {
             this.accountService.setLoginData(response.data);
-            this.router.navigateByUrl('');
-          }
-          else if(response.data &&  response.data.pendingConfirmation) {
-            this.router.navigateByUrl('confirm-email');
+            this.authRedirect.redirectAfterLoginAction();
           }
           else {
             this.notificationsService.info("Info", response.error);
