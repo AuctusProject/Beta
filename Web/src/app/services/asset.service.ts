@@ -5,7 +5,7 @@ import { Asset } from "../model/asset/asset";
 
 @Injectable()
 export class AssetService {
-  private baseGetAssetUrl = this.httpService.apiUrl("asset/v1");
+  private baseGetAssetUrl = this.httpService.apiUrl("v1/assets/");
   
   constructor(private httpService : HttpService) { }
 

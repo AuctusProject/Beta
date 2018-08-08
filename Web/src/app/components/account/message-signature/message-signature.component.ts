@@ -4,6 +4,7 @@ import { AccountService } from '../../../services/account.service';
 import { ValidateSignatureRequest } from '../../../model/account/validateSignatureRequest';
 import { Constants } from '../../../util/constants';
 import { Router } from '../../../../../node_modules/@angular/router';
+import { AuthRedirect } from '../../../providers/authRedirect';
 
 @Component({
   selector: 'message-signature',
@@ -12,7 +13,10 @@ import { Router } from '../../../../../node_modules/@angular/router';
 })
 export class MessageSignatureComponent implements OnInit {
   hasMetamask : boolean = true;
-  constructor(private web3Service : Web3Service, private router: Router, private accountService : AccountService) { }
+  constructor(private web3Service : Web3Service, 
+    private router: Router,
+    private accountService : AccountService,
+    private authRedirect: AuthRedirect) { }
 
   ngOnInit() {
   }
@@ -40,7 +44,10 @@ export class MessageSignatureComponent implements OnInit {
       validateSignatureRequest.address = account;
       validateSignatureRequest.signature = signatureInfo.result;
       this.accountService.validateSignature(validateSignatureRequest).subscribe(result =>
-        this.router.navigateByUrl('')
+        {
+          this.accountService.setLoginData(result);
+          this.authRedirect.redirectAfterLoginAction();
+        }
       )
     }
     else if(signatureInfo.error && signatureInfo.error.message){
@@ -49,5 +56,9 @@ export class MessageSignatureComponent implements OnInit {
     else{
       alert("Error signing message");
     }
+  }
+
+  becomeAdvisor(){
+    this.router.navigateByUrl('become-advisor');
   }
 }

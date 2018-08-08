@@ -7,18 +7,23 @@ import { LoginRequest } from '../model/account/loginRequest';
 import { Router } from '../../../node_modules/@angular/router';
 import { LoginData } from '../model/account/loginData';
 import { ConfirmEmailRequest } from '../model/account/confirmEmailRequest';
+import { ForgotPasswordRequest } from '../model/account/forgotPasswordRequest';
+import { RecoverPasswordRequest } from '../model/account/recoverPasswordRequest';
+import { ChangePasswordRequest } from '../model/account/changePasswordRequest';
 
 
 @Injectable()
 export class AccountService {
-  private baseGetAccountsUrl = this.httpService.apiUrl("accounts/v1");
-  private validateSignatureUrl = this.httpService.apiUrl("accounts/v1/validate");
-  private loginUrl = this.httpService.apiUrl("accounts/v1/login");
-  private confirmationEmailUrl = this.httpService.apiUrl("accounts/v1/email/confirmation");
+  private baseGetAccountsUrl = this.httpService.apiUrl("v1/accounts");
+  private validateSignatureUrl = this.httpService.apiUrl("/v1/accounts/me/signatures");
+  private loginUrl = this.httpService.apiUrl("v1/accounts/login");
+  private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmation");
+  private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
+  private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
 
   constructor(private httpService : HttpService, private router : Router) { }
 
-  validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginResponse> {
+  validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginData> {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
   }
 
@@ -57,5 +62,17 @@ export class AccountService {
 
   confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginData>{
     return this.httpService.post(this.confirmationEmailUrl, confirmEmailRequest);
+  }
+
+  forgotPassword(forgotPasswordRequest: ForgotPasswordRequest) : Observable<void>{
+    return this.httpService.post(this.recoverPasswordUrl, forgotPasswordRequest);
+  }
+  
+  recoverPassword(recoverPasswordRequest: RecoverPasswordRequest) : Observable<void>{
+    return this.httpService.put(this.recoverPasswordUrl, recoverPasswordRequest);
+  }
+
+  changePassword(changePasswordRequest: ChangePasswordRequest) : Observable<void>{
+    return this.httpService.put(this.changePasswordUrl, changePasswordRequest);
   }
 }

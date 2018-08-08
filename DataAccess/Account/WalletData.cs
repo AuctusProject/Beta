@@ -14,7 +14,7 @@ namespace Auctus.DataAccess.Account
     {
         public override string TableName => "Wallet";
 
-        private const string SQL_BY_USER = @"SELECT w.* FROM [Wallet] w WHERE w.UserId = @UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = w.UserId";
+        private const string SQL_BY_USER = @"SELECT w.* FROM [Wallet] w WHERE w.UserId = @UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = w.UserId)";
 
         private const string SQL_BY_ADDRESS = @"SELECT w.* 
                                                 FROM 

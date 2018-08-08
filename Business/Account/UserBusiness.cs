@@ -27,6 +27,11 @@ namespace Auctus.Business.Account
             return Data.GetByEmail(email);
         }
 
+        public User GetById(int id)
+        {
+            return Data.GetById(id);
+        }
+
         public LoginResponse Login(string email, string password)
         {
             BaseEmailValidation(email);
@@ -41,7 +46,7 @@ namespace Auctus.Business.Account
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
-            if (!IsValidAdvisor(user))
+            if (!IsValidAdvisor(user) && Config.MINUMIM_AUC_TO_LOGIN > 0)
             {
                 aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
                 hasInvestment = aucAmount >= Config.MINUMIM_AUC_TO_LOGIN;
@@ -149,7 +154,7 @@ namespace Auctus.Business.Account
                     throw new ArgumentException("The wallet is already on used.");
             }
 
-            var message = $"{address} is my address.\n{DateTime.Today.Year}-{DateTime.Today.Month.ToString().PadLeft(2, '0')}-{DateTime.Today.Day.ToString().PadLeft(2, '0')}";
+            var message = $"I accept the Privacy Policy and Terms of Use.";
             var recoveryAddress = Signature.HashAndEcRecover(message, signature)?.ToLower();
             if (address != recoveryAddress)
                 throw new ArgumentException("Invalid signature.");
@@ -182,10 +187,15 @@ namespace Auctus.Business.Account
             if (user.Password != Security.Hash(currentPassword))
                 throw new ArgumentException("Current password is incorrect.");
 
-            BasePasswordValidation(newPassword);
-            PasswordValidation(newPassword);
+            UpdatePassword(user, newPassword);
+        }
 
-            user.Password = Security.Hash(newPassword);
+        public void UpdatePassword(User user, string password)
+        {
+            BasePasswordValidation(password);
+            PasswordValidation(password);
+
+            user.Password = Security.Hash(password);
             Data.Update(user);
         }
 

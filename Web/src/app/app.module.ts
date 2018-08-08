@@ -35,6 +35,10 @@ import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { RegisterComponent } from './components/account/register/register.component';
+import { BecomeAdvisorComponent } from './components/advisor/become-advisor/become-advisor.component';
+import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
+import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
+import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
 
 
 @NgModule({
@@ -48,7 +52,11 @@ import { RegisterComponent } from './components/account/register/register.compon
     MessageSignatureComponent,
     LoginComponent,
     RegisterComponent,
-    ConfirmEmailComponent
+    ConfirmEmailComponent,
+    BecomeAdvisorComponent,
+    ForgotPasswordComponent,
+    ForgotPasswordResetComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

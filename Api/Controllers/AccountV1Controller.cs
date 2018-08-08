@@ -20,20 +20,19 @@ using System.Threading.Tasks;
 namespace Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/accounts/v1/")]
+    [Route("api/v1/accounts/")]
     [EnableCors("Default")]
     public class AccountV1Controller : AccountBaseController
     {
         public AccountV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
 
-        [Route("validate")]
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ValidateSignature([FromBody]ValidateSignatureRequest signatureRequest)
+        public async new Task<IActionResult> Register([FromBody]RegisterRequest registerRequest)
         {
-            return base.ValidateSignature(signatureRequest);
+            return await base.Register(registerRequest);
         }
-
 
         [Route("login")]
         [HttpPost]
@@ -44,27 +43,54 @@ namespace Api.Controllers
             return base.Login(loginRequest);
         }
 
-        [Route("register")]
+        [Route("passwords/recover")]
+        [HttpPut]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult RecoverPassword([FromBody]RecoverPasswordRequest recoverPasswordRequest)
+        {
+            return base.RecoverPassword(recoverPasswordRequest);
+        }
+
+        [Route("passwords/recover")]
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async new Task<IActionResult> Register([FromBody]RegisterRequest registerRequest)
+        public new async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordRequest forgotPasswordRequest)
         {
-            return await base.Register(registerRequest);
+            return await base.ForgotPassword(forgotPasswordRequest);
         }
 
-        [Route("email/confirmation")]
+        [Route("me/passwords")]
+        [HttpPut]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ChangePassword([FromBody]ChangePasswordRequest changePasswordRequest)
+        {
+            return base.ChangePassword(changePasswordRequest);
+        }
+
+        [Route("me/signatures")]
+        [HttpPost]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ValidateSignature([FromBody]ValidateSignatureRequest signatureRequest)
+        {
+            return base.ValidateSignature(signatureRequest);
+        }
+
+        [Route("me/confirmation")]
         [HttpGet]
-        [Authorize]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async new Task<IActionResult> ResendEmailConfirmation()
         {
             return await base.ResendEmailConfirmation();
         }
 
-        [Route("email/confirmation")]
+        [Route("me/confirmation")]
         [HttpPost]
-        [Authorize]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ConfirmEmail([FromBody]ConfirmEmailRequest confirmEmailRequest)
         {
