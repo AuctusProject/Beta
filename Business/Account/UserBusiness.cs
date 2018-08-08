@@ -98,8 +98,9 @@ namespace Auctus.Business.Account
             };
         }
 
-        public async Task ResendEmailConfirmation(string email)
+        public async Task ResendEmailConfirmation()
         {
+            var email = LoggedEmail;
             BaseEmailValidation(email);
             EmailValidation(email);
 

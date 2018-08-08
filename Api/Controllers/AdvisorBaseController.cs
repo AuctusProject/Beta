@@ -39,7 +39,7 @@ namespace Api.Controllers
                 if (beAdvisorRequest == null)
                     return BadRequest();
 
-                var result = await RequestToBeAdvisorBusiness.Create(GetUser(), beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience);
+                var result = await RequestToBeAdvisorBusiness.Create(beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience);
 
                 return Ok(result);
             }
@@ -53,7 +53,7 @@ namespace Api.Controllers
         {
             try
             {
-                var result = RequestToBeAdvisorBusiness.GetByEmail(GetUser());
+                var result = RequestToBeAdvisorBusiness.GetByLoggedEmail();
                 return Ok(result);
             }
             catch (Exception ex)

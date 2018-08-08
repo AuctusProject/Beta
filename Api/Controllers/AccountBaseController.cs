@@ -116,7 +116,7 @@ namespace Api.Controllers
         {
             try
             {
-                await UserBusiness.ResendEmailConfirmation(GetUser());
+                await UserBusiness.ResendEmailConfirmation();
                 return Ok();
             }
             catch (Exception ex)
