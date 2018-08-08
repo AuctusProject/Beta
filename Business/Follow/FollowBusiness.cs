@@ -19,14 +19,12 @@ namespace Auctus.Business.Follow
 
         public FollowObj Create(int userId, FollowActionType actionType)
         {
-            var follow = new FollowObj();
-            follow.ActionType = actionType.Value;
-            follow.CreationDate = DateTime.UtcNow;
-            follow.UserId = userId;
-
-            Data.Insert(follow);
-
-            return follow;
+            return new FollowObj()
+            {
+                ActionType = actionType.Value,
+                CreationDate = DateTime.UtcNow,
+                UserId = userId
+            };
         }
     }
 }

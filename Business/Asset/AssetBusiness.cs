@@ -24,7 +24,7 @@ namespace Auctus.Business.Asset
             var user = GetValidUser();
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.List());
+            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
             Task.WaitAll(advices, assetFollowers);
 
             List<AdvisorResponse> advisorsResult;
@@ -38,8 +38,8 @@ namespace Auctus.Business.Asset
             var user = GetValidUser();
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.List(advisors.Select(c => c.Id).Distinct()));
-            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.List());
+            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
+            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
             Task.WaitAll(advices, advisorFollowers, assetFollowers);
 
             List<AdvisorResponse> advisorsResult;

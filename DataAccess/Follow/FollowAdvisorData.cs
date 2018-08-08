@@ -18,7 +18,7 @@ namespace Auctus.DataAccess.Follow
                                         INNER JOIN [Follow] f ON f.Id = fa.Id
                                         INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
                                             ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-                                         WHERE {0}";
+                                         WHERE f.ActionType = @ActionType AND ({0})";
 
         private const string SQL_GET_LAST_BY_USER = @"SELECT f.*, fa.AdvisorId FROM 
                                         [FollowAdvisor] fa
@@ -28,10 +28,11 @@ namespace Auctus.DataAccess.Follow
                                          WHERE f.UserId = @UserId
                                             AND fa.AdvisorId = @AdvisorId";
 
-        public List<FollowAdvisor> List(IEnumerable<int> advisorIds)
+        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds)
         {
             var complement = "";
             DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("ActionType", FollowActionType.Follow.Value, DbType.Int32);
             if (advisorIds.Count() > 0)
             {
                 complement = string.Join(" OR ", advisorIds.Select((c, i) => $"fa.AdvisorId = @AdvisorId{i}"));
