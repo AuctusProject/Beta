@@ -6,6 +6,7 @@ import { LoginResponse } from '../model/account/loginResponse';
 import { LoginRequest } from '../model/account/loginRequest';
 import { Router } from '../../../node_modules/@angular/router';
 import { LoginData } from '../model/account/loginData';
+import { ConfirmEmailRequest } from '../model/account/confirmEmailRequest';
 
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AccountService {
   private baseGetAccountsUrl = this.httpService.apiUrl("accounts/v1");
   private validateSignatureUrl = this.httpService.apiUrl("accounts/v1/validate");
   private loginUrl = this.httpService.apiUrl("accounts/v1/login");
+  private confirmationEmailUrl = this.httpService.apiUrl("accounts/v1/email/confirmation");
 
   constructor(private httpService : HttpService, private router : Router) { }
 
@@ -32,8 +34,8 @@ export class AccountService {
     return this.httpService.getLoginData();
   }
 
-  getUser(): string {
-    return this.httpService.getUser();
+  getUserEmail(): string {
+    return this.httpService.getUserEmail();
   }
 
   logout(): void {
@@ -47,5 +49,13 @@ export class AccountService {
 
   isLoggedIn() : boolean{
     return this.httpService.isLoggedIn();
+  }
+
+  resendEmailConfirmation() : Observable<void>{
+    return this.httpService.get(this.confirmationEmailUrl);
+  }
+
+  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginData>{
+    return this.httpService.post(this.confirmationEmailUrl, confirmEmailRequest);
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Advisor;
+using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
@@ -11,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Auctus.Business.Advisor
 {
-    public class RequestToBeAdvisorBusiness : BaseBusiness<RequestToBeAdvisor, RequestToBeAdvisorData>
+    public class RequestToBeAdvisorBusiness : BaseBusiness<RequestToBeAdvisor, IRequestToBeAdvisorData<RequestToBeAdvisor>>
     {
-        public RequestToBeAdvisorBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public RequestToBeAdvisorBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public RequestToBeAdvisor GetByUser(int userId)
         {

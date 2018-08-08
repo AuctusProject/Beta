@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccess.Account;
 using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Exchanges;
+using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Follow;
 using Auctus.Model;
@@ -17,9 +18,9 @@ using System.Transactions;
 
 namespace Auctus.Business.Account
 {
-    public class UserBusiness : BaseBusiness<User, UserData>
+    public class UserBusiness : BaseBusiness<User, IUserData<User>>
     {
-        public UserBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public UserBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public User GetByEmail(string email)
         {
@@ -232,11 +233,14 @@ Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new ArgumentException("Password cannot have spaces.");
         }
 
-        public void FollowAdvisor(int advisorId)
+        public void ToggleFollowAdvisor(int advisorId)
         {
             var user = GetValidUser();
 
-            FollowAdvisorBusiness.Create(user.Id, advisorId, FollowActionType.Follow);
+            FollowAdvisor lastState = FollowAdvisorBusiness.GetLastByUser(user.Id, advisorId);
+            FollowActionType newStateType = lastState == null || lastState.FollowActionType == FollowActionType.Unfollow ? FollowActionType.Follow : FollowActionType.Unfollow;
+
+            FollowAdvisorBusiness.Create(user.Id, advisorId, newStateType);
         }
     }
 }

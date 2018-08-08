@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
 using Dapper;
 using MongoDB.Bson;
@@ -10,7 +11,7 @@ using System.Linq;
 
 namespace Auctus.DataAccess.Asset
 {
-    public class AssetValueData : BaseMongo<AssetValue>
+    public class AssetValueData : BaseMongo<AssetValue>, IAssetValueData<AssetValue>
     {
         public override string CollectionName => "AssetValue";
 

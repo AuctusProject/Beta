@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
@@ -32,6 +33,7 @@ import { LoginComponent } from './components/account/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/forms';
 import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
+import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { RegisterComponent } from './components/account/register/register.component';
 
 
@@ -44,11 +46,11 @@ import { RegisterComponent } from './components/account/register/register.compon
     TopAdvisorsComponent,
     TopAssetsComponent,
     MessageSignatureComponent,
-    LoginComponent,
-    RegisterComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
     AppRoutingModule,

@@ -19,6 +19,7 @@ using Auctus.Util;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Microsoft.Extensions.PlatformAbstractions;
+using Auctus.Business;
 
 namespace Api
 {
@@ -88,8 +89,8 @@ namespace Api
 
             services.AddMvc();
             services.AddSingleton<Cache>();
-            services.AddNodeServices();
 
+            DataAccessDependencyResolver.RegisterDataAccess(services);
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)

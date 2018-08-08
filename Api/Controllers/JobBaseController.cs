@@ -15,19 +15,19 @@ namespace Api.Controllers
 
         protected virtual IActionResult UpdateAssetsValues()
         {
-            RunJobAsync(AssetServices.UpdateAllAssetsValues);
+            RunJobAsync(AssetBusiness.UpdateAllAssetsValues);
             return Ok();
         }
 
         protected virtual IActionResult CreateAssets()
         {
-            RunJobSync(AssetServices.CreateAssets);
+            RunJobSync(AssetBusiness.CreateCoinMarketCapNotIncludedAssets);
             return Ok();
         }
 
         internal IActionResult UpdateAllAssetsIcons()
         {
-            RunJobSync(AssetServices.UpdateAllAssetsIcons);
+            RunJobSync(AssetBusiness.UpdateAllAssetsIcons);
             return Ok();
         }
         private void RunJobAsync(Action action)

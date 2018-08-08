@@ -1,5 +1,6 @@
 ﻿using Auctus.Business.Web3;
 using Auctus.DataAccess.Account;
+using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Model;
 using Auctus.Util;
@@ -12,9 +13,9 @@ using System.Text.RegularExpressions;
 
 namespace Auctus.Business.Account
 {
-    public class WalletBusiness : BaseBusiness<Wallet, WalletData>
+    public class WalletBusiness : BaseBusiness<Wallet, IWalletData<Wallet>>
     {
-        public WalletBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public WalletBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public void ValidateUserWallet(User user)
         {

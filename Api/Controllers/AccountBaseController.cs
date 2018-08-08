@@ -24,7 +24,7 @@ namespace Api.Controllers
             
             try
             {
-                return Ok(AccountServices.ValidateSignature(signatureRequest.Address, signatureRequest.Signature));
+                return Ok(UserBusiness.ValidateSignature(signatureRequest.Address, signatureRequest.Signature));
             }
             catch (ArgumentException ex)
             {
@@ -39,8 +39,8 @@ namespace Api.Controllers
 
             try
             {
-                var loginResponse = AccountServices.Login(loginRequest.Email, loginRequest.Password);
-                return Ok(new { logged = true, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
+                var loginResponse = UserBusiness.Login(loginRequest.Email, loginRequest.Password);
+                return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
             }
             catch (ArgumentException ex)
             {
@@ -52,16 +52,43 @@ namespace Api.Controllers
         {
             if (registerRequest == null)
                 return BadRequest();
-            
+
             try
             {
-                var loginResponse = await AccountServices.Register(registerRequest.Email, registerRequest.Password, registerRequest.RequestedToBeAdvisor);
-                return Ok(new { logged = true, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
+                var loginResponse = await UserBusiness.Register(registerRequest.Email, registerRequest.Password, registerRequest.RequestedToBeAdvisor);
+                return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        protected virtual async Task<IActionResult> ResendEmailConfirmation()
+        {
+            try
+            {
+                await UserBusiness.ResendEmailConfirmation(GetUser());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual IActionResult ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)
+        {
+            try
+            {
+                var loginResponse = UserBusiness.ConfirmEmail(confirmEmailRequest.Code);
+                return Ok(loginResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
     }
 }

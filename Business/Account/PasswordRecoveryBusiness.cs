@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Account;
+using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
 using Auctus.Util.NotShared;
@@ -10,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Auctus.Business.Account
 {
-    public class PasswordRecoveryBusiness : BaseBusiness<PasswordRecovery, PasswordRecoveryData>
+    public class PasswordRecoveryBusiness : BaseBusiness<PasswordRecovery, IPasswordRecoveryData<PasswordRecovery>>
     {
-        public PasswordRecoveryBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public PasswordRecoveryBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
     }
 }

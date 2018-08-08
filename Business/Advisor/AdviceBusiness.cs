@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Advisor;
+using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
 using Microsoft.Extensions.Logging;
@@ -8,9 +9,9 @@ using System.Text;
 
 namespace Auctus.Business.Advisor
 {
-    public class AdviceBusiness : BaseBusiness<Advice, AdviceData>
+    public class AdviceBusiness : BaseBusiness<Advice, IAdviceData<Advice>>
     {
-        public AdviceBusiness(ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(loggerFactory, cache, email, ip) { }
+        public AdviceBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
         public void Advise(int assetId, AdviceType type)
         {

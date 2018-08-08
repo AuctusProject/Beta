@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Follow;
 using Auctus.DomainObjects.Follow;
 using Dapper;
 using System;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace Auctus.DataAccess.Follow
 {
-    public class FollowAssetData : BaseSQL<FollowAsset>
+    public class FollowAssetData : BaseSQL<FollowAsset>, IFollowAssetData<FollowAsset>
     {
         public override string TableName => "FollowAsset";
 

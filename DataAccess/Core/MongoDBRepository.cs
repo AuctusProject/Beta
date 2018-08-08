@@ -31,14 +31,15 @@ namespace Auctus.DataAccess.Core
             IMongoDatabase database = Client.GetDatabase(DATABASE_NAME);
             return database;
         }
-        protected Task InsertOneAsync(string collectionName, MongoDomainObject document)
+
+        protected Task InsertOneAsync<T>(string collectionName, T document)
         {
             IMongoDatabase database = GetDataBase();
             IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
             return collection.InsertOneAsync(document.ToBsonDocument());
         }
 
-        protected Task InsertManyAsync(string collectionName, IEnumerable<MongoDomainObject> documents)
+        protected Task InsertManyAsync<T>(string collectionName, IEnumerable<T> documents)
         {
             IMongoDatabase database = GetDataBase();
             IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using Auctus.DataAccess.Core;
 using Auctus.Util.NotShared;
+using System.Threading.Tasks;
+using Auctus.DataAccessInterfaces;
 
 namespace Auctus.DataAccess.Core
 {
@@ -39,6 +41,16 @@ namespace Auctus.DataAccess.Core
         public void Delete(T obj)
         {
             base.Delete<T>(obj);
+        }
+
+        public Task InsertOneAsync(T obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task InsertManyAsync(IEnumerable<T> objs)
+        {
+            throw new NotImplementedException();
         }
     }
 }
