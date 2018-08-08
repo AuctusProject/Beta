@@ -54,7 +54,7 @@ namespace Auctus.Business.Account
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 IsAdvisor = IsValidAdvisor(user),
                 HasInvestment = hasInvestment,
-                ResquestedToBeAdvisor = user.RequestToBeAdvisor != null
+                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
         }
 
@@ -89,7 +89,7 @@ namespace Auctus.Business.Account
                 HasInvestment = false,
                 PendingConfirmation = true,
                 IsAdvisor = false,
-                ResquestedToBeAdvisor = requestedToBeAdvisor
+                RequestedToBeAdvisor = requestedToBeAdvisor
             };
         }
 
@@ -123,7 +123,7 @@ namespace Auctus.Business.Account
                 HasInvestment = false,
                 PendingConfirmation = false,
                 IsAdvisor = false,
-                ResquestedToBeAdvisor = user.RequestToBeAdvisor != null
+                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
         }
 
@@ -172,7 +172,7 @@ namespace Auctus.Business.Account
                 HasInvestment = true,
                 IsAdvisor = IsValidAdvisor(user),
                 PendingConfirmation = false,
-                ResquestedToBeAdvisor = user.RequestToBeAdvisor != null
+                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
         }
 

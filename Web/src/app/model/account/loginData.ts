@@ -4,7 +4,7 @@ export class LoginData {
   hasInvestment : boolean;
   isAdvisor : boolean;
   pendingConfirmation : boolean;
-  resquestedToBeAdvisor : boolean; 
+  requestedToBeAdvisor : boolean; 
 
   constructor(){
   }
