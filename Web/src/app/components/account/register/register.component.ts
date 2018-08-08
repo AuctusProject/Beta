@@ -6,10 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+ /* registerRequest: LoginRequest = new LoginRequest();
+  loginPromise: Subscription;
+  loginForm: FormGroup;*/
 
-  constructor() { }
+  constructor(/*private formBuilder: FormBuilder, 
+    private accountService: AccountService, 
+    private router: Router,
+  private notificationsService: NotificationsService*/) { }
 
   ngOnInit() {
-  }
+  } 
 
 }
