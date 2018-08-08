@@ -11,6 +11,6 @@ namespace Auctus.Model
         public bool HasInvestment { get; set; }
         public bool IsAdvisor { get; set; }
         public bool PendingConfirmation { get; set; }
-        public bool ResquestedToBeAdvisor { get; set; }
+        public bool RequestedToBeAdvisor { get; set; }
     }
 }

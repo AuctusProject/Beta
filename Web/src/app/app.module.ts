@@ -34,6 +34,7 @@ import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/fo
 import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
+import { RegisterComponent } from './components/account/register/register.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { ConfirmEmailComponent } from './components/account/confirm-email/confir
     TopAssetsComponent,
     MessageSignatureComponent,
     LoginComponent,
+    RegisterComponent,
     ConfirmEmailComponent
   ],
   imports: [

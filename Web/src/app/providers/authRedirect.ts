@@ -37,7 +37,7 @@ export class AuthRedirect implements CanActivate {
         return true;
       }
     }
-    else if(loginData.resquestedToBeAdvisor && !loginData.isAdvisor){
+    else if(loginData.requestedToBeAdvisor && !loginData.isAdvisor){
       if(currentUrl != '/advisor-details') {
         this.router.navigateByUrl('advisor-details');
         return true;
@@ -49,7 +49,7 @@ export class AuthRedirect implements CanActivate {
         return true;
       }
     }
-    else if( loginData.isAdvisor){
+    else if(loginData.isAdvisor){
       if (currentUrl != '/advisor/' + loginData.id) {
         this.router.navigateByUrl('advisor/' + loginData.id);
         return true;
