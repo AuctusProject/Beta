@@ -79,7 +79,7 @@ namespace Api.Controllers
             return base.ValidateSignature(signatureRequest);
         }
 
-        [Route("me/confirmation")]
+        [Route("me/confirmations")]
         [HttpGet]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -88,7 +88,7 @@ namespace Api.Controllers
             return await base.ResendEmailConfirmation();
         }
 
-        [Route("me/confirmation")]
+        [Route("me/confirmations")]
         [HttpPost]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

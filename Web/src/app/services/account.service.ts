@@ -17,7 +17,7 @@ export class AccountService {
   private baseGetAccountsUrl = this.httpService.apiUrl("v1/accounts");
   private validateSignatureUrl = this.httpService.apiUrl("/v1/accounts/me/signatures");
   private loginUrl = this.httpService.apiUrl("v1/accounts/login");
-  private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmation");
+  private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmations");
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
 
