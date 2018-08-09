@@ -9,6 +9,7 @@ using Auctus.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Auctus.DomainObjects.Follow;
 
 namespace Api.Controllers
 {
@@ -55,6 +56,32 @@ namespace Api.Controllers
             {
                 var result = RequestToBeAdvisorBusiness.GetByLoggedEmail();
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual IActionResult FollowAdvisor(int id)
+        {
+            try
+            {
+                var followAdvisor = UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Follow);
+                return Ok(followAdvisor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual IActionResult UnfollowAdvisor(int id)
+        {
+            try
+            {
+                var followAdvisor = UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Unfollow);
+                return Ok(followAdvisor);
             }
             catch (Exception ex)
             {

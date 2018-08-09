@@ -44,5 +44,23 @@ namespace Api.Controllers
         {
             return base.GetRequestToBe();
         }
+
+        [Route("{id}/followers")]
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult FollowAdvisor([FromRoute]int id)
+        {
+            return base.FollowAdvisor(id);
+        }
+
+        [Route("{id}/followers")]
+        [HttpDelete]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult UnfollowAdvisor([FromRoute]int id)
+        {
+            return base.UnfollowAdvisor(id);
+        }
     }
 }
