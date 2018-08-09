@@ -1,14 +1,14 @@
 ﻿using Auctus.DataAccess.Core;
-using Auctus.DataAccessInterfaces.Follow;
-using Auctus.DomainObjects.Follow;
+using Auctus.DomainObjects.Account;
+using Auctus.DomainObjects.Asset;
 using Dapper;
+using DataAccessInterfaces.Asset;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
-namespace Auctus.DataAccess.Follow
+namespace Auctus.DataAccess.Asset
 {
     public class FollowAssetData : BaseSQL<FollowAsset>, IFollowAssetData<FollowAsset>
     {

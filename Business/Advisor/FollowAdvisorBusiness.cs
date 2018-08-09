@@ -1,14 +1,14 @@
 ﻿using Auctus.DataAccess.Core;
-using Auctus.DataAccess.Follow;
-using Auctus.DataAccessInterfaces.Follow;
-using Auctus.DomainObjects.Follow;
+using Auctus.DomainObjects.Account;
+using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
+using DataAccessInterfaces.Advisor;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Auctus.Business.Follow
+namespace Auctus.Business.Advisor
 {
     public class FollowAdvisorBusiness : BaseBusiness<FollowAdvisor, IFollowAdvisorData<FollowAdvisor>>
     {

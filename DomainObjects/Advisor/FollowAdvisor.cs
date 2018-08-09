@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Auctus.DomainObjects.Account;
 
-namespace Auctus.DomainObjects.Follow
+namespace Auctus.DomainObjects.Advisor
 {
     public class FollowAdvisor : Follow
     {

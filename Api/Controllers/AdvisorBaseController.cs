@@ -9,7 +9,7 @@ using Auctus.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Auctus.DomainObjects.Follow;
+using Auctus.DomainObjects.Account;
 
 namespace Api.Controllers
 {

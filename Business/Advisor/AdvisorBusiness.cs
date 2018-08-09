@@ -64,8 +64,8 @@ namespace Auctus.Business.Advisor
         }
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 
-            IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<DomainObjects.Follow.FollowAdvisor> advisorFollowers,
-            IEnumerable<DomainObjects.Follow.FollowAsset> assetFollowers)
+            IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<FollowAdvisor> advisorFollowers,
+            IEnumerable<FollowAsset> assetFollowers)
         {
             advisorsResult = new List<AdvisorResponse>();
             assetsResult = new List<AssetResponse>();

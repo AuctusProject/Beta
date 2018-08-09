@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Auctus.DomainObjects.Follow
+namespace Auctus.DomainObjects.Account
 {
     public class FollowActionType : IntType
     {

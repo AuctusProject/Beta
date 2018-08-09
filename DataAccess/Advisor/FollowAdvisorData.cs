@@ -1,13 +1,15 @@
 ﻿using Auctus.DataAccess.Core;
-using Auctus.DataAccessInterfaces.Follow;
-using Auctus.DomainObjects.Follow;
+using Auctus.DomainObjects.Account;
+using Auctus.DomainObjects.Advisor;
 using Dapper;
+using DataAccessInterfaces.Advisor;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using System.Linq;
 
-namespace Auctus.DataAccess.Follow
+namespace Auctus.DataAccess.Advisor
 {
     public class FollowAdvisorData : BaseSQL<FollowAdvisor>, IFollowAdvisorData<FollowAdvisor>
     {
