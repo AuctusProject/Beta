@@ -19,6 +19,13 @@ namespace Api.Controllers
     public class AdvisorV1Controller : AdvisorBaseController
     {
         public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+        
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAdvisors()
+        {
+            return base.ListAdvisors();
+        }
 
         [Route("advices")]
         [HttpPost]

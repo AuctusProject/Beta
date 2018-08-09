@@ -15,7 +15,20 @@ namespace Api.Controllers
 {
     public class AdvisorBaseController : BaseController
     {
-        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { } 
+        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+
+        protected IActionResult ListAdvisors()
+        {
+            try
+            {
+                var advisorsResponse = AdvisorBusiness.ListAdvisorsData();
+                return Ok(advisorsResponse);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
 
         protected IActionResult Advise(AdviseRequest adviseRequest)
         {
