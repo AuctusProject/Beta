@@ -49,6 +49,11 @@ namespace Auctus.DataAccessMock.Account
             };
         }
 
+        public User GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public User GetForLogin(string email)
         {
             throw new NotImplementedException();

@@ -8,7 +8,7 @@ namespace Auctus.Test.Advisor
     public class AdvisorTest : BaseTest
     {
         [Fact]
-        public void Calculation()
+        public void CalculationForListAdvisors()
         {
             var response = AdvisorBusiness.ListAdvisorsData();
         }
