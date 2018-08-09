@@ -21,7 +21,15 @@ namespace Auctus.Business.Advisor
             return Data.GetByUser(userId);
         }
 
-        public async Task<RequestToBeAdvisor> Create(string email, string name, string description, string previousExperience)
+        public RequestToBeAdvisor GetByLoggedEmail()
+        {
+            var user = UserBusiness.GetByEmail(LoggedEmail);
+            if(user == null)
+                throw new ArgumentException("Invalid email.");
+            return Data.GetByUser(user.Id);
+        }
+
+        public async Task<RequestToBeAdvisor> Create(string name, string description, string previousExperience)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name must be filled.");

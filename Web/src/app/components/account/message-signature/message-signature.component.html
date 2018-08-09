@@ -1,7 +1,8 @@
-<button (click)="signMessage()">SIGN MESSAGE</button>
 <div *ngIf="hasMetamask">
-  
+  <button (click)="signMessage()">SIGN MESSAGE</button>
 </div>
 <div *ngIf="!hasMetamask">
   Please install metamask
 </div>
+
+<button (click)="becomeAdvisor()">BECOME ADVISOR</button>

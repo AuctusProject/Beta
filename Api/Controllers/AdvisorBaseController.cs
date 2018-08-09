@@ -31,5 +31,35 @@ namespace Api.Controllers
             }
             return Ok();
         }
+
+        protected async Task<IActionResult> RequestToBe(BeAdvisorRequest beAdvisorRequest)
+        {
+            try
+            {
+                if (beAdvisorRequest == null)
+                    return BadRequest();
+
+                var result = await RequestToBeAdvisorBusiness.Create(beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected IActionResult GetRequestToBe()
+        {
+            try
+            {
+                var result = RequestToBeAdvisorBusiness.GetByLoggedEmail();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

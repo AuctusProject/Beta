@@ -14,14 +14,13 @@ using Api.Model.Advisor;
 namespace Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/advisors/v1/")]
-    [Authorize("Bearer")]
+    [Route("api/v1/advisors/")]
     [EnableCors("Default")]
     public class AdvisorV1Controller : AdvisorBaseController
     {
         public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
 
-        [Route("advise/")]
+        [Route("advices")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult Advise([FromBody]AdviseRequest adviseRequest)
@@ -29,5 +28,21 @@ namespace Api.Controllers
             return base.Advise(adviseRequest);
         }
 
+        [Route("me/requests")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new async Task<IActionResult> RequestToBe([FromBody]BeAdvisorRequest beAdvisorRequest)
+        {
+            return await base.RequestToBe(beAdvisorRequest);
+        }
+
+        [Route("me/requests")]
+        [AllowAnonymous]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetRequestToBe()
+        {
+            return base.GetRequestToBe();
+        }
     }
 }

@@ -46,6 +46,13 @@ namespace Auctus.DataAccess.Account
                                                 WHERE 
                                                 u.Email = @Email";
 
+        private const string SQL_BY_ID = @"SELECT u.*, a.*
+                                                FROM 
+                                                [User] u
+                                                LEFT JOIN [Advisor] a ON a.Id = u.Id
+                                                WHERE 
+                                                u.Id = @Id";
+
         public User GetForLogin(string email)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -119,6 +126,29 @@ namespace Auctus.DataAccess.Account
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Email", email.ToLower().Trim(), DbType.AnsiString);
             return Query<User, Auctus.DomainObjects.Advisor.Advisor, User>(SQL_BY_EMAIL,
+                        (user, advisor) =>
+                        {
+                            if (advisor != null)
+                            {
+                                advisor.Id = user.Id;
+                                advisor.Email = user.Email;
+                                advisor.Password = user.Password;
+                                advisor.CreationDate = user.CreationDate;
+                                advisor.ConfirmationCode = user.ConfirmationCode;
+                                advisor.ConfirmationDate = user.ConfirmationDate;
+                                advisor.IsAdvisor = true;
+                                return advisor;
+                            }
+                            else
+                                return user;
+                        }, "Id", parameters).SingleOrDefault();
+        }
+
+        public User GetById(int id)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            return Query<User, Auctus.DomainObjects.Advisor.Advisor, User>(SQL_BY_ID,
                         (user, advisor) =>
                         {
                             if (advisor != null)
