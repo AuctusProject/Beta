@@ -27,6 +27,14 @@ namespace Api.Controllers
             return base.ListAdvisors();
         }
 
+        [Route("{id}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAdvisor(int id)
+        {
+            return base.GetAdvisor(id);
+        }
+
         [Route("advices")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -11,6 +11,7 @@ import { ForgotPasswordComponent } from './components/account/forgot-password/fo
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
 import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-advisors.component';
+import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -24,6 +25,7 @@ const routes: Routes = [
     { path: 'forgot-password-reset', component: ForgotPasswordResetComponent },
     { path: 'change-password', component: ChangePasswordComponent,canActivate:[AuthRedirect] },
     { path: 'list-advisors', component: ListAdvisorsComponent,canActivate:[AuthRedirect] },
+    { path: 'advisor-details/:id', component: AdvisorDetailsComponent,canActivate:[AuthRedirect] },
 ];
 
 @NgModule({
