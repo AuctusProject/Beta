@@ -1,4 +1,6 @@
-﻿using Auctus.DomainObjects.Asset;
+﻿using Auctus.DataAccess.Core;
+using Auctus.DomainObjects.Account;
+using Auctus.DomainObjects.Asset;
 using Auctus.Util;
 using DataAccessInterfaces.Asset;
 using Microsoft.Extensions.Logging;
@@ -15,6 +17,27 @@ namespace Auctus.Business.Asset
         public List<FollowAsset> ListFollowers(IEnumerable<int> assetIds = null)
         {
             return Data.ListFollowers(assetIds);
+        }
+
+        public FollowAsset Create(int userId, int AssetId, FollowActionType actionType)
+        {
+            using (var transaction = new TransactionalDapperCommand())
+            {
+                var follow = FollowBusiness.Create(userId, actionType);
+                transaction.Insert(follow);
+                FollowAsset followAsset = new FollowAsset()
+                {
+                    Id = follow.Id,
+                    AssetId = AssetId,
+                    ActionType = follow.ActionType,
+                    UserId = follow.UserId,
+                    CreationDate = follow.CreationDate
+                };
+                transaction.Insert(followAsset);
+                transaction.Commit();
+
+                return followAsset;
+            }
         }
     }
 }
