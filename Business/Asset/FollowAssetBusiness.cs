@@ -1,13 +1,12 @@
-﻿using Auctus.DataAccess.Follow;
-using Auctus.DataAccessInterfaces.Follow;
-using Auctus.DomainObjects.Follow;
+﻿using Auctus.DomainObjects.Asset;
 using Auctus.Util;
+using DataAccessInterfaces.Asset;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Auctus.Business.Follow
+namespace Auctus.Business.Asset
 {
     public class FollowAssetBusiness : BaseBusiness<FollowAsset, IFollowAssetData<FollowAsset>>
     {

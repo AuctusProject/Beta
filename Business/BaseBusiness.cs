@@ -1,7 +1,6 @@
 ﻿using Auctus.Business.Account;
 using Auctus.Business.Advisor;
 using Auctus.Business.Asset;
-using Auctus.Business.Follow;
 using Auctus.DataAccess;
 using Auctus.DataAccess.Core;
 using Auctus.DataAccessInterfaces;
