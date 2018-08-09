@@ -26,7 +26,7 @@ export class AccountService {
 
   constructor(private httpService : HttpService, private router : Router) { }
 
-  validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginData> {
+  validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginResponse> {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
   }
 
