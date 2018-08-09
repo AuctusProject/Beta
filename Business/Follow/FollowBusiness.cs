@@ -22,7 +22,7 @@ namespace Auctus.Business.Follow
             return new FollowObj()
             {
                 ActionType = actionType.Value,
-                CreationDate = DateTime.UtcNow,
+                CreationDate = Data.GetDateTimeNow(),
                 UserId = userId
             };
         }

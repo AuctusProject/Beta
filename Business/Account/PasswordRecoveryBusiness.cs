@@ -25,13 +25,13 @@ namespace Auctus.Business.Account
                 {
                     recovery = new PasswordRecovery();
                     recovery.UserId = user.Id;
-                    recovery.CreationDate = DateTime.UtcNow;
+                    recovery.CreationDate = Data.GetDateTimeNow();
                     recovery.Token = Guid.NewGuid().ToString();
                     Data.Insert(recovery);
                 }
                 else
                 {
-                    recovery.CreationDate = DateTime.UtcNow;
+                    recovery.CreationDate = Data.GetDateTimeNow();
                     recovery.Token = Guid.NewGuid().ToString();
                     Data.Update(recovery);
                 }
@@ -61,7 +61,7 @@ Auctus Team", Config.WEB_URL, code));
             var recovery = Data.Get(code);
             if (recovery == null)
                 throw new ArgumentException("There is no request for recover password.");
-            if (DateTime.UtcNow > recovery.CreationDate.AddMinutes(60))
+            if (Data.GetDateTimeNow() > recovery.CreationDate.AddMinutes(60))
                 throw new ArgumentException("Recover password code is expired.");
 
             UserBusiness.UpdatePassword(UserBusiness.GetById(recovery.UserId), password);

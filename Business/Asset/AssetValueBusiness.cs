@@ -23,8 +23,8 @@ namespace Auctus.Business.Asset
 
         internal void UpdateAssetValue(DomainObjects.Asset.Asset asset)
         {
-            var lastUpdatedValue = LastAssetValue(asset.Id)?.Date ?? DateTime.UtcNow.AddDays(-30).Date;
-            if (lastUpdatedValue.AddMinutes(ExchangeApi.GAP_IN_MINUTES_BETWEEN_VALUES) > DateTime.UtcNow)
+            var lastUpdatedValue = LastAssetValue(asset.Id)?.Date ?? Data.GetDateTimeNow().AddDays(-30).Date;
+            if (lastUpdatedValue.AddMinutes(ExchangeApi.GAP_IN_MINUTES_BETWEEN_VALUES) > Data.GetDateTimeNow())
             {
                 return;
             }
@@ -40,7 +40,7 @@ namespace Auctus.Business.Asset
         internal Dictionary<DateTime, List<AssetValue>> GetAssetValuesGroupedByDate(IEnumerable<int> assetsIds, DateTime startDate)
         {
             var assetValues = Data.List(assetsIds, startDate);
-            var now = DateTime.UtcNow;
+            var now = Data.GetDateTimeNow();
             var rangeValueInMinutes = GetRangeValueToGroupAssetsInMinutes((int)Math.Ceiling(now.Subtract(startDate).TotalMinutes));
             var iterateDate = startDate.AddSeconds(-startDate.Second).AddMilliseconds(-startDate.Millisecond);
             var passedMinutes = (iterateDate.Hour * 60 + iterateDate.Minute);

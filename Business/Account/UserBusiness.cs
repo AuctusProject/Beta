@@ -81,7 +81,7 @@ namespace Auctus.Business.Account
 
             user = new User();
             user.Email = email.ToLower().Trim();
-            user.CreationDate = DateTime.UtcNow;
+            user.CreationDate = Data.GetDateTimeNow();
             user.Password = Security.Hash(password);
             user.ConfirmationCode = Guid.NewGuid().ToString();
             Data.Insert(user);
@@ -120,7 +120,7 @@ namespace Auctus.Business.Account
             if (user == null)
                 throw new ArgumentException("Invalid confirmation code.");
 
-            user.ConfirmationDate = DateTime.UtcNow;
+            user.ConfirmationDate = Data.GetDateTimeNow();
             Data.Update(user);
 
             return new Model.LoginResponse()
@@ -168,7 +168,7 @@ namespace Auctus.Business.Account
                     throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
             }
 
-            var creationDate = DateTime.UtcNow;
+            var creationDate = Data.GetDateTimeNow();
             WalletBusiness.InsertNew(creationDate, user.Id, address);
             ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
 

@@ -51,7 +51,7 @@ namespace Auctus.Business.Advisor
 
             var newRequest = new RequestToBeAdvisor()
             {
-                CreationDate = DateTime.UtcNow,
+                CreationDate = Data.GetDateTimeNow(),
                 Name = name,
                 Description = description,
                 PreviousExperience = previousExperience,
