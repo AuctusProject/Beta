@@ -1,10 +1,10 @@
-import { LoginData } from "./loginData";
-
 export class LoginResponse {
+  id: number;
   email: string;
-  logged: boolean;
-  error: string;
-  data: LoginData;
+  hasInvestment : boolean;
+  isAdvisor : boolean;
+  pendingConfirmation : boolean;
+  requestedToBeAdvisor : boolean; 
 
   constructor(){
   }

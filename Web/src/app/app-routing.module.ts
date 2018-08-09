@@ -6,11 +6,13 @@ import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
+import { RegisterComponent } from './components/account/register/register.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
     { path: 'top-advisors', component: TopAdvisorsComponent, canActivate: [AuthRedirect]  },
     { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
     { path: 'feed', component: LoginComponent, canActivate: [AuthRedirect],  },
     { path: 'confirm-email', component: ConfirmEmailComponent, canActivate: [AuthRedirect] },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },

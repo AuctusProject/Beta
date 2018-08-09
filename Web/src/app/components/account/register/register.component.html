@@ -1,23 +1,24 @@
 <p>Register new Account</p>
 <div class="main-content">
-    <form [formGroup]="registerForm" (ngSubmit)="onCreateAccountClick()" fxLayoutAlign="space-evenly center">
-      <div class="blue-box" fxLayout="column" fxLayoutGap="20px">
-        <div fxLayout="column" fxLayoutAlign="space-evenly center">
-          <div fxLayout="row" fxLayoutGap="20px">
-            
-              <input matInput placeholder="Email" [(ngModel)]="registerRequest.email" formControlName="email" type="text"
-                autocomplete="username email" />
-            
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px">
-              <input matInput placeholder="Password" [(ngModel)]="registerRequest.password" type="password" formControlName="password" autocomplete="current-password"/>
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px">
-            <button type="submit" class="primary-button bold login" >
-              Create Account
-            </button>
-          </div>
+  <form [formGroup]="registerForm" (ngSubmit)="onCreateAccountClick()" fxLayoutAlign="space-evenly center">
+    <div class="blue-box" fxLayout="column" fxLayoutGap="20px">
+      <div fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <input matInput placeholder="Email" [(ngModel)]="registerRequest.email" formControlName="email" type="text" autocomplete="username email"/>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <input matInput placeholder="Password" [(ngModel)]="registerRequest.password" type="password" formControlName="password"
+            autocomplete="current-password" />
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <input matInput [(ngModel)]="registerRequest.requestedToBeAdvisor" type="checkbox" formControlName="password"/>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <button type="submit" class="primary-button bold login">
+            Create Account
+          </button>
         </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
+</div>

@@ -5,8 +5,10 @@ import { ValidateSignatureRequest } from '../model/account/validateSignatureRequ
 import { LoginResponse } from '../model/account/loginResponse';
 import { LoginRequest } from '../model/account/loginRequest';
 import { Router } from '../../../node_modules/@angular/router';
-import { LoginData } from '../model/account/loginData';
+import { LoginResult } from '../model/account/loginResult';
 import { ConfirmEmailRequest } from '../model/account/confirmEmailRequest';
+import { RegisterRequest } from '../model/account/registerRequest';
+import { RegisterResponse } from '../model/account/registerResponse';
 
 
 @Injectable()
@@ -15,6 +17,7 @@ export class AccountService {
   private validateSignatureUrl = this.httpService.apiUrl("accounts/v1/validate");
   private loginUrl = this.httpService.apiUrl("accounts/v1/login");
   private confirmationEmailUrl = this.httpService.apiUrl("accounts/v1/email/confirmation");
+  private registerUrl = this.httpService.apiUrl("accounts/v1/register")
 
   constructor(private httpService : HttpService, private router : Router) { }
 
@@ -22,15 +25,15 @@ export class AccountService {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
   }
 
-  login(loginRequest : LoginRequest):Observable<LoginResponse>{
+  login(loginRequest : LoginRequest):Observable<LoginResult>{
     return this.httpService.post(this.loginUrl, loginRequest);
   }
 
-  setLoginData(loginData: LoginData): void {
+  setLoginData(loginData: LoginResponse): void {
     this.httpService.setLoginData(loginData);
   }
 
-  getLoginData(): LoginData {
+  getLoginData(): LoginResponse {
     return this.httpService.getLoginData();
   }
 
@@ -55,7 +58,11 @@ export class AccountService {
     return this.httpService.get(this.confirmationEmailUrl);
   }
 
-  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginData>{
+  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginResponse>{
     return this.httpService.post(this.confirmationEmailUrl, confirmEmailRequest);
+  }
+
+  register(registerRequest: RegisterRequest) : Observable<RegisterResponse>{
+    return this.httpService.post(this.registerUrl, registerRequest)
   }
 }
