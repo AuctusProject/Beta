@@ -22,3 +22,4 @@ export class AdvisorResponse {
     this.assets = [];
   }
 }
+

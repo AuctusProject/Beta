@@ -20,6 +20,6 @@ namespace Auctus.Model
         public DateTime CreationDate { get; set; }
         public List<RecommendationDistributionResponse> RecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
 
-        public List<AssetResponse> Asset { get; set; } = new List<AssetResponse>();
+        public List<AssetResponse> Assets { get; set; } = new List<AssetResponse>();
     }
 }

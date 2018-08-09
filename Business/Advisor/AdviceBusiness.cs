@@ -26,7 +26,7 @@ namespace Auctus.Business.Advisor
             Insert(
                 new Advice()
                 {
-                    UserId = user.Id,
+                    AdvisorId = user.Id,
                     AssetId = assetId,
                     Type = type.Value,
                     CreationDate = Data.GetDateTimeNow()
