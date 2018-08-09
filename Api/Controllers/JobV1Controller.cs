@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace Api.Controllers
 {
     [Produces("application/json")]
-    [Route("api/jobs/v1/")]
+    [Route("api/v1/jobs/")]
     //[Authorize("Bearer")]
     [EnableCors("Default")]
     public class JobV1Controller : JobBaseController
@@ -33,14 +33,15 @@ namespace Api.Controllers
             return base.UpdateAssetsValues();
         }
 
-        [Route("assets/create")]
+        [Route("assets")]
         [HttpPost]
         public new IActionResult CreateAssets()
         {
             return base.CreateAssets();
         }
+
         [Route("assets/icons")]
-        [HttpGet]
+        [HttpPost]
         public new IActionResult UpdateAllAssetsIcons()
         {
             return base.UpdateAllAssetsIcons();

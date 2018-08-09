@@ -6,6 +6,10 @@ import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
+import { BecomeAdvisorComponent } from './components/advisor/become-advisor/become-advisor.component';
+import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
+import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
+import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
 import { RegisterComponent } from './components/account/register/register.component';
 
 const routes: Routes = [
@@ -16,6 +20,10 @@ const routes: Routes = [
     { path: 'feed', component: LoginComponent, canActivate: [AuthRedirect],  },
     { path: 'confirm-email', component: ConfirmEmailComponent, canActivate: [AuthRedirect] },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
+    { path: 'become-advisor', component: BecomeAdvisorComponent, canActivate: [AuthRedirect] },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'forgot-password-reset', component: ForgotPasswordResetComponent },
+    { path: 'change-password', component: ChangePasswordComponent,canActivate:[AuthRedirect] },
 ];
 
 @NgModule({

@@ -8,6 +8,11 @@ namespace Auctus.DataAccessMock
 {
     public class BaseData<T> : IBaseData<T>
     {
+        public virtual DateTime GetDateTimeNow()
+        {
+            return new DateTime(2018, 5, 18, 0, 0, 0);
+        }
+
         public virtual void Delete(T obj)
         {
             throw new NotImplementedException();

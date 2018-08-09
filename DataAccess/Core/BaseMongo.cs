@@ -25,6 +25,11 @@ namespace Auctus.DataAccess.Core
             }
         }
 
+        public virtual DateTime GetDateTimeNow()
+        {
+            return DateTime.UtcNow;
+        }
+
         public Task InsertOneAsync(T document)
         {
             return base.InsertOneAsync(CollectionName, document);

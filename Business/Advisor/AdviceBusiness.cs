@@ -29,7 +29,7 @@ namespace Auctus.Business.Advisor
                     UserId = user.Id,
                     AssetId = assetId,
                     Type = type.Value,
-                    CreationDate = DateTime.UtcNow,
+                    CreationDate = Data.GetDateTimeNow()
                 });
         }
 

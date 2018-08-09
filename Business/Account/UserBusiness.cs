@@ -3,7 +3,7 @@ using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Exchanges;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
-using Auctus.DomainObjects.Follow;
+using Auctus.DomainObjects.Advisor;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
@@ -27,6 +27,11 @@ namespace Auctus.Business.Account
             return Data.GetByEmail(email);
         }
 
+        public User GetById(int id)
+        {
+            return Data.GetById(id);
+        }
+
         public LoginResponse Login(string email, string password)
         {
             BaseEmailValidation(email);
@@ -41,7 +46,7 @@ namespace Auctus.Business.Account
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
-            if (!IsValidAdvisor(user))
+            if (!IsValidAdvisor(user) && Config.MINUMIM_AUC_TO_LOGIN > 0)
             {
                 aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
                 hasInvestment = aucAmount >= Config.MINUMIM_AUC_TO_LOGIN;
@@ -76,7 +81,7 @@ namespace Auctus.Business.Account
 
             user = new User();
             user.Email = email.ToLower().Trim();
-            user.CreationDate = DateTime.UtcNow;
+            user.CreationDate = Data.GetDateTimeNow();
             user.Password = Security.Hash(password);
             user.ConfirmationCode = Guid.NewGuid().ToString();
             Data.Insert(user);
@@ -93,8 +98,9 @@ namespace Auctus.Business.Account
             };
         }
 
-        public async Task ResendEmailConfirmation(string email)
+        public async Task ResendEmailConfirmation()
         {
+            var email = LoggedEmail;
             BaseEmailValidation(email);
             EmailValidation(email);
 
@@ -114,7 +120,7 @@ namespace Auctus.Business.Account
             if (user == null)
                 throw new ArgumentException("Invalid confirmation code.");
 
-            user.ConfirmationDate = DateTime.UtcNow;
+            user.ConfirmationDate = Data.GetDateTimeNow();
             Data.Update(user);
 
             return new Model.LoginResponse()
@@ -149,7 +155,7 @@ namespace Auctus.Business.Account
                     throw new ArgumentException("The wallet is already on used.");
             }
 
-            var message = $"{address} is my address.\n{DateTime.Today.Year}-{DateTime.Today.Month.ToString().PadLeft(2, '0')}-{DateTime.Today.Day.ToString().PadLeft(2, '0')}";
+            var message = $"I accept the Privacy Policy and Terms of Use.";
             var recoveryAddress = Signature.HashAndEcRecover(message, signature)?.ToLower();
             if (address != recoveryAddress)
                 throw new ArgumentException("Invalid signature.");
@@ -162,7 +168,7 @@ namespace Auctus.Business.Account
                     throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
             }
 
-            var creationDate = DateTime.UtcNow;
+            var creationDate = Data.GetDateTimeNow();
             WalletBusiness.InsertNew(creationDate, user.Id, address);
             ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
 
@@ -182,10 +188,15 @@ namespace Auctus.Business.Account
             if (user.Password != Security.Hash(currentPassword))
                 throw new ArgumentException("Current password is incorrect.");
 
-            BasePasswordValidation(newPassword);
-            PasswordValidation(newPassword);
+            UpdatePassword(user, newPassword);
+        }
 
-            user.Password = Security.Hash(newPassword);
+        public void UpdatePassword(User user, string password)
+        {
+            BasePasswordValidation(password);
+            PasswordValidation(password);
+
+            user.Password = Security.Hash(password);
             Data.Update(user);
         }
 
@@ -233,14 +244,11 @@ Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new ArgumentException("Password cannot have spaces.");
         }
 
-        public void ToggleFollowAdvisor(int advisorId)
+        public FollowAdvisor FollowUnfollowAdvisor(int advisorId, FollowActionType followActionType)
         {
             var user = GetValidUser();
 
-            FollowAdvisor lastState = FollowAdvisorBusiness.GetLastByUser(user.Id, advisorId);
-            FollowActionType newStateType = lastState == null || lastState.FollowActionType == FollowActionType.Unfollow ? FollowActionType.Follow : FollowActionType.Unfollow;
-
-            FollowAdvisorBusiness.Create(user.Id, advisorId, newStateType);
+            return FollowAdvisorBusiness.Create(user.Id, advisorId, followActionType);
         }
     }
 }

@@ -225,7 +225,7 @@ namespace Auctus.DataAccess.Core
         private static PropertyContainer ParseProperties<T>(T obj)
         {
             PropertyContainer propertyContainer = new PropertyContainer();
-            PropertyInfo[] properties = typeof(T).GetProperties();
+            IEnumerable<PropertyInfo> properties = typeof(T).GetProperties().Where(c => c.DeclaringType == typeof(T) || c.IsDefined(typeof(DapperKeyAttribute), false));
             foreach (PropertyInfo property in properties)
             {
                 // Skip reference types (but still include string!)
@@ -318,7 +318,8 @@ namespace Auctus.DataAccess.Core
 
             internal void AddKey(string name, object value, DbType type, bool identity)
             {
-                if (identity)
+                ulong id;
+                if (identity && (value == null || (ulong.TryParse(value.ToString(), out id) && id == 0)))
                 {
                     if (!string.IsNullOrEmpty(_identity))
                         throw new ArgumentException("Incorrect identity parameter.");

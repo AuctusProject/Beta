@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Auctus.DataAccessInterfaces
@@ -12,5 +13,7 @@ namespace Auctus.DataAccessInterfaces
         void Delete(T obj);
         Task InsertOneAsync(T obj);
         Task InsertManyAsync(IEnumerable<T> objs);
+
+        DateTime GetDateTimeNow();
     }
 }

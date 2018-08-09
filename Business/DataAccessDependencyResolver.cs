@@ -1,15 +1,15 @@
 ﻿using Auctus.DataAccess.Account;
 using Auctus.DataAccess.Advisor;
 using Auctus.DataAccess.Asset;
-using Auctus.DataAccess.Follow;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
-using Auctus.DataAccessInterfaces.Follow;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
-using Auctus.DomainObjects.Follow;
+using DataAccessInterfaces.Account;
+using DataAccessInterfaces.Advisor;
+using DataAccessInterfaces.Asset;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Auctus.Business
@@ -30,7 +30,7 @@ namespace Auctus.Business
             services.AddScoped<IAssetValueData<AssetValue>, AssetValueData>();
             services.AddScoped<IFollowAdvisorData<FollowAdvisor>, FollowAdvisorData>();
             services.AddScoped<IFollowAssetData<FollowAsset>, FollowAssetData>();
-            services.AddScoped<IFollowData<DomainObjects.Follow.Follow>, FollowData>();
+            services.AddScoped<IFollowData<Follow>, FollowData>();
         }
     }
 }

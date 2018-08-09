@@ -29,7 +29,7 @@ namespace Auctus.Business.Account
         {
             Data.InsertOneAsync(new DomainObjects.Account.Action()
             {
-                CreationDate = DateTime.UtcNow,
+                CreationDate = Data.GetDateTimeNow(),
                 UserId = userId,
                 Type = 2,
                 AucAmount = aucAmount,
@@ -41,7 +41,7 @@ namespace Auctus.Business.Account
         {
             Data.InsertOneAsync(new DomainObjects.Account.Action()
             {
-                CreationDate = DateTime.UtcNow,
+                CreationDate = Data.GetDateTimeNow(),
                 UserId = userId,
                 Type = 3,
                 AucAmount = aucAmount,

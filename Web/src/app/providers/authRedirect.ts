@@ -37,14 +37,14 @@ export class AuthRedirect implements CanActivate {
         return true;
       }
     }
-    else if(loginResponse.requestedToBeAdvisor && !loginResponse.isAdvisor){
-      if(currentUrl != '/advisor-details') {
-        this.router.navigateByUrl('advisor-details');
+    else if (loginResponse.requestedToBeAdvisor && !loginResponse.isAdvisor){
+      if(currentUrl != '/become-advisor' && currentUrl != '/wallet-login') {
+        this.router.navigateByUrl('become-advisor');
         return true;
       }
     }    
-    else if(!loginResponse.isAdvisor && !loginResponse.hasInvestment){
-      if(currentUrl != '/wallet-login') {
+    else if (!loginResponse.isAdvisor && !loginResponse.hasInvestment){
+      if(currentUrl != '/wallet-login' && currentUrl != '/become-advisor') {
         this.router.navigateByUrl('wallet-login');
         return true;
       }

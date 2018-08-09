@@ -48,6 +48,54 @@ namespace Api.Controllers
             }
         }
 
+        protected virtual IActionResult RecoverPassword(RecoverPasswordRequest recoverPasswordRequest)
+        {
+            if (recoverPasswordRequest == null)
+                return BadRequest();
+
+            try
+            {
+                PasswordRecoveryBusiness.RecoverPassword(recoverPasswordRequest.Code, recoverPasswordRequest.Password);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual async Task<IActionResult> ForgotPassword(ForgotPasswordRequest forgotPasswordRequest)
+        {
+            if (forgotPasswordRequest == null || String.IsNullOrWhiteSpace(forgotPasswordRequest.Email))
+                return BadRequest();
+
+            try
+            {
+                await PasswordRecoveryBusiness.SendEmailForForgottenPassword(forgotPasswordRequest.Email);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual IActionResult ChangePassword(ChangePasswordRequest changePasswordRequest)
+        {
+            if (changePasswordRequest == null || String.IsNullOrWhiteSpace(changePasswordRequest.CurrentPassword) || String.IsNullOrWhiteSpace(changePasswordRequest.NewPassword))
+                return BadRequest();
+
+            try
+            {
+                UserBusiness.ChangePassword(changePasswordRequest.CurrentPassword, changePasswordRequest.NewPassword);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
         protected virtual async Task<IActionResult> Register(RegisterRequest registerRequest)
         {
             if (registerRequest == null)
@@ -68,7 +116,7 @@ namespace Api.Controllers
         {
             try
             {
-                await UserBusiness.ResendEmailConfirmation(GetUser());
+                await UserBusiness.ResendEmailConfirmation();
                 return Ok();
             }
             catch (Exception ex)
@@ -89,6 +137,5 @@ namespace Api.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
     }
 }

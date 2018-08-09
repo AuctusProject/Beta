@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Follow\**" />
+    <EmbeddedResource Remove="Follow\**" />
+    <None Remove="Follow\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
@@ -29,6 +35,11 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection.abstractions\2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Account\" />
+    <Folder Include="Asset\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Advisor } from '../../../model/advisor/advisor';
+import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 
 @Component({
   selector: 'advisor-card',
@@ -7,7 +7,7 @@ import { Advisor } from '../../../model/advisor/advisor';
   styleUrls: ['./advisor-card.component.css']
 })
 export class AdvisorCardComponent implements OnInit {
-  @Input() advisor: Advisor;
+  @Input() advisor: AdvisorResponse;
   
   constructor() { }
 

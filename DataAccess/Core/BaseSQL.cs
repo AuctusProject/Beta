@@ -23,6 +23,11 @@ namespace Auctus.DataAccess.Core
             return base.SelectByObject<T>(criteria);
         }
 
+        public virtual DateTime GetDateTimeNow()
+        {
+            return DateTime.UtcNow;
+        }
+
         public IEnumerable<T> SelectAll()
         {
             return base.SelectAll<T>();
