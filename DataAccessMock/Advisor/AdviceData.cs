@@ -62,7 +62,7 @@ namespace Auctus.DataAccessMock.Advisor
                 AssetId = assetId,
                 CreationDate = dateTime,
                 Type = type.Value,
-                UserId = userId
+                AdvisorId = userId
             };
         }
     }

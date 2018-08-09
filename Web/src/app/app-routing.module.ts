@@ -10,6 +10,7 @@ import { BecomeAdvisorComponent } from './components/advisor/become-advisor/beco
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
+import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-advisors.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'forgot-password-reset', component: ForgotPasswordResetComponent },
     { path: 'change-password', component: ChangePasswordComponent,canActivate:[AuthRedirect] },
+    { path: 'list-advisors', component: ListAdvisorsComponent,canActivate:[AuthRedirect] },
 ];
 
 @NgModule({

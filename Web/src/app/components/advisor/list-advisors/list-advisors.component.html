@@ -1,0 +1,11 @@
+<p>
+  list-advisors works!
+</p>
+<select  class='form-control' 
+        (change)="onSortOptionChanged($event)" [(ngModel)]="selectedSortOption">
+        <option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.name}}</option>
+</select>
+<div *ngFor="let advisor of advisors">
+<br/>
+<advisor-card [advisor]="advisor"></advisor-card>
+</div>

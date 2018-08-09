@@ -22,9 +22,9 @@ namespace Auctus.DataAccess.Advisor
             DynamicParameters parameters = new DynamicParameters();
             if (advisorIds.Count() > 0)
             {
-                complement = string.Join(" OR ", advisorIds.Select((c, i) => $"a.UserId = @UserId{i}"));
+                complement = string.Join(" OR ", advisorIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
                 for (int i = 0; i < advisorIds.Count(); ++i)
-                    parameters.Add($"UserId{i}", advisorIds.ElementAt(i), DbType.Int32);
+                    parameters.Add($"AdvisorId{i}", advisorIds.ElementAt(i), DbType.Int32);
             }
             return Query<Advice>(string.Format(SQL_LIST, complement), parameters).ToList();
         }
