@@ -19,7 +19,6 @@ import { HttpService } from './services/http.service';
 import { AssetHistoryChartComponent } from './components/asset/asset-history-chart/asset-history-chart.component';
 import { RecommendationDistributionComponent } from './components/recommendation-distribution/recommendation-distribution.component';
 import { AdvisorCardComponent } from './components/advisor/advisor-card/advisor-card.component';
-import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AdvisorService } from './services/advisor.service';
 import { HttpModule } from '../../node_modules/@angular/http';
@@ -49,7 +48,6 @@ import { AdvisorDetailsComponent } from './components/advisor/advisor-details/ad
     AssetHistoryChartComponent,
     RecommendationDistributionComponent,
     AdvisorCardComponent,
-    TopAdvisorsComponent,
     TopAssetsComponent,
     MessageSignatureComponent,
     LoginComponent,

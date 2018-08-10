@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
-import { Asset } from "../model/asset/asset";
+import { AssetResponse } from "../model/asset/assetResponse";
 
 @Injectable()
 export class AssetService {
@@ -9,11 +9,11 @@ export class AssetService {
   
   constructor(private httpService : HttpService) { }
 
-  getAsset(id: string): Observable<Asset> {
+  getAsset(id: string): Observable<AssetResponse> {
     return this.httpService.get(this.baseGetAssetUrl + "/" + id);
   }
 
-  getAssets(): Observable<Asset[]> {
+  getAssets(): Observable<AssetResponse[]> {
     return this.httpService.get(this.baseGetAssetUrl);
   }
 }

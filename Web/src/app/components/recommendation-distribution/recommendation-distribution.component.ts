@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 import { RecommendationDistributionResponse } from '../../model/recommendationDistributionResponse';
+import { Util } from '../../util/Util';
 
 @Component({
   selector: 'recommendation-distribution',
@@ -23,7 +24,7 @@ export class RecommendationDistributionComponent implements OnInit {
     this.pieData = [];
     for(var i =0;i<this.data.length;i++){
         this.pieData.push({
-            name: this.data[i].getTypeDescription(),
+            name: Util.GetRecommendationTypeDescription(this.data[i].type),
             y: this.data[i].total
         });
     }

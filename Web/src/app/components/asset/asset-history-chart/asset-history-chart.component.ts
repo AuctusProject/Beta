@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { StockChart, Chart } from 'angular-highcharts';
-import { AssetValue } from '../../../model/asset/AssetValue';
-import { Advice } from '../../../model/advisor/Advice';
+import { ValuesResponse, AdviceResponse } from '../../../model/asset/assetResponse';
+import { Util } from '../../../util/Util';
 
 
 @Component({
@@ -10,8 +10,8 @@ import { Advice } from '../../../model/advisor/Advice';
   styleUrls: ['./asset-history-chart.component.css']
 })
 export class AssetHistoryChartComponent implements OnInit {
-  @Input() assetValues : AssetValue[];
-  @Input() advices : Advice[];
+  @Input() assetValues : ValuesResponse[];
+  @Input() advices : AdviceResponse[];
   assetChart: StockChart;  
   advicesData: any = [];
   chartData: any = [];
@@ -25,8 +25,11 @@ export class AssetHistoryChartComponent implements OnInit {
   }
 
   fillChartData(){
-    for(var i =0;i<this.assetValues.length;i++){
-      this.chartData.push([this.assetValues[i].date.getUTCMilliseconds(), this.assetValues[i].value]);
+    for(var i =0;i<this.assetValues.length && i< 50;i++){
+      this.chartData.push(
+        [Date.parse(this.assetValues[i].date),
+        this.assetValues[i].value]
+      );
     }    
   }
 
@@ -34,8 +37,8 @@ export class AssetHistoryChartComponent implements OnInit {
     if(this.advices){
       for(var i =0;i<this.advices.length;i++){
         this.advicesData.push({
-          x: this.advices[i].creationDate.getUTCMilliseconds(),
-          title: this.advices[i].type
+          x: Date.parse(this.advices[i].date),
+          title: Util.GetRecommendationTypeDescription(this.advices[i].adviceType)
         });
       }
     }
@@ -43,6 +46,9 @@ export class AssetHistoryChartComponent implements OnInit {
 
   createChart(){
     this.assetChart = new StockChart({
+      chart:{
+        zoomType: 'x'
+      },
       rangeSelector: {
         selected: 1
       },

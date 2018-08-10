@@ -9,7 +9,7 @@ import { AdvisorService } from '../../../services/advisor.service';
   styleUrls: ['./advisor-details.component.css']
 })
 export class AdvisorDetailsComponent implements OnInit {
-  advisor: AdvisorResponse = new AdvisorResponse();
+  advisor: AdvisorResponse;
   constructor(private route: ActivatedRoute, private advisorService: AdvisorService) { }
 
   ngOnInit() {

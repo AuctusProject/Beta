@@ -1,3 +1,7 @@
-<p>
-  advisor-details works!
-</p>
+<div *ngIf="advisor">
+  <advisor-card [advisor]="advisor"></advisor-card>
+  <recommendation-distribution [data]="advisor.recommendationDistribution"></recommendation-distribution>
+  <div *ngFor="let asset of advisor.assets">
+    <asset-history-chart [assetValues]="asset.values" [advices]="asset.assetAdvisor[0].advices"></asset-history-chart>
+  </div>
+</div>
