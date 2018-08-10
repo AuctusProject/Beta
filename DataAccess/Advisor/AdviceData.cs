@@ -16,6 +16,16 @@ namespace Auctus.DataAccess.Advisor
 
         private const string SQL_LIST = @"SELECT a.* FROM [Advice] a WHERE {0}";
 
+        private const string SQL_GET_LAST_FOR_ASSET_BY_ADVISOR = @"
+	    SELECT TOP 1
+		    a.*
+	    FROM 
+    	    [Advice] a
+        WHERE 
+    	    a.AssetId = @AssetId
+            AND a.AdvisorId = @AdvisorId
+        ORDER BY a.CreationDate DESC ";
+
         public List<Advice> List(IEnumerable<int> advisorIds)
         {
             var complement = "";
@@ -27,6 +37,15 @@ namespace Auctus.DataAccess.Advisor
                     parameters.Add($"AdvisorId{i}", advisorIds.ElementAt(i), DbType.Int32);
             }
             return Query<Advice>(string.Format(SQL_LIST, complement), parameters).ToList();
+        }
+
+        public Advice GetLastAdviceForAssetByAdvisor(int assetId, int advisorId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("AssetId", assetId, DbType.Int32);
+            parameters.Add("AdvisorId", advisorId, DbType.Int32);
+
+            return Query<Advice>(SQL_GET_LAST_FOR_ASSET_BY_ADVISOR, parameters).SingleOrDefault();
         }
     }
 }
