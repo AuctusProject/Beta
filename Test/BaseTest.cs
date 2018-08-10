@@ -1,20 +1,22 @@
 using Auctus.Business.Account;
 using Auctus.Business.Advisor;
 using Auctus.Business.Asset;
-using Auctus.Business.Follow;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
-using Auctus.DataAccessInterfaces.Follow;
 using Auctus.DataAccessMock.Account;
 using Auctus.DataAccessMock.Advisor;
 using Auctus.DataAccessMock.Asset;
-using Auctus.DataAccessMock.Follow;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
-using Auctus.DomainObjects.Follow;
 using Auctus.Util;
+using DataAccessInterfaces.Account;
+using DataAccessInterfaces.Advisor;
+using DataAccessInterfaces.Asset;
+using DataAccessMock.Account;
+using DataAccessMock.Advisor;
+using DataAccessMock.Asset;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -47,7 +49,7 @@ namespace Auctus.Test
             services.AddScoped<IAssetValueData<AssetValue>, AssetValueData>();
             services.AddScoped<IFollowAdvisorData<FollowAdvisor>, FollowAdvisorData>();
             services.AddScoped<IFollowAssetData<FollowAsset>, FollowAssetData>();
-            services.AddScoped<IFollowData<DomainObjects.Follow.Follow>, FollowData>();
+            services.AddScoped<IFollowData<Follow>, FollowData>();
 
             ServiceProvider = services.BuildServiceProvider();
             MemoryCache = ServiceProvider.GetService<Cache>();

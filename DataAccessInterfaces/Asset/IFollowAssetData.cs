@@ -1,7 +1,10 @@
-﻿using Auctus.DomainObjects.Follow;
+﻿using Auctus.DataAccessInterfaces;
+using Auctus.DomainObjects.Asset;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace Auctus.DataAccessInterfaces.Follow
+namespace DataAccessInterfaces.Asset
 {
     public interface IFollowAssetData<T> : IBaseData<T>
     {

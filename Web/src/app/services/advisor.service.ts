@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
-import { Advisor } from "../model/advisor/advisor";
+import { AdvisorResponse } from "../model/advisor/advisorResponse";
 import { RequestToBeAdvisor } from '../model/advisor/requestToBeAdvisor';
 import { RequestToBeAdvisorRequest } from '../model/advisor/requestToBeAdvisorRequest';
 
@@ -12,11 +12,11 @@ export class AdvisorService {
   
   constructor(private httpService : HttpService) { }
 
-  getAdvisor(id: string): Observable<Advisor> {
+  getAdvisor(id: string): Observable<AdvisorResponse> {
     return this.httpService.get(this.baseGetAdvisorsUrl + "/" + id);
   }
 
-  getAdvisors(): Observable<Advisor[]> {
+  getAdvisors(): Observable<AdvisorResponse[]> {
     return this.httpService.get(this.baseGetAdvisorsUrl);
   }
 

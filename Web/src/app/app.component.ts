@@ -1,8 +1,7 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
-import { RecommendationDistribution } from './model/recommendationDistribution';
+import { RecommendationDistributionResponse } from './model/recommendationDistributionResponse';
 import { AssetValue } from './model/asset/AssetValue';
-import { Advisor } from './model/advisor/advisor';
-import { AdvisorDetails } from './model/advisor/advisorDetails';
+import { AdvisorResponse } from './model/advisor/advisorResponse';
 import { Router, ActivatedRoute } from '../../node_modules/@angular/router';
 import { AuthRedirect } from './providers/authRedirect';
 import { Route } from '../../node_modules/@angular/compiler/src/core';
@@ -30,10 +29,10 @@ export class AppComponent implements OnInit{
 
   title = 'app';
 
-  data: RecommendationDistribution[] = [
-    new RecommendationDistribution(1, 30),
-    new RecommendationDistribution(0, 15),
-    new RecommendationDistribution(2, 65)
+  data: RecommendationDistributionResponse[] = [
+    new RecommendationDistributionResponse(1, 30),
+    new RecommendationDistributionResponse(0, 15),
+    new RecommendationDistributionResponse(2, 65)
   ];
 
   assetValues: AssetValue[]= [{
@@ -42,23 +41,23 @@ export class AppComponent implements OnInit{
     }
   ];
 
-  advisor : Advisor = {
-    id: 1,
+  advisor : AdvisorResponse = {
+    userId: 1,
     description: "Description",
     name: "Name",
-    urlPhoto:"https://cdn.tipranks.com/expert-pictures/485_EJBGDHCAD_tsqr.jpg",
-    advisorDetails: {
-      averageReturn: 23.5,
-      following: false,
-      numberOfFollowers: 121,
-      ranking: 2,
-      rating: 3.9,
-      successRate: 75,
-      recommendationDistribution:[
-        new RecommendationDistribution(1, 30),
-        new RecommendationDistribution(0, 15),
-        new RecommendationDistribution(2, 65)
-      ]
-    }
+    averageReturn: 23.5,
+    following: false,
+    owner: false,
+    creationDate: new Date(2018, 7, 1),
+    numberOfFollowers: 121,
+    totalAssetsAdvised: 5,
+    ranking: 2,
+    rating: 3.9,
+    successRate: 75,
+    recommendationDistribution:[
+      new RecommendationDistributionResponse(1, 30),
+      new RecommendationDistributionResponse(0, 15),
+      new RecommendationDistributionResponse(2, 65)
+    ]
   }
 }

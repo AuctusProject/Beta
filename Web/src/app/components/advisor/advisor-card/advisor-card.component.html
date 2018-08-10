@@ -1,25 +1,27 @@
 <div>
-  {{advisor.name}}
+  <a routerLink="/advisor-details/{{advisor.userId}}">View profile</a>
 </div>
 <div>
-  {{advisor.description}}
+  Name: {{advisor.name}}
 </div>
 <div>
-  {{advisor.advisorDetails.successRate}}
+  Description: {{advisor.description}}
 </div>
 <div>
-  {{advisor.advisorDetails.averageReturn}}
+  Success Rate: {{advisor.successRate}}
 </div>
 <div>
-  {{advisor.advisorDetails.ranking}}
+  Average Return: {{advisor.averageReturn}}
 </div>
 <div>
-  {{advisor.advisorDetails.numberOfFollowers}}
+  Ranking: {{advisor.ranking}}
 </div>
 <div>
-  {{advisor.advisorDetails.following}}
+  Number Of Followers: {{advisor.numberOfFollowers}}
 </div>
 <div>
-  {{advisor.advisorDetails.rating}}
+  Following: {{advisor.following}}
 </div>
-<img [src]="advisor.urlPhoto"/>
+<div>
+  Rating: {{advisor.rating}}
+</div>

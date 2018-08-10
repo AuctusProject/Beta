@@ -19,6 +19,21 @@ namespace Api.Controllers
     public class AdvisorV1Controller : AdvisorBaseController
     {
         public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+        
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAdvisors()
+        {
+            return base.ListAdvisors();
+        }
+
+        [Route("{id}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAdvisor(int id)
+        {
+            return base.GetAdvisor(id);
+        }
 
         [Route("advices")]
         [HttpPost]
@@ -43,6 +58,24 @@ namespace Api.Controllers
         public new IActionResult GetRequestToBe()
         {
             return base.GetRequestToBe();
+        }
+
+        [Route("{id}/followers")]
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult FollowAdvisor([FromRoute]int id)
+        {
+            return base.FollowAdvisor(id);
+        }
+
+        [Route("{id}/followers")]
+        [HttpDelete]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult UnfollowAdvisor([FromRoute]int id)
+        {
+            return base.UnfollowAdvisor(id);
         }
     }
 }

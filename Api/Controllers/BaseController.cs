@@ -19,7 +19,6 @@ using Api.Model;
 using Microsoft.Extensions.Primitives;
 using Auctus.Business.Account;
 using Auctus.Business.Advisor;
-using Auctus.Business.Follow;
 using Auctus.Business.Asset;
 
 namespace Api.Controllers

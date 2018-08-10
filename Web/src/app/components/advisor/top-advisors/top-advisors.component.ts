@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdvisorService } from '../../../services/advisor.service';
-import { Advisor } from '../../../model/advisor/advisor';
+import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 
 @Component({
   selector: 'top-advisors',
@@ -8,7 +8,7 @@ import { Advisor } from '../../../model/advisor/advisor';
   styleUrls: ['./top-advisors.component.css']
 })
 export class TopAdvisorsComponent implements OnInit {
-  advisors : Advisor[];
+  advisors : AdvisorResponse[];
   constructor(private advisorService: AdvisorService) { }
 
   ngOnInit() {

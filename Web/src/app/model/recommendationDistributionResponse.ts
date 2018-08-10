@@ -1,4 +1,4 @@
-export class RecommendationDistribution {
+export class RecommendationDistributionResponse {
   type:number;
   total:number;
 

@@ -1,9 +1,10 @@
-﻿using Auctus.Util.DapperAttributes;
+﻿using Auctus.DomainObjects.Account;
+using Auctus.Util.DapperAttributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Auctus.DomainObjects.Follow
+namespace Auctus.DomainObjects.Asset
 {
     public class FollowAsset : Follow
     {

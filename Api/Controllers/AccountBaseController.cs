@@ -137,18 +137,5 @@ namespace Api.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
-        protected virtual IActionResult ToggleFollowAdvisor(int id)
-        {
-            try
-            {
-                var followAdvisor = UserBusiness.ToggleFollowAdvisor(id);
-                return Ok(followAdvisor);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
-        }
     }
 }

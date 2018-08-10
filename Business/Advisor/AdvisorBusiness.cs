@@ -35,7 +35,7 @@ namespace Auctus.Business.Advisor
             List<AssetResponse> assetsResult;
             CalculateForAdvisorsData(CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult);
             var result = advisorsResult.Where(c => c.UserId == advisorId).Single();
-            result.Asset = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
+            result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
             return result;
         }
 
@@ -64,8 +64,8 @@ namespace Auctus.Business.Advisor
         }
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 
-            IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<DomainObjects.Follow.FollowAdvisor> advisorFollowers,
-            IEnumerable<DomainObjects.Follow.FollowAsset> assetFollowers)
+            IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<FollowAdvisor> advisorFollowers,
+            IEnumerable<FollowAsset> assetFollowers)
         {
             advisorsResult = new List<AdvisorResponse>();
             assetsResult = new List<AssetResponse>();
@@ -90,20 +90,20 @@ namespace Auctus.Business.Advisor
                         var assetAdvices = allAdvices.Where(a => a.AssetId == asset.Id).OrderBy(c => c.CreationDate);
                         foreach (var advice in assetAdvices)
                         {
-                            var detail = SetAdviceDetail(values, assetAdviceDetails, advice, previousAdvice.ContainsKey(advice.UserId) ? previousAdvice[advice.UserId] : null,
-                                startAdviceType.ContainsKey(advice.UserId) ? startAdviceType[advice.UserId] : null);
+                            var detail = SetAdviceDetail(values, assetAdviceDetails, advice, previousAdvice.ContainsKey(advice.AdvisorId) ? previousAdvice[advice.AdvisorId] : null,
+                                startAdviceType.ContainsKey(advice.AdvisorId) ? startAdviceType[advice.AdvisorId] : null);
                             if (detail != null)
                             {
-                                previousAdvice[advice.UserId] = detail;
+                                previousAdvice[advice.AdvisorId] = detail;
                                 if (detail.Advice.AdviceType == AdviceType.ClosePosition)
-                                    startAdviceType[advice.UserId] = null;
-                                else if (!startAdviceType.ContainsKey(advice.UserId) || startAdviceType[advice.UserId] == null || 
-                                    startAdviceType[advice.UserId].Advice.Type != detail.Advice.Type)
-                                    startAdviceType[advice.UserId] = detail;
+                                    startAdviceType[advice.AdvisorId] = null;
+                                else if (!startAdviceType.ContainsKey(advice.AdvisorId) || startAdviceType[advice.AdvisorId] == null || 
+                                    startAdviceType[advice.AdvisorId].Advice.Type != detail.Advice.Type)
+                                    startAdviceType[advice.AdvisorId] = detail;
                             }   
                         }
 
-                        var assetAdvisorsId = assetAdvices.Select(c => c.UserId).Distinct();
+                        var assetAdvisorsId = assetAdvices.Select(c => c.AdvisorId).Distinct();
 
                         AssetResponse assetResultData = null;
                         if (mode != CalculationMode.AdvisorBase)
@@ -133,14 +133,14 @@ namespace Auctus.Business.Advisor
                                 AssetId = asset.Id,
                                 CreationDate = Data.GetDateTimeNow(),
                                 Type = AdviceType.ClosePosition.Value,
-                                UserId = advisorId
+                                AdvisorId = advisorId
                             };
                             SetAdviceDetail(values, assetAdviceDetails, currentStatus, previousAdvice.ContainsKey(advisorId) ? previousAdvice[advisorId] : null,
                                 startAdviceType.ContainsKey(advisorId) ? startAdviceType[advisorId] : null);
 
                             if (mode != CalculationMode.AdvisorBase)
                             {
-                                var advisorDetailsValues = assetAdviceDetails.Where(c => c.Advice.UserId == advisorId).OrderBy(c => c.Advice.CreationDate);
+                                var advisorDetailsValues = assetAdviceDetails.Where(c => c.Advice.AdvisorId == advisorId).OrderBy(c => c.Advice.CreationDate);
                                 assetResultData.AssetAdvisor.Add(new AssetResponse.AssetAdvisorResponse()
                                 {
                                     UserId = advisorId,
@@ -176,7 +176,7 @@ namespace Auctus.Business.Advisor
                 {
                     foreach (var advisor in allAdvisors)
                     {
-                        var details = adviceDetails.Where(c => c.Advice.UserId == advisor.Id);
+                        var details = adviceDetails.Where(c => c.Advice.AdvisorId == advisor.Id);
                         var assetsAdvised = details.Select(c => c.Advice.AssetId);
                         var advFollowers = advisorFollowers.Where(c => c.AdvisorId == advisor.Id);
                         advisorsResult.Add(new AdvisorResponse()
@@ -251,7 +251,7 @@ namespace Auctus.Business.Advisor
                 }
                 if (startAdviceType != null && startAdviceType.Advice.Type != advice.Type)
                 {
-                    var advisorAdvices = assetAdviceDetails.Where(c => c.Advice.UserId == startAdviceType.Advice.UserId && startAdviceType.Advice.Id <= c.Advice.Id
+                    var advisorAdvices = assetAdviceDetails.Where(c => c.Advice.AdvisorId == startAdviceType.Advice.AdvisorId && startAdviceType.Advice.Id <= c.Advice.Id
                                             && startAdviceType.Advice.Type == c.Advice.Type).ToList();
                     advisorAdvices.ForEach(c =>
                     {

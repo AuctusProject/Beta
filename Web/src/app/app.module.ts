@@ -39,6 +39,8 @@ import { BecomeAdvisorComponent } from './components/advisor/become-advisor/beco
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
+import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-advisors.component';
+import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
 
 
 @NgModule({
@@ -56,7 +58,9 @@ import { ChangePasswordComponent } from './components/account/change-password/ch
     BecomeAdvisorComponent,
     ForgotPasswordComponent,
     ForgotPasswordResetComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ListAdvisorsComponent,
+    AdvisorDetailsComponent
   ],
   imports: [
     BrowserModule,

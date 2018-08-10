@@ -5,11 +5,13 @@ import { ValidateSignatureRequest } from '../model/account/validateSignatureRequ
 import { LoginResponse } from '../model/account/loginResponse';
 import { LoginRequest } from '../model/account/loginRequest';
 import { Router } from '../../../node_modules/@angular/router';
-import { LoginData } from '../model/account/loginData';
+import { LoginResult } from '../model/account/loginResult';
 import { ConfirmEmailRequest } from '../model/account/confirmEmailRequest';
 import { ForgotPasswordRequest } from '../model/account/forgotPasswordRequest';
 import { RecoverPasswordRequest } from '../model/account/recoverPasswordRequest';
 import { ChangePasswordRequest } from '../model/account/changePasswordRequest';
+import { RegisterRequest } from '../model/account/registerRequest';
+import { RegisterResponse } from '../model/account/registerResponse';
 
 
 @Injectable()
@@ -20,22 +22,23 @@ export class AccountService {
   private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmations");
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
+  private registerUrl = this.httpService.apiUrl("accounts/v1/register")
 
   constructor(private httpService : HttpService, private router : Router) { }
 
-  validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginData> {
+  validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginResponse> {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
   }
 
-  login(loginRequest : LoginRequest):Observable<LoginResponse>{
+  login(loginRequest : LoginRequest):Observable<LoginResult>{
     return this.httpService.post(this.loginUrl, loginRequest);
   }
 
-  setLoginData(loginData: LoginData): void {
+  setLoginData(loginData: LoginResponse): void {
     this.httpService.setLoginData(loginData);
   }
 
-  getLoginData(): LoginData {
+  getLoginData(): LoginResponse {
     return this.httpService.getLoginData();
   }
 
@@ -60,7 +63,7 @@ export class AccountService {
     return this.httpService.get(this.confirmationEmailUrl);
   }
 
-  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginData>{
+  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginResponse>{
     return this.httpService.post(this.confirmationEmailUrl, confirmEmailRequest);
   }
 
@@ -74,5 +77,9 @@ export class AccountService {
 
   changePassword(changePasswordRequest: ChangePasswordRequest) : Observable<void>{
     return this.httpService.put(this.changePasswordUrl, changePasswordRequest);
+  }
+
+  register(registerRequest: RegisterRequest) : Observable<RegisterResponse>{
+    return this.httpService.post(this.registerUrl, registerRequest)
   }
 }

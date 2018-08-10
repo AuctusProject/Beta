@@ -9,12 +9,39 @@ using Auctus.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Auctus.DomainObjects.Account;
 
 namespace Api.Controllers
 {
     public class AdvisorBaseController : BaseController
     {
-        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { } 
+        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+
+        protected IActionResult GetAdvisor(int id)
+        {
+            try
+            {
+                var advisorsResponse = AdvisorBusiness.GetAdvisorData(id);
+                return Ok(advisorsResponse);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected IActionResult ListAdvisors()
+        {
+            try
+            {
+                var advisorsResponse = AdvisorBusiness.ListAdvisorsData();
+                return Ok(advisorsResponse);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
 
         protected IActionResult Advise(AdviseRequest adviseRequest)
         {
@@ -55,6 +82,32 @@ namespace Api.Controllers
             {
                 var result = RequestToBeAdvisorBusiness.GetByLoggedEmail();
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual IActionResult FollowAdvisor(int id)
+        {
+            try
+            {
+                var followAdvisor = UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Follow);
+                return Ok(followAdvisor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected virtual IActionResult UnfollowAdvisor(int id)
+        {
+            try
+            {
+                var followAdvisor = UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Unfollow);
+                return Ok(followAdvisor);
             }
             catch (Exception ex)
             {

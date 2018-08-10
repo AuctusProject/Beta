@@ -3,7 +3,8 @@ using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Exchanges;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
-using Auctus.DomainObjects.Follow;
+using Auctus.DomainObjects.Advisor;
+using Auctus.DomainObjects.Asset;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
@@ -244,14 +245,18 @@ Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new ArgumentException("Password cannot have spaces.");
         }
 
-        public FollowAdvisor ToggleFollowAdvisor(int advisorId)
+        public FollowAdvisor FollowUnfollowAdvisor(int advisorId, FollowActionType followActionType)
         {
             var user = GetValidUser();
 
-            FollowAdvisor lastState = FollowAdvisorBusiness.GetLastByUser(user.Id, advisorId);
-            FollowActionType newStateType = lastState == null || lastState.FollowActionType == FollowActionType.Unfollow ? FollowActionType.Follow : FollowActionType.Unfollow;
+            return FollowAdvisorBusiness.Create(user.Id, advisorId, followActionType);
+        }
 
-            return FollowAdvisorBusiness.Create(user.Id, advisorId, newStateType);
+        public FollowAsset FollowUnfollowAsset(int AssetId, FollowActionType followActionType)
+        {
+            var user = GetValidUser();
+
+            return FollowAssetBusiness.Create(user.Id, AssetId, followActionType);
         }
     }
 }

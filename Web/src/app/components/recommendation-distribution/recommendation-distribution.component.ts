@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'angular-highcharts';
-import { RecommendationDistribution } from '../../model/recommendationDistribution';
+import { RecommendationDistributionResponse } from '../../model/recommendationDistributionResponse';
 
 @Component({
   selector: 'recommendation-distribution',
@@ -9,7 +9,7 @@ import { RecommendationDistribution } from '../../model/recommendationDistributi
 })
 export class RecommendationDistributionComponent implements OnInit {
   pieChart: Chart;
-  @Input() data : RecommendationDistribution[];
+  @Input() data : RecommendationDistributionResponse[];
   pieData: any;
 
   constructor() { }
