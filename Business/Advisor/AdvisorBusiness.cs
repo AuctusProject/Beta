@@ -300,5 +300,15 @@ namespace Auctus.Business.Advisor
             public bool? Success { get; set; }
             public AdviceModeType ModeType { get; set; }
         }
+
+        public void Advise(int assetId, AdviceType type)
+        {
+            var user = GetValidUser();
+
+            if (!UserBusiness.IsValidAdvisor(user))
+                throw new UnauthorizedAccessException("User is not a valid advisor.");
+
+
+        }
     }
 }
