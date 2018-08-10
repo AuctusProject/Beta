@@ -1,8 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { StockChart, Chart } from 'angular-highcharts';
 import { ValuesResponse, AdviceResponse } from '../../../model/asset/assetResponse';
 import { Util } from '../../../util/Util';
-
 
 @Component({
   selector: 'asset-history-chart',
@@ -25,7 +24,7 @@ export class AssetHistoryChartComponent implements OnInit {
   }
 
   fillChartData(){
-    for(var i =0;i<this.assetValues.length && i< 50;i++){
+    for(var i =0;i<this.assetValues.length;i++){
       this.chartData.push(
         [Date.parse(this.assetValues[i].date),
         this.assetValues[i].value]
