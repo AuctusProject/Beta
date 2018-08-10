@@ -1,6 +1,6 @@
 import { LoginResponse } from "./loginResponse";
 
-export class RegisterResponse {
+export class LoginResult {
   email: string;
   logged: boolean;
   error: string;

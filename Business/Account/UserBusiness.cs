@@ -4,6 +4,7 @@ using Auctus.DataAccess.Exchanges;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
+using Auctus.DomainObjects.Asset;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
@@ -249,6 +250,13 @@ Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
             var user = GetValidUser();
 
             return FollowAdvisorBusiness.Create(user.Id, advisorId, followActionType);
+        }
+
+        public FollowAsset FollowUnfollowAsset(int AssetId, FollowActionType followActionType)
+        {
+            var user = GetValidUser();
+
+            return FollowAssetBusiness.Create(user.Id, AssetId, followActionType);
         }
     }
 }

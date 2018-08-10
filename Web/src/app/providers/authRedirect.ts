@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, Route, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AccountService } from '../services/account.service';
-import { LoginData } from '../model/account/loginData';
+import { LoginResponse} from '../model/account/loginResponse';
 
 @Injectable()
 export class AuthRedirect implements CanActivate {
@@ -30,28 +30,28 @@ export class AuthRedirect implements CanActivate {
     }
   }
 
-  private redirect(loginData: LoginData, currentUrl?: string):boolean{
-    if(loginData.pendingConfirmation){
+  private redirect(loginResponse: LoginResponse, currentUrl?: string):boolean{
+    if(loginResponse.pendingConfirmation){
       if(currentUrl == null || !currentUrl.startsWith('/confirm-email')) {
         this.router.navigateByUrl('confirm-email');
         return true;
       }
     }
-    else if(loginData.requestedToBeAdvisor && !loginData.isAdvisor){
+    else if (loginResponse.requestedToBeAdvisor && !loginResponse.isAdvisor){
       if(currentUrl != '/become-advisor' && currentUrl != '/wallet-login') {
         this.router.navigateByUrl('become-advisor');
         return true;
       }
     }    
-    else if(!loginData.isAdvisor && !loginData.hasInvestment){
+    else if (!loginResponse.isAdvisor && !loginResponse.hasInvestment){
       if(currentUrl != '/wallet-login' && currentUrl != '/become-advisor') {
         this.router.navigateByUrl('wallet-login');
         return true;
       }
     }
-    else if(loginData.isAdvisor){
-      if (currentUrl != '/advisor/' + loginData.id) {
-        this.router.navigateByUrl('advisor/' + loginData.id);
+    else if(loginResponse.isAdvisor){
+      if (currentUrl != '/advisor/' + loginResponse.id) {
+        this.router.navigateByUrl('advisor/' + loginResponse.id);
         return true;
       }
     }
