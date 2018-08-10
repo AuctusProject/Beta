@@ -108,52 +108,15 @@ namespace Auctus.Business.Advisor
 
                         AssetResponse assetResultData = null;
                         if (mode != CalculationMode.AdvisorBase)
-                        {
-                            var assFollowers = assetFollowers?.Where(c => c.AssetId == asset.Id);
-                            assetResultData = new AssetResponse()
-                            {
-                                AssetId = asset.Id,
-                                Code = asset.Code,
-                                Name = asset.Name,
-                                Following = assFollowers?.Any(c => c.UserId == loggedUser.Id),
-                                NumberOfFollowers = assFollowers?.Count(),
-                                TotalAdvisors = assetAdvisorsId.Count(),
-                                TotalRatings = assetAdvices.Count(),
-                                LastValue = values.First().Value,
-                                Variation24h = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-1)).Value,
-                                Variation7d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-7)).Value,
-                                Variation30d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-30)).Value,
-                                Values = mode == CalculationMode.AssetBase ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
-                                    .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
-                            };
-                        }
+                            assetResultData = GetAssetBaseResponse(loggedUser, asset, assetFollowers, assetAdvices, assetAdvisorsId, values, mode);
+
                         foreach (var advisorId in assetAdvisorsId)
                         {
-                            var currentStatus = new Advice()
-                            {
-                                AssetId = asset.Id,
-                                CreationDate = Data.GetDateTimeNow(),
-                                Type = AdviceType.ClosePosition.Value,
-                                AdvisorId = advisorId
-                            };
-                            SetAdviceDetail(values, assetAdviceDetails, currentStatus, previousAdvice.ContainsKey(advisorId) ? previousAdvice[advisorId] : null,
+                            SetAdviceDetail(values, assetAdviceDetails, GetLastAdvice(asset, advisorId), previousAdvice.ContainsKey(advisorId) ? previousAdvice[advisorId] : null,
                                 startAdviceType.ContainsKey(advisorId) ? startAdviceType[advisorId] : null);
 
                             if (mode != CalculationMode.AdvisorBase)
-                            {
-                                var advisorDetailsValues = assetAdviceDetails.Where(c => c.Advice.AdvisorId == advisorId).OrderBy(c => c.Advice.CreationDate);
-                                assetResultData.AssetAdvisor.Add(new AssetResponse.AssetAdvisorResponse()
-                                {
-                                    UserId = advisorId,
-                                    AverageReturn = advisorDetailsValues.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / advisorDetailsValues.Count(c => c.Return.HasValue),
-                                    SuccessRate = (double)advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
-                                    TotalRatings = advisorDetailsValues.Count(),
-                                    LastAdviceDate = advisorDetailsValues.Last().Advice.CreationDate,
-                                    LastAdviceMode = advisorDetailsValues.Last().ModeType.Value,
-                                    LastAdviceType = advisorDetailsValues.Last().Advice.Type,
-                                    Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c => new AssetResponse.AdviceResponse() { AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).ToList() : null
-                                });
-                            }
+                                assetResultData.AssetAdvisor.Add(GetAssetAdvisorResponse(advisorId, assetAdviceDetails, mode));
                         }
 
                         if (mode != CalculationMode.AdvisorBase)
@@ -178,28 +141,82 @@ namespace Auctus.Business.Advisor
                     foreach (var advisor in allAdvisors)
                     {
                         var details = adviceDetails.Where(c => c.Advice.AdvisorId == advisor.Id);
-                        var assetsAdvised = details.Select(c => c.Advice.AssetId);
-                        var advFollowers = advisorFollowers.Where(c => c.AdvisorId == advisor.Id);
-                        advisorsResult.Add(new AdvisorResponse()
-                        {
-                            UserId = advisor.Id,
-                            Name = advisor.Name,
-                            CreationDate = advisor.BecameAdvisorDate,
-                            Description = advisor.Description,
-                            Owner = advisor.Id == loggedUser.Id,
-                            NumberOfFollowers = advFollowers.Count(),
-                            TotalAssetsAdvised = assetsAdvised.Any() ? assetsAdvised.Distinct().Count() : 0,
-                            Following = advFollowers.Any(c => c.UserId == loggedUser.Id),
-                            AverageReturn = details.Any(c => c.Return.HasValue) ? details.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / details.Count(c => c.Return.HasValue) : 0,
-                            SuccessRate = details.Any(c => c.Success.HasValue) ? (double)details.Count(c => c.Success.HasValue && c.Success.Value) / details.Count(c => c.Success.HasValue) : 0,
-                            RecommendationDistribution = !details.Any() ? new List<RecommendationDistributionResponse>() :
-                                details.GroupBy(c => c.Advice.Type).Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList()
-                        });
+                        advisorsResult.Add(GetAdvisorResponse(details, advisorFollowers, advisor, loggedUser));
                         advisorsData[advisor.Id] = details;
                     }
                     SetAdvisorsRanking(advisorsResult, advisorsData);
                 }
             }
+        }
+
+        private Advice GetLastAdvice(DomainObjects.Asset.Asset asset, int advisorId)
+        {
+            return new Advice()
+            {
+                AssetId = asset.Id,
+                CreationDate = Data.GetDateTimeNow(),
+                Type = AdviceType.ClosePosition.Value,
+                AdvisorId = advisorId
+            };
+        }
+
+        private AssetResponse GetAssetBaseResponse(User loggedUser, DomainObjects.Asset.Asset asset, IEnumerable<FollowAsset> assetFollowers, 
+            IEnumerable<Advice> assetAdvices, IEnumerable<int> assetAdvisorsId, IEnumerable<AssetValue> values, CalculationMode mode)
+        {
+            var assFollowers = assetFollowers?.Where(c => c.AssetId == asset.Id);
+            return new AssetResponse()
+            {
+                AssetId = asset.Id,
+                Code = asset.Code,
+                Name = asset.Name,
+                Following = assFollowers?.Any(c => c.UserId == loggedUser.Id),
+                NumberOfFollowers = assFollowers?.Count(),
+                TotalAdvisors = assetAdvisorsId.Count(),
+                TotalRatings = assetAdvices.Count(),
+                LastValue = values.First().Value,
+                Variation24h = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-1)).Value,
+                Variation7d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-7)).Value,
+                Variation30d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-30)).Value,
+                Values = mode == CalculationMode.AssetBase ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
+                                    .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
+            };
+        }
+
+        private AssetResponse.AssetAdvisorResponse GetAssetAdvisorResponse(int advisorId, List<AdviceDetail> assetAdviceDetails, CalculationMode mode)
+        {
+            var advisorDetailsValues = assetAdviceDetails.Where(c => c.Advice.AdvisorId == advisorId).OrderBy(c => c.Advice.CreationDate);
+            return new AssetResponse.AssetAdvisorResponse()
+            {
+                UserId = advisorId,
+                AverageReturn = advisorDetailsValues.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / advisorDetailsValues.Count(c => c.Return.HasValue),
+                SuccessRate = (double)advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
+                TotalRatings = advisorDetailsValues.Count(),
+                LastAdviceDate = advisorDetailsValues.Last().Advice.CreationDate,
+                LastAdviceMode = advisorDetailsValues.Last().ModeType.Value,
+                LastAdviceType = advisorDetailsValues.Last().Advice.Type,
+                Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c => new AssetResponse.AdviceResponse() { AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).ToList() : null
+            };
+        }
+
+        private AdvisorResponse GetAdvisorResponse(IEnumerable<AdviceDetail> details, IEnumerable<FollowAdvisor> advisorFollowers, DomainObjects.Advisor.Advisor advisor, User loggedUser)
+        {
+            var assetsAdvised = details.Select(c => c.Advice.AssetId);
+            var advFollowers = advisorFollowers.Where(c => c.AdvisorId == advisor.Id);
+            return new AdvisorResponse()
+            {
+                UserId = advisor.Id,
+                Name = advisor.Name,
+                CreationDate = advisor.BecameAdvisorDate,
+                Description = advisor.Description,
+                Owner = advisor.Id == loggedUser.Id,
+                NumberOfFollowers = advFollowers.Count(),
+                TotalAssetsAdvised = assetsAdvised.Any() ? assetsAdvised.Distinct().Count() : 0,
+                Following = advFollowers.Any(c => c.UserId == loggedUser.Id),
+                AverageReturn = details.Any(c => c.Return.HasValue) ? details.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / details.Count(c => c.Return.HasValue) : 0,
+                SuccessRate = details.Any(c => c.Success.HasValue) ? (double)details.Count(c => c.Success.HasValue && c.Success.Value) / details.Count(c => c.Success.HasValue) : 0,
+                RecommendationDistribution = !details.Any() ? new List<RecommendationDistributionResponse>() :
+                    details.GroupBy(c => c.Advice.Type).Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList()
+            };
         }
 
         private void SetAdvisorsRanking(List<AdvisorResponse> advisorsResult, Dictionary<int, IEnumerable<AdviceDetail>> advisorsData)
@@ -225,7 +242,7 @@ namespace Auctus.Business.Advisor
             {
                 var maximumValue = newAdvisors.Any(a => a.UserId == c.UserId) ? 0.7 : 1.0;
                 c.Rating = Math.Min(5.0, generalNormalization * (
-                      (0.35 * 5.0 * Math.Min(maximumValue, maxAvg == 0 ? 0 : c.AverageReturn / maxAvg))
+                      (0.35 * 5.0 * Math.Min(maximumValue, maxAvg <= 0 || c.AverageReturn <= 0 ? 0 : c.AverageReturn / maxAvg))
                     + (0.30 * 5.0 * Math.Min(maximumValue, maxSucRate == 0 ? 0 : c.SuccessRate / maxSucRate))
                     + (0.01 * 5.0 * Math.Min(maximumValue, maxAssets == 0 ? 0 : (double)c.TotalAssetsAdvised / maxAssets))
                     + (0.15 * 5.0 * Math.Min(maximumValue, maxAdvices == 0 ? 0 : ((double)advisorsData[c.UserId].Count() / advDays[c.UserId]) / maxAdvices))
