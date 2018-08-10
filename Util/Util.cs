@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Numerics;
 using System.Text;
 using System.Threading;
-using gfoidl.DataCompression;
 using System.Linq;
 
 namespace Auctus.Util
@@ -58,27 +57,6 @@ namespace Auctus.Util
         public static decimal ConvertHexaBigNumber(string hexaNumber, int decimals)
         {
             return ConvertBigNumber(BigInteger.Parse("0" + hexaNumber.TrimStart('0', 'x'), NumberStyles.AllowHexSpecifier).ToString(), decimals);
-        }
-
-        public static Dictionary<DateTime, double> SwingingDoorCompression(Dictionary<DateTime, double> data)
-        {
-            var compression = data.Average(c => c.Value) * 0.025;
-            var totalMinutes = (int)Math.Ceiling(data.Max(c => c.Key).Subtract(data.Min(c => c.Key)).TotalMinutes);
-            return data.Select(c => new DataPoint(c.Key, c.Value)).SwingingDoorCompression(compression,
-                GetMaximumTimeSpanForDataCompression(totalMinutes), null).ToDictionary(c => new DateTime(Convert.ToInt64(c.X)), c => c.Y);
-        }
-
-        private static TimeSpan GetMaximumTimeSpanForDataCompression(int totalMinutes)
-        {
-            var expected = totalMinutes / 300;
-            if (expected > 5)
-            {
-                var possibilities = new int[] { 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360, 480, 720, 1440 };
-                expected = possibilities.Where(c => c <= expected).OrderByDescending(c => c).First();
-            }
-            else
-                expected = 5;
-            return new TimeSpan(0, 0, expected, 0);
         }
     }
 }

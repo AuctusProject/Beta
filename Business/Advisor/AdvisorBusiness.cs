@@ -122,7 +122,7 @@ namespace Auctus.Business.Advisor
                                 Variation24h = values.First().Value / values.Where(c => c.Date <= values.First().Date.AddDays(-1)).First().Value,
                                 Variation7d = values.First().Value / values.Where(c => c.Date <= values.First().Date.AddDays(-7)).First().Value,
                                 Variation30d = values.First().Value / values.Where(c => c.Date <= values.First().Date.AddDays(-30)).First().Value,
-                                Values = mode == CalculationMode.AssetBase ? null : Util.Util.SwingingDoorCompression(values.ToDictionary(c => c.Date, c => c.Value))
+                                Values = mode == CalculationMode.AssetBase ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
                                     .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
                             };
                         }
