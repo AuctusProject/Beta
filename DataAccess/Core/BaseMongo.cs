@@ -30,14 +30,14 @@ namespace Auctus.DataAccess.Core
             return DateTime.UtcNow;
         }
 
-        public Task InsertOneAsync(T document)
+        public Task InsertOneAsync(T obj)
         {
-            return base.InsertOneAsync(CollectionName, document);
+            return base.InsertOneAsync(CollectionName, obj);
         }
 
-        public Task InsertManyAsync(IEnumerable<T> documents)
+        public Task InsertManyAsync(IEnumerable<T> objs)
         {
-            return base.InsertManyAsync(CollectionName, documents);
+            return base.InsertManyAsync(CollectionName, objs);
         }
 
         #region IBaseData implementation
