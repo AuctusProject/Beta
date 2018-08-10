@@ -307,9 +307,13 @@ namespace Auctus.Business.Advisor
             var user = GetValidUser();
 
             if (!UserBusiness.IsValidAdvisor(user))
-                throw new UnauthorizedAccessException("User is not a valid advisor.");
+                throw new InvalidOperationException("Logged user is not a valid Advisor.");
 
+            var asset = AssetBusiness.GetById(assetId);
+            if (asset == null)
+                throw new ArgumentException("Asset not found.");
 
+            AdviceBusiness.ValidateAndCreate(user.Id, assetId, type);
         }
     }
 }
