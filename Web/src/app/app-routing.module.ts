@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
 import { LoginComponent } from './components/account/login/login.component';
 import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
@@ -16,7 +15,6 @@ import { AdvisorDetailsComponent } from './components/advisor/advisor-details/ad
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
-    { path: 'top-advisors', component: TopAdvisorsComponent, canActivate: [AuthRedirect]  },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'feed', component: LoginComponent, canActivate: [AuthRedirect],  },

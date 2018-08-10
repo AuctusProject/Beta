@@ -32,7 +32,8 @@ namespace Auctus.Business.Account
                     throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
 
                 MemoryCache.Set<object>(cacheKey, true, 10);
-                ActionBusiness.InsertNewAucVerification(user.Id, aucAmount.Value);
+                if(aucAmount.HasValue)
+                    ActionBusiness.InsertNewAucVerification(user.Id, aucAmount.Value);
             }
         }
 

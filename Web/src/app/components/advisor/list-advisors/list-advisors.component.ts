@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { AdvisorService } from '../../../services/advisor.service';
-import { Sortable } from '../../../util/Util'
+import { Util } from '../../../util/Util';
 @Component({
   selector: 'list-advisors',
   templateUrl: './list-advisors.component.html',
@@ -42,18 +42,18 @@ export class ListAdvisorsComponent implements OnInit {
   }
 
   sortByName(){
-    Sortable.sort<AdvisorResponse>(this.advisors, a => a.name);
+    Util.Sort<AdvisorResponse>(this.advisors, a => a.name);
   }
   sortByRanking(){
-    Sortable.sort<AdvisorResponse>(this.advisors, a => a.ranking);
+    Util.Sort<AdvisorResponse>(this.advisors, a => a.ranking);
   }
   sortByFollowers(){
-    Sortable.sort<AdvisorResponse>(this.advisors, a => a.numberOfFollowers, "DESC");
+    Util.Sort<AdvisorResponse>(this.advisors, a => a.numberOfFollowers, "DESC");
   }
   sortByReturnRate(){
-    Sortable.sort<AdvisorResponse>(this.advisors, a => a.averageReturn, "DESC");
+    Util.Sort<AdvisorResponse>(this.advisors, a => a.averageReturn, "DESC");
   }
   sortBySuccessRate(){
-    Sortable.sort<AdvisorResponse>(this.advisors, a => a.successRate, "DESC");
+    Util.Sort<AdvisorResponse>(this.advisors, a => a.successRate, "DESC");
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Asset } from '../../../model/asset/asset';
+import { AssetResponse } from '../../../model/asset/assetResponse';
 import { AssetService } from '../../../services/asset.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { AssetService } from '../../../services/asset.service';
   styleUrls: ['./top-assets.component.css']
 })
 export class TopAssetsComponent implements OnInit {
-  assets : Asset[];
+  assets : AssetResponse[];
   constructor(private assetService: AssetService) { }
 
   ngOnInit() {

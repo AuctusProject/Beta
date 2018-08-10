@@ -36,6 +36,7 @@ namespace Auctus.Business.Advisor
             CalculateForAdvisorsData(CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult);
             var result = advisorsResult.Where(c => c.UserId == advisorId).Single();
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
+            result.Assets.ForEach(a => a.AssetAdvisor = a.AssetAdvisor.Where(c => c.UserId == advisorId).ToList());
             return result;
         }
 
@@ -75,7 +76,7 @@ namespace Auctus.Business.Advisor
             {
                 assetsIds = assetsIds.Distinct();
                 var assets = AssetBusiness.ListAssets(assetsIds);
-                var minimumDate = allAdvices.Min(c => c.CreationDate).AddDays(-7);
+                var minimumDate = allAdvices.Min(c => c.CreationDate).AddDays(-30);
                 var assetValues = AssetValueBusiness.List(assetsIds, minimumDate);
 
                 var adviceDetails = new List<AdviceDetail>();
@@ -224,11 +225,11 @@ namespace Auctus.Business.Advisor
             {
                 var maximumValue = newAdvisors.Any(a => a.UserId == c.UserId) ? 0.7 : 1.0;
                 c.Rating = Math.Min(5.0, generalNormalization * (
-                      (0.35 * 5.0 * Math.Min(maximumValue, c.AverageReturn / maxAvg))
-                    + (0.30 * 5.0 * Math.Min(maximumValue, c.SuccessRate / maxSucRate))
-                    + (0.01 * 5.0 * Math.Min(maximumValue, (double)c.TotalAssetsAdvised / maxAssets))
-                    + (0.15 * 5.0 * Math.Min(maximumValue, ((double)advisorsData[c.UserId].Count() / advDays[c.UserId]) / maxAdvices))
-                    + (0.15 * 5.0 * Math.Min(maximumValue, ((double)c.NumberOfFollowers / advDays[c.UserId]) / maxFollowers))
+                      (0.35 * 5.0 * Math.Min(maximumValue, maxAvg == 0 ? 0 : c.AverageReturn / maxAvg))
+                    + (0.30 * 5.0 * Math.Min(maximumValue, maxSucRate == 0 ? 0 : c.SuccessRate / maxSucRate))
+                    + (0.01 * 5.0 * Math.Min(maximumValue, maxAssets == 0 ? 0 : (double)c.TotalAssetsAdvised / maxAssets))
+                    + (0.15 * 5.0 * Math.Min(maximumValue, maxAdvices == 0 ? 0 : ((double)advisorsData[c.UserId].Count() / advDays[c.UserId]) / maxAdvices))
+                    + (0.15 * 5.0 * Math.Min(maximumValue, maxFollowers == 0 ? 0 : ((double)c.NumberOfFollowers / advDays[c.UserId]) / maxFollowers))
                     + (0.04 * 5.0 * Math.Min(maximumValue, (double)c.CreationDate.Ticks / lastActivity.Ticks))));
             });
             advisorsResult = advisorsResult.OrderByDescending(c => c.Rating).ToList();

@@ -1,4 +1,5 @@
 import { RecommendationDistributionResponse } from "../recommendationDistributionResponse";
+import { AdvisorResponse } from "../advisor/advisorResponse";
 
 export class AssetResponse {
   assetId: number;
@@ -15,6 +16,9 @@ export class AssetResponse {
   mode: number;
   recommendationDistribution: RecommendationDistributionResponse[];
   values:ValuesResponse[];
+  assetAdvisor: AssetAdvisorResponse[];
+  advices: AdviceResponse[];
+  advisors: AdvisorResponse[];
 }
 
 export class AssetAdvisorResponse
@@ -29,12 +33,12 @@ export class AssetAdvisorResponse
   advices: AdviceResponse[];
 }
 
-class ValuesResponse{
-  date: Date;
+export class ValuesResponse{
+  date: string;
   value: number;
 }
 
-class AdviceResponse{
-  date: Date;
+export class AdviceResponse{
+  date: string;
   adviceType: number;
 }
