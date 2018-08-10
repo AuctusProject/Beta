@@ -17,7 +17,7 @@ namespace Auctus.Business.Advisor
 {
     public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, IAdvisorData<DomainObjects.Advisor.Advisor>>
     {
-        public enum CalculationMode : int { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3 }
+        public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3 }
 
         public AdvisorBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
@@ -34,7 +34,7 @@ namespace Auctus.Business.Advisor
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
             CalculateForAdvisorsData(CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult);
-            var result = advisorsResult.Where(c => c.UserId == advisorId).Single();
+            var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
             result.Assets.ForEach(a => a.AssetAdvisor = a.AssetAdvisor.Where(c => c.UserId == advisorId).ToList());
             return result;
@@ -120,10 +120,10 @@ namespace Auctus.Business.Advisor
                                 TotalAdvisors = assetAdvisorsId.Count(),
                                 TotalRatings = assetAdvices.Count(),
                                 LastValue = values.First().Value,
-                                Variation24h = values.First().Value / values.Where(c => c.Date <= values.First().Date.AddDays(-1)).First().Value,
-                                Variation7d = values.First().Value / values.Where(c => c.Date <= values.First().Date.AddDays(-7)).First().Value,
-                                Variation30d = values.First().Value / values.Where(c => c.Date <= values.First().Date.AddDays(-30)).First().Value,
-                                Values = mode == CalculationMode.AssetBase ? null : Util.Util.SwingingDoorCompression(values.ToDictionary(c => c.Date, c => c.Value))
+                                Variation24h = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-1)).Value,
+                                Variation7d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-7)).Value,
+                                Variation30d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-30)).Value,
+                                Values = mode == CalculationMode.AssetBase ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
                                     .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
                             };
                         }
@@ -146,7 +146,7 @@ namespace Auctus.Business.Advisor
                                 {
                                     UserId = advisorId,
                                     AverageReturn = advisorDetailsValues.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / advisorDetailsValues.Count(c => c.Return.HasValue),
-                                    SuccessRate = advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
+                                    SuccessRate = (double)advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
                                     TotalRatings = advisorDetailsValues.Count(),
                                     LastAdviceDate = advisorDetailsValues.Last().Advice.CreationDate,
                                     LastAdviceMode = advisorDetailsValues.Last().ModeType.Value,
@@ -217,8 +217,8 @@ namespace Auctus.Business.Advisor
             var lastActivity = details.Max(c => c.Value.Max(a => a.Advice.CreationDate));
 
             var advDays = advisorsResult.Select(c => new { Id = c.UserId, Days = Data.GetDateTimeNow().Subtract(c.CreationDate).TotalDays }).ToDictionary(c => c.Id, c => c.Days);
-            var maxAdvices = details.Max(c => (double)c.Value.Count() / (double)advDays[c.Key]);
-            var maxFollowers = advisorsConsidered.Max(c => (double)c.NumberOfFollowers / (double)advDays[c.UserId]);
+            var maxAdvices = details.Max(c => (double)c.Value.Count() / advDays[c.Key]);
+            var maxFollowers = advisorsConsidered.Max(c => (double)c.NumberOfFollowers / advDays[c.UserId]);
 
             var generalNormalization = 1.2;
             advisorsResult.ForEach(c =>
@@ -240,7 +240,7 @@ namespace Auctus.Business.Advisor
         private AdviceDetail SetAdviceDetail(IEnumerable<DomainObjects.Asset.AssetValue> values, List<AdviceDetail> assetAdviceDetails, 
             Advice advice, AdviceDetail previousAdvice, AdviceDetail startAdviceType)
         {
-            var value = values.Where(c => c.Date <= advice.CreationDate).FirstOrDefault();
+            var value = values.FirstOrDefault(c => c.Date <= advice.CreationDate);
             if (value != null)
             {
                 if (previousAdvice != null)

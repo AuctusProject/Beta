@@ -10,6 +10,10 @@ namespace Auctus.Util.Azure
     //https://s2.coinmarketcap.com/static/img/coins/32x32/{id}.png
     public class StorageManager
     {
+        protected StorageManager()
+        {
+
+        }
        public static void UploadFileFromUrl(string containerName, string fileName, string url)
         {
             CloudStorageAccount storageAccount;
@@ -23,7 +27,7 @@ namespace Auctus.Util.Azure
             }
             else
             {
-                throw new Exception(string.Format("Could not upload file {0} to blob storage.", fileName));
+                throw new OperationCanceledException(string.Format("Could not upload file {0} to blob storage.", fileName));
                     
             }
         }

@@ -5,7 +5,7 @@ using Auctus.Util;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Data;
 
 namespace Auctus.Business.Advisor
 {
@@ -17,11 +17,11 @@ namespace Auctus.Business.Advisor
         {
             var user = GetValidUser();
             if (!UserBusiness.IsValidAdvisor(user))
-                throw new Exception("Logged user is not an Advisor.");
+                throw new InvalidOperationException("Logged user is not an Advisor.");
 
             var asset = AssetBusiness.GetById(assetId);
             if (asset == null)
-                throw new Exception("Asset not found.");
+                throw new ArgumentException("Asset not found.");
 
             Insert(
                 new Advice()

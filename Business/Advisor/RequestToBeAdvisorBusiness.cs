@@ -46,7 +46,7 @@ namespace Auctus.Business.Advisor
 
             var user = GetValidUser();
             var request = GetByUser(user.Id);
-            if (request?.Approved ?? false)
+            if (request?.Approved == true)
                 throw new ArgumentException("User was already approved as advisor.");
 
             var newRequest = new RequestToBeAdvisor()

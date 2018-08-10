@@ -69,34 +69,16 @@ namespace Auctus.Business.Asset
         private void CreateAssetValueForPendingDates(DomainObjects.Asset.Asset asset, DateTime lastUpdatedValue, Dictionary<DateTime, double> assetDateAndValues)
         {
             var pendingUpdate = assetDateAndValues?.Where(d => d.Key > lastUpdatedValue).OrderBy(v => v.Key);
-            //var previousDateAndValue = assetDateAndValues?.Where(d => d.Key == lastUpdatedValue).OrderByDescending(v => v.Key).FirstOrDefault();
+           
             if (pendingUpdate != null)
             {
                 List<AssetValue> assetValues = new List<AssetValue>();
                 foreach (var pending in pendingUpdate)
                 {
-                    //previousDateAndValue = InsertAssetValueForPreviousDaysWithoutMarketValues(asset, previousDateAndValue, pending);
                     assetValues.Add(new DomainObjects.Asset.AssetValue() { AssetId = asset.Id, Date = pending.Key, Value = pending.Value });
                 }
                 Data.InsertManyAsync(assetValues);
             }
-        }
-
-        private KeyValuePair<DateTime, double> InsertAssetValueForPreviousDaysWithoutMarketValues(DomainObjects.Asset.Asset asset, KeyValuePair<DateTime, double>? previousDateAndValue, KeyValuePair<DateTime, double> currentPendingDateAndValue)
-        {
-            if (previousDateAndValue.HasValue && previousDateAndValue?.Key > DateTime.MinValue)
-            {
-                var previousDate = previousDateAndValue?.Key.AddDays(1);
-                List<AssetValue> previousAssetValues = new List<AssetValue>();
-
-                while (previousDate < currentPendingDateAndValue.Key)
-                {
-                    previousAssetValues.Add(new DomainObjects.Asset.AssetValue() { AssetId = asset.Id, Date = previousDate.Value, Value = previousDateAndValue.Value.Value });
-                    previousDate = previousDate.Value.AddDays(1);
-                }
-                Data.InsertManyAsync(previousAssetValues);
-            }
-            return currentPendingDateAndValue;
         }
     }
 }

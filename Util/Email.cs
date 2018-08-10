@@ -23,13 +23,6 @@ namespace Auctus.Util
             try
             {
                 strIn = Regex.Replace(strIn, @"(@)(.+)$", DomainMapper, RegexOptions.None, TimeSpan.FromMilliseconds(200));
-            }
-            catch (RegexMatchTimeoutException)
-            {
-                return false;
-            }
-            try
-            {
                 return Regex.IsMatch(strIn,
                       @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                       @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
@@ -65,10 +58,10 @@ namespace Auctus.Util
             IEnumerable<string> cc = null, IEnumerable<string> bcc = null, IEnumerable<SendGrid.Helpers.Mail.Attachment> attachment = null)
         {
             if (string.IsNullOrWhiteSpace(subject))
-                throw new ArgumentNullException("Parameter subject must be filled.");
+                throw new ArgumentNullException("subject");
 
-            if (to == null || to.Count() == 0)
-                throw new ArgumentNullException("Parameter to must be filled.");
+            if (to == null || !to.Any())
+                throw new ArgumentNullException("to");
 
             List<EmailAddress> toList = new List<EmailAddress>();
 
@@ -96,7 +89,7 @@ namespace Auctus.Util
             }
 
             SendGridClient client = new SendGridClient(Config.SENDGRID_API_KEY);
-            var response = await client.SendEmailAsync(mailMessage);
+            await client.SendEmailAsync(mailMessage);
         }
     }
 }

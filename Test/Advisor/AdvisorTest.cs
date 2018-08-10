@@ -12,5 +12,14 @@ namespace Auctus.Test.Advisor
         {
             var response = AdvisorBusiness.ListAdvisorsData();
         }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void CalculationForAdvisor(int advisorId)
+        {
+            var response = AdvisorBusiness.GetAdvisorData(advisorId);
+        }
     }
 }
