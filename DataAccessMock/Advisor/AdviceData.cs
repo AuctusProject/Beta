@@ -65,5 +65,10 @@ namespace Auctus.DataAccessMock.Advisor
                 AdvisorId = userId
             };
         }
+
+        public Advice GetLastAdviceForAssetByAdvisor(int assetId, int advisorId)
+        {
+            return null;
+        }
     }
 }

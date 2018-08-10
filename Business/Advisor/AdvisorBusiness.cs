@@ -318,5 +318,19 @@ namespace Auctus.Business.Advisor
             public bool? Success { get; set; }
             public AdviceModeType ModeType { get; set; }
         }
+
+        public void Advise(int assetId, AdviceType type)
+        {
+            var user = GetValidUser();
+
+            if (!UserBusiness.IsValidAdvisor(user))
+                throw new InvalidOperationException("Logged user is not a valid Advisor.");
+
+            var asset = AssetBusiness.GetById(assetId);
+            if (asset == null)
+                throw new ArgumentException("Asset not found.");
+
+            AdviceBusiness.ValidateAndCreate(user.Id, assetId, type);
+        }
     }
 }

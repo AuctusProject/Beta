@@ -50,7 +50,7 @@ namespace Api.Controllers
                 if (adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
                     return BadRequest();
 
-                AdviceBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
+                AdvisorBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
             }
             catch (ArgumentException ex)
             {
