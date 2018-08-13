@@ -27,22 +27,10 @@ namespace Auctus.DataAccess.Advisor
         ORDER BY a.CreationDate DESC ";
 
         private const string SQL_LIST_LAST_ADVICES_FOR_USER_WITH_PAGINATION = @"
-	    SELECT {0} *
-            FROM Advice
-            WHERE AssetId IN (SELECT fa.AssetId FROM 
-            [FollowAsset] fa
-            INNER JOIN [Follow] f ON f.Id = fa.Id
-            INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
-                ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-             WHERE f.ActionType = @ActionType
-	            AND f.UserId = @UserId)
-            OR AdvisorId IN (SELECT fa.AdvisorId FROM 
-            [FollowAdvisor] fa
-            INNER JOIN [Follow] f ON f.Id = fa.Id
-            INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
-                ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-             WHERE f.ActionType = @ActionType
-	            AND f.UserId = @UserId)
+	    SELECT {0} a.*
+            FROM [Advice] a
+            INNER JOIN Advisor ON Advisor.Id = a.AdvisorId AND Advisor.Enabled = 1
+            WHERE 
             {1}
             ORDER BY CreationDate DESC";
 
@@ -68,20 +56,30 @@ namespace Auctus.DataAccess.Advisor
             return Query<Advice>(SQL_GET_LAST_FOR_ASSET_BY_ADVISOR, parameters).SingleOrDefault();
         }
 
-        public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int userId, int? top, int? lastAdviceId)
+        public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> advisorsIds, IEnumerable<int> assetsIds, int? top, int? lastAdviceId)
         {
+            var complement = "";
             var parameters = new DynamicParameters();
-            parameters.Add("ActionType", DomainObjects.Account.FollowActionType.Follow.Value, DbType.Int32);
-            parameters.Add("UserId", userId, DbType.Int32);
+            if (advisorsIds.Count() > 0)
+            {
+                complement = string.Join(" OR ", advisorsIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
+                for (int i = 0; i < advisorsIds.Count(); ++i)
+                    parameters.Add($"AdvisorId{i}", advisorsIds.ElementAt(i), DbType.Int32);
+            }
+            if (assetsIds.Count() > 0)
+            {
+                complement = string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
+                for (int i = 0; i < advisorsIds.Count(); ++i)
+                    parameters.Add($"AssetId{i}", advisorsIds.ElementAt(i), DbType.Int32);
+            }
 
             var topCondition = (top.HasValue ? "TOP " + top.Value : String.Empty);
-            var lastAdviceCondition = String.Empty;
             if (lastAdviceId.HasValue) {
-                lastAdviceCondition = " AND Id < @LastAdviceId ";
+                complement = " AND a.Id < @LastAdviceId ";
                 parameters.Add("LastAdviceId", lastAdviceId.Value, DbType.Int32);
             }
 
-            var query = String.Format(SQL_LIST_LAST_ADVICES_FOR_USER_WITH_PAGINATION, topCondition, lastAdviceCondition);
+            var query = String.Format(SQL_LIST_LAST_ADVICES_FOR_USER_WITH_PAGINATION, topCondition, complement);
 
             return Query<Advice>(query, parameters);
         }

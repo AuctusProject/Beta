@@ -47,18 +47,18 @@ namespace Auctus.DataAccessMock.Advisor
 
             advices.Add(GetAdvice(2, 4, new DateTime(2018, 5, 15, 4, 15, 0), AdviceType.Buy));
             advices.Add(GetAdvice(2, 4, new DateTime(2018, 6, 16, 17, 20, 0), AdviceType.ClosePosition));
-            return advices;
+            return advices.OrderBy(c => c.CreationDate).Select((c, i) =>
+            {
+                c.Id = i + 1;
+                return c;
+            }).ToList();
         }
 
         public List<Advice> List(IEnumerable<int> advisorIds)
         {
             List<Advice> advices = GetAllAdvices();
 
-            return advices.Where(a => advisorIds.Contains(a.AdvisorId)).OrderBy(c => c.CreationDate).Select((c, i) =>
-            {
-                c.Id = i + 1;
-                return c;
-            }).ToList();
+            return advices.Where(a => advisorIds.Contains(a.AdvisorId)).ToList();
         }
 
         
@@ -78,13 +78,18 @@ namespace Auctus.DataAccessMock.Advisor
             return null;
         }
 
-        public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int userId, int? top, int? lastAdviceId)
+        public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> advisorsIds, IEnumerable<int> assetsIds, int? top, int? lastAdviceId)
         {
-            List<Advice> advices = GetAllAdvices();
-            var query = advices.Where(a => lastAdviceId.HasValue && a.Id < lastAdviceId.Value);
+            IEnumerable<Advice> advices = GetAllAdvices().Where(a => advisorsIds.Contains(a.AdvisorId) || assetsIds.Contains(a.AssetId));
+            if(lastAdviceId.HasValue)
+                advices = advices.Where(a => a.Id < lastAdviceId.Value);
+
+            advices = advices.OrderByDescending(a => a.CreationDate);
+
             if (top.HasValue)
-                query = query.Take(top.Value);
-            return query.OrderByDescending(a => a.CreationDate);
+                advices = advices.Take(top.Value);
+
+            return advices;
         }
     }
 }

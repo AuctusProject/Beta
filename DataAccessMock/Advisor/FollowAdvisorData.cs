@@ -10,10 +10,12 @@ namespace DataAccessMock.Advisor
 {
     public class FollowAdvisorData : BaseData<FollowAdvisor>, IFollowAdvisorData<FollowAdvisor>
     {
-        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds)
+        public static List<FollowAdvisor> FollowAdvisorList = CreateFollowAdvisorList();
+
+        private static List<FollowAdvisor> CreateFollowAdvisorList()
         {
             var id = 0;
-            var followers = new List<FollowAdvisor>
+            return new List<FollowAdvisor>
             {
                 GetFollowers(ref id, 2, 1),
                 GetFollowers(ref id, 3, 1),
@@ -24,7 +26,11 @@ namespace DataAccessMock.Advisor
                 GetFollowers(ref id, 5, 2),
                 GetFollowers(ref id, 1, 3)
             };
-            return followers;
+        }
+
+        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds)
+        {
+            return FollowAdvisorList;
         }
 
         public FollowAdvisor GetLastByUserForAdvisor(int userId, int advisorId)
@@ -32,7 +38,7 @@ namespace DataAccessMock.Advisor
             throw new NotImplementedException();
         }
 
-        private FollowAdvisor GetFollowers(ref int id, int userId, int advisorId)
+        private static FollowAdvisor GetFollowers(ref int id, int userId, int advisorId)
         {
             ++id;
             return new FollowAdvisor()

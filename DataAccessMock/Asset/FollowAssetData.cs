@@ -10,7 +10,9 @@ namespace DataAccessMock.Asset
 {
     public class FollowAssetData : BaseData<FollowAsset>, IFollowAssetData<FollowAsset>
     {
-        public List<FollowAsset> ListFollowers(IEnumerable<int> assetsIds)
+        public static List<FollowAsset> FollowAssetList = CreateFollowAssetList();
+
+        private static List<FollowAsset> CreateFollowAssetList()
         {
             var id = 0;
             var followers = new List<FollowAsset>
@@ -25,7 +27,12 @@ namespace DataAccessMock.Asset
             return followers;
         }
 
-        private FollowAsset GetFollowers(ref int id, int userId, int assetId)
+        public List<FollowAsset> ListFollowers(IEnumerable<int> assetsIds)
+        {
+            return FollowAssetList;
+        }
+
+        private static FollowAsset GetFollowers(ref int id, int userId, int assetId)
         {
             ++id;
             return new FollowAsset()

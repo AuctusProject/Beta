@@ -7,6 +7,6 @@ namespace Auctus.DataAccessInterfaces.Advisor
     {
         List<Advice> List(IEnumerable<int> advisorIds);
         Advice GetLastAdviceForAssetByAdvisor(int assetId, int advisorId);
-        IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int userId, int? top, int? lastAdviceId);
+        IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> followingAdvisors, IEnumerable<int> followingAssets, int? top, int? lastAdviceId);
     }
 }

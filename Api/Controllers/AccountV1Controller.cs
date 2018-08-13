@@ -96,5 +96,14 @@ namespace Api.Controllers
         {
             return base.ConfirmEmail(confirmEmailRequest);
         }
+
+        [Route("me/advices")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAdvices([FromQuery]int? top, [FromQuery]int? lastAdviceId)
+        {
+            return base.ListAdvices(top, lastAdviceId);
+        }
     }
 }

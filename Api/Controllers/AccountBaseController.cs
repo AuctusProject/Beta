@@ -137,5 +137,18 @@ namespace Api.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        protected virtual IActionResult ListAdvices(int? top, int? lastAdviceId)
+        {
+            try
+            {
+                var feedResponse = AdviceBusiness.ListFeed(top, lastAdviceId);
+                return Ok(feedResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }
