@@ -37,6 +37,7 @@ namespace Api.Controllers
 
         [Route("advices")]
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult Advise([FromBody]AdviseRequest adviseRequest)
         {

@@ -44,6 +44,7 @@ namespace Auctus.Model
         }
         public class AdviceResponse
         {
+            public int UserId { get; set; }
             public DateTime Date { get; set; }
             public int AdviceType { get; set; }
         }
