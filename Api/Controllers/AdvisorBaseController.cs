@@ -52,7 +52,7 @@ namespace Api.Controllers
 
                 AdvisorBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { error = ex.Message });
             }
