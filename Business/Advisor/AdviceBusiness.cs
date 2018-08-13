@@ -94,7 +94,7 @@ namespace Auctus.Business.Advisor
 
         private static List<FeedResponse> ConvertToFeedResponse(IEnumerable<Advice> advices, List<AdvisorResponse> advisorsResult, List<AssetResponse> assetResult)
         {
-            List<FeedResponse> feedResult = new List<FeedResponse>();
+            var feedResult = new List<FeedResponse>();
 
             foreach (var advice in advices)
             {
