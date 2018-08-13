@@ -20,6 +20,14 @@ namespace Api.Controllers
         {
         }
 
+        [HttpGet]
+        //[Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAssets()
+        {
+            return base.ListAssets();
+        }
+
         [Route("{id}/followers")]
         [HttpPost]
         [Authorize]
@@ -37,5 +45,9 @@ namespace Api.Controllers
         {
             return base.UnfollowAsset(id);
         }
+
+        
+       
+
     }
 }

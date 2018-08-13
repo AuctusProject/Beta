@@ -12,9 +12,9 @@ namespace Auctus.Model
         public int TotalRatings { get; set; }
         public int TotalAdvisors { get; set; }
         public double LastValue { get; set; }
-        public double Variation24h { get; set; }
-        public double Variation7d { get; set; }
-        public double Variation30d { get; set; }
+        public double? Variation24h { get; set; }
+        public double? Variation7d { get; set; }
+        public double? Variation30d { get; set; }
         public int? NumberOfFollowers { get; set; }
         public bool? Following { get; set; }
         public int Mode { get; set; }

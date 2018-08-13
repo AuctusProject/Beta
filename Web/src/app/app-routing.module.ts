@@ -12,7 +12,7 @@ import { ChangePasswordComponent } from './components/account/change-password/ch
 import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-advisors.component';
 import { RegisterComponent } from './components/account/register/register.component';
 import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
-
+import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
@@ -26,6 +26,7 @@ const routes: Routes = [
     { path: 'change-password', component: ChangePasswordComponent,canActivate:[AuthRedirect] },
     { path: 'list-advisors', component: ListAdvisorsComponent,canActivate:[AuthRedirect] },
     { path: 'advisor-details/:id', component: AdvisorDetailsComponent,canActivate:[AuthRedirect] },
+    { path: 'list-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] }
 ];
 
 @NgModule({
