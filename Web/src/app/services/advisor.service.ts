@@ -9,6 +9,7 @@ import { RequestToBeAdvisorRequest } from '../model/advisor/requestToBeAdvisorRe
 export class AdvisorService {
   private baseGetAdvisorsUrl = this.httpService.apiUrl("v1/advisors");
   private requestToBeAdvisorsUrl = this.httpService.apiUrl("v1/advisors/me/requests");
+  private followAdvisorsUrl = this.httpService.apiUrl("v1/advisors/{id}/followers");
   
   constructor(private httpService : HttpService) { }
 
@@ -26,5 +27,13 @@ export class AdvisorService {
 
   postRequestToBeAdvisor(requestToBeAdvisorRequest: RequestToBeAdvisorRequest): Observable<RequestToBeAdvisor> {
     return this.httpService.post(this.requestToBeAdvisorsUrl, requestToBeAdvisorRequest);
+  }
+
+  followAdvisor(advisorId:number):Observable<void>{
+    return this.httpService.post(this.followAdvisorsUrl.replace("{id}", advisorId.toString()));
+  }
+
+  unfollowAdvisor(advisorId:number):Observable<void>{
+    return this.httpService.delete(this.followAdvisorsUrl.replace("{id}", advisorId.toString()));
   }
 }

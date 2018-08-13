@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { AdvisorService } from '../../../services/advisor.service';
+import { environment } from '../../../../environments/environment';
+import { AssetResponse } from '../../../model/asset/assetResponse';
 
 @Component({
   selector: 'advisor-details',
@@ -16,5 +18,8 @@ export class AdvisorDetailsComponent implements OnInit {
     this.route.params.subscribe(params => 
       this.advisorService.getAdvisor(params['id']).subscribe(advisor => this.advisor = advisor)
     )
+  }
+  getAssetImgUrl(asset: AssetResponse){
+    return environment.assetImgUrl.replace("{id}", asset.assetId.toString());
   }
 }
