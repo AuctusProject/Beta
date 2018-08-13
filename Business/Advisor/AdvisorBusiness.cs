@@ -164,6 +164,14 @@ namespace Auctus.Business.Advisor
             IEnumerable<Advice> assetAdvices, IEnumerable<int> assetAdvisorsId, IEnumerable<AssetValue> values, CalculationMode mode)
         {
             var assFollowers = assetFollowers?.Where(c => c.AssetId == asset.Id);
+            var firstData = values.First();
+            var vl30d = values.Where(c => c.Date <= firstData.Date.AddDays(-30) && c.Date > firstData.Date.AddDays(-31));
+            var vl7d = values.Where(c => c.Date <= firstData.Date.AddDays(-7) && c.Date > firstData.Date.AddDays(-8)); 
+            var vl24h = values.Where(c => c.Date <= firstData.Date.AddDays(-1) && c.Date > firstData.Date.AddDays(-2));
+            var lastValue = firstData.Value;
+            var variation24h = vl24h.Any() ? (lastValue / vl24h.First().Value) - 1 : (double?)null;
+            var variation7d = vl7d.Any() ? (lastValue / vl7d.First().Value) - 1 : (double?)null;
+            var variation30d = vl30d.Any() ? (lastValue / vl30d.First().Value) - 1 : (double?)null;
             return new AssetResponse()
             {
                 AssetId = asset.Id,
@@ -173,10 +181,10 @@ namespace Auctus.Business.Advisor
                 NumberOfFollowers = assFollowers?.Count(),
                 TotalAdvisors = assetAdvisorsId.Count(),
                 TotalRatings = assetAdvices.Count(),
-                LastValue = values.First().Value,
-                Variation24h = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-1)).Value,
-                Variation7d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-7)).Value,
-                Variation30d = values.First().Value / values.First(c => c.Date <= values.First().Date.AddDays(-30)).Value,
+                LastValue = lastValue,
+                Variation24h = variation24h,
+                Variation7d = variation7d,
+                Variation30d = variation30d,
                 Values = mode == CalculationMode.AssetBase ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
                                     .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
             };
@@ -262,7 +270,8 @@ namespace Auctus.Business.Advisor
             {
                 if (previousAdvice != null)
                 {
-                    previousAdvice.Return = previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? (double?)null :
+                    if (previousAdvice.Advice.Type != advice.Type)
+                        previousAdvice.Return = previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? (double?)null :
                                             (previousAdvice.Advice.AdviceType == AdviceType.Buy ? 1.0 : -1.0) * (value.Value / previousAdvice.Value - 1);
 
                     assetAdviceDetails.Add(previousAdvice);
@@ -274,14 +283,17 @@ namespace Auctus.Business.Advisor
                     advisorAdvices.ForEach(c =>
                     {
                         if (c.Advice.AdviceType != AdviceType.ClosePosition)
+                        {
+                            c.Return = (startAdviceType.Advice.AdviceType == AdviceType.Buy ? 1.0 : -1.0) * (value.Value / c.Value - 1);
                             c.Success = startAdviceType.Advice.AdviceType == AdviceType.Buy ? value.Value >= c.Value : value.Value <= c.Value;
+                        }
                     });
                 }
                 return new AdviceDetail()
                 {
                     Advice = advice,
                     Value = value.Value,
-                    ModeType = previousAdvice == null ? AdviceModeType.Initiate : 
+                    ModeType = previousAdvice == null || previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? AdviceModeType.Initiate : 
                                 previousAdvice.Advice.Type == advice.Type ? AdviceModeType.Reiterate :
                                 previousAdvice.Advice.AdviceType == AdviceType.Buy ? AdviceModeType.Downgrade : AdviceModeType.Upgrade
                 };
