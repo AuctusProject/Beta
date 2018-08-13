@@ -127,7 +127,7 @@ namespace Auctus.Business.Advisor
                                     .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
                                 assetResultData.Mode = GetAssetModeType(assetResultData);
                                 assetResultData.Advices = mode == CalculationMode.AssetBase ? null : assetAdviceDetails
-                                    .Select(c => new AssetResponse.AdviceResponse() { AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).OrderBy(c => c.Date).ToList();
+                                    .Select(c => new AssetResponse.AdviceResponse() { UserId = c.Advice.AdvisorId, AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).OrderBy(c => c.Date).ToList();
                             }
                             assetsResult.Add(assetResultData);
                         }
@@ -202,7 +202,7 @@ namespace Auctus.Business.Advisor
                 LastAdviceDate = advisorDetailsValues.Last().Advice.CreationDate,
                 LastAdviceMode = advisorDetailsValues.Last().ModeType.Value,
                 LastAdviceType = advisorDetailsValues.Last().Advice.Type,
-                Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c => new AssetResponse.AdviceResponse() { AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).ToList() : null
+                Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c => new AssetResponse.AdviceResponse() { UserId = advisorId, AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).ToList() : null
             };
         }
 
