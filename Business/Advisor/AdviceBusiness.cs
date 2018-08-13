@@ -52,5 +52,11 @@ namespace Auctus.Business.Advisor
                     throw new InvalidOperationException("You need a Buy or Sell recommendation before advising to Close Position.");
             }
         }
+
+        public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int? top, int? lastAdviceId)
+        {
+            var user = UserBusiness.GetValidUser();
+            return Data.ListLastAdvicesForUserWithPagination(user.Id, top, lastAdviceId);
+        }
     }
 }
