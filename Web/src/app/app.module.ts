@@ -40,6 +40,8 @@ import { ForgotPasswordResetComponent } from './components/account/forgot-passwo
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
 import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-advisors.component';
 import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
+import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
+import { AssetCardComponent } from './components/asset/asset-card/asset-card.component';
 
 
 @NgModule({
@@ -58,7 +60,9 @@ import { AdvisorDetailsComponent } from './components/advisor/advisor-details/ad
     ForgotPasswordResetComponent,
     ChangePasswordComponent,
     ListAdvisorsComponent,
-    AdvisorDetailsComponent
+    AdvisorDetailsComponent,
+    ListAssetsComponent,
+    AssetCardComponent
   ],
   imports: [
     BrowserModule,

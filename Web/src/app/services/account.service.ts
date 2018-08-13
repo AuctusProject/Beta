@@ -22,7 +22,7 @@ export class AccountService {
   private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmations");
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
-  private registerUrl = this.httpService.apiUrl("accounts/v1/register")
+  private registerUrl = this.httpService.apiUrl("v1/accounts")
 
   constructor(private httpService : HttpService, private router : Router) { }
 
