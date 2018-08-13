@@ -15,7 +15,21 @@ namespace Api.Controllers
         {
         }
 
-        protected virtual IActionResult FollowAsset(int id)
+        protected IActionResult ListAssets()
+        {
+            try
+            {
+                var assetResponse = AssetBusiness.ListAssetData();
+                return Ok(assetResponse);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+
+        protected IActionResult FollowAsset(int id)
         {
             try
             {
@@ -28,7 +42,8 @@ namespace Api.Controllers
             }
         }
 
-        protected virtual IActionResult UnfollowAsset(int id)
+       
+        protected IActionResult UnfollowAsset(int id)
         {
             try
             {
