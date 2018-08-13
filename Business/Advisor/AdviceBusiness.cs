@@ -15,7 +15,7 @@ namespace Auctus.Business.Advisor
 
         public AdviceBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
 
-        public void ValidateAndCreate(int advisorId, int assetId, AdviceType type)
+        internal void ValidateAndCreate(int advisorId, int assetId, AdviceType type)
         {
             ValidateAdvice(assetId, advisorId, type);
 
