@@ -9,6 +9,10 @@ namespace Auctus.DataAccessMock.Advisor
 {
     public class AdviceData : BaseData<Advice>, IAdviceData<Advice>
     {
+        public override void Insert(Advice obj)
+        {
+            //Intentionally left empty for unit testing
+        }
         public List<Advice> List(IEnumerable<int> advisorIds)
         {
             var advices = new List<Advice>();
@@ -68,7 +72,16 @@ namespace Auctus.DataAccessMock.Advisor
 
         public Advice GetLastAdviceForAssetByAdvisor(int assetId, int advisorId)
         {
-            return null;
+            switch (assetId)
+            {
+                case 1:
+                    return GetAdvice(advisorId, 1, new DateTime(2018, 5, 9, 16, 35, 0), AdviceType.Buy);
+                case 2:
+                    return GetAdvice(advisorId, 2, GetDateTimeNow(), AdviceType.Sell);
+                case 3:
+                    return GetAdvice(advisorId, 3, new DateTime(2018, 5, 9, 16, 35, 0), AdviceType.ClosePosition);
+                default: return null;
+            }
         }
     }
 }

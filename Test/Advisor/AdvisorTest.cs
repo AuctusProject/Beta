@@ -238,5 +238,36 @@ namespace Auctus.Test.Advisor
             Assert.Equal(expFirstType, advices.First().AdviceType);
             Assert.Equal(expLastType, advices.Last().AdviceType);
         }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        public void Advise(int assetId)
+        {
+            switch(assetId)
+            {
+                case 1:
+                    AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition);
+                    break;
+                case 2:
+                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
+                    break;
+                case 3:
+                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
+                    AdvisorBusiness.Advise(assetId, AdviceType.Buy);
+                    break;
+                case 4:
+                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
+                    AdvisorBusiness.Advise(assetId, AdviceType.Buy);
+                    break;
+                case 5:
+                    Assert.Throws<ArgumentException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
+                    break;
+                default: break;
+            }
+        }
     }
 }

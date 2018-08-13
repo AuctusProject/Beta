@@ -60,7 +60,7 @@ namespace Auctus.Business.Asset
                 if (assets != null)
                     MemoryCache.Set<List<Auctus.DomainObjects.Asset.Asset>>(cacheKey, assets, 720);
             }
-            return ids != null ? assets : assets.Where(c => ids.Contains(c.Id)).ToList();
+            return ids == null ? assets : assets.Where(c => ids.Contains(c.Id)).ToList();
         }
 
         public Auctus.DomainObjects.Asset.Asset GetById(int id)
