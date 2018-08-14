@@ -89,6 +89,8 @@ namespace Api
             services.AddSingleton<Cache>();
 
             DataAccessDependencyResolver.RegisterDataAccess(services, Configuration);
+
+            services.AddApplicationInsightsTelemetry(Configuration.GetSection("ApplicationInsights:InstrumentationKey").Get<string>());
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)
