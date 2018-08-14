@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Linq;
 using System.Text;
-using Auctus.Util.NotShared;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Text.RegularExpressions;

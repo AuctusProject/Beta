@@ -7,7 +7,6 @@ using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.Model;
 using Auctus.Util;
-using Auctus.Util.NotShared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -43,7 +42,7 @@ namespace Auctus.Business.Account
             var user = Data.GetForLogin(email);
             if (user == null)
                 throw new ArgumentException("Email is invalid.");
-            else if (user.Password != Security.Hash(password))
+            else if (user.Password != GetHashedPassword(password, user.Email, user.CreationDate))
                 throw new ArgumentException("Password is invalid.");
 
             bool hasInvestment = true;
@@ -84,8 +83,8 @@ namespace Auctus.Business.Account
             user = new User();
             user.Email = email.ToLower().Trim();
             user.CreationDate = Data.GetDateTimeNow();
-            user.Password = Security.Hash(password);
             user.ConfirmationCode = Guid.NewGuid().ToString();
+            user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
             Data.Insert(user);
 
             await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
@@ -98,6 +97,11 @@ namespace Auctus.Business.Account
                 IsAdvisor = false,
                 RequestedToBeAdvisor = requestedToBeAdvisor
             };
+        }
+
+        private string GetHashedPassword(string password, string email, DateTime creationDate)
+        {
+            return Security.Hash(password, $"{email}{creationDate.Ticks}{HashSecret}");
         }
 
         public async Task ResendEmailConfirmation()
@@ -187,7 +191,7 @@ namespace Auctus.Business.Account
         public void ChangePassword(string currentPassword, string newPassword)
         {
             var user = GetValidUser();
-            if (user.Password != Security.Hash(currentPassword))
+            if (user.Password != GetHashedPassword(currentPassword, user.Email, user.CreationDate))
                 throw new ArgumentException("Current password is incorrect.");
 
             UpdatePassword(user, newPassword);
@@ -198,7 +202,7 @@ namespace Auctus.Business.Account
             BasePasswordValidation(password);
             PasswordValidation(password);
 
-            user.Password = Security.Hash(password);
+            user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
             Data.Update(user);
         }
 

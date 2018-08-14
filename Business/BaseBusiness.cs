@@ -59,6 +59,7 @@ namespace Auctus.Business
         private List<string> _emailErrorList;
         private string _storageConfiguration;
         private string _sendGridKey;
+        private string _hashSecret;
 
         protected BaseBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip)
         {
@@ -181,6 +182,16 @@ namespace Auctus.Business
                 if (_sendGridKey == null)
                     _sendGridKey = Configuration.GetSection("Email:SendGridKey").Get<string>();
                 return _sendGridKey;
+            }
+        }
+
+        protected string HashSecret
+        {
+            get
+            {
+                if (_hashSecret == null)
+                    _hashSecret = Configuration.GetSection("Security:HashSecret").Get<string>();
+                return _hashSecret;
             }
         }
 

@@ -1,7 +1,6 @@
 ﻿using Auctus.DataAccess.Blockchain;
 using Auctus.DomainObjects.Web3;
 using Auctus.Util;
-using Auctus.Util.NotShared;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;

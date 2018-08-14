@@ -1,7 +1,6 @@
 ﻿using Api.Model.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
-using Auctus.Util.NotShared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;

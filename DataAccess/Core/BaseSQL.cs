@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Auctus.DataAccess.Core;
-using Auctus.Util.NotShared;
 using System.Threading.Tasks;
 using Auctus.DataAccessInterfaces;
 using Microsoft.Extensions.Configuration;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.WindowsAzure.Storage;
-using Auctus.Util.NotShared;
 
 namespace Auctus.Util.Azure
 {

@@ -3,7 +3,6 @@ using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
-using Auctus.Util.NotShared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
