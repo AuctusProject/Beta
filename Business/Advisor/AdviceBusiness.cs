@@ -19,15 +19,15 @@ namespace Auctus.Business.Advisor
 
         public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
-        internal void ValidateAndCreate(int advisorId, int assetId, AdviceType type)
+        internal void ValidateAndCreate(int advisorId, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            ValidateAdvice(assetId, advisorId, type);
+            ValidateAdvice(asset, advisorId, type);
 
             Insert(
                 new Advice()
                 {
                     AdvisorId = advisorId,
-                    AssetId = assetId,
+                    AssetId = asset.Id,
                     Type = type.Value,
                     CreationDate = Data.GetDateTimeNow()
                 });
@@ -43,9 +43,9 @@ namespace Auctus.Business.Advisor
             return Data.GetLastAdviceForAssetByAdvisor(assetId, advisorId);
         }
 
-        private void ValidateAdvice(int assetId, int advisorId, AdviceType type)
+        private void ValidateAdvice(DomainObjects.Asset.Asset asset, int advisorId, AdviceType type)
         {
-            Advice lastAdvice = GetLastAdviceForAssetByAdvisor(assetId, advisorId);
+            Advice lastAdvice = GetLastAdviceForAssetByAdvisor(asset.Id, advisorId);
 
             if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MIN_TIME_BETWEEN_ADVICES_IN_SECONDS)
                 throw new InvalidOperationException("You need to wait before advising again for this asset.");
@@ -54,6 +54,12 @@ namespace Auctus.Business.Advisor
             {
                 if (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition)
                     throw new InvalidOperationException("You need a Buy or Sell recommendation before advising to Close Position.");
+            }
+
+            if (type == AdviceType.Sell)
+            {
+                if (!asset.ShortSellingEnabled)
+                    throw new InvalidOperationException("Sell recommendations are not available for this asset.");
             }
         }
 

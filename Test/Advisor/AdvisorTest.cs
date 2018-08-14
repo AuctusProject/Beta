@@ -251,6 +251,7 @@ namespace Auctus.Test.Advisor
             {
                 case 1:
                     AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition);
+                    AdvisorBusiness.Advise(assetId, AdviceType.Sell);
                     break;
                 case 2:
                     Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
@@ -258,6 +259,7 @@ namespace Auctus.Test.Advisor
                 case 3:
                     Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
                     AdvisorBusiness.Advise(assetId, AdviceType.Buy);
+                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Sell));
                     break;
                 case 4:
                     Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
