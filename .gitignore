@@ -1,7 +1,6 @@
 Util/NotShared/
 **/nlog.config
-**/appsettings.Development.json
-**/appsettings.Production.json
+**/appsettings.*.json
 
 *.suo
 *.user
