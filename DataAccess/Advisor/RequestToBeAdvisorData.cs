@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Advisor;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,9 +11,10 @@ using System.Text;
 
 namespace Auctus.DataAccess.Advisor
 {
-    public class RequestToBeAdvisorData : BaseSQL<RequestToBeAdvisor>, IRequestToBeAdvisorData<RequestToBeAdvisor>
+    public class RequestToBeAdvisorData : BaseSql<RequestToBeAdvisor>, IRequestToBeAdvisorData<RequestToBeAdvisor>
     {
         public override string TableName => "RequestToBeAdvisor";
+        public RequestToBeAdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
         private const string SELECT_BY_USER = @"SELECT r.* FROM 
                                                 [RequestToBeAdvisor] r

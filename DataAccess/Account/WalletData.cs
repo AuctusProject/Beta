@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,9 +11,10 @@ using System.Text;
 
 namespace Auctus.DataAccess.Account
 {
-    public class WalletData : BaseSQL<Wallet>, IWalletData<Wallet>
+    public class WalletData : BaseSql<Wallet>, IWalletData<Wallet>
     {
         public override string TableName => "Wallet";
+        public WalletData(IConfigurationRoot configuration) : base(configuration) { }
 
         private const string SQL_BY_USER = @"SELECT w.* FROM [Wallet] w WHERE w.UserId = @UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = w.UserId)";
 

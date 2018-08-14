@@ -1,6 +1,6 @@
 ﻿using Auctus.DomainObjects.Web3;
 using Auctus.Util;
-using Auctus.Util.NotShared;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,46 +10,55 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
 
-namespace Auctus.Business.Web3
+namespace Auctus.DataAccess.Blockchain
 {
-    public class Web3Business
+    public class Web3Api
     {
-        private const string BASE_ROUTE = "v1/jsonrpc/mainnet/";
+        private readonly string Web3Url;
+        private readonly string BaseRoute;
+        private readonly string AucContractAddress;
 
-        public static decimal GetAucAmount(string address)
+        public Web3Api(IConfigurationRoot configuration)
+        {
+            Web3Url = configuration.GetSection("Url:Web3").Get<string>();
+            BaseRoute = configuration.GetSection("Url:Web3Route").Get<string>(); 
+            AucContractAddress = configuration.GetSection("AucContract").Get<string>(); 
+        }
+
+        public decimal GetAucAmount(string address)
         {
             address = address.ToLower().StartsWith("0x") ? address.Substring(2) : address;
-            var response = GetWithRetry(string.Format("eth_call?params=[{{\"to\":\"0xc12d099be31567add4e4e4d0d45691c3f58f5663\",\"data\":\"0x70a08231000000000000000000000000{0}\"}},\"latest\"]", address));
+            var response = GetWithRetry($"eth_call?params=[{{\"to\":\"{AucContractAddress}\",\"data\":\"0x70a08231000000000000000000000000{address}\"}},\"latest\"]");
             return Util.Util.ConvertHexaBigNumber(response.ToString(), 18);
         }
 
-        private static object PostWithRetry(string route, object contentObject)
+        private object PostWithRetry(string route, object contentObject)
         {
-            return Retry.Get().Execute<object>((Func<string, object, object >)Post, route, contentObject);
+            return Retry.Get().Execute<object>((Func<string, object, object>)Post, route, contentObject);
         }
 
-        private static object Post(string route, object contentObject)
+        private object Post(string route, object contentObject)
         {
             using (var client = CreateWeb3Client())
             {
                 var content = contentObject != null ? new StringContent(JsonConvert.SerializeObject(contentObject), Encoding.UTF8, "application/json") : null;
-                using (HttpResponseMessage response = client.PostAsync(BASE_ROUTE + route, content).Result)
+                using (HttpResponseMessage response = client.PostAsync(BaseRoute + route, content).Result)
                 {
                     return HandleResponse(response);
                 }
             }
         }
 
-        private static object GetWithRetry(string route)
+        private object GetWithRetry(string route)
         {
             return Retry.Get().Execute<object>((Func<string, object>)Get, route);
         }
 
-        private static object Get(string route)
+        private object Get(string route)
         {
             using (var client = CreateWeb3Client())
             {
-                using (HttpResponseMessage response = client.GetAsync(BASE_ROUTE + route).Result)
+                using (HttpResponseMessage response = client.GetAsync(BaseRoute + route).Result)
                 {
                     return HandleResponse(response);
                 }
@@ -71,10 +80,10 @@ namespace Auctus.Business.Web3
                 throw new Exception(responseContent);
         }
 
-        private static HttpClient CreateWeb3Client()
+        private HttpClient CreateWeb3Client()
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri(Config.WEB3_URL);
+            client.BaseAddress = new Uri(Web3Url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return client;

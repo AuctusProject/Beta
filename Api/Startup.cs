@@ -25,14 +25,14 @@ namespace Api
 {
     public class Startup
     {
-        private IConfigurationRoot Configuration { get; }
+        public static IConfigurationRoot Configuration { get; private set; }
 
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -41,6 +41,7 @@ namespace Api
         {
             services.AddMemoryCache();
 
+            var urlConfiguration = Configuration.GetSection("Url");
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,12 +52,12 @@ namespace Api
                 {
 
                     ValidateAudience = false,
-                    ValidAudience = Config.WEB_URL,
+                    ValidAudience = urlConfiguration.GetValue<string>("Web"),
                     ValidateIssuer = false,
-                    ValidIssuer = Config.API_URL,
+                    ValidIssuer = urlConfiguration.GetValue<string>("Api"),
                     ValidateIssuerSigningKey = true,
                     //IssuerSigningKey = new X509SecurityKey(new X509Certificate2(Path.Combine(env.ContentRootPath, "auctus.pfx"), "")),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config.AUTH_SECRET)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Auth").GetValue<string>("Secret"))),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     RequireExpirationTime = true,
@@ -76,7 +77,7 @@ namespace Api
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
-                    builder.WithOrigins(Config.WEB_URL,"http://localhost:4200")
+                    builder.WithOrigins(urlConfiguration.GetValue<string>("Web"))
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
@@ -90,7 +91,7 @@ namespace Api
             services.AddMvc();
             services.AddSingleton<Cache>();
 
-            DataAccessDependencyResolver.RegisterDataAccess(services);
+            DataAccessDependencyResolver.RegisterDataAccess(services, Configuration);
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)

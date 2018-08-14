@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,9 +11,10 @@ using System.Text;
 
 namespace Auctus.DataAccess.Account
 {
-    public class ExchangeApiAccessData : BaseSQL<ExchangeApiAccess>, IExchangeApiAccessData<ExchangeApiAccess>
+    public class ExchangeApiAccessData : BaseSql<ExchangeApiAccess>, IExchangeApiAccessData<ExchangeApiAccess>
     {
         public override string TableName => "ExchangeApiAccess";
+        public ExchangeApiAccessData(IConfigurationRoot configuration) : base(configuration) { }
 
         public List<ExchangeApiAccess> List(int userId)
         {

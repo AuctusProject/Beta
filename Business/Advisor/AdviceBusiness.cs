@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Auctus.Business.Advisor
     {
         private const int MIN_TIME_BETWEEN_ADVICES_IN_SECONDS = 300;
 
-        public AdviceBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         internal void ValidateAndCreate(int advisorId, int assetId, AdviceType type)
         {

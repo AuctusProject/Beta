@@ -4,6 +4,7 @@ using Auctus.DataAccessInterfaces.Asset;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Azure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,8 @@ namespace Auctus.Business.Asset
     {
         public readonly static string COINMARKETCAP_ICONS_BASE_URL = @"https://s2.coinmarketcap.com/static/img/coins/32x32/{0}";
         public readonly static string ICON_CONTAINER_NAME = "assetsicons";
-        public AssetBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+
+        public AssetBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         public IEnumerable<AssetResponse> ListAssetData()
         {
@@ -68,17 +70,6 @@ namespace Auctus.Business.Asset
             return ListAssets(new int[] { id }).FirstOrDefault();
         }
 
-        public void UpdateAllAssetsValues()
-        {
-            var assets = ListAssets();
-
-            foreach (var asset in assets)
-            {
-                if (asset.Type == 1)
-                    AssetValueBusiness.UpdateAssetValue(asset);
-            }
-        }
-
         public void UpdateAllAssetsIcons()
         {
             var coinMarketCapAssets = new CoinMarketCapApi().GetAllCoinMarketCapAssets();
@@ -112,7 +103,7 @@ namespace Auctus.Business.Asset
 
         private void UploadAssetIcon(string fileName)
         {
-            StorageManager.UploadFileFromUrl(ICON_CONTAINER_NAME,fileName,string.Format(COINMARKETCAP_ICONS_BASE_URL, fileName));
+            StorageManager.UploadFileFromUrl(StorageConfiguration, ICON_CONTAINER_NAME, fileName, string.Format(COINMARKETCAP_ICONS_BASE_URL, fileName));
         }
     }
 }

@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,9 +11,10 @@ using System.Text;
 
 namespace Auctus.DataAccess.Account
 {
-    public class PasswordRecoveryData : BaseSQL<PasswordRecovery>, IPasswordRecoveryData<PasswordRecovery>
+    public class PasswordRecoveryData : BaseSql<PasswordRecovery>, IPasswordRecoveryData<PasswordRecovery>
     {
         public override string TableName => "PasswordRecovery";
+        public PasswordRecoveryData(IConfigurationRoot configuration) : base(configuration) { }
 
         public PasswordRecovery Get(int userId)
         {

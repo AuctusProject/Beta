@@ -1,10 +1,10 @@
-﻿using Auctus.Business.Web3;
-using Auctus.DataAccess.Account;
+﻿using Auctus.DataAccess.Account;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Auctus.Business.Account
 {
     public class WalletBusiness : BaseBusiness<Wallet, IWalletData<Wallet>>
     {
-        public WalletBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public WalletBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         public void ValidateUserWallet(User user)
         {
@@ -28,7 +28,7 @@ namespace Auctus.Business.Account
                     throw new UnauthorizedAccessException("Wallet was not defined.");
 
                 var aucAmount = GetAucAmount(wallet.Address);
-                if (aucAmount < Config.MINUMIM_AUC_TO_LOGIN)
+                if (aucAmount < MinimumAucLogin)
                     throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
 
                 MemoryCache.Set<object>(cacheKey, true, 10);

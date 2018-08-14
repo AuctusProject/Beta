@@ -3,6 +3,7 @@ using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +12,10 @@ using System.Text;
 
 namespace Auctus.DataAccess.Account
 {
-    public class UserData : BaseSQL<User>, IUserData<User>
+    public class UserData : BaseSql<User>, IUserData<User>
     {
         public override string TableName => "User";
+        public UserData(IConfigurationRoot configuration) : base(configuration) { }
 
         private const string SQL_FOR_LOGIN = @"SELECT u.*, a.*, r.*, w.* 
                                                 FROM 

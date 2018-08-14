@@ -10,13 +10,13 @@ using Auctus.DataAccess.Core;
 using Auctus.Util.NotShared;
 using System.Threading.Tasks;
 using Auctus.DataAccessInterfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace Auctus.DataAccess.Core
 {
-    public abstract class BaseSQL<T> : DapperRepositoryBase, IBaseData<T>
+    public abstract class BaseSql<T> : DapperRepositoryBase, IBaseData<T>
     {
-        protected BaseSQL() : base(Config.CONNECTION_STRING)
-        { }
+        protected BaseSql(IConfigurationRoot configuration) : base(configuration) { }
 
         public IEnumerable<T> SelectByObject(T criteria)
         {

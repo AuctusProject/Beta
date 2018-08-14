@@ -8,12 +8,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace Auctus.DataAccess.Advisor
 {
-    public class FollowAdvisorData : BaseSQL<FollowAdvisor>, IFollowAdvisorData<FollowAdvisor>
+    public class FollowAdvisorData : BaseSql<FollowAdvisor>, IFollowAdvisorData<FollowAdvisor>
     {
         public override string TableName => "FollowAdvisor";
+        public FollowAdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
         private const string SQL_LIST = @"SELECT f.*, fa.AdvisorId FROM 
                                         [FollowAdvisor] fa

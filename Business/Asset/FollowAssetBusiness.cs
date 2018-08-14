@@ -3,6 +3,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Asset;
 using Auctus.Util;
 using DataAccessInterfaces.Asset;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Auctus.Business.Asset
 {
     public class FollowAssetBusiness : BaseBusiness<FollowAsset, IFollowAssetData<FollowAsset>>
     {
-        public FollowAssetBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public FollowAssetBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         public List<FollowAsset> ListFollowers(IEnumerable<int> assetIds = null)
         {
@@ -21,7 +22,7 @@ namespace Auctus.Business.Asset
 
         public FollowAsset Create(int userId, int AssetId, FollowActionType actionType)
         {
-            using (var transaction = new TransactionalDapperCommand())
+            using (var transaction = TransactionalDapperCommand)
             {
                 var follow = FollowBusiness.Create(userId, actionType);
                 transaction.Insert(follow);

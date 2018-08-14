@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -14,6 +15,7 @@ namespace Auctus.DataAccess.Asset
     public class AssetValueData : BaseMongo<AssetValue>, IAssetValueData<AssetValue>
     {
         public override string CollectionName => "AssetValue";
+        public AssetValueData(IConfigurationRoot configuration) : base(configuration) { }
 
         public AssetValue GetLastValue(int assetId)
         {

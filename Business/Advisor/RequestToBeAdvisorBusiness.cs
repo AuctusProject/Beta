@@ -4,6 +4,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
 using Auctus.Util.NotShared;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Auctus.Business.Advisor
 {
     public class RequestToBeAdvisorBusiness : BaseBusiness<RequestToBeAdvisor, IRequestToBeAdvisorData<RequestToBeAdvisor>>
     {
-        public RequestToBeAdvisorBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public RequestToBeAdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         public RequestToBeAdvisor GetByUser(int userId)
         {
@@ -63,7 +64,7 @@ namespace Auctus.Business.Advisor
         }
         private async Task SendRequestToBeAdvisorEmail(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
         {
-            await Email.SendAsync(Config.EMAIL_FOR_CRITICAL_ERROR,
+            await Email.SendAsync(SendGridKey, EmailErrorList,
                 string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor == null ? "NEW" : "UPDATE"),
                 string.Format(@"Email: {0} 
 <br/>

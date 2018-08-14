@@ -9,11 +9,12 @@ using System.Linq;
 using System.Text;
 using Auctus.DataAccess.Exchanges;
 using Auctus.DataAccessInterfaces.Account;
+using Microsoft.Extensions.Configuration;
 
 namespace Auctus.Business.Account
 {
     public class ExchangeApiAccessBusiness : BaseBusiness<ExchangeApiAccess, IExchangeApiAccessData<ExchangeApiAccess>>
     {
-        public ExchangeApiAccessBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public ExchangeApiAccessBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
     }
 }

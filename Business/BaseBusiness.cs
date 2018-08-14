@@ -1,11 +1,13 @@
 ﻿using Auctus.Business.Account;
 using Auctus.Business.Advisor;
 using Auctus.Business.Asset;
+using Auctus.Business.Blockchain;
 using Auctus.DataAccess;
 using Auctus.DataAccess.Core;
 using Auctus.DataAccessInterfaces;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,7 @@ namespace Auctus.Business
 {
     public abstract class BaseBusiness<T, D> where D : IBaseData<T>
     {
+        protected readonly IConfigurationRoot Configuration;
         protected readonly IServiceProvider ServiceProvider;
         protected readonly ILoggerFactory LoggerFactory;
         protected readonly ILogger Logger;
@@ -46,9 +49,20 @@ namespace Auctus.Business
         private RequestToBeAdvisorBusiness _requestToBeAdvisorBusiness;
         private WalletBusiness _walletBusiness;
         private ActionBusiness _actionBusiness;
+        private Web3Business _web3Business;
 
-        protected BaseBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip)
+        private string _apiUrl;
+        private string _webUrl;
+        private string _web3Url;
+        private string _web3Route;
+        private int? _minimumAucLogin;
+        private List<string> _emailErrorList;
+        private string _storageConfiguration;
+        private string _sendGridKey;
+
+        protected BaseBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip)
         {
+            Configuration = configuration;
             ServiceProvider = serviceProvider;
             MemoryCache = cache;
             LoggerFactory = loggerFactory;
@@ -110,12 +124,100 @@ namespace Auctus.Business
             }
         }
 
+        protected string ApiUrl
+        {
+            get
+            {
+                if (_apiUrl == null)
+                    _apiUrl = Configuration.GetSection("Url:Api").Get<string>();
+                return _apiUrl;
+            }
+        }
+
+        protected string WebUrl
+        {
+            get
+            {
+                if (_webUrl == null)
+                    _webUrl = Configuration.GetSection("Url:Web").Get<string>();
+                return _webUrl;
+            }
+        }
+
+        protected string Web3Url
+        {
+            get
+            {
+                if (_web3Url == null)
+                    _web3Url = Configuration.GetSection("Url:Web3").Get<string>();
+                return _web3Url;
+            }
+        }
+
+        protected string Web3Route
+        {
+            get
+            {
+                if (_web3Route == null)
+                    _web3Route = Configuration.GetSection("Url:Web3Route").Get<string>();
+                return _web3Route;
+            }
+        }
+
+        protected string StorageConfiguration
+        {
+            get
+            {
+                if (_storageConfiguration == null)
+                    _storageConfiguration = Configuration.GetSection("ConnectionString:Storage").Get<string>();
+                return _storageConfiguration;
+            }
+        }
+
+        protected string SendGridKey
+        {
+            get
+            {
+                if (_sendGridKey == null)
+                    _sendGridKey = Configuration.GetSection("Email:SendGridKey").Get<string>();
+                return _sendGridKey;
+            }
+        }
+
+        protected int MinimumAucLogin
+        {
+            get
+            {
+                if (_minimumAucLogin == null)
+                    _minimumAucLogin = Configuration.GetSection("Auth:MinimumAuc").Get<int>();
+                return _minimumAucLogin.Value;
+            }
+        }
+
+        protected List<string> EmailErrorList
+        {
+            get
+            {
+                if (_emailErrorList == null)
+                    _emailErrorList = Configuration.GetSection("Email:Error").Get<List<string>>();
+                return _emailErrorList;
+            }
+        }
+
+        protected TransactionalDapperCommand TransactionalDapperCommand
+        {
+            get
+            {
+                return new TransactionalDapperCommand(Configuration);
+            }
+        }
+
         protected UserBusiness UserBusiness
         {
             get
             {
                 if (_userBusiness == null)
-                    _userBusiness = new UserBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _userBusiness = new UserBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _userBusiness;
             }
         }
@@ -125,7 +227,7 @@ namespace Auctus.Business
             get
             {
                 if (_passwordRecoveryBusiness == null)
-                    _passwordRecoveryBusiness = new PasswordRecoveryBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _passwordRecoveryBusiness = new PasswordRecoveryBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _passwordRecoveryBusiness;
             }
         }
@@ -135,7 +237,7 @@ namespace Auctus.Business
             get
             {
                 if (_advisorBusiness == null)
-                    _advisorBusiness = new AdvisorBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _advisorBusiness = new AdvisorBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _advisorBusiness;
             }
         }
@@ -145,7 +247,7 @@ namespace Auctus.Business
             get
             {
                 if (_adviceBusiness == null)
-                    _adviceBusiness = new AdviceBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _adviceBusiness = new AdviceBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _adviceBusiness;
             }
         }
@@ -155,7 +257,7 @@ namespace Auctus.Business
             get
             {
                 if (_followBusiness == null)
-                    _followBusiness = new FollowBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _followBusiness = new FollowBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _followBusiness;
             }
         }
@@ -165,7 +267,7 @@ namespace Auctus.Business
             get
             {
                 if (_followAssetBusiness == null)
-                    _followAssetBusiness = new FollowAssetBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _followAssetBusiness = new FollowAssetBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _followAssetBusiness;
             }
         }
@@ -175,7 +277,7 @@ namespace Auctus.Business
             get
             {
                 if (_followAdvisorBusiness == null)
-                    _followAdvisorBusiness = new FollowAdvisorBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _followAdvisorBusiness = new FollowAdvisorBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _followAdvisorBusiness;
             }
         }
@@ -185,7 +287,7 @@ namespace Auctus.Business
             get
             {
                 if (_assetBusiness == null)
-                    _assetBusiness = new AssetBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _assetBusiness = new AssetBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _assetBusiness;
             }
         }
@@ -195,7 +297,7 @@ namespace Auctus.Business
             get
             {
                 if (_assetValueBusiness == null)
-                    _assetValueBusiness = new AssetValueBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _assetValueBusiness = new AssetValueBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _assetValueBusiness;
             }
         }
@@ -205,7 +307,7 @@ namespace Auctus.Business
             get
             {
                 if (_exchangeApiAccessBusiness == null)
-                    _exchangeApiAccessBusiness = new ExchangeApiAccessBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _exchangeApiAccessBusiness = new ExchangeApiAccessBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _exchangeApiAccessBusiness;
             }
         }
@@ -215,7 +317,7 @@ namespace Auctus.Business
             get
             {
                 if (_requestToBeAdvisorBusiness == null)
-                    _requestToBeAdvisorBusiness = new RequestToBeAdvisorBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _requestToBeAdvisorBusiness = new RequestToBeAdvisorBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _requestToBeAdvisorBusiness;
             }
         }
@@ -225,7 +327,7 @@ namespace Auctus.Business
             get
             {
                 if (_walletBusiness == null)
-                    _walletBusiness = new WalletBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _walletBusiness = new WalletBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _walletBusiness;
             }
         }
@@ -235,8 +337,18 @@ namespace Auctus.Business
             get
             {
                 if (_actionBusiness == null)
-                    _actionBusiness = new ActionBusiness(ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                    _actionBusiness = new ActionBusiness(Configuration, ServiceProvider, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _actionBusiness;
+            }
+        }
+
+        protected Web3Business Web3Business
+        {
+            get
+            {
+                if (_web3Business == null)
+                    _web3Business = new Web3Business(Configuration);
+                return _web3Business;
             }
         }
     }
