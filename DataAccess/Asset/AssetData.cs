@@ -12,6 +12,8 @@ namespace Auctus.DataAccess.Asset
 {
     public class AssetData : BaseSql<DomainObjects.Asset.Asset>, IAssetData<DomainObjects.Asset.Asset>
     {
+        public override string TableName => "Asset";
+
         private const string SQL_LIST_FOLLOWING_ASSETS = @"SELECT a.* FROM 
             [Asset] a
             INNER JOIN [FollowAsset] fa ON fa.AssetId = a.Id
@@ -21,7 +23,6 @@ namespace Auctus.DataAccess.Asset
              WHERE f.ActionType = @ActionType
 	            AND f.UserId = @UserId";
 
-        public override string TableName => "Asset";
         public AssetData(IConfigurationRoot configuration) : base(configuration) { }
 
         public IEnumerable<DomainObjects.Asset.Asset> ListFollowingAssets(int userId)
