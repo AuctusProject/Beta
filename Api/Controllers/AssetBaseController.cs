@@ -28,6 +28,19 @@ namespace Api.Controllers
             }
         }
 
+        protected IActionResult GetAsset(int id)
+        {
+            try
+            {
+                var assetResponse = AssetBusiness.GetAssetData(id);
+                return Ok(assetResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
 
         protected IActionResult FollowAsset(int id)
         {
