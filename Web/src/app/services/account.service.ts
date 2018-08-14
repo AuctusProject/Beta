@@ -12,6 +12,7 @@ import { RecoverPasswordRequest } from '../model/account/recoverPasswordRequest'
 import { ChangePasswordRequest } from '../model/account/changePasswordRequest';
 import { RegisterRequest } from '../model/account/registerRequest';
 import { RegisterResponse } from '../model/account/registerResponse';
+import { FeedResponse } from '../model/advisor/feedResponse';
 
 
 @Injectable()
@@ -22,7 +23,8 @@ export class AccountService {
   private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmations");
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
-  private registerUrl = this.httpService.apiUrl("v1/accounts")
+  private registerUrl = this.httpService.apiUrl("v1/accounts");
+  private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
 
   constructor(private httpService : HttpService, private router : Router) { }
 
@@ -81,5 +83,16 @@ export class AccountService {
 
   register(registerRequest: RegisterRequest) : Observable<RegisterResponse>{
     return this.httpService.post(this.registerUrl, registerRequest)
+  }
+
+  listFeed(top? : number, lastAdviceId? : number) : Observable<FeedResponse>{
+    var url = this.listFeedUrl + "?";
+    if(top != null){
+      url += "top="+top;
+    }
+    if(lastAdviceId != null){
+      url += "&lastAdviceId="+lastAdviceId;
+    }
+    return this.httpService.get(url);
   }
 }

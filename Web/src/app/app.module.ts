@@ -43,7 +43,8 @@ import { AdvisorDetailsComponent } from './components/advisor/advisor-details/ad
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetCardComponent } from './components/asset/asset-card/asset-card.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
-
+import { AdvicesComponent } from './components/advisor/advices/advices.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { AssetDetailsComponent } from './components/asset/asset-details/asset-de
     AdvisorDetailsComponent,
     ListAssetsComponent,
     AssetCardComponent,
-    AssetDetailsComponent
+    AssetDetailsComponent,
+    AdvicesComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +78,8 @@ import { AssetDetailsComponent } from './components/asset/asset-details/asset-de
     ChartModule,
     FormsModule,
     ReactiveFormsModule,
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+    InfiniteScrollModule
   ],
   providers: [
     HttpService,

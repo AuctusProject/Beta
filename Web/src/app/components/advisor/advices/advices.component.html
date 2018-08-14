@@ -1,0 +1,15 @@
+<div class="search-results"
+		    infiniteScroll
+		    [infiniteScrollDistance]="2"
+		    [infiniteScrollThrottle]="50"
+        (scrolled)="appendFeed()">
+        <div *ngFor="let advice of advices">
+          <p>{{advice.adviceId}}<br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </p>
+        </div>
+
+</div>
