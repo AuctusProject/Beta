@@ -1,5 +1,6 @@
 ﻿using Auctus.Util.DapperAttributes;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,13 +15,15 @@ namespace Auctus.DataAccess.Core
     {
         private readonly string _connectionString;
         protected const int _defaultTimeout = 30;
+        protected readonly IConfigurationRoot Configuration;
 
         public abstract string TableName { get; }
 
         #region Constructor
-        protected DapperRepositoryBase(string connectionString)
+        protected DapperRepositoryBase(IConfigurationRoot configuration)
         {
-            _connectionString = connectionString;
+            Configuration = configuration;
+            _connectionString = configuration.GetSection("ConnectionString:SQL").Get<string>();
         }
         #endregion
 

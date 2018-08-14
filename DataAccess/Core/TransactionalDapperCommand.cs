@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Data;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 
 namespace Auctus.DataAccess.Core
 {
@@ -15,7 +16,7 @@ namespace Auctus.DataAccess.Core
         private SqlConnection Connection { get; }
         private SqlTransaction Transaction { get; }
 
-        public TransactionalDapperCommand(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) : base(Config.CONNECTION_STRING)
+        public TransactionalDapperCommand(IConfigurationRoot configuration, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) : base(configuration)
         {
             Connection = GetOpenConnection();
             Transaction = Connection.BeginTransaction(isolationLevel);

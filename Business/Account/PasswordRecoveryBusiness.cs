@@ -3,6 +3,7 @@ using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
 using Auctus.Util.NotShared;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Auctus.Business.Account
 {
     public class PasswordRecoveryBusiness : BaseBusiness<PasswordRecovery, IPasswordRecoveryData<PasswordRecovery>>
     {
-        public PasswordRecoveryBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public PasswordRecoveryBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         public async Task SendEmailForForgottenPassword(string email)
         {
@@ -42,7 +43,7 @@ namespace Auctus.Business.Account
 
         private async Task SendForgottenPassword(string email, string code)
         {
-            await Email.SendAsync(
+            await Email.SendAsync(SendGridKey,
                 new string[] { email },
                 "Reset your password - Auctus Platform",
                 string.Format(@"Hello,
@@ -53,7 +54,7 @@ If you didn't mean to reset your password, then you can just ignore this email. 
 <br/><br/>
 Thanks,
 <br/>
-Auctus Team", Config.WEB_URL, code));
+Auctus Team", WebUrl, code));
         }
 
         public void RecoverPassword(string code, string password)

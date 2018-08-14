@@ -8,16 +8,12 @@ namespace Auctus.Util.Azure
 {
     //https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-dotnet?tabs=windows
     //https://s2.coinmarketcap.com/static/img/coins/32x32/{id}.png
-    public class StorageManager
+    public static class StorageManager
     {
-        protected StorageManager()
-        {
-
-        }
-       public static void UploadFileFromUrl(string containerName, string fileName, string url)
+       public static void UploadFileFromUrl(string storageAccountConfiguration, string containerName, string fileName, string url)
         {
             CloudStorageAccount storageAccount;
-            if (CloudStorageAccount.TryParse(Config.STORAGE_ACCOUNT, out storageAccount))
+            if (CloudStorageAccount.TryParse(storageAccountConfiguration, out storageAccount))
             {
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var container = blobClient.GetContainerReference(containerName);

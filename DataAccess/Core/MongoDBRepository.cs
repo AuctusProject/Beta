@@ -7,29 +7,24 @@ using MongoDB.Bson;
 using System.Threading.Tasks;
 using System.Linq;
 using Auctus.DomainObjects;
+using Microsoft.Extensions.Configuration;
 
 namespace Auctus.DataAccess.Core
 {
-    public class MongoDBRepository
+    public abstract class MongoDBRepository
     {
-        private static MongoClient _client;
-
-        private static MongoClient Client
-        {
-            get
-            {
-                if (_client == null)
-                {
-                    _client = new MongoClient(Config.MONGO_CONNECTION_STRING);
-                }
-                return _client;
-            }
-        }
         private const string DATABASE_NAME = "AucutusPlatform";
-        internal static IMongoDatabase GetDataBase()
+        protected readonly IConfigurationRoot Configuration;
+
+        protected MongoDBRepository(IConfigurationRoot configuration)
         {
-            IMongoDatabase database = Client.GetDatabase(DATABASE_NAME);
-            return database;
+            Configuration = configuration;
+            MongoConnection.Initiate(configuration.GetSection("ConnectionString:Mongo").Get<string>());
+        }
+
+        protected IMongoDatabase GetDataBase()
+        {
+            return MongoConnection.Client.GetDatabase(DATABASE_NAME);
         }
 
         protected Task InsertOneAsync<T>(string collectionName, T document)
@@ -46,5 +41,15 @@ namespace Auctus.DataAccess.Core
             return collection.InsertManyAsync(documents.Select(x => x.ToBsonDocument()));
         }
 
+        private static class MongoConnection
+        {
+            internal static MongoClient Client { get; private set; }
+
+            internal static void Initiate(string connectionString)
+            {
+                if (Client == null)
+                    Client = new MongoClient(connectionString);
+            }
+        }
     }
 }

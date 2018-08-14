@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccess.Core;
 using Auctus.DataAccessInterfaces;
 using Auctus.DomainObjects;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -15,11 +16,13 @@ namespace Auctus.DataAccess.Core
     {
         public abstract string CollectionName { get; }
 
+        protected BaseMongo(IConfigurationRoot configuration) : base(configuration) { }
+
         public IMongoCollection<T> Collection
         {
            get
             {
-                var database = MongoDBRepository.GetDataBase();
+                var database = GetDataBase();
                 var collection = database.GetCollection<T>(CollectionName);
                 return collection;
             }

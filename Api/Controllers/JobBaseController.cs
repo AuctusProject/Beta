@@ -15,7 +15,7 @@ namespace Api.Controllers
 
         protected virtual IActionResult UpdateAssetsValues()
         {
-            RunJobAsync(AssetBusiness.UpdateAllAssetsValues);
+            RunJobAsync(AssetValueBusiness.UpdateAllAssetsValues);
             return Ok();
         }
 

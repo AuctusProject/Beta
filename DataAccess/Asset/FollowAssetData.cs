@@ -3,6 +3,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Asset;
 using Dapper;
 using DataAccessInterfaces.Asset;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,9 +11,10 @@ using System.Linq;
 
 namespace Auctus.DataAccess.Asset
 {
-    public class FollowAssetData : BaseSQL<FollowAsset>, IFollowAssetData<FollowAsset>
+    public class FollowAssetData : BaseSql<FollowAsset>, IFollowAssetData<FollowAsset>
     {
         public override string TableName => "FollowAsset";
+        public FollowAssetData(IConfigurationRoot configuration) : base(configuration) { }
 
         private const string SQL_LIST = @"SELECT f.*, fa.AssetId FROM 
                                         [FollowAsset] fa

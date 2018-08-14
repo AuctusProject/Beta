@@ -3,6 +3,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
 using DataAccessInterfaces.Advisor;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Auctus.Business.Advisor
 {
     public class FollowAdvisorBusiness : BaseBusiness<FollowAdvisor, IFollowAdvisorData<FollowAdvisor>>
     {
-        public FollowAdvisorBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public FollowAdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds = null)
         {
@@ -26,7 +27,7 @@ namespace Auctus.Business.Advisor
 
         public FollowAdvisor Create(int userId, int advisorId, FollowActionType actionType)
         {
-            using (var transaction = new TransactionalDapperCommand())
+            using (var transaction = TransactionalDapperCommand)
             {
                 var follow = FollowBusiness.Create(userId, actionType);
                 transaction.Insert(follow);

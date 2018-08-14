@@ -8,6 +8,7 @@ using Auctus.DomainObjects.Asset;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.NotShared;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Auctus.Business.Account
 {
     public class UserBusiness : BaseBusiness<User, IUserData<User>>
     {
-        public UserBusiness(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(serviceProvider, loggerFactory, cache, email, ip) { }
+        public UserBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         public User GetByEmail(string email)
         {
@@ -47,10 +48,10 @@ namespace Auctus.Business.Account
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
-            if (!IsValidAdvisor(user) && Config.MINUMIM_AUC_TO_LOGIN > 0)
+            if (!IsValidAdvisor(user) && MinimumAucLogin > 0)
             {
                 aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
-                hasInvestment = aucAmount >= Config.MINUMIM_AUC_TO_LOGIN;
+                hasInvestment = aucAmount >= MinimumAucLogin;
             }
             ActionBusiness.InsertNewLogin(user.Id, aucAmount);
             return new Model.LoginResponse()
@@ -165,7 +166,7 @@ namespace Auctus.Business.Account
             if (!IsValidAdvisor(user))
             {
                 aucAmount = WalletBusiness.GetAucAmount(address);
-                if (aucAmount < Config.MINUMIM_AUC_TO_LOGIN)
+                if (aucAmount < MinimumAucLogin)
                     throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
             }
 
@@ -203,7 +204,7 @@ namespace Auctus.Business.Account
 
         private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
         {
-            await Email.SendAsync(
+            await Email.SendAsync(SendGridKey,
                 new string[] { email },
                 "Verify your email address - Auctus Beta",
                 string.Format(@"Hello,
@@ -214,7 +215,7 @@ To activate your account please verify your email address and complete your regi
 <br/><br/>
 Thanks,
 <br/>
-Auctus Team", Config.WEB_URL, code, requestedToBeAdvisor ? "&a=" : ""));
+Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         }
 
         public static void BaseEmailValidation(string email)

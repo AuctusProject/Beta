@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Advisor;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace Auctus.DataAccess.Advisor
 {
-    public class AdvisorData : BaseSQL<DomainObjects.Advisor.Advisor>, IAdvisorData<DomainObjects.Advisor.Advisor>
+    public class AdvisorData : BaseSql<DomainObjects.Advisor.Advisor>, IAdvisorData<DomainObjects.Advisor.Advisor>
     {
         private const string SQL_LIST_FOLLOWING_ADVISORS = @"SELECT a.* FROM 
             [Advisor] a
@@ -22,6 +23,7 @@ namespace Auctus.DataAccess.Advisor
 	            AND f.UserId = @UserId";
 
         public override string TableName => "Advisor";
+        public AdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
         public List<DomainObjects.Advisor.Advisor> ListEnabled()
         {
