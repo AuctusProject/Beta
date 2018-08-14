@@ -1,3 +1,42 @@
 <p>
   asset-card works!
 </p>
+<div>
+    <img [src]="getAssetImgUrl(asset)">
+  </div>
+<div>
+  Name: {{asset.name}}
+</div>
+<div>
+  Acronym: {{asset.name}}
+</div>
+<div>
+  Success Rate: {{asset.name}}
+</div>
+<div>
+  Current Value: {{asset.name}}
+</div>
+<div>
+  24h Variation: {{asset.name}}
+</div>
+<div>
+  30 days recomendation:
+  <br/>
+  Buy: 
+  <br/>
+  Close
+  <br/>
+  Sell
+</div>
+<div>
+  General Consensus: {{asset.name}}
+</div>
+<div>
+  Rating: {{asset.name}}
+</div>
+<div *ngIf="asset.following">
+    <button (click)="onUnfollowClick()">UNFOLLOW</button>
+</div>
+<div *ngIf="!asset.following">
+  <button (click)="onFollowClick()">FOLLOW</button>
+</div>
