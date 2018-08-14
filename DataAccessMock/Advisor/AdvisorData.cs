@@ -3,12 +3,15 @@ using Auctus.DomainObjects.Account;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Auctus.DomainObjects.Advisor;
+using System.Linq;
+using DataAccessMock.Advisor;
 
 namespace Auctus.DataAccessMock.Advisor
 {
     public class AdvisorData : BaseData<DomainObjects.Advisor.Advisor>, IAdvisorData<DomainObjects.Advisor.Advisor>
     {
-        public List<DomainObjects.Advisor.Advisor> ListEnabled()
+        private static List<DomainObjects.Advisor.Advisor> ListAll()
         {
             var advisors = new List<DomainObjects.Advisor.Advisor>();
             advisors.Add(new DomainObjects.Advisor.Advisor()
@@ -105,6 +108,17 @@ namespace Auctus.DataAccessMock.Advisor
                 }
             });
             return advisors;
+        }
+
+        public List<DomainObjects.Advisor.Advisor> ListEnabled()
+        {
+            return ListAll().Where(a => a.Enabled).ToList();
+        }
+
+        public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors(int userId)
+        {
+            var advisorsIds = FollowAdvisorData.FollowAdvisorList.Where(c => c.UserId == userId).Select(c=> c.AdvisorId);
+            return ListEnabled().Where(c => advisorsIds.Contains(c.Id));
         }
     }
 }

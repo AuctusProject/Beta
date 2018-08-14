@@ -62,7 +62,7 @@ namespace Auctus.Business.Asset
                 if (assets != null)
                     MemoryCache.Set<List<Auctus.DomainObjects.Asset.Asset>>(cacheKey, assets, 720);
             }
-            return ids != null ? assets : assets.Where(c => ids.Contains(c.Id)).ToList();
+            return ids == null ? assets : assets.Where(c => ids.Contains(c.Id)).ToList();
         }
 
         public Auctus.DomainObjects.Asset.Asset GetById(int id)
@@ -104,6 +104,12 @@ namespace Auctus.Business.Asset
         private void UploadAssetIcon(string fileName)
         {
             StorageManager.UploadFileFromUrl(StorageConfiguration, ICON_CONTAINER_NAME, fileName, string.Format(COINMARKETCAP_ICONS_BASE_URL, fileName));
+        }
+
+        public IEnumerable<DomainObjects.Asset.Asset> ListFollowingAssets()
+        {
+            var user = GetValidUser();
+            return Data.ListFollowingAssets(user.Id);
         }
     }
 }

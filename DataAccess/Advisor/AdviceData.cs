@@ -28,6 +28,14 @@ namespace Auctus.DataAccess.Advisor
             AND a.AdvisorId = @AdvisorId
         ORDER BY a.CreationDate DESC ";
 
+        private const string SQL_LIST_LAST_ADVICES_FOR_USER_WITH_PAGINATION = @"
+	    SELECT {0} a.*
+            FROM [Advice] a
+            INNER JOIN Advisor ON Advisor.Id = a.AdvisorId AND Advisor.Enabled = 1
+            WHERE 
+            {1}
+            ORDER BY CreationDate DESC";
+
         public List<Advice> List(IEnumerable<int> advisorIds)
         {
             var complement = "";
@@ -48,6 +56,34 @@ namespace Auctus.DataAccess.Advisor
             parameters.Add("AdvisorId", advisorId, DbType.Int32);
 
             return Query<Advice>(SQL_GET_LAST_FOR_ASSET_BY_ADVISOR, parameters).SingleOrDefault();
+        }
+
+        public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> advisorsIds, IEnumerable<int> assetsIds, int? top, int? lastAdviceId)
+        {
+            var complement = "";
+            var parameters = new DynamicParameters();
+            if (advisorsIds.Count() > 0)
+            {
+                complement = string.Join(" OR ", advisorsIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
+                for (int i = 0; i < advisorsIds.Count(); ++i)
+                    parameters.Add($"AdvisorId{i}", advisorsIds.ElementAt(i), DbType.Int32);
+            }
+            if (assetsIds.Count() > 0)
+            {
+                complement = string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
+                for (int i = 0; i < advisorsIds.Count(); ++i)
+                    parameters.Add($"AssetId{i}", advisorsIds.ElementAt(i), DbType.Int32);
+            }
+
+            var topCondition = (top.HasValue ? "TOP " + top.Value : String.Empty);
+            if (lastAdviceId.HasValue) {
+                complement = " AND a.Id < @LastAdviceId ";
+                parameters.Add("LastAdviceId", lastAdviceId.Value, DbType.Int32);
+            }
+
+            var query = String.Format(SQL_LIST_LAST_ADVICES_FOR_USER_WITH_PAGINATION, topCondition, complement);
+
+            return Query<Advice>(query, parameters);
         }
     }
 }

@@ -9,7 +9,12 @@ namespace Auctus.DataAccessMock.Advisor
 {
     public class AdviceData : BaseData<Advice>, IAdviceData<Advice>
     {
-        public List<Advice> List(IEnumerable<int> advisorIds)
+        public override void Insert(Advice obj)
+        {
+            //Intentionally left empty for unit testing
+        }
+
+        private List<Advice> GetAllAdvices()
         {
             var advices = new List<Advice>();
             advices.Add(GetAdvice(1, 1, new DateTime(2018, 5, 9, 16, 35, 0), AdviceType.Buy));
@@ -47,7 +52,6 @@ namespace Auctus.DataAccessMock.Advisor
 
             advices.Add(GetAdvice(2, 4, new DateTime(2018, 5, 15, 4, 15, 0), AdviceType.Buy));
             advices.Add(GetAdvice(2, 4, new DateTime(2018, 6, 16, 17, 20, 0), AdviceType.ClosePosition));
-
             return advices.OrderBy(c => c.CreationDate).Select((c, i) =>
             {
                 c.Id = i + 1;
@@ -55,6 +59,14 @@ namespace Auctus.DataAccessMock.Advisor
             }).ToList();
         }
 
+        public List<Advice> List(IEnumerable<int> advisorIds)
+        {
+            List<Advice> advices = GetAllAdvices();
+
+            return advices.Where(a => advisorIds.Contains(a.AdvisorId)).ToList();
+        }
+
+        
         private Advice GetAdvice(int userId, int assetId, DateTime dateTime, AdviceType type)
         {
             return new Advice()
@@ -68,7 +80,30 @@ namespace Auctus.DataAccessMock.Advisor
 
         public Advice GetLastAdviceForAssetByAdvisor(int assetId, int advisorId)
         {
-            return null;
+            switch (assetId)
+            {
+                case 1:
+                    return GetAdvice(advisorId, 1, new DateTime(2018, 5, 9, 16, 35, 0), AdviceType.Buy);
+                case 2:
+                    return GetAdvice(advisorId, 2, GetDateTimeNow(), AdviceType.Sell);
+                case 3:
+                    return GetAdvice(advisorId, 3, new DateTime(2018, 5, 9, 16, 35, 0), AdviceType.ClosePosition);
+                default: return null;
+            }
+        }
+
+        public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> advisorsIds, IEnumerable<int> assetsIds, int? top, int? lastAdviceId)
+        {
+            IEnumerable<Advice> advices = GetAllAdvices().Where(a => advisorsIds.Contains(a.AdvisorId) || assetsIds.Contains(a.AssetId));
+            if(lastAdviceId.HasValue)
+                advices = advices.Where(a => a.Id < lastAdviceId.Value);
+
+            advices = advices.OrderByDescending(a => a.CreationDate);
+
+            if (top.HasValue)
+                advices = advices.Take(top.Value);
+
+            return advices;
         }
     }
 }

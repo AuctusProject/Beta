@@ -18,7 +18,7 @@ namespace Auctus.Business.Advisor
 {
     public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, IAdvisorData<DomainObjects.Advisor.Advisor>>
     {
-        public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3 }
+        public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4 }
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
@@ -122,7 +122,7 @@ namespace Auctus.Business.Advisor
 
                         if (mode != CalculationMode.AdvisorBase)
                         {
-                            if (mode != CalculationMode.AdvisorDetailed)
+                            if (mode != CalculationMode.AdvisorDetailed && mode != CalculationMode.Feed)
                             {
                                 assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.GroupBy(c => c.LastAdviceType)
                                     .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
@@ -186,7 +186,7 @@ namespace Auctus.Business.Advisor
                 Variation24h = variation24h,
                 Variation7d = variation7d,
                 Variation30d = variation30d,
-                Values = mode == CalculationMode.AssetBase ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
+                Values = mode == CalculationMode.AssetBase || mode == CalculationMode.Feed ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
                                     .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
             };
         }
@@ -344,6 +344,12 @@ namespace Auctus.Business.Advisor
                 throw new ArgumentException("Asset not found.");
 
             AdviceBusiness.ValidateAndCreate(user.Id, assetId, type);
+        }
+
+        public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors()
+        {
+            var user = GetValidUser();
+            return Data.ListFollowingAdvisors(user.Id);
         }
     }
 }

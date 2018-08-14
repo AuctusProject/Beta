@@ -1,8 +1,9 @@
 ﻿using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
+using DataAccessMock.Asset;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Auctus.DataAccessMock.Asset
 {
@@ -16,6 +17,12 @@ namespace Auctus.DataAccessMock.Asset
             assets.Add(new DomainObjects.Asset.Asset() { Id = 3, Code = "XRP", Name = "Ripple", Type = AssetType.Crypto.Value, CoinMarketCapId = 3 });
             assets.Add(new DomainObjects.Asset.Asset() { Id = 4, Code = "AUC", Name = "Auctus", Type = AssetType.Crypto.Value, CoinMarketCapId = 4 });
             return assets;
+        }
+
+        public IEnumerable<DomainObjects.Asset.Asset> ListFollowingAssets(int userId)
+        {
+            var assetsIds = FollowAssetData.FollowAssetList.Where(c => c.UserId == userId).Select(c => c.AssetId);
+            return SelectAll().Where(c => assetsIds.Contains(c.Id));
         }
     }
 }

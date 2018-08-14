@@ -26,7 +26,7 @@ const routes: Routes = [
     { path: 'change-password', component: ChangePasswordComponent,canActivate:[AuthRedirect] },
     { path: 'list-advisors', component: ListAdvisorsComponent,canActivate:[AuthRedirect] },
     { path: 'advisor-details/:id', component: AdvisorDetailsComponent,canActivate:[AuthRedirect] },
-    { path: 'list-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] }
+    { path: 'list-assets', component: ListAssetsComponent }
 ];
 
 @NgModule({
