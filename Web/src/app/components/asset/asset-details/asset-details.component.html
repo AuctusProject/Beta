@@ -1,0 +1,13 @@
+<div *ngIf="asset">
+  <asset-card [asset]="asset"></asset-card>
+  <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
+  <asset-history-chart [assetValues]="asset.values"></asset-history-chart>
+  <div *ngFor="let assetAdvisor of asset.assetAdvisor; let i = index">
+    <br/>
+    <div>User: {{asset.advisors[i].name}}</div>
+    <div>Ranking: {{asset.advisors[i].ranking}}</div>
+    <div>Last Advice Type: {{getRecommendationFromType(assetAdvisor.lastAdviceType)}}</div>
+    <div>Last Advice Mode: {{assetAdvisor.lastAdviceMode}}</div>
+    <div>Last Advice Date: {{assetAdvisor.lastAdviceDate}}</div>
+  </div>
+</div>

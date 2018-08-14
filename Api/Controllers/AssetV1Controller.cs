@@ -28,6 +28,15 @@ namespace Api.Controllers
             return base.ListAssets();
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAsset(int id)
+        {
+            return base.GetAsset(id);
+        }
+
         [Route("{id}/followers")]
         [HttpPost]
         [Authorize]

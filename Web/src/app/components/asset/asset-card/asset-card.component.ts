@@ -21,7 +21,7 @@ export class AssetCardComponent implements OnInit {
     this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
   }
 
-  getAdvisorImgUrl(){
+  getAssetImgUrl(){
     return environment.assetImgUrl.replace("{id}", this.asset.assetId.toString());
   }
 }

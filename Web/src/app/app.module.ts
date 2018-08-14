@@ -42,6 +42,7 @@ import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-a
 import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetCardComponent } from './components/asset/asset-card/asset-card.component';
+import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { AssetCardComponent } from './components/asset/asset-card/asset-card.com
     ListAdvisorsComponent,
     AdvisorDetailsComponent,
     ListAssetsComponent,
-    AssetCardComponent
+    AssetCardComponent,
+    AssetDetailsComponent
   ],
   imports: [
     BrowserModule,

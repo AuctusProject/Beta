@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://localhost:60755/api/",
+  apiUrl: "http://localhost:50427/api/",
   assetImgUrl: "https://auctusplatform.blob.core.windows.net/assetsicons/{id}.png",
   profileImgUrl: "https://auctusplatform.blob.core.windows.net/userpicture/{id}.png",
 };
