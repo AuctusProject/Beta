@@ -12,10 +12,8 @@ namespace Api
 {
     public class Program
     {
-        protected Program()
-        {
+        protected Program() { }
 
-        }
         public static void Main(string[] args)
         {
             BuildWebHost(args).Run();
@@ -23,6 +21,7 @@ namespace Api
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseApplicationInsights()
                 .UseStartup<Startup>()
                 .Build();
     }

@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using Auctus.Util;
-using NLog.Extensions.Logging;
-using NLog.Web;
 using Microsoft.Extensions.PlatformAbstractions;
 using Auctus.Business;
 
@@ -95,10 +93,6 @@ namespace Api
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)
         {
-            loggerFactory.AddNLog();
-            app.AddNLogWeb();
-            env.ConfigureNLog("nlog.config");
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -106,7 +100,6 @@ namespace Api
             app.UseAuthentication();
             app.UseCors("Default");
             app.UseMvcWithDefaultRoute();
-
         }
     }
 }
