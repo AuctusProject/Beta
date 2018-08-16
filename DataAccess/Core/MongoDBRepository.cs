@@ -12,7 +12,7 @@ namespace Auctus.DataAccess.Core
 {
     public abstract class MongoDBRepository
     {
-        private const string DATABASE_NAME = "AucutusPlatform";
+        private const string DATABASE_NAME = "AuctusPlatform";
         protected readonly IConfigurationRoot Configuration;
 
         protected MongoDBRepository(IConfigurationRoot configuration)
