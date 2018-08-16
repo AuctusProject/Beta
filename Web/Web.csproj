@@ -10,14 +10,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="angular.json" />
+    <Content Remove="e2e\tsconfig.e2e.json" />
+    <Content Remove="package-lock.json" />
+    <Content Remove="package.json" />
+    <Content Remove="src\tsconfig.app.json" />
+    <Content Remove="src\tsconfig.spec.json" />
+    <Content Remove="src\tslint.json" />
+    <Content Remove="src\web.config" />
+    <Content Remove="tsconfig.json" />
+    <Content Remove="tslint.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="src\app\model\login.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-    <Folder Include="e2e\" />
-    <Folder Include="static\" />
+    <None Include="angular.json" />
+    <None Include="e2e\tsconfig.e2e.json" />
+    <None Include="package-lock.json" />
+    <None Include="package.json" />
+    <None Include="src\tsconfig.app.json" />
+    <None Include="src\tsconfig.spec.json" />
+    <None Include="src\tslint.json" />
+    <None Include="src\web.config" />
+    <None Include="tsconfig.json" />
+    <None Include="tslint.json" />
   </ItemGroup>
-
 
 </Project>
