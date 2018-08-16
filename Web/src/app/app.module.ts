@@ -23,7 +23,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AdvisorService } from './services/advisor.service';
 import { HttpModule } from '../../node_modules/@angular/http';
 import { HttpClientModule } from '../../node_modules/@angular/common/http';
-import { TopAssetsComponent } from './components/asset/top-assets/top-assets.component';
 import { AssetService } from './services/asset.service';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { AccountService } from './services/account.service';
@@ -45,6 +44,8 @@ import { AssetCardComponent } from './components/asset/asset-card/asset-card.com
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NewAdviseComponent } from './components/advisor/new-advise/new-advise.component';
+import { MatModule } from './mat.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     AssetHistoryChartComponent,
     RecommendationDistributionComponent,
     AdvisorCardComponent,
-    TopAssetsComponent,
     MessageSignatureComponent,
     LoginComponent,
     RegisterComponent,
@@ -66,7 +66,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     ListAssetsComponent,
     AssetCardComponent,
     AssetDetailsComponent,
-    AdvicesComponent
+    AdvicesComponent,
+    NewAdviseComponent
   ],
   imports: [
     BrowserModule,
@@ -78,8 +79,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     ChartModule,
     FormsModule,
     ReactiveFormsModule,
-    SimpleNotificationsModule.forRoot(),
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    MatModule
   ],
   providers: [
     HttpService,

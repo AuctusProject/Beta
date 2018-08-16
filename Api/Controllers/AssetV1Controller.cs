@@ -21,7 +21,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAssets()
         {
@@ -29,7 +29,16 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("details")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAssetsDetails()
+        {
+            return base.ListAssetsDetails();
+        }
+
+        [HttpGet]
+        [Route("{id}/details")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetAsset(int id)
@@ -54,9 +63,5 @@ namespace Api.Controllers
         {
             return base.UnfollowAsset(id);
         }
-
-        
-       
-
     }
 }

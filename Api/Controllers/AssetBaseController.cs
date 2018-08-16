@@ -19,6 +19,19 @@ namespace Api.Controllers
         {
             try
             {
+                var assetResponse = AssetBusiness.ListAssets();
+                return Ok(assetResponse);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        protected IActionResult ListAssetsDetails()
+        {
+            try
+            {
                 var assetResponse = AssetBusiness.ListAssetData();
                 return Ok(assetResponse);
             }
