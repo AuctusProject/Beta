@@ -6,17 +6,24 @@ using Auctus.Util;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {
     public class JobBaseController : BaseController
     {
-        protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+        private readonly IServiceScopeFactory ServiceScopeFactory;
+
+        protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : 
+            base(loggerFactory, cache, serviceProvider)
+        {
+            ServiceScopeFactory = serviceScopeFactory;
+        }
 
         protected virtual IActionResult UpdateAssetsValues()
         {
-            RunJobAsync(AssetValueBusiness.UpdateAllAssetsValues);
+            RunJobAsync(() => AssetValueBusiness.UpdateAllAssetsValues());
             return Ok();
         }
 
@@ -35,20 +42,24 @@ namespace Api.Controllers
         {
             Task.Factory.StartNew(() =>
             {
-                TelemetryClient telemetry = new TelemetryClient();
-                try
+                using (var scope = ServiceScopeFactory.CreateScope())
                 {
-                    telemetry.TrackEvent(action.Method.Name);
-                    RunJobSync(action);
-                }
-                catch (Exception e)
-                {
-                    telemetry.TrackException(e);
-                    Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
-                }
-                finally
-                {
-                    telemetry.Flush();
+                    ServiceProvider = scope.ServiceProvider;
+                    TelemetryClient telemetry = new TelemetryClient();
+                    try
+                    {
+                        telemetry.TrackEvent(action.Method.Name);
+                        RunJobSync(action);
+                    }
+                    catch (Exception e)
+                    {
+                        telemetry.TrackException(e);
+                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
+                    }
+                    finally
+                    {
+                        telemetry.Flush();
+                    }
                 }
             });
         }

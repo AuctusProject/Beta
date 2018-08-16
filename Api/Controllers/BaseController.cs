@@ -31,7 +31,7 @@ namespace Api.Controllers
         protected readonly ILoggerFactory LoggerFactory;
         protected readonly ILogger Logger;
         protected readonly Cache MemoryCache;
-        protected readonly IServiceProvider ServiceProvider;
+        protected IServiceProvider ServiceProvider;
 
         protected BaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider)
         {
