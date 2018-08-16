@@ -22,14 +22,7 @@ namespace Api.Controllers
             if (signatureRequest == null)
                 return BadRequest();
             
-            try
-            {
-                return Ok(UserBusiness.ValidateSignature(signatureRequest.Address, signatureRequest.Signature));
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(UserBusiness.ValidateSignature(signatureRequest.Address, signatureRequest.Signature));
         }
 
         protected virtual IActionResult Login(LoginRequest loginRequest)
@@ -37,15 +30,8 @@ namespace Api.Controllers
             if (loginRequest == null)
                 return BadRequest();
 
-            try
-            {
-                var loginResponse = UserBusiness.Login(loginRequest.Email, loginRequest.Password);
-                return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            var loginResponse = UserBusiness.Login(loginRequest.Email, loginRequest.Password);
+            return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
         }
 
         protected virtual IActionResult RecoverPassword(RecoverPasswordRequest recoverPasswordRequest)
@@ -53,15 +39,8 @@ namespace Api.Controllers
             if (recoverPasswordRequest == null)
                 return BadRequest();
 
-            try
-            {
-                PasswordRecoveryBusiness.RecoverPassword(recoverPasswordRequest.Code, recoverPasswordRequest.Password);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            PasswordRecoveryBusiness.RecoverPassword(recoverPasswordRequest.Code, recoverPasswordRequest.Password);
+            return Ok();
         }
 
         protected virtual async Task<IActionResult> ForgotPassword(ForgotPasswordRequest forgotPasswordRequest)
@@ -69,15 +48,8 @@ namespace Api.Controllers
             if (forgotPasswordRequest == null || String.IsNullOrWhiteSpace(forgotPasswordRequest.Email))
                 return BadRequest();
 
-            try
-            {
-                await PasswordRecoveryBusiness.SendEmailForForgottenPassword(forgotPasswordRequest.Email);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            await PasswordRecoveryBusiness.SendEmailForForgottenPassword(forgotPasswordRequest.Email);
+            return Ok();
         }
 
         protected virtual IActionResult ChangePassword(ChangePasswordRequest changePasswordRequest)
@@ -85,15 +57,8 @@ namespace Api.Controllers
             if (changePasswordRequest == null || String.IsNullOrWhiteSpace(changePasswordRequest.CurrentPassword) || String.IsNullOrWhiteSpace(changePasswordRequest.NewPassword))
                 return BadRequest();
 
-            try
-            {
-                UserBusiness.ChangePassword(changePasswordRequest.CurrentPassword, changePasswordRequest.NewPassword);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            UserBusiness.ChangePassword(changePasswordRequest.CurrentPassword, changePasswordRequest.NewPassword);
+            return Ok();
         }
 
         protected virtual async Task<IActionResult> Register(RegisterRequest registerRequest)
@@ -101,54 +66,24 @@ namespace Api.Controllers
             if (registerRequest == null)
                 return BadRequest();
 
-            try
-            {
-                var loginResponse = await UserBusiness.Register(registerRequest.Email, registerRequest.Password, registerRequest.RequestedToBeAdvisor);
-                return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            var loginResponse = await UserBusiness.Register(registerRequest.Email, registerRequest.Password, registerRequest.RequestedToBeAdvisor);
+            return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
         }
 
         protected virtual async Task<IActionResult> ResendEmailConfirmation()
         {
-            try
-            {
-                await UserBusiness.ResendEmailConfirmation();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            await UserBusiness.ResendEmailConfirmation();
+            return Ok();
         }
 
         protected virtual IActionResult ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)
         {
-            try
-            {
-                var loginResponse = UserBusiness.ConfirmEmail(confirmEmailRequest.Code);
-                return Ok(loginResponse);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(UserBusiness.ConfirmEmail(confirmEmailRequest.Code));
         }
 
         protected virtual IActionResult ListAdvices(int? top, int? lastAdviceId)
         {
-            try
-            {
-                var feedResponse = AdviceBusiness.ListFeed(top, lastAdviceId);
-                return Ok(feedResponse);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(AdviceBusiness.ListFeed(top, lastAdviceId));
         }
     }
 }

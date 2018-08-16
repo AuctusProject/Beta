@@ -3,6 +3,7 @@ using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -25,29 +26,29 @@ namespace Auctus.Business.Advisor
         {
             var user = UserBusiness.GetByEmail(LoggedEmail);
             if(user == null)
-                throw new ArgumentException("Invalid email.");
+                throw new NotFoundException("Invalid email.");
             return Data.GetByUser(user.Id);
         }
 
         public async Task<RequestToBeAdvisor> Create(string name, string description, string previousExperience)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Name must be filled.");
+                throw new BusinessException("Name must be filled.");
             if (name.Length > 100)
-                throw new ArgumentException("Name cannot have more than 100 characters.");
+                throw new BusinessException("Name cannot have more than 100 characters.");
             if (string.IsNullOrWhiteSpace(description))
-                throw new ArgumentException("Description must be filled.");
+                throw new BusinessException("Description must be filled.");
             if (description.Length > 4000)
-                throw new ArgumentException("Description cannot have more than 4000 characters.");
+                throw new BusinessException("Description cannot have more than 4000 characters.");
             if (string.IsNullOrWhiteSpace(previousExperience))
-                throw new ArgumentException("Previous experience must be filled.");
+                throw new BusinessException("Previous experience must be filled.");
             if (previousExperience.Length > 4000)
-                throw new ArgumentException("Previous experience cannot have more than 4000 characters.");
+                throw new BusinessException("Previous experience cannot have more than 4000 characters.");
 
             var user = GetValidUser();
             var request = GetByUser(user.Id);
             if (request?.Approved == true)
-                throw new ArgumentException("User was already approved as advisor.");
+                throw new BusinessException("User was already approved as advisor.");
 
             var newRequest = new RequestToBeAdvisor()
             {

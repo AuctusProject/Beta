@@ -3,6 +3,7 @@ using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Model;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -24,11 +25,11 @@ namespace Auctus.Business.Account
             {
                 var wallet = Data.GetByUser(user.Id);
                 if (wallet == null)
-                    throw new UnauthorizedAccessException("Wallet was not defined.");
+                    throw new NotFoundException("Wallet was not defined.");
 
                 var aucAmount = GetAucAmount(wallet.Address);
                 if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
+                    throw new UnauthorizedException("Wallet does not have enough AUC.");
 
                 MemoryCache.Set<object>(cacheKey, true, 10);
                 if(aucAmount.HasValue)
@@ -69,11 +70,11 @@ namespace Auctus.Business.Account
         public string GetAddressFormatted(string address)
         {
             if (string.IsNullOrWhiteSpace(address))
-                throw new ArgumentException("Address cannot be empty.");
+                throw new BusinessException("Address cannot be empty.");
 
             address = address.ToLower().Trim();
             if (!IsValidAddress(address))
-                throw new ArgumentException("Invalid address.");
+                throw new BusinessException("Invalid address.");
 
             if (address.StartsWith("0x"))
                 return address;

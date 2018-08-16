@@ -3,6 +3,7 @@ using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Model;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,8 +16,6 @@ namespace Auctus.Business.Advisor
 {
     public class AdviceBusiness : BaseBusiness<Advice, IAdviceData<Advice>>
     {
-        private const int MIN_TIME_BETWEEN_ADVICES_IN_SECONDS = 300;
-
         public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
         internal void ValidateAndCreate(int advisorId, DomainObjects.Asset.Asset asset, AdviceType type)
@@ -47,19 +46,19 @@ namespace Auctus.Business.Advisor
         {
             Advice lastAdvice = GetLastAdviceForAssetByAdvisor(asset.Id, advisorId);
 
-            if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MIN_TIME_BETWEEN_ADVICES_IN_SECONDS)
-                throw new InvalidOperationException("You need to wait before advising again for this asset.");
+            if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
+                throw new BusinessException("You need to wait before advising again for this asset.");
 
             if (type == AdviceType.ClosePosition)
             {
                 if (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition)
-                    throw new InvalidOperationException("You need a Buy or Sell recommendation before advising to Close Position.");
+                    throw new BusinessException("You need a Buy or Sell recommendation before advising to Close Position.");
             }
 
             if (type == AdviceType.Sell)
             {
                 if (!asset.ShortSellingEnabled)
-                    throw new InvalidOperationException("Sell recommendations are not available for this asset.");
+                    throw new BusinessException("Sell recommendations are not available for this asset.");
             }
         }
 

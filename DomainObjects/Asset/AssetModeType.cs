@@ -1,4 +1,5 @@
 ﻿using Auctus.Util;
+using Auctus.Util.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,7 +35,7 @@ namespace Auctus.DomainObjects.Asset
                 case 5:
                     return Close;
                 default:
-                    throw new ArgumentException("Invalid type.");
+                    throw new BusinessException("Invalid type.");
             }
         }
     }

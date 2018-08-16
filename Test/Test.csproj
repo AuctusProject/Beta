@@ -2,15 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Follow\**" />
-    <EmbeddedResource Remove="Follow\**" />
-    <None Remove="Follow\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
@@ -33,6 +25,7 @@
   <ItemGroup>
     <Folder Include="Account\" />
     <Folder Include="Asset\" />
+    <Folder Include="Advisor\" />
   </ItemGroup>
 
 </Project>

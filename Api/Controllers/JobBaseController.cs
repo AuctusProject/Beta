@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Auctus.Util;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -34,13 +35,20 @@ namespace Api.Controllers
         {
             Task.Factory.StartNew(() =>
             {
+                TelemetryClient telemetry = new TelemetryClient();
                 try
                 {
+                    telemetry.TrackEvent(action.Method.Name);
                     RunJobSync(action);
                 }
                 catch (Exception e)
                 {
+                    telemetry.TrackException(e);
                     Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
+                }
+                finally
+                {
+                    telemetry.Flush();
                 }
             });
         }
@@ -51,7 +59,5 @@ namespace Api.Controllers
             action();
             Logger.LogTrace($"Job {action.Method.Name} ended.");
         }
-
-       
     }
 }

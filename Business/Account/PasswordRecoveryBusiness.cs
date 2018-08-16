@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -60,9 +61,9 @@ Auctus Team", WebUrl, code));
         {
             var recovery = Data.Get(code);
             if (recovery == null)
-                throw new ArgumentException("There is no request for recover password.");
+                throw new BusinessException("There is no request for recover password.");
             if (Data.GetDateTimeNow() > recovery.CreationDate.AddMinutes(60))
-                throw new ArgumentException("Recover password code is expired.");
+                throw new BusinessException("Recover password code is expired.");
 
             UserBusiness.UpdatePassword(UserBusiness.GetById(recovery.UserId), password);
         }
