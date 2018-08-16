@@ -24,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="src\app\model\login.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="angular.json" />
     <None Include="e2e\tsconfig.e2e.json" />
     <None Include="package-lock.json" />
