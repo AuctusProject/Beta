@@ -1,6 +1,7 @@
 ﻿using Auctus.DomainObjects.Advisor;
 using Auctus.Model;
 using Auctus.Test.Asset;
+using Auctus.Util.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -254,19 +255,19 @@ namespace Auctus.Test.Advisor
                     AdvisorBusiness.Advise(assetId, AdviceType.Sell);
                     break;
                 case 2:
-                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
                     break;
                 case 3:
-                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
                     AdvisorBusiness.Advise(assetId, AdviceType.Buy);
-                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Sell));
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Sell));
                     break;
                 case 4:
-                    Assert.Throws<InvalidOperationException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
                     AdvisorBusiness.Advise(assetId, AdviceType.Buy);
                     break;
                 case 5:
-                    Assert.Throws<ArgumentException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
+                    Assert.Throws<NotFoundException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
                     break;
                 default: break;
             }
