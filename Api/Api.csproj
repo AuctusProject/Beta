@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\Test\Test.csproj" />
     <ProjectReference Include="..\Util\Util.csproj" />
   </ItemGroup>
 
