@@ -1,0 +1,14 @@
+<form #adviseForm="ngForm" class="example-form" (ngSubmit)="onSubmit()">
+  <mat-form-field class="example-full-width" >
+    <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" (change)="onAssetInputBlur($event)" required>
+    <mat-autocomplete (optionSelected)="optionSelected($event)"  #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option.name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <select class='form-control' [(ngModel)]="advise.adviceType" name="Advise Type" required>
+    <option *ngFor="let signalOption of currentAssetSignalOptions" [value]="signalOption.value">{{signalOption.text}}</option>
+  </select>
+  <input type="submit" [disabled]="!adviseForm.form.valid" value="SAVE">
+</form>

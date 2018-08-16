@@ -12,7 +12,7 @@ export class ListAssetsComponent implements OnInit {
   constructor(private assetService: AssetService) { }
 
   ngOnInit() {
-    this.assetService.getAssets().subscribe(result => this.assets = result);
+    this.assetService.getAssetsDetails().subscribe(result => this.assets = result);
   }
   
 

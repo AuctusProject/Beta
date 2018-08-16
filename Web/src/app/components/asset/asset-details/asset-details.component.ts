@@ -16,7 +16,7 @@ export class AssetDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => 
-      this.assetService.getAsset(params['id']).subscribe(asset => this.asset = asset)
+      this.assetService.getAssetDetails(params['id']).subscribe(asset => this.asset = asset)
     )
   }
 

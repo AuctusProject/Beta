@@ -17,7 +17,15 @@ namespace Api.Controllers
 
         protected IActionResult ListAssets()
         {
-            return Ok(AssetBusiness.ListAssetData());
+            var assetResponse = AssetBusiness.ListAssets();
+            return Ok(assetResponse);
+            
+        }
+
+        protected IActionResult ListAssetsDetails()
+        {
+            var assetResponse = AssetBusiness.ListAssetData();
+            return Ok(assetResponse);
         }
 
         protected IActionResult GetAsset(int id)
