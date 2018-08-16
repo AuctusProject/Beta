@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
