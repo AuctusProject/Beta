@@ -17,56 +17,24 @@ namespace Api.Controllers
 
         protected IActionResult ListAssets()
         {
-            try
-            {
-                var assetResponse = AssetBusiness.ListAssetData();
-                return Ok(assetResponse);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(AssetBusiness.ListAssetData());
         }
 
         protected IActionResult GetAsset(int id)
         {
-            try
-            {
-                var assetResponse = AssetBusiness.GetAssetData(id);
-                return Ok(assetResponse);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(AssetBusiness.GetAssetData(id));
         }
 
 
         protected IActionResult FollowAsset(int id)
         {
-            try
-            {
-                var followAsset = UserBusiness.FollowUnfollowAsset(id, FollowActionType.Follow);
-                return Ok(followAsset);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(UserBusiness.FollowUnfollowAsset(id, FollowActionType.Follow));
         }
 
        
         protected IActionResult UnfollowAsset(int id)
         {
-            try
-            {
-                var followAsset = UserBusiness.FollowUnfollowAsset(id, FollowActionType.Unfollow);
-                return Ok(followAsset);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(UserBusiness.FollowUnfollowAsset(id, FollowActionType.Unfollow));
         }
     }
 }

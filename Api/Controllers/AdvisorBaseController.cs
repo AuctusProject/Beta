@@ -19,100 +19,44 @@ namespace Api.Controllers
 
         protected IActionResult GetAdvisor(int id)
         {
-            try
-            {
-                var advisorsResponse = AdvisorBusiness.GetAdvisorData(id);
-                return Ok(advisorsResponse);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(AdvisorBusiness.GetAdvisorData(id));
         }
 
         protected IActionResult ListAdvisors()
         {
-            try
-            {
-                var advisorsResponse = AdvisorBusiness.ListAdvisorsData();
-                return Ok(advisorsResponse);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(AdvisorBusiness.ListAdvisorsData());
         }
 
         protected IActionResult Advise(AdviseRequest adviseRequest)
         {
-            try
-            {
-                if (adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
-                    return BadRequest();
+            if (adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
+                return BadRequest();
 
-                AdvisorBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            AdvisorBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType));
             return Ok();
         }
 
         protected async Task<IActionResult> RequestToBe(BeAdvisorRequest beAdvisorRequest)
         {
-            try
-            {
-                if (beAdvisorRequest == null)
-                    return BadRequest();
+            if (beAdvisorRequest == null)
+                return BadRequest();
 
-                var result = await RequestToBeAdvisorBusiness.Create(beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(await RequestToBeAdvisorBusiness.Create(beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience));
         }
 
         protected IActionResult GetRequestToBe()
         {
-            try
-            {
-                var result = RequestToBeAdvisorBusiness.GetByLoggedEmail();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(RequestToBeAdvisorBusiness.GetByLoggedEmail());
         }
 
         protected virtual IActionResult FollowAdvisor(int id)
         {
-            try
-            {
-                var followAdvisor = UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Follow);
-                return Ok(followAdvisor);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Follow));
         }
 
         protected virtual IActionResult UnfollowAdvisor(int id)
         {
-            try
-            {
-                var followAdvisor = UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Unfollow);
-                return Ok(followAdvisor);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Unfollow));
         }
     }
 }

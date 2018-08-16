@@ -20,6 +20,9 @@ using Auctus.Business.Account;
 using Auctus.Business.Advisor;
 using Auctus.Business.Asset;
 using Microsoft.Extensions.Configuration;
+using Microsoft.ApplicationInsights;
+using System.Net;
+using Auctus.Util.Exceptions;
 
 namespace Api.Controllers
 {
@@ -107,6 +110,33 @@ namespace Api.Controllers
                     context.Result = new JsonResult(new { jwt = GenerateToken(user), data = ((ObjectResult)context.Result).Value });
                 else
                     context.Result = new JsonResult(new { jwt = GenerateToken(user) });
+            }
+            else if (context.Exception != null)
+            {
+                if (!(context.Exception is BusinessException))
+                {
+                    TelemetryClient telemetry = new TelemetryClient();
+                    if (!string.IsNullOrEmpty(user))
+                        telemetry.Context.User.Id = user;
+                    telemetry.TrackException(context.Exception);
+                    telemetry.Flush();
+                }
+
+                context.ExceptionHandled = true;
+                if (context.Exception is BusinessException)
+                    context.Result = new BadRequestObjectResult(new { error = context.Exception.Message });
+                else if (context.Exception is NotFoundException)
+                    context.Result = new NotFoundObjectResult(new { error = context.Exception.Message });
+                else if (context.Exception is UnauthorizedException)
+                    context.Result = new JsonResult(new { error = context.Exception.Message })
+                    {
+                        StatusCode = 401
+                    };
+                else
+                    context.Result = new JsonResult(new { error = "Unexpected error." })
+                    {
+                        StatusCode = 500
+                    };
             }
             base.OnActionExecuted(context);
         }

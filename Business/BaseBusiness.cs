@@ -7,6 +7,7 @@ using Auctus.DataAccess.Core;
 using Auctus.DataAccessInterfaces;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -56,6 +57,7 @@ namespace Auctus.Business
         private string _web3Url;
         private string _web3Route;
         private int? _minimumAucLogin;
+        private int? _minimumTimeInSecondsBetweenAdvices;
         private List<string> _emailErrorList;
         private string _storageConfiguration;
         private string _sendGridKey;
@@ -102,9 +104,9 @@ namespace Auctus.Business
                 UserBusiness.EmailValidation(LoggedEmail);
                 user = UserBusiness.GetByEmail(LoggedEmail);
                 if (user == null)
-                    throw new ArgumentException("User cannot be found.");
+                    throw new NotFoundException("User cannot be found.");
                 if (!user.ConfirmationDate.HasValue)
-                    throw new ArgumentException("Email was not confirmed.");
+                    throw new BusinessException("Email was not confirmed.");
 
                 if (!UserBusiness.IsValidAdvisor(user))
                 {
@@ -202,6 +204,16 @@ namespace Auctus.Business
                 if (_minimumAucLogin == null)
                     _minimumAucLogin = Configuration.GetSection("Auth:MinimumAuc").Get<int>();
                 return _minimumAucLogin.Value;
+            }
+        }
+
+        protected int MinimumTimeInSecondsBetweenAdvices
+        {
+            get
+            {
+                if (_minimumTimeInSecondsBetweenAdvices == null)
+                    _minimumTimeInSecondsBetweenAdvices = Configuration.GetSection("MinimumTimeInSecondsBetweenAdvices").Get<int>();
+                return _minimumTimeInSecondsBetweenAdvices.Value;
             }
         }
 

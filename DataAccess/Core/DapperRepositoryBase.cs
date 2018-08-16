@@ -1,4 +1,5 @@
 ﻿using Auctus.Util.DapperAttributes;
+using Auctus.Util.Exceptions;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -325,7 +326,7 @@ namespace Auctus.DataAccess.Core
                 if (identity && (value == null || (ulong.TryParse(value.ToString(), out id) && id == 0)))
                 {
                     if (!string.IsNullOrEmpty(_identity))
-                        throw new ArgumentException("Incorrect identity parameter.");
+                        throw new Exception("Incorrect identity parameter.");
                     _identity = name;
                 }
                 Add(_keyParameters, name, value, type);

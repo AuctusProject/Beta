@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Linq;
 using Auctus.Util;
 using Auctus.DomainObjects.Portfolio;
+using Auctus.Util.Exceptions;
 
 namespace Auctus.DataAccess.Exchanges
 {
@@ -106,7 +107,7 @@ namespace Auctus.DataAccess.Exchanges
                         return returnDictionary;
                 }
                 else
-                    throw new InvalidOperationException();
+                    throw HandleError(response);
             }
             return returnDictionary;
         }
@@ -124,8 +125,22 @@ namespace Auctus.DataAccess.Exchanges
                     return result?.Data;
                 }
                 else
-                    throw new InvalidOperationException();
+                    throw HandleError(response);
             }
+        }
+
+        private ApiException HandleError(HttpResponseMessage response)
+        {
+            var responseContent = "Not readable";
+            try
+            {
+                responseContent = response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception ex)
+            {
+                responseContent += $" - {ex.Message}";
+            }
+            return new ApiException((int)response.StatusCode, responseContent);
         }
     }
 }

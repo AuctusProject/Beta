@@ -1,4 +1,5 @@
 ﻿using Auctus.Util;
+using Auctus.Util.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Auctus.DomainObjects.Account
                 case 1:
                     return Follow;
                 default:
-                    throw new ArgumentException("Invalid type.");
+                    throw new BusinessException("Invalid type.");
             }
         }
     }

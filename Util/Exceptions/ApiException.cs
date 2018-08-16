@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Auctus.DomainObjects.Web3
+namespace Auctus.Util.Exceptions
 {
     [Serializable]
-    public class Web3Exception : Exception
+    public class ApiException : Exception
     {
         public int Code { get; private set; }
-        public Web3Exception(int code, string message) : base (message)
+        public ApiException(int code, string message) : base(message)
         {
             Code = code;
         }

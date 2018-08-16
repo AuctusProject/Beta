@@ -7,6 +7,7 @@ using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.Model;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -41,9 +42,9 @@ namespace Auctus.Business.Account
 
             var user = Data.GetForLogin(email);
             if (user == null)
-                throw new ArgumentException("Email is invalid.");
+                throw new BusinessException("Email is invalid.");
             else if (user.Password != GetHashedPassword(password, user.Email, user.CreationDate))
-                throw new ArgumentException("Password is invalid.");
+                throw new BusinessException("Password is invalid.");
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
@@ -78,7 +79,7 @@ namespace Auctus.Business.Account
 
             var user = Data.GetByEmail(email);
             if (user != null)
-                throw new ArgumentException("Email already registered.");
+                throw new BusinessException("Email already registered.");
 
             user = new User();
             user.Email = email.ToLower().Trim();
@@ -112,7 +113,7 @@ namespace Auctus.Business.Account
 
             var user = Data.GetByEmail(email);
             if (user == null)
-                throw new ArgumentException("User cannot be found.");
+                throw new NotFoundException("User cannot be found.");
 
             user.ConfirmationCode = Guid.NewGuid().ToString();
             Data.Update(user);
@@ -124,7 +125,7 @@ namespace Auctus.Business.Account
         {
             var user = Data.GetByConfirmationCode(code);
             if (user == null)
-                throw new ArgumentException("Invalid confirmation code.");
+                throw new BusinessException("Invalid confirmation code.");
 
             user.ConfirmationDate = Data.GetDateTimeNow();
             Data.Update(user);
@@ -144,11 +145,11 @@ namespace Auctus.Business.Account
             BaseEmailValidation(LoggedEmail);
             var user = Data.GetForNewWallet(LoggedEmail);
             if (user == null)
-                throw new ArgumentException("User cannot be found.");
+                throw new NotFoundException("User cannot be found.");
             if (!user.ConfirmationDate.HasValue)
-                throw new ArgumentException("Email was not confirmed.");
+                throw new BusinessException("Email was not confirmed.");
             if (string.IsNullOrWhiteSpace(signature))
-                throw new ArgumentException("Signature cannot be empty.");
+                throw new BusinessException("Signature cannot be empty.");
 
             address = WalletBusiness.GetAddressFormatted(address);
 
@@ -156,22 +157,22 @@ namespace Auctus.Business.Account
             if (wallet != null)
             {
                 if (wallet.UserId == user.Id)
-                    throw new ArgumentException("The wallet is already linked to your account.");
+                    throw new BusinessException("The wallet is already linked to your account.");
                 else
-                    throw new ArgumentException("The wallet is already on used.");
+                    throw new BusinessException("The wallet is already on used.");
             }
 
             var message = $"I accept the Privacy Policy and Terms of Use.";
             var recoveryAddress = Signature.HashAndEcRecover(message, signature)?.ToLower();
             if (address != recoveryAddress)
-                throw new ArgumentException("Invalid signature.");
+                throw new BusinessException("Invalid signature.");
 
             decimal? aucAmount = null;
             if (!IsValidAdvisor(user))
             {
                 aucAmount = WalletBusiness.GetAucAmount(address);
                 if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedAccessException("Wallet does not have enough AUC.");
+                    throw new UnauthorizedException("Wallet does not have enough AUC.");
             }
 
             var creationDate = Data.GetDateTimeNow();
@@ -192,7 +193,7 @@ namespace Auctus.Business.Account
         {
             var user = GetValidUser();
             if (user.Password != GetHashedPassword(currentPassword, user.Email, user.CreationDate))
-                throw new ArgumentException("Current password is incorrect.");
+                throw new BusinessException("Current password is incorrect.");
 
             UpdatePassword(user, newPassword);
         }
@@ -225,29 +226,29 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         public static void BaseEmailValidation(string email)
         {
             if (string.IsNullOrEmpty(email))
-                throw new ArgumentException("Email must be filled.");
+                throw new BusinessException("Email must be filled.");
         }
 
         public static void EmailValidation(string email)
         {
             if (!Email.IsValidEmail(email))
-                throw new ArgumentException("Email informed is invalid.");
+                throw new BusinessException("Email informed is invalid.");
         }
 
         private void BasePasswordValidation(string password)
         {
             if (string.IsNullOrEmpty(password))
-                throw new ArgumentException("Password must be filled.");
+                throw new BusinessException("Password must be filled.");
         }
 
         private void PasswordValidation(string password)
         {
             if (password.Length < 8)
-                throw new ArgumentException("Password must be at least 8 characters.");
+                throw new BusinessException("Password must be at least 8 characters.");
             if (password.Length > 100)
-                throw new ArgumentException("Password cannot have more than 100 characters.");
+                throw new BusinessException("Password cannot have more than 100 characters.");
             if (password.Contains(" "))
-                throw new ArgumentException("Password cannot have spaces.");
+                throw new BusinessException("Password cannot have spaces.");
         }
 
         public FollowAdvisor FollowUnfollowAdvisor(int advisorId, FollowActionType followActionType)

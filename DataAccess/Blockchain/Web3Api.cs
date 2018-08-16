@@ -1,5 +1,6 @@
 ﻿using Auctus.DomainObjects.Web3;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -72,12 +73,12 @@ namespace Auctus.DataAccess.Blockchain
             {
                 var infuraResponse = JsonConvert.DeserializeObject<InfuraResponse>(responseContent);
                 if (infuraResponse.Error != null)
-                    throw new Web3Exception(infuraResponse.Error.Code ?? 400, infuraResponse.Error.Message);
+                    throw new ApiException(400, $"{infuraResponse.Error.Code} {infuraResponse.Error.Message}");
                 else
                     return infuraResponse.Result;
             }
             else
-                throw new Exception(responseContent);
+                throw new ApiException((int)response.StatusCode, responseContent);
         }
 
         private HttpClient CreateWeb3Client()

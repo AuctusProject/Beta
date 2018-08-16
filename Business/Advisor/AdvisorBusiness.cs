@@ -6,6 +6,7 @@ using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.Model;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -337,11 +338,11 @@ namespace Auctus.Business.Advisor
             var user = GetValidUser();
 
             if (!UserBusiness.IsValidAdvisor(user))
-                throw new InvalidOperationException("Logged user is not a valid Advisor.");
+                throw new UnauthorizedException("Logged user is not a valid Advisor.");
 
             var asset = AssetBusiness.GetById(assetId);
             if (asset == null)
-                throw new ArgumentException("Asset not found.");
+                throw new NotFoundException("Asset not found.");
 
             AdviceBusiness.ValidateAndCreate(user.Id, asset, type);
         }
