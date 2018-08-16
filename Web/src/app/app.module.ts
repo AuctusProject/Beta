@@ -44,8 +44,9 @@ import { AssetCardComponent } from './components/asset/asset-card/asset-card.com
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { NewAdviseComponent } from './components/advisor/new-advise/new-advise.component';
+import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
 import { MatModule } from './mat.module';
+import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { MatModule } from './mat.module';
     AssetCardComponent,
     AssetDetailsComponent,
     AdvicesComponent,
-    NewAdviseComponent
+    NewAdviceComponent,
+    ConfirmAdviceDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -93,6 +95,7 @@ import { MatModule } from './mat.module';
     AuthRedirect,
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules} 
   ],
+  entryComponents:[ConfirmAdviceDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

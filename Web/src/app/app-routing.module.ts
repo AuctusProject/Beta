@@ -15,7 +15,7 @@ import { AdvisorDetailsComponent } from './components/advisor/advisor-details/ad
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
-import { NewAdviseComponent } from './components/advisor/new-advise/new-advise.component';
+import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -32,7 +32,7 @@ const routes: Routes = [
     { path: 'advisor-details/:id', component: AdvisorDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'list-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
-    { path: 'new-advise', component: NewAdviseComponent, canActivate:[AuthRedirect] },
+    { path: 'new-advice', component: NewAdviceComponent, canActivate:[AuthRedirect] },
 ];
 
 @NgModule({

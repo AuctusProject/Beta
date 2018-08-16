@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Confirm Advice</h2>
+<mat-dialog-content class="mat-typography">
+  Are you sure you want to create a {{getAdviceType()}} recommendation to {{data.assetName}}?
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false" mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Confirm</button>
+</mat-dialog-actions>
+
+<!-- Copyright 2018 Google Inc. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->

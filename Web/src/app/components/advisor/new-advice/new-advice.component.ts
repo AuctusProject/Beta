@@ -8,13 +8,15 @@ import { FormControl } from '../../../../../node_modules/@angular/forms';
 import { Observable } from '../../../../../node_modules/rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '../../../../../node_modules/@angular/material';
+import {MatDialog} from '@angular/material';
+import { ConfirmAdviceDialogComponent } from './confirm-advice-dialog/confirm-advice-dialog.component';
 
 @Component({
-  selector: 'new-advise',
-  templateUrl: './new-advise.component.html',
-  styleUrls: ['./new-advise.component.css']
+  selector: 'new-advice',
+  templateUrl: './new-advice.component.html', 
+  styleUrls: ['./new-advice.component.css']
 })
-export class NewAdviseComponent implements OnInit {
+export class NewAdviceComponent implements OnInit {
   options: Asset[];
   advise: AdviseRequest = new AdviseRequest();
   myControl = new FormControl();
@@ -35,7 +37,7 @@ export class NewAdviseComponent implements OnInit {
 ];
 
   currentAssetSignalOptions = [];
-  constructor(private assetService: AssetService, private advisorService: AdvisorService, private notificationService: NotificationsService) { }
+  constructor(private assetService: AssetService, private advisorService: AdvisorService, private notificationService: NotificationsService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.assetService.getAssets().subscribe(result => {
@@ -60,7 +62,14 @@ export class NewAdviseComponent implements OnInit {
   }
 
   onSubmit(){
-    this.advisorService.advise(this.advise).subscribe(result => this.notificationService.success("New advise was successfully created."));
+    const dialogRef = this.dialog.open(ConfirmAdviceDialogComponent, {width: '250px',data: {adviceType:this.advise.adviceType,assetName: this.myControl.value.name}}); 
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.advisorService.advise(this.advise).subscribe(result => this.notificationService.success("New advise was successfully created."));
+      }
+    });
+    
   }
 
   optionSelected(selected: MatAutocompleteSelectedEvent){
