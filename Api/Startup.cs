@@ -17,6 +17,7 @@ using System.IO;
 using Auctus.Util;
 using Microsoft.Extensions.PlatformAbstractions;
 using Auctus.Business;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Api
 {
@@ -89,6 +90,15 @@ namespace Api
             services.AddSingleton<Cache>();
 
             DataAccessDependencyResolver.RegisterDataAccess(services, Configuration);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "Auctus Platform API",
+                    Description = "Auctus Platform Web API"
+                });
+            });
 
             services.AddApplicationInsightsTelemetry(Configuration.GetSection("ApplicationInsights:InstrumentationKey").Get<string>());
         }
@@ -102,6 +112,12 @@ namespace Api
             app.UseAuthentication();
             app.UseCors("Default");
             app.UseMvcWithDefaultRoute();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }
