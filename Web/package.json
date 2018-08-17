@@ -29,6 +29,7 @@
     "highcharts": "^6.1.1",
     "ngx-infinite-scroll": "^6.0.1",
     "rxjs": "^6.0.0",
+    "sha3": "^1.2.2",
     "web3": "^0.19",
     "web3-utils": "^1.0.0-beta.30",
     "zone.js": "^0.8.26"
