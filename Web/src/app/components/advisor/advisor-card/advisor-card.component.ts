@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { AdvisorService } from '../../../services/advisor.service';
-import { environment } from '../../../../environments/environment';
+import { CONFIG} from "../../../services/config.service";
 
 @Component({
   selector: 'advisor-card',
@@ -24,6 +24,6 @@ export class AdvisorCardComponent implements OnInit {
   }
 
   getAdvisorImgUrl(){
-    return environment.profileImgUrl.replace("{id}", this.advisor.userId.toString());
+    return CONFIG.profileImgUrl.replace("{id}", this.advisor.userId.toString());
   }
 }

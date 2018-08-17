@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AssetResponse } from '../../../model/asset/assetResponse';
 import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { AssetService } from '../../../services/asset.service';
-import { environment } from '../../../../environments/environment.prod';
 import { Util } from '../../../util/Util';
+import { CONFIG} from "../../../services/config.service";
 
 @Component({
   selector: 'asset-details',
@@ -21,7 +21,7 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   getAssetImgUrl(asset: AssetResponse){
-    return environment.assetImgUrl.replace("{id}", asset.assetId.toString());
+    return CONFIG.assetImgUrl.replace("{id}", asset.assetId.toString());
   }
 
   getRecommendationFromType(type: number){
