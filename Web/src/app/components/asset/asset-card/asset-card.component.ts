@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AssetResponse } from '../../../model/asset/assetResponse';
 import { AssetService } from '../../../services/asset.service';
-import { environment } from '../../../../environments/environment';
+import { CONFIG} from "../../../services/config.service";
 
 @Component({
   selector: 'asset-card',
@@ -22,6 +22,6 @@ export class AssetCardComponent implements OnInit {
   }
 
   getAssetImgUrl(){
-    return environment.assetImgUrl.replace("{id}", this.asset.assetId.toString());
+    return CONFIG.assetImgUrl.replace("{id}", this.asset.assetId.toString());
   }
 }

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
 import stock from 'highcharts/modules/stock.src';
@@ -47,6 +47,12 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
 import { MatModule } from './mat.module';
 import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
+import { ConfigService } from './services/config.service';
+
+export function loadConfigService(configService: ConfigService): Function
+{
+  return () => { return configService.load() }; 
+}
 
 @NgModule({
   declarations: [
@@ -93,7 +99,9 @@ import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/co
     AccountService,
     AuthGuard,
     AuthRedirect,
-    {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules} 
+    {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules},
+    ConfigService,
+    { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
   ],
   entryComponents:[ConfirmAdviceDialogComponent],
   bootstrap: [AppComponent]
