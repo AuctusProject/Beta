@@ -1,6 +1,6 @@
 <form #adviseForm="ngForm" class="example-form" (ngSubmit)="onSubmit()">
   <mat-form-field class="example-full-width" >
-    <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" (change)="onAssetInputBlur($event)" required>
+    <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" (change)="onAssetInputBlur()" required>
     <mat-autocomplete (optionSelected)="optionSelected($event)"  #auto="matAutocomplete" [displayWith]="displayFn">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
         {{option.name}}
