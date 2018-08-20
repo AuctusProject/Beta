@@ -17,7 +17,9 @@ namespace Auctus.DomainObjects.Asset
         [DapperType(System.Data.DbType.Int32)]
         public int Type { get; set; }
         [DapperType(System.Data.DbType.Int32)]
-        public int CoinMarketCapId { get; set; }
+        public int? CoinMarketCapId { get; set; }
+        [DapperType(System.Data.DbType.AnsiString)]
+        public string CoinGeckoId { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool ShortSellingEnabled { get; set; }
 

@@ -28,19 +28,19 @@ namespace Auctus.Business.Account
                     throw new NotFoundException("Wallet was not defined.");
 
                 var aucAmount = GetAucAmount(wallet.Address);
+                ActionBusiness.InsertNewAucVerification(user.Id, aucAmount);
+
                 if (aucAmount < MinimumAucLogin)
                     throw new UnauthorizedException("Wallet does not have enough AUC.");
 
                 MemoryCache.Set<object>(cacheKey, true, 10);
-                if(aucAmount.HasValue)
-                    ActionBusiness.InsertNewAucVerification(user.Id, aucAmount.Value);
             }
         }
 
-        public decimal? GetAucAmount(string address)
+        public decimal GetAucAmount(string address)
         {
             if (string.IsNullOrEmpty(address))
-                return null;
+                throw new ArgumentNullException("address");
 
             return Web3Business.GetAucAmount(address);
         }
