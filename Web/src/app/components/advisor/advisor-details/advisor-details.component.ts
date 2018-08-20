@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { AdvisorService } from '../../../services/advisor.service';
-import { environment } from '../../../../environments/environment';
 import { AssetResponse } from '../../../model/asset/assetResponse';
+import { CONFIG } from "../../../services/config.service";
 
 @Component({
   selector: 'advisor-details',
@@ -20,6 +20,6 @@ export class AdvisorDetailsComponent implements OnInit {
     )
   }
   getAssetImgUrl(asset: AssetResponse){
-    return environment.assetImgUrl.replace("{id}", asset.assetId.toString());
+    return CONFIG.assetImgUrl.replace("{id}", asset.assetId.toString());
   }
 }

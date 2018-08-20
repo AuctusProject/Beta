@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { NotificationsService } from "angular2-notifications";
-import { environment } from '../../environments/environment';
+import { CONFIG} from "./config.service";
 import { Router } from '@angular/router';
 import { LocalStorageService } from "./local-storage.service";
 import { LoginResponse } from '../model/account/loginResponse';
@@ -49,7 +49,7 @@ export class HttpService {
   }
 
   apiUrl(route: string): string {
-    return environment.apiUrl + route;
+    return CONFIG.apiUrl + route;
   }
 
   baseHttpHeaders(): any {
