@@ -12,6 +12,6 @@ namespace Auctus.DataAccessInterfaces.Account
         User GetByEmail(string email);
         List<User> ListForAucSituation();
         User GetByReferralCode(string referralCode);
-        List<User> ListReferredUsers(int id);
+        List<User> ListReferredUsers(int referredId);
     }
 }

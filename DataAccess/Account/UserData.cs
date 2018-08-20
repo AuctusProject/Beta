@@ -191,9 +191,11 @@ namespace Auctus.DataAccess.Account
             return SelectByParameters<User>(parameters).SingleOrDefault();
         }
 
-        public List<User> ListReferredUsers(int id)
+        public List<User> ListReferredUsers(int referredId)
         {
-            throw new NotImplementedException();
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("ReferredId", referredId, DbType.Int32);
+            return SelectByParameters<User>(parameters).ToList();
         }
     }
 }

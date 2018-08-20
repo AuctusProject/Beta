@@ -90,6 +90,7 @@ namespace Auctus.Business.Account
             user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
             user.ReferralCode = GenerateReferralCode();
             user.ReferredId = referredUser?.Id;
+            user.AllowNotifications = true;
             Data.Insert(user);
 
             await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
@@ -348,8 +349,15 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         {
             var user = GetValidUser();
             var referredUsers = Data.ListReferredUsers(user.Id);
+            ReferralProgramInfoResponse response = ConvertReferredUsersToReferralProgramInfo(referredUsers);
+            response.ReferralCode = user.ReferralCode;
+            return response;
+        }
+
+        private static ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)
+        {
             var response = new ReferralProgramInfoResponse();
-            foreach(var group in referredUsers.GroupBy(c => c.ReferralStatus))
+            foreach (var group in referredUsers.GroupBy(c => c.ReferralStatus))
             {
                 if (group.Key == ReferralStatusType.InProgress.Value)
                     response.InProgressCount = group.Count();
@@ -362,7 +370,8 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
                 else
                     response.NotStartedCount = group.Count();
             }
-            return response;            
+
+            return response;
         }
     }
 }
