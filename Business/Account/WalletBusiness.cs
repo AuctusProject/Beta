@@ -27,13 +27,14 @@ namespace Auctus.Business.Account
                 if (wallet == null)
                     throw new NotFoundException("Wallet was not defined.");
 
-                var aucAmount = GetAucAmount(wallet.Address);
-                ActionBusiness.InsertNewAucVerification(user.Id, aucAmount);
+                wallet.AUCBalance = GetAucAmount(wallet.Address);
+                ActionBusiness.InsertNewAucVerification(user.Id, wallet.AUCBalance.Value);
+                Data.Update(wallet);
 
-                if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - aucAmount} AUCs.");
+                if (wallet.AUCBalance.Value < MinimumAucLogin)
+                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - wallet.AUCBalance.Value} AUCs.");
 
-                MemoryCache.Set<object>(cacheKey, true, 10);
+                MemoryCache.Set<object>(cacheKey, true, 20);
             }
         }
 
