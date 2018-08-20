@@ -3,6 +3,7 @@ using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Exchanges;
 using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Exchange;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -27,19 +28,37 @@ namespace Auctus.Business.Asset
             return Data.List(assetsIds, startDate);
         }
 
-        public void UpdateAllAssetsValues()
+        public void UpdateCoinmarketcapAssetsValues()
         {
-            var assets = AssetBusiness.ListAssets();
-            var currentValuesDictionary = new CoinMarketCapApi().GetAllCoinsCurrentPrice();
+            UpdateAssetsValues(CoinMarketCapApi.Instance.GetAllCoinsData(), IsCoinmarketcapAsset);
+        }
+
+        private bool IsCoinmarketcapAsset(DomainObjects.Asset.Asset asset, string key)
+        {
+            return asset.CoinMarketCapId == Convert.ToInt32(key);
+        }
+
+        public void UpdateCoingeckoAssetsValues()
+        {
+            UpdateAssetsValues(CoinGeckoApi.Instance.GetAllCoinsData(), IsCoingeckoAsset);
+        }
+
+        private bool IsCoingeckoAsset(DomainObjects.Asset.Asset asset, string key)
+        {
+            return asset.CoinGeckoId == key;
+        }
+
+        private void UpdateAssetsValues(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
+        {
             var currentDate = DateTime.UtcNow;
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
-            var assetValues = new List<DomainObjects.Asset.AssetValue>();
-
-            foreach (var currentValue in currentValuesDictionary)
+            var assets = AssetBusiness.ListAssets();
+            var assetValues = new List<AssetValue>();
+            foreach (var assetValue in assetResults.Where(c => c.Price.HasValue))
             {
-                var asset = assets.FirstOrDefault(a => a.CoinMarketCapId == currentValue.Key);
+                var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));
                 if (asset != null)
-                    assetValues.Add(new DomainObjects.Asset.AssetValue() { AssetId = asset.Id, Date = currentDate, Value = currentValue.Value });
+                    assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }
             Data.InsertManyAsync(assetValues);
         }

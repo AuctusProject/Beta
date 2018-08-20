@@ -21,23 +21,62 @@ namespace Api.Controllers
             ServiceScopeFactory = serviceScopeFactory;
         }
 
-        protected virtual IActionResult UpdateAssetsValues()
+        protected virtual IActionResult UpdateAssetsValues(string api)
         {
-            RunJobAsync(() => AssetValueBusiness.UpdateAllAssetsValues());
+            if (!ValidApi(api))
+                return BadRequest();
+
+            RunJobAsync(() => HandleUpdateAssetsValues(api));
             return Ok();
         }
 
-        protected virtual IActionResult CreateAssets()
+        protected virtual IActionResult CreateAssets(string api)
         {
-            RunJobSync(AssetBusiness.CreateCoinMarketCapNotIncludedAssets);
+            if (!ValidApi(api))
+                return BadRequest();
+
+            RunJobAsync(() => HandleCreateAssets(api));
             return Ok();
         }
 
-        internal IActionResult UpdateAllAssetsIcons()
+        protected virtual IActionResult UpdateAssetsIcons(string api)
         {
-            RunJobSync(AssetBusiness.UpdateAllAssetsIcons);
+            if (!ValidApi(api))
+                return BadRequest();
+
+            RunJobAsync(() => HandleUpdateAssetsIcons(api));
             return Ok();
         }
+
+        private bool ValidApi(string api)
+        {
+            return !string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coinmarketcap" || api.ToLower() == "coingecko");
+        }
+
+        private void HandleUpdateAssetsValues(string api)
+        {
+            if (api == "coingecko")
+                AssetValueBusiness.UpdateCoingeckoAssetsValues();
+            else
+                AssetValueBusiness.UpdateCoinmarketcapAssetsValues();
+        }
+
+        private void HandleCreateAssets(string api)
+        {
+            if (api == "coingecko")
+                AssetBusiness.CreateCoingeckoNotIncludedAssets();
+            else
+                AssetBusiness.CreateCoinmarketcapNotIncludedAssets();
+        }
+
+        private void HandleUpdateAssetsIcons(string api)
+        {
+            if (api == "coingecko")
+                AssetBusiness.UpdateCoingeckoAssetsIcons();
+            else
+                AssetBusiness.UpdateCoinmarketcapAssetsIcons();
+        }
+
         private void RunJobAsync(Action action)
         {
             Task.Factory.StartNew(() =>
@@ -68,7 +107,7 @@ namespace Api.Controllers
         {
             Logger.LogInformation($"Job {action.Method.Name} started.");
             action();
-            Logger.LogTrace($"Job {action.Method.Name} ended.");
+            Logger.LogInformation($"Job {action.Method.Name} ended.");
         }
     }
 }

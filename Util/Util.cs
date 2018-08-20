@@ -58,5 +58,19 @@ namespace Auctus.Util
         {
             return ConvertBigNumber(BigInteger.Parse("0" + hexaNumber.TrimStart('0', 'x'), NumberStyles.AllowHexSpecifier).ToString(), decimals);
         }
+
+        public static bool IsEqualWithTolerance(double a, double b, double percentageTolerance)
+        {
+            if (a == b)
+                return true;
+            else if (percentageTolerance <= 0)
+                return false;
+            else if (a > b && (a - (a * percentageTolerance)) <= b)
+                return true;
+            else if (a < b && (b - (b * percentageTolerance)) <= a)
+                return true;
+            else
+                return false;
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace Auctus.DomainObjects.Asset
         public int AssetId { get; set; }
         public DateTime Date { get; set; }
         public double Value { get; set; }
+        public double? MarketCap { get; set; }
     }
 }
