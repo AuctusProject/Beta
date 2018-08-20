@@ -210,6 +210,18 @@ namespace Auctus.DataAccess.Account
             return QueryParentChild<User, Wallet, int>(SQL_FOR_AUC_SITUATION, c => c.Id, c => c.Wallets, "Id", parameters).ToList();
         }
 
+        public User GetByReferralCode(string referralCode)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("ReferralCode", referralCode, DbType.AnsiString);
+            return SelectByParameters<User>(parameters).SingleOrDefault();
+        }
+
+        public List<User> ListReferredUsers(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
             DynamicParameters parameters = new DynamicParameters();

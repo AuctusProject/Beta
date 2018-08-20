@@ -11,6 +11,8 @@ namespace Auctus.DataAccessInterfaces.Account
         User GetForNewWallet(string email);
         User GetByEmail(string email);
         List<User> ListForAucSituation();
+        User GetByReferralCode(string referralCode);
+        List<User> ListReferredUsers(int id);
         List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId);
     }
 }

@@ -66,7 +66,7 @@ namespace Api.Controllers
             if (registerRequest == null)
                 return BadRequest();
 
-            var loginResponse = await UserBusiness.Register(registerRequest.Email, registerRequest.Password, registerRequest.RequestedToBeAdvisor);
+            var loginResponse = await UserBusiness.Register(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode, registerRequest.RequestedToBeAdvisor);
             return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
         }
 
@@ -84,6 +84,20 @@ namespace Api.Controllers
         protected virtual IActionResult ListAdvices(int? top, int? lastAdviceId)
         {
             return Ok(AdviceBusiness.ListFeed(top, lastAdviceId));
+        }
+
+        protected virtual IActionResult SetReferralCode(SetReferralRequest setReferralRequest)
+        {
+            if(setReferralRequest == null || String.IsNullOrWhiteSpace(setReferralRequest.ReferralCode))
+                return BadRequest();
+
+            UserBusiness.SetReferralCode(setReferralRequest.ReferralCode);
+            return Ok();
+        }
+
+        protected virtual IActionResult GetReferralProgramInfo()
+        {
+            return Ok(UserBusiness.GetReferralProgramInfo());
         }
     }
 }

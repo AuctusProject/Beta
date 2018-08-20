@@ -69,6 +69,16 @@ namespace Auctus.DataAccessMock.Account
             throw new NotImplementedException();
         }
 
+        public User GetByReferralCode(string referralCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<User> ListReferredUsers(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
             throw new NotImplementedException();
