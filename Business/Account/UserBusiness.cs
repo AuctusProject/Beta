@@ -90,7 +90,7 @@ namespace Auctus.Business.Account
 
             await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
 
-            return new Model.LoginResponse()
+            return new LoginResponse()
             {
                 Email = user.Email,
                 HasInvestment = false,
@@ -172,11 +172,11 @@ namespace Auctus.Business.Account
             {
                 aucAmount = WalletBusiness.GetAucAmount(address);
                 if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedException("Wallet does not have enough AUC.");
+                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - aucAmount} AUCs.");
             }
 
             var creationDate = Data.GetDateTimeNow();
-            WalletBusiness.InsertNew(creationDate, user.Id, address);
+            WalletBusiness.InsertNew(creationDate, user.Id, address, aucAmount);
             ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
 
             return new LoginResponse()
@@ -196,6 +196,11 @@ namespace Auctus.Business.Account
                 throw new BusinessException("Current password is incorrect.");
 
             UpdatePassword(user, newPassword);
+        }
+
+        public void SetUsersAucSituation()
+        {
+
         }
 
         public void UpdatePassword(User user, string password)

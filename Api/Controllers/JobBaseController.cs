@@ -48,6 +48,12 @@ namespace Api.Controllers
             return Ok();
         }
 
+        protected virtual IActionResult SetUsersAuc()
+        {
+            RunJobAsync(() => UserBusiness.SetUsersAucSituation());
+            return Ok();
+        }
+
         private bool ValidApi(string api)
         {
             return !string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coinmarketcap" || api.ToLower() == "coingecko");
