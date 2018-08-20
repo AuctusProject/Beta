@@ -94,7 +94,7 @@ namespace Auctus.Business.Account
 
             await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
 
-            return new Model.LoginResponse()
+            return new LoginResponse()
             {
                 Email = user.Email,
                 HasInvestment = false,
@@ -212,11 +212,20 @@ namespace Auctus.Business.Account
             {
                 aucAmount = WalletBusiness.GetAucAmount(address);
                 if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedException("Wallet does not have enough AUC.");
+                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - aucAmount} AUCs.");
             }
 
             var creationDate = Data.GetDateTimeNow();
-            WalletBusiness.InsertNew(creationDate, user.Id, address);
+            using (var transaction = TransactionalDapperCommand)
+            {
+                transaction.Insert(WalletBusiness.CreateNew(creationDate, user.Id, address, aucAmount));
+                if (user.ReferredId.HasValue)
+                {
+                    user.ReferralStatus = ReferralStatusType.InProgress.Value;
+                    transaction.Update(user);
+                }
+                transaction.Commit();
+            }
             ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
 
             return new LoginResponse()
@@ -236,6 +245,36 @@ namespace Auctus.Business.Account
                 throw new BusinessException("Current password is incorrect.");
 
             UpdatePassword(user, newPassword);
+        }
+
+        public void SetUsersAucSituation()
+        {
+            var users = Data.ListForAucSituation();
+            foreach (var user in users)
+            {
+                var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
+                var currentWallet = user.Wallets.OrderByDescending(c => c.CreationDate).First();
+                currentWallet.AUCBalance = WalletBusiness.GetAucAmount(currentWallet.Address);
+                ActionBusiness.InsertNewAucVerification(user.Id, currentWallet.AUCBalance.Value);
+                using (var transaction = TransactionalDapperCommand)
+                {
+                    transaction.Update(currentWallet);
+                    if (user.ReferralStatusType == ReferralStatusType.InProgress)
+                    {
+                        if (currentWallet.AUCBalance < MinimumAucLogin)
+                        {
+                            user.ReferralStatus = ReferralStatusType.Interrupted.Value;
+                            transaction.Update(user);
+                        }
+                        else if (DateTime.UtcNow.Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                        {
+                            user.ReferralStatus = ReferralStatusType.Finished.Value;
+                            transaction.Update(user);
+                        }
+                    }
+                    transaction.Commit();
+                }
+            }
         }
 
         public void UpdatePassword(User user, string password)

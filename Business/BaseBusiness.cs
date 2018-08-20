@@ -57,6 +57,7 @@ namespace Auctus.Business
         private string _web3Url;
         private string _web3Route;
         private int? _minimumAucLogin;
+        private int? _minimumDaysToKeepAuc;
         private int? _minimumTimeInSecondsBetweenAdvices;
         private List<string> _emailErrorList;
         private string _storageConfiguration;
@@ -204,6 +205,16 @@ namespace Auctus.Business
                 if (_minimumAucLogin == null)
                     _minimumAucLogin = Configuration.GetSection("Auth:MinimumAuc").Get<int>();
                 return _minimumAucLogin.Value;
+            }
+        }
+
+        protected int MinimumDaysToKeepAuc
+        {
+            get
+            {
+                if (_minimumDaysToKeepAuc == null)
+                    _minimumDaysToKeepAuc = Configuration.GetSection("MinimumDaysToKeepAuc").Get<int>();
+                return _minimumDaysToKeepAuc.Value;
             }
         }
 

@@ -46,5 +46,12 @@ namespace Api.Controllers
         {
             return base.UpdateAssetsIcons(api);
         }
+
+        [Route("users/auc")]
+        [HttpPost]
+        public new IActionResult SetUsersAuc()
+        {
+            return base.SetUsersAuc();
+        }
     }
 }

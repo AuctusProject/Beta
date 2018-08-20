@@ -27,13 +27,14 @@ namespace Auctus.Business.Account
                 if (wallet == null)
                     throw new NotFoundException("Wallet was not defined.");
 
-                var aucAmount = GetAucAmount(wallet.Address);
-                ActionBusiness.InsertNewAucVerification(user.Id, aucAmount);
+                wallet.AUCBalance = GetAucAmount(wallet.Address);
+                ActionBusiness.InsertNewAucVerification(user.Id, wallet.AUCBalance.Value);
+                Data.Update(wallet);
 
-                if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedException("Wallet does not have enough AUC.");
+                if (wallet.AUCBalance.Value < MinimumAucLogin)
+                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - wallet.AUCBalance.Value} AUCs.");
 
-                MemoryCache.Set<object>(cacheKey, true, 10);
+                MemoryCache.Set<object>(cacheKey, true, 20);
             }
         }
 
@@ -50,15 +51,15 @@ namespace Auctus.Business.Account
             return Regex.IsMatch(address, "^(0x)?[0-9a-f]{40}$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
         }
 
-        public Wallet InsertNew(DateTime creationDate, int userId, string address)
+        public Wallet CreateNew(DateTime creationDate, int userId, string address, decimal? aucAmount)
         {
             var wallet = new Wallet()
             {
                 Address = address,
                 UserId = userId,
-                CreationDate = creationDate
+                CreationDate = creationDate,
+                AUCBalance = aucAmount
             };
-            Data.Insert(wallet);
             return wallet;
         }
 
