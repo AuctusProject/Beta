@@ -21,6 +21,12 @@ namespace Auctus.DomainObjects.Account
         public DateTime? ConfirmationDate { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]
         public string ConfirmationCode { get; set; }
+        [DapperType(System.Data.DbType.AnsiString)]
+        public string ReferralCode { get; set; }
+        [DapperType(System.Data.DbType.Int32)]
+        public int? ReferredId { get; set; }
+        [DapperType(System.Data.DbType.Int32)]
+        public int? ReferralStatus { get; set; }
 
         public bool IsAdvisor { get; set; }
         public Wallet Wallet { get; set; }

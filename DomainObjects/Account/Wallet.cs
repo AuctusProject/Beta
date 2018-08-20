@@ -16,5 +16,8 @@ namespace Auctus.DomainObjects.Account
         public DateTime CreationDate { get; set; }
         [DapperType(System.Data.DbType.Int32)]
         public int UserId { get; set; }
+        [DapperType(System.Data.DbType.Decimal)]
+        public decimal? AUCBalance { get; set; }
+
     }
 }
