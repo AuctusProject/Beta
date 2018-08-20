@@ -180,7 +180,7 @@ namespace Auctus.Business.Account
             };
         }
 
-        public LoginResponse ValidateSignature(string address, string signature, string referralCode)
+        public LoginResponse ValidateSignature(string address, string signature)
         {
             BaseEmailValidation(LoggedEmail);
             var user = Data.GetForNewWallet(LoggedEmail);
@@ -342,6 +342,27 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             var user = GetValidUser();
 
             return FollowAssetBusiness.Create(user.Id, AssetId, followActionType);
+        }
+
+        public ReferralProgramInfoResponse GetReferralProgramInfo()
+        {
+            var user = GetValidUser();
+            var referredUsers = Data.ListReferredUsers(user.Id);
+            var response = new ReferralProgramInfoResponse();
+            foreach(var group in referredUsers.GroupBy(c => c.ReferralStatus))
+            {
+                if (group.Key == ReferralStatusType.InProgress.Value)
+                    response.InProgressCount = group.Count();
+                else if (group.Key == ReferralStatusType.Interrupted.Value)
+                    response.InterruptedCount = group.Count();
+                else if (group.Key == ReferralStatusType.Finished.Value)
+                    response.FinishedCount = group.Count();
+                else if (group.Key == ReferralStatusType.Paid.Value)
+                    response.PaidCount = group.Count();
+                else
+                    response.NotStartedCount = group.Count();
+            }
+            return response;            
         }
     }
 }
