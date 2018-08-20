@@ -63,6 +63,7 @@ namespace Auctus.Business
         private string _storageConfiguration;
         private string _sendGridKey;
         private string _hashSecret;
+        private double? _discountPercentageOnAuc;
 
         protected BaseBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip)
         {
@@ -225,6 +226,16 @@ namespace Auctus.Business
                 if (_minimumTimeInSecondsBetweenAdvices == null)
                     _minimumTimeInSecondsBetweenAdvices = Configuration.GetSection("MinimumTimeInSecondsBetweenAdvices").Get<int>();
                 return _minimumTimeInSecondsBetweenAdvices.Value;
+            }
+        }
+
+        protected double DiscountPercentageOnAuc
+        {
+            get
+            {
+                if (_discountPercentageOnAuc == null)
+                    _discountPercentageOnAuc = Configuration.GetSection("DiscountPercentageOnAuc").Get<double>();
+                return _discountPercentageOnAuc.Value;
             }
         }
 

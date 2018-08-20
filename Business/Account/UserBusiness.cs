@@ -48,10 +48,10 @@ namespace Auctus.Business.Account
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
-            if (!IsValidAdvisor(user) && MinimumAucLogin > 0)
+            if (!IsValidAdvisor(user))
             {
                 aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
-                hasInvestment = aucAmount >= MinimumAucLogin;
+                hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
             }
             ActionBusiness.InsertNewLogin(user.Id, aucAmount);
             return new Model.LoginResponse()
@@ -68,6 +68,11 @@ namespace Auctus.Business.Account
         public bool IsValidAdvisor(User user)
         {
             return user.IsAdvisor && ((DomainObjects.Advisor.Advisor)user).Enabled;
+        }
+
+        public decimal GetMinimumAucAmountForUser(User user)
+        {
+            return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? DiscountPercentageOnAuc : 0)));
         }
 
         public async Task<LoginResponse> Register(string email, string password, string referralCode, bool requestedToBeAdvisor)
@@ -212,8 +217,7 @@ namespace Auctus.Business.Account
             if (!IsValidAdvisor(user))
             {
                 aucAmount = WalletBusiness.GetAucAmount(address);
-                if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - aucAmount} AUCs.");
+                WalletBusiness.ValidateAucAmount(aucAmount.Value, GetMinimumAucAmountForUser(user));
             }
 
             var creationDate = Data.GetDateTimeNow();
@@ -262,7 +266,7 @@ namespace Auctus.Business.Account
                     transaction.Update(currentWallet);
                     if (user.ReferralStatusType == ReferralStatusType.InProgress)
                     {
-                        if (currentWallet.AUCBalance < MinimumAucLogin)
+                        if (currentWallet.AUCBalance < GetMinimumAucAmountForUser(user))
                         {
                             user.ReferralStatus = ReferralStatusType.Interrupted.Value;
                             transaction.Update(user);

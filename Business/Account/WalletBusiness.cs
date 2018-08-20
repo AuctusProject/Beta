@@ -31,11 +31,15 @@ namespace Auctus.Business.Account
                 ActionBusiness.InsertNewAucVerification(user.Id, wallet.AUCBalance.Value);
                 Data.Update(wallet);
 
-                if (wallet.AUCBalance.Value < MinimumAucLogin)
-                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - wallet.AUCBalance.Value} AUCs.");
-
+                ValidateAucAmount(wallet.AUCBalance.Value, UserBusiness.GetMinimumAucAmountForUser(user));
                 MemoryCache.Set<object>(cacheKey, true, 20);
             }
+        }
+
+        public void ValidateAucAmount(decimal aucAmount, decimal minimumAucAmountForUser)
+        {
+            if (aucAmount < minimumAucAmountForUser)
+                throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {minimumAucAmountForUser - aucAmount} AUCs.");
         }
 
         public decimal GetAucAmount(string address)
