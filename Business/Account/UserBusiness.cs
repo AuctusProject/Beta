@@ -70,7 +70,7 @@ namespace Auctus.Business.Account
             return user.IsAdvisor && ((DomainObjects.Advisor.Advisor)user).Enabled;
         }
 
-        public async Task<LoginResponse> Register(string email, string password, bool requestedToBeAdvisor)
+        public async Task<LoginResponse> Register(string email, string password, string referralCode, bool requestedToBeAdvisor)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
@@ -81,11 +81,15 @@ namespace Auctus.Business.Account
             if (user != null)
                 throw new BusinessException("Email already registered.");
 
+            var referredUser = GetReferredUser(referralCode);
+
             user = new User();
             user.Email = email.ToLower().Trim();
             user.CreationDate = Data.GetDateTimeNow();
             user.ConfirmationCode = Guid.NewGuid().ToString();
             user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
+            user.ReferralCode = GenerateReferralCode();
+            user.ReferredId = referredUser?.Id;
             Data.Insert(user);
 
             await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
@@ -98,6 +102,42 @@ namespace Auctus.Business.Account
                 IsAdvisor = false,
                 RequestedToBeAdvisor = requestedToBeAdvisor
             };
+        }
+
+        public void SetReferralCode(string referralCode)
+        {
+            var user = GetValidUser();
+            var referredUser = GetReferredUser(referralCode);
+            user.ReferredId = referredUser.Id;
+            Update(user);
+        }
+
+        private string GenerateReferralCode()
+        {
+            User user;
+            String referralCode;
+            do
+            {
+                referralCode = Util.Util.GetRandomString(7);
+                user = Data.GetByReferralCode(referralCode.ToUpper());
+            } while (user != null);
+
+            return referralCode;
+        }
+
+        private User GetReferredUser(string referralCode)
+        {
+            if (!string.IsNullOrWhiteSpace(referralCode))
+            {
+                var user = Data.GetByReferralCode(referralCode.ToUpper());
+
+                if (user == null)
+                {
+                    throw new BusinessException("Invalid referral code");
+                }
+                return user;
+            }
+            return null;
         }
 
         private string GetHashedPassword(string password, string email, DateTime creationDate)
@@ -140,7 +180,7 @@ namespace Auctus.Business.Account
             };
         }
 
-        public LoginResponse ValidateSignature(string address, string signature)
+        public LoginResponse ValidateSignature(string address, string signature, string referralCode)
         {
             BaseEmailValidation(LoggedEmail);
             var user = Data.GetForNewWallet(LoggedEmail);
@@ -176,7 +216,16 @@ namespace Auctus.Business.Account
             }
 
             var creationDate = Data.GetDateTimeNow();
-            WalletBusiness.InsertNew(creationDate, user.Id, address, aucAmount);
+            using (var transaction = TransactionalDapperCommand)
+            {
+                transaction.Insert(WalletBusiness.CreateNew(creationDate, user.Id, address, aucAmount));
+                if (user.ReferredId.HasValue)
+                {
+                    user.ReferralStatus = ReferralStatusType.InProgress.Value;
+                    transaction.Update(user);
+                }
+                transaction.Commit();
+            }
             ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
 
             return new LoginResponse()
@@ -200,7 +249,32 @@ namespace Auctus.Business.Account
 
         public void SetUsersAucSituation()
         {
-
+            var users = Data.ListForAucSituation();
+            foreach (var user in users)
+            {
+                var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
+                var currentWallet = user.Wallets.OrderByDescending(c => c.CreationDate).First();
+                currentWallet.AUCBalance = WalletBusiness.GetAucAmount(currentWallet.Address);
+                ActionBusiness.InsertNewAucVerification(user.Id, currentWallet.AUCBalance.Value);
+                using (var transaction = TransactionalDapperCommand)
+                {
+                    transaction.Update(currentWallet);
+                    if (user.ReferralStatusType == ReferralStatusType.InProgress)
+                    {
+                        if (currentWallet.AUCBalance < MinimumAucLogin)
+                        {
+                            user.ReferralStatus = ReferralStatusType.Interrupted.Value;
+                            transaction.Update(user);
+                        }
+                        else if (DateTime.UtcNow.Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                        {
+                            user.ReferralStatus = ReferralStatusType.Finished.Value;
+                            transaction.Update(user);
+                        }
+                    }
+                    transaction.Commit();
+                }
+            }
         }
 
         public void UpdatePassword(User user, string password)
