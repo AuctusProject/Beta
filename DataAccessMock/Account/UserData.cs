@@ -74,7 +74,7 @@ namespace Auctus.DataAccessMock.Account
             throw new NotImplementedException();
         }
 
-        public List<User> ListReferredUsers(int id)
+        public List<User> ListReferredUsers(int referredId)
         {
             throw new NotImplementedException();
         }
