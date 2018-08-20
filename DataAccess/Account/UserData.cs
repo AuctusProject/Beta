@@ -62,6 +62,32 @@ namespace Auctus.DataAccess.Account
                                                     WHERE 
                                                     u.ReferralStatus = @ReferralStatus OR u.AllowNotifications = @AllowNotifications";
 
+        private const string SQL_FOLLOWING = @"SELECT u.*, w.*
+                                                FROM 
+                                                [User] u
+                                                INNER JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                INNER JOIN [Follow] f ON f.UserId = u.Id 
+                                                INNER JOIN [FollowAdvisor] fa ON fa.Id = f.Id 
+                                                WHERE 
+                                                f.ActionType = @ActionType AND fa.AdvisorId = @AdvisorId AND u.AllowNotifications = @AllowNotifications AND
+                                                f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 
+                                                                    [Follow] f2 
+                                                                    INNER JOIN [FollowAdvisor] fa2 ON fa2.Id = f2.Id 
+                                                                    WHERE f2.UserId = u.Id AND fa2.AdvisorId = @AdvisorId)
+                                                UNION ALL
+                                                SELECT u.*, w.*
+                                                FROM 
+                                                [User] u
+                                                INNER JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                INNER JOIN [Follow] f ON f.UserId = u.Id 
+                                                INNER JOIN [FollowAsset] fa ON fa.Id = f.Id 
+                                                WHERE 
+                                                f.ActionType = @ActionType AND fa.AssetId = @AssetId AND u.AllowNotifications = @AllowNotifications AND
+                                                f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 
+                                                                    [Follow] f2 
+                                                                    INNER JOIN [FollowAsset] fa2 ON fa2.Id = f2.Id 
+                                                                    WHERE f2.UserId = u.Id AND fa2.AssetId = @AssetId)";
+
         public User GetForLogin(string email)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -182,6 +208,21 @@ namespace Auctus.DataAccess.Account
             parameters.Add("ReferralStatus", ReferralStatusType.InProgress.Value, DbType.Int32);
             parameters.Add("AllowNotifications", true, DbType.Boolean);
             return QueryParentChild<User, Wallet, int>(SQL_FOR_AUC_SITUATION, c => c.Id, c => c.Wallets, "Id", parameters).ToList();
+        }
+
+        public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("AdvisorId", advisorId, DbType.Int32);
+            parameters.Add("AssetId", assetId, DbType.Int32);
+            parameters.Add("ActionType", FollowActionType.Follow.Value, DbType.Int32);
+            parameters.Add("AllowNotifications", true, DbType.Boolean);
+            return Query<User, Wallet, User>(SQL_FOLLOWING,
+                       (user, wallet) =>
+                       {
+                           user.Wallet = wallet;
+                           return user;
+                       }, "Id", parameters).ToList();
         }
     }
 }

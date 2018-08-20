@@ -337,7 +337,7 @@ namespace Auctus.Business.Advisor
         {
             var user = GetValidUser();
 
-            if (!UserBusiness.IsValidAdvisor(user))
+            if (!user.IsAdvisor)
                 throw new UnauthorizedException("Logged user is not a valid Advisor.");
 
             var asset = AssetBusiness.GetById(assetId);

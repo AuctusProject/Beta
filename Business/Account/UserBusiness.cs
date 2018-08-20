@@ -303,5 +303,10 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
 
             return FollowAssetBusiness.Create(user.Id, AssetId, followActionType);
         }
+
+        public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
+        {
+            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId);
+        }
     }
 }

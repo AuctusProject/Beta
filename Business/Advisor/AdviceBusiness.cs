@@ -20,46 +20,31 @@ namespace Auctus.Business.Advisor
 
         internal void ValidateAndCreate(int advisorId, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            ValidateAdvice(asset, advisorId, type);
+            Advice lastAdvice = Data.GetLastAdviceForAssetByAdvisor(asset.Id, advisorId);
 
-            Insert(
-                new Advice()
-                {
-                    AdvisorId = advisorId,
-                    AssetId = asset.Id,
-                    Type = type.Value,
-                    CreationDate = Data.GetDateTimeNow()
-                });
+            if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
+                throw new BusinessException("You need to wait before advising again for this asset.");
+
+            if (type == AdviceType.ClosePosition && (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition))
+                throw new BusinessException("You need a Buy or Sell recommendation before advising to Close Position.");
+
+            if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
+                throw new BusinessException("Sell recommendations are not available for this asset.");
+
+            Insert(new Advice()
+                    {
+                        AdvisorId = advisorId,
+                        AssetId = asset.Id,
+                        Type = type.Value,
+                        CreationDate = Data.GetDateTimeNow()
+                    });
+
+            var usersFollowing = UserBusiness.ListUsersFollowingAdvisorOrAsset(advisorId, asset.Id);
         }
 
         public List<Advice> List(IEnumerable<int> advisorsId)
         {
             return Data.List(advisorsId);
-        }
-
-        private Advice GetLastAdviceForAssetByAdvisor(int assetId, int advisorId)
-        {
-            return Data.GetLastAdviceForAssetByAdvisor(assetId, advisorId);
-        }
-
-        private void ValidateAdvice(DomainObjects.Asset.Asset asset, int advisorId, AdviceType type)
-        {
-            Advice lastAdvice = GetLastAdviceForAssetByAdvisor(asset.Id, advisorId);
-
-            if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
-                throw new BusinessException("You need to wait before advising again for this asset.");
-
-            if (type == AdviceType.ClosePosition)
-            {
-                if (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition)
-                    throw new BusinessException("You need a Buy or Sell recommendation before advising to Close Position.");
-            }
-
-            if (type == AdviceType.Sell)
-            {
-                if (!asset.ShortSellingEnabled)
-                    throw new BusinessException("Sell recommendations are not available for this asset.");
-            }
         }
 
         public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int? top, int? lastAdviceId)
