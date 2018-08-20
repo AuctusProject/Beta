@@ -63,5 +63,10 @@ namespace Auctus.DataAccessMock.Account
         {
             throw new NotImplementedException();
         }
+
+        public List<User> ListForAucSituation()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
