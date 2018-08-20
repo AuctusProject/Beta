@@ -50,7 +50,7 @@ namespace Auctus.Business.Account
             return Regex.IsMatch(address, "^(0x)?[0-9a-f]{40}$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
         }
 
-        public Wallet InsertNew(DateTime creationDate, int userId, string address, decimal? aucAmount)
+        public Wallet CreateNew(DateTime creationDate, int userId, string address, decimal? aucAmount)
         {
             var wallet = new Wallet()
             {
@@ -59,7 +59,6 @@ namespace Auctus.Business.Account
                 CreationDate = creationDate,
                 AUCBalance = aucAmount
             };
-            Data.Insert(wallet);
             return wallet;
         }
 

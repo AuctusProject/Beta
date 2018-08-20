@@ -55,11 +55,18 @@ namespace Auctus.DataAccess.Account
                                                 WHERE 
                                                 u.Id = @Id";
 
+        private const string SQL_FOR_AUC_SITUATION = @"SELECT u.*, w.*
+                                                    FROM 
+                                                    [User] u
+                                                    INNER JOIN [Wallet] w ON u.Id = w.UserId
+                                                    WHERE 
+                                                    u.ReferralStatus = @ReferralStatus OR u.AllowNotifications = @AllowNotifications";
+
         public User GetForLogin(string email)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Email", email.ToLower().Trim(), DbType.AnsiString);
-            return Query<User, Auctus.DomainObjects.Advisor.Advisor, RequestToBeAdvisor, Wallet, User>(SQL_FOR_LOGIN,
+            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, Wallet, User>(SQL_FOR_LOGIN,
                         (user, advisor, request, wallet) =>
                         {
                             if (advisor != null)
@@ -100,7 +107,7 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Email", email.ToLower().Trim(), DbType.AnsiString);
-            return Query<User, Auctus.DomainObjects.Advisor.Advisor, RequestToBeAdvisor, User>(SQL_FOR_NEW_WALLET,
+            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, User>(SQL_FOR_NEW_WALLET,
                         (user, advisor, request) =>
                         {
                             if (advisor != null)
@@ -127,7 +134,7 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Email", email.ToLower().Trim(), DbType.AnsiString);
-            return Query<User, Auctus.DomainObjects.Advisor.Advisor, User>(SQL_BY_EMAIL,
+            return Query<User, DomainObjects.Advisor.Advisor, User>(SQL_BY_EMAIL,
                         (user, advisor) =>
                         {
                             if (advisor != null)
@@ -150,7 +157,7 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32);
-            return Query<User, Auctus.DomainObjects.Advisor.Advisor, User>(SQL_BY_ID,
+            return Query<User, DomainObjects.Advisor.Advisor, User>(SQL_BY_ID,
                         (user, advisor) =>
                         {
                             if (advisor != null)
@@ -167,6 +174,14 @@ namespace Auctus.DataAccess.Account
                             else
                                 return user;
                         }, "Id", parameters).SingleOrDefault();
+        }
+
+        public List<User> ListForAucSituation()
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("ReferralStatus", ReferralStatusType.InProgress.Value, DbType.Int32);
+            parameters.Add("AllowNotifications", true, DbType.Boolean);
+            return QueryParentChild<User, Wallet, int>(SQL_FOR_AUC_SITUATION, c => c.Id, c => c.Wallets, "Id", parameters).ToList();
         }
     }
 }

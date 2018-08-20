@@ -176,7 +176,16 @@ namespace Auctus.Business.Account
             }
 
             var creationDate = Data.GetDateTimeNow();
-            WalletBusiness.InsertNew(creationDate, user.Id, address, aucAmount);
+            using (var transaction = TransactionalDapperCommand)
+            {
+                transaction.Insert(WalletBusiness.CreateNew(creationDate, user.Id, address, aucAmount));
+                if (user.ReferredId.HasValue)
+                {
+                    user.ReferralStatus = ReferralStatusType.InProgress.Value;
+                    transaction.Update(user);
+                }
+                transaction.Commit();
+            }
             ActionBusiness.InsertNewWallet(creationDate, user.Id, $"Message: {message} --- Signature: {signature}", aucAmount ?? null);
 
             return new LoginResponse()
@@ -200,7 +209,31 @@ namespace Auctus.Business.Account
 
         public void SetUsersAucSituation()
         {
-
+            var users = Data.ListForAucSituation();
+            foreach (var user in users)
+            {
+                var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
+                var currentWallet = user.Wallets.OrderByDescending(c => c.CreationDate).First();
+                currentWallet.AUCBalance = WalletBusiness.GetAucAmount(currentWallet.Address);
+                using (var transaction = TransactionalDapperCommand)
+                {
+                    transaction.Update(currentWallet);
+                    if (user.ReferralStatusType == ReferralStatusType.InProgress)
+                    {
+                        if (currentWallet.AUCBalance < MinimumAucLogin)
+                        {
+                            user.ReferralStatus = ReferralStatusType.Interrupted.Value;
+                            transaction.Update(user);
+                        }
+                        else if (DateTime.UtcNow.Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                        {
+                            user.ReferralStatus = ReferralStatusType.Finished.Value;
+                            transaction.Update(user);
+                        }
+                    }
+                    transaction.Commit();
+                }
+            }
         }
 
         public void UpdatePassword(User user, string password)
