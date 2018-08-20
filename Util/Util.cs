@@ -72,5 +72,18 @@ namespace Auctus.Util
             else
                 return false;
         }
+
+        private const string CHARACTER_SET = "123456789ABCDEFGHIJKLMNPQRSTUVWXYZ";
+        private static Random rnd = new Random();
+
+        public static String GetRandomString(int length)
+        {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++)
+            {
+                builder.Append(CHARACTER_SET[rnd.Next(CHARACTER_SET.Length)]);
+            }
+            return builder.ToString();
+        }
     }
 }

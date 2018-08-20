@@ -168,5 +168,12 @@ namespace Auctus.DataAccess.Account
                                 return user;
                         }, "Id", parameters).SingleOrDefault();
         }
+
+        public User GetByReferralCode(string referralCode)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("ReferralCode", referralCode, DbType.AnsiString);
+            return SelectByParameters<User>(parameters).SingleOrDefault();
+        }
     }
 }

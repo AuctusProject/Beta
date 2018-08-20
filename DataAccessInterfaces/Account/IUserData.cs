@@ -8,6 +8,7 @@ namespace Auctus.DataAccessInterfaces.Account
         User GetForLogin(string email);
         User GetByConfirmationCode(string code);
         User GetForNewWallet(string email);
-        User GetByEmail(string email);        
+        User GetByEmail(string email);
+        User GetByReferralCode(string referralCode);
     }
 }
