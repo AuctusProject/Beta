@@ -1,5 +1,6 @@
 ﻿using Auctus.DataAccess.Advisor;
 using Auctus.DataAccessInterfaces.Advisor;
+using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Model;
 using Auctus.Util;
@@ -18,9 +19,9 @@ namespace Auctus.Business.Advisor
     {
         public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
 
-        internal void ValidateAndCreate(int advisorId, DomainObjects.Asset.Asset asset, AdviceType type)
+        internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            Advice lastAdvice = Data.GetLastAdviceForAssetByAdvisor(asset.Id, advisorId);
+            Advice lastAdvice = Data.GetLastAdviceForAssetByAdvisor(asset.Id, advisor.Id);
 
             if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
                 throw new BusinessException("You need to wait before advising again for this asset.");
@@ -33,13 +34,33 @@ namespace Auctus.Business.Advisor
 
             Insert(new Advice()
                     {
-                        AdvisorId = advisorId,
+                        AdvisorId = advisor.Id,
                         AssetId = asset.Id,
                         Type = type.Value,
                         CreationDate = Data.GetDateTimeNow()
                     });
 
-            var usersFollowing = UserBusiness.ListUsersFollowingAdvisorOrAsset(advisorId, asset.Id);
+            var usersFollowing = UserBusiness.ListUsersFollowingAdvisorOrAsset(advisor.Id, asset.Id);
+            foreach (var user in usersFollowing)
+                SendAdviceNotification(user, advisor, asset, type);
+        }
+
+        private async Task SendAdviceNotification(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
+        {
+            await Email.SendAsync(SendGridKey,
+                new string[] { user.Email },
+                $"New tip on Auctus Beta for {asset.Code}",
+                $@"Hello,
+<br/><br/>
+The advisor {advisor.Name} set a new {type.GetDescription()} tip for the asset {asset.Code} - {asset.Name}.
+<br/>
+To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.
+<br/><br/>
+<small>If you do not want to receive these tips for advisors/assets that you are following <a href='{WebUrl}/config/{user.Id}' target='_blank'>click here</a>.</small>
+<br/><br/>
+Thanks,
+<br/>
+Auctus Team");
         }
 
         public List<Advice> List(IEnumerable<int> advisorsId)

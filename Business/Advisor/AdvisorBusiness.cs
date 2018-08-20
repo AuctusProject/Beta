@@ -344,7 +344,7 @@ namespace Auctus.Business.Advisor
             if (asset == null)
                 throw new NotFoundException("Asset not found.");
 
-            AdviceBusiness.ValidateAndCreate(user.Id, asset, type);
+            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type);
         }
 
         public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors()

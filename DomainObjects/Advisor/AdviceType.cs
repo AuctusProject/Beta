@@ -29,5 +29,20 @@ namespace Auctus.DomainObjects.Advisor
                     throw new BusinessException("Invalid type.");
             }
         }
+
+        public string GetDescription()
+        {
+            switch (Value)
+            {
+                case 0:
+                    return "Sell";
+                case 1:
+                    return "Buy";
+                case 2:
+                    return "Close Position";
+                default:
+                    throw new BusinessException("Invalid type.");
+            }
+        }
     }
 }
