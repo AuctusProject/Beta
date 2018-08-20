@@ -20,31 +20,31 @@ namespace Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/jobs/")]
-    //[Authorize("Bearer")]
+    [Authorize("Bearer")]
     [EnableCors("Default")]
     public class JobV1Controller : JobBaseController
     {
         public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
-        [Route("assets/values")]
+        [Route("assets/{api}/values")]
         [HttpPost]
-        public new IActionResult UpdateAssetsValues()
+        public new IActionResult UpdateAssetsValues([FromRoute]string api)
         {
-            return base.UpdateAssetsValues();
+            return base.UpdateAssetsValues(api);
         }
 
-        [Route("assets")]
+        [Route("assets/{api}")]
         [HttpPost]
-        public new IActionResult CreateAssets()
+        public new IActionResult CreateAssets([FromRoute]string api)
         {
-            return base.CreateAssets();
+            return base.CreateAssets(api);
         }
 
-        [Route("assets/icons")]
+        [Route("assets/{api}/icons")]
         [HttpPost]
-        public new IActionResult UpdateAllAssetsIcons()
+        public new IActionResult UpdateAssetsIcons([FromRoute]string api)
         {
-            return base.UpdateAllAssetsIcons();
+            return base.UpdateAssetsIcons(api);
         }
     }
 }
