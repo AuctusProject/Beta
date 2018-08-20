@@ -42,5 +42,10 @@ namespace Auctus.DataAccessMock.Asset
             values.AddRange(AssetValuesPartialData.GetAssetValues12());
             return values.Where(c => assetsIds.Contains(c.AssetId) && (!startDate.HasValue || c.Date >= startDate.Value)).ToList();
         }
+
+        public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime?> assetsMap)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
