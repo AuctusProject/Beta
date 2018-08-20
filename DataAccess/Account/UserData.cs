@@ -190,5 +190,10 @@ namespace Auctus.DataAccess.Account
             parameters.Add("ReferralCode", referralCode, DbType.AnsiString);
             return SelectByParameters<User>(parameters).SingleOrDefault();
         }
+
+        public List<User> ListReferredUsers(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

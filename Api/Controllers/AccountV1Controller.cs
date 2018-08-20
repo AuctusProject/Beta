@@ -113,5 +113,14 @@ namespace Api.Controllers
         {
             return base.SetReferralCode(setReferralRequest);
         }
+
+        [Route("me/referrals")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetReferralProgramInfo()
+        {
+            return base.GetReferralProgramInfo();
+        }
     }
 }

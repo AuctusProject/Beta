@@ -94,5 +94,10 @@ namespace Api.Controllers
             UserBusiness.SetReferralCode(setReferralRequest.ReferralCode);
             return Ok();
         }
+
+        protected virtual IActionResult GetReferralProgramInfo()
+        {
+            return Ok(UserBusiness.GetReferralProgramInfo());
+        }
     }
 }
