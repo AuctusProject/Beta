@@ -23,9 +23,9 @@ namespace Auctus.Business.Asset
             return Data.GetLastValue(assetId);
         }
 
-        internal List<AssetValue> List(IEnumerable<int> assetsIds, DateTime startDate)
+        internal List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
         {
-            return Data.List(assetsIds, startDate);
+            return Data.FilterAssetValues(assetsMap);
         }
 
         public void UpdateCoinmarketcapAssetsValues()

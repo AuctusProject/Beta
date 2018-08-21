@@ -78,8 +78,14 @@ namespace Auctus.Business.Advisor
             {
                 assetsIds = assetsIds.Distinct();
                 var assets = AssetBusiness.ListAssets(assetsIds);
-                var minimumDate = allAdvices.Min(c => c.CreationDate).AddDays(-30);
-                var assetValues = AssetValueBusiness.List(assetsIds, minimumDate);
+
+                var assetDateMapping = new Dictionary<int, DateTime>();
+                foreach(int assetId in assetsIds)
+                {
+                    assetDateMapping.Add(assetId, allAdvices.Where(advice => advice.AssetId == assetId).Min(c => c.CreationDate).AddDays(-30));
+                }
+
+                var assetValues = AssetValueBusiness.FilterAssetValues(assetDateMapping);
 
                 var adviceDetails = new List<AdviceDetail>();
                 foreach (var asset in assets)

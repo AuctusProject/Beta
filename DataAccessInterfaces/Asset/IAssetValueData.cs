@@ -9,6 +9,6 @@ namespace Auctus.DataAccessInterfaces.Asset
         AssetValue GetLastValue(int assetId);
         List<AssetValue> List(IEnumerable<int> assetsIds, DateTime? startDate = null);
 
-        List<AssetValue> FilterAssetValues(Dictionary<int, DateTime?> assetsMap);
+        List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap);
     }
 }
