@@ -32,20 +32,14 @@ namespace Auctus.DataAccess.Asset
             foreach (KeyValuePair<int, DateTime> pair in assetsMap)
             {
                 if (filter == null)
-                    filter = GetFilterByIdAndDate(filterBuilder, pair.Key, pair.Value);
+                    filter = filterBuilder.Eq(asset => asset.AssetId, pair.Key) & filterBuilder.Gte(asset => asset.Date, pair.Value);
                 else
-                    filter = filter | GetFilterByIdAndDate(filterBuilder, pair.Key, pair.Value);
+                    filter = filter | filterBuilder.Eq(asset => asset.AssetId, pair.Key) & filterBuilder.Gte(asset => asset.Date, pair.Value);
             }
 
             var result = Collection.Find(filter).ToList();
 
             return result;
-        }
-
-        private FilterDefinition<AssetValue> GetFilterByIdAndDate(FilterDefinitionBuilder<AssetValue> filterBuilder, int assetId, DateTime valueDate)
-        {
-            var filter = filterBuilder.Eq(asset => asset.AssetId, assetId) & filterBuilder.Gte(asset => asset.Date, valueDate);
-            return filter;
         }
     }
 }
