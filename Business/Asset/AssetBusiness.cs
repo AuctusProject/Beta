@@ -213,5 +213,10 @@ namespace Auctus.Business.Asset
             var user = GetValidUser();
             return Data.ListFollowingAssets(user.Id);
         }
+
+        public IEnumerable<DomainObjects.Asset.Asset> ListByNameOrCode(string searchTerm)
+        {
+            return Data.ListByNameOrCode(searchTerm);
+        }
     }
 }

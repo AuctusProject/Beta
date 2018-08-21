@@ -110,7 +110,7 @@ namespace Auctus.Business.Account
 
         public void SetReferralCode(string referralCode)
         {
-            var user = GetValidUser();
+            var user = GetByEmail(LoggedEmail);
             var referredUser = GetReferredUser(referralCode);
             user.ReferredId = referredUser.Id;
             Update(user);
@@ -385,6 +385,14 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
             return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId);
+        }
+
+        public void Search(string searchTerm)
+        {
+            IEnumerable<DomainObjects.Advisor.Advisor> advisors = null;
+            IEnumerable<DomainObjects.Asset.Asset> assets = null;
+
+            Parallel.Invoke(() => advisors = AdvisorBusiness.ListByName(searchTerm), () => assets = AssetBusiness.ListByNameOrCode(searchTerm));
         }
     }
 }

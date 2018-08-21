@@ -133,5 +133,13 @@ namespace Api.Controllers
         {
             return base.SetAllowNotifications(setAllowNotificationsRequest);
         }
+
+        [Route("search/{term}")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult Search([FromRoute]string term)
+        {
+            return base.Search(term);
+        }
     }
 }

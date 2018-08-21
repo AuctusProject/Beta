@@ -172,7 +172,7 @@ namespace Api.Controllers
             base.OnActionExecuted(context);
         }
 
-        protected string GenerateToken(string email, int expirationMinutes = 4320)
+        protected string GenerateToken(string email, int expirationMinutes = 2628000)
         {
             var unixTimestamp = Convert.ToInt64((DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             var claims = new Claim[]

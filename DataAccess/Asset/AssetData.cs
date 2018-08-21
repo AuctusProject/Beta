@@ -23,6 +23,18 @@ namespace Auctus.DataAccess.Asset
              WHERE f.ActionType = @ActionType
 	            AND f.UserId = @UserId";
 
+        private const string SQL_SEARCH_BY_NAME_OR_CODE = @"
+		SELECT TOP 10
+			a.*,
+			(SELECT TOP 1 1 FROM [Advice] ad WHERE ad.AssetId = a.Id) AS HasAdvice
+		FROM 
+			[Asset] a
+		WHERE
+			a.Name LIKE @Term + '%'
+			OR a.Name LIKE '% ' + @Term + '%'
+			OR a.Code LIKE @Term + '%' 
+		ORDER BY a.MarketCap DESC ";
+
         public AssetData(IConfigurationRoot configuration) : base(configuration) { }
 
         public IEnumerable<DomainObjects.Asset.Asset> ListFollowingAssets(int userId)
@@ -32,6 +44,14 @@ namespace Auctus.DataAccess.Asset
             parameters.Add("UserId", userId, DbType.Int32);
 
             return Query<DomainObjects.Asset.Asset>(SQL_LIST_FOLLOWING_ASSETS, parameters);
+        }
+
+        public IEnumerable<DomainObjects.Asset.Asset> ListByNameOrCode(string searchTerm)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Term", searchTerm, DbType.AnsiString);
+
+            return Query<DomainObjects.Asset.Asset>(SQL_SEARCH_BY_NAME_OR_CODE, parameters);
         }
     }
 }
