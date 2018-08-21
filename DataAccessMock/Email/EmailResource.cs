@@ -11,7 +11,7 @@ namespace Auctus.DataAccessMock.Email
     {
         public Task SendAsync(IEnumerable<string> to, string subject, string body, bool bodyIsHtml = true, string from = "noreply@auctus.org", IEnumerable<string> cc = null, IEnumerable<string> bcc = null, IEnumerable<Attachment> attachment = null)
         {
-            return null;
+            return Task.FromResult(0);
         }
     }
 }
