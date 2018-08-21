@@ -44,7 +44,6 @@ namespace Auctus.Test
             var builder = new ConfigurationBuilder()
                 .SetBasePath(rootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
