@@ -358,6 +358,13 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             return response;
         }
 
+        public void SetAllowNotifications(bool allowNotifications)
+        {
+            var user = GetValidUser();
+            user.AllowNotifications = allowNotifications;
+            Data.Update(user);
+        }
+
         private static ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)
         {
             var response = new ReferralProgramInfoResponse();

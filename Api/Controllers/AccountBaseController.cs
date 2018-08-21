@@ -99,5 +99,14 @@ namespace Api.Controllers
         {
             return Ok(UserBusiness.GetReferralProgramInfo());
         }
+
+        protected virtual IActionResult SetAllowNotifications(SetAllowNotificationsRequest setAllowNotificationsRequest)
+        {
+            if (setAllowNotificationsRequest == null)
+                return BadRequest();
+
+            UserBusiness.SetAllowNotifications(setAllowNotificationsRequest.AllowNotifications);
+            return Ok();
+        }
     }
 }
