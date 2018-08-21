@@ -122,5 +122,14 @@ namespace Api.Controllers
         {
             return base.GetReferralProgramInfo();
         }
+
+        [Route("me/notifications")]
+        [HttpPost]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult SetAllowNotifications([FromBody]SetAllowNotificationsRequest setAllowNotificationsRequest)
+        {
+            return base.SetAllowNotifications(setAllowNotificationsRequest);
+        }
     }
 }
