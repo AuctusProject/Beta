@@ -47,6 +47,13 @@ namespace Api.Controllers
             return base.UpdateAssetsIcons(api);
         }
 
+        [Route("assets/{api}/marketcap")]
+        [HttpPost]
+        public new IActionResult UpdateAssetsMarketcap([FromRoute]string api)
+        {
+            return base.UpdateAssetsMarketcap(api);
+        }
+
         [Route("users/auc")]
         [HttpPost]
         public new IActionResult SetUsersAuc()
