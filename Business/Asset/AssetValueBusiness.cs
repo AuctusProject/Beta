@@ -58,7 +58,14 @@ namespace Auctus.Business.Asset
             {
                 var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));
                 if (asset != null)
+                {
+                    if (assetValue.MarketCap.HasValue)
+                    {
+                        asset.MarketCap = assetValue.MarketCap.Value;
+                        AssetBusiness.Update(asset);
+                    }
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
+                }
             }
             Data.InsertManyAsync(assetValues);
         }

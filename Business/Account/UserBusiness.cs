@@ -260,7 +260,7 @@ namespace Auctus.Business.Account
                 var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
                 var currentWallet = user.Wallets.OrderByDescending(c => c.CreationDate).First();
                 currentWallet.AUCBalance = WalletBusiness.GetAucAmount(currentWallet.Address);
-                ActionBusiness.InsertNewAucVerification(user.Id, currentWallet.AUCBalance.Value);
+                ActionBusiness.InsertJobAucVerification(user.Id, currentWallet.AUCBalance.Value);
                 using (var transaction = TransactionalDapperCommand)
                 {
                     transaction.Update(currentWallet);
