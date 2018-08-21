@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Account\" />
     <Folder Include="Asset\" />
     <Folder Include="Advisor\" />
   </ItemGroup>

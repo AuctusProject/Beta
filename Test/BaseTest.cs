@@ -32,7 +32,7 @@ namespace Auctus.Test
         private readonly ILoggerFactory LoggerFactory;
         private readonly IConfigurationRoot Configuration;
         private readonly Cache MemoryCache;
-        private readonly string LoggedEmail;
+        protected string LoggedEmail;
         private readonly string LoggedIp;
 
         protected BaseTest()

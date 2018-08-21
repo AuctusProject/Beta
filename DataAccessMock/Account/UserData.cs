@@ -3,32 +3,28 @@ using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Auctus.DataAccessMock.Account
 {
     public class UserData : BaseData<User>, IUserData<User>
     {
-        public User GetByConfirmationCode(string code)
+        static List<User> users = new List<User>()
         {
-            throw new NotImplementedException();
-        }
-
-        public User GetByEmail(string email)
-        {
-            return new DomainObjects.Advisor.Advisor()
+            new DomainObjects.Advisor.Advisor()
             {
                 Id = 1,
                 Email = "test@auctus.org",
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "",
+                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
                 IsAdvisor = true,
                 Name = "Tester Advisor",
                 Description = "Test Advisor description",
                 Enabled = true,
                 BecameAdvisorDate = new DateTime(2018, 5, 8, 0, 0, 0),
+                ReferralCode = "0000001",
                 Wallet = new Wallet()
                 {
                     Id = 1,
@@ -46,42 +42,207 @@ namespace Auctus.DataAccessMock.Account
                     Name = "Tester Advisor",
                     PreviousExperience = ""
                 }
-            };
+            },
+            new DomainObjects.Account.User()
+            {
+                Id = 2,
+                Email = "test+2@auctus.org",
+                CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
+                ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
+                ConfirmationCode = "",
+                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                IsAdvisor = false,
+                ReferralCode = "0000002",
+                Wallet = new Wallet()
+                {
+                    Id = 2,
+                    UserId = 2,
+                    Address = "0x0000000000000000000000000000000000000000",
+                    CreationDate = new DateTime(2018, 5, 3, 0, 0, 0),
+                    AUCBalance = 1000
+                }
+            },
+            new DomainObjects.Advisor.Advisor()
+            {
+                Id = 3,
+                Email = "test+3@auctus.org",
+                CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
+                ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
+                ConfirmationCode = "",
+                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                IsAdvisor = true,
+                Name = "Tester Advisor",
+                Description = "Test Advisor description",
+                Enabled = true,
+                BecameAdvisorDate = new DateTime(2018, 5, 8, 0, 0, 0),
+                ReferralCode = "0000003",
+                ReferredId = 1,
+                ReferralStatus = ReferralStatusType.Finished.Value,
+                Wallet = new Wallet()
+                {
+                    Id = 3,
+                    UserId = 3,
+                    Address = "0x0000000000000000000000000000000000000000",
+                    CreationDate = new DateTime(2018, 5, 3, 0, 0, 0)
+                },
+                RequestToBeAdvisor = new DomainObjects.Advisor.RequestToBeAdvisor()
+                {
+                    Id = 2,
+                    UserId = 3,
+                    Approved = true,
+                    CreationDate = new DateTime(2018, 5, 4, 0, 0, 0),
+                    Description = "Test Advisor description",
+                    Name = "Tester Advisor",
+                    PreviousExperience = ""
+                }
+            },
+            new DomainObjects.Account.User()
+            {
+                Id = 4,
+                Email = "test+4@auctus.org",
+                CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
+                ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
+                ConfirmationCode = "",
+                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                IsAdvisor = false,
+                ReferralCode = "0000004",
+                ReferredId = 1,
+                ReferralStatus = ReferralStatusType.InProgress.Value,
+                Wallet = new Wallet()
+                {
+                    Id = 4,
+                    UserId = 4,
+                    Address = "0x0000000000000000000000000000000000000000",
+                    CreationDate = new DateTime(2018, 5, 3, 0, 0, 0),
+                    AUCBalance = 1000
+                }
+            },
+            new DomainObjects.Account.User()
+            {
+                Id = 5,
+                Email = "test+5@auctus.org",
+                CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
+                ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
+                ConfirmationCode = "",
+                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                IsAdvisor = false,
+                ReferralCode = "0000005",
+                ReferredId = 1,
+                ReferralStatus = ReferralStatusType.Interrupted.Value,
+                Wallet = new Wallet()
+                {
+                    Id = 5,
+                    UserId = 5,
+                    Address = "0x0000000000000000000000000000000000000000",
+                    CreationDate = new DateTime(2018, 5, 3, 0, 0, 0),
+                    AUCBalance = 1000
+                }
+            },
+            new DomainObjects.Account.User()
+            {
+                Id = 6,
+                Email = "test+6@auctus.org",
+                CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
+                ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
+                ConfirmationCode = "",
+                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                IsAdvisor = false,
+                ReferralCode = "0000006",
+                ReferredId = 1,
+                ReferralStatus = ReferralStatusType.Paid.Value,
+                Wallet = new Wallet()
+                {
+                    Id = 6,
+                    UserId = 6,
+                    Address = "0x0000000000000000000000000000000000000000",
+                    CreationDate = new DateTime(2018, 5, 3, 0, 0, 0),
+                    AUCBalance = 1000
+                }
+            },
+            new DomainObjects.Account.User()
+            {
+                Id = 7,
+                Email = "test+7@auctus.org",
+                CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
+                ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
+                ConfirmationCode = "",
+                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                IsAdvisor = false,
+                ReferralCode = "0000007",
+                ReferredId = 1,
+                ReferralStatus = ReferralStatusType.Finished.Value,
+                Wallet = new Wallet()
+                {
+                    Id = 7,
+                    UserId = 7,
+                    Address = "0x0000000000000000000000000000000000000000",
+                    CreationDate = new DateTime(2018, 5, 3, 0, 0, 0),
+                    AUCBalance = 1000
+                }
+            }
+        };
+
+        public override IEnumerable<User> SelectAll()
+        {
+            return users;
+        }
+
+        public User GetByConfirmationCode(string code)
+        {
+            return users.FirstOrDefault(c => c.ConfirmationCode == code);
+        }
+
+        public User GetByEmail(string email)
+        {
+            return users.FirstOrDefault(c => c.Email.ToLower() == email.ToLower());
         }
 
         public User GetById(int id)
         {
-            throw new NotImplementedException();
+            return users.FirstOrDefault(c => c.Id == id);
         }
 
         public User GetForLogin(string email)
         {
-            throw new NotImplementedException();
+            return GetByEmail(email);
         }
 
         public User GetForNewWallet(string email)
         {
-            throw new NotImplementedException();
+            return GetByEmail(email);
         }
 
         public List<User> ListForAucSituation()
         {
-            throw new NotImplementedException();
+            return users.Where(c => c.ReferralStatus == ReferralStatusType.InProgress.Value && c.AllowNotifications).ToList();
         }
 
         public User GetByReferralCode(string referralCode)
         {
-            throw new NotImplementedException();
+            return users.FirstOrDefault(c => c.ReferralCode == referralCode);
         }
 
         public List<User> ListReferredUsers(int referredId)
         {
-            throw new NotImplementedException();
+            return users.Where(c => c.ReferredId == referredId).ToList();
         }
 
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
-            return new List<User>();
+            throw new NotImplementedException();
+        }
+
+        public override void Insert(User obj)
+        {
+            users.Add(obj);
+        }
+
+        public override void Update(User obj)
+        {
+            var user = users.FirstOrDefault(c => c.Id == obj.Id);
+            var index = users.IndexOf(user);
+            users.RemoveAt(index);
+            users.Add(obj);
         }
     }
 }
