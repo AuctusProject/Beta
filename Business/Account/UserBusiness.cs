@@ -271,7 +271,7 @@ namespace Auctus.Business.Account
                             user.ReferralStatus = ReferralStatusType.Interrupted.Value;
                             transaction.Update(user);
                         }
-                        else if (DateTime.UtcNow.Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                        else if (Data.GetDateTimeNow().Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
                         {
                             user.ReferralStatus = ReferralStatusType.Finished.Value;
                             transaction.Update(user);

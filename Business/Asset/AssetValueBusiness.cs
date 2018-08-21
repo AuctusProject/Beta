@@ -50,7 +50,7 @@ namespace Auctus.Business.Asset
 
         private void UpdateAssetsValues(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
         {
-            var currentDate = DateTime.UtcNow;
+            var currentDate = Data.GetDateTimeNow();
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
             var assets = AssetBusiness.ListAssets();
             var assetValues = new List<AssetValue>();
@@ -58,14 +58,7 @@ namespace Auctus.Business.Asset
             {
                 var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));
                 if (asset != null)
-                {
-                    if (assetValue.MarketCap.HasValue)
-                    {
-                        asset.MarketCap = assetValue.MarketCap.Value;
-                        AssetBusiness.Update(asset);
-                    }
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
-                }
             }
             Data.InsertManyAsync(assetValues);
         }

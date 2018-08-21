@@ -30,6 +30,15 @@ namespace Api.Controllers
             return Ok();
         }
 
+        protected virtual IActionResult UpdateAssetsMarketcap(string api)
+        {
+            if (!ValidApi(api))
+                return BadRequest();
+
+            RunJobAsync(() => HandleUpdateAssetsMarketcap(api));
+            return Ok();
+        }
+
         protected virtual IActionResult CreateAssets(string api)
         {
             if (!ValidApi(api))
@@ -65,6 +74,14 @@ namespace Api.Controllers
                 AssetValueBusiness.UpdateCoingeckoAssetsValues();
             else
                 AssetValueBusiness.UpdateCoinmarketcapAssetsValues();
+        }
+
+        private void HandleUpdateAssetsMarketcap(string api)
+        {
+            if (api == "coingecko")
+                AssetBusiness.UpdateCoingeckoAssetsMarketcap();
+            else
+                AssetBusiness.UpdateCoinmarketcapAssetsMarketcap();
         }
 
         private void HandleCreateAssets(string api)

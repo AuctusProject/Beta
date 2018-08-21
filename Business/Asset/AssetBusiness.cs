@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccess.Asset;
 using Auctus.DataAccess.Exchanges;
 using Auctus.DataAccessInterfaces.Asset;
+using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Exchange;
 using Auctus.Model;
 using Auctus.Util;
@@ -98,6 +99,31 @@ namespace Auctus.Business.Asset
         private bool IsCoingeckoAsset(DomainObjects.Asset.Asset asset, string key)
         {
             return asset.CoinGeckoId == key;
+        }
+
+        public void UpdateCoinmarketcapAssetsMarketcap()
+        {
+            UpdateAssetsMarketcap(CoinMarketCapApi.Instance.GetAllCoinsData(), IsCoinmarketcapAsset);
+        }
+
+        public void UpdateCoingeckoAssetsMarketcap()
+        {
+            UpdateAssetsMarketcap(CoinGeckoApi.Instance.GetAllCoinsData(), IsCoingeckoAsset);
+        }
+
+        private void UpdateAssetsMarketcap(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
+        {
+            var assets = AssetBusiness.ListAssets();
+            var assetValues = new List<AssetValue>();
+            foreach (var assetValue in assetResults.Where(c => c.MarketCap.HasValue && c.MarketCap > 0))
+            {
+                var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));
+                if (asset != null)
+                {
+                    asset.MarketCap = assetValue.MarketCap.Value;
+                    Data.Update(asset);
+                }
+            }
         }
 
         private void CreateNotIncludedAssets(IEnumerable<AssetResult> assetResults, IEnumerable<AssetResult> assetExternalResults, bool isCoingecko)
