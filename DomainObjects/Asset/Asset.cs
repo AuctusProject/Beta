@@ -26,5 +26,6 @@ namespace Auctus.DomainObjects.Asset
         public double? MarketCap { get; set; }
 
         public AssetType AssetType { get { return AssetType.Get(Type); } }
+        public bool HasAdvice { get; set; }
     }
 }
