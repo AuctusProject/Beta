@@ -32,7 +32,8 @@ namespace Auctus.DataAccess.Asset
 		WHERE
 			a.Name LIKE @Term + '%'
 			OR a.Name LIKE '% ' + @Term + '%'
-			OR a.Code LIKE @Term + '%' ";
+			OR a.Code LIKE @Term + '%' 
+		ORDER BY a.MarketCap DESC ";
 
         public AssetData(IConfigurationRoot configuration) : base(configuration) { }
 

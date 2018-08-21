@@ -24,12 +24,20 @@ namespace Auctus.DataAccess.Advisor
 
         private const string SQL_SEARCH_BY_NAME = @"
 		SELECT TOP 10
-			a.* 
+			a.*,
+			(SELECT count(*) 
+				FROM FollowAdvisor fa
+					INNER JOIN [Follow] f ON f.Id = fa.Id 
+					INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b
+					ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
+				WHERE f.ActionType = 1 AND fa.AdvisorId = a.Id) AS Followers,
+			(SELECT count(*) FROM Advice ad WHERE ad.AdvisorId = a.Id) AS Advices
 		FROM 
 			[Advisor] a
 		WHERE
 			a.Name LIKE @Name + '%'
-			OR a.Name LIKE '% ' + @Name + '%' ";
+			OR a.Name LIKE '% ' + @Name + '%'
+		ORDER BY Followers DESC, Advices DESC ";
 
         public override string TableName => "Advisor";
         public AdvisorData(IConfigurationRoot configuration) : base(configuration) { }
