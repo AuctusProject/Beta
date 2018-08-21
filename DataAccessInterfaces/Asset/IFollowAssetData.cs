@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccessInterfaces.Asset
+namespace Auctus.DataAccessInterfaces.Asset
 {
     public interface IFollowAssetData<T> : IBaseData<T>
     {

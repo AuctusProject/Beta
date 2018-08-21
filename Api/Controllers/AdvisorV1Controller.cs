@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using Api.Model.Advisor;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Controllers
 {
@@ -18,8 +19,9 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class AdvisorV1Controller : AdvisorBaseController
     {
-        public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
-        
+        public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAdvisors()

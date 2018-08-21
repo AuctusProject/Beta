@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Auctus.Business.Account
 {
     public class ActionBusiness : BaseBusiness<DomainObjects.Account.Action, IActionData<DomainObjects.Account.Action>>
     {
-        public ActionBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public ActionBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public void InsertNewWallet(DateTime dateTime, int userId, string message, decimal? aucAmount)
         {

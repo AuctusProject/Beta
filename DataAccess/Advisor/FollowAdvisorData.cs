@@ -2,13 +2,13 @@
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Dapper;
-using DataAccessInterfaces.Advisor;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
+using Auctus.DataAccessInterfaces.Advisor;
 
 namespace Auctus.DataAccess.Advisor
 {

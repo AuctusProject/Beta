@@ -1,15 +1,20 @@
 ﻿using Auctus.DataAccess.Account;
 using Auctus.DataAccess.Advisor;
 using Auctus.DataAccess.Asset;
+using Auctus.DataAccess.Blockchain;
+using Auctus.DataAccess.Email;
+using Auctus.DataAccess.Exchange;
+using Auctus.DataAccess.Storage;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
+using Auctus.DataAccessInterfaces.Blockchain;
+using Auctus.DataAccessInterfaces.Email;
+using Auctus.DataAccessInterfaces.Exchange;
+using Auctus.DataAccessInterfaces.Storage;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
-using DataAccessInterfaces.Account;
-using DataAccessInterfaces.Advisor;
-using DataAccessInterfaces.Asset;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,8 +22,13 @@ namespace Auctus.Business
 {
     public static class DataAccessDependencyResolver
     {
-        public static void RegisterDataAccess(IServiceCollection services, IConfigurationRoot configuration)
+        public static void RegisterDataAccess(IServiceCollection services, IConfigurationRoot configuration, bool isDevelopment)
         {
+            services.AddSingleton<IEmailResource, EmailResource>(c => new EmailResource(configuration, isDevelopment));
+            services.AddSingleton<IWeb3Api, Web3Api>(c => new Web3Api(configuration));
+            services.AddSingleton<IAzureStorageResource, AzureStorageResource>(c => new AzureStorageResource(configuration));
+            services.AddSingleton<ICoinMarketcapApi, CoinMarketCapApi>(c => new CoinMarketCapApi());
+            services.AddSingleton<ICoinGeckoApi, CoinGeckoApi>(c => new CoinGeckoApi());
             services.AddScoped<IActionData<DomainObjects.Account.Action>, ActionData>(c => new ActionData(configuration));
             services.AddScoped<IExchangeApiAccessData<ExchangeApiAccess>, ExchangeApiAccessData>(c => new ExchangeApiAccessData(configuration));
             services.AddScoped<IPasswordRecoveryData<PasswordRecovery>, PasswordRecoveryData>(c => new PasswordRecoveryData(configuration));

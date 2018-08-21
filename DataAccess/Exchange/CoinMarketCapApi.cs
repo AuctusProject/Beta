@@ -9,18 +9,17 @@ using Auctus.Util.Exceptions;
 using Auctus.DataAccess.Core;
 using System.Net;
 using Auctus.DomainObjects.Exchange;
+using Auctus.DataAccessInterfaces.Exchange;
 
-namespace Auctus.DataAccess.Exchanges
+namespace Auctus.DataAccess.Exchange
 {
-    public class CoinMarketCapApi : ApiBase
+    public class CoinMarketCapApi : ApiBase, ICoinMarketcapApi
     {
         private const string COINMARKETCAP_ICONS_BASE_URL = @"https://s2.coinmarketcap.com/static/img/coins/32x32/";
         private const string FULLDATA_ROUTE = "v2/ticker/?limit=100&sort=id&structure=array&start=";
         private const string LISTING_ROUTE = "v2/listings/"; 
 
-        private CoinMarketCapApi() : base("https://api.coinmarketcap.com/") { }
-
-        public static CoinMarketCapApi Instance => new CoinMarketCapApi();
+        public CoinMarketCapApi() : base("https://api.coinmarketcap.com/") { }
 
         public IEnumerable<AssetResult> GetAllCoinsData()
         {

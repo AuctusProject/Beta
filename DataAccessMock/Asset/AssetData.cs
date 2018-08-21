@@ -1,6 +1,5 @@
 ﻿using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
-using DataAccessMock.Asset;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,9 +1,4 @@
-﻿using Auctus.DataAccessInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataAccessInterfaces.Account
+﻿namespace Auctus.DataAccessInterfaces.Account
 {
     public interface IFollowData<T> : IBaseData<T>
     {

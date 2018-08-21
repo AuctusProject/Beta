@@ -24,7 +24,8 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class JobV1Controller : JobBaseController
     {
-        public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         [Route("assets/{api}/values")]
         [HttpPost]

@@ -1,6 +1,6 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
-using DataAccessInterfaces.Account;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
