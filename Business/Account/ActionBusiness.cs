@@ -49,5 +49,17 @@ namespace Auctus.Business.Account
                 Ip = LoggedIp
             });
         }
+
+        public void InsertJobAucVerification(int userId, decimal aucAmount)
+        {
+            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            {
+                CreationDate = Data.GetDateTimeNow(),
+                UserId = userId,
+                Type = 4,
+                AucAmount = aucAmount,
+                Ip = LoggedIp
+            });
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace Auctus.DataAccessMock.Asset
             };
         }
         
-        public List<AssetValue> List(IEnumerable<int> assetsIds, DateTime? startDate = null)
+        public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
         {
             var values = new List<AssetValue>();
             values.AddRange(AssetValuesPartialData.GetAssetValues1());
@@ -40,12 +40,7 @@ namespace Auctus.DataAccessMock.Asset
             values.AddRange(AssetValuesPartialData.GetAssetValues10());
             values.AddRange(AssetValuesPartialData.GetAssetValues11());
             values.AddRange(AssetValuesPartialData.GetAssetValues12());
-            return values.Where(c => assetsIds.Contains(c.AssetId) && (!startDate.HasValue || c.Date >= startDate.Value)).ToList();
-        }
-
-        public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
-        {
-            throw new NotImplementedException();
+            return values.Where(c => assetsMap.ContainsKey(c.AssetId) && assetsMap[c.AssetId] <= c.Date).ToList();
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Auctus.Business.Asset
 
         private void UpdateAssetsValues(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
         {
-            var currentDate = DateTime.UtcNow;
+            var currentDate = Data.GetDateTimeNow();
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
             var assets = AssetBusiness.ListAssets();
             var assetValues = new List<AssetValue>();

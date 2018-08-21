@@ -24,16 +24,6 @@ namespace Auctus.DataAccess.Asset
             return value;
         }
 
-        public List<AssetValue> List(IEnumerable<int> assetsIds, DateTime? startDate = null)
-        {
-            var filterBuilder = Builders<AssetValue>.Filter;
-            var filter = filterBuilder.In(x => x.AssetId, assetsIds.ToArray());
-            if (startDate.HasValue)
-                filter = filter & filterBuilder.Gte(x => x.Date, startDate.Value);
-
-            return Collection.Find(filter).ToList();
-        }
-
         public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
         {
             var filterBuilder = Builders<AssetValue>.Filter;
@@ -42,21 +32,14 @@ namespace Auctus.DataAccess.Asset
             foreach (KeyValuePair<int, DateTime> pair in assetsMap)
             {
                 if (filter == null)
-                    filter = GetFilterByIdAndDate(filterBuilder, pair.Key, pair.Value);
+                    filter = filterBuilder.Eq(asset => asset.AssetId, pair.Key) & filterBuilder.Gte(asset => asset.Date, pair.Value);
                 else
-                    filter = filter | GetFilterByIdAndDate(filterBuilder, pair.Key, pair.Value);
+                    filter = filter | filterBuilder.Eq(asset => asset.AssetId, pair.Key) & filterBuilder.Gte(asset => asset.Date, pair.Value);
             }
 
             var result = Collection.Find(filter).ToList();
 
             return result;
-        }
-
-        private FilterDefinition<AssetValue> GetFilterByIdAndDate(FilterDefinitionBuilder<AssetValue> filterBuilder, int assetId, DateTime valueDate)
-        {
-            var filter = filterBuilder.Eq(asset => asset.AssetId, assetId);
-
-            return filter;
         }
     }
 }

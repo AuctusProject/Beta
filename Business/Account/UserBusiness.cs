@@ -260,7 +260,7 @@ namespace Auctus.Business.Account
                 var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
                 var currentWallet = user.Wallets.OrderByDescending(c => c.CreationDate).First();
                 currentWallet.AUCBalance = WalletBusiness.GetAucAmount(currentWallet.Address);
-                ActionBusiness.InsertNewAucVerification(user.Id, currentWallet.AUCBalance.Value);
+                ActionBusiness.InsertJobAucVerification(user.Id, currentWallet.AUCBalance.Value);
                 using (var transaction = TransactionalDapperCommand)
                 {
                     transaction.Update(currentWallet);
@@ -271,7 +271,7 @@ namespace Auctus.Business.Account
                             user.ReferralStatus = ReferralStatusType.Interrupted.Value;
                             transaction.Update(user);
                         }
-                        else if (DateTime.UtcNow.Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                        else if (Data.GetDateTimeNow().Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
                         {
                             user.ReferralStatus = ReferralStatusType.Finished.Value;
                             transaction.Update(user);
@@ -388,6 +388,14 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
             return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId);
+        }
+
+        public void Search(string searchTerm)
+        {
+            IEnumerable<DomainObjects.Advisor.Advisor> advisors = null;
+            IEnumerable<DomainObjects.Asset.Asset> assets = null;
+
+            Parallel.Invoke(() => advisors = AdvisorBusiness.ListByName(searchTerm), () => assets = AssetBusiness.ListByNameOrCode(searchTerm));
         }
     }
 }
