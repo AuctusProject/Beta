@@ -25,7 +25,8 @@ namespace Auctus.DataAccess.Asset
 
         private const string SQL_SEARCH_BY_NAME_OR_CODE = @"
 		SELECT TOP 10
-			a.* 
+			a.*,
+			(SELECT TOP 1 1 FROM [Advice] ad WHERE ad.AssetId = a.Id) AS HasAdvice
 		FROM 
 			[Asset] a
 		WHERE
