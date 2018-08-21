@@ -13,6 +13,8 @@ import { ChangePasswordRequest } from '../model/account/changePasswordRequest';
 import { RegisterRequest } from '../model/account/registerRequest';
 import { RegisterResponse } from '../model/account/registerResponse';
 import { FeedResponse } from '../model/advisor/feedResponse';
+import { ReferralProgramInfoResponse } from '../model/account/ReferralProgramInfoResponse';
+import { SetReferralRequest } from '../model/account/setReferralRequest';
 
 
 @Injectable()
@@ -25,6 +27,7 @@ export class AccountService {
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
   private registerUrl = this.httpService.apiUrl("v1/accounts");
   private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
+  private referralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
 
   constructor(private httpService : HttpService, private router : Router) { }
 
@@ -94,5 +97,13 @@ export class AccountService {
       url += "&lastAdviceId="+lastAdviceId;
     }
     return this.httpService.get(url);
+  }
+
+  getReferralProgramInfo() : Observable<ReferralProgramInfoResponse>{
+    return this.httpService.get(this.referralsUrl);
+  }
+
+  setReferralCode(setReferralRequest: SetReferralRequest) : Observable<void>{
+    return this.httpService.post(this.referralsUrl, setReferralRequest);
   }
 }

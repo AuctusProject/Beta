@@ -16,6 +16,7 @@ import { ListAssetsComponent } from './components/asset/list-assets/list-assets.
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
 import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
+import { ReferralComponent } from './components/account/referral/referral.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -33,6 +34,7 @@ const routes: Routes = [
     { path: 'list-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'new-advice', component: NewAdviceComponent, canActivate:[AuthRedirect] },
+    { path: 'referral', component: ReferralComponent, canActivate:[AuthRedirect] },
 ];
 
 @NgModule({
