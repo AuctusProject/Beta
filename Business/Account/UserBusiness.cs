@@ -389,5 +389,13 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         {
             return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId);
         }
+
+        public void Search(string searchTerm)
+        {
+            IEnumerable<DomainObjects.Advisor.Advisor> advisors = null;
+            IEnumerable<DomainObjects.Asset.Asset> assets = null;
+
+            Parallel.Invoke(() => advisors = AdvisorBusiness.ListByName(searchTerm), () => assets = AssetBusiness.ListByNameOrCode(searchTerm));
+        }
     }
 }

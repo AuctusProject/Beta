@@ -358,5 +358,10 @@ namespace Auctus.Business.Advisor
             var user = GetValidUser();
             return Data.ListFollowingAdvisors(user.Id);
         }
+
+        public IEnumerable<DomainObjects.Advisor.Advisor> ListByName(string searchTerm)
+        {
+            return Data.ListByName(searchTerm);
+        }
     }
 }
