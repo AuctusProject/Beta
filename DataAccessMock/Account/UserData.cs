@@ -81,7 +81,7 @@ namespace Auctus.DataAccessMock.Account
 
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
-            throw new NotImplementedException();
+            return new List<User>();
         }
     }
 }
