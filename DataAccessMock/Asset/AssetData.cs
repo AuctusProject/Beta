@@ -24,5 +24,11 @@ namespace Auctus.DataAccessMock.Asset
             var assetsIds = FollowAssetData.FollowAssetList.Where(c => c.UserId == userId).Select(c => c.AssetId);
             return SelectAll().Where(c => assetsIds.Contains(c.Id));
         }
+
+        public IEnumerable<DomainObjects.Asset.Asset> ListByNameOrCode(string searchTerm)
+        {
+            return SelectAll().Where(asset => asset.Code.ToUpper().StartsWith(searchTerm.ToUpper()) 
+                || asset.Name.ToUpper().StartsWith(searchTerm.ToUpper()) || asset.Name.ToUpper().Contains(" " + searchTerm.ToUpper()));
+        }
     }
 }

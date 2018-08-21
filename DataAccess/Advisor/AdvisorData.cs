@@ -22,6 +22,15 @@ namespace Auctus.DataAccess.Advisor
              WHERE f.ActionType = @ActionType
 	            AND f.UserId = @UserId";
 
+        private const string SQL_SEARCH_BY_NAME = @"
+		SELECT TOP 10
+			a.* 
+		FROM 
+			[Advisor] a
+		WHERE
+			a.Name LIKE @Name + '%'
+			OR a.Name LIKE '% ' + @Name + '%' ";
+
         public override string TableName => "Advisor";
         public AdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
@@ -39,6 +48,14 @@ namespace Auctus.DataAccess.Advisor
             parameters.Add("UserId", userId, DbType.Int32);
 
             return Query<DomainObjects.Advisor.Advisor>(SQL_LIST_FOLLOWING_ADVISORS, parameters);
+        }
+
+        public IEnumerable<DomainObjects.Advisor.Advisor> ListByName(string searchTerm)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("Name", searchTerm, DbType.AnsiString);
+
+            return Query<DomainObjects.Advisor.Advisor>(SQL_SEARCH_BY_NAME, parameters);
         }
     }
 }

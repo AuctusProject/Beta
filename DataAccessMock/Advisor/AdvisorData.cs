@@ -110,6 +110,11 @@ namespace Auctus.DataAccessMock.Advisor
             return advisors;
         }
 
+        public IEnumerable<DomainObjects.Advisor.Advisor> ListByName(string searchTerm)
+        {
+            return ListAll().Where(advisor => advisor.Name.ToUpper().StartsWith(searchTerm.ToUpper()) || advisor.Name.ToUpper().Contains(" " + searchTerm.ToUpper()));
+        }
+
         public List<DomainObjects.Advisor.Advisor> ListEnabled()
         {
             return ListAll().Where(a => a.Enabled).ToList();
