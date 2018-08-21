@@ -54,8 +54,7 @@ namespace Auctus.DataAccess.Asset
 
         private FilterDefinition<AssetValue> GetFilterByIdAndDate(FilterDefinitionBuilder<AssetValue> filterBuilder, int assetId, DateTime valueDate)
         {
-            var filter = filterBuilder.Eq(asset => asset.AssetId, assetId);
-
+            var filter = filterBuilder.Eq(asset => asset.AssetId, assetId) & filterBuilder.Gte(asset => asset.Date, valueDate);
             return filter;
         }
     }
