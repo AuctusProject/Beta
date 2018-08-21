@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from '../../../services/account.service';
+import { ReferralProgramInfoResponse } from '../../../model/account/ReferralProgramInfoResponse';
 
 @Component({
   selector: 'referral',
@@ -6,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./referral.component.css']
 })
 export class ReferralComponent implements OnInit {
-
-  constructor() { }
+  referralInfo : ReferralProgramInfoResponse;
+  constructor(private accountService: AccountService) { }
 
   ngOnInit() {
+    this.accountService.getReferralProgramInfo().subscribe(result => this.referralInfo = result);
   }
 
 }
