@@ -112,7 +112,7 @@ namespace Auctus.Business.Account
 
         public void SetReferralCode(string referralCode)
         {
-            var user = GetValidUser();
+            var user = GetByEmail(LoggedEmail);
             var referredUser = GetReferredUser(referralCode);
             user.ReferredId = referredUser.Id;
             Update(user);

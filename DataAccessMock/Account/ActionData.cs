@@ -9,5 +9,9 @@ namespace Auctus.DataAccessMock.Account
 {
     public class ActionData : BaseData<DomainObjects.Account.Action>, IActionData<DomainObjects.Account.Action>
     {
+        public override Task InsertOneAsync(DomainObjects.Account.Action obj)
+        {
+            return new Task(() => { });
+        }
     }
 }
