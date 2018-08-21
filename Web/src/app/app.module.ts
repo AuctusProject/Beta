@@ -48,6 +48,7 @@ import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.c
 import { MatModule } from './mat.module';
 import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
 import { ConfigService } from './services/config.service';
+import { ReferralComponent } from './components/account/referral/referral.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -75,7 +76,8 @@ export function loadConfigService(configService: ConfigService): Function
     AssetDetailsComponent,
     AdvicesComponent,
     NewAdviceComponent,
-    ConfirmAdviceDialogComponent
+    ConfirmAdviceDialogComponent,
+    ReferralComponent
   ],
   imports: [
     BrowserModule,
