@@ -1,9 +1,10 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Asset;
 using Auctus.Util;
-using DataAccessInterfaces.Asset;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Auctus.Business.Asset
 {
     public class FollowAssetBusiness : BaseBusiness<FollowAsset, IFollowAssetData<FollowAsset>>
     {
-        public FollowAssetBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public FollowAssetBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public List<FollowAsset> ListFollowers(IEnumerable<int> assetIds = null)
         {

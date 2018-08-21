@@ -1,12 +1,12 @@
-﻿using Auctus.DataAccessMock;
+﻿using Auctus.DataAccessInterfaces.Asset;
+using Auctus.DataAccessMock;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Asset;
-using DataAccessInterfaces.Asset;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccessMock.Asset
+namespace Auctus.DataAccessMock.Asset
 {
     public class FollowAssetData : BaseData<FollowAsset>, IFollowAssetData<FollowAsset>
     {

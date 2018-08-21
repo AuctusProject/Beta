@@ -1,12 +1,10 @@
-﻿using Auctus.DataAccess.Asset;
-using Auctus.DataAccess.Exchanges;
-using Auctus.DataAccessInterfaces.Asset;
+﻿using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Exchange;
 using Auctus.Model;
 using Auctus.Util;
-using Auctus.Util.Azure;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,9 +16,7 @@ namespace Auctus.Business.Asset
 {
     public class AssetBusiness : BaseBusiness<DomainObjects.Asset.Asset, IAssetData<DomainObjects.Asset.Asset>>
     {
-        private const string ICON_CONTAINER_NAME = "assetsicons";
-
-        public AssetBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public AssetBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public IEnumerable<AssetResponse> ListAssetData()
         {
@@ -73,22 +69,22 @@ namespace Auctus.Business.Asset
 
         public void UpdateCoinmarketcapAssetsIcons()
         {
-            UpdateIcons(CoinMarketCapApi.Instance.GetAllCoinsData(), IsCoinmarketcapAsset);
+            UpdateIcons(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
         }
 
         public void UpdateCoingeckoAssetsIcons()
         {
-            UpdateIcons(CoinGeckoApi.Instance.GetAllCoinsData(), IsCoingeckoAsset);
+            UpdateIcons(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
         }
 
         public void CreateCoinmarketcapNotIncludedAssets()
         {
-            CreateNotIncludedAssets(CoinMarketCapApi.Instance.GetAllCoinsData(), CoinGeckoApi.Instance.GetAllCoinsData(), false);
+            CreateNotIncludedAssets(CoinMarketcapBusiness.GetAllCoinsData(), CoinGeckoBusiness.GetAllCoinsData(), false);
         }
 
         public void CreateCoingeckoNotIncludedAssets()
         {
-            CreateNotIncludedAssets(CoinGeckoApi.Instance.GetAllCoinsData(), CoinMarketCapApi.Instance.GetAllCoinsData(), true);
+            CreateNotIncludedAssets(CoinGeckoBusiness.GetAllCoinsData(), CoinMarketcapBusiness.GetAllCoinsData(), true);
         }
 
         private bool IsCoinmarketcapAsset(DomainObjects.Asset.Asset asset, string key)
@@ -103,12 +99,12 @@ namespace Auctus.Business.Asset
 
         public void UpdateCoinmarketcapAssetsMarketcap()
         {
-            UpdateAssetsMarketcap(CoinMarketCapApi.Instance.GetAllCoinsData(), IsCoinmarketcapAsset);
+            UpdateAssetsMarketcap(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
         }
 
         public void UpdateCoingeckoAssetsMarketcap()
         {
-            UpdateAssetsMarketcap(CoinGeckoApi.Instance.GetAllCoinsData(), IsCoingeckoAsset);
+            UpdateAssetsMarketcap(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
         }
 
         private void UpdateAssetsMarketcap(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
@@ -206,10 +202,10 @@ namespace Auctus.Business.Asset
             }
         }
 
-        private void UploadAssetIcon(int assetId, string url)
+        private bool UploadAssetIcon(int assetId, string url)
         {
             url = !url.Contains('?') ? url : url.Split('?')[0];
-            StorageManager.UploadFileFromUrl(StorageConfiguration, ICON_CONTAINER_NAME, $"{assetId}.png", url);
+            return AzureStorageBusiness.UploadAssetFromUrl($"{assetId}.png", url);
         }
 
         public IEnumerable<DomainObjects.Asset.Asset> ListFollowingAssets()

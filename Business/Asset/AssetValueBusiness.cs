@@ -1,11 +1,9 @@
-﻿using Auctus.DataAccess.Asset;
-using Auctus.DataAccess.Core;
-using Auctus.DataAccess.Exchanges;
-using Auctus.DataAccessInterfaces.Asset;
+﻿using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Exchange;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,7 +14,7 @@ namespace Auctus.Business.Asset
 {
     public class AssetValueBusiness : BaseBusiness<AssetValue, IAssetValueData<AssetValue>>
     {
-        public AssetValueBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public AssetValueBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         internal AssetValue LastAssetValue(int assetId)
         {
@@ -30,7 +28,7 @@ namespace Auctus.Business.Asset
 
         public void UpdateCoinmarketcapAssetsValues()
         {
-            UpdateAssetsValues(CoinMarketCapApi.Instance.GetAllCoinsData(), IsCoinmarketcapAsset);
+            UpdateAssetsValues(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
         }
 
         private bool IsCoinmarketcapAsset(DomainObjects.Asset.Asset asset, string key)
@@ -40,7 +38,7 @@ namespace Auctus.Business.Asset
 
         public void UpdateCoingeckoAssetsValues()
         {
-            UpdateAssetsValues(CoinGeckoApi.Instance.GetAllCoinsData(), IsCoingeckoAsset);
+            UpdateAssetsValues(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
         }
 
         private bool IsCoingeckoAsset(DomainObjects.Asset.Asset asset, string key)

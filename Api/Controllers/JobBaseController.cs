@@ -13,20 +13,15 @@ namespace Api.Controllers
 {
     public class JobBaseController : BaseController
     {
-        private readonly IServiceScopeFactory ServiceScopeFactory;
-
         protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : 
-            base(loggerFactory, cache, serviceProvider)
-        {
-            ServiceScopeFactory = serviceScopeFactory;
-        }
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory)  { }
 
         protected virtual IActionResult UpdateAssetsValues(string api)
         {
             if (!ValidApi(api))
                 return BadRequest();
 
-            RunJobAsync(() => HandleUpdateAssetsValues(api));
+            RunAsync(() => HandleUpdateAssetsValues(api));
             return Ok();
         }
 
@@ -35,7 +30,7 @@ namespace Api.Controllers
             if (!ValidApi(api))
                 return BadRequest();
 
-            RunJobAsync(() => HandleUpdateAssetsMarketcap(api));
+            RunAsync(() => HandleUpdateAssetsMarketcap(api));
             return Ok();
         }
 
@@ -44,7 +39,7 @@ namespace Api.Controllers
             if (!ValidApi(api))
                 return BadRequest();
 
-            RunJobAsync(() => HandleCreateAssets(api));
+            RunAsync(() => HandleCreateAssets(api));
             return Ok();
         }
 
@@ -53,13 +48,13 @@ namespace Api.Controllers
             if (!ValidApi(api))
                 return BadRequest();
 
-            RunJobAsync(() => HandleUpdateAssetsIcons(api));
+            RunAsync(() => HandleUpdateAssetsIcons(api));
             return Ok();
         }
 
         protected virtual IActionResult SetUsersAuc()
         {
-            RunJobAsync(() => UserBusiness.SetUsersAucSituation());
+            RunAsync(() => UserBusiness.SetUsersAucSituation());
             return Ok();
         }
 
@@ -98,39 +93,6 @@ namespace Api.Controllers
                 AssetBusiness.UpdateCoingeckoAssetsIcons();
             else
                 AssetBusiness.UpdateCoinmarketcapAssetsIcons();
-        }
-
-        private void RunJobAsync(Action action)
-        {
-            Task.Factory.StartNew(() =>
-            {
-                using (var scope = ServiceScopeFactory.CreateScope())
-                {
-                    ServiceProvider = scope.ServiceProvider;
-                    TelemetryClient telemetry = new TelemetryClient();
-                    try
-                    {
-                        telemetry.TrackEvent(action.Method.Name);
-                        RunJobSync(action);
-                    }
-                    catch (Exception e)
-                    {
-                        telemetry.TrackException(e);
-                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
-                    }
-                    finally
-                    {
-                        telemetry.Flush();
-                    }
-                }
-            });
-        }
-
-        private void RunJobSync(Action action)
-        {
-            Logger.LogInformation($"Job {action.Method.Name} started.");
-            action();
-            Logger.LogInformation($"Job {action.Method.Name} ended.");
         }
     }
 }

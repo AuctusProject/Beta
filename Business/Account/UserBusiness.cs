@@ -1,7 +1,4 @@
-﻿using Auctus.DataAccess.Account;
-using Auctus.DataAccess.Core;
-using Auctus.DataAccess.Exchanges;
-using Auctus.DataAccessInterfaces.Account;
+﻿using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
@@ -9,6 +6,7 @@ using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,7 +20,7 @@ namespace Auctus.Business.Account
 {
     public class UserBusiness : BaseBusiness<User, IUserData<User>>
     {
-        public UserBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public UserBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public User GetByEmail(string email)
         {
@@ -293,8 +291,7 @@ namespace Auctus.Business.Account
 
         private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
         {
-            await Email.SendAsync(SendGridKey,
-                new string[] { email },
+            await EmailBusiness.SendAsync(new string[] { email },
                 "Verify your email address - Auctus Beta",
                 string.Format(@"Hello,
 <br/><br/>
@@ -313,9 +310,9 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new BusinessException("Email must be filled.");
         }
 
-        public static void EmailValidation(string email)
+        public void EmailValidation(string email)
         {
-            if (!Email.IsValidEmail(email))
+            if (!EmailBusiness.IsValidEmail(email))
                 throw new BusinessException("Email informed is invalid.");
         }
 

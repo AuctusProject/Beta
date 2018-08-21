@@ -6,6 +6,7 @@ using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Auctus.Business.Advisor
 {
     public class AdviceBusiness : BaseBusiness<Advice, IAdviceData<Advice>>
     {
-        public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
@@ -40,15 +41,19 @@ namespace Auctus.Business.Advisor
                         CreationDate = Data.GetDateTimeNow()
                     });
 
+            RunAsync(async () => await SendAdviceNotificationForFollowersAsync(advisor, asset, type));
+        }
+
+        private async Task SendAdviceNotificationForFollowersAsync(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
+        {
             var usersFollowing = UserBusiness.ListUsersFollowingAdvisorOrAsset(advisor.Id, asset.Id);
             foreach (var user in usersFollowing)
-                SendAdviceNotification(user, advisor, asset, type);
+                await SendAdviceNotification(user, advisor, asset, type);
         }
 
         private async Task SendAdviceNotification(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            await Email.SendAsync(SendGridKey,
-                new string[] { user.Email },
+            await EmailBusiness.SendAsync(new string[] { user.Email },
                 $"New tip on Auctus Beta for {asset.Code}",
                 $@"Hello,
 <br/><br/>
