@@ -368,11 +368,22 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             return response;
         }
 
-        public void SetAllowNotifications(bool allowNotifications)
+        public void SetConfiguration(bool allowNotifications)
         {
             var user = GetValidUser();
             user.AllowNotifications = allowNotifications;
             Update(user);
+        }
+
+        public UserConfigurationResponse GetConfiguration()
+        {
+            var user = GetValidUser();
+            var wallet = WalletBusiness.GetByUser(user.Id);
+            return new UserConfigurationResponse()
+            {
+                AllowNotifications = user.AllowNotifications,
+                Wallet = wallet?.Address
+            };
         }
 
         private static ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)

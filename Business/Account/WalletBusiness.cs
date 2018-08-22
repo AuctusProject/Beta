@@ -37,6 +37,11 @@ namespace Auctus.Business.Account
             }
         }
 
+        public Wallet GetByUser(int userId)
+        {
+            return Data.GetByUser(userId);
+        }
+
         public void ValidateAucAmount(decimal aucAmount, decimal minimumAucAmountForUser)
         {
             if (aucAmount < minimumAucAmountForUser)

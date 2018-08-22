@@ -125,22 +125,22 @@ namespace Api.Controllers
             return base.GetReferralProgramInfo();
         }
 
-        [Route("me/notifications")]
+        [Route("me/configuration")]
         [HttpPost]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult SetAllowNotifications([FromBody]SetAllowNotificationsRequest setAllowNotificationsRequest)
+        public new IActionResult SetConfiguration([FromBody]SetConfigurationRequest setConfigurationRequest)
         {
-            return base.SetAllowNotifications(setAllowNotificationsRequest);
+            return base.SetConfiguration(setConfigurationRequest);
         }
 
-        [Route("me/notifications")]
+        [Route("me/configuration")]
         [HttpGet]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult GetAllowNotifications()
+        public new IActionResult GetConfiguration()
         {
-            return base.GetAllowNotifications();
+            return base.GetConfiguration();
         }
 
         [Route("search/{term}")]

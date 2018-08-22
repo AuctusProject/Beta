@@ -102,18 +102,18 @@ namespace Api.Controllers
             return Ok(UserBusiness.GetReferralProgramInfo());
         }
 
-        protected virtual IActionResult SetAllowNotifications(SetAllowNotificationsRequest setAllowNotificationsRequest)
+        protected virtual IActionResult SetConfiguration(SetConfigurationRequest setConfigurationRequest)
         {
-            if (setAllowNotificationsRequest == null)
+            if (setConfigurationRequest == null)
                 return BadRequest();
 
-            UserBusiness.SetAllowNotifications(setAllowNotificationsRequest.AllowNotifications);
+            UserBusiness.SetConfiguration(setConfigurationRequest.AllowNotifications);
             return Ok();
         }
 
-        protected virtual IActionResult GetAllowNotifications()
+        protected virtual IActionResult GetConfiguration()
         {
-            return Ok(new { allow = UserBusiness.GetValidUser().AllowNotifications });
+            return Ok(UserBusiness.GetConfiguration());
         }
 
         protected virtual IActionResult Search(string term)

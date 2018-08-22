@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Api.Model.Account
 {
-    public class SetAllowNotificationsRequest
+    public class SetConfigurationRequest
     {
         public bool AllowNotifications { get; set; }
     }
