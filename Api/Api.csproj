@@ -4,7 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/e9ec56be-9e25-4aee-b573-a75029f0b5a1/resourcegroups/AuctusPlatformApiDev/providers/microsoft.insights/components/AuctusPlatformApiDevInsights</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/e9ec56be-9e25-4aee-b573-a75029f0b5a1/resourcegroups/AuctusPlatformApiDev/providers/microsoft.insights/components/AuctusPlatformApiDevInsights</ApplicationInsightsAnnotationResourceId>
-	<DebugType>Full</DebugType>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>Full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
