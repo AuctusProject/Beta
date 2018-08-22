@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Auctus.DomainObjects.Advisor;
 using System.Linq;
-using DataAccessMock.Advisor;
 
 namespace Auctus.DataAccessMock.Advisor
 {

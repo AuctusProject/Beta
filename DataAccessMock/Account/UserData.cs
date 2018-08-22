@@ -18,7 +18,7 @@ namespace Auctus.DataAccessMock.Account
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                Password = "lhs1mr/DnObStvpxSPVZGYNs3muWSgCqHoRlOXoruC8g",//testeauctus
                 IsAdvisor = true,
                 Name = "Tester Advisor",
                 Description = "Test Advisor description",
@@ -50,7 +50,7 @@ namespace Auctus.DataAccessMock.Account
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                Password = "lhs1mr/DnObStvpxSPVZGYNs3muWSgCqHoRlOXoruC8g",//testeauctus
                 IsAdvisor = false,
                 ReferralCode = "0000002",
                 Wallet = new Wallet()
@@ -69,7 +69,7 @@ namespace Auctus.DataAccessMock.Account
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                Password = "lhs1mr/DnObStvpxSPVZGYNs3muWSgCqHoRlOXoruC8g",//testeauctus
                 IsAdvisor = true,
                 Name = "Tester Advisor",
                 Description = "Test Advisor description",
@@ -103,7 +103,7 @@ namespace Auctus.DataAccessMock.Account
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                Password = "lhs1mr/DnObStvpxSPVZGYNs3muWSgCqHoRlOXoruC8g",//testeauctus
                 IsAdvisor = false,
                 ReferralCode = "0000004",
                 ReferredId = 1,
@@ -124,7 +124,7 @@ namespace Auctus.DataAccessMock.Account
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                Password = "lhs1mr/DnObStvpxSPVZGYNs3muWSgCqHoRlOXoruC8g",//testeauctus
                 IsAdvisor = false,
                 ReferralCode = "0000005",
                 ReferredId = 1,
@@ -145,7 +145,7 @@ namespace Auctus.DataAccessMock.Account
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                Password = "lhs1mr/DnObStvpxSPVZGYNs3muWSgCqHoRlOXoruC8g",//testeauctus
                 IsAdvisor = false,
                 ReferralCode = "0000006",
                 ReferredId = 1,
@@ -166,7 +166,7 @@ namespace Auctus.DataAccessMock.Account
                 CreationDate = new DateTime(2018, 5, 1, 0, 0, 0),
                 ConfirmationDate = new DateTime(2018, 5, 2, 0, 0, 0),
                 ConfirmationCode = "",
-                Password = "BC46By6kTL4VKx1BldTIIIyszwukzfRD/dGKid86Y5CL4sNgtOhB0opyKmKPJHYCUkzVfJMfj47gnCTybTcr6yB0RNTt4aNE2Q==",//testeauctus
+                Password = "lhs1mr/DnObStvpxSPVZGYNs3muWSgCqHoRlOXoruC8g",//testeauctus
                 IsAdvisor = false,
                 ReferralCode = "0000007",
                 ReferredId = 1,

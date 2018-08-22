@@ -1,8 +1,8 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Asset;
 using Dapper;
-using DataAccessInterfaces.Asset;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

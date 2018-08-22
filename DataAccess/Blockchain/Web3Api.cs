@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Blockchain;
 using Auctus.DomainObjects.Web3;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
@@ -14,7 +15,7 @@ using System.Web;
 
 namespace Auctus.DataAccess.Blockchain
 {
-    public class Web3Api : ApiBase
+    public class Web3Api : ApiBase, IWeb3Api
     {
         private readonly string BaseRoute;
         private readonly string AucContractAddress;

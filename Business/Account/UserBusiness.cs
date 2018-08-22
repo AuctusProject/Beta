@@ -1,7 +1,4 @@
-﻿using Auctus.DataAccess.Account;
-using Auctus.DataAccess.Core;
-using Auctus.DataAccess.Exchanges;
-using Auctus.DataAccessInterfaces.Account;
+﻿using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
@@ -9,6 +6,7 @@ using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,7 +20,7 @@ namespace Auctus.Business.Account
 {
     public class UserBusiness : BaseBusiness<User, IUserData<User>>
     {
-        public UserBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public UserBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public User GetByEmail(string email)
         {
@@ -115,7 +113,7 @@ namespace Auctus.Business.Account
             var user = GetByEmail(LoggedEmail);
             var referredUser = GetReferredUser(referralCode);
             user.ReferredId = referredUser.Id;
-            Update(user);
+            Data.Update(user);
         }
 
         private string GenerateReferralCode()
@@ -288,13 +286,25 @@ namespace Auctus.Business.Account
             PasswordValidation(password);
 
             user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
+            Update(user);
+        }
+
+        public new void Update(User user)
+        {
             Data.Update(user);
+            if (user.ConfirmationDate.HasValue)
+            {
+                var cacheKey = GetUserCacheKey();
+                if (user.IsAdvisor)
+                    MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
+                else
+                    MemoryCache.Set<User>(cacheKey, user);
+            }
         }
 
         private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
         {
-            await Email.SendAsync(SendGridKey,
-                new string[] { email },
+            await EmailBusiness.SendAsync(new string[] { email },
                 "Verify your email address - Auctus Beta",
                 string.Format(@"Hello,
 <br/><br/>
@@ -313,9 +323,9 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new BusinessException("Email must be filled.");
         }
 
-        public static void EmailValidation(string email)
+        public void EmailValidation(string email)
         {
-            if (!Email.IsValidEmail(email))
+            if (!EmailBusiness.IsValidEmail(email))
                 throw new BusinessException("Email informed is invalid.");
         }
 
@@ -362,7 +372,7 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         {
             var user = GetValidUser();
             user.AllowNotifications = allowNotifications;
-            Data.Update(user);
+            Update(user);
         }
 
         private static ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)
@@ -390,12 +400,37 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId);
         }
 
-        public void Search(string searchTerm)
+        public SearchResponse Search(string searchTerm)
         {
             IEnumerable<DomainObjects.Advisor.Advisor> advisors = null;
             IEnumerable<DomainObjects.Asset.Asset> assets = null;
 
             Parallel.Invoke(() => advisors = AdvisorBusiness.ListByName(searchTerm), () => assets = AssetBusiness.ListByNameOrCode(searchTerm));
+
+            var response = new SearchResponse();
+
+            foreach(DomainObjects.Advisor.Advisor advisor in advisors)
+            {
+                response.Advisors.Add(new SearchResponse.AdvisorResult()
+                {
+                    AdvisorId = advisor.Id,
+                    Description = advisor.Description,
+                    Enabled = advisor.Enabled,
+                    Name = advisor.Name
+                });
+            }
+            foreach (DomainObjects.Asset.Asset asset in assets)
+            {
+                response.Assets.Add(new SearchResponse.AssetResult()
+                {
+                    AssetId = asset.Id,
+                    Code = asset.Code,
+                    HasAdvice = asset.HasAdvice,
+                    Name = asset.Name
+                });
+            }
+
+            return response;
         }
     }
 }

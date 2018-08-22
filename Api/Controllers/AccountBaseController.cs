@@ -9,13 +9,15 @@ using Auctus.Model;
 using Auctus.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {
     public class AccountBaseController : BaseController
     {
-        protected AccountBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+        protected AccountBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         protected virtual IActionResult ValidateSignature(ValidateSignatureRequest signatureRequest)
         {
@@ -109,10 +111,14 @@ namespace Api.Controllers
             return Ok();
         }
 
+        protected virtual IActionResult GetAllowNotifications()
+        {
+            return Ok(new { allow = UserBusiness.GetValidUser().AllowNotifications });
+        }
+
         protected virtual IActionResult Search(string term)
         {
-            UserBusiness.Search(term);
-            return Ok();
+            return Ok(UserBusiness.Search(term));
         }
     }
 }

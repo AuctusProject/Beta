@@ -1,17 +1,26 @@
-﻿using System;
+﻿using Auctus.DataAccessInterfaces.Storage;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.WindowsAzure.Storage;
 
-namespace Auctus.Util.Azure
+namespace Auctus.DataAccess.Storage
 {
     //https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-dotnet?tabs=windows
-    public static class StorageManager
+    public class AzureStorageResource : IAzureStorageResource
     {
-       public static void UploadFileFromUrl(string storageAccountConfiguration, string containerName, string fileName, string url)
+        private readonly string StorageConfiguration;
+
+        public AzureStorageResource(IConfigurationRoot configuration)
+        {
+            StorageConfiguration = configuration.GetSection("ConnectionString:Storage").Get<string>();
+        }
+
+        public bool UploadFileFromUrl(string containerName, string fileName, string url)
         {
             CloudStorageAccount storageAccount;
-            if (CloudStorageAccount.TryParse(storageAccountConfiguration, out storageAccount))
+            if (CloudStorageAccount.TryParse(StorageConfiguration, out storageAccount))
             {
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var container = blobClient.GetContainerReference(containerName);
@@ -23,12 +32,14 @@ namespace Auctus.Util.Azure
                 }
                 catch
                 {
+                    return false;
                 }
             }
             else
             {
                 throw new OperationCanceledException(string.Format("Could not upload file {0} to blob storage.", fileName));
             }
+            return true;
         }
     }
 }

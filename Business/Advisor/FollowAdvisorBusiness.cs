@@ -1,9 +1,10 @@
 ﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
-using DataAccessInterfaces.Advisor;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Auctus.Business.Advisor
 {
     public class FollowAdvisorBusiness : BaseBusiness<FollowAdvisor, IFollowAdvisorData<FollowAdvisor>>
     {
-        public FollowAdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public FollowAdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds = null)
         {

@@ -24,6 +24,7 @@ namespace Api
     public class Startup
     {
         public static IConfigurationRoot Configuration { get; private set; }
+        public static IHostingEnvironment Enviroment { get; private set; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -32,7 +33,9 @@ namespace Api
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
+            Enviroment = env;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -89,7 +92,8 @@ namespace Api
             services.AddMvc();
             services.AddSingleton<Cache>();
 
-            DataAccessDependencyResolver.RegisterDataAccess(services, Configuration);
+            DataAccessDependencyResolver.RegisterDataAccess(services, Configuration, Enviroment.IsDevelopment());
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info

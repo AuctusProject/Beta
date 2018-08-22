@@ -1,8 +1,5 @@
-﻿using Auctus.DataAccess.Blockchain;
-using Auctus.DomainObjects.Web3;
-using Auctus.Util;
+﻿using Auctus.DataAccessInterfaces.Blockchain;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +12,16 @@ namespace Auctus.Business.Blockchain
 {
     public class Web3Business
     {
-        private readonly Web3Api Data;
+        private readonly IWeb3Api Api;
 
-        internal Web3Business(IConfigurationRoot configuration)
+        internal Web3Business(IConfigurationRoot configuration, IServiceProvider serviceProvider)
         {
-            Data = new Web3Api(configuration);
+            Api = (IWeb3Api)serviceProvider.GetService(typeof(IWeb3Api));
         }
 
         public decimal GetAucAmount(string address)
         {
-            return Data.GetAucAmount(address);
+            return Api.GetAucAmount(address);
         }
     }
 }
