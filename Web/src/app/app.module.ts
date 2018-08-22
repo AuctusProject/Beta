@@ -21,14 +21,14 @@ import { RecommendationDistributionComponent } from './components/recommendation
 import { AdvisorCardComponent } from './components/advisor/advisor-card/advisor-card.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AdvisorService } from './services/advisor.service';
-import { HttpModule } from '../../node_modules/@angular/http';
-import { HttpClientModule } from '../../node_modules/@angular/common/http';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AssetService } from './services/asset.service';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { AccountService } from './services/account.service';
 import { LoginComponent } from './components/account/login/login.component';
 // import { MatModule } from './mat.module';
-import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
@@ -49,6 +49,7 @@ import { MatModule } from './mat.module';
 import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
 import { ConfigService } from './services/config.service';
 import { ReferralComponent } from './components/account/referral/referral.component';
+import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -77,7 +78,8 @@ export function loadConfigService(configService: ConfigService): Function
     AdvicesComponent,
     NewAdviceComponent,
     ConfirmAdviceDialogComponent,
-    ReferralComponent
+    ReferralComponent,
+    ConfigurationComponent
   ],
   imports: [
     BrowserModule,

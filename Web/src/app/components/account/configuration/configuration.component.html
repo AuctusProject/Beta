@@ -1,0 +1,9 @@
+<p>Registered wallet</p>
+<div fxLayout="row" fxLayoutGap="20px">
+    <input disabled readonly [(ngModel)]="wallet" type="text" />
+</div>
+<p>Allow email notification when a new tip is sent by some advisor or asset that you are following</p>
+<div fxLayout="row" fxLayoutGap="20px">
+    <input mat-checkbox [(ngModel)]="configurationRequest.allowNotifications" type="checkbox" />
+</div>
+<button (click)="save()">SAVE</button>

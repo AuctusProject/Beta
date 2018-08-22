@@ -4,7 +4,7 @@ import { HttpService } from './http.service';
 import { ValidateSignatureRequest } from '../model/account/validateSignatureRequest';
 import { LoginResponse } from '../model/account/loginResponse';
 import { LoginRequest } from '../model/account/loginRequest';
-import { Router } from '../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
 import { LoginResult } from '../model/account/loginResult';
 import { ConfirmEmailRequest } from '../model/account/confirmEmailRequest';
 import { ForgotPasswordRequest } from '../model/account/forgotPasswordRequest';
@@ -15,6 +15,8 @@ import { RegisterResponse } from '../model/account/registerResponse';
 import { FeedResponse } from '../model/advisor/feedResponse';
 import { ReferralProgramInfoResponse } from '../model/account/ReferralProgramInfoResponse';
 import { SetReferralRequest } from '../model/account/setReferralRequest';
+import { ConfigurationResponse } from '../model/account/configurationResponse';
+import { ConfigurationRequest } from '../model/account/configurationRequest';
 
 
 @Injectable()
@@ -28,6 +30,7 @@ export class AccountService {
   private registerUrl = this.httpService.apiUrl("v1/accounts");
   private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
   private referralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
+  private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
 
   constructor(private httpService : HttpService, private router : Router) { }
 
@@ -105,5 +108,13 @@ export class AccountService {
 
   setReferralCode(setReferralRequest: SetReferralRequest) : Observable<void>{
     return this.httpService.post(this.referralsUrl, setReferralRequest);
+  }
+
+  getConfiguration() : Observable<ConfigurationResponse>{
+    return this.httpService.get(this.configurationUrl);
+  }
+
+  setConfiguration(configurationRequest: ConfigurationRequest) : Observable<void>{
+    return this.httpService.post(this.configurationUrl, configurationRequest);
   }
 }

@@ -61,7 +61,7 @@ The advisor {advisor.Name} set a new {type.GetDescription()} tip for the asset {
 <br/>
 To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.
 <br/><br/>
-<small>If you do not want to receive these tips for advisors/assets that you are following <a href='{WebUrl}/config/{user.Id}' target='_blank'>click here</a>.</small>
+<small>If you do not want to receive these tips for advisors/assets that you are following <a href='{WebUrl}/configuration' target='_blank'>click here</a>.</small>
 <br/><br/>
 Thanks,
 <br/>
