@@ -4,7 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Auctus.Util</RootNamespace>
     <AssemblyName>Util</AssemblyName>
-	<DebugType>Full</DebugType>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>Full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

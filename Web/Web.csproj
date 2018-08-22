@@ -8,7 +8,10 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-	<DebugType>Full</DebugType>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>Full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
