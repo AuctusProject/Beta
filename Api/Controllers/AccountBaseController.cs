@@ -118,8 +118,7 @@ namespace Api.Controllers
 
         protected virtual IActionResult Search(string term)
         {
-            UserBusiness.Search(term);
-            return Ok();
+            return Ok(UserBusiness.Search(term));
         }
     }
 }
