@@ -7,7 +7,6 @@
 
     <TargetPlatform>x86</TargetPlatform>
 
-    <TestAdaptersPaths>%SystemDrive%\Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>
   </RunConfiguration>
   <DataCollectionRunSettings>
     <DataCollectors>
@@ -38,7 +37,7 @@
             </Functions>
 
             <Attributes>
-              <Exclude> 
+              <Exclude>
                 <Attribute>^System\.Diagnostics\.DebuggerHiddenAttribute$</Attribute>
                 <Attribute>^System\.Diagnostics\.DebuggerNonUserCodeAttribute$</Attribute>
                 <Attribute>^System\.Runtime\.CompilerServices.CompilerGeneratedAttribute$</Attribute>
