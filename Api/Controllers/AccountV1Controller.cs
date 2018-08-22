@@ -134,6 +134,15 @@ namespace Api.Controllers
             return base.SetAllowNotifications(setAllowNotificationsRequest);
         }
 
+        [Route("me/notifications")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAllowNotifications()
+        {
+            return base.GetAllowNotifications();
+        }
+
         [Route("search/{term}")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

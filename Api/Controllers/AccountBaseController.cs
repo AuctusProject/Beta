@@ -111,6 +111,11 @@ namespace Api.Controllers
             return Ok();
         }
 
+        protected virtual IActionResult GetAllowNotifications()
+        {
+            return Ok(new { allow = UserBusiness.GetValidUser().AllowNotifications });
+        }
+
         protected virtual IActionResult Search(string term)
         {
             UserBusiness.Search(term);

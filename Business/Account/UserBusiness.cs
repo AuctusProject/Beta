@@ -113,7 +113,7 @@ namespace Auctus.Business.Account
             var user = GetByEmail(LoggedEmail);
             var referredUser = GetReferredUser(referralCode);
             user.ReferredId = referredUser.Id;
-            Update(user);
+            Data.Update(user);
         }
 
         private string GenerateReferralCode()
@@ -286,7 +286,20 @@ namespace Auctus.Business.Account
             PasswordValidation(password);
 
             user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
+            Update(user);
+        }
+
+        public new void Update(User user)
+        {
             Data.Update(user);
+            if (user.ConfirmationDate.HasValue)
+            {
+                var cacheKey = GetUserCacheKey();
+                if (user.IsAdvisor)
+                    MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
+                else
+                    MemoryCache.Set<User>(cacheKey, user);
+            }
         }
 
         private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
@@ -359,7 +372,7 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         {
             var user = GetValidUser();
             user.AllowNotifications = allowNotifications;
-            Data.Update(user);
+            Update(user);
         }
 
         private static ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)
