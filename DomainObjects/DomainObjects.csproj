@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Auctus.DomainObjects</RootNamespace>
     <AssemblyName>DomainObjects</AssemblyName>
+	<DebugType>Full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
