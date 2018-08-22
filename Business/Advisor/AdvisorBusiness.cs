@@ -132,7 +132,7 @@ namespace Auctus.Business.Advisor
                         {
                             if (mode != CalculationMode.AdvisorDetailed && mode != CalculationMode.Feed)
                             {
-                                assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.GroupBy(c => c.LastAdviceType)
+                                assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.Where(c => c.LastAdviceType.HasValue).GroupBy(c => c.LastAdviceType.Value)
                                     .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
                                 assetResultData.Mode = GetAssetModeType(assetResultData);
                                 assetResultData.Advices = mode == CalculationMode.AssetBase ? null : assetAdviceDetails
@@ -208,9 +208,9 @@ namespace Auctus.Business.Advisor
                 AverageReturn = advisorDetailsValues.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / advisorDetailsValues.Count(c => c.Return.HasValue),
                 SuccessRate = (double)advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
                 TotalRatings = advisorDetailsValues.Count(),
-                LastAdviceDate = advisorDetailsValues.Last().Advice.CreationDate,
-                LastAdviceMode = advisorDetailsValues.Last().ModeType.Value,
-                LastAdviceType = advisorDetailsValues.Last().Advice.Type,
+                LastAdviceDate = advisorDetailsValues.LastOrDefault()?.Advice.CreationDate,
+                LastAdviceMode = advisorDetailsValues.LastOrDefault()?.ModeType.Value,
+                LastAdviceType = advisorDetailsValues.LastOrDefault()?.Advice.Type,
                 Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c => new AssetResponse.AdviceResponse() { UserId = advisorId, AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).ToList() : null
             };
         }
