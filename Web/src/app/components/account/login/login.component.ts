@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { LoginRequest } from '../../../model/account/loginRequest';
-import { Router } from '../../../../../node_modules/@angular/router';
 import { Subscription } from '../../../../../node_modules/rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
@@ -19,7 +18,6 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, 
     private accountService: AccountService, 
-    private router: Router,
     private notificationsService: NotificationsService,
     private authRedirect : AuthRedirect) { 
     this.buildForm();
