@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
   <RunConfiguration>
-    <MaxCpuCount>1</MaxCpuCount>
+    <MaxCpuCount>0</MaxCpuCount>
 
     <ResultsDirectory>.\TestResults</ResultsDirectory>
 
@@ -84,4 +84,9 @@
       </DataCollector>
     </DataCollectors>
   </DataCollectionRunSettings>
+  <MSTest>
+    <CaptureTraceOutput>True</CaptureTraceOutput>
+    <ParallelizeAssemblies>True</ParallelizeAssemblies>
+    <ParallelizeTestCollections>True</ParallelizeTestCollections>
+  </MSTest>
 </RunSettings>
