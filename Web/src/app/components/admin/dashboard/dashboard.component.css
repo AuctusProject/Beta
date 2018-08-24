@@ -1,0 +1,20 @@
+.biggerNumber {
+    font-weight: 900;
+    font-size: 40px;
+}
+
+.biggerText {
+    font-size: 12px;
+}
+
+.totalText {
+    color: dimgray;
+}
+
+section {
+    padding-bottom: 30px;
+}
+
+.registration-chart {
+    width: 90%;
+}

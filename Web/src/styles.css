@@ -1,2 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@font-face {
+  font-family: "HelveticaNeueBold";
+  src: url('/assets/fonts/HelveticaNeueBold.eot'); /* IE9 Compat Modes */
+  src: url('/assets/fonts/HelveticaNeueBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('/assets/fonts/HelveticaNeueBold.woff2') format('woff2'), /* Super Modern Browsers */
+  url("/assets/fonts/HelveticaNeueBold.woff") format("woff"), /* Pretty Modern Browsers */
+  url("/assets/fonts/HelveticaNeueBold.ttf") format("truetype"), /* Safari, Android, iOS */
+  url('/assets/fonts/HelveticaNeueBold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url('/assets/fonts/HelveticaNeueMedium.eot'); /* IE9 Compat Modes */
+  src: url('/assets/fonts/HelveticaNeueMedium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('/assets/fonts/HelveticaNeueMedium.woff2') format('woff2'), /* Super Modern Browsers */
+  url("/assets/fonts/HelveticaNeueMedium.woff") format("woff"), /* Pretty Modern Browsers */
+  url("/assets/fonts/HelveticaNeueMedium.ttf") format("truetype"), /* Safari, Android, iOS */
+  url('/assets/fonts/HelveticaNeueMedium.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+html {
+  min-height:100%;
+}
+
+body {
+  background-color: #fafafa;
+  min-height:100%;
+}
+
+body, p, span {
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+  margin: 0px;
+}
+
+.bold {
+  font-family: 'HelveticaNeueBold';
+}

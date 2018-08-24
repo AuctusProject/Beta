@@ -1,0 +1,20 @@
+<section id="header">
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="30px">
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="biggerNumber bold">{{dashboardData.totalUsersConfirmed}}</span>
+                <span class="biggerText totalText">CONFIRMED USERS</span>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="biggerNumber bold">{{dashboardData.totalUsersConfirmedFromReferral}}</span>
+                <span class="biggerText totalText">FROM REFERRAL</span>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="biggerNumber bold">{{dashboardData.totalAdvisors}}</span>
+                <span class="biggerText totalText">ADVISORS</span>
+            </div>
+        </div>
+        <div class="registration-chart" [chart]="registrationChart"></div>
+    </div>
+</section>
+<mat-divider></mat-divider>

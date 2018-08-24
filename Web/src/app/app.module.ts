@@ -12,7 +12,7 @@ export function highchartsModules() {
 }
 
 import { AppComponent } from './app.component';
-
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { Web3Service } from './services/web3.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { HttpService } from './services/http.service';
@@ -94,7 +94,8 @@ export function loadConfigService(configService: ConfigService): Function
     FormsModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
-    MatModule
+    MatModule,
+    FlexLayoutModule
   ],
   providers: [
     HttpService,

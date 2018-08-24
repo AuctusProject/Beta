@@ -33,28 +33,23 @@ export class DashboardResponse {
     usersConfirmedLastSitutation: FlagData;
     advisorsLastSitutation: FlagData;
     requestToBeAdvisorLastSitutation: FlagData;
-
-    constructor(){
-    }
 }
+
 export class DistributionData {
     name: string;
     amount: number;
-    constructor(){
-    }
 }
+
 export class FlagData {
     description: string;
-    date: Date;
-    constructor(){
-    }
+    date: string;
 }
+
 export class RegistrationData {
-    date: Date;
+    date: string;
     value: Number;
-    constructor(){
-    }
 }
+
 export class AdvisorData {
     id: number;
     name: string;
@@ -62,6 +57,4 @@ export class AdvisorData {
     subValue1: number;
     subValue2: number;
     subValue3: number;
-    constructor(){
-    }
 }
