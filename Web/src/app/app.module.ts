@@ -50,6 +50,7 @@ import { ConfigService } from './services/config.service';
 import { ReferralComponent } from './components/account/referral/referral.component';
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { NavigationService } from './services/navigation.service';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { GlobalSearchComponent } from './components/search/global-search/global-search.component';
 
 export function loadConfigService(configService: ConfigService): Function
@@ -80,7 +81,8 @@ export function loadConfigService(configService: ConfigService): Function
     NewAdviceComponent,
     ConfirmAdviceDialogComponent,
     ReferralComponent,
-    ConfigurationComponent,
+    ConfigurationComponent, 
+    DashboardComponent,
     GlobalSearchComponent
   ],
   imports: [

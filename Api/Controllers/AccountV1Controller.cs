@@ -152,7 +152,7 @@ namespace Api.Controllers
         }
 
 
-        [Route("admin")]
+        [Route("dashboard")]
         [HttpGet]
         [Authorize("Bearer")]
         [OnlyAdmin]
