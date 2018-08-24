@@ -31,4 +31,10 @@
     <Folder Include="Advisor\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="test.runsettings">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

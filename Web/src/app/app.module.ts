@@ -29,7 +29,6 @@ import { AccountService } from './services/account.service';
 import { LoginComponent } from './components/account/login/login.component';
 // import { MatModule } from './mat.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { RegisterComponent } from './components/account/register/register.component';
@@ -50,6 +49,7 @@ import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/co
 import { ConfigService } from './services/config.service';
 import { ReferralComponent } from './components/account/referral/referral.component';
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
+import { NavigationService } from './services/navigation.service';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -101,7 +101,7 @@ export function loadConfigService(configService: ConfigService): Function
     AdvisorService,
     AssetService,
     AccountService,
-    AuthGuard,
+    NavigationService,
     AuthRedirect,
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules},
     ConfigService,
