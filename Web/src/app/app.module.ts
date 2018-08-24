@@ -50,6 +50,7 @@ import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/co
 import { ConfigService } from './services/config.service';
 import { ReferralComponent } from './components/account/referral/referral.component';
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
+import { GlobalSearchComponent } from './components/search/global-search/global-search.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -79,7 +80,8 @@ export function loadConfigService(configService: ConfigService): Function
     NewAdviceComponent,
     ConfirmAdviceDialogComponent,
     ReferralComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    GlobalSearchComponent
   ],
   imports: [
     BrowserModule,
