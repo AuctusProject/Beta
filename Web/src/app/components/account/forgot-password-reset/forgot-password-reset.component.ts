@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/rou
 import { AccountService } from '../../../services/account.service';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { RecoverPasswordRequest } from '../../../model/account/recoverPasswordRequest';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'forgot-password-reset',
@@ -13,9 +14,9 @@ export class ForgotPasswordResetComponent implements OnInit {
   recoverPasswordRequest: RecoverPasswordRequest = new RecoverPasswordRequest();
   constructor(
     private route: ActivatedRoute,
-    private router: Router, 
     private accountService : AccountService,
-    private notificationService : NotificationsService) { }
+    private notificationService : NotificationsService,
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
     this.recoverPasswordRequest.code = this.route.snapshot.queryParams['c'];
@@ -25,7 +26,7 @@ export class ForgotPasswordResetComponent implements OnInit {
     this.accountService.recoverPassword(this.recoverPasswordRequest).subscribe(result => 
       {
         this.notificationService.success(null, "Password was changed.");
-        this.router.navigateByUrl('login');
+        this.navigationService.goToLogin();
       }
     );
   }

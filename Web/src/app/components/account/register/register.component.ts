@@ -4,7 +4,7 @@ import { RegisterResponse } from '../../../model/account/registerResponse';
 import { Subscription } from '../../../../../node_modules/rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountService } from '../../../services/account.service';
-import { Router, ActivatedRoute } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { AuthRedirect } from '../../../providers/authRedirect';
 
@@ -23,7 +23,6 @@ export class RegisterComponent implements OnInit {
     private notificationsService: NotificationsService,
     private accountService: AccountService,
     private authRedirect : AuthRedirect,
-    private router: Router,
     private activatedRoute: ActivatedRoute) {
     this.buildForm();
   }

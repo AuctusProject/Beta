@@ -209,5 +209,17 @@ namespace Api.Controllers
         protected ExchangeApiAccessBusiness ExchangeApiAccessBusiness { get { return new ExchangeApiAccessBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected RequestToBeAdvisorBusiness RequestToBeAdvisorBusiness { get { return new RequestToBeAdvisorBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
 
+        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+        protected class OnlyAdminAttribute : ActionFilterAttribute
+        {
+            public override void OnActionExecuting(ActionExecutingContext context)
+            {
+                var user = ((BaseController)context.Controller).GetUser();
+                if (Startup.Configuration.GetSection("Admins").Get<List<string>>()?.Contains(user) == true)
+                    base.OnActionExecuting(context);
+                else
+                    context.Result = new UnauthorizedResult();
+            }
+        }
     }
 }

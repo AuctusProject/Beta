@@ -302,6 +302,11 @@ namespace Auctus.Business.Account
             }
         }
 
+        public List<User> ListAllUsersData()
+        {
+            return Data.ListAllUsersData();
+        }
+
         private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
         {
             await EmailBusiness.SendAsync(new string[] { email },
