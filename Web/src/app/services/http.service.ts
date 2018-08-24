@@ -7,13 +7,15 @@ import { CONFIG} from "./config.service";
 import { LocalStorageService } from "./local-storage.service";
 import { LoginResponse } from '../model/account/loginResponse';
 import { NavigationService } from './navigation.service';
+import { Router } from '../../../node_modules/@angular/router';
 
 @Injectable()
 export class HttpService {
   constructor(private http: HttpClient, 
     private notificationService: NotificationsService,
     private localStorageService: LocalStorageService,
-    private navigationService: NavigationService) { }
+    private navigationService: NavigationService,
+    private router: Router) { }
 
   private jwt: string = "auc_jwt";
   private login: string = "auc_login";
@@ -129,6 +131,7 @@ export class HttpService {
     return (response: any): Observable<T> => {
       if (response.status == "401") {
         this.logout();
+        this.localStorageService.setLocalStorage("redirectUrl", this.router.url);
         this.navigationService.goToLogin();
       }
       else if (response.status != "200") {
