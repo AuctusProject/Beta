@@ -244,5 +244,10 @@ namespace Auctus.DataAccessMock.Account
             users.RemoveAt(index);
             users.Add(obj);
         }
+
+        public List<User> ListAllUsersData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

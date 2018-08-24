@@ -35,5 +35,22 @@ namespace Auctus.DomainObjects.Account
                     throw new BusinessException("Invalid type.");
             }
         }
+
+        public string GetDescription()
+        {
+            switch (Value)
+            {
+                case 0:
+                    return "In Progress";
+                case 1:
+                    return "Interrupted";
+                case 2:
+                    return "Finished";
+                case 3:
+                    return "Paid";
+                default:
+                    throw new BusinessException("Invalid type.");
+            }
+        }
     }
 }

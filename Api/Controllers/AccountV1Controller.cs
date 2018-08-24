@@ -150,5 +150,16 @@ namespace Api.Controllers
         {
             return base.Search(term);
         }
+
+
+        [Route("admin")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [OnlyAdmin]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetDashboard()
+        {
+            return base.GetDashboard();
+        }
     }
 }

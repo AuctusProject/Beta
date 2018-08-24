@@ -120,5 +120,10 @@ namespace Api.Controllers
         {
             return Ok(UserBusiness.Search(term));
         }
+
+        protected virtual IActionResult GetDashboard()
+        {
+            return Ok(ActionBusiness.GetDashboardData());
+        }
     }
 }

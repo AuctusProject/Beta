@@ -6,6 +6,7 @@ using Auctus.Util;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -18,36 +19,24 @@ namespace Api.Controllers
 
         protected virtual IActionResult UpdateAssetsValues(string api)
         {
-            if (!ValidApi(api))
-                return BadRequest();
-
             RunAsync(() => HandleUpdateAssetsValues(api));
             return Ok();
         }
 
         protected virtual IActionResult UpdateAssetsMarketcap(string api)
         {
-            if (!ValidApi(api))
-                return BadRequest();
-
             RunAsync(() => HandleUpdateAssetsMarketcap(api));
             return Ok();
         }
 
         protected virtual IActionResult CreateAssets(string api)
         {
-            if (!ValidApi(api))
-                return BadRequest();
-
             RunAsync(() => HandleCreateAssets(api));
             return Ok();
         }
 
         protected virtual IActionResult UpdateAssetsIcons(string api)
         {
-            if (!ValidApi(api))
-                return BadRequest();
-
             RunAsync(() => HandleUpdateAssetsIcons(api));
             return Ok();
         }
@@ -56,11 +45,6 @@ namespace Api.Controllers
         {
             RunAsync(() => UserBusiness.SetUsersAucSituation());
             return Ok();
-        }
-
-        private bool ValidApi(string api)
-        {
-            return !string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coinmarketcap" || api.ToLower() == "coingecko");
         }
 
         private void HandleUpdateAssetsValues(string api)
@@ -93,6 +77,19 @@ namespace Api.Controllers
                 AssetBusiness.UpdateCoingeckoAssetsIcons();
             else
                 AssetBusiness.UpdateCoinmarketcapAssetsIcons();
+        }
+
+        [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+        protected class ValidApiAttribute : ActionFilterAttribute
+        {
+            public override void OnActionExecuting(ActionExecutingContext context)
+            {
+                var api = context.RouteData?.Values.Any() == true ? context.RouteData.Values["api"]?.ToString() : null;
+                if (!string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coinmarketcap" || api.ToLower() == "coingecko"))
+                    base.OnActionExecuting(context);
+                else
+                    context.Result = new BadRequestResult();
+            }
         }
     }
 }
