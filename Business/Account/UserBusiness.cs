@@ -439,7 +439,7 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             {
                 response.Assets.Add(new SearchResponse.AssetResult()
                 {
-                    AssetId = asset.Id,
+                    Id = asset.Id,
                     Code = asset.Code,
                     HasAdvice = asset.HasAdvice,
                     Name = asset.Name

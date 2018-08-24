@@ -1,3 +1,13 @@
-<p>
-  global-search works!
-</p>
+<input type="text" matInput (input)="onInputChanged($event.target.value)" [matAutocomplete]="auto">
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-optgroup [label]="Assets">
+    <mat-option *ngFor="let asset of assetResults" [value]="asset">
+      {{asset.name}}
+    </mat-option>
+  </mat-optgroup>
+  <mat-optgroup [label]="Experts">
+    <mat-option *ngFor="let expert of expertResults" [value]="expert">
+      {{expert.name}}
+    </mat-option>
+  </mat-optgroup>
+</mat-autocomplete>

@@ -30,6 +30,7 @@ export class AccountService {
   private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
   private referralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
   private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
+  private searchUrl = this.httpService.apiUrl("v1/accounts/search");
 
   constructor(private httpService : HttpService, private navigationService: NavigationService) { }
 
@@ -115,5 +116,9 @@ export class AccountService {
 
   setConfiguration(configurationRequest: ConfigurationRequest) : Observable<void>{
     return this.httpService.post(this.configurationUrl, configurationRequest);
+  }
+
+  search(searchTerm: string) {
+    return this.httpService.get(this.searchUrl + "/" + searchTerm);
   }
 }
