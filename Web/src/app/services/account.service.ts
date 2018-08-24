@@ -32,6 +32,7 @@ export class AccountService {
   private referralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
   private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
   private dashboardUrl = this.httpService.apiUrl("v1/accounts/dashboard");
+  private searchUrl = this.httpService.apiUrl("v1/accounts/search");
 
   constructor(private httpService : HttpService, private navigationService: NavigationService) { }
 
@@ -121,5 +122,9 @@ export class AccountService {
 
   getDashboard() : Observable<DashboardResponse>{
     return this.httpService.get(this.dashboardUrl);
+  }
+
+  search(searchTerm: string) {
+    return this.httpService.get(this.searchUrl + "/" + searchTerm);
   }
 }

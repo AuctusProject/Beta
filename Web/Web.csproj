@@ -40,4 +40,8 @@
     <None Include="tslint.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="src\app\components\search\" />
+  </ItemGroup>
+
 </Project>

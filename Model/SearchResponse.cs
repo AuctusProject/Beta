@@ -11,7 +11,7 @@ namespace Auctus.Model
 
         public class AssetResult
         {
-            public int AssetId { get; set; }
+            public int Id { get; set; }
             public string Code { get; set; }
             public string Name { get; set; }
             public bool HasAdvice { get; set; }
