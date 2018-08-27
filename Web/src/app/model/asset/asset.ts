@@ -4,5 +4,4 @@ export class Asset {
   code: string;
   type: number;
   shortSellingEnabled: boolean;
-  hasAdvice: boolean;
 }

@@ -375,7 +375,7 @@ namespace Auctus.Business.Advisor
 
         public IEnumerable<DomainObjects.Advisor.Advisor> ListByName(string searchTerm)
         {
-            return Data.ListByName(searchTerm);
+            return GetAdvisors().Where(advisor => advisor.Name.ToUpper().StartsWith(searchTerm.ToUpper()) || advisor.Name.ToUpper().Contains(" " + searchTerm.ToUpper()));
         }
     }
 }

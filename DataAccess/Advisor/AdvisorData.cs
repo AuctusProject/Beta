@@ -22,23 +22,6 @@ namespace Auctus.DataAccess.Advisor
              WHERE f.ActionType = @ActionType
 	            AND f.UserId = @UserId";
 
-        private const string SQL_SEARCH_BY_NAME = @"
-		SELECT TOP 10
-			a.*,
-			(SELECT count(*) 
-				FROM FollowAdvisor fa
-					INNER JOIN [Follow] f ON f.Id = fa.Id 
-					INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b
-					ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-				WHERE f.ActionType = 1 AND fa.AdvisorId = a.Id) AS Followers,
-			(SELECT count(*) FROM Advice ad WHERE ad.AdvisorId = a.Id) AS Advices
-		FROM 
-			[Advisor] a
-		WHERE
-			a.Name LIKE @Name + '%'
-			OR a.Name LIKE '% ' + @Name + '%'
-		ORDER BY Followers DESC, Advices DESC ";
-
         public override string TableName => "Advisor";
         public AdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
@@ -56,14 +39,6 @@ namespace Auctus.DataAccess.Advisor
             parameters.Add("UserId", userId, DbType.Int32);
 
             return Query<DomainObjects.Advisor.Advisor>(SQL_LIST_FOLLOWING_ADVISORS, parameters);
-        }
-
-        public IEnumerable<DomainObjects.Advisor.Advisor> ListByName(string searchTerm)
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("Name", searchTerm, DbType.AnsiString);
-
-            return Query<DomainObjects.Advisor.Advisor>(SQL_SEARCH_BY_NAME, parameters);
         }
     }
 }

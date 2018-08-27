@@ -143,10 +143,10 @@ namespace Api.Controllers
             return base.GetConfiguration();
         }
 
-        [Route("search/{term}")]
+        [Route("search")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult Search([FromRoute]string term)
+        public new IActionResult Search([FromQuery]string term)
         {
             return base.Search(term);
         }
