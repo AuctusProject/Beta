@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdvisorService } from '../../../services/advisor.service';
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
+import { MatProgressBar, MatSpinner } from '../../../../../node_modules/@angular/material';
 
 @Component({
   selector: 'advisors-requests',
@@ -9,7 +10,10 @@ import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 })
 export class AdvisorsRequestsComponent implements OnInit {
   requests : RequestToBeAdvisor[];
-
+  matProgressBar: MatProgressBar;
+  matSpinner : MatSpinner;
+    
+  
   constructor(private advisorService: AdvisorService) 
   { 
   }
