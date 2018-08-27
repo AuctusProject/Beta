@@ -64,6 +64,7 @@ namespace Api.Controllers
 
         [Route("requests")]
         [HttpGet]
+        [OnlyAdmin]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListRequestToBe()
         {

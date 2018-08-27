@@ -98,18 +98,6 @@ namespace Auctus.Business.Account
             result.TotalAdvisorsFollowed = advisorFollowers.Result.Any() ? advisorFollowers.Result.Select(c => c.AdvisorId).Distinct().Count() : 0;
             result.TotalUsersFollowing = advisorFollowers.Result.Select(c => c.UserId).Concat(assetFollowers.Result.Select(c => c.UserId)).Distinct().Count();
 
-            result.Advisors = advisors.GroupBy(c => c.BecameAdvisorDate.ToString("yyyy-MM-dd"))
-                .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date).ToList();
-            result.AdvisorsLastSitutation = GetFlagData(result.Advisors);
-
-            result.UsersStartedRegistration = users.Result.Where(c => !advisors.Any(a => a.Id == c.Id) && !c.Wallets.Any()).GroupBy(c => c.CreationDate.ToString("yyyy-MM-dd"))
-                .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date).ToList();
-            result.UsersStartedRegistrationLastSitutation = GetFlagData(result.UsersStartedRegistration);
-
-            result.RequestToBeAdvisor = requestsToBeAdvisor.Result.GroupBy(c => c.UserId).Select(g => new { Id = g.Key, Date = g.Min(c => c.CreationDate) }).GroupBy(c => c.Date.ToString("yyyy-MM-dd"))
-                .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date).ToList();
-            result.RequestToBeAdvisorLastSitutation = GetFlagData(result.RequestToBeAdvisor);
-
             var confirmedUsers = new Dictionary<int, DateTime>();
             foreach (var user in users.Result.Where(c => c.Wallets.Any()))
             {
@@ -121,12 +109,32 @@ namespace Auctus.Business.Account
                 result.AucHolded += Convert.ToDouble(currentWallet.AUCBalance ?? 0);
                 result.AucHoldedInProgress += user.ReferralStatusType == ReferralStatusType.InProgress ? Convert.ToDouble(currentWallet.AUCBalance ?? 0) : 0;
             }
-            result.UsersConfirmed = confirmedUsers.GroupBy(c => c.Value.ToString("yyyy-MM-dd"))
-                .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date).ToList();
-            result.UsersConfirmedLastSitutation = GetFlagData(result.UsersConfirmed);
-
             result.AucRatioPerConfirmedUser = result.TotalUsersConfirmed > 0 ? result.AucHolded / result.TotalUsersConfirmed : 0;
             result.AucRatioPerUserInProgress = result.TotalWalletsInProgress > 0 ? result.AucHoldedInProgress / result.TotalWalletsInProgress : 0;
+
+            var usersConfirmedData = confirmedUsers.GroupBy(c => c.Value.ToString("yyyy-MM-dd"))
+                .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date);
+
+            var advisorsData = advisors.GroupBy(c => c.BecameAdvisorDate.ToString("yyyy-MM-dd"))
+                .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date);
+
+            var usersStartedRegistrationData = users.Result.Where(c => !advisors.Any(a => a.Id == c.Id) && !c.Wallets.Any()).GroupBy(c => c.CreationDate.ToString("yyyy-MM-dd"))
+                .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date);
+
+            var requestToBeAdvisorData = requestsToBeAdvisor.Result.GroupBy(c => c.UserId).Select(g => new { Id = g.Key, Date = g.Min(c => c.CreationDate) })
+                .GroupBy(c => c.Date.ToString("yyyy-MM-dd")).Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date);
+
+            var minDate = usersConfirmedData.Select(c => c.Date).Concat(advisorsData.Select(c => c.Date)).Concat(usersStartedRegistrationData.Select(c => c.Date))
+                .Concat(requestToBeAdvisorData.Select(c => c.Date)).Min(c => c.Date);
+
+            result.UsersConfirmed = GetRegistrationData(usersConfirmedData, minDate);
+            result.Advisors = GetRegistrationData(advisorsData, minDate);
+            result.UsersStartedRegistration = GetRegistrationData(usersStartedRegistrationData, minDate);
+            result.RequestToBeAdvisor = GetRegistrationData(requestToBeAdvisorData, minDate);
+            result.UsersConfirmedLastSitutation = GetFlagData(result.UsersConfirmed);
+            result.AdvisorsLastSitutation = GetFlagData(result.Advisors);
+            result.UsersStartedRegistrationLastSitutation = GetFlagData(result.UsersStartedRegistration);
+            result.RequestToBeAdvisorLastSitutation = GetFlagData(result.RequestToBeAdvisor);
 
             result.Following.Add(new DashboardResponse.DistributionData() { Name = "Asset", Amount = assetFollowers.Result.Count });
             result.Following.Add(new DashboardResponse.DistributionData() { Name = "Advisor", Amount = advisorFollowers.Result.Count });
@@ -185,6 +193,21 @@ namespace Auctus.Business.Account
             return result;
         }
 
+        private List<DashboardResponse.RegistrationData> GetRegistrationData(IEnumerable<DashboardResponse.RegistrationData> baseData, DateTime minDate)
+        {
+            var today = Data.GetDateTimeNow().Date;
+            var result = new List<DashboardResponse.RegistrationData>();
+            for (var date = minDate; date <= today; date = date.AddDays(1))
+            {
+                var data = baseData.FirstOrDefault(c => c.Date == date);
+                if (data == null)
+                    result.Add(new DashboardResponse.RegistrationData() { Date = date, Value = 0 });
+                else
+                    result.Add(data);
+            }
+            return result;
+        }
+
         private DashboardResponse.FlagData GetFlagData(List<DashboardResponse.RegistrationData> registrationDatas)
         {
             if (!registrationDatas.Any())
@@ -202,7 +225,7 @@ namespace Auctus.Business.Account
 
         private string GetFlagDescription(int value)
         {
-            return value == 0 ? "zero" : value > 0 ? $"+{value}" : $"-{value}";
+            return value == 0 ? "zero" : value > 0 ? $"+{value}" : $"{value}";
         }
     }
 }

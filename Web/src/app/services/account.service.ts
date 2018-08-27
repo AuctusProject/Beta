@@ -17,6 +17,7 @@ import { SetReferralRequest } from '../model/account/setReferralRequest';
 import { ConfigurationResponse } from '../model/account/configurationResponse';
 import { ConfigurationRequest } from '../model/account/configurationRequest';
 import { NavigationService } from './navigation.service';
+import { DashboardResponse } from '../model/admin/dashboardresponse';
 
 
 @Injectable()
@@ -30,6 +31,8 @@ export class AccountService {
   private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
   private referralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
   private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
+  private dashboardUrl = this.httpService.apiUrl("v1/accounts/dashboard");
+  private searchUrl = this.httpService.apiUrl("v1/accounts/search");
 
   constructor(private httpService : HttpService, private navigationService: NavigationService) { }
 
@@ -115,5 +118,13 @@ export class AccountService {
 
   setConfiguration(configurationRequest: ConfigurationRequest) : Observable<void>{
     return this.httpService.post(this.configurationUrl, configurationRequest);
+  }
+
+  getDashboard() : Observable<DashboardResponse>{
+    return this.httpService.get(this.dashboardUrl);
+  }
+
+  search(searchTerm: string) {
+    return this.httpService.get(this.searchUrl + "/" + searchTerm);
   }
 }

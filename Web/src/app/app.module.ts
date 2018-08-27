@@ -12,7 +12,7 @@ export function highchartsModules() {
 }
 
 import { AppComponent } from './app.component';
-
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { Web3Service } from './services/web3.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { HttpService } from './services/http.service';
@@ -50,6 +50,8 @@ import { ConfigService } from './services/config.service';
 import { ReferralComponent } from './components/account/referral/referral.component';
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { NavigationService } from './services/navigation.service';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { GlobalSearchComponent } from './components/search/global-search/global-search.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -79,7 +81,9 @@ export function loadConfigService(configService: ConfigService): Function
     NewAdviceComponent,
     ConfirmAdviceDialogComponent,
     ReferralComponent,
-    ConfigurationComponent
+    ConfigurationComponent, 
+    DashboardComponent,
+    GlobalSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +96,8 @@ export function loadConfigService(configService: ConfigService): Function
     FormsModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
-    MatModule
+    MatModule,
+    FlexLayoutModule
   ],
   providers: [
     HttpService,
