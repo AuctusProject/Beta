@@ -55,6 +55,7 @@ import { GlobalSearchComponent } from './components/search/global-search/global-
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { NgHttpLoaderModule } from 'ng-http-loader'; 
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
+import {Angular2PromiseButtonModule} from 'angular2-promise-buttons/dist';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -98,6 +99,13 @@ export function loadConfigService(configService: ConfigService): Function
     NgHttpLoaderModule,
     AppRoutingModule,
     SimpleNotificationsModule.forRoot(),
+    Angular2PromiseButtonModule
+      .forRoot({
+        spinnerTpl: '<span class="btn-spinner"></span>',
+        disableBtn: true,
+        btnLoadingClass: 'is-loading',
+        handleCurrentBtnOnly: false,
+    }),
     ChartModule,
     FormsModule,
     ReactiveFormsModule,
