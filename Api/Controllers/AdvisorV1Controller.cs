@@ -77,7 +77,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ApproveRequestToBe(int id)
         {
-            return base.ListRequestToBe();
+            return base.ApproveRequestToBe(id);
         }
 
         [Route("requests/{id}/reject")]
@@ -86,7 +86,7 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult RejectRequestToBe(int id)
         {
-            return base.ListRequestToBe();
+            return base.RejectRequestToBe(id);
         }
 
         [Route("{id}/followers")]

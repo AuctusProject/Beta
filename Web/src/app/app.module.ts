@@ -52,6 +52,7 @@ import { ConfigurationComponent } from './components/account/configuration/confi
 import { NavigationService } from './services/navigation.service';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { GlobalSearchComponent } from './components/search/global-search/global-search.component';
+import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -83,7 +84,8 @@ export function loadConfigService(configService: ConfigService): Function
     ReferralComponent,
     ConfigurationComponent, 
     DashboardComponent,
-    GlobalSearchComponent
+    GlobalSearchComponent,
+    AdvisorsRequestsComponent
   ],
   imports: [
     BrowserModule,

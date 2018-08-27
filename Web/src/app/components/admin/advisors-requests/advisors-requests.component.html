@@ -1,0 +1,9 @@
+<div *ngFor="let request of requests">
+  {{request.id}}<br/>
+  {{request.name}}<br/>
+  {{request.description}}<br/>
+  {{request.previousExperience}}<br/>
+  {{request.creationDate}}<br/>  
+  <button (click)="approve(request.id)">APPROVE</button>
+  <button (click)="reject(request.id)">REJECT</button>
+</div>

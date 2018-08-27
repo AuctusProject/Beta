@@ -11,6 +11,8 @@ export class AdvisorService {
   private baseGetAdvisorsUrl = this.httpService.apiUrl("v1/advisors");
   private requestToBeAdvisorsUrl = this.httpService.apiUrl("v1/advisors/me/requests");
   private listPendingRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests");
+  private approveRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests/{id}/approve");
+  private rejectRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests/{id}/reject");
   private followAdvisorsUrl = this.httpService.apiUrl("v1/advisors/{id}/followers");
   private adviseUrl = this.httpService.apiUrl("v1/advisors/advices");
 
@@ -30,6 +32,14 @@ export class AdvisorService {
 
   listPendingRequestToBeAdvisor(): Observable<RequestToBeAdvisor[]> {
     return this.httpService.get(this.listPendingRequestToBeAdvisorUrl);
+  }
+
+  approveAdvisor(requestId:number):Observable<void>{
+    return this.httpService.post(this.approveRequestToBeAdvisorUrl.replace("{id}", requestId.toString()));
+  }
+
+  rejectAdvisor(requestId:number):Observable<void>{
+    return this.httpService.post(this.rejectRequestToBeAdvisorUrl.replace("{id}", requestId.toString()));
   }
 
   postRequestToBeAdvisor(requestToBeAdvisorRequest: RequestToBeAdvisorRequest): Observable<RequestToBeAdvisor> {

@@ -22,11 +22,11 @@ namespace Auctus.DataAccess.Advisor
                                                 r.UserId = @UserId
                                                 AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = r.UserId) ";
 
-        private const string LIST_BY_STATUS = @"SELECT r.* FROM 
+        private const string LIST_PENDING = @"SELECT r.* FROM 
                                                 [RequestToBeAdvisor] r
                                                 WHERE
                                                 r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = r.UserId) 
-                                                AND r.Approved = @Approved";
+                                                AND r.Approved IS NULL";
 
         public RequestToBeAdvisor GetById(int id)
         {
@@ -45,8 +45,7 @@ namespace Auctus.DataAccess.Advisor
         public List<RequestToBeAdvisor> ListPending()
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("Approved", null, DbType.Boolean);
-            return Query<RequestToBeAdvisor>(LIST_BY_STATUS, parameters).ToList();
+            return Query<RequestToBeAdvisor>(LIST_PENDING, parameters).ToList();
         }
     }
 }
