@@ -136,6 +136,11 @@ namespace Auctus.Business.Account
             result.UsersStartedRegistrationLastSitutation = GetFlagData(result.UsersStartedRegistration);
             result.RequestToBeAdvisorLastSitutation = GetFlagData(result.RequestToBeAdvisor);
 
+            result.UsersConfirmed.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.UsersConfirmed.LastOrDefault()?.Value ?? 0 });
+            result.Advisors.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.Advisors.LastOrDefault()?.Value ?? 0 });
+            result.UsersStartedRegistration.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.UsersStartedRegistration.LastOrDefault()?.Value ?? 0 });
+            result.RequestToBeAdvisor.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.RequestToBeAdvisor.LastOrDefault()?.Value ?? 0 });
+
             result.Following.Add(new DashboardResponse.DistributionData() { Name = "Asset", Amount = assetFollowers.Result.Count });
             result.Following.Add(new DashboardResponse.DistributionData() { Name = "Advisor", Amount = advisorFollowers.Result.Count });
 
