@@ -71,6 +71,24 @@ namespace Api.Controllers
             return base.ListRequestToBe();
         }
 
+        [Route("requests/{id}/approve")]
+        [HttpPost]
+        [OnlyAdmin]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ApproveRequestToBe(int id)
+        {
+            return base.ListRequestToBe();
+        }
+
+        [Route("requests/{id}/reject")]
+        [HttpPost]
+        [OnlyAdmin]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult RejectRequestToBe(int id)
+        {
+            return base.ListRequestToBe();
+        }
+
         [Route("{id}/followers")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

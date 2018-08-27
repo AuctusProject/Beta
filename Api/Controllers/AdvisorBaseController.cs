@@ -56,6 +56,18 @@ namespace Api.Controllers
             return Ok(RequestToBeAdvisorBusiness.ListPending());
         }
 
+        protected IActionResult ApproveRequestToBe(int id)
+        {
+            RequestToBeAdvisorBusiness.Approve(id);
+            return Ok();
+        }
+
+        protected IActionResult RejectRequestToBe(int id)
+        {
+            RequestToBeAdvisorBusiness.Reject(id);
+            return Ok();
+        }
+
         protected virtual IActionResult FollowAdvisor(int id)
         {
             return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Follow));
