@@ -31,6 +31,31 @@ namespace Auctus.Business.Advisor
             return Data.GetByUser(user.Id);
         }
 
+        public List<RequestToBeAdvisor> ListPending()
+        {
+            return Data.ListPending();
+        }
+
+        public void Approve(int id)
+        {
+            var request = Data.GetById(id);
+            request.Approved = true;
+            var advisor = AdvisorBusiness.CreateFromRequest(request);
+            using (var transaction = TransactionalDapperCommand)
+            {
+                transaction.Insert(advisor);
+                transaction.Update(request);
+                transaction.Commit();
+            }
+        }
+
+        public void Reject(int id)
+        {
+            var request = Data.GetById(id);
+            request.Approved = false;
+            Update(request);
+        }
+
         public async Task<RequestToBeAdvisor> Create(string name, string description, string previousExperience)
         {
             if (string.IsNullOrWhiteSpace(name))

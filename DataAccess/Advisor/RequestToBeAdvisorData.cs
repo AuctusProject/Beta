@@ -22,11 +22,31 @@ namespace Auctus.DataAccess.Advisor
                                                 r.UserId = @UserId
                                                 AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = r.UserId) ";
 
+        private const string LIST_BY_STATUS = @"SELECT r.* FROM 
+                                                [RequestToBeAdvisor] r
+                                                WHERE
+                                                r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = r.UserId) 
+                                                AND r.Approved = @Approved";
+
+        public RequestToBeAdvisor GetById(int id)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            return SelectByParameters<RequestToBeAdvisor>(parameters).SingleOrDefault();
+        }
+
         public RequestToBeAdvisor GetByUser(int userId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("UserId", userId, DbType.Int32);
             return Query<RequestToBeAdvisor>(SELECT_BY_USER, parameters).SingleOrDefault();
+        }
+
+        public List<RequestToBeAdvisor> ListPending()
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Approved", null, DbType.Boolean);
+            return Query<RequestToBeAdvisor>(LIST_BY_STATUS, parameters).ToList();
         }
     }
 }

@@ -43,6 +43,19 @@ namespace Auctus.Business.Advisor
             return result;
         }
 
+        public DomainObjects.Advisor.Advisor CreateFromRequest(RequestToBeAdvisor request)
+        {
+            var advisor = new DomainObjects.Advisor.Advisor()
+            {
+                Id = request.UserId,
+                Name = request.Name,
+                Description = request.Description,
+                BecameAdvisorDate = Data.GetDateTimeNow(),
+                Enabled = true
+            };
+            return advisor;
+        }
+
         private void CalculateForAdvisorsData(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult)
         {
             var user = GetValidUser();

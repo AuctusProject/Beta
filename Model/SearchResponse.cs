@@ -19,7 +19,7 @@ namespace Auctus.Model
 
         public class AdvisorResult
         {
-            public int AdvisorId { get; set; }
+            public int UserId { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
             public bool Enabled { get; set; }

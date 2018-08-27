@@ -10,6 +10,7 @@ import { AdviseRequest } from '../model/advisor/adviseRequest';
 export class AdvisorService {
   private baseGetAdvisorsUrl = this.httpService.apiUrl("v1/advisors");
   private requestToBeAdvisorsUrl = this.httpService.apiUrl("v1/advisors/me/requests");
+  private listPendingRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests");
   private followAdvisorsUrl = this.httpService.apiUrl("v1/advisors/{id}/followers");
   private adviseUrl = this.httpService.apiUrl("v1/advisors/advices");
 
@@ -25,6 +26,10 @@ export class AdvisorService {
 
   getRequestToBeAdvisor(): Observable<RequestToBeAdvisor> {
     return this.httpService.get(this.requestToBeAdvisorsUrl);
+  }
+
+  listPendingRequestToBeAdvisor(): Observable<RequestToBeAdvisor[]> {
+    return this.httpService.get(this.listPendingRequestToBeAdvisorUrl);
   }
 
   postRequestToBeAdvisor(requestToBeAdvisorRequest: RequestToBeAdvisorRequest): Observable<RequestToBeAdvisor> {
