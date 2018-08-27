@@ -31,6 +31,11 @@ namespace Auctus.Business.Advisor
             return Data.GetByUser(user.Id);
         }
 
+        public List<RequestToBeAdvisor> ListPending()
+        {
+            return Data.ListPending();
+        }
+
         public async Task<RequestToBeAdvisor> Create(string name, string description, string previousExperience)
         {
             if (string.IsNullOrWhiteSpace(name))

@@ -16,6 +16,7 @@ namespace Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/advisors/")]
+    [Authorize("Bearer")]
     [EnableCors("Default")]
     public class AdvisorV1Controller : AdvisorBaseController
     {
@@ -39,7 +40,6 @@ namespace Api.Controllers
 
         [Route("advices")]
         [HttpPost]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult Advise([FromBody]AdviseRequest adviseRequest)
         {
@@ -55,7 +55,6 @@ namespace Api.Controllers
         }
 
         [Route("me/requests")]
-        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetRequestToBe()
@@ -63,9 +62,16 @@ namespace Api.Controllers
             return base.GetRequestToBe();
         }
 
+        [Route("requests")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListRequestToBe()
+        {
+            return base.ListRequestToBe();
+        }
+
         [Route("{id}/followers")]
         [HttpPost]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult FollowAdvisor([FromRoute]int id)
         {
@@ -74,7 +80,6 @@ namespace Api.Controllers
 
         [Route("{id}/followers")]
         [HttpDelete]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult UnfollowAdvisor([FromRoute]int id)
         {

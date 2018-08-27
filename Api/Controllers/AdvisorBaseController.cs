@@ -51,6 +51,11 @@ namespace Api.Controllers
             return Ok(RequestToBeAdvisorBusiness.GetByLoggedEmail());
         }
 
+        protected IActionResult ListRequestToBe()
+        {
+            return Ok(RequestToBeAdvisorBusiness.ListPending());
+        }
+
         protected virtual IActionResult FollowAdvisor(int id)
         {
             return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Follow));
