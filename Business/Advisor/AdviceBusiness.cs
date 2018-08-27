@@ -68,9 +68,9 @@ Thanks,
 Auctus Team");
         }
 
-        public List<Advice> List(IEnumerable<int> advisorsId)
+        public List<Advice> List(IEnumerable<int> advisorsId = null, IEnumerable<int> assetsId = null)
         {
-            return Data.List(advisorsId);
+            return Data.List(advisorsId, assetsId);
         }
 
         public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int? top, int? lastAdviceId)

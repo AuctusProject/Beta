@@ -36,15 +36,26 @@ namespace Auctus.DataAccess.Advisor
             {1}
             ORDER BY CreationDate DESC";
 
-        public List<Advice> List(IEnumerable<int> advisorIds)
+        public List<Advice> List(IEnumerable<int> advisorIds = null, IEnumerable<int> assetsIds = null)
         {
+            if ((!advisorIds?.Any() ?? true) && (!assetsIds?.Any() ?? true))
+                throw new ArgumentNullException("advisorIds");
+
             var complement = "";
             DynamicParameters parameters = new DynamicParameters();
-            if (advisorIds.Any())
+            if (advisorIds?.Any() ?? false)
             {
                 complement = string.Join(" OR ", advisorIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
                 for (int i = 0; i < advisorIds.Count(); ++i)
                     parameters.Add($"AdvisorId{i}", advisorIds.ElementAt(i), DbType.Int32);
+            }
+            if (assetsIds?.Any() ?? false)
+            {
+                if (advisorIds?.Any() ?? false)
+                    complement += " OR ";
+                complement += string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
+                for (int i = 0; i < assetsIds.Count(); ++i)
+                    parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
             }
             return Query<Advice>(string.Format(SQL_LIST, complement), parameters).ToList();
         }

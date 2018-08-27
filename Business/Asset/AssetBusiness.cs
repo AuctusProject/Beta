@@ -216,7 +216,7 @@ namespace Auctus.Business.Asset
 
         public IEnumerable<DomainObjects.Asset.Asset> ListByNameOrCode(string searchTerm)
         {
-            return Data.ListByNameOrCode(searchTerm);
+            return ListAssets().Where(asset => asset.Name.ToUpper().StartsWith(searchTerm.ToUpper()) || asset.Code.ToUpper().StartsWith(searchTerm.ToUpper()));
         }
     }
 }

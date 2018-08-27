@@ -18,6 +18,7 @@ import { ConfigurationResponse } from '../model/account/configurationResponse';
 import { ConfigurationRequest } from '../model/account/configurationRequest';
 import { NavigationService } from './navigation.service';
 import { DashboardResponse } from '../model/admin/dashboardresponse';
+import { SearchResponse } from '../model/search/searchResponse';
 
 
 @Injectable()
@@ -124,7 +125,7 @@ export class AccountService {
     return this.httpService.get(this.dashboardUrl);
   }
 
-  search(searchTerm: string) {
-    return this.httpService.get(this.searchUrl + "/" + searchTerm);
+  search(searchTerm: string): Observable<SearchResponse> {
+    return this.httpService.get(this.searchUrl + "?term=" + searchTerm);
   }
 }
