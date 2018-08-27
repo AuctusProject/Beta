@@ -429,7 +429,7 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             {
                 response.Advisors.Add(new SearchResponse.AdvisorResult()
                 {
-                    AdvisorId = advisor.Id,
+                    UserId = advisor.Id,
                     Description = advisor.Description,
                     Enabled = advisor.Enabled,
                     Name = advisor.Name
