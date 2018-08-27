@@ -18,6 +18,7 @@ import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.c
 import { ReferralComponent } from './components/account/referral/referral.component';
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -37,7 +38,8 @@ const routes: Routes = [
     { path: 'new-advice', component: NewAdviceComponent, canActivate:[AuthRedirect] },
     { path: 'referral', component: ReferralComponent, canActivate:[AuthRedirect] },
     { path: 'configuration', component: ConfigurationComponent, canActivate:[AuthRedirect] },
-    { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] }
+    { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
+    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
 ];
 
 @NgModule({

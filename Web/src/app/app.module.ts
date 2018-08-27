@@ -52,6 +52,9 @@ import { ConfigurationComponent } from './components/account/configuration/confi
 import { NavigationService } from './services/navigation.service';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { GlobalSearchComponent } from './components/search/global-search/global-search.component';
+import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
+import { NgHttpLoaderModule } from 'ng-http-loader'; 
+import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -83,13 +86,16 @@ export function loadConfigService(configService: ConfigService): Function
     ReferralComponent,
     ConfigurationComponent, 
     DashboardComponent,
-    GlobalSearchComponent
+    GlobalSearchComponent,
+    AdvisorsRequestsComponent,
+    TopLoadingComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
+    NgHttpLoaderModule,
     AppRoutingModule,
     SimpleNotificationsModule.forRoot(),
     ChartModule,
@@ -112,7 +118,8 @@ export function loadConfigService(configService: ConfigService): Function
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
   ],
-  entryComponents:[ConfirmAdviceDialogComponent],
+  entryComponents:[ConfirmAdviceDialogComponent, TopLoadingComponent],
+  exports: [TopLoadingComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
