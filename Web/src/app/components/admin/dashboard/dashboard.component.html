@@ -1,20 +1,147 @@
 <section id="header">
     <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
-        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="30px">
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="70px" fxLayoutGap.xs="20px" fxLayoutGap.sm="35px">
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <span class="biggerNumber bold">{{dashboardData.totalUsersConfirmed}}</span>
-                <span class="biggerText totalText">CONFIRMED USERS</span>
+                <div class="biggerNumber bold">{{dashboardData.totalUsersConfirmed}}<span class="smallNumber">&nbsp;/&nbsp;{{dashboardData.totalActiveUsers}}</span></div>
+                <div class="biggerText totalText">CONFIRMED USERS<span class="numberText">&nbsp;/&nbsp;ACTIVES</span></div>
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <span class="biggerNumber bold">{{dashboardData.totalUsersConfirmedFromReferral}}</span>
                 <span class="biggerText totalText">FROM REFERRAL</span>
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <span class="biggerNumber bold">{{dashboardData.totalAdvisors}}</span>
-                <span class="biggerText totalText">ADVISORS</span>
+                <span class="biggerNumber bold">{{dashboardData.totalAdvisors}}<span class="smallNumber bold">&nbsp;/&nbsp;{{dashboardData.totalActiveAdvisors}}</span></span>
+                <div class="biggerText totalText">ADVISORS<span class="numberText">&nbsp;/&nbsp;ACTIVES</span></div>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="80px" fxLayoutGap.xs="30px" fxLayoutGap.sm="45px">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="smallNumber bold">{{dashboardData.totalUsersStartedRegistration}}</span>
+                <span class="smallText totalText">STARTED REGISTRATION</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="smallNumber bold">{{dashboardData.totalUsersStartedRegistrationFromReferral}}</span>
+                <span class="smallText totalText">STARTED REGISTRATION<br/>FROM REFERRAL</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="smallNumber bold">{{dashboardData.totalRequestToBeAdvisor}}</span>
+                <span class="smallText totalText">REQUEST TO BE ADVISOR</span>
             </div>
         </div>
         <div class="registration-chart" [chart]="registrationChart"></div>
     </div>
 </section>
 <mat-divider></mat-divider>
+<section id="holders">
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="70px" fxLayoutGap.xs="20px" fxLayoutGap.sm="35px">
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="totalNumber bold">{{dashboardData.totalWalletsWithAuc}}</span>
+                <span class="numberText totalText">WALLETS WITH AUC</span>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="totalNumber bold">{{dashboardData.aucHolded}}</span>
+                <span class="numberText totalText">AUC HOLDED</span>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="totalNumber bold">{{dashboardData.aucRatioPerConfirmedUser}}</span>
+                <span class="numberText totalText">RATIO PER USER</span>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="70px" fxLayoutGap.xs="20px" fxLayoutGap.sm="35px">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="smallNumber bold">{{dashboardData.totalWalletsInProgress}}</span>
+                <span class="smallText totalText">WALLETS WITH AUC<br/>IN PROGRESS</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="smallNumber bold">{{dashboardData.aucHoldedInProgress}}</span>
+                <span class="smallText totalText">AUC HOLDED<br/>IN PROGRESS</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <span class="smallNumber bold">{{dashboardData.aucRatioPerUserInProgress}}</span>
+                <span class="smallText totalText">RATIO PER USER<br/>IN PROGRESS</span>
+            </div>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" class="start-margin" fxLayoutAlign="space-around center" fxLayoutGap="5px">
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50" fxFlex.xs="100" fxFlex.sm="100">
+            <table>
+                <tr class="totalText" style="border-bottom: 1px;">
+                    <th class="numberText bold"><i>TOP 10</i></th>
+                    <th class="numberText bold">Total</th>
+                    <th class="smallText">In progress</th>
+                    <th class="smallText">Interrupted</th>
+                    <th class="smallText">Finished</th>
+                </tr>
+                <tr *ngFor="let advisor of dashboardData.advisorReferral" class="totalText">
+                    <td class="numberText align-left">{{advisor.name}}</td>
+                    <td class="numberText bold">{{advisor.total}}</td>
+                    <td class="smallText bold">{{advisor.subValue1}}</td>
+                    <td class="smallText bold">{{advisor.subValue2}}</td>
+                    <td class="smallText bold">{{advisor.subValue3}}</td>
+                </tr>
+            </table>
+        </div>
+        <div [chart]="referralChart" fxFlex="50" fxFlex.xs="100" fxFlex.sm="100"></div>
+    </div>
+</section>
+<mat-divider></mat-divider>
+<section id="advices">
+    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" class="start-margin" fxLayoutAlign="space-around start" fxLayoutGap="5px">
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50" fxFlex.xs="100" fxFlex.sm="100">
+            <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="70px" fxLayoutGap.xs="20px" fxLayoutGap.sm="35px">
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <span class="totalNumber bold">{{dashboardData.totalAssetsAdviced}}</span>
+                    <span class="numberText totalText">ASSETS ADVICED</span>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <span class="totalNumber bold">{{dashboardData.totalRecentAdvices}}</span>
+                    <span class="numberText totalText">RECENT ADVICES</span>
+                </div>
+            </div>
+            <table>
+                <tr class="totalText" style="border-bottom: 1px;">
+                    <th class="numberText bold"><i>TOP 10</i></th>
+                    <th class="numberText bold">Total</th>
+                    <th class="smallText">Recent</th>
+                </tr>
+                <tr *ngFor="let advisor of dashboardData.advisorAdvices" class="totalText">
+                    <td class="numberText align-left">{{advisor.name}}</td>
+                    <td class="numberText bold">{{advisor.total}}</td>
+                    <td class="smallText bold">{{advisor.subValue1}}</td>
+                </tr>
+            </table>
+        </div>
+        <div [chart]="advicesChart" fxFlex="50" fxFlex.xs="100" fxFlex.sm="100"></div>
+    </div>
+</section>
+<mat-divider></mat-divider>
+<section id="followers">
+    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" class="start-margin" fxLayoutAlign="space-around start" fxLayoutGap="5px">
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50" fxFlex.xs="100" fxFlex.sm="100">
+            <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="70px" fxLayoutGap.xs="20px" fxLayoutGap.sm="35px">
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <span class="totalNumber bold">{{dashboardData.totalUsersFollowing}}</span>
+                    <span class="numberText totalText">USERS FOLLOWING</span>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <span class="totalNumber bold">{{dashboardData.totalAdvisorsFollowed}}</span>
+                    <span class="numberText totalText">ADVISORS FOLLOWED</span>
+                </div>
+            </div>
+            <table>
+                <tr class="totalText" style="border-bottom: 1px;">
+                    <th class="numberText bold"><i>TOP 10</i></th>
+                    <th class="numberText bold">Total</th>
+                    <th class="smallText">Recent</th>
+                </tr>
+                <tr *ngFor="let advisor of dashboardData.advisorFollowers" class="totalText">
+                    <td class="numberText align-left">{{advisor.name}}</td>
+                    <td class="numberText bold">{{advisor.total}}</td>
+                    <td class="smallText bold">{{advisor.subValue1}}</td>
+                </tr>
+            </table>
+        </div>
+        <div [chart]="followingChart" fxFlex="50" fxFlex.xs="100" fxFlex.sm="100"></div>
+    </div>
+</section>

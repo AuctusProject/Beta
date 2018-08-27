@@ -261,10 +261,10 @@ namespace Auctus.Business.Advisor
             var maxAvg = advisorsConsidered.Max(c => c.AverageReturn);
             var maxSucRate = advisorsConsidered.Max(c => c.SuccessRate);
             var maxAssets = advisorsConsidered.Max(c => c.TotalAssetsAdvised);
-            var lastActivity = details.Max(c => c.Value.Max(a => a.Advice.CreationDate));
+            var lastActivity = details.Any(c => c.Value.Any()) ? details.Max(c => c.Value.Max(a => a.Advice.CreationDate)) : DateTime.MinValue;
 
             var advDays = advisorsResult.Select(c => new { Id = c.UserId, Days = Data.GetDateTimeNow().Subtract(c.CreationDate).TotalDays }).ToDictionary(c => c.Id, c => c.Days);
-            var maxAdvices = details.Max(c => (double)c.Value.Count() / advDays[c.Key]);
+            var maxAdvices = details.Any(c => c.Value.Any()) ? details.Max(c => (double)c.Value.Count() / advDays[c.Key]) : 0;
             var maxFollowers = advisorsConsidered.Max(c => (double)c.NumberOfFollowers / advDays[c.UserId]);
 
             var generalNormalization = 1.2;
@@ -277,7 +277,7 @@ namespace Auctus.Business.Advisor
                     + (0.01 * 5.0 * Math.Min(maximumValue, maxAssets == 0 ? 0 : (double)c.TotalAssetsAdvised / maxAssets))
                     + (0.15 * 5.0 * Math.Min(maximumValue, maxAdvices == 0 ? 0 : ((double)advisorsData[c.UserId].Count() / advDays[c.UserId]) / maxAdvices))
                     + (0.15 * 5.0 * Math.Min(maximumValue, maxFollowers == 0 ? 0 : ((double)c.NumberOfFollowers / advDays[c.UserId]) / maxFollowers))
-                    + (0.04 * 5.0 * Math.Min(maximumValue, (double)c.CreationDate.Ticks / lastActivity.Ticks))));
+                    + (0.04 * 5.0 * Math.Min(maximumValue, lastActivity.Ticks == 0 ? 0 : (double)c.CreationDate.Ticks / lastActivity.Ticks))));
             });
             advisorsResult = advisorsResult.OrderByDescending(c => c.Rating).ToList();
             for (int i = 0; i < advisorsResult.Count; ++i)
