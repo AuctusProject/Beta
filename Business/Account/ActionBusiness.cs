@@ -148,7 +148,7 @@ namespace Auctus.Business.Account
             var groupedFollowers = advisorFollowers.Result.GroupBy(c => c.AdvisorId).Select(g => new { Id = g.Key, Value = g.Count() }).OrderByDescending(c => c.Value);
             if (groupedFollowers.Any())
             {
-                groupedFollowers = groupedFollowers.Take(groupedFollowers.Count() > 5 ? 5 : groupedFollowers.Count()).OrderByDescending(c => c.Value);
+                groupedFollowers = groupedFollowers.Take(groupedFollowers.Count() > 10 ? 10 : groupedFollowers.Count()).OrderByDescending(c => c.Value);
                 var consideredFollowers = advisorFollowers.Result.Where(c => groupedFollowers.Any(a => a.Id == c.AdvisorId));
                 result.AdvisorFollowers = groupedFollowers.Select(c => new DashboardResponse.AdvisorData()
                 {
@@ -162,7 +162,7 @@ namespace Auctus.Business.Account
             var groupedAdvices = advices.Result.GroupBy(c => c.AdvisorId).Select(g => new { Id = g.Key, Value = g.Count() }).OrderByDescending(c => c.Value);
             if (groupedAdvices.Any())
             {
-                groupedAdvices = groupedAdvices.Take(groupedAdvices.Count() > 5 ? 5 : groupedAdvices.Count()).OrderByDescending(c => c.Value);
+                groupedAdvices = groupedAdvices.Take(groupedAdvices.Count() > 10 ? 10 : groupedAdvices.Count()).OrderByDescending(c => c.Value);
                 var consideredAdvices = advices.Result.Where(c => groupedAdvices.Any(a => a.Id == c.AdvisorId));
                 result.AdvisorAdvices = groupedAdvices.Select(c => new DashboardResponse.AdvisorData()
                 {
@@ -178,15 +178,15 @@ namespace Auctus.Business.Account
             if (groupedReferred.Any())
             {
                 groupedReferred = groupedReferred.Take(groupedReferred.Count() > 10 ? 10 : groupedReferred.Count()).OrderByDescending(c => c.Value);
-                var consideredReferred= users.Result.Where(c => c.ReferralStatus.HasValue).Where(c => groupedReferred.Any(a => a.Id == c.Id));
+                var consideredReferred= users.Result.Where(c => c.ReferralStatus.HasValue).Where(c => groupedReferred.Any(a => a.Id == c.ReferredId));
                 result.AdvisorReferral = groupedReferred.Select(c => new DashboardResponse.AdvisorData()
                 {
                     Id = c.Id,
-                    Name = advisors.First(a => a.Id == c.Id).Name,
+                    Name = advisors.Any(a => a.Id == c.Id) ? advisors.First(a => a.Id == c.Id).Name : users.Result.First(u => u.Id == c.Id).Email,
                     Total = c.Value,
-                    SubValue1 = consideredReferred.Count(a => a.Id == c.Id && a.ReferralStatusType == ReferralStatusType.InProgress),
-                    SubValue2 = consideredReferred.Count(a => a.Id == c.Id && a.ReferralStatusType == ReferralStatusType.Interrupted),
-                    SubValue3 = consideredReferred.Count(a => a.Id == c.Id && (a.ReferralStatusType == ReferralStatusType.Finished || a.ReferralStatusType == ReferralStatusType.Paid))
+                    SubValue1 = consideredReferred.Count(a => a.ReferredId == c.Id && a.ReferralStatusType == ReferralStatusType.InProgress),
+                    SubValue2 = consideredReferred.Count(a => a.ReferredId == c.Id && a.ReferralStatusType == ReferralStatusType.Interrupted),
+                    SubValue3 = consideredReferred.Count(a => a.ReferredId == c.Id && (a.ReferralStatusType == ReferralStatusType.Finished || a.ReferralStatusType == ReferralStatusType.Paid))
                 }).ToList();
             }
 

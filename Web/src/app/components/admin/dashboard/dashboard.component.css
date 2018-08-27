@@ -12,9 +12,61 @@
 }
 
 section {
-    padding-bottom: 30px;
+    padding-bottom: 20px;
+    margin-top: 20px;
 }
 
 .registration-chart {
-    width: 90%;
+    width: 95%;
+}
+
+.totalNumber {
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.numberText {
+    font-size: 10px;
+}
+
+.smallNumber {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.smallText {
+    font-size: 8px;
+}
+
+.start-margin {
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.align-left {
+    text-align: left;
+}
+
+table {
+    border-spacing: 0px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+th {
+    padding-right: 10px;
+    text-align: center;
+    border-bottom-color: dimgray;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+tr:nth-child(even) { 
+    background-color: #f2f2f2;
 }
