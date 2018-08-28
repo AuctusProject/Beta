@@ -102,7 +102,7 @@ namespace Auctus.Business.Advisor
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 
             IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<FollowAdvisor> advisorFollowers,
-            IEnumerable<FollowAsset> assetFollowers)
+            IEnumerable<FollowAsset> assetFollowers, int? selectAssetId = null)
         {
             advisorsResult = new List<AdvisorResponse>();
             assetsResult = new List<AssetResponse>();
@@ -111,14 +111,19 @@ namespace Auctus.Business.Advisor
             if (assetsIds.Any())
             {
                 assetsIds = assetsIds.Distinct();
+
+                if (selectAssetId.HasValue && !assetsIds.Contains(selectAssetId.Value))
+                {
+                    FillNotAdvicedAsset(out assetsResult, mode, selectAssetId.Value, loggedUser, assetFollowers);
+                    return;
+                }
+
                 var assets = AssetBusiness.ListAssets(assetsIds);
 
                 var assetDateMapping = new Dictionary<int, DateTime>();
                 foreach(int assetId in assetsIds)
-                {
                     assetDateMapping.Add(assetId, allAdvices.Where(advice => advice.AssetId == assetId).Min(c => c.CreationDate).AddDays(-30));
-                }
-
+                
                 var assetValues = AssetValueBusiness.FilterAssetValues(assetDateMapping);
 
                 var adviceDetails = new List<AdviceDetail>();
@@ -189,6 +194,20 @@ namespace Auctus.Business.Advisor
                     SetAdvisorsRanking(advisorsResult, advisorsData);
                 }
             }
+            else if (selectAssetId.HasValue)
+                FillNotAdvicedAsset(out assetsResult, mode, selectAssetId.Value, loggedUser, assetFollowers);
+        }
+
+        private void FillNotAdvicedAsset(out List<AssetResponse> assetsResult, CalculationMode mode, int selectAssetId, User loggedUser, IEnumerable<FollowAsset> assetFollowers)
+        {
+            assetsResult = new List<AssetResponse>();
+            var asset = AssetBusiness.GetById(selectAssetId);
+
+            var filterValues = new Dictionary<int, DateTime>();
+            filterValues[selectAssetId] = Data.GetDateTimeNow().AddDays(-30);
+            var values = AssetValueBusiness.FilterAssetValues(filterValues);
+
+            assetsResult.Add(GetAssetBaseResponse(loggedUser, asset, assetFollowers, new Advice[] { }, new int[] { }, values, mode));
         }
 
         private Advice GetLastAdvice(DomainObjects.Asset.Asset asset, int advisorId)
