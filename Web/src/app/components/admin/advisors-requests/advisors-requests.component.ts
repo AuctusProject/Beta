@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdvisorService } from '../../../services/advisor.service';
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 import { MatProgressBar, MatSpinner } from '../../../../../node_modules/@angular/material';
+import { Subscription } from '../../../../../node_modules/rxjs';
 
 @Component({
   selector: 'advisors-requests',
@@ -12,7 +13,7 @@ export class AdvisorsRequestsComponent implements OnInit {
   requests : RequestToBeAdvisor[];
   matProgressBar: MatProgressBar;
   matSpinner : MatSpinner;
-    
+  promise:Subscription; 
   
   constructor(private advisorService: AdvisorService) 
   { 
@@ -23,13 +24,13 @@ export class AdvisorsRequestsComponent implements OnInit {
   }
 
   refreshList(){
-    this.advisorService.listPendingRequestToBeAdvisor().subscribe(result => 
+    this.promise = this.advisorService.listPendingRequestToBeAdvisor().subscribe(result => 
       this.requests = result
     );
   }
 
   approve(id:number){
-    this.advisorService.approveAdvisor(id).subscribe(result => 
+    this.promise = this.advisorService.approveAdvisor(id).subscribe(result => 
       {
         this.refreshList();
       }
@@ -37,7 +38,7 @@ export class AdvisorsRequestsComponent implements OnInit {
   }
 
   reject(id:number){
-    this.advisorService.rejectAdvisor(id).subscribe(result => 
+    this.promise = this.advisorService.rejectAdvisor(id).subscribe(result => 
       {
         this.refreshList();
       }
