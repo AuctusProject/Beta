@@ -24,6 +24,21 @@ namespace Auctus.Business.Advisor
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
+        public void EditAdvisor(int id, string name, string description)
+        {
+            var advisor = Data.GetAdvisor(id);
+
+            if (advisor == null)
+                throw new NotFoundException("Advisor not found");
+
+            if (advisor.Email.ToLower() != LoggedEmail.ToLower())
+                throw new UnauthorizedException("Invalid credentials");
+
+            advisor.Name = name;
+            advisor.Description = description;
+            Update(advisor);
+        }
+
         public IEnumerable<AdvisorResponse> ListAdvisorsData()
         {
             List<AdvisorResponse> advisorsResult;

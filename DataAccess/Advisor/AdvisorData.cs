@@ -40,5 +40,12 @@ namespace Auctus.DataAccess.Advisor
 
             return Query<DomainObjects.Advisor.Advisor>(SQL_LIST_FOLLOWING_ADVISORS, parameters);
         }
+
+        public DomainObjects.Advisor.Advisor GetAdvisor(int id)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            return SelectByParameters<DomainObjects.Advisor.Advisor>(parameters).FirstOrDefault();
+        }
     }
 }

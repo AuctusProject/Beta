@@ -56,6 +56,7 @@ import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/
 import { NgHttpLoaderModule } from 'ng-http-loader'; 
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
 import {Angular2PromiseButtonModule} from 'angular2-promise-buttons/dist';
+import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -89,7 +90,8 @@ export function loadConfigService(configService: ConfigService): Function
     DashboardComponent,
     GlobalSearchComponent,
     AdvisorsRequestsComponent,
-    TopLoadingComponent
+    TopLoadingComponent,
+    AdvisorEditComponent
   ],
   imports: [
     BrowserModule,

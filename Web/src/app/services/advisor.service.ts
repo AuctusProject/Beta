@@ -5,6 +5,7 @@ import { AdvisorResponse } from "../model/advisor/advisorResponse";
 import { RequestToBeAdvisor } from '../model/advisor/requestToBeAdvisor';
 import { RequestToBeAdvisorRequest } from '../model/advisor/requestToBeAdvisorRequest';
 import { AdviseRequest } from '../model/advisor/adviseRequest';
+import { AdvisorRequest } from '../model/advisor/advisorRequest';
 
 @Injectable()
 export class AdvisorService {
@@ -20,6 +21,10 @@ export class AdvisorService {
 
   getAdvisor(id: string): Observable<AdvisorResponse> {
     return this.httpService.get(this.baseGetAdvisorsUrl + "/" + id);
+  }
+
+  editAdvisor(id: number, advisorRequest: AdvisorRequest): Observable<void> {
+    return this.httpService.put(this.baseGetAdvisorsUrl + "/" + id, advisorRequest);
   }
 
   getAdvisors(): Observable<AdvisorResponse[]> {

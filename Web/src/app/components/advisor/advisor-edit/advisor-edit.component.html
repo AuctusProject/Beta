@@ -1,0 +1,5 @@
+<div *ngIf="advisor">
+<input [(ngModel)]="advisor.name" placeholder="Name">
+<input [(ngModel)]="advisor.description" placeholder="Description">
+<button (click)="save()">SAVE</button>
+</div>

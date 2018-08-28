@@ -31,7 +31,7 @@ export class NavigationService {
   }
 
   public goToAdvisorDetail(advisorId:number){
-    this.goToUrl('advisor/'+advisorId);
+    this.goToUrl('advisor-details/'+advisorId);
   }
 
   public goToHome(){

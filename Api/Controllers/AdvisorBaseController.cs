@@ -24,6 +24,12 @@ namespace Api.Controllers
             return Ok(AdvisorBusiness.GetAdvisorData(id));
         }
 
+        protected IActionResult EditAdvisor(int id, AdvisorRequest advisorRequest)
+        {
+            AdvisorBusiness.EditAdvisor(id, advisorRequest.Name, advisorRequest.Description)
+            return Ok();
+        }
+
         protected IActionResult ListAdvisors()
         {
             return Ok(AdvisorBusiness.ListAdvisorsData());
