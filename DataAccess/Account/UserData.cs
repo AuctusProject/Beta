@@ -199,6 +199,10 @@ namespace Auctus.DataAccess.Account
                                 advisor.CreationDate = user.CreationDate;
                                 advisor.ConfirmationCode = user.ConfirmationCode;
                                 advisor.ConfirmationDate = user.ConfirmationDate;
+                                advisor.ReferralCode = user.ReferralCode;
+                                advisor.ReferralStatus = user.ReferralStatus;
+                                advisor.ReferredId = user.ReferredId;
+                                advisor.AllowNotifications = user.AllowNotifications;
                                 advisor.IsAdvisor = true;
                                 return advisor;
                             }

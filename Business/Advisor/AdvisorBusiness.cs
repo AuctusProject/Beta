@@ -39,6 +39,11 @@ namespace Auctus.Business.Advisor
             Update(advisor);
         }
 
+        public DomainObjects.Advisor.Advisor GetAdvisor(int id)
+        {
+            return Data.GetAdvisor(id);
+        }
+
         public IEnumerable<AdvisorResponse> ListAdvisorsData()
         {
             List<AdvisorResponse> advisorsResult;

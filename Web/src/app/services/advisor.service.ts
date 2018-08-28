@@ -6,10 +6,12 @@ import { RequestToBeAdvisor } from '../model/advisor/requestToBeAdvisor';
 import { RequestToBeAdvisorRequest } from '../model/advisor/requestToBeAdvisorRequest';
 import { AdviseRequest } from '../model/advisor/adviseRequest';
 import { AdvisorRequest } from '../model/advisor/advisorRequest';
+import { Advisor } from '../model/advisor/advisor';
 
 @Injectable()
 export class AdvisorService {
-  private baseGetAdvisorsUrl = this.httpService.apiUrl("v1/advisors");
+  private advisorsUrl = this.httpService.apiUrl("v1/advisors");
+  private advisorsDetailsUrl = this.httpService.apiUrl("v1/advisors/{id}/details");
   private requestToBeAdvisorsUrl = this.httpService.apiUrl("v1/advisors/me/requests");
   private listPendingRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests");
   private approveRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests/{id}/approve");
@@ -19,16 +21,20 @@ export class AdvisorService {
 
   constructor(private httpService : HttpService) { }
 
-  getAdvisor(id: string): Observable<AdvisorResponse> {
-    return this.httpService.get(this.baseGetAdvisorsUrl + "/" + id);
+  getAdvisor(id: string): Observable<Advisor> {
+    return this.httpService.get(this.advisorsUrl + "/" + id);
   }
 
   editAdvisor(id: number, advisorRequest: AdvisorRequest): Observable<void> {
-    return this.httpService.put(this.baseGetAdvisorsUrl + "/" + id, advisorRequest);
+    return this.httpService.patch(this.advisorsUrl + "/" + id, advisorRequest);
+  }
+
+  getAdvisorDetails(id: string): Observable<AdvisorResponse> {
+    return this.httpService.get(this.advisorsUrl.replace("{id}", id));
   }
 
   getAdvisors(): Observable<AdvisorResponse[]> {
-    return this.httpService.get(this.baseGetAdvisorsUrl);
+    return this.httpService.get(this.advisorsUrl);
   }
 
   getRequestToBeAdvisor(): Observable<RequestToBeAdvisor> {

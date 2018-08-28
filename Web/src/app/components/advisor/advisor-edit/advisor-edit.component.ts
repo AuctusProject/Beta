@@ -6,6 +6,7 @@ import { AdvisorRequest } from '../../../model/advisor/advisorRequest';
 import { Subscription } from '../../../../../node_modules/rxjs';
 import { AccountService } from '../../../services/account.service';
 import { NavigationService } from '../../../services/navigation.service';
+import { Advisor } from '../../../model/advisor/advisor';
 
 @Component({
   selector: 'advisor-edit',
@@ -13,7 +14,7 @@ import { NavigationService } from '../../../services/navigation.service';
   styleUrls: ['./advisor-edit.component.css']
 })
 export class AdvisorEditComponent implements OnInit {
-  advisor: AdvisorResponse;
+  advisor: Advisor;
   promise: Subscription;
   constructor(private route: ActivatedRoute, private advisorService: AdvisorService, private accountService: AccountService, private navigationService: NavigationService) { }
 
@@ -38,7 +39,7 @@ export class AdvisorEditComponent implements OnInit {
     var request = new AdvisorRequest();
     request.name = this.advisor.name;
     request.description = this.advisor.description;
-    this.promise = this.advisorService.editAdvisor(this.advisor.userId, request).subscribe(result => {});
+    this.promise = this.advisorService.editAdvisor(this.advisor.id, request).subscribe(result => {});
   }
 
 }
