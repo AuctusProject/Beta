@@ -8,7 +8,7 @@ import { TopLoadingComponent } from './components/util/top-loading/top-loading.c
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  public topLoading: any = TopLoadingComponent.prototype.constructor;
+  public topLoading = TopLoadingComponent.prototype.constructor;
   constructor(){}
 
   ngOnInit(){

@@ -109,6 +109,11 @@ namespace Auctus.DataAccessMock.Advisor
             return advisors;
         }
 
+        public DomainObjects.Advisor.Advisor GetAdvisor(int id)
+        {
+            return ListAll().FirstOrDefault(c => c.Id == id);
+        }
+
         public List<DomainObjects.Advisor.Advisor> ListEnabled()
         {
             return ListAll().Where(a => a.Enabled).ToList();
