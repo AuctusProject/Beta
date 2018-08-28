@@ -73,6 +73,20 @@ Auctus Team");
             return Data.List(advisorsId, assetsId);
         }
 
+        public List<Advice> ListAllCached()
+        {
+            var advicesCahceKey = "allAdvicesCached";
+            var advices = MemoryCache.Get<List<Advice>>(advicesCahceKey);
+            if (advices == null)
+            {
+                var advisorsId = AdvisorBusiness.GetAdvisors().Select(c => c.Id).Distinct();
+                advices = List(advisorsId);
+                if (advices.Any())
+                    MemoryCache.Set<List<Advice>>(advicesCahceKey, advices, 40);
+            }
+            return advices;
+        }
+
         public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int? top, int? lastAdviceId)
         {
             var followingAdvisorsIds = Task.Factory.StartNew(() => AdvisorBusiness.ListFollowingAdvisors().Select(c => c.Id));

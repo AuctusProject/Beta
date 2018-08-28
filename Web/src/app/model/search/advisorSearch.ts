@@ -3,5 +3,4 @@ export class AdvisorSearch {
     name: string;
     description: string;
     advices: number;
-    followers: number;
 }

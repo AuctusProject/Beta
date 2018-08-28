@@ -353,14 +353,12 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         public FollowAdvisor FollowUnfollowAdvisor(int advisorId, FollowActionType followActionType)
         {
             var user = GetValidUser();
-
             return FollowAdvisorBusiness.Create(user.Id, advisorId, followActionType);
         }
 
         public FollowAsset FollowUnfollowAsset(int AssetId, FollowActionType followActionType)
         {
             var user = GetValidUser();
-
             return FollowAssetBusiness.Create(user.Id, AssetId, followActionType);
         }
 
@@ -428,25 +426,7 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             if (!assets.Any() && !advisors.Any())
                 return new SearchResponse();
 
-            IEnumerable<int> assetsId = new int[] { };
-            IEnumerable<int> advisorsId = new int[] { };
-
-            Task<List<FollowAdvisor>> advisorFollowers = null;
-            if (advisors.Any())
-            {
-                advisorsId = advisors.Select(c => c.Id).Distinct();
-                advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisorsId));
-            }
-
-            if (assets.Any())
-                assetsId = assets.Select(c => c.Id).Distinct();
-
-            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisorsId, assetsId));
-
-            if (advisorFollowers != null)
-                Task.WaitAll(advices, advisorFollowers);
-            else 
-                Task.WaitAll(advices);
+            var advices = AdviceBusiness.ListAllCached();
 
             var response = new SearchResponse();
             foreach(DomainObjects.Advisor.Advisor advisor in advisors)
@@ -456,8 +436,7 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
                     Id = advisor.Id,
                     Description = advisor.Description,
                     Name = advisor.Name,
-                    Advices = advices.Result.Count(c => c.AdvisorId == advisor.Id),
-                    Followers = advisorFollowers?.Result.Count(c => c.AdvisorId == advisor.Id) ?? 0
+                    Advices = advices.Count(c => c.AdvisorId == advisor.Id)
                 });
             }
             foreach (DomainObjects.Asset.Asset asset in assets)
@@ -467,11 +446,11 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
                     Id = asset.Id,
                     Code = asset.Code,
                     Name = asset.Name,
-                    Advices = advices.Result.Count(c => c.AssetId == asset.Id),
+                    Advices = advices.Count(c => c.AssetId == asset.Id),
                     MarketCap = asset.MarketCap ?? 0
                 });
             }
-            response.Advisors = response.Advisors.OrderByDescending(c => c.Advices).ThenByDescending(c => c.Followers).ThenBy(c => c.Name).ToList();
+            response.Advisors = response.Advisors.OrderByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
             response.Assets = response.Assets.OrderByDescending(c => c.MarketCap).ThenByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
             return response;
         }
