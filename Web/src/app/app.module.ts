@@ -12,7 +12,7 @@ export function highchartsModules() {
 }
 
 import { AppComponent } from './app.component';
-
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { Web3Service } from './services/web3.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { HttpService } from './services/http.service';
@@ -21,15 +21,14 @@ import { RecommendationDistributionComponent } from './components/recommendation
 import { AdvisorCardComponent } from './components/advisor/advisor-card/advisor-card.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AdvisorService } from './services/advisor.service';
-import { HttpModule } from '../../node_modules/@angular/http';
-import { HttpClientModule } from '../../node_modules/@angular/common/http';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AssetService } from './services/asset.service';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { AccountService } from './services/account.service';
 import { LoginComponent } from './components/account/login/login.component';
 // import { MatModule } from './mat.module';
-import { FormsModule, ReactiveFormsModule } from '../../node_modules/@angular/forms';
-import { AuthGuard } from './providers/authGuard';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { RegisterComponent } from './components/account/register/register.component';
@@ -48,6 +47,16 @@ import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.c
 import { MatModule } from './mat.module';
 import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
 import { ConfigService } from './services/config.service';
+import { ReferralComponent } from './components/account/referral/referral.component';
+import { ConfigurationComponent } from './components/account/configuration/configuration.component';
+import { NavigationService } from './services/navigation.service';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { GlobalSearchComponent } from './components/search/global-search/global-search.component';
+import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
+import { NgHttpLoaderModule } from 'ng-http-loader'; 
+import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
+import {Angular2PromiseButtonModule} from 'angular2-promise-buttons/dist';
+import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -75,20 +84,36 @@ export function loadConfigService(configService: ConfigService): Function
     AssetDetailsComponent,
     AdvicesComponent,
     NewAdviceComponent,
-    ConfirmAdviceDialogComponent
+    ConfirmAdviceDialogComponent,
+    ReferralComponent,
+    ConfigurationComponent, 
+    DashboardComponent,
+    GlobalSearchComponent,
+    AdvisorsRequestsComponent,
+    TopLoadingComponent,
+    AdvisorEditComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
+    NgHttpLoaderModule,
     AppRoutingModule,
     SimpleNotificationsModule.forRoot(),
+    Angular2PromiseButtonModule
+      .forRoot({
+        spinnerTpl: '<span class="btn-spinner"></span>',
+        disableBtn: true,
+        btnLoadingClass: 'is-loading',
+        handleCurrentBtnOnly: false,
+    }),
     ChartModule,
     FormsModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
-    MatModule
+    MatModule,
+    FlexLayoutModule
   ],
   providers: [
     HttpService,
@@ -97,13 +122,14 @@ export function loadConfigService(configService: ConfigService): Function
     AdvisorService,
     AssetService,
     AccountService,
-    AuthGuard,
+    NavigationService,
     AuthRedirect,
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules},
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
   ],
-  entryComponents:[ConfirmAdviceDialogComponent],
+  entryComponents:[ConfirmAdviceDialogComponent, TopLoadingComponent],
+  exports: [TopLoadingComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

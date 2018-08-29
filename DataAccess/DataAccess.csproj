@@ -5,6 +5,10 @@
     <RootNamespace>Auctus.DataAccess</RootNamespace>
     <AssemblyName>DataAccess</AssemblyName>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1705;1591</NoWarn>
@@ -16,7 +20,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
     <PackageReference Include="RestSharp" Version="106.3.1" />
+    <PackageReference Include="Sendgrid" Version="9.9.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.1" />
   </ItemGroup>
 
   <ItemGroup>

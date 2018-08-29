@@ -8,6 +8,7 @@ using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,27 @@ namespace Auctus.Business.Advisor
     {
         public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4 }
 
-        public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
+
+        public void EditAdvisor(int id, string name, string description)
+        {
+            var advisor = Data.GetAdvisor(id);
+
+            if (advisor == null)
+                throw new NotFoundException("Advisor not found");
+
+            if (advisor.Email.ToLower() != LoggedEmail.ToLower())
+                throw new UnauthorizedException("Invalid credentials");
+
+            advisor.Name = name;
+            advisor.Description = description;
+            Update(advisor);
+        }
+
+        public DomainObjects.Advisor.Advisor GetAdvisor(int id)
+        {
+            return Data.GetAdvisor(id);
+        }
 
         public IEnumerable<AdvisorResponse> ListAdvisorsData()
         {
@@ -40,6 +61,19 @@ namespace Auctus.Business.Advisor
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
             result.Assets.ForEach(a => a.AssetAdvisor = a.AssetAdvisor.Where(c => c.UserId == advisorId).ToList());
             return result;
+        }
+
+        public DomainObjects.Advisor.Advisor CreateFromRequest(RequestToBeAdvisor request)
+        {
+            var advisor = new DomainObjects.Advisor.Advisor()
+            {
+                Id = request.UserId,
+                Name = request.Name,
+                Description = request.Description,
+                BecameAdvisorDate = Data.GetDateTimeNow(),
+                Enabled = true
+            };
+            return advisor;
         }
 
         private void CalculateForAdvisorsData(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult)
@@ -68,7 +102,7 @@ namespace Auctus.Business.Advisor
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 
             IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<FollowAdvisor> advisorFollowers,
-            IEnumerable<FollowAsset> assetFollowers)
+            IEnumerable<FollowAsset> assetFollowers, int? selectAssetId = null)
         {
             advisorsResult = new List<AdvisorResponse>();
             assetsResult = new List<AssetResponse>();
@@ -77,9 +111,20 @@ namespace Auctus.Business.Advisor
             if (assetsIds.Any())
             {
                 assetsIds = assetsIds.Distinct();
+
+                if (selectAssetId.HasValue && !assetsIds.Contains(selectAssetId.Value))
+                {
+                    FillNotAdvicedAsset(out assetsResult, mode, selectAssetId.Value, loggedUser, assetFollowers);
+                    return;
+                }
+
                 var assets = AssetBusiness.ListAssets(assetsIds);
-                var minimumDate = allAdvices.Min(c => c.CreationDate).AddDays(-30);
-                var assetValues = AssetValueBusiness.List(assetsIds, minimumDate);
+
+                var assetDateMapping = new Dictionary<int, DateTime>();
+                foreach(int assetId in assetsIds)
+                    assetDateMapping.Add(assetId, allAdvices.Where(advice => advice.AssetId == assetId).Min(c => c.CreationDate).AddDays(-30));
+                
+                var assetValues = AssetValueBusiness.FilterAssetValues(assetDateMapping);
 
                 var adviceDetails = new List<AdviceDetail>();
                 foreach (var asset in assets)
@@ -125,7 +170,7 @@ namespace Auctus.Business.Advisor
                         {
                             if (mode != CalculationMode.AdvisorDetailed && mode != CalculationMode.Feed)
                             {
-                                assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.GroupBy(c => c.LastAdviceType)
+                                assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.Where(c => c.LastAdviceType.HasValue).GroupBy(c => c.LastAdviceType.Value)
                                     .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
                                 assetResultData.Mode = GetAssetModeType(assetResultData);
                                 assetResultData.Advices = mode == CalculationMode.AssetBase ? null : assetAdviceDetails
@@ -149,6 +194,20 @@ namespace Auctus.Business.Advisor
                     SetAdvisorsRanking(advisorsResult, advisorsData);
                 }
             }
+            else if (selectAssetId.HasValue)
+                FillNotAdvicedAsset(out assetsResult, mode, selectAssetId.Value, loggedUser, assetFollowers);
+        }
+
+        private void FillNotAdvicedAsset(out List<AssetResponse> assetsResult, CalculationMode mode, int selectAssetId, User loggedUser, IEnumerable<FollowAsset> assetFollowers)
+        {
+            assetsResult = new List<AssetResponse>();
+            var asset = AssetBusiness.GetById(selectAssetId);
+
+            var filterValues = new Dictionary<int, DateTime>();
+            filterValues[selectAssetId] = Data.GetDateTimeNow().AddDays(-30);
+            var values = AssetValueBusiness.FilterAssetValues(filterValues);
+
+            assetsResult.Add(GetAssetBaseResponse(loggedUser, asset, assetFollowers, new Advice[] { }, new int[] { }, values, mode));
         }
 
         private Advice GetLastAdvice(DomainObjects.Asset.Asset asset, int advisorId)
@@ -201,9 +260,9 @@ namespace Auctus.Business.Advisor
                 AverageReturn = advisorDetailsValues.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / advisorDetailsValues.Count(c => c.Return.HasValue),
                 SuccessRate = (double)advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
                 TotalRatings = advisorDetailsValues.Count(),
-                LastAdviceDate = advisorDetailsValues.Last().Advice.CreationDate,
-                LastAdviceMode = advisorDetailsValues.Last().ModeType.Value,
-                LastAdviceType = advisorDetailsValues.Last().Advice.Type,
+                LastAdviceDate = advisorDetailsValues.LastOrDefault()?.Advice.CreationDate,
+                LastAdviceMode = advisorDetailsValues.LastOrDefault()?.ModeType.Value,
+                LastAdviceType = advisorDetailsValues.LastOrDefault()?.Advice.Type,
                 Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c => new AssetResponse.AdviceResponse() { UserId = advisorId, AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).ToList() : null
             };
         }
@@ -241,10 +300,10 @@ namespace Auctus.Business.Advisor
             var maxAvg = advisorsConsidered.Max(c => c.AverageReturn);
             var maxSucRate = advisorsConsidered.Max(c => c.SuccessRate);
             var maxAssets = advisorsConsidered.Max(c => c.TotalAssetsAdvised);
-            var lastActivity = details.Max(c => c.Value.Max(a => a.Advice.CreationDate));
+            var lastActivity = details.Any(c => c.Value.Any()) ? details.Max(c => c.Value.Max(a => a.Advice.CreationDate)) : DateTime.MinValue;
 
             var advDays = advisorsResult.Select(c => new { Id = c.UserId, Days = Data.GetDateTimeNow().Subtract(c.CreationDate).TotalDays }).ToDictionary(c => c.Id, c => c.Days);
-            var maxAdvices = details.Max(c => (double)c.Value.Count() / advDays[c.Key]);
+            var maxAdvices = details.Any(c => c.Value.Any()) ? details.Max(c => (double)c.Value.Count() / advDays[c.Key]) : 0;
             var maxFollowers = advisorsConsidered.Max(c => (double)c.NumberOfFollowers / advDays[c.UserId]);
 
             var generalNormalization = 1.2;
@@ -257,7 +316,7 @@ namespace Auctus.Business.Advisor
                     + (0.01 * 5.0 * Math.Min(maximumValue, maxAssets == 0 ? 0 : (double)c.TotalAssetsAdvised / maxAssets))
                     + (0.15 * 5.0 * Math.Min(maximumValue, maxAdvices == 0 ? 0 : ((double)advisorsData[c.UserId].Count() / advDays[c.UserId]) / maxAdvices))
                     + (0.15 * 5.0 * Math.Min(maximumValue, maxFollowers == 0 ? 0 : ((double)c.NumberOfFollowers / advDays[c.UserId]) / maxFollowers))
-                    + (0.04 * 5.0 * Math.Min(maximumValue, (double)c.CreationDate.Ticks / lastActivity.Ticks))));
+                    + (0.04 * 5.0 * Math.Min(maximumValue, lastActivity.Ticks == 0 ? 0 : (double)c.CreationDate.Ticks / lastActivity.Ticks))));
             });
             advisorsResult = advisorsResult.OrderByDescending(c => c.Rating).ToList();
             for (int i = 0; i < advisorsResult.Count; ++i)
@@ -344,13 +403,18 @@ namespace Auctus.Business.Advisor
             if (asset == null)
                 throw new NotFoundException("Asset not found.");
 
-            AdviceBusiness.ValidateAndCreate(user.Id, asset, type);
+            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type);
         }
 
         public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors()
         {
             var user = GetValidUser();
             return Data.ListFollowingAdvisors(user.Id);
+        }
+
+        public IEnumerable<DomainObjects.Advisor.Advisor> ListByName(string searchTerm)
+        {
+            return GetAdvisors().Where(advisor => advisor.Name.ToUpper().StartsWith(searchTerm.ToUpper()) || advisor.Name.ToUpper().Contains(" " + searchTerm.ToUpper()));
         }
     }
 }

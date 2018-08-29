@@ -1,10 +1,9 @@
-﻿using Auctus.DataAccessInterfaces;
-using Auctus.DomainObjects.Advisor;
+﻿using Auctus.DomainObjects.Advisor;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccessInterfaces.Advisor
+namespace Auctus.DataAccessInterfaces.Advisor
 {
     public interface IFollowAdvisorData<T> : IBaseData<T>
     {

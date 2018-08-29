@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/account/login/login.component';
-import { AuthGuard } from './providers/authGuard';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
@@ -16,6 +15,11 @@ import { ListAssetsComponent } from './components/asset/list-assets/list-assets.
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
 import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
+import { ReferralComponent } from './components/account/referral/referral.component';
+import { ConfigurationComponent } from './components/account/configuration/configuration.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
+import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -33,6 +37,11 @@ const routes: Routes = [
     { path: 'list-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'new-advice', component: NewAdviceComponent, canActivate:[AuthRedirect] },
+    { path: 'referral', component: ReferralComponent, canActivate:[AuthRedirect] },
+    { path: 'configuration', component: ConfigurationComponent, canActivate:[AuthRedirect] },
+    { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
+    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
+    { path: 'advisor-edit/:id', component: AdvisorEditComponent, canActivate:[AuthRedirect] },
 ];
 
 @NgModule({

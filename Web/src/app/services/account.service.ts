@@ -4,7 +4,6 @@ import { HttpService } from './http.service';
 import { ValidateSignatureRequest } from '../model/account/validateSignatureRequest';
 import { LoginResponse } from '../model/account/loginResponse';
 import { LoginRequest } from '../model/account/loginRequest';
-import { Router } from '../../../node_modules/@angular/router';
 import { LoginResult } from '../model/account/loginResult';
 import { ConfirmEmailRequest } from '../model/account/confirmEmailRequest';
 import { ForgotPasswordRequest } from '../model/account/forgotPasswordRequest';
@@ -13,11 +12,17 @@ import { ChangePasswordRequest } from '../model/account/changePasswordRequest';
 import { RegisterRequest } from '../model/account/registerRequest';
 import { RegisterResponse } from '../model/account/registerResponse';
 import { FeedResponse } from '../model/advisor/feedResponse';
+import { ReferralProgramInfoResponse } from '../model/account/ReferralProgramInfoResponse';
+import { SetReferralRequest } from '../model/account/setReferralRequest';
+import { ConfigurationResponse } from '../model/account/configurationResponse';
+import { ConfigurationRequest } from '../model/account/configurationRequest';
+import { NavigationService } from './navigation.service';
+import { DashboardResponse } from '../model/admin/dashboardresponse';
+import { SearchResponse } from '../model/search/searchResponse';
 
 
 @Injectable()
 export class AccountService {
-  private baseGetAccountsUrl = this.httpService.apiUrl("v1/accounts");
   private validateSignatureUrl = this.httpService.apiUrl("/v1/accounts/me/signatures");
   private loginUrl = this.httpService.apiUrl("v1/accounts/login");
   private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmations");
@@ -25,8 +30,12 @@ export class AccountService {
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
   private registerUrl = this.httpService.apiUrl("v1/accounts");
   private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
+  private referralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
+  private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
+  private dashboardUrl = this.httpService.apiUrl("v1/accounts/dashboard");
+  private searchUrl = this.httpService.apiUrl("v1/accounts/search");
 
-  constructor(private httpService : HttpService, private router : Router) { }
+  constructor(private httpService : HttpService, private navigationService: NavigationService) { }
 
   validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginResponse> {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
@@ -50,7 +59,7 @@ export class AccountService {
 
   logout(): void {
     this.httpService.logout();
-    this.router.navigateByUrl('home');
+    this.navigationService.goToLogin();
   }
 
   logoutWithoutRedirect(): void {
@@ -94,5 +103,29 @@ export class AccountService {
       url += "&lastAdviceId="+lastAdviceId;
     }
     return this.httpService.get(url);
+  }
+
+  getReferralProgramInfo() : Observable<ReferralProgramInfoResponse>{
+    return this.httpService.get(this.referralsUrl);
+  }
+
+  setReferralCode(setReferralRequest: SetReferralRequest) : Observable<void>{
+    return this.httpService.post(this.referralsUrl, setReferralRequest);
+  }
+
+  getConfiguration() : Observable<ConfigurationResponse>{
+    return this.httpService.get(this.configurationUrl);
+  }
+
+  setConfiguration(configurationRequest: ConfigurationRequest) : Observable<void>{
+    return this.httpService.post(this.configurationUrl, configurationRequest);
+  }
+
+  getDashboard() : Observable<DashboardResponse>{
+    return this.httpService.get(this.dashboardUrl);
+  }
+
+  search(searchTerm: string): Observable<SearchResponse> {
+    return this.httpService.get(this.searchUrl + "?term=" + searchTerm);
   }
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Auctus.DomainObjects.Advisor;
 using System.Linq;
-using DataAccessMock.Advisor;
 
 namespace Auctus.DataAccessMock.Advisor
 {
@@ -108,6 +107,11 @@ namespace Auctus.DataAccessMock.Advisor
                 }
             });
             return advisors;
+        }
+
+        public DomainObjects.Advisor.Advisor GetAdvisor(int id)
+        {
+            return ListAll().FirstOrDefault(c => c.Id == id);
         }
 
         public List<DomainObjects.Advisor.Advisor> ListEnabled()

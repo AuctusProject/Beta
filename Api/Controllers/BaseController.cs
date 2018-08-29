@@ -23,22 +23,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.ApplicationInsights;
 using System.Net;
 using Auctus.Util.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly ILoggerFactory LoggerFactory;
-        protected readonly ILogger Logger;
-        protected readonly Cache MemoryCache;
-        protected IServiceProvider ServiceProvider;
+        protected ILoggerFactory LoggerFactory { get; private set; }
+        protected ILogger Logger { get; private set; }
+        protected Cache MemoryCache { get; private set; }
+        protected IServiceProvider ServiceProvider { get; private set; }
+        protected IServiceScopeFactory ServiceScopeFactory { get; private set; }
 
-        protected BaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider)
+        protected BaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory)
         {
             MemoryCache = cache;
             LoggerFactory = loggerFactory;
             Logger = loggerFactory.CreateLogger(GetType().Namespace);
             ServiceProvider = serviceProvider;
+            ServiceScopeFactory = serviceScopeFactory;
         }
 
         protected string GetUser()
@@ -99,6 +102,34 @@ namespace Api.Controllers
             return BadRequest(new { });
         }
 
+        protected void RunAsync(Action action)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                using (var scope = ServiceScopeFactory.CreateScope())
+                {
+                    ServiceProvider = scope.ServiceProvider;
+                    TelemetryClient telemetry = new TelemetryClient();
+                    try
+                    {
+                        telemetry.TrackEvent(action.Method.Name);
+                        Logger.LogInformation($"Job {action.Method.Name} started.");
+                        action();
+                        Logger.LogInformation($"Job {action.Method.Name} ended.");
+                    }
+                    catch (Exception e)
+                    {
+                        telemetry.TrackException(e);
+                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
+                    }
+                    finally
+                    {
+                        telemetry.Flush();
+                    }
+                }
+            });
+        }
+
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var user = GetUser();
@@ -141,7 +172,7 @@ namespace Api.Controllers
             base.OnActionExecuted(context);
         }
 
-        protected string GenerateToken(string email, int expirationMinutes = 4320)
+        protected string GenerateToken(string email, int expirationMinutes = 2628000)
         {
             var unixTimestamp = Convert.ToInt64((DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             var claims = new Claim[]
@@ -164,19 +195,31 @@ namespace Api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        protected UserBusiness UserBusiness { get { return new UserBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected WalletBusiness WalletBusiness { get { return new WalletBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected ActionBusiness ActionBusiness { get { return new ActionBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected PasswordRecoveryBusiness PasswordRecoveryBusiness { get { return new PasswordRecoveryBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected AdvisorBusiness AdvisorBusiness { get { return new AdvisorBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected AdviceBusiness AdviceBusiness { get { return new AdviceBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected FollowBusiness FollowBusiness { get { return new FollowBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected FollowAssetBusiness FollowAssetBusiness { get { return new FollowAssetBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected FollowAdvisorBusiness FollowAdvisorBusiness { get { return new FollowAdvisorBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected AssetBusiness AssetBusiness { get { return new AssetBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected AssetValueBusiness AssetValueBusiness { get { return new AssetValueBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected ExchangeApiAccessBusiness ExchangeApiAccessBusiness { get { return new ExchangeApiAccessBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected RequestToBeAdvisorBusiness RequestToBeAdvisorBusiness { get { return new RequestToBeAdvisorBusiness(Startup.Configuration, ServiceProvider, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected UserBusiness UserBusiness { get { return new UserBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected WalletBusiness WalletBusiness { get { return new WalletBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected ActionBusiness ActionBusiness { get { return new ActionBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected PasswordRecoveryBusiness PasswordRecoveryBusiness { get { return new PasswordRecoveryBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdvisorBusiness AdvisorBusiness { get { return new AdvisorBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdviceBusiness AdviceBusiness { get { return new AdviceBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected FollowBusiness FollowBusiness { get { return new FollowBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected FollowAssetBusiness FollowAssetBusiness { get { return new FollowAssetBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected FollowAdvisorBusiness FollowAdvisorBusiness { get { return new FollowAdvisorBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AssetBusiness AssetBusiness { get { return new AssetBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AssetValueBusiness AssetValueBusiness { get { return new AssetValueBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected ExchangeApiAccessBusiness ExchangeApiAccessBusiness { get { return new ExchangeApiAccessBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected RequestToBeAdvisorBusiness RequestToBeAdvisorBusiness { get { return new RequestToBeAdvisorBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
 
+        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+        protected class OnlyAdminAttribute : ActionFilterAttribute
+        {
+            public override void OnActionExecuting(ActionExecutingContext context)
+            {
+                var user = ((BaseController)context.Controller).GetUser();
+                if (Startup.Configuration.GetSection("Admins").Get<List<string>>()?.Contains(user) == true)
+                    base.OnActionExecuting(context);
+                else
+                    context.Result = new UnauthorizedResult();
+            }
+        }
     }
 }

@@ -12,11 +12,9 @@ namespace Auctus.DomainObjects.Advisor
         public string Name { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]
         public string Description { get; set; }
-        [DapperType(System.Data.DbType.AnsiString)]
+        [DapperType(System.Data.DbType.DateTime)]
         public DateTime BecameAdvisorDate { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool Enabled { get; set; }
-
-        //public List<Advice> Advice { get; set; } = new List<Advice>();
     }
 }

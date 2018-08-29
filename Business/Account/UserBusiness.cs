@@ -1,7 +1,4 @@
-﻿using Auctus.DataAccess.Account;
-using Auctus.DataAccess.Core;
-using Auctus.DataAccess.Exchanges;
-using Auctus.DataAccessInterfaces.Account;
+﻿using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
@@ -9,6 +6,7 @@ using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,7 +20,7 @@ namespace Auctus.Business.Account
 {
     public class UserBusiness : BaseBusiness<User, IUserData<User>>
     {
-        public UserBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public UserBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public User GetByEmail(string email)
         {
@@ -48,10 +46,10 @@ namespace Auctus.Business.Account
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
-            if (!IsValidAdvisor(user) && MinimumAucLogin > 0)
+            if (!IsValidAdvisor(user) && !IsAdmin)
             {
                 aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
-                hasInvestment = aucAmount >= MinimumAucLogin;
+                hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
             }
             ActionBusiness.InsertNewLogin(user.Id, aucAmount);
             return new Model.LoginResponse()
@@ -68,6 +66,11 @@ namespace Auctus.Business.Account
         public bool IsValidAdvisor(User user)
         {
             return user.IsAdvisor && ((DomainObjects.Advisor.Advisor)user).Enabled;
+        }
+
+        public decimal GetMinimumAucAmountForUser(User user)
+        {
+            return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? DiscountPercentageOnAuc : 0)));
         }
 
         public async Task<LoginResponse> Register(string email, string password, string referralCode, bool requestedToBeAdvisor)
@@ -107,10 +110,10 @@ namespace Auctus.Business.Account
 
         public void SetReferralCode(string referralCode)
         {
-            var user = GetValidUser();
+            var user = GetByEmail(LoggedEmail);
             var referredUser = GetReferredUser(referralCode);
             user.ReferredId = referredUser.Id;
-            Update(user);
+            Data.Update(user);
         }
 
         private string GenerateReferralCode()
@@ -212,8 +215,7 @@ namespace Auctus.Business.Account
             if (!IsValidAdvisor(user))
             {
                 aucAmount = WalletBusiness.GetAucAmount(address);
-                if (aucAmount < MinimumAucLogin)
-                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - aucAmount} AUCs.");
+                WalletBusiness.ValidateAucAmount(aucAmount.Value, GetMinimumAucAmountForUser(user));
             }
 
             var creationDate = Data.GetDateTimeNow();
@@ -256,18 +258,18 @@ namespace Auctus.Business.Account
                 var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
                 var currentWallet = user.Wallets.OrderByDescending(c => c.CreationDate).First();
                 currentWallet.AUCBalance = WalletBusiness.GetAucAmount(currentWallet.Address);
-                ActionBusiness.InsertNewAucVerification(user.Id, currentWallet.AUCBalance.Value);
+                ActionBusiness.InsertJobAucVerification(user.Id, currentWallet.AUCBalance.Value);
                 using (var transaction = TransactionalDapperCommand)
                 {
                     transaction.Update(currentWallet);
                     if (user.ReferralStatusType == ReferralStatusType.InProgress)
                     {
-                        if (currentWallet.AUCBalance < MinimumAucLogin)
+                        if (currentWallet.AUCBalance < GetMinimumAucAmountForUser(user))
                         {
                             user.ReferralStatus = ReferralStatusType.Interrupted.Value;
                             transaction.Update(user);
                         }
-                        else if (DateTime.UtcNow.Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                        else if (Data.GetDateTimeNow().Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
                         {
                             user.ReferralStatus = ReferralStatusType.Finished.Value;
                             transaction.Update(user);
@@ -284,13 +286,30 @@ namespace Auctus.Business.Account
             PasswordValidation(password);
 
             user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
+            Update(user);
+        }
+
+        public new void Update(User user)
+        {
             Data.Update(user);
+            if (user.ConfirmationDate.HasValue)
+            {
+                var cacheKey = GetUserCacheKey();
+                if (user.IsAdvisor)
+                    MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
+                else
+                    MemoryCache.Set<User>(cacheKey, user);
+            }
+        }
+
+        public List<User> ListAllUsersData()
+        {
+            return Data.ListAllUsersData();
         }
 
         private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
         {
-            await Email.SendAsync(SendGridKey,
-                new string[] { email },
+            await EmailBusiness.SendAsync(new string[] { email },
                 "Verify your email address - Auctus Beta",
                 string.Format(@"Hello,
 <br/><br/>
@@ -309,9 +328,9 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
                 throw new BusinessException("Email must be filled.");
         }
 
-        public static void EmailValidation(string email)
+        public void EmailValidation(string email)
         {
-            if (!Email.IsValidEmail(email))
+            if (!EmailBusiness.IsValidEmail(email))
                 throw new BusinessException("Email informed is invalid.");
         }
 
@@ -334,14 +353,12 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         public FollowAdvisor FollowUnfollowAdvisor(int advisorId, FollowActionType followActionType)
         {
             var user = GetValidUser();
-
             return FollowAdvisorBusiness.Create(user.Id, advisorId, followActionType);
         }
 
         public FollowAsset FollowUnfollowAsset(int AssetId, FollowActionType followActionType)
         {
             var user = GetValidUser();
-
             return FollowAssetBusiness.Create(user.Id, AssetId, followActionType);
         }
 
@@ -352,6 +369,24 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
             ReferralProgramInfoResponse response = ConvertReferredUsersToReferralProgramInfo(referredUsers);
             response.ReferralCode = user.ReferralCode;
             return response;
+        }
+
+        public void SetConfiguration(bool allowNotifications)
+        {
+            var user = GetValidUser();
+            user.AllowNotifications = allowNotifications;
+            Update(user);
+        }
+
+        public UserConfigurationResponse GetConfiguration()
+        {
+            var user = GetValidUser();
+            var wallet = WalletBusiness.GetByUser(user.Id);
+            return new UserConfigurationResponse()
+            {
+                AllowNotifications = user.AllowNotifications,
+                Wallet = wallet?.Address
+            };
         }
 
         private static ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)
@@ -377,6 +412,47 @@ Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
             return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId);
+        }
+
+        public SearchResponse Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+                return new SearchResponse();
+
+            IEnumerable<DomainObjects.Advisor.Advisor> advisors = null;
+            IEnumerable<DomainObjects.Asset.Asset> assets = null;
+            Parallel.Invoke(() => advisors = AdvisorBusiness.ListByName(searchTerm), () => assets = AssetBusiness.ListByNameOrCode(searchTerm));
+
+            if (!assets.Any() && !advisors.Any())
+                return new SearchResponse();
+
+            var advices = AdviceBusiness.ListAllCached();
+
+            var response = new SearchResponse();
+            foreach(DomainObjects.Advisor.Advisor advisor in advisors)
+            {
+                response.Advisors.Add(new SearchResponse.AdvisorResult()
+                {
+                    Id = advisor.Id,
+                    Description = advisor.Description,
+                    Name = advisor.Name,
+                    Advices = advices.Count(c => c.AdvisorId == advisor.Id)
+                });
+            }
+            foreach (DomainObjects.Asset.Asset asset in assets)
+            {
+                response.Assets.Add(new SearchResponse.AssetResult()
+                {
+                    Id = asset.Id,
+                    Code = asset.Code,
+                    Name = asset.Name,
+                    Advices = advices.Count(c => c.AssetId == asset.Id),
+                    MarketCap = asset.MarketCap ?? 0
+                });
+            }
+            response.Advisors = response.Advisors.OrderByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
+            response.Assets = response.Assets.OrderByDescending(c => c.MarketCap).ThenByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
+            return response;
         }
     }
 }

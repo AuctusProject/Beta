@@ -32,9 +32,9 @@ namespace Auctus.Model
             public double SuccessRate { get; set; }
             public double AverageReturn { get; set; }
             public int TotalRatings { get; set; }
-            public DateTime LastAdviceDate { get; set; }
-            public int LastAdviceType { get; set; }
-            public int LastAdviceMode { get; set; }
+            public DateTime? LastAdviceDate { get; set; }
+            public int? LastAdviceType { get; set; }
+            public int? LastAdviceMode { get; set; }
             public List<AdviceResponse> Advices { get; set; } = new List<AdviceResponse>();
         }
         public class ValuesResponse

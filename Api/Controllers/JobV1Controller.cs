@@ -22,12 +22,15 @@ namespace Api.Controllers
     [Route("api/v1/jobs/")]
     [Authorize("Bearer")]
     [EnableCors("Default")]
+    [OnlyAdmin]
     public class JobV1Controller : JobBaseController
     {
-        public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         [Route("assets/{api}/values")]
         [HttpPost]
+        [ValidApi]
         public new IActionResult UpdateAssetsValues([FromRoute]string api)
         {
             return base.UpdateAssetsValues(api);
@@ -35,6 +38,7 @@ namespace Api.Controllers
 
         [Route("assets/{api}")]
         [HttpPost]
+        [ValidApi]
         public new IActionResult CreateAssets([FromRoute]string api)
         {
             return base.CreateAssets(api);
@@ -42,9 +46,18 @@ namespace Api.Controllers
 
         [Route("assets/{api}/icons")]
         [HttpPost]
+        [ValidApi]
         public new IActionResult UpdateAssetsIcons([FromRoute]string api)
         {
             return base.UpdateAssetsIcons(api);
+        }
+
+        [Route("assets/{api}/marketcap")]
+        [HttpPost]
+        [ValidApi]
+        public new IActionResult UpdateAssetsMarketcap([FromRoute]string api)
+        {
+            return base.UpdateAssetsMarketcap(api);
         }
 
         [Route("users/auc")]

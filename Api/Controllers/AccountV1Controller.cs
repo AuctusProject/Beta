@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -23,7 +24,8 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class AccountV1Controller : AccountBaseController
     {
-        public AccountV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+        public AccountV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         [HttpPost]
         [AllowAnonymous]
@@ -121,6 +123,43 @@ namespace Api.Controllers
         public new IActionResult GetReferralProgramInfo()
         {
             return base.GetReferralProgramInfo();
+        }
+
+        [Route("me/configuration")]
+        [HttpPost]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult SetConfiguration([FromBody]SetConfigurationRequest setConfigurationRequest)
+        {
+            return base.SetConfiguration(setConfigurationRequest);
+        }
+
+        [Route("me/configuration")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetConfiguration()
+        {
+            return base.GetConfiguration();
+        }
+
+        [Route("search")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult Search([FromQuery]string term)
+        {
+            return base.Search(term);
+        }
+
+
+        [Route("dashboard")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [OnlyAdmin]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetDashboard()
+        {
+            return base.GetDashboard();
         }
     }
 }

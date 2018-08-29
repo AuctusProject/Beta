@@ -1,0 +1,9 @@
+.content{
+    display:block;
+    margin:20px;
+}
+
+label{
+    color: gray;
+    font-size: 12px;
+}

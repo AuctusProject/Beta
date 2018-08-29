@@ -6,6 +6,7 @@ using Auctus.Util;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -13,50 +14,37 @@ namespace Api.Controllers
 {
     public class JobBaseController : BaseController
     {
-        private readonly IServiceScopeFactory ServiceScopeFactory;
-
         protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : 
-            base(loggerFactory, cache, serviceProvider)
-        {
-            ServiceScopeFactory = serviceScopeFactory;
-        }
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory)  { }
 
         protected virtual IActionResult UpdateAssetsValues(string api)
         {
-            if (!ValidApi(api))
-                return BadRequest();
+            RunAsync(() => HandleUpdateAssetsValues(api));
+            return Ok();
+        }
 
-            RunJobAsync(() => HandleUpdateAssetsValues(api));
+        protected virtual IActionResult UpdateAssetsMarketcap(string api)
+        {
+            RunAsync(() => HandleUpdateAssetsMarketcap(api));
             return Ok();
         }
 
         protected virtual IActionResult CreateAssets(string api)
         {
-            if (!ValidApi(api))
-                return BadRequest();
-
-            RunJobAsync(() => HandleCreateAssets(api));
+            RunAsync(() => HandleCreateAssets(api));
             return Ok();
         }
 
         protected virtual IActionResult UpdateAssetsIcons(string api)
         {
-            if (!ValidApi(api))
-                return BadRequest();
-
-            RunJobAsync(() => HandleUpdateAssetsIcons(api));
+            RunAsync(() => HandleUpdateAssetsIcons(api));
             return Ok();
         }
 
         protected virtual IActionResult SetUsersAuc()
         {
-            RunJobAsync(() => UserBusiness.SetUsersAucSituation());
+            RunAsync(() => UserBusiness.SetUsersAucSituation());
             return Ok();
-        }
-
-        private bool ValidApi(string api)
-        {
-            return !string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coinmarketcap" || api.ToLower() == "coingecko");
         }
 
         private void HandleUpdateAssetsValues(string api)
@@ -65,6 +53,14 @@ namespace Api.Controllers
                 AssetValueBusiness.UpdateCoingeckoAssetsValues();
             else
                 AssetValueBusiness.UpdateCoinmarketcapAssetsValues();
+        }
+
+        private void HandleUpdateAssetsMarketcap(string api)
+        {
+            if (api == "coingecko")
+                AssetBusiness.UpdateCoingeckoAssetsMarketcap();
+            else
+                AssetBusiness.UpdateCoinmarketcapAssetsMarketcap();
         }
 
         private void HandleCreateAssets(string api)
@@ -83,37 +79,17 @@ namespace Api.Controllers
                 AssetBusiness.UpdateCoinmarketcapAssetsIcons();
         }
 
-        private void RunJobAsync(Action action)
+        [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+        protected class ValidApiAttribute : ActionFilterAttribute
         {
-            Task.Factory.StartNew(() =>
+            public override void OnActionExecuting(ActionExecutingContext context)
             {
-                using (var scope = ServiceScopeFactory.CreateScope())
-                {
-                    ServiceProvider = scope.ServiceProvider;
-                    TelemetryClient telemetry = new TelemetryClient();
-                    try
-                    {
-                        telemetry.TrackEvent(action.Method.Name);
-                        RunJobSync(action);
-                    }
-                    catch (Exception e)
-                    {
-                        telemetry.TrackException(e);
-                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
-                    }
-                    finally
-                    {
-                        telemetry.Flush();
-                    }
-                }
-            });
-        }
-
-        private void RunJobSync(Action action)
-        {
-            Logger.LogInformation($"Job {action.Method.Name} started.");
-            action();
-            Logger.LogInformation($"Job {action.Method.Name} ended.");
+                var api = context.RouteData?.Values.Any() == true ? context.RouteData.Values["api"]?.ToString() : null;
+                if (!string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coinmarketcap" || api.ToLower() == "coingecko"))
+                    base.OnActionExecuting(context);
+                else
+                    context.Result = new BadRequestResult();
+            }
         }
     }
 }

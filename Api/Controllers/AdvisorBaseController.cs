@@ -10,16 +10,29 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Auctus.DomainObjects.Account;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Controllers
 {
     public class AdvisorBaseController : BaseController
     {
-        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         protected IActionResult GetAdvisor(int id)
         {
+            return Ok(AdvisorBusiness.GetAdvisor(id));
+        }
+
+        protected IActionResult GetAdvisorDetails(int id)
+        {
             return Ok(AdvisorBusiness.GetAdvisorData(id));
+        }
+
+        protected IActionResult EditAdvisor(int id, AdvisorRequest advisorRequest)
+        {
+            AdvisorBusiness.EditAdvisor(id, advisorRequest.Name, advisorRequest.Description);
+            return Ok();
         }
 
         protected IActionResult ListAdvisors()
@@ -47,6 +60,23 @@ namespace Api.Controllers
         protected IActionResult GetRequestToBe()
         {
             return Ok(RequestToBeAdvisorBusiness.GetByLoggedEmail());
+        }
+
+        protected IActionResult ListRequestToBe()
+        {
+            return Ok(RequestToBeAdvisorBusiness.ListPending());
+        }
+
+        protected IActionResult ApproveRequestToBe(int id)
+        {
+            RequestToBeAdvisorBusiness.Approve(id);
+            return Ok();
+        }
+
+        protected IActionResult RejectRequestToBe(int id)
+        {
+            RequestToBeAdvisorBusiness.Reject(id);
+            return Ok();
         }
 
         protected virtual IActionResult FollowAdvisor(int id)

@@ -1,7 +1,8 @@
 export class RegisterRequest {
   email: string;
   password : string;
-  requestedToBeAdvisor: boolean ;
+  referralCode: string;
+  requestedToBeAdvisor: boolean;
 
 
   constructor(){

@@ -9,13 +9,15 @@ using Auctus.Model;
 using Auctus.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {
     public class AccountBaseController : BaseController
     {
-        protected AccountBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider) { }
+        protected AccountBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         protected virtual IActionResult ValidateSignature(ValidateSignatureRequest signatureRequest)
         {
@@ -98,6 +100,30 @@ namespace Api.Controllers
         protected virtual IActionResult GetReferralProgramInfo()
         {
             return Ok(UserBusiness.GetReferralProgramInfo());
+        }
+
+        protected virtual IActionResult SetConfiguration(SetConfigurationRequest setConfigurationRequest)
+        {
+            if (setConfigurationRequest == null)
+                return BadRequest();
+
+            UserBusiness.SetConfiguration(setConfigurationRequest.AllowNotifications);
+            return Ok();
+        }
+
+        protected virtual IActionResult GetConfiguration()
+        {
+            return Ok(UserBusiness.GetConfiguration());
+        }
+
+        protected virtual IActionResult Search(string term)
+        {
+            return Ok(UserBusiness.Search(term));
+        }
+
+        protected virtual IActionResult GetDashboard()
+        {
+            return Ok(ActionBusiness.GetDashboardData());
         }
     }
 }

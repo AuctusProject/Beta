@@ -1,0 +1,15 @@
+<mat-form-field>
+  <input type="text" matInput [(ngModel)]="inputText" placeholder="Search" (input)="onInputChanged($event.target.value)" [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)">
+    <mat-optgroup label="Assets">
+      <mat-option *ngFor="let asset of searchResults.assets" [value]="asset">
+        {{asset.name}}
+      </mat-option>
+    </mat-optgroup>
+    <mat-optgroup label="Experts">
+      <mat-option *ngFor="let expert of searchResults.advisors" [value]="expert">
+        {{expert.name}}
+      </mat-option>
+    </mat-optgroup>
+  </mat-autocomplete>
+</mat-form-field>

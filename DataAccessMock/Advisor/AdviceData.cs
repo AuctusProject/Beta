@@ -59,11 +59,13 @@ namespace Auctus.DataAccessMock.Advisor
             }).ToList();
         }
 
-        public List<Advice> List(IEnumerable<int> advisorIds)
+        public List<Advice> List(IEnumerable<int> advisorIds = null, IEnumerable<int> assetsIds = null)
         {
             List<Advice> advices = GetAllAdvices();
 
-            return advices.Where(a => advisorIds.Contains(a.AdvisorId)).ToList();
+            return advisorIds != null && assetsIds == null ? advices.Where(a => advisorIds.Contains(a.AdvisorId)).ToList() :
+                assetsIds != null && advisorIds != null ? advices.Where(a => advisorIds.Contains(a.AdvisorId) && assetsIds.Contains(a.AssetId)).ToList() :
+                assetsIds != null && advisorIds == null ? advices.Where(a => assetsIds.Contains(a.AssetId)).ToList() : advices;
         }
 
         

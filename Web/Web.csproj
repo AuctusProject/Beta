@@ -9,6 +9,10 @@
     <OutputType>Library</OutputType>
     <StartupObject />
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="angular.json" />
@@ -34,6 +38,10 @@
     <None Include="src\web.config" />
     <None Include="tsconfig.json" />
     <None Include="tslint.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="src\app\components\search\" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Controllers
 {
@@ -16,9 +17,8 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class AssetV1Controller : AssetBaseController
     {
-        public AssetV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider)
-        {
-        }
+        public AssetV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         [HttpGet]
         [Authorize]

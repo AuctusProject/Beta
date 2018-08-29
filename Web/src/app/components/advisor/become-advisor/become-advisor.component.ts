@@ -3,7 +3,7 @@ import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 import { AdvisorService } from '../../../services/advisor.service';
 import { RequestToBeAdvisorRequest } from '../../../model/advisor/requestToBeAdvisorRequest';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
-import { Router } from '../../../../../node_modules/@angular/router';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'become-advisor',
@@ -15,7 +15,7 @@ export class BecomeAdvisorComponent implements OnInit {
   requestToBeAdvisorRequest: RequestToBeAdvisorRequest = new RequestToBeAdvisorRequest();
   constructor(private advisorService: AdvisorService, 
     private notificationsService: NotificationsService,
-    private router: Router
+    private navigationService: NavigationService
   ) { }
 
   ngOnInit() {
@@ -41,6 +41,6 @@ export class BecomeAdvisorComponent implements OnInit {
   }
 
   walletLogin(){
-    this.router.navigateByUrl('wallet-login');
+    this.navigationService.goToWalletLogin();
   }
 }

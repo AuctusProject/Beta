@@ -5,6 +5,7 @@ using Auctus.DomainObjects.Advisor;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Auctus.Business.Advisor
 {
     public class RequestToBeAdvisorBusiness : BaseBusiness<RequestToBeAdvisor, IRequestToBeAdvisorData<RequestToBeAdvisor>>
     {
-        public RequestToBeAdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public RequestToBeAdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public RequestToBeAdvisor GetByUser(int userId)
         {
@@ -28,6 +29,31 @@ namespace Auctus.Business.Advisor
             if(user == null)
                 throw new NotFoundException("Invalid email.");
             return Data.GetByUser(user.Id);
+        }
+
+        public List<RequestToBeAdvisor> ListPending()
+        {
+            return Data.ListPending();
+        }
+
+        public void Approve(int id)
+        {
+            var request = Data.GetById(id);
+            request.Approved = true;
+            var advisor = AdvisorBusiness.CreateFromRequest(request);
+            using (var transaction = TransactionalDapperCommand)
+            {
+                transaction.Insert(advisor);
+                transaction.Update(request);
+                transaction.Commit();
+            }
+        }
+
+        public void Reject(int id)
+        {
+            var request = Data.GetById(id);
+            request.Approved = false;
+            Update(request);
         }
 
         public async Task<RequestToBeAdvisor> Create(string name, string description, string previousExperience)
@@ -64,9 +90,7 @@ namespace Auctus.Business.Advisor
         }
         private async Task SendRequestToBeAdvisorEmail(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
         {
-            await Email.SendAsync(SendGridKey, EmailErrorList,
-                string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor == null ? "NEW" : "UPDATE"),
-                string.Format(@"Email: {0} 
+            await EmailBusiness.SendErrorEmailAsync(string.Format(@"Email: {0} 
 <br/>
 <br/>
 <b>Old Name</b>: {1}
@@ -84,6 +108,8 @@ namespace Auctus.Business.Advisor
 <b>New Previous Experience</b>: {6}", user.Email, 
 oldRequestToBeAdvisor?.Name ?? "N/A", newRequestToBeAdvisor.Name,
 oldRequestToBeAdvisor?.Description ?? "N/A", newRequestToBeAdvisor.Description,
-oldRequestToBeAdvisor?.PreviousExperience ?? "N/A", newRequestToBeAdvisor.PreviousExperience));
-        }    }
+oldRequestToBeAdvisor?.PreviousExperience ?? "N/A", newRequestToBeAdvisor.PreviousExperience),
+string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor == null ? "NEW" : "UPDATE"));
+        }
+    }
 }

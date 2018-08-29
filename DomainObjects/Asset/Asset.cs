@@ -22,7 +22,10 @@ namespace Auctus.DomainObjects.Asset
         public string CoinGeckoId { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool ShortSellingEnabled { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double? MarketCap { get; set; }
 
         public AssetType AssetType { get { return AssetType.Get(Type); } }
+        public bool HasAdvice { get; set; }
     }
 }

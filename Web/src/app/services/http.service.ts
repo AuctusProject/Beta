@@ -4,16 +4,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { NotificationsService } from "angular2-notifications";
 import { CONFIG} from "./config.service";
-import { Router } from '@angular/router';
 import { LocalStorageService } from "./local-storage.service";
 import { LoginResponse } from '../model/account/loginResponse';
+import { NavigationService } from './navigation.service';
+import { Router } from '../../../node_modules/@angular/router';
 
 @Injectable()
 export class HttpService {
   constructor(private http: HttpClient, 
-    private notificationService: NotificationsService, 
-    private router: Router,
-    private localStorageService: LocalStorageService) { }
+    private notificationService: NotificationsService,
+    private localStorageService: LocalStorageService,
+    private navigationService: NavigationService,
+    private router: Router) { }
 
   private jwt: string = "auc_jwt";
   private login: string = "auc_login";
@@ -129,7 +131,8 @@ export class HttpService {
     return (response: any): Observable<T> => {
       if (response.status == "401") {
         this.logout();
-        this.router.navigateByUrl('login');
+        this.localStorageService.setLocalStorage("redirectUrl", this.router.url);
+        this.navigationService.goToLogin();
       }
       else if (response.status != "200") {
         if (response.error) {

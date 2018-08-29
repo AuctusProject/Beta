@@ -1,9 +1,5 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
-import { RecommendationDistributionResponse } from './model/recommendationDistributionResponse';
-import { AdvisorResponse } from './model/advisor/advisorResponse';
-import { Router, ActivatedRoute } from '../../node_modules/@angular/router';
-import { AuthRedirect } from './providers/authRedirect';
-import { Route } from '../../node_modules/@angular/compiler/src/core';
+import { Component, OnInit } from '@angular/core';
+import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
 
 
 @Component({
@@ -12,7 +8,7 @@ import { Route } from '../../node_modules/@angular/compiler/src/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-
+  public topLoading = TopLoadingComponent.prototype.constructor;
   constructor(){}
 
   ngOnInit(){

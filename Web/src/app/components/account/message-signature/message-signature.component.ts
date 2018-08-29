@@ -3,8 +3,8 @@ import { Web3Service } from '../../../services/web3.service';
 import { AccountService } from '../../../services/account.service';
 import { ValidateSignatureRequest } from '../../../model/account/validateSignatureRequest';
 import { Constants } from '../../../util/constants';
-import { Router } from '../../../../../node_modules/@angular/router';
 import { AuthRedirect } from '../../../providers/authRedirect';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'message-signature',
@@ -14,7 +14,7 @@ import { AuthRedirect } from '../../../providers/authRedirect';
 export class MessageSignatureComponent implements OnInit {
   hasMetamask : boolean = true;
   constructor(private web3Service : Web3Service, 
-    private router: Router,
+    private navigationService: NavigationService,
     private accountService : AccountService,
     private authRedirect: AuthRedirect) { }
 
@@ -59,6 +59,6 @@ export class MessageSignatureComponent implements OnInit {
   }
 
   becomeAdvisor(){
-    this.router.navigateByUrl('become-advisor');
+    this.navigationService.goToBecomeAdvisor();
   }
 }

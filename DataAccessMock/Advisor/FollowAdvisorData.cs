@@ -1,12 +1,12 @@
-﻿using Auctus.DataAccessMock;
+﻿using Auctus.DataAccessInterfaces.Advisor;
+using Auctus.DataAccessMock;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
-using DataAccessInterfaces.Advisor;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccessMock.Advisor
+namespace Auctus.DataAccessMock.Advisor
 {
     public class FollowAdvisorData : BaseData<FollowAdvisor>, IFollowAdvisorData<FollowAdvisor>
     {

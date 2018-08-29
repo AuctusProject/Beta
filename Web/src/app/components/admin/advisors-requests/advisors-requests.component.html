@@ -1,0 +1,20 @@
+<div class="content">
+  <h1>Advisors Requests</h1>
+  <div *ngIf="!requests">Loading...</div>
+  <div *ngIf="requests && requests.length == 0">No pending requests.</div>
+  <div *ngFor="let request of requests">
+    <label>Id</label>
+    <div>{{request.id}}</div>
+    <label>Name</label>
+    <div>{{request.name}}</div>
+    <label>Description</label>
+    <div>{{request.description}}</div>
+    <label>Previous Experience</label>
+    <div>{{request.previousExperience}}</div>
+    <label>Date</label>
+    <div>{{request.creationDate | date:"medium"}}</div>  
+    <button [promiseBtn]="promise" (click)="approve(request.id)" mat-flat-button color="primary">APPROVE</button>
+    <button [promiseBtn]="promise" (click)="reject(request.id)" mat-flat-button color="warn">REJECT</button>
+    <hr>
+  </div>
+</div>

@@ -62,6 +62,11 @@ namespace Auctus.DataAccess.Account
                                                     WHERE 
                                                     u.ReferralStatus = @ReferralStatus OR u.AllowNotifications = @AllowNotifications";
 
+        private const string SQL_FOR_ALL_USER_DATA = @"SELECT u.*, w.*
+                                                       FROM 
+                                                       [User] u
+                                                       LEFT JOIN [Wallet] w ON u.Id = w.UserId";
+
         private const string SQL_FOLLOWING = @"SELECT u.*, w.*
                                                 FROM 
                                                 [User] u
@@ -194,6 +199,10 @@ namespace Auctus.DataAccess.Account
                                 advisor.CreationDate = user.CreationDate;
                                 advisor.ConfirmationCode = user.ConfirmationCode;
                                 advisor.ConfirmationDate = user.ConfirmationDate;
+                                advisor.ReferralCode = user.ReferralCode;
+                                advisor.ReferralStatus = user.ReferralStatus;
+                                advisor.ReferredId = user.ReferredId;
+                                advisor.AllowNotifications = user.AllowNotifications;
                                 advisor.IsAdvisor = true;
                                 return advisor;
                             }
@@ -222,6 +231,11 @@ namespace Auctus.DataAccess.Account
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("ReferredId", referredId, DbType.Int32);
             return SelectByParameters<User>(parameters).ToList();
+        }
+
+        public List<User> ListAllUsersData()
+        {
+            return QueryParentChild<User, Wallet, int>(SQL_FOR_ALL_USER_DATA, c => c.Id, c => c.Wallets, "Id").ToList();
         }
 
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)

@@ -6,14 +6,14 @@ using Auctus.Util;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Auctus.DomainObjects.Account;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Controllers
 {
     public class AssetBaseController : BaseController
     {
-        protected AssetBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider) : base(loggerFactory, cache, serviceProvider)
-        {
-        }
+        protected AssetBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         protected IActionResult ListAssets()
         {

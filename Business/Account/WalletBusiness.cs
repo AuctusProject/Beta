@@ -5,6 +5,7 @@ using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,11 @@ namespace Auctus.Business.Account
 {
     public class WalletBusiness : BaseBusiness<Wallet, IWalletData<Wallet>>
     {
-        public WalletBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, loggerFactory, cache, email, ip) { }
+        public WalletBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public void ValidateUserWallet(User user)
         {
-            var cacheKey = user.Email.ToLower().Trim() + "validated";
+            var cacheKey = user.Email + "validated";
             var validated = MemoryCache.Get<object>(cacheKey);
             if (validated == null)
             {
@@ -31,11 +32,20 @@ namespace Auctus.Business.Account
                 ActionBusiness.InsertNewAucVerification(user.Id, wallet.AUCBalance.Value);
                 Data.Update(wallet);
 
-                if (wallet.AUCBalance.Value < MinimumAucLogin)
-                    throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {MinimumAucLogin - wallet.AUCBalance.Value} AUCs.");
-
+                ValidateAucAmount(wallet.AUCBalance.Value, UserBusiness.GetMinimumAucAmountForUser(user));
                 MemoryCache.Set<object>(cacheKey, true, 20);
             }
+        }
+
+        public Wallet GetByUser(int userId)
+        {
+            return Data.GetByUser(userId);
+        }
+
+        public void ValidateAucAmount(decimal aucAmount, decimal minimumAucAmountForUser)
+        {
+            if (aucAmount < minimumAucAmountForUser && !IsAdmin)
+                throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {minimumAucAmountForUser - aucAmount} AUCs.");
         }
 
         public decimal GetAucAmount(string address)
