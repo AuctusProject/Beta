@@ -11,6 +11,29 @@ export class Web3Service {
   private web3: Web3;
 
   constructor() {
+      
+
+    
+    // TODO: ACTIVATE EIP 1102 ON NOVEMBER 2ND   
+    //     // If web3 is not injected (modern browsers)...
+    // if (typeof window.web3 === 'undefined') {
+    //     // Listen for provider injection
+    //     window.addEventListener('message', ({ data }) => {
+    //         if (data && data.type && data.type === 'ETHEREUM_PROVIDER_SUCCESS') {
+    //             // Use injected provider, start dapp...
+    //             window.web3 = new Web3(ethereum);
+    //         }
+    //     });
+    //     // Request provider
+    //     window.postMessage({ type: 'ETHEREUM_PROVIDER_REQUEST' }, '*');
+    // }
+    // // If web3 is injected (legacy browsers)...
+    // else {
+    //     // Use injected provider, start dapp
+    //     this.web3 = new Web3(window.web3.currentProvider);
+    // } 
+   
+
     this.getWeb3().subscribe();
   }
 
