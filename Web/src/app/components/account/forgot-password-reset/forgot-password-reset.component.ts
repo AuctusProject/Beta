@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { AccountService } from '../../../services/account.service';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { RecoverPasswordRequest } from '../../../model/account/recoverPasswordRequest';
