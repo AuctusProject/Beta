@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Web3Service } from '../../../services/web3.service';
 import { AccountService } from '../../../services/account.service';
 import { ValidateSignatureRequest } from '../../../model/account/validateSignatureRequest';
@@ -13,28 +13,47 @@ import { NavigationService } from '../../../services/navigation.service';
 })
 export class MessageSignatureComponent implements OnInit {
   hasMetamask : boolean;
+  hasUnlockedAccount : boolean;
+  account: string;
   constructor(private web3Service : Web3Service, 
     private navigationService: NavigationService,
     private accountService : AccountService,
-    private authRedirect: AuthRedirect) { }
+    private authRedirect: AuthRedirect,
+    private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.web3Service.getWeb3().subscribe(result => 
-      {
-        if(result){
-          this.hasMetamask = true;
+    this.monitorMetamaskAccount();
+  }
+
+  private monitorMetamaskAccount() {
+    let self = this;
+    var accountInterval = setInterval(function () {
+      self.web3Service.getWeb3().subscribe(result => 
+        {
+          if(result){
+            self.hasMetamask = true;
+            self.changeDetector.detectChanges();
+            self.web3Service.getAccount().subscribe(
+              account => {
+                if (account) {
+                  self.hasUnlockedAccount = true;
+                }
+                else{
+                  self.hasUnlockedAccount = false;
+                }
+                self.account = account;
+                self.changeDetector.detectChanges();
+              })
+          }
+          else{
+            self.hasMetamask = false;
+          }
         }
-        else{
-          this.hasMetamask = false;
-        }
-      }
-    );
+      )}, 100);
   }
 
   signMessage(){
-    this.web3Service.getAccount().subscribe(account => 
-      this.sendMessage(account)
-    );
+    this.sendMessage(this.account);
   }
 
   sendMessage(account){

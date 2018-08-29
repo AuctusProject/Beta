@@ -1,8 +1,11 @@
-<div *ngIf="hasMetamask">
+<div *ngIf="hasMetamask && hasUnlockedAccount">
   <button (click)="signMessage()">SIGN MESSAGE</button>
 </div>
 <div *ngIf="!hasMetamask">
-  Please install metamask and unlock your account
+  Please install metamask
+</div>
+<div *ngIf="!hasUnlockedAccount">
+  Please unlock your account
 </div>
 
 <button (click)="becomeAdvisor()">BECOME ADVISOR</button>
