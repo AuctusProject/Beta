@@ -32,7 +32,7 @@ export class AuthRedirect implements CanActivate {
         if(redirectUrl)
           this.navigationService.goToUrl(redirectUrl);
         else
-          this.navigationService.goToFeed();
+          this.redirectToHome(loginData);
       }
     }
   }
@@ -63,12 +63,13 @@ export class AuthRedirect implements CanActivate {
         return true;
       }
     }
-    else if(loginResponse.isAdvisor){
-      if (currentUrl != '/advisor/' + loginResponse.id) {
-        this.navigationService.goToAdvisorDetail(loginResponse.id);
-        return true;
-      }
-    }
     return false;
+  }
+
+  private redirectToHome(loginResponse: LoginResponse){
+    if(loginResponse.isAdvisor)
+      this.navigationService.goToAdvisorDetail(loginResponse.id);
+    else
+      this.navigationService.goToFeed();
   }
 }

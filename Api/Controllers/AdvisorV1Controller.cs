@@ -38,6 +38,22 @@ namespace Api.Controllers
             return base.GetAdvisor(id);
         }
 
+        [Route("{id}/details")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAdvisorDetails(int id)
+        {
+            return base.GetAdvisorDetails(id);
+        }
+
+        [Route("{id}")]
+        [HttpPatch]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult EditAdvisor(int id, [FromBody]AdvisorRequest advisorRequest)
+        {
+            return base.EditAdvisor(id, advisorRequest);
+        }
+
         [Route("advices")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

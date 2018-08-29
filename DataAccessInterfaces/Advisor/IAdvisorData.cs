@@ -7,5 +7,6 @@ namespace Auctus.DataAccessInterfaces.Advisor
     {
         List<DomainObjects.Advisor.Advisor> ListEnabled();
         IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors(int userId);
+        DomainObjects.Advisor.Advisor GetAdvisor(int id);
     }
 }

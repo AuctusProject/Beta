@@ -19,6 +19,7 @@ import { ReferralComponent } from './components/account/referral/referral.compon
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
+import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -40,6 +41,7 @@ const routes: Routes = [
     { path: 'configuration', component: ConfigurationComponent, canActivate:[AuthRedirect] },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
+    { path: 'advisor-edit/:id', component: AdvisorEditComponent, canActivate:[AuthRedirect] },
 ];
 
 @NgModule({

@@ -16,7 +16,7 @@ export class AdvisorDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => 
-      this.advisorService.getAdvisor(params['id']).subscribe(advisor => this.advisor = advisor)
+      this.advisorService.getAdvisorDetails(params['id']).subscribe(advisor => this.advisor = advisor)
     )
   }
   getAssetImgUrl(asset: AssetResponse){

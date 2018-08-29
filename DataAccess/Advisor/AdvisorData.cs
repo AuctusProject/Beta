@@ -22,6 +22,11 @@ namespace Auctus.DataAccess.Advisor
              WHERE f.ActionType = @ActionType
 	            AND f.UserId = @UserId";
 
+        private const string SQL_GET_BY_ID = @"SELECT * FROM 
+            [Advisor] a 
+            INNER JOIN [User] u ON a.Id = u.Id 
+            WHERE u.Id = @Id";
+
         public override string TableName => "Advisor";
         public AdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
@@ -39,6 +44,13 @@ namespace Auctus.DataAccess.Advisor
             parameters.Add("UserId", userId, DbType.Int32);
 
             return Query<DomainObjects.Advisor.Advisor>(SQL_LIST_FOLLOWING_ADVISORS, parameters);
+        }
+
+        public DomainObjects.Advisor.Advisor GetAdvisor(int id)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            return Query<DomainObjects.Advisor.Advisor>(SQL_GET_BY_ID, parameters).FirstOrDefault();
         }
     }
 }
