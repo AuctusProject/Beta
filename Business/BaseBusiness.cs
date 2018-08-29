@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,6 +70,7 @@ namespace Auctus.Business
         private int? _minimumTimeInSecondsBetweenAdvices;
         private string _hashSecret;
         private double? _discountPercentageOnAuc;
+        private List<string> _admins;
 
         protected BaseBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip)
         {
@@ -235,6 +237,24 @@ namespace Auctus.Business
                 if (_discountPercentageOnAuc == null)
                     _discountPercentageOnAuc = Configuration.GetSection("DiscountPercentageOnAuc").Get<double>();
                 return _discountPercentageOnAuc.Value;
+            }
+        }
+
+        protected List<string> Admins
+        {
+            get
+            {
+                if (_admins == null)
+                    _admins = Configuration.GetSection("Admins").Get<List<string>>();
+                return _admins;
+            }
+        }
+
+        protected bool IsAdmin
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(LoggedEmail) && Admins?.Any(c => c == LoggedEmail) == true;
             }
         }
 

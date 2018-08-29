@@ -20,7 +20,7 @@ namespace Auctus.Business.Account
 
         public void ValidateUserWallet(User user)
         {
-            var cacheKey = user.Email.ToLower().Trim() + "validated";
+            var cacheKey = user.Email + "validated";
             var validated = MemoryCache.Get<object>(cacheKey);
             if (validated == null)
             {
@@ -44,7 +44,7 @@ namespace Auctus.Business.Account
 
         public void ValidateAucAmount(decimal aucAmount, decimal minimumAucAmountForUser)
         {
-            if (aucAmount < minimumAucAmountForUser)
+            if (aucAmount < minimumAucAmountForUser && !IsAdmin)
                 throw new UnauthorizedException($"Wallet does not have enough AUC. Missing {minimumAucAmountForUser - aucAmount} AUCs.");
         }
 

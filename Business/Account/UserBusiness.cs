@@ -46,7 +46,7 @@ namespace Auctus.Business.Account
 
             bool hasInvestment = true;
             decimal? aucAmount = null;
-            if (!IsValidAdvisor(user))
+            if (!IsValidAdvisor(user) && !IsAdmin)
             {
                 aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
                 hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
