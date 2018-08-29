@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
-import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { ConfirmEmailRequest } from '../../../model/account/confirmEmailRequest';
 import { AuthRedirect } from '../../../providers/authRedirect';
 

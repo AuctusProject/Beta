@@ -25,7 +25,7 @@ export class AdvisorEditComponent implements OnInit {
             this.advisorService.getAdvisor(params['id']).subscribe(advisor => this.advisor = advisor)
           }
           else{
-            this.navigationService.goToAdvisorDetail(params['id']);
+            this.navigationService.goToAdvisorDetails(params['id']);
           }
         }
         else{

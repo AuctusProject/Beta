@@ -68,7 +68,7 @@ export class AuthRedirect implements CanActivate {
 
   private redirectToHome(loginResponse: LoginResponse){
     if(loginResponse.isAdvisor)
-      this.navigationService.goToAdvisorDetail(loginResponse.id);
+      this.navigationService.goToAdvisorDetails(loginResponse.id);
     else
       this.navigationService.goToFeed();
   }

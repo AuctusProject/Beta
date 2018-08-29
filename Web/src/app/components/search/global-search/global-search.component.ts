@@ -2,7 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { SearchResponse } from '../../../model/search/searchResponse';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
-import { Router } from '@angular/router';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'global-search',
@@ -14,8 +14,7 @@ export class GlobalSearchComponent implements OnInit {
   timer: any;
   inputText: string;
   constructor(private accountService: AccountService,
-    private router: Router, 
-    private zone : NgZone) { }
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
   }
@@ -41,9 +40,9 @@ export class GlobalSearchComponent implements OnInit {
     if (event.option.value) {
       this.inputText = event.option.value.name;
       if (event.option.value.code) {
-        this.zone.run(() => this.router.navigate(['asset-details', event.option.value.id]));
+        this.navigationService.goToAssetDetails(event.option.value.id);
       } else {
-        this.zone.run(() => this.router.navigate(['advisor-details', event.option.value.id]));
+        this.navigationService.goToAdvisorDetails(event.option.value.id);
       }
     } else {
       this.inputText = "";

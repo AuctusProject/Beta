@@ -71,6 +71,11 @@ namespace Auctus.DataAccess.Advisor
 
         public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> advisorsIds, IEnumerable<int> assetsIds, int? top, int? lastAdviceId)
         {
+            if (!advisorsIds.Any() && !assetsIds.Any())
+            {
+                return Enumerable.Empty<Advice>();
+            }
+
             var complement = "";
             var parameters = new DynamicParameters();
             if (advisorsIds.Count() > 0)

@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Injectable()
 export class NavigationService {
-  constructor(private router:Router) {
+  constructor(private router:Router, private zone : NgZone) {
   }
 
   public goToUrl(url:string){
-    this.router.navigateByUrl(url);
+    this.zone.run(() => this.router.navigateByUrl(url));
   }
 
   public goToLogin(){
@@ -30,8 +30,12 @@ export class NavigationService {
     this.goToUrl('confirm-email');
   }
 
-  public goToAdvisorDetail(advisorId:number){
+  public goToAdvisorDetails(advisorId:number){
     this.goToUrl('advisor-details/'+advisorId);
+  }
+
+  public goToAssetDetails(assetId:number){
+    this.goToUrl('asset-details/'+assetId);
   }
 
   public goToHome(){
