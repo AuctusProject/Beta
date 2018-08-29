@@ -57,6 +57,8 @@ import { NgHttpLoaderModule } from 'ng-http-loader';
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
 import {Angular2PromiseButtonModule} from 'angular2-promise-buttons/dist';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
+import { RecommendationBoxComponent } from './components/home/recommendation-box/recommendation-box.component';
+import { HomeComponent } from './components/home/home/home.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -91,7 +93,9 @@ export function loadConfigService(configService: ConfigService): Function
     GlobalSearchComponent,
     AdvisorsRequestsComponent,
     TopLoadingComponent,
-    AdvisorEditComponent
+    AdvisorEditComponent,
+    RecommendationBoxComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
