@@ -107,12 +107,21 @@ Auctus Team");
             {
                 var user = GetValidUser();
                 var advisors = AdvisorBusiness.GetAdvisors();
-                var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-                var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
+                Task<List<Advice>> advices = null;
+                Task<List<FollowAdvisor>> advisorFollowers = null;
+                if (advisors.Any())
+                {
+                    advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
+                    advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
+                }
                 var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
-                Task.WaitAll(advices, advisorFollowers, assetFollowers);
 
-                AdvisorBusiness.Calculation(CalculationMode.Feed, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, assetFollowers.Result);
+                if (advisors.Any())
+                    Task.WaitAll(advices, advisorFollowers, assetFollowers);
+                else
+                    Task.WaitAll(assetFollowers);
+
+                AdvisorBusiness.Calculation(CalculationMode.Feed, out advisorsResult, out assetsResult, user, advices?.Result, advisors, advisorFollowers?.Result, assetFollowers.Result);
 
                 MemoryCache.Set(advisorsCacheKey, advisorsResult, 10);
                 MemoryCache.Set(assetsCacheKey, assetsResult, 10);
