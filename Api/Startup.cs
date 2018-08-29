@@ -51,18 +51,16 @@ namespace Api
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-
                     ValidateAudience = false,
                     ValidAudience = urlConfiguration.GetValue<string>("Web"),
-                    ValidateIssuer = false,
+                    ValidateIssuer = true,
                     ValidIssuer = urlConfiguration.GetValue<string>("Api"),
                     ValidateIssuerSigningKey = true,
                     //IssuerSigningKey = new X509SecurityKey(new X509Certificate2(Path.Combine(env.ContentRootPath, "auctus.pfx"), "")),
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Auth").GetValue<string>("Secret"))),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
-                    RequireExpirationTime = true,
-
+                    RequireExpirationTime = true
                 };
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = true;

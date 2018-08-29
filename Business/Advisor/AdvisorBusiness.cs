@@ -107,8 +107,8 @@ namespace Auctus.Business.Advisor
             advisorsResult = new List<AdvisorResponse>();
             assetsResult = new List<AssetResponse>();
 
-            var assetsIds = allAdvices.Select(a => a.AssetId);
-            if (assetsIds.Any())
+            var assetsIds = allAdvices?.Select(a => a.AssetId);
+            if (assetsIds?.Any() == true)
             {
                 assetsIds = assetsIds.Distinct();
 
@@ -183,7 +183,7 @@ namespace Auctus.Business.Advisor
                     }
                 }
                 var advisorsData = new Dictionary<int, IEnumerable<AdviceDetail>>();
-                if (mode != CalculationMode.AssetBase)
+                if (mode != CalculationMode.AssetBase && allAdvisors?.Any() == true)
                 {
                     foreach (var advisor in allAdvisors)
                     {
@@ -270,7 +270,7 @@ namespace Auctus.Business.Advisor
         private AdvisorResponse GetAdvisorResponse(IEnumerable<AdviceDetail> details, IEnumerable<FollowAdvisor> advisorFollowers, DomainObjects.Advisor.Advisor advisor, User loggedUser)
         {
             var assetsAdvised = details.Select(c => c.Advice.AssetId);
-            var advFollowers = advisorFollowers.Where(c => c.AdvisorId == advisor.Id);
+            var advFollowers = advisorFollowers?.Where(c => c.AdvisorId == advisor.Id);
             return new AdvisorResponse()
             {
                 UserId = advisor.Id,
@@ -278,9 +278,9 @@ namespace Auctus.Business.Advisor
                 CreationDate = advisor.BecameAdvisorDate,
                 Description = advisor.Description,
                 Owner = advisor.Id == loggedUser.Id,
-                NumberOfFollowers = advFollowers.Count(),
+                NumberOfFollowers = advFollowers?.Count() ?? 0,
                 TotalAssetsAdvised = assetsAdvised.Any() ? assetsAdvised.Distinct().Count() : 0,
-                Following = advFollowers.Any(c => c.UserId == loggedUser.Id),
+                Following = advFollowers?.Any(c => c.UserId == loggedUser.Id) == true,
                 AverageReturn = details.Any(c => c.Return.HasValue) ? details.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / details.Count(c => c.Return.HasValue) : 0,
                 SuccessRate = details.Any(c => c.Success.HasValue) ? (double)details.Count(c => c.Success.HasValue && c.Success.Value) / details.Count(c => c.Success.HasValue) : 0,
                 RecommendationDistribution = !details.Any() ? new List<RecommendationDistributionResponse>() :
