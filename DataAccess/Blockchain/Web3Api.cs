@@ -16,6 +16,12 @@ namespace Auctus.DataAccess.Blockchain
 {
     public class Web3Api : ApiBase
     {
+        private class AucAmountResponse
+        {
+            [JsonProperty("result")]
+            public string Result { get; set; }
+        }
+
         private readonly string BaseRoute;
         private readonly string AucContractAddress;
 
@@ -30,12 +36,6 @@ namespace Auctus.DataAccess.Blockchain
             address = address.ToLower().StartsWith("0x") ? address.Substring(2) : address;
             var response = GetWithRetry($"{BaseRoute}eth_call?params=[{{\"to\":\"{AucContractAddress}\",\"data\":\"0x70a08231000000000000000000000000{address}\"}},\"latest\"]");
             return Util.Util.ConvertHexaBigNumber(JsonConvert.DeserializeObject<AucAmountResponse>(response).Result, 18);
-        }
-
-        private class AucAmountResponse
-        {
-            [JsonProperty("result")]
-            public string Result { get; set; }
-        }
+        }       
     }
 }
