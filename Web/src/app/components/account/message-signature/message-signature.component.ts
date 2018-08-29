@@ -12,13 +12,23 @@ import { NavigationService } from '../../../services/navigation.service';
   styleUrls: ['./message-signature.component.css']
 })
 export class MessageSignatureComponent implements OnInit {
-  hasMetamask : boolean = true;
+  hasMetamask : boolean;
   constructor(private web3Service : Web3Service, 
     private navigationService: NavigationService,
     private accountService : AccountService,
     private authRedirect: AuthRedirect) { }
 
   ngOnInit() {
+    this.web3Service.getWeb3().subscribe(result => 
+      {
+        if(result){
+          this.hasMetamask = true;
+        }
+        else{
+          this.hasMetamask = false;
+        }
+      }
+    );
   }
 
   signMessage(){
