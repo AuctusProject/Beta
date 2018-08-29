@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Web3Service } from '../../../services/web3.service';
 import { AccountService } from '../../../services/account.service';
 import { ValidateSignatureRequest } from '../../../model/account/validateSignatureRequest';
@@ -11,47 +11,71 @@ import { NavigationService } from '../../../services/navigation.service';
   templateUrl: './message-signature.component.html',
   styleUrls: ['./message-signature.component.css']
 })
-export class MessageSignatureComponent implements OnInit {
+export class MessageSignatureComponent implements OnInit, OnDestroy {
   hasMetamask : boolean;
+  hasUnlockedAccount : boolean;
+  account: string;
+  accountInterval;
   constructor(private web3Service : Web3Service, 
     private navigationService: NavigationService,
     private accountService : AccountService,
-    private authRedirect: AuthRedirect) { }
+    private authRedirect: AuthRedirect,
+    private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.web3Service.getWeb3().subscribe(result => 
-      {
-        if(result){
-          this.hasMetamask = true;
+    this.monitorMetamaskAccount();
+  }
+
+  ngOnDestroy(){
+    clearInterval(this.accountInterval);
+  }
+
+  private monitorMetamaskAccount() {
+    let self = this;
+    this.accountInterval = setInterval(function () {
+      self.web3Service.getWeb3().subscribe(result => 
+        {
+          if(result){
+            self.hasMetamask = true;
+            self.changeDetector.detectChanges();
+            self.web3Service.getAccount().subscribe(
+              account => {
+                if (account) {
+                  self.hasUnlockedAccount = true;
+                }
+                else{
+                  self.hasUnlockedAccount = false;
+                }
+                self.account = account;
+                self.changeDetector.detectChanges();
+              })
+          }
+          else{
+            self.hasMetamask = false;
+          }
         }
-        else{
-          this.hasMetamask = false;
-        }
-      }
-    );
+      )}, 100);
   }
 
   signMessage(){
-    this.web3Service.getAccount().subscribe(account => 
-      this.sendMessage(account)
-    );
+    this.sendMessage();
   }
 
-  sendMessage(account){
+  private sendMessage(){
     var message = (Constants.signatureMessage);
     this.web3Service.getWeb3().subscribe(web3 => web3.currentProvider.sendAsync({
       jsonrpc: "2.0",
       method: "personal_sign",
-      params: [this.web3Service.toHex(message), account]
+      params: [this.web3Service.toHex(message), this.account]
     },(a,signatureInfo)=>{
-      this.handleSignatureResult(account, signatureInfo);      
+      this.handleSignatureResult(signatureInfo);      
     }));
   }
 
-  handleSignatureResult(account, signatureInfo){
+  handleSignatureResult(signatureInfo){
     if(signatureInfo.result){
       var validateSignatureRequest = new ValidateSignatureRequest();
-      validateSignatureRequest.address = account;
+      validateSignatureRequest.address = this.account;
       validateSignatureRequest.signature = signatureInfo.result;
       this.accountService.validateSignature(validateSignatureRequest).subscribe(result =>
         {

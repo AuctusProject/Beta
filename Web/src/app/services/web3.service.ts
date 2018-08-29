@@ -43,16 +43,12 @@ export class Web3Service {
       if (self.web3) {
         observer.next(self.web3);
       }
+      else if (typeof window.web3 !== 'undefined') {
+        self.web3 = new Web3(window.web3.currentProvider);
+        observer.next(self.web3);
+      }
       else {
-        window.addEventListener('load', function () {
-          if (typeof window.web3 !== 'undefined') {
-            self.web3 = new Web3(window.web3.currentProvider);
-            observer.next(self.web3);
-          }
-          else {
-            observer.next(null);
-          }
-        })
+        observer.next(null);
       }
     });
   }
