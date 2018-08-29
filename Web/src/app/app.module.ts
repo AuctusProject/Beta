@@ -59,6 +59,7 @@ import {Angular2PromiseButtonModule} from 'angular2-promise-buttons/dist';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 import { RecommendationBoxComponent } from './components/home/recommendation-box/recommendation-box.component';
 import { HomeComponent } from './components/home/home/home.component';
+import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -95,7 +96,8 @@ export function loadConfigService(configService: ConfigService): Function
     TopLoadingComponent,
     AdvisorEditComponent,
     RecommendationBoxComponent,
-    HomeComponent
+    HomeComponent,
+    TopAdvisorsComponent
   ],
   imports: [
     BrowserModule,
