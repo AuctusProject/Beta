@@ -60,6 +60,7 @@ import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-
 import { RecommendationBoxComponent } from './components/home/recommendation-box/recommendation-box.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
+import { BarRatingModule } from "ngx-bar-rating";
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -119,7 +120,8 @@ export function loadConfigService(configService: ConfigService): Function
     ReactiveFormsModule,
     InfiniteScrollModule,
     MatModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    BarRatingModule
   ],
   providers: [
     HttpService,

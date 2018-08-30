@@ -78,7 +78,7 @@ namespace Auctus.Business.Advisor
 
         private void CalculateForAdvisorsData(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult)
         {
-            var user = GetValidUser();
+            var user = UserBusiness.GetByEmail(LoggedEmail);
             var advisors = GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
@@ -191,7 +191,7 @@ namespace Auctus.Business.Advisor
                         advisorsResult.Add(GetAdvisorResponse(details, advisorFollowers, advisor, loggedUser));
                         advisorsData[advisor.Id] = details;
                     }
-                    SetAdvisorsRanking(advisorsResult, advisorsData);
+                    SetAdvisorsRanking(ref advisorsResult, advisorsData);
                 }
             }
             else if (selectAssetId.HasValue)
@@ -238,7 +238,7 @@ namespace Auctus.Business.Advisor
                 AssetId = asset.Id,
                 Code = asset.Code,
                 Name = asset.Name,
-                Following = assFollowers?.Any(c => c.UserId == loggedUser.Id),
+                Following = loggedUser != null && assFollowers?.Any(c => c.UserId == loggedUser.Id) == true,
                 NumberOfFollowers = assFollowers?.Count(),
                 TotalAdvisors = assetAdvisorsId.Count(),
                 TotalRatings = assetAdvices.Count(),
@@ -277,10 +277,10 @@ namespace Auctus.Business.Advisor
                 Name = advisor.Name,
                 CreationDate = advisor.BecameAdvisorDate,
                 Description = advisor.Description,
-                Owner = advisor.Id == loggedUser.Id,
+                Owner = loggedUser != null && advisor.Id == loggedUser.Id,
                 NumberOfFollowers = advFollowers?.Count() ?? 0,
                 TotalAssetsAdvised = assetsAdvised.Any() ? assetsAdvised.Distinct().Count() : 0,
-                Following = advFollowers?.Any(c => c.UserId == loggedUser.Id) == true,
+                Following = loggedUser != null && advFollowers?.Any(c => c.UserId == loggedUser.Id) == true,
                 AverageReturn = details.Any(c => c.Return.HasValue) ? details.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / details.Count(c => c.Return.HasValue) : 0,
                 SuccessRate = details.Any(c => c.Success.HasValue) ? (double)details.Count(c => c.Success.HasValue && c.Success.Value) / details.Count(c => c.Success.HasValue) : 0,
                 RecommendationDistribution = !details.Any() ? new List<RecommendationDistributionResponse>() :
@@ -288,7 +288,7 @@ namespace Auctus.Business.Advisor
             };
         }
 
-        private void SetAdvisorsRanking(List<AdvisorResponse> advisorsResult, Dictionary<int, IEnumerable<AdviceDetail>> advisorsData)
+        private void SetAdvisorsRanking(ref List<AdvisorResponse> advisorsResult, Dictionary<int, IEnumerable<AdviceDetail>> advisorsData)
         {
             var advisorsConsidered = advisorsResult.Where(c => c.CreationDate < Data.GetDateTimeNow().AddDays(-3));
             if (!advisorsConsidered.Any())

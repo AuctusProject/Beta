@@ -1,36 +1,58 @@
-<div>
-  <a routerLink="/advisor-details/{{advisor.userId}}">View profile</a>
-</div>
-<div>
-    <img [src]="getAdvisorImgUrl()">
+<div class="advisor-card-container">
+  <div class="card-header">
+    <div class="expert-picture">
+      <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
+      <div class="expert-ranking">
+          {{advisor.ranking}}
+        </div>
+    </div>
+    <div class="expert-name">
+      {{advisor.name}}
+    </div>
+    <div class="expert-description">
+      {{advisor.description}}
+    </div>
+    <div class="expert-rating">
+      <bar-rating [readOnly]="'true'" [rate]="'1.899999'"></bar-rating>
+    </div>
   </div>
-<div>
-  Name: {{advisor.name}}
-</div>
-<div>
-  Description: {{advisor.description}}
-</div>
-<div>
-  Success Rate: {{advisor.successRate}}
-</div>
-<div>
-  Average Return: {{advisor.averageReturn}}
-</div>
-<div>
-  Ranking: {{advisor.ranking}}
-</div>
-<div>
-  Number Of Followers: {{advisor.numberOfFollowers}}
-</div>
-<div>
-  Following: {{advisor.following}}
-</div>
-<div>
-  Rating: {{advisor.rating}}
-</div>
-<div *ngIf="advisor.following">
-    <button (click)="onUnfollowClick()">UNFOLLOW</button>
-</div>
-<div *ngIf="!advisor.following">
-  <button (click)="onFollowClick()">FOLLOW</button>
+  <div class="card-divider"></div>
+  <div class="expert-ranking-description">
+      Ranked #{{advisor.ranking}} out of {{advisorsLength}} experts
+  </div>
+  <div class="expert-rates">
+    <div class="success-rate-column">
+      <div class="success-rate">
+          {{advisor.successRate}}%
+      </div>
+      <div class="success-rate-description">Success Rate</div>
+    </div>
+    <div class="average-return-column">
+      <div class="average-return">
+          {{advisor.averageReturn}}%
+      </div>
+      <div class="average-return-description">Average Return</div>
+    </div>
+  </div>
+  <div class="recommendation-distribution">
+    <div class="buy-distribution">
+      Buy: {{getBuyRecommendationPercentage()}}%
+    </div>
+    <div class="close-distribution">
+      Close: {{getCloseRecommendationPercentage()}}%
+    </div>
+    <div class="sell-distribution">
+      Sell: {{getSellRecommendationPercentage()}}%
+    </div>
+  </div>
+  <div class="distribution-follow-divider"></div>
+  <div class="followed-by">
+    Followed by {{advisor.numberOfFollowers}} investors
+  </div>
+  <div class="follow-link" *ngIf="advisor.following" (click)="onUnfollowClick()">
+    Unfollow
+  </div>
+  <div class="follow-link" *ngIf="!advisor.following" (click)="onFollowClick()">
+    Follow
+  </div>
 </div>

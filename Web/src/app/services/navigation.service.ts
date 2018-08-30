@@ -41,4 +41,8 @@ export class NavigationService {
   public goToHome(){
     this.goToUrl('home');
   }
+
+  public goToListAdvisors(){
+    this.goToUrl('list-advisors');
+  }
 }

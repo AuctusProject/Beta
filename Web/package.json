@@ -30,6 +30,7 @@
     "core-js": "^2.5.4",
     "highcharts": "^6.1.1",
     "ng-http-loader": "^3.0.0",
+    "ngx-bar-rating": "^1.1.0",
     "ngx-infinite-scroll": "^6.0.1",
     "rxjs": "^6.0.0",
     "sha3": "^1.2.2",

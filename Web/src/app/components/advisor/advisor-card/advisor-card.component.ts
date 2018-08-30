@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { AdvisorService } from '../../../services/advisor.service';
 import { CONFIG} from "../../../services/config.service";
+import { Util } from '../../../util/Util';
 
 @Component({
   selector: 'advisor-card',
@@ -10,6 +11,7 @@ import { CONFIG} from "../../../services/config.service";
 })
 export class AdvisorCardComponent implements OnInit {
   @Input() advisor: AdvisorResponse;
+  @Input() advisorsLength: number;
   
   constructor(private advisorServices:AdvisorService) { }
 
@@ -25,5 +27,33 @@ export class AdvisorCardComponent implements OnInit {
 
   getAdvisorImgUrl(){
     return CONFIG.profileImgUrl.replace("{id}", this.advisor.userId.toString());
+  }
+
+  getTotalRecommendations(){
+    var total = 0;
+    for(var i =0; i < this.advisor.recommendationDistribution.length; i++){
+      total += this.advisor.recommendationDistribution[i].total;
+    }
+    return total;
+  }
+
+  getRecommendationPercentage(type: number){
+    for(var i =0; i < this.advisor.recommendationDistribution.length; i++){
+      if(this.advisor.recommendationDistribution[i].type == type)
+        return this.advisor.recommendationDistribution[i].total/this.getTotalRecommendations() * 100;
+    }
+    return 0;
+  }
+
+  getBuyRecommendationPercentage(){
+    return this.getRecommendationPercentage(Util.BUY);
+  }
+
+  getCloseRecommendationPercentage(){
+    return this.getRecommendationPercentage(Util.CLOSE);
+  }
+    
+  getSellRecommendationPercentage(){
+    return this.getRecommendationPercentage(Util.SELL);    
   }
 }

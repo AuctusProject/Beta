@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~ngx-bar-rating/themes/br-default-theme.css';
 
 @font-face {
   font-family: "HelveticaNeueBold";
@@ -21,6 +22,24 @@
   url('/assets/fonts/HelveticaNeueMedium.svg#svgFontName') format('svg'); /* Legacy iOS */
 }
 
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-Bold.ttf");
+  font-weight: 700;
+}
+
 html {
   min-height:100%;
 }
@@ -31,12 +50,13 @@ body {
 }
 
 body, p, span {
-  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+  font-family: 'Gilroy';
   margin: 0px;
+  font-weight: 300;
 }
 
 .bold {
-  font-family: 'HelveticaNeueBold';
+  font-weight: bold;
 }
 
 
@@ -148,3 +168,18 @@ button.is-loading .btn-spinner {
   opacity: 1;
 }
 /*Angular promise button styles*/
+
+.section-title{
+  font-size: 25px;
+  text-align: center;
+  color: #626262;
+  margin-top:36px;
+}
+
+.section-subtitle{
+  font-size: 9px;
+  text-align: center;
+  color: #626262;
+  margin-top: 9px;
+  margin-bottom: 35px;
+}

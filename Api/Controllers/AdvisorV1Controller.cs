@@ -16,7 +16,6 @@ namespace Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/advisors/")]
-    [Authorize("Bearer")]
     [EnableCors("Default")]
     public class AdvisorV1Controller : AdvisorBaseController
     {
@@ -24,6 +23,7 @@ namespace Api.Controllers
             base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAdvisors()
         {
@@ -32,6 +32,7 @@ namespace Api.Controllers
 
         [Route("{id}")]
         [HttpGet]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetAdvisor(int id)
         {
@@ -40,6 +41,7 @@ namespace Api.Controllers
 
         [Route("{id}/details")]
         [HttpGet]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetAdvisorDetails(int id)
         {
@@ -48,6 +50,7 @@ namespace Api.Controllers
 
         [Route("{id}")]
         [HttpPatch]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult EditAdvisor(int id, [FromBody]AdvisorRequest advisorRequest)
         {
@@ -56,6 +59,7 @@ namespace Api.Controllers
 
         [Route("advices")]
         [HttpPost]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult Advise([FromBody]AdviseRequest adviseRequest)
         {
@@ -64,6 +68,7 @@ namespace Api.Controllers
 
         [Route("me/requests")]
         [HttpPost]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new async Task<IActionResult> RequestToBe([FromBody]BeAdvisorRequest beAdvisorRequest)
         {
@@ -72,6 +77,7 @@ namespace Api.Controllers
 
         [Route("me/requests")]
         [HttpGet]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetRequestToBe()
         {
@@ -81,6 +87,7 @@ namespace Api.Controllers
         [Route("requests")]
         [HttpGet]
         [OnlyAdmin]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListRequestToBe()
         {
@@ -90,6 +97,7 @@ namespace Api.Controllers
         [Route("requests/{id}/approve")]
         [HttpPost]
         [OnlyAdmin]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ApproveRequestToBe(int id)
         {
@@ -99,6 +107,7 @@ namespace Api.Controllers
         [Route("requests/{id}/reject")]
         [HttpPost]
         [OnlyAdmin]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult RejectRequestToBe(int id)
         {
@@ -107,6 +116,7 @@ namespace Api.Controllers
 
         [Route("{id}/followers")]
         [HttpPost]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult FollowAdvisor([FromRoute]int id)
         {
@@ -115,6 +125,7 @@ namespace Api.Controllers
 
         [Route("{id}/followers")]
         [HttpDelete]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult UnfollowAdvisor([FromRoute]int id)
         {
