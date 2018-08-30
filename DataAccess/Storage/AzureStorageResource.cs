@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Auctus.DataAccess.Storage
 {
@@ -17,29 +18,46 @@ namespace Auctus.DataAccess.Storage
             StorageConfiguration = configuration.GetSection("ConnectionString:Storage").Get<string>();
         }
 
-        public bool UploadFileFromUrl(string containerName, string fileName, string url)
+        public async Task<bool> UploadFileFromUrlAsync(string containerName, string fileName, string url)
+        {
+            var reference = await GetBlockBlobReference(containerName, fileName);
+            try
+            {
+                await reference.StartCopyAsync(new Uri(url));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file)
+        {
+            var reference = await GetBlockBlobReference(containerName, fileName);
+            try
+            {
+                await reference.UploadFromByteArrayAsync(file, 0, file.Length);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private async Task<Microsoft.WindowsAzure.Storage.Blob.CloudBlockBlob> GetBlockBlobReference(string containerName, string fileName)
         {
             CloudStorageAccount storageAccount;
             if (CloudStorageAccount.TryParse(StorageConfiguration, out storageAccount))
             {
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var container = blobClient.GetContainerReference(containerName);
-                container.CreateIfNotExistsAsync().Wait();
-                var reference = container.GetBlockBlobReference(fileName);
-                try
-                {
-                    reference.StartCopyAsync(new Uri(url)).Wait();
-                }
-                catch
-                {
-                    return false;
-                }
+                await container.CreateIfNotExistsAsync();
+                return container.GetBlockBlobReference(fileName);
             }
             else
-            {
-                throw new OperationCanceledException(string.Format("Could not upload file {0} to blob storage.", fileName));
-            }
-            return true;
+                throw new OperationCanceledException($"Could not upload the file {fileName} to container {containerName} on blob storage. Configuration problem.");
         }
     }
 }

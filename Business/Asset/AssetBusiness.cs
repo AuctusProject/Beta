@@ -67,24 +67,24 @@ namespace Auctus.Business.Asset
             return ListAssets(new int[] { id }).FirstOrDefault();
         }
 
-        public void UpdateCoinmarketcapAssetsIcons()
+        public async Task UpdateCoinmarketcapAssetsIconsAsync()
         {
-            UpdateIcons(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
+            await UpdateIconsAsync(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
         }
 
-        public void UpdateCoingeckoAssetsIcons()
+        public async Task UpdateCoingeckoAssetsIconsAsync()
         {
-            UpdateIcons(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
+            await UpdateIconsAsync(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
         }
 
-        public void CreateCoinmarketcapNotIncludedAssets()
+        public async Task CreateCoinmarketcapNotIncludedAssetsAsync()
         {
-            CreateNotIncludedAssets(CoinMarketcapBusiness.GetAllCoinsData(), CoinGeckoBusiness.GetAllCoinsData(), false);
+            await CreateNotIncludedAssetsAsync(CoinMarketcapBusiness.GetAllCoinsData(), CoinGeckoBusiness.GetAllCoinsData(), false);
         }
 
-        public void CreateCoingeckoNotIncludedAssets()
+        public async Task CreateCoingeckoNotIncludedAssetsAsync()
         {
-            CreateNotIncludedAssets(CoinGeckoBusiness.GetAllCoinsData(), CoinMarketcapBusiness.GetAllCoinsData(), true);
+            await CreateNotIncludedAssetsAsync(CoinGeckoBusiness.GetAllCoinsData(), CoinMarketcapBusiness.GetAllCoinsData(), true);
         }
 
         private bool IsCoinmarketcapAsset(DomainObjects.Asset.Asset asset, string key)
@@ -122,7 +122,7 @@ namespace Auctus.Business.Asset
             }
         }
 
-        private void CreateNotIncludedAssets(IEnumerable<AssetResult> assetResults, IEnumerable<AssetResult> assetExternalResults, bool isCoingecko)
+        private async Task CreateNotIncludedAssetsAsync(IEnumerable<AssetResult> assetResults, IEnumerable<AssetResult> assetExternalResults, bool isCoingecko)
         {
             var assets = AssetBusiness.ListAll();
             foreach (var asset in assetResults)
@@ -153,7 +153,7 @@ namespace Auctus.Business.Asset
                     newAsset.CoinMarketCapId = Convert.ToInt32(asset.Id);
 
                 Data.Insert(newAsset);
-                UploadAssetIcon(newAsset.Id, asset.ImageUrl);
+                await UploadAssetIconAsync(newAsset.Id, asset.ImageUrl);
             }
         }
 
@@ -191,21 +191,35 @@ namespace Auctus.Business.Asset
                         || Util.Util.IsEqualWithTolerance(asset.MarketCap.Value, externalAsset.MarketCap.Value, 0.1)));
         }
 
-        private void UpdateIcons(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
+        private async Task UpdateIconsAsync(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
         {
             var assets = AssetBusiness.ListAll();
             foreach (var assetData in assetResults)
             {
                 var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetData.Id));
                 if (asset != null)
-                    UploadAssetIcon(asset.Id, assetData.ImageUrl);
+                    await UploadAssetIconAsync(asset.Id, assetData.ImageUrl);
             }
         }
 
-        private bool UploadAssetIcon(int assetId, string url)
+        private async Task<bool> UploadAssetIconAsync(int assetId, string url)
         {
-            url = !url.Contains('?') ? url : url.Split('?')[0];
-            return AzureStorageBusiness.UploadAssetFromUrl($"{assetId}.png", url);
+            if (string.IsNullOrEmpty(url))
+                return false;
+            if (!url.ToLower().StartsWith("http"))
+                return false;
+
+            if (url.ToLower().Contains("/large/"))
+                url = url.Replace("/large/", "/small/");
+
+            var result = await AzureStorageBusiness.UploadAssetFromUrlAsync($"{assetId}.png", url);
+
+            if (!result && url.Contains("/small/"))
+            {
+                url = url.Replace("/small/", "/large/");
+                result = await AzureStorageBusiness.UploadAssetFromUrlAsync($"{assetId}.png", url);
+            }
+            return result;
         }
 
         public IEnumerable<DomainObjects.Asset.Asset> ListFollowingAssets()

@@ -31,13 +31,13 @@ namespace Api.Controllers
 
         protected virtual IActionResult CreateAssets(string api)
         {
-            RunAsync(() => HandleCreateAssets(api));
+            RunAsync(async () => await HandleCreateAssetsAsync(api));
             return Ok();
         }
 
         protected virtual IActionResult UpdateAssetsIcons(string api)
         {
-            RunAsync(() => HandleUpdateAssetsIcons(api));
+            RunAsync(async () => await HandleUpdateAssetsIconsAsync(api));
             return Ok();
         }
 
@@ -63,20 +63,20 @@ namespace Api.Controllers
                 AssetBusiness.UpdateCoinmarketcapAssetsMarketcap();
         }
 
-        private void HandleCreateAssets(string api)
+        private async Task HandleCreateAssetsAsync(string api)
         {
             if (api == "coingecko")
-                AssetBusiness.CreateCoingeckoNotIncludedAssets();
+                await AssetBusiness.CreateCoingeckoNotIncludedAssetsAsync();
             else
-                AssetBusiness.CreateCoinmarketcapNotIncludedAssets();
+                await AssetBusiness.CreateCoinmarketcapNotIncludedAssetsAsync();
         }
 
-        private void HandleUpdateAssetsIcons(string api)
+        private async Task HandleUpdateAssetsIconsAsync(string api)
         {
             if (api == "coingecko")
-                AssetBusiness.UpdateCoingeckoAssetsIcons();
+                await AssetBusiness.UpdateCoingeckoAssetsIconsAsync();
             else
-                AssetBusiness.UpdateCoinmarketcapAssetsIcons();
+                await AssetBusiness.UpdateCoinmarketcapAssetsIconsAsync();
         }
 
         [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]

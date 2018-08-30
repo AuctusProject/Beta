@@ -3,12 +3,14 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Auctus.Business.Storage
 {
     public class AzureStorageBusiness
     {
         private const string ASSET_ICON_CONTAINER_NAME = "assetsicons";
+        private const string USER_PICTURE_CONTAINER_NAME = "userpicture";
 
         private readonly IAzureStorageResource Resource;
 
@@ -17,9 +19,14 @@ namespace Auctus.Business.Storage
             Resource = (IAzureStorageResource)serviceProvider.GetService(typeof(IAzureStorageResource));
         }
 
-        public bool UploadAssetFromUrl(string fileName, string url)
+        public async Task<bool> UploadAssetFromUrlAsync(string fileName, string url)
         {
-            return Resource.UploadFileFromUrl(ASSET_ICON_CONTAINER_NAME, fileName, url);
+            return await Resource.UploadFileFromUrlAsync(ASSET_ICON_CONTAINER_NAME, fileName, url);
+        }
+
+        public async Task<bool> UploadUserPictureFromBytesAsync(string fileName, byte[] file)
+        {
+            return await Resource.UploadFileFromBytesAsync(USER_PICTURE_CONTAINER_NAME, fileName, file);
         }
     }
 }

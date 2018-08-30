@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Auctus.DataAccessInterfaces.Storage
 {
     public interface IAzureStorageResource
     {
-        bool UploadFileFromUrl(string containerName, string fileName, string url);
+        Task<bool> UploadFileFromUrlAsync(string containerName, string fileName, string url);
+        Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file);
     }
 }
