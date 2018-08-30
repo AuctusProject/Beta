@@ -1,0 +1,10 @@
+<div>
+  Top Experts
+</div>
+<div>
+  Follow the top experts and get the best recommendations!
+</div>
+
+<div *ngFor="let expert of experts">
+  <advisor-card [advisor]="expert"></advisor-card>
+</div>

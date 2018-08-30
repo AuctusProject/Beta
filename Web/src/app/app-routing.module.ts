@@ -20,9 +20,10 @@ import { ConfigurationComponent } from './components/account/configuration/confi
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
+import { HomeComponent } from './components/home/home/home.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'feed', pathMatch: 'full' },
+    { path: '', component: HomeComponent  },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
