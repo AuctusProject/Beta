@@ -56,7 +56,7 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            CalculateForAdvisorsData(CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult);
+            CalculateForAdvisorsData(CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult, advisorId);
             var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
             result.Assets.ForEach(a => a.AssetAdvisor = a.AssetAdvisor.Where(c => c.UserId == advisorId).ToList());
@@ -76,7 +76,7 @@ namespace Auctus.Business.Advisor
             return advisor;
         }
 
-        private void CalculateForAdvisorsData(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult)
+        private void CalculateForAdvisorsData(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, int? advisorId = null)
         {
             var user = GetValidUser();
             var advisors = GetAdvisors();
@@ -84,7 +84,7 @@ namespace Auctus.Business.Advisor
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
             Task.WaitAll(advices, advisorFollowers);
 
-            Calculation(mode, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, null);
+            Calculation(mode, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, null, null, advisorId);
         }
 
         public List<DomainObjects.Advisor.Advisor> GetAdvisors()
@@ -102,7 +102,7 @@ namespace Auctus.Business.Advisor
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 
             IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<FollowAdvisor> advisorFollowers,
-            IEnumerable<FollowAsset> assetFollowers, int? selectAssetId = null)
+            IEnumerable<FollowAsset> assetFollowers = null, int? selectAssetId = null, int? selectAdvisorId = null)
         {
             advisorsResult = new List<AdvisorResponse>();
             assetsResult = new List<AssetResponse>();
@@ -121,8 +121,30 @@ namespace Auctus.Business.Advisor
                 var assets = AssetBusiness.ListAssets(assetsIds);
 
                 var assetDateMapping = new Dictionary<int, DateTime>();
-                foreach(int assetId in assetsIds)
-                    assetDateMapping.Add(assetId, allAdvices.Where(advice => advice.AssetId == assetId).Min(c => c.CreationDate).AddDays(-30));
+                foreach (int assetId in assetsIds)
+                {
+                    DateTime startDate;
+                    if (mode == CalculationMode.AdvisorBase)
+                        startDate = Data.GetDateTimeNow().AddHours(-4);
+                    else if (mode == CalculationMode.AssetBase || mode == CalculationMode.Feed)
+                        startDate = Data.GetDateTimeNow().AddDays(-30).AddHours(-4);
+                    else if (mode == CalculationMode.AdvisorDetailed)
+                    {
+                        var selectAdvisorFirstAdvice = allAdvices.Where(c => c.AssetId == assetId && c.AdvisorId == selectAdvisorId.Value).OrderBy(c => c.CreationDate).FirstOrDefault();
+                        if (selectAdvisorFirstAdvice == null)
+                            startDate = Data.GetDateTimeNow().AddHours(-4);
+                        else
+                            startDate = selectAdvisorFirstAdvice.CreationDate.AddDays(-30); 
+                    }
+                    else 
+                    {
+                        if (selectAssetId.Value == assetId)
+                            startDate = new DateTime(Math.Min(allAdvices.Where(c => c.AssetId == assetId).Min(c => c.CreationDate).AddDays(-7).Ticks, Data.GetDateTimeNow().AddDays(-30).AddHours(-4).Ticks));
+                        else
+                            startDate = Data.GetDateTimeNow().AddHours(-4);
+                    }
+                    assetDateMapping.Add(assetId, startDate);
+                }
                 
                 var assetValues = AssetValueBusiness.FilterAssetValues(assetDateMapping);
 
@@ -138,7 +160,7 @@ namespace Auctus.Business.Advisor
                         var assetAdvices = allAdvices.Where(a => a.AssetId == asset.Id).OrderBy(c => c.CreationDate);
                         foreach (var advice in assetAdvices)
                         {
-                            var detail = SetAdviceDetail(values, assetAdviceDetails, advice, previousAdvice.ContainsKey(advice.AdvisorId) ? previousAdvice[advice.AdvisorId] : null,
+                            var detail = SetAdviceDetail(assetAdviceDetails, advice, previousAdvice.ContainsKey(advice.AdvisorId) ? previousAdvice[advice.AdvisorId] : null,
                                 startAdviceType.ContainsKey(advice.AdvisorId) ? startAdviceType[advice.AdvisorId] : null);
                             if (detail != null)
                             {
@@ -159,8 +181,8 @@ namespace Auctus.Business.Advisor
 
                         foreach (var advisorId in assetAdvisorsId)
                         {
-                            SetAdviceDetail(values, assetAdviceDetails, GetLastAdvice(asset, advisorId), previousAdvice.ContainsKey(advisorId) ? previousAdvice[advisorId] : null,
-                                startAdviceType.ContainsKey(advisorId) ? startAdviceType[advisorId] : null);
+                            SetAdviceDetail(assetAdviceDetails, GetLastAdvice(asset, advisorId, values.First().Value), 
+                                previousAdvice.ContainsKey(advisorId) ? previousAdvice[advisorId] : null, startAdviceType.ContainsKey(advisorId) ? startAdviceType[advisorId] : null);
 
                             if (mode != CalculationMode.AdvisorBase)
                                 assetResultData.AssetAdvisor.Add(GetAssetAdvisorResponse(advisorId, assetAdviceDetails, mode));
@@ -174,7 +196,14 @@ namespace Auctus.Business.Advisor
                                     .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
                                 assetResultData.Mode = GetAssetModeType(assetResultData);
                                 assetResultData.Advices = mode == CalculationMode.AssetBase ? null : assetAdviceDetails
-                                    .Select(c => new AssetResponse.AdviceResponse() { UserId = c.Advice.AdvisorId, AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).OrderBy(c => c.Date).ToList();
+                                    .Select(c => 
+                                    new AssetResponse.AdviceResponse()
+                                    {
+                                        UserId = c.Advice.AdvisorId,
+                                        AdviceType = c.Advice.Type,
+                                        Date = c.Advice.CreationDate,
+                                        AssetValue = c.Advice.AssetValue
+                                    }).OrderBy(c => c.Date).ToList();
                             }
                             assetsResult.Add(assetResultData);
                         }
@@ -210,14 +239,15 @@ namespace Auctus.Business.Advisor
             assetsResult.Add(GetAssetBaseResponse(loggedUser, asset, assetFollowers, new Advice[] { }, new int[] { }, values, mode));
         }
 
-        private Advice GetLastAdvice(DomainObjects.Asset.Asset asset, int advisorId)
+        private Advice GetLastAdvice(DomainObjects.Asset.Asset asset, int advisorId, double lastValue)
         {
             return new Advice()
             {
                 AssetId = asset.Id,
                 CreationDate = Data.GetDateTimeNow(),
                 Type = AdviceType.ClosePosition.Value,
-                AdvisorId = advisorId
+                AdvisorId = advisorId,
+                AssetValue = lastValue
             };
         }
 
@@ -263,7 +293,15 @@ namespace Auctus.Business.Advisor
                 LastAdviceDate = advisorDetailsValues.LastOrDefault()?.Advice.CreationDate,
                 LastAdviceMode = advisorDetailsValues.LastOrDefault()?.ModeType.Value,
                 LastAdviceType = advisorDetailsValues.LastOrDefault()?.Advice.Type,
-                Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c => new AssetResponse.AdviceResponse() { UserId = advisorId, AdviceType = c.Advice.Type, Date = c.Advice.CreationDate }).ToList() : null
+                LastAdviceAssetValue = advisorDetailsValues.LastOrDefault()?.Advice.AssetValue,
+                Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c =>
+                    new AssetResponse.AdviceResponse()
+                    {
+                        UserId = advisorId,
+                        AdviceType = c.Advice.Type,
+                        Date = c.Advice.CreationDate,
+                        AssetValue = c.Advice.AssetValue
+                    }).ToList() : null
             };
         }
 
@@ -323,43 +361,36 @@ namespace Auctus.Business.Advisor
                 advisorsResult[i].Ranking = i + 1;
         }
 
-        private AdviceDetail SetAdviceDetail(IEnumerable<DomainObjects.Asset.AssetValue> values, List<AdviceDetail> assetAdviceDetails, 
-            Advice advice, AdviceDetail previousAdvice, AdviceDetail startAdviceType)
+        private AdviceDetail SetAdviceDetail(List<AdviceDetail> assetAdviceDetails, Advice advice, AdviceDetail previousAdvice, AdviceDetail startAdviceType)
         {
-            var value = values.FirstOrDefault(c => c.Date <= advice.CreationDate);
-            if (value != null)
+            if (previousAdvice != null)
             {
-                if (previousAdvice != null)
-                {
-                    if (previousAdvice.Advice.Type != advice.Type)
-                        previousAdvice.Return = previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? (double?)null :
-                                            (previousAdvice.Advice.AdviceType == AdviceType.Buy ? 1.0 : -1.0) * (value.Value / previousAdvice.Value - 1);
+                if (previousAdvice.Advice.Type != advice.Type)
+                    previousAdvice.Return = previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? (double?)null :
+                                        (previousAdvice.Advice.AdviceType == AdviceType.Buy ? 1.0 : -1.0) * (advice.AssetValue / previousAdvice.Advice.AssetValue - 1);
 
-                    assetAdviceDetails.Add(previousAdvice);
-                }
-                if (startAdviceType != null && startAdviceType.Advice.Type != advice.Type)
-                {
-                    var advisorAdvices = assetAdviceDetails.Where(c => c.Advice.AdvisorId == startAdviceType.Advice.AdvisorId && startAdviceType.Advice.Id <= c.Advice.Id
-                                            && startAdviceType.Advice.Type == c.Advice.Type).ToList();
-                    advisorAdvices.ForEach(c =>
-                    {
-                        if (c.Advice.AdviceType != AdviceType.ClosePosition)
-                        {
-                            c.Return = (startAdviceType.Advice.AdviceType == AdviceType.Buy ? 1.0 : -1.0) * (value.Value / c.Value - 1);
-                            c.Success = startAdviceType.Advice.AdviceType == AdviceType.Buy ? value.Value >= c.Value : value.Value <= c.Value;
-                        }
-                    });
-                }
-                return new AdviceDetail()
-                {
-                    Advice = advice,
-                    Value = value.Value,
-                    ModeType = previousAdvice == null || previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? AdviceModeType.Initiate : 
-                                previousAdvice.Advice.Type == advice.Type ? AdviceModeType.Reiterate :
-                                previousAdvice.Advice.AdviceType == AdviceType.Buy ? AdviceModeType.Downgrade : AdviceModeType.Upgrade
-                };
+                assetAdviceDetails.Add(previousAdvice);
             }
-            return null;
+            if (startAdviceType != null && startAdviceType.Advice.Type != advice.Type)
+            {
+                var advisorAdvices = assetAdviceDetails.Where(c => c.Advice.AdvisorId == startAdviceType.Advice.AdvisorId && startAdviceType.Advice.Id <= c.Advice.Id
+                                        && startAdviceType.Advice.Type == c.Advice.Type).ToList();
+                advisorAdvices.ForEach(c =>
+                {
+                    if (c.Advice.AdviceType != AdviceType.ClosePosition)
+                    {
+                        c.Return = (startAdviceType.Advice.AdviceType == AdviceType.Buy ? 1.0 : -1.0) * (advice.AssetValue / c.Advice.AssetValue - 1);
+                        c.Success = startAdviceType.Advice.AdviceType == AdviceType.Buy ? advice.AssetValue >= c.Advice.AssetValue : advice.AssetValue <= c.Advice.AssetValue;
+                    }
+                });
+            }
+            return new AdviceDetail()
+            {
+                Advice = advice,
+                ModeType = previousAdvice == null || previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? AdviceModeType.Initiate : 
+                            previousAdvice.Advice.Type == advice.Type ? AdviceModeType.Reiterate :
+                            previousAdvice.Advice.AdviceType == AdviceType.Buy ? AdviceModeType.Downgrade : AdviceModeType.Upgrade
+            };
         }
 
         private int GetAssetModeType(AssetResponse asset)
@@ -386,7 +417,6 @@ namespace Auctus.Business.Advisor
         private class AdviceDetail
         {
             public Advice Advice{ get; set; }
-            public double Value { get; set; }
             public double? Return { get; set; }
             public bool? Success { get; set; }
             public AdviceModeType ModeType { get; set; }

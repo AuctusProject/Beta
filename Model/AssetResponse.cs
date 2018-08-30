@@ -35,6 +35,7 @@ namespace Auctus.Model
             public DateTime? LastAdviceDate { get; set; }
             public int? LastAdviceType { get; set; }
             public int? LastAdviceMode { get; set; }
+            public double? LastAdviceAssetValue { get; set; }
             public List<AdviceResponse> Advices { get; set; } = new List<AdviceResponse>();
         }
         public class ValuesResponse
@@ -47,6 +48,7 @@ namespace Auctus.Model
             public int UserId { get; set; }
             public DateTime Date { get; set; }
             public int AdviceType { get; set; }
+            public double AssetValue { get; set; }
         }
     }
 }
