@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Auctus.DomainObjects.Account;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace Api.Controllers
 {
@@ -29,9 +30,24 @@ namespace Api.Controllers
             return Ok(AdvisorBusiness.GetAdvisorData(id));
         }
 
-        protected IActionResult EditAdvisor(int id, AdvisorRequest advisorRequest)
+        protected async Task<IActionResult> EditAdvisorAsync(int id, AdvisorRequest advisorRequest)
         {
-            AdvisorBusiness.EditAdvisor(id, advisorRequest.Name, advisorRequest.Description);
+            if (advisorRequest.ChangePicture && Request.Form != null && Request.Form.Files != null && Request.Form.Files.Count == 1 && Request.Form.Files[0].Length > 0
+                && string.IsNullOrWhiteSpace(Request.Form.Files[0].FileName) && string.IsNullOrWhiteSpace(Request.Form.Files[0].ContentType))
+            {
+                if (!FileTypeMatcher.GetValidFileExtensions().Any(c => Request.Form.Files[0].ContentType.ToUpper().Contains(c)))
+                    return BadRequest(new { error = "Invalid file." });
+
+                var fileExtension = Request.Form.Files[0].FileName.Split('.').Last().ToUpper();
+                if (string.IsNullOrWhiteSpace(fileExtension) || !FileTypeMatcher.GetValidFileExtensions().Any(c => c == fileExtension))
+                    return BadRequest(new { error = "File extension is invalid." });
+
+                using (var stream = Request.Form.Files[0].OpenReadStream())
+                    await AdvisorBusiness.EditAdvisor(id, advisorRequest.Name, advisorRequest.Description, true, stream, fileExtension);
+            }
+            else
+                await AdvisorBusiness.EditAdvisor(id, advisorRequest.Name, advisorRequest.Description, advisorRequest.ChangePicture, null, null);
+
             return Ok();
         }
 
@@ -67,9 +83,9 @@ namespace Api.Controllers
             return Ok(RequestToBeAdvisorBusiness.ListPending());
         }
 
-        protected IActionResult ApproveRequestToBe(int id)
+        protected async Task<IActionResult> ApproveRequestToBe(int id)
         {
-            RequestToBeAdvisorBusiness.Approve(id);
+            await RequestToBeAdvisorBusiness.ApproveAsync(id);
             return Ok();
         }
 

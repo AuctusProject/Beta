@@ -12,6 +12,7 @@ namespace Auctus.DomainObjects.Account
         public static readonly ActionType NewLogin = new ActionType(2);
         public static readonly ActionType NewAucVerification = new ActionType(3);
         public static readonly ActionType JobVerification = new ActionType(4);
+        public static readonly ActionType EditAdvisor = new ActionType(5);
 
         private ActionType(int type) : base(type)
         { }
@@ -28,6 +29,8 @@ namespace Auctus.DomainObjects.Account
                     return NewAucVerification;
                 case 4:
                     return JobVerification;
+                case 5:
+                    return EditAdvisor;
                 default:
                     throw new BusinessException("Invalid type.");
             }

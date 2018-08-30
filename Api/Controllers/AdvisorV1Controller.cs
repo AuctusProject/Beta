@@ -47,11 +47,11 @@ namespace Api.Controllers
         }
 
         [Route("{id}")]
-        [HttpPatch]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult EditAdvisor(int id, [FromBody]AdvisorRequest advisorRequest)
+        public new async Task<IActionResult> EditAdvisorAsync(int id, [FromBody]AdvisorRequest advisorRequest)
         {
-            return base.EditAdvisor(id, advisorRequest);
+            return await base.EditAdvisorAsync(id, advisorRequest);
         }
 
         [Route("advices")]
@@ -91,9 +91,9 @@ namespace Api.Controllers
         [HttpPost]
         [OnlyAdmin]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ApproveRequestToBe(int id)
+        public new async Task<IActionResult> ApproveRequestToBe(int id)
         {
-            return base.ApproveRequestToBe(id);
+            return await base.ApproveRequestToBe(id);
         }
 
         [Route("requests/{id}/reject")]

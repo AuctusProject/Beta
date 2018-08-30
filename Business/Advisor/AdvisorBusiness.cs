@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,19 +25,55 @@ namespace Auctus.Business.Advisor
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-        public void EditAdvisor(int id, string name, string description)
+        public async Task EditAdvisor(int id, string name, string description, bool changePicture, Stream pictureStream, string pictureExtension)
         {
-            var advisor = Data.GetAdvisor(id);
+            if (string.IsNullOrWhiteSpace(name))
+                throw new BusinessException("Name must be filled.");
+            if (name.Length > 50)
+                throw new BusinessException("Name cannot have more than 50 characters.");
+            if (string.IsNullOrWhiteSpace(description))
+                throw new BusinessException("Description must be filled.");
+            if (description.Length > 160)
+                throw new BusinessException("Description cannot have more than 160 characters.");
 
+            byte[] picture = null;
+            if (changePicture && pictureStream != null)
+                picture = GetPictureBytes(pictureStream, pictureExtension);
+
+            var advisor = Data.GetAdvisor(id);
             if (advisor == null)
                 throw new NotFoundException("Advisor not found");
-
             if (advisor.Email.ToLower() != LoggedEmail.ToLower())
                 throw new UnauthorizedException("Invalid credentials");
+
+            var previousData = $"(Previous) Name: {advisor.Name} - Change Picture: {changePicture} - Description: {advisor.Description}";
 
             advisor.Name = name;
             advisor.Description = description;
             Update(advisor);
+            if (changePicture)
+                await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{advisor.Id}.png", picture ?? UserBusiness.GetNoUploadedImageForUser(advisor));
+
+            ActionBusiness.InsertEditAdvisor(advisor.Id, previousData);
+        }
+
+        private byte[] GetPictureBytes(Stream pictureStream, string pictureExtension)
+        {
+            pictureExtension = pictureExtension == "JPEG" ? "JPG" : pictureExtension;
+            var extensionFound = FileTypeMatcher.GetFileExtension(pictureStream);
+            if (string.IsNullOrEmpty(extensionFound) || pictureExtension != extensionFound)
+                throw new BusinessException("File is invalid.");
+
+            byte[] picture;
+            using (var memoryStream = new MemoryStream())
+            {
+                pictureStream.CopyTo(memoryStream);
+                picture = memoryStream.ToArray();
+            }
+            if (picture.Length > (1.5 * 1024 * 1024))
+                throw new BusinessException("File is too large.");
+
+            return picture;
         }
 
         public DomainObjects.Advisor.Advisor GetAdvisor(int id)
@@ -338,7 +375,7 @@ namespace Auctus.Business.Advisor
             var maxAvg = advisorsConsidered.Max(c => c.AverageReturn);
             var maxSucRate = advisorsConsidered.Max(c => c.SuccessRate);
             var maxAssets = advisorsConsidered.Max(c => c.TotalAssetsAdvised);
-            var lastActivity = details.Any(c => c.Value.Any()) ? details.Max(c => c.Value.Max(a => a.Advice.CreationDate)) : DateTime.MinValue;
+            var lastActivity = details.Any(c => c.Value.Any()) ? details.Where(c => c.Value.Any()).Max(c => c.Value.Max(a => a.Advice.CreationDate)) : DateTime.MinValue;
 
             var advDays = advisorsResult.Select(c => new { Id = c.UserId, Days = Data.GetDateTimeNow().Subtract(c.CreationDate).TotalDays }).ToDictionary(c => c.Id, c => c.Days);
             var maxAdvices = details.Any(c => c.Value.Any()) ? details.Max(c => (double)c.Value.Count() / advDays[c.Key]) : 0;

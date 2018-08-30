@@ -46,6 +46,20 @@ namespace Auctus.DataAccess.Storage
             }
         }
 
+        public async Task<bool> DeleteFileAsync(string containerName, string fileName)
+        {
+            var reference = await GetBlockBlobReference(containerName, fileName);
+            try
+            {
+                await reference.DeleteIfExistsAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private async Task<Microsoft.WindowsAzure.Storage.Blob.CloudBlockBlob> GetBlockBlobReference(string containerName, string fileName)
         {
             CloudStorageAccount storageAccount;
