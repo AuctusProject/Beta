@@ -161,5 +161,10 @@ Auctus Team");
             }
             return feedResult.OrderByDescending(c => c.Date).ToList();
         }
+
+        public IEnumerable<Advice> ListLastAdvicesForAllTypes(int? top)
+        {
+            return Data.ListLastAdvicesForAllTypes(top);
+        }
     }
 }
