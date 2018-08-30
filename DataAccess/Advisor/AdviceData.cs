@@ -36,6 +36,17 @@ namespace Auctus.DataAccess.Advisor
             {1}
             ORDER BY CreationDate DESC";
 
+        private const string SQL_LIST_LAST_BY_TYPE = @"
+	    SELECT * FROM
+		    (SELECT {0}
+			    a.* 
+		    FROM 
+			    Advice a
+		    WHERE
+			    a.Type = @Type{1}
+		    ORDER BY a.CreationDate DESC
+		    ) a{1}";
+
         public List<Advice> List(IEnumerable<int> advisorIds = null, IEnumerable<int> assetsIds = null)
         {
             if ((!advisorIds?.Any() ?? true) && (!assetsIds?.Any() ?? true))
@@ -98,6 +109,24 @@ namespace Auctus.DataAccess.Advisor
             }
 
             var query = String.Format(SQL_LIST_LAST_ADVICES_FOR_USER_WITH_PAGINATION, topCondition, complement);
+
+            return Query<Advice>(query, parameters);
+        }
+
+        public IEnumerable<Advice> ListLastAdvicesForAllTypes(int? top)
+        {
+            var topCondition = (top.HasValue ? "TOP " + top.Value : String.Empty);
+            var validTypes = new AdviceType[] { AdviceType.Sell, AdviceType.Buy, AdviceType.ClosePosition };
+            var parameters = new DynamicParameters();
+            var querySegments = new List<string>();
+
+            foreach (AdviceType type in validTypes)
+            {
+                parameters.Add(string.Format("Type{0}", type.Value), type.Value, DbType.Int32);
+                querySegments.Add(string.Format(SQL_LIST_LAST_BY_TYPE, topCondition, type.Value));
+            }
+
+            var query = string.Join(" UNION ", querySegments);
 
             return Query<Advice>(query, parameters);
         }

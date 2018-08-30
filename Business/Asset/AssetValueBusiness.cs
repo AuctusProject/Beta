@@ -16,12 +16,12 @@ namespace Auctus.Business.Asset
     {
         public AssetValueBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-        internal AssetValue LastAssetValue(int assetId)
+        public AssetValue LastAssetValue(int assetId)
         {
             return Data.GetLastValue(assetId);
         }
 
-        internal List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
+        public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
         {
             return Data.FilterAssetValues(assetsMap);
         }

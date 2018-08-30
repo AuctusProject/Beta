@@ -18,6 +18,8 @@ namespace Auctus.DomainObjects.Advisor
         public DateTime CreationDate { get; set; }
         [DapperType(System.Data.DbType.Int32)]
         public int Type { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double AssetValue { get; set; }
 
         public AdviceType AdviceType { get { return AdviceType.Get(Type); } }
     }

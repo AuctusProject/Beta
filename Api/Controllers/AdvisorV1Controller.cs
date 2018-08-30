@@ -49,12 +49,12 @@ namespace Api.Controllers
         }
 
         [Route("{id}")]
-        [HttpPatch]
+        [HttpPost]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult EditAdvisor(int id, [FromBody]AdvisorRequest advisorRequest)
+        public new async Task<IActionResult> EditAdvisorAsync(int id, [FromBody]AdvisorRequest advisorRequest)
         {
-            return base.EditAdvisor(id, advisorRequest);
+            return await base.EditAdvisorAsync(id, advisorRequest);
         }
 
         [Route("advices")]
@@ -99,9 +99,9 @@ namespace Api.Controllers
         [OnlyAdmin]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ApproveRequestToBe(int id)
+        public new async Task<IActionResult> ApproveRequestToBe(int id)
         {
-            return base.ApproveRequestToBe(id);
+            return await base.ApproveRequestToBe(id);
         }
 
         [Route("requests/{id}/reject")]
@@ -130,6 +130,15 @@ namespace Api.Controllers
         public new IActionResult UnfollowAdvisor([FromRoute]int id)
         {
             return base.UnfollowAdvisor(id);
+        }
+
+        [Route("advices/latest_by_type")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListLastAdvicesForAllTypes([FromQuery]int top)
+        {
+            return base.ListLastAdvicesForAllTypes(top);
         }
     }
 }

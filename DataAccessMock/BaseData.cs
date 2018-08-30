@@ -10,7 +10,7 @@ namespace Auctus.DataAccessMock
     {
         public virtual DateTime GetDateTimeNow()
         {
-            return new DateTime(2018, 5, 18, 0, 0, 0);
+            return new DateTime(2018, 6, 30, 23, 55, 0);
         }
 
         public virtual void Delete(T obj)

@@ -11,6 +11,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -142,6 +145,43 @@ namespace Auctus.Business.Account
                 return user;
             }
             return null;
+        }
+
+        public byte[] GetNoUploadedImageForUser(User user)
+        {
+            var userData = (user.CreationDate.Ticks * user.Id + user.Id).ToString().Select(c => Convert.ToInt32(c.ToString()));
+            using (var bitmap = new Bitmap(32, 32))
+            {
+                var dataPosition = 0;
+                for (var w = 0; w < 32; ++w)
+                {
+                    for (var h = 0; h < 32; ++h)
+                    {
+                        if (userData.ElementAt(dataPosition) < 3)
+                            bitmap.SetPixel(w, h, Color.White);
+                        else if (userData.ElementAt(dataPosition) < 5)
+                            bitmap.SetPixel(w, h, Color.DeepSkyBlue);
+                        else if (userData.ElementAt(dataPosition) == 5)
+                            bitmap.SetPixel(w, h, Color.DarkOrange);
+                        else if (userData.ElementAt(dataPosition) == 6)
+                            bitmap.SetPixel(w, h, Color.LightSkyBlue);
+                        else if (userData.ElementAt(dataPosition) < 9)
+                            bitmap.SetPixel(w, h, Color.Orange);
+                        else 
+                            bitmap.SetPixel(w, h, Color.Red);
+
+                        if (dataPosition == userData.Count() - 1)
+                            dataPosition = 0;
+                        else
+                            ++dataPosition;
+                    }
+                }
+                using (var stream = new MemoryStream())
+                {
+                    bitmap.Save(stream, ImageFormat.Png);
+                    return stream.ToArray();
+                }
+            }
         }
 
         private string GetHashedPassword(string password, string email, DateTime creationDate)

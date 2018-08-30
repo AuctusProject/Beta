@@ -54,11 +54,9 @@ namespace Auctus.Test.Advisor
                     Assert.Single(response.Assets.Where(c => c.AssetId == 2));
                     Assert.Single(response.Assets.Single(c => c.AssetId == 2).AssetAdvisor.Where(c => c.UserId == 1));
                     AssetTest.AssertBaseAsset1Data(response.Assets.Single(c => c.AssetId == 1));
-                    AssetTest.AssertValues1Data(response.Assets.Single(c => c.AssetId == 1));
                     AssertAssetAdvisor1Data(response.Assets.Single(c => c.AssetId == 1).AssetAdvisor.Single(c => c.UserId == 1), 1);
                     AssertAssetAdvisor1AdvicesData(response.Assets.Single(c => c.AssetId == 1).AssetAdvisor.Single(c => c.UserId == 1).Advices, 1);
                     AssetTest.AssertBaseAsset2Data(response.Assets.Single(c => c.AssetId == 2));
-                    AssetTest.AssertValues2Data(response.Assets.Single(c => c.AssetId == 2));
                     AssertAssetAdvisor1Data(response.Assets.Single(c => c.AssetId == 2).AssetAdvisor.Single(c => c.UserId == 1), 2);
                     AssertAssetAdvisor1AdvicesData(response.Assets.Single(c => c.AssetId == 2).AssetAdvisor.Single(c => c.UserId == 1).Advices, 2);
                     break;
@@ -70,19 +68,15 @@ namespace Auctus.Test.Advisor
                     Assert.Single(response.Assets.Where(c => c.AssetId == 3));
                     Assert.Single(response.Assets.Where(c => c.AssetId == 4));
                     AssetTest.AssertBaseAsset1Data(response.Assets.Single(c => c.AssetId == 1));
-                    AssetTest.AssertValues1Data(response.Assets.Single(c => c.AssetId == 1));
                     AssertAssetAdvisor2Data(response.Assets.Single(c => c.AssetId == 1).AssetAdvisor.Single(c => c.UserId == 2), 1);
                     AssertAssetAdvisor2AdvicesData(response.Assets.Single(c => c.AssetId == 1).AssetAdvisor.Single(c => c.UserId == 2).Advices, 1);
                     AssetTest.AssertBaseAsset2Data(response.Assets.Single(c => c.AssetId == 2));
-                    AssetTest.AssertValues2Data(response.Assets.Single(c => c.AssetId == 2));
                     AssertAssetAdvisor2Data(response.Assets.Single(c => c.AssetId == 2).AssetAdvisor.Single(c => c.UserId == 2), 2);
                     AssertAssetAdvisor2AdvicesData(response.Assets.Single(c => c.AssetId == 2).AssetAdvisor.Single(c => c.UserId == 2).Advices, 2);
                     AssetTest.AssertBaseAsset3Data(response.Assets.Single(c => c.AssetId == 3));
-                    AssetTest.AssertValues3Data(response.Assets.Single(c => c.AssetId == 3));
                     AssertAssetAdvisor2Data(response.Assets.Single(c => c.AssetId == 3).AssetAdvisor.Single(c => c.UserId == 2), 3);
                     AssertAssetAdvisor2AdvicesData(response.Assets.Single(c => c.AssetId == 3).AssetAdvisor.Single(c => c.UserId == 2).Advices, 3);
                     AssetTest.AssertBaseAsset4Data(response.Assets.Single(c => c.AssetId == 4));
-                    AssetTest.AssertValues4Data(response.Assets.Single(c => c.AssetId == 4));
                     AssertAssetAdvisor2Data(response.Assets.Single(c => c.AssetId == 4).AssetAdvisor.Single(c => c.UserId == 2), 4);
                     AssertAssetAdvisor2AdvicesData(response.Assets.Single(c => c.AssetId == 4).AssetAdvisor.Single(c => c.UserId == 2).Advices, 4);
                     break;
@@ -91,7 +85,6 @@ namespace Auctus.Test.Advisor
                     Assert.Single(response.Assets);
                     Assert.Single(response.Assets.Where(c => c.AssetId == 1));
                     AssetTest.AssertBaseAsset1Data(response.Assets.Single(c => c.AssetId == 1));
-                    AssetTest.AssertValues1Data(response.Assets.Single(c => c.AssetId == 1));
                     AssertAssetAdvisor3Data(response.Assets.Single(c => c.AssetId == 1).AssetAdvisor.Single(c => c.UserId == 3), 1);
                     AssertAssetAdvisor3AdvicesData(response.Assets.Single(c => c.AssetId == 1).AssetAdvisor.Single(c => c.UserId == 3).Advices, 1);
                     break;
@@ -104,7 +97,7 @@ namespace Auctus.Test.Advisor
             expRecommendation[AdviceType.Buy.Value] = 7;
             expRecommendation[AdviceType.Sell.Value] = 2;
             expRecommendation[AdviceType.ClosePosition.Value] = 4;
-            AssertAdvisorData(advisor, -0.065105, 0.222222, 4, 2, true, false, 2.322126, 3, expRecommendation);
+            AssertAdvisorData(advisor, -0.047146, 0.333333, 4, 2, true, false, 2.590221, 3, expRecommendation);
         }
 
         internal static void AssertAdvisor2Data(AdvisorResponse advisor)
@@ -113,7 +106,7 @@ namespace Auctus.Test.Advisor
             expRecommendation[AdviceType.Buy.Value] = 5;
             expRecommendation[AdviceType.Sell.Value] = 7;
             expRecommendation[AdviceType.ClosePosition.Value] = 2;
-            AssertAdvisorData(advisor, -0.074166, 0.333333, 3, 4, false, false, 2.549984, 2, expRecommendation);
+            AssertAdvisorData(advisor, -0.014205, 0.583333, 3, 4, false, false, 2.937720, 2, expRecommendation);
         }
 
         internal static void AssertAdvisor3Data(AdvisorResponse advisor)
@@ -121,7 +114,7 @@ namespace Auctus.Test.Advisor
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.Sell.Value] = 1;
             expRecommendation[AdviceType.ClosePosition.Value] = 1;
-            AssertAdvisorData(advisor, 0.070949, 1, 1, 1, false, true, 4.580877, 1, expRecommendation);
+            AssertAdvisorData(advisor, 0.070949, 1, 1, 1, false, true, 4.519683, 1, expRecommendation);
         }
 
         private static void AssertAdvisorData(AdvisorResponse advisor, double expReturn, double expSuccessRate, int expNumberFollowers,
@@ -149,7 +142,7 @@ namespace Auctus.Test.Advisor
             switch(assetId)
             {
                 case 1:
-                    AssertAssetAdvisorData(assetAdvisor, -0.087320, 0.166667, 8, 0, 0);
+                    AssertAssetAdvisorData(assetAdvisor, -0.060381, 0.333333, 8, 0, 0);
                     break;
                 case 2:
                     AssertAssetAdvisorData(assetAdvisor, -0.020676, 0.333333, 5, 2, 2);
@@ -166,10 +159,10 @@ namespace Auctus.Test.Advisor
                     AssertAssetAdvisorData(assetAdvisor, 0.024781, 0.333333, 4, 2, 2);
                     break;
                 case 2:
-                    AssertAssetAdvisorData(assetAdvisor, 0.001179, 0.333333, 3, 3, 0);
+                    AssertAssetAdvisorData(assetAdvisor, 0.062164, 0.666667, 3, 3, 0);
                     break;
                 case 3:
-                    AssertAssetAdvisorData(assetAdvisor, -0.086164, 0.4, 5, 1, 0);
+                    AssertAssetAdvisorData(assetAdvisor, 0.021150, 0.8, 5, 1, 0);
                     break;
                 case 4:
                     AssertAssetAdvisorData(assetAdvisor, -0.537053, 0, 2, 3, 2);

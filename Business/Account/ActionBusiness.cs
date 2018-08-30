@@ -68,6 +68,18 @@ namespace Auctus.Business.Account
             });
         }
 
+        public void InsertEditAdvisor(int userId, string message)
+        {
+            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            {
+                CreationDate = Data.GetDateTimeNow(),
+                UserId = userId,
+                Type = ActionType.EditAdvisor.Value,
+                Message = message,
+                Ip = LoggedIp
+            });
+        }
+
         public DashboardResponse GetDashboardData()
         {
             var cutDayForActivity = Data.GetDateTimeNow().AddDays(-7);

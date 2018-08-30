@@ -36,9 +36,15 @@ namespace Auctus.Business.Advisor
             return Data.ListPending();
         }
 
-        public void Approve(int id)
+        public async Task ApproveAsync(int id)
         {
             var request = Data.GetById(id);
+            var user = UserBusiness.GetById(id);
+            if (user.IsAdvisor)
+                throw new BusinessException("User is already advisor.");
+            if (request.Approved == true)
+                throw new BusinessException("Requets is already approved.");
+
             request.Approved = true;
             var advisor = AdvisorBusiness.CreateFromRequest(request);
             using (var transaction = TransactionalDapperCommand)
@@ -47,6 +53,7 @@ namespace Auctus.Business.Advisor
                 transaction.Update(request);
                 transaction.Commit();
             }
+            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{user.Id}.png", UserBusiness.GetNoUploadedImageForUser(user));
         }
 
         public void Reject(int id)

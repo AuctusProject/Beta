@@ -33,12 +33,17 @@ namespace Auctus.Business.Advisor
             if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
                 throw new BusinessException("Sell recommendations are not available for this asset.");
 
+            var assetValue = AssetValueBusiness.LastAssetValue(asset.Id);
+            if (assetValue == null)
+                throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
+
             Insert(new Advice()
                     {
                         AdvisorId = advisor.Id,
                         AssetId = asset.Id,
                         Type = type.Value,
-                        CreationDate = Data.GetDateTimeNow()
+                        CreationDate = Data.GetDateTimeNow(),
+                        AssetValue = assetValue.Value
                     });
 
             RunAsync(async () => await SendAdviceNotificationForFollowersAsync(advisor, asset, type));
@@ -155,6 +160,11 @@ Auctus Team");
                 });
             }
             return feedResult.OrderByDescending(c => c.Date).ToList();
+        }
+
+        public IEnumerable<Advice> ListLastAdvicesForAllTypes(int? top)
+        {
+            return Data.ListLastAdvicesForAllTypes(top);
         }
     }
 }

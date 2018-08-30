@@ -55,7 +55,6 @@ namespace Auctus.Test.Asset
                 case 1:
                     AssertBaseAsset1Data(response);
                     AssertExtraAsset1Data(response);
-                    AssertValues1Data(response);
                     AssertAsset1AdvicesData(response.Advices);
                     Assert.Equal(3, response.Advisors.Count);
                     Assert.Equal(3, response.AssetAdvisor.Count);
@@ -75,7 +74,6 @@ namespace Auctus.Test.Asset
                 case 2:
                     AssertBaseAsset2Data(response);
                     AssertExtraAsset2Data(response);
-                    AssertValues2Data(response);
                     AssertAsset2AdvicesData(response.Advices);
                     Assert.Equal(2, response.Advisors.Count);
                     Assert.Equal(2, response.AssetAdvisor.Count);
@@ -91,7 +89,6 @@ namespace Auctus.Test.Asset
                 case 3:
                     AssertBaseAsset3Data(response);
                     AssertExtraAsset3Data(response);
-                    AssertValues3Data(response);
                     AssertAsset3AdvicesData(response.Advices);
                     Assert.Single(response.Advisors);
                     Assert.Single(response.AssetAdvisor);
@@ -103,7 +100,6 @@ namespace Auctus.Test.Asset
                 case 4:
                     AssertBaseAsset4Data(response);
                     AssertExtraAsset4Data(response);
-                    AssertValues4Data(response);
                     AssertAsset4AdvicesData(response.Advices);
                     Assert.Single(response.Advisors);
                     Assert.Single(response.AssetAdvisor);
@@ -113,26 +109,6 @@ namespace Auctus.Test.Asset
                     AdvisorTest.AssertAssetAdvisor2Data(response.AssetAdvisor.Single(c => c.UserId == 2), 4);
                     break;
             }
-        }
-
-        internal static void AssertValues1Data(AssetResponse asset)
-        {
-            AssertValuesData(asset, 1020, 9683.955819, 7470.347514);
-        }
-
-        internal static void AssertValues2Data(AssetResponse asset)
-        {
-            AssertValuesData(asset, 1179, 781.064044, 595.091365);
-        }
-
-        internal static void AssertValues3Data(AssetResponse asset)
-        {
-            AssertValuesData(asset, 1149, 0.899942, 0.668940);
-        }
-
-        internal static void AssertValues4Data(AssetResponse asset)
-        {
-            AssertValuesData(asset, 1383, 0.826652, 0.248711);
         }
 
         internal static void AssertBaseAsset1Data(AssetResponse asset)

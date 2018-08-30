@@ -9,5 +9,6 @@ namespace Auctus.DataAccessInterfaces.Storage
     {
         Task<bool> UploadFileFromUrlAsync(string containerName, string fileName, string url);
         Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file);
+        Task<bool> DeleteFileAsync(string containerName, string fileName);
     }
 }

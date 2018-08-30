@@ -8,6 +8,11 @@ namespace Auctus.DataAccessMock.Storage
 {
     public class AzureStorageResource : IAzureStorageResource
     {
+        public Task<bool> DeleteFileAsync(string containerName, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file)
         {
             throw new NotImplementedException();

@@ -28,5 +28,10 @@ namespace Auctus.Business.Storage
         {
             return await Resource.UploadFileFromBytesAsync(USER_PICTURE_CONTAINER_NAME, fileName, file);
         }
+
+        public async Task<bool> DeleteUserPicture(string fileName)
+        {
+            return await Resource.DeleteFileAsync(USER_PICTURE_CONTAINER_NAME, fileName);
+        }
     }
 }
