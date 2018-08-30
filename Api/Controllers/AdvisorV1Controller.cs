@@ -120,5 +120,14 @@ namespace Api.Controllers
         {
             return base.UnfollowAdvisor(id);
         }
+
+        [Route("advices/latest_by_type")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListLastAdvicesForAllTypes([FromQuery]int top)
+        {
+            return base.ListLastAdvicesForAllTypes(top);
+        }
     }
 }

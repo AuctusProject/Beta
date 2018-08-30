@@ -88,5 +88,10 @@ namespace Api.Controllers
         {
             return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Unfollow));
         }
+
+        protected virtual IActionResult ListLastAdvicesForAllTypes(int top)
+        {
+            return Ok(AdviceBusiness.ListLastAdvicesForAllTypes(top));
+        }
     }
 }
