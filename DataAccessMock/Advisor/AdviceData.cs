@@ -107,5 +107,17 @@ namespace Auctus.DataAccessMock.Advisor
 
             return advices;
         }
+
+        public IEnumerable<Advice> ListLastAdvicesForAllTypes(int? top)
+        {
+            var result = new List<Advice>();
+            var allAdvices = GetAllAdvices();
+
+            result.AddRange(allAdvices.Where(advice => advice.AdviceType == AdviceType.Sell).OrderByDescending(advice => advice.CreationDate).Take(top ?? 3));
+            result.AddRange(allAdvices.Where(advice => advice.AdviceType == AdviceType.Buy).OrderByDescending(advice => advice.CreationDate).Take(top ?? 3));
+            result.AddRange(allAdvices.Where(advice => advice.AdviceType == AdviceType.ClosePosition).OrderByDescending(advice => advice.CreationDate).Take(top ?? 3));
+
+            return result;
+        }
     }
 }
