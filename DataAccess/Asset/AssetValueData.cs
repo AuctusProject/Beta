@@ -19,9 +19,7 @@ namespace Auctus.DataAccess.Asset
 
         public AssetValue GetLastValue(int assetId)
         {
-            var value = Collection.Find( x => x.AssetId == assetId).SortByDescending(x => x.Date).FirstOrDefault();
-
-            return value;
+            return Collection.Find(x => x.AssetId == assetId).SortByDescending(x => x.Date).FirstOrDefault(); 
         }
 
         public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
