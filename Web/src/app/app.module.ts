@@ -61,10 +61,27 @@ import { RecommendationBoxComponent } from './components/home/recommendation-box
 import { HomeComponent } from './components/home/home/home.component';
 import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
 import { BarRatingModule } from "ngx-bar-rating";
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
 
 export function loadConfigService(configService: ConfigService): Function
 {
   return () => { return configService.load() }; 
+}
+
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig(
+      [
+        {
+          id: FacebookLoginProvider.PROVIDER_ID,
+          provider: new FacebookLoginProvider("2044979652220211")
+        },
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider("367680444115-ceggf3epb575veih8mb0rm0jdi37qede.apps.googleusercontent.com")
+        }
+      ]
+  );
+  return config;
 }
 
 @NgModule({
@@ -121,7 +138,8 @@ export function loadConfigService(configService: ConfigService): Function
     InfiniteScrollModule,
     MatModule,
     FlexLayoutModule,
-    BarRatingModule
+    BarRatingModule,
+    SocialLoginModule
   ],
   providers: [
     HttpService,
@@ -135,6 +153,7 @@ export function loadConfigService(configService: ConfigService): Function
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules},
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
+    { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs }
   ],
   entryComponents:[ConfirmAdviceDialogComponent, TopLoadingComponent],
   exports: [TopLoadingComponent],

@@ -35,6 +35,83 @@ namespace Auctus.Business.Account
             return Data.GetById(id);
         }
 
+        public LoginResponse SocialLogin(SocialNetworkType socialNetworkType, string email, string accessToken, bool requestedToBeAdvisor)
+        {
+            BaseEmailValidation(email);
+            EmailValidation(email);
+            SocialUser socialUser = GetSocialUser(socialNetworkType, accessToken);
+            ValidateSocialUser(socialUser, email);
+
+            var user = Data.GetForLogin(email);
+            if (user != null)
+            {
+                return SocialLogin(user, socialNetworkType);
+            }
+            else
+            {
+                return SocialRegister(email, requestedToBeAdvisor, socialNetworkType);
+            }
+        }
+
+        private LoginResponse SocialRegister(string email, bool requestedToBeAdvisor, SocialNetworkType socialNetworkType)
+        {
+            var user = CreateUser(email, null, null, true);
+            Data.Insert(user);
+            
+            ActionBusiness.InsertNewLogin(user.Id, null, socialNetworkType);
+            return new LoginResponse()
+            {
+                Email = user.Email,
+                HasInvestment = false,
+                PendingConfirmation = false,
+                IsAdvisor = false,
+                RequestedToBeAdvisor = requestedToBeAdvisor
+            };            
+        }
+
+        private LoginResponse SocialLogin(User user, SocialNetworkType socialNetworkType)
+        {
+            if (!user.ConfirmationDate.HasValue)
+            {
+                user.ConfirmationDate = Data.GetDateTimeNow();
+                Data.Update(user);
+            }
+            bool hasInvestment = GetUserHasInvestment(user, out decimal? aucAmount);
+            ActionBusiness.InsertNewLogin(user.Id, aucAmount, socialNetworkType);
+
+            return new Model.LoginResponse()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
+                IsAdvisor = IsValidAdvisor(user),
+                HasInvestment = hasInvestment,
+                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+            };
+        }
+
+        private static void ValidateSocialUser(SocialUser socialUser, string email)
+        {
+            if (socialUser == null || socialUser.Email == null || email == null || socialUser.Email.ToLower() != email.ToLower())
+            {
+                throw new BusinessException("Invalid parameters");
+            }
+        }
+
+        private SocialUser GetSocialUser(SocialNetworkType socialNetworkType, string accessToken)
+        {
+            SocialUser socialUser = null;
+            if (socialNetworkType == SocialNetworkType.Facebook)
+            {
+                socialUser = FacebookBusiness.GetSocialUser(accessToken);
+            }
+            else if (socialNetworkType == SocialNetworkType.Google)
+            {
+                socialUser = GoogleBusiness.GetSocialUser(accessToken);
+            }
+            return socialUser;
+        }
+
         public LoginResponse Login(string email, string password)
         {
             BaseEmailValidation(email);
@@ -46,15 +123,8 @@ namespace Auctus.Business.Account
                 throw new BusinessException("Email is invalid.");
             else if (user.Password != GetHashedPassword(password, user.Email, user.CreationDate))
                 throw new BusinessException("Password is invalid.");
-
-            bool hasInvestment = true;
-            decimal? aucAmount = null;
-            if (!IsValidAdvisor(user) && !IsAdmin)
-            {
-                aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
-                hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
-            }
-            ActionBusiness.InsertNewLogin(user.Id, aucAmount);
+            bool hasInvestment = GetUserHasInvestment(user, out decimal? aucAmount);
+            ActionBusiness.InsertNewLogin(user.Id, aucAmount, null);
             return new Model.LoginResponse()
             {
                 Id = user.Id,
@@ -64,6 +134,18 @@ namespace Auctus.Business.Account
                 HasInvestment = hasInvestment,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
+        }
+
+        private bool GetUserHasInvestment(User user, out decimal? aucAmount)
+        {
+            aucAmount = null;
+            bool hasInvestment = true;
+            if (!IsValidAdvisor(user) && !IsAdmin)
+            {
+                aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
+                hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
+            }
+            return hasInvestment;
         }
 
         public bool IsValidAdvisor(User user)
@@ -89,15 +171,7 @@ namespace Auctus.Business.Account
 
             var referredUser = GetReferredUser(referralCode);
 
-            user = new User();
-            user.Email = email.ToLower().Trim();
-            user.CreationDate = Data.GetDateTimeNow();
-            user.ConfirmationCode = Guid.NewGuid().ToString();
-            user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
-            user.ReferralCode = GenerateReferralCode();
-            user.ReferredId = referredUser?.Id;
-            user.AllowNotifications = true;
-            Data.Insert(user);
+            user = CreateUser(email, password, referredUser, false);
 
             await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
 
@@ -109,6 +183,21 @@ namespace Auctus.Business.Account
                 IsAdvisor = false,
                 RequestedToBeAdvisor = requestedToBeAdvisor
             };
+        }
+
+        private User CreateUser(string email, string password, User referredUser, bool emailConfirmed)
+        {
+            User user = new User();
+            user.Email = email.ToLower().Trim();
+            user.CreationDate = Data.GetDateTimeNow();
+            user.ConfirmationCode = Guid.NewGuid().ToString();
+            user.Password = String.IsNullOrWhiteSpace(password) ? null : GetHashedPassword(password, user.Email, user.CreationDate);
+            user.ReferralCode = GenerateReferralCode();
+            user.ReferredId = referredUser?.Id;
+            user.AllowNotifications = true;
+            user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
+            Data.Insert(user);
+            return user;
         }
 
         public void SetReferralCode(string referralCode)
