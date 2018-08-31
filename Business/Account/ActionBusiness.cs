@@ -183,6 +183,7 @@ namespace Auctus.Business.Account
                 {
                     Id = c.Id,
                     Name = consideredAdvisors.First(a => a.Id == c.Id).Name,
+                    UrlGuid = consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString(),
                     Total = c.Value,
                     SubValue1 = consideredFollowers.Count(a => a.CreationDate >= cutDayForActivity)
                 }).ToList();
@@ -197,6 +198,7 @@ namespace Auctus.Business.Account
                 {
                     Id = c.Id,
                     Name = consideredAdvisors.First(a => a.Id == c.Id).Name,
+                    UrlGuid = consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString(),
                     Total = c.Value,
                     SubValue1 = advisorAdvices.Count(a => a.CreationDate >= cutDayForActivity)
                 }).ToList();
@@ -211,6 +213,7 @@ namespace Auctus.Business.Account
                 {
                     Id = c.Id,
                     Name = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).Name : consideredUsers.First(u => u.Id == c.Id).Email,
+                    UrlGuid = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString() : null,
                     Total = c.Value,
                     SubValue1 = consideredReferred.Count(a => a.ReferredId == c.Id && a.ReferralStatusType == ReferralStatusType.InProgress),
                     SubValue2 = consideredReferred.Count(a => a.ReferredId == c.Id && a.ReferralStatusType == ReferralStatusType.Interrupted),

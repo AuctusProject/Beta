@@ -1,4 +1,6 @@
-﻿using Auctus.DataAccessInterfaces.Storage;
+﻿using Auctus.DataAccess.Core;
+using Auctus.DataAccessInterfaces.Storage;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using System;
@@ -20,7 +22,7 @@ namespace Auctus.DataAccess.Storage
 
         public async Task<bool> UploadFileFromUrlAsync(string containerName, string fileName, string url)
         {
-            var reference = await GetBlockBlobReference(containerName, fileName);
+            var reference = await GetBlockBlobReferenceAsync(containerName, fileName);
             try
             {
                 await reference.StartCopyAsync(new Uri(url));
@@ -34,7 +36,7 @@ namespace Auctus.DataAccess.Storage
 
         public async Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file)
         {
-            var reference = await GetBlockBlobReference(containerName, fileName);
+            var reference = await GetBlockBlobReferenceAsync(containerName, fileName);
             try
             {
                 await reference.UploadFromByteArrayAsync(file, 0, file.Length);
@@ -48,7 +50,7 @@ namespace Auctus.DataAccess.Storage
 
         public async Task<bool> DeleteFileAsync(string containerName, string fileName)
         {
-            var reference = await GetBlockBlobReference(containerName, fileName);
+            var reference = await GetBlockBlobReferenceAsync(containerName, fileName);
             try
             {
                 await reference.DeleteIfExistsAsync();
@@ -60,7 +62,7 @@ namespace Auctus.DataAccess.Storage
             }
         }
 
-        private async Task<Microsoft.WindowsAzure.Storage.Blob.CloudBlockBlob> GetBlockBlobReference(string containerName, string fileName)
+        private async Task<Microsoft.WindowsAzure.Storage.Blob.CloudBlockBlob> GetBlockBlobReferenceAsync(string containerName, string fileName)
         {
             CloudStorageAccount storageAccount;
             if (CloudStorageAccount.TryParse(StorageConfiguration, out storageAccount))

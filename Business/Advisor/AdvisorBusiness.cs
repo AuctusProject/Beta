@@ -16,16 +16,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Auctus.Business.Advisor
 {
     public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, IAdvisorData<DomainObjects.Advisor.Advisor>>
     {
         public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4 }
+        private const string ADVISORS_CACHE_KEY = "Advisors";
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-        public async Task EditAdvisor(int id, string name, string description, bool changePicture, Stream pictureStream, string pictureExtension)
+        public async Task<Guid> EditAdvisorAsync(int id, string name, string description, bool changePicture, Stream pictureStream, string pictureExtension)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessException("Name must be filled.");
@@ -41,20 +44,66 @@ namespace Auctus.Business.Advisor
                 picture = GetPictureBytes(pictureStream, pictureExtension);
 
             var advisor = Data.GetAdvisor(id);
-            if (advisor == null)
+            if (advisor == null || !advisor.Enabled)
                 throw new NotFoundException("Advisor not found");
             if (advisor.Email.ToLower() != LoggedEmail.ToLower())
                 throw new UnauthorizedException("Invalid credentials");
 
-            var previousData = $"(Previous) Name: {advisor.Name} - Change Picture: {changePicture} - Description: {advisor.Description}";
+            var previousData = $"(Previous) Name: {advisor.Name} - Change Picture: {changePicture} - Url Guid: {advisor.UrlGuid} - Description: {advisor.Description}";
 
+            if (changePicture)
+            {
+                var previousGuid = advisor.UrlGuid;
+                advisor.UrlGuid = Guid.NewGuid();
+                if (await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{advisor.UrlGuid}.png", picture ?? GetNoUploadedImageForAdvisor(advisor)))
+                    await AzureStorageBusiness.DeleteUserPicture($"{previousGuid}.png");
+            }
             advisor.Name = name;
             advisor.Description = description;
             Update(advisor);
-            if (changePicture)
-                await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{advisor.Id}.png", picture ?? UserBusiness.GetNoUploadedImageForUser(advisor));
 
             ActionBusiness.InsertEditAdvisor(advisor.Id, previousData);
+            RunAsync(() => UpdateAdvisorsCache(Data.ListEnabled()));
+
+            return advisor.UrlGuid;
+        }
+
+        public byte[] GetNoUploadedImageForAdvisor(User user)
+        {
+            var userData = (user.CreationDate.Ticks * (double)user.Id + user.Id).ToString().Select(c => Convert.ToInt32(c.ToString()));
+            using (var bitmap = new Bitmap(32, 32))
+            {
+                var dataPosition = 0;
+                for (var w = 0; w < 32; ++w)
+                {
+                    for (var h = 0; h < 32; ++h)
+                    {
+                        if (userData.ElementAt(dataPosition) < 3)
+                            bitmap.SetPixel(w, h, Color.White);
+                        else if (userData.ElementAt(dataPosition) < 5)
+                            bitmap.SetPixel(w, h, Color.DeepSkyBlue);
+                        else if (userData.ElementAt(dataPosition) == 5)
+                            bitmap.SetPixel(w, h, Color.DarkOrange);
+                        else if (userData.ElementAt(dataPosition) == 6)
+                            bitmap.SetPixel(w, h, Color.LightSkyBlue);
+                        else if (userData.ElementAt(dataPosition) < 9)
+                            bitmap.SetPixel(w, h, Color.Orange);
+                        else
+                            bitmap.SetPixel(w, h, Color.Red);
+
+                        if (dataPosition == userData.Count() - 1)
+                            dataPosition = 0;
+                        else
+                            ++dataPosition;
+                    }
+                }
+                using (var stream = new MemoryStream())
+                {
+                    bitmap.Save(stream, ImageFormat.Png);
+                    stream.Position = 0;
+                    return stream.ToArray();
+                }
+            }
         }
 
         private byte[] GetPictureBytes(Stream pictureStream, string pictureExtension)
@@ -100,7 +149,7 @@ namespace Auctus.Business.Advisor
             return result;
         }
 
-        public DomainObjects.Advisor.Advisor CreateFromRequest(RequestToBeAdvisor request)
+        public DomainObjects.Advisor.Advisor CreateFromRequest(RequestToBeAdvisor request, Guid urlGuid)
         {
             var advisor = new DomainObjects.Advisor.Advisor()
             {
@@ -108,7 +157,8 @@ namespace Auctus.Business.Advisor
                 Name = request.Name,
                 Description = request.Description,
                 BecameAdvisorDate = Data.GetDateTimeNow(),
-                Enabled = true
+                Enabled = true,
+                UrlGuid = urlGuid
             };
             return advisor;
         }
@@ -126,15 +176,19 @@ namespace Auctus.Business.Advisor
 
         public List<DomainObjects.Advisor.Advisor> GetAdvisors()
         {
-            string cacheKey = "Advisors";
-            var advisors = MemoryCache.Get<List<DomainObjects.Advisor.Advisor>>(cacheKey);
+            var advisors = MemoryCache.Get<List<DomainObjects.Advisor.Advisor>>(ADVISORS_CACHE_KEY);
             if (advisors == null)
             {
                 advisors = Data.ListEnabled();
-                if (advisors != null && advisors.Any())
-                    MemoryCache.Set(cacheKey, advisors, 240);
+                UpdateAdvisorsCache(advisors);
             }
             return advisors;
+        }
+
+        private void UpdateAdvisorsCache(List<DomainObjects.Advisor.Advisor> advisors)
+        {
+            if (advisors != null && advisors.Any())
+                MemoryCache.Set(ADVISORS_CACHE_KEY, advisors, 240);
         }
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 
@@ -350,6 +404,7 @@ namespace Auctus.Business.Advisor
             {
                 UserId = advisor.Id,
                 Name = advisor.Name,
+                UrlGuid = advisor.UrlGuid.ToString(),
                 CreationDate = advisor.BecameAdvisorDate,
                 Description = advisor.Description,
                 Owner = loggedUser != null && advisor.Id == loggedUser.Id,

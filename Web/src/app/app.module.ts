@@ -51,7 +51,7 @@ import { ReferralComponent } from './components/account/referral/referral.compon
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { NavigationService } from './services/navigation.service';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
-import { GlobalSearchComponent } from './components/search/global-search/global-search.component';
+import { GlobalSearchComponent } from './components/util/global-search/global-search.component';
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { NgHttpLoaderModule } from 'ng-http-loader'; 
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
@@ -60,6 +60,7 @@ import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-
 import { RecommendationBoxComponent } from './components/home/recommendation-box/recommendation-box.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
+import { FileUploaderComponent } from './components/util/file-uploader/file-uploader.component';
 import { BarRatingModule } from "ngx-bar-rating";
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
 
@@ -115,7 +116,8 @@ export function getAuthServiceConfigs() {
     AdvisorEditComponent,
     RecommendationBoxComponent,
     HomeComponent,
-    TopAdvisorsComponent
+    TopAdvisorsComponent,
+    FileUploaderComponent
   ],
   imports: [
     BrowserModule,

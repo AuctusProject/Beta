@@ -17,7 +17,7 @@ namespace Auctus.Business.Account
     {
         public PasswordRecoveryBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-        public async Task SendEmailForForgottenPassword(string email)
+        public async Task SendEmailForForgottenPasswordAsync(string email)
         {
             var user = UserBusiness.GetByEmail(email);
             if (user != null)
@@ -38,11 +38,11 @@ namespace Auctus.Business.Account
                     Data.Update(recovery);
                 }
 
-                await SendForgottenPassword(email, recovery.Token);
+                await SendForgottenPasswordAsync(email, recovery.Token);
             }
         }
 
-        private async Task SendForgottenPassword(string email, string code)
+        private async Task SendForgottenPasswordAsync(string email, string code)
         {
             await EmailBusiness.SendAsync(new string[] { email },
                 "Reset your password - Auctus Platform",

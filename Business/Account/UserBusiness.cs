@@ -11,9 +11,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -158,7 +155,7 @@ namespace Auctus.Business.Account
             return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? DiscountPercentageOnAuc : 0)));
         }
 
-        public async Task<LoginResponse> Register(string email, string password, string referralCode, bool requestedToBeAdvisor)
+        public async Task<LoginResponse> RegisterAsync(string email, string password, string referralCode, bool requestedToBeAdvisor)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
@@ -173,7 +170,7 @@ namespace Auctus.Business.Account
 
             user = CreateUser(email, password, referredUser, false);
 
-            await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
+            await SendEmailConfirmationAsync(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
 
             return new LoginResponse()
             {
@@ -236,49 +233,12 @@ namespace Auctus.Business.Account
             return null;
         }
 
-        public byte[] GetNoUploadedImageForUser(User user)
-        {
-            var userData = (user.CreationDate.Ticks * user.Id + user.Id).ToString().Select(c => Convert.ToInt32(c.ToString()));
-            using (var bitmap = new Bitmap(32, 32))
-            {
-                var dataPosition = 0;
-                for (var w = 0; w < 32; ++w)
-                {
-                    for (var h = 0; h < 32; ++h)
-                    {
-                        if (userData.ElementAt(dataPosition) < 3)
-                            bitmap.SetPixel(w, h, Color.White);
-                        else if (userData.ElementAt(dataPosition) < 5)
-                            bitmap.SetPixel(w, h, Color.DeepSkyBlue);
-                        else if (userData.ElementAt(dataPosition) == 5)
-                            bitmap.SetPixel(w, h, Color.DarkOrange);
-                        else if (userData.ElementAt(dataPosition) == 6)
-                            bitmap.SetPixel(w, h, Color.LightSkyBlue);
-                        else if (userData.ElementAt(dataPosition) < 9)
-                            bitmap.SetPixel(w, h, Color.Orange);
-                        else 
-                            bitmap.SetPixel(w, h, Color.Red);
-
-                        if (dataPosition == userData.Count() - 1)
-                            dataPosition = 0;
-                        else
-                            ++dataPosition;
-                    }
-                }
-                using (var stream = new MemoryStream())
-                {
-                    bitmap.Save(stream, ImageFormat.Png);
-                    return stream.ToArray();
-                }
-            }
-        }
-
         private string GetHashedPassword(string password, string email, DateTime creationDate)
         {
             return Security.Hash(password, $"{email}{creationDate.Ticks}{HashSecret}");
         }
 
-        public async Task ResendEmailConfirmation()
+        public async Task ResendEmailConfirmationAsync()
         {
             var email = LoggedEmail;
             BaseEmailValidation(email);
@@ -291,7 +251,7 @@ namespace Auctus.Business.Account
             user.ConfirmationCode = Guid.NewGuid().ToString();
             Data.Update(user);
 
-            await SendEmailConfirmation(email, user.ConfirmationCode, false);
+            await SendEmailConfirmationAsync(email, user.ConfirmationCode, false);
         }
 
         public LoginResponse ConfirmEmail(string code)
@@ -436,7 +396,7 @@ namespace Auctus.Business.Account
             return Data.ListAllUsersData();
         }
 
-        private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
+        private async Task SendEmailConfirmationAsync(string email, string code, bool requestedToBeAdvisor)
         {
             await EmailBusiness.SendAsync(new string[] { email },
                 "Verify your email address - Auctus Beta",

@@ -53,6 +53,7 @@ export class RegistrationData {
 export class AdvisorData {
     id: number;
     name: string;
+    urlGuid: string;
     total: number;
     subValue1: number;
     subValue2: number;

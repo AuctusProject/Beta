@@ -30,9 +30,9 @@ namespace Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async new Task<IActionResult> Register([FromBody]RegisterRequest registerRequest)
+        public async new Task<IActionResult> RegisterAsync([FromBody]RegisterRequest registerRequest)
         {
-            return await base.Register(registerRequest);
+            return await base.RegisterAsync(registerRequest);
         }
 
         [HttpPost]
@@ -66,9 +66,9 @@ namespace Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordRequest forgotPasswordRequest)
+        public new async Task<IActionResult> ForgotPasswordAsync([FromBody]ForgotPasswordRequest forgotPasswordRequest)
         {
-            return await base.ForgotPassword(forgotPasswordRequest);
+            return await base.ForgotPasswordAsync(forgotPasswordRequest);
         }
 
         [Route("me/passwords")]
@@ -93,9 +93,9 @@ namespace Api.Controllers
         [HttpGet]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async new Task<IActionResult> ResendEmailConfirmation()
+        public async new Task<IActionResult> ResendEmailConfirmationAsync()
         {
-            return await base.ResendEmailConfirmation();
+            return await base.ResendEmailConfirmationAsync();
         }
 
         [Route("me/confirmations")]

@@ -4,6 +4,7 @@ import { AssetResponse } from "../asset/assetResponse";
 export class AdvisorResponse {
   userId: number;
   name: string;
+  urlGuid: string;
   description: string;
   successRate:number;
   averageReturn:number;

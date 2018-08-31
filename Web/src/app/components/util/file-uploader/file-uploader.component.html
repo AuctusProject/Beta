@@ -1,0 +1,15 @@
+<label class="uploader" ondragover="return false;"
+    [class.loaded]="loaded" 
+    (dragenter)="handleDragEnter()"
+    (dragleave)="handleDragLeave()"
+    (drop)="handleDrop($event)">
+    
+    <i class="close" (click)="removeImage($event)">&times;</i>
+
+    <i class="icon icon-upload" [style.color]="dragging ? activeColor : overlayColor">{{imageText}}</i>
+    
+    <img [src]="imageSrc" (load)="handleImageLoad()" 
+    [style.box-shadow]="dragging ? activeBox : baseBox" [class.loaded]="imageLoaded"/>
+    
+    <input type="file" #fileInput id="fileInput" name="fileInput" accept=".png,.jpg,.jpeg" (change)="handleInputChange($event)">
+</label>

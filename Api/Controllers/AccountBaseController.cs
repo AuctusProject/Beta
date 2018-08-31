@@ -54,12 +54,12 @@ namespace Api.Controllers
             return Ok();
         }
 
-        protected virtual async Task<IActionResult> ForgotPassword(ForgotPasswordRequest forgotPasswordRequest)
+        protected virtual async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest forgotPasswordRequest)
         {
             if (forgotPasswordRequest == null || String.IsNullOrWhiteSpace(forgotPasswordRequest.Email))
                 return BadRequest();
 
-            await PasswordRecoveryBusiness.SendEmailForForgottenPassword(forgotPasswordRequest.Email);
+            await PasswordRecoveryBusiness.SendEmailForForgottenPasswordAsync(forgotPasswordRequest.Email);
             return Ok();
         }
 
@@ -72,18 +72,18 @@ namespace Api.Controllers
             return Ok();
         }
 
-        protected virtual async Task<IActionResult> Register(RegisterRequest registerRequest)
+        protected virtual async Task<IActionResult> RegisterAsync(RegisterRequest registerRequest)
         {
             if (registerRequest == null)
                 return BadRequest();
 
-            var loginResponse = await UserBusiness.Register(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode, registerRequest.RequestedToBeAdvisor);
+            var loginResponse = await UserBusiness.RegisterAsync(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode, registerRequest.RequestedToBeAdvisor);
             return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
         }
 
-        protected virtual async Task<IActionResult> ResendEmailConfirmation()
+        protected virtual async Task<IActionResult> ResendEmailConfirmationAsync()
         {
-            await UserBusiness.ResendEmailConfirmation();
+            await UserBusiness.ResendEmailConfirmationAsync();
             return Ok();
         }
 

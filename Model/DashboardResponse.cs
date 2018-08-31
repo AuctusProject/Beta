@@ -60,6 +60,7 @@ namespace Auctus.Model
         {
             public int Id { get; set; }
             public string Name { get; set; }
+            public string UrlGuid { get; set; }
             public int Total { get; set; }
             public int SubValue1 { get; set; }
             public int SubValue2 { get; set; }

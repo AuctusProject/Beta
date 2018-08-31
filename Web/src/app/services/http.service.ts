@@ -54,28 +54,41 @@ export class HttpService {
     return CONFIG.apiUrl + route;
   }
 
-  baseHttpHeaders(): any {
+  baseHttpHeaders(ignoreContentType?: boolean): any {
     var token = this.getAccessToken();
-    var header;
+    var header = {};
     if (token) {
-      header = {
-        'Content-Type': 'application/json',
-        'Authorization': ('Bearer ' + token)
-      };
-    } else {
+      if (!ignoreContentType) {
+        header = {
+          'Content-Type': 'application/json',
+          'Authorization': ('Bearer ' + token)
+        };
+      } else {
+        header = { 'Authorization': ('Bearer ' + token) };
+      }
+    } else if (!ignoreContentType) {
       header = { 'Content-Type': 'application/json' };
     }
     return new HttpHeaders(header);
   }
 
-  getHttpOptions(httpOptions: any): any {
+  getHttpOptions(httpOptions: any, ignoreContentType?: boolean): any {
     if (!httpOptions) {
-      httpOptions = { headers: this.baseHttpHeaders() };
+      httpOptions = { headers: this.baseHttpHeaders(ignoreContentType) };
     }
     else if (!httpOptions["headers"]) {
-      httpOptions["headers"] = this.baseHttpHeaders();
+      httpOptions["headers"] = this.baseHttpHeaders(ignoreContentType);
     }
     return httpOptions;
+  }
+
+  postWithoutContentType<T>(url: string, model: T): Observable<any> {
+    return this.http.post<any>(url, model, this.getHttpOptions(null, true)).pipe(
+      tap((response: any) => {
+        if (response && response.jwt) this.setAccessToken(response.jwt);
+      }),
+      catchError(this.handleError<T>(url))
+    );
   }
 
   post<T>(url: string, model?: T, httpOptions: any = {}): Observable<any> {
