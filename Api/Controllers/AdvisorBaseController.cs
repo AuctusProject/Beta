@@ -32,8 +32,8 @@ namespace Api.Controllers
 
         protected async Task<IActionResult> EditAdvisorAsync(int id, AdvisorRequest advisorRequest)
         {
-            if (advisorRequest.ChangePicture && Request.Form != null && Request.Form.Files != null && Request.Form.Files.Count == 1 && Request.Form.Files[0].Length > 0
-                && string.IsNullOrWhiteSpace(Request.Form.Files[0].FileName) && string.IsNullOrWhiteSpace(Request.Form.Files[0].ContentType))
+            if (advisorRequest.ChangedPicture && Request.Form != null && Request.Form.Files != null && Request.Form.Files.Count == 1 && Request.Form.Files[0].Length > 0
+                && !string.IsNullOrWhiteSpace(Request.Form.Files[0].FileName) && !string.IsNullOrWhiteSpace(Request.Form.Files[0].ContentType))
             {
                 if (!FileTypeMatcher.GetValidFileExtensions().Any(c => Request.Form.Files[0].ContentType.ToUpper().Contains(c)))
                     return BadRequest(new { error = "Invalid file." });
@@ -43,10 +43,10 @@ namespace Api.Controllers
                     return BadRequest(new { error = "File extension is invalid." });
 
                 using (var stream = Request.Form.Files[0].OpenReadStream())
-                    await AdvisorBusiness.EditAdvisor(id, advisorRequest.Name, advisorRequest.Description, true, stream, fileExtension);
+                    await AdvisorBusiness.EditAdvisorAsync(id, advisorRequest.Name, advisorRequest.Description, true, stream, fileExtension);
             }
             else
-                await AdvisorBusiness.EditAdvisor(id, advisorRequest.Name, advisorRequest.Description, advisorRequest.ChangePicture, null, null);
+                await AdvisorBusiness.EditAdvisorAsync(id, advisorRequest.Name, advisorRequest.Description, advisorRequest.ChangedPicture, null, null);
 
             return Ok();
         }
@@ -65,12 +65,12 @@ namespace Api.Controllers
             return Ok();
         }
 
-        protected async Task<IActionResult> RequestToBe(BeAdvisorRequest beAdvisorRequest)
+        protected async Task<IActionResult> RequestToBeAsync(BeAdvisorRequest beAdvisorRequest)
         {
             if (beAdvisorRequest == null)
                 return BadRequest();
 
-            return Ok(await RequestToBeAdvisorBusiness.Create(beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience));
+            return Ok(await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience));
         }
 
         protected IActionResult GetRequestToBe()
@@ -83,7 +83,7 @@ namespace Api.Controllers
             return Ok(RequestToBeAdvisorBusiness.ListPending());
         }
 
-        protected async Task<IActionResult> ApproveRequestToBe(int id)
+        protected async Task<IActionResult> ApproveRequestToBeAsync(int id)
         {
             await RequestToBeAdvisorBusiness.ApproveAsync(id);
             return Ok();

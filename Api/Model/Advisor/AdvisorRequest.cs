@@ -9,6 +9,6 @@ namespace Api.Model.Advisor
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public bool ChangePicture { get; set; }
+        public bool ChangedPicture { get; set; }
     }
 }

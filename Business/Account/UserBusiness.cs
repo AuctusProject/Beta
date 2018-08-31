@@ -76,7 +76,7 @@ namespace Auctus.Business.Account
             return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? DiscountPercentageOnAuc : 0)));
         }
 
-        public async Task<LoginResponse> Register(string email, string password, string referralCode, bool requestedToBeAdvisor)
+        public async Task<LoginResponse> RegisterAsync(string email, string password, string referralCode, bool requestedToBeAdvisor)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
@@ -99,7 +99,7 @@ namespace Auctus.Business.Account
             user.AllowNotifications = true;
             Data.Insert(user);
 
-            await SendEmailConfirmation(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
+            await SendEmailConfirmationAsync(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
 
             return new LoginResponse()
             {
@@ -190,7 +190,7 @@ namespace Auctus.Business.Account
             return Security.Hash(password, $"{email}{creationDate.Ticks}{HashSecret}");
         }
 
-        public async Task ResendEmailConfirmation()
+        public async Task ResendEmailConfirmationAsync()
         {
             var email = LoggedEmail;
             BaseEmailValidation(email);
@@ -203,7 +203,7 @@ namespace Auctus.Business.Account
             user.ConfirmationCode = Guid.NewGuid().ToString();
             Data.Update(user);
 
-            await SendEmailConfirmation(email, user.ConfirmationCode, false);
+            await SendEmailConfirmationAsync(email, user.ConfirmationCode, false);
         }
 
         public LoginResponse ConfirmEmail(string code)
@@ -348,7 +348,7 @@ namespace Auctus.Business.Account
             return Data.ListAllUsersData();
         }
 
-        private async Task SendEmailConfirmation(string email, string code, bool requestedToBeAdvisor)
+        private async Task SendEmailConfirmationAsync(string email, string code, bool requestedToBeAdvisor)
         {
             await EmailBusiness.SendAsync(new string[] { email },
                 "Verify your email address - Auctus Beta",

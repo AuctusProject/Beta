@@ -53,10 +53,10 @@ namespace Auctus.Business.Advisor
         {
             var usersFollowing = UserBusiness.ListUsersFollowingAdvisorOrAsset(advisor.Id, asset.Id);
             foreach (var user in usersFollowing)
-                await SendAdviceNotification(user, advisor, asset, type);
+                await SendAdviceNotificationAsync(user, advisor, asset, type);
         }
 
-        private async Task SendAdviceNotification(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
+        private async Task SendAdviceNotificationAsync(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
             await EmailBusiness.SendAsync(new string[] { user.Email },
                 $"New tip on Auctus Beta for {asset.Code}",

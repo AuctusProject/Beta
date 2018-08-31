@@ -26,7 +26,12 @@ export class AdvisorService {
   }
 
   editAdvisor(id: number, advisorRequest: AdvisorRequest): Observable<void> {
-    return this.httpService.patch(this.advisorsUrl + "/" + id, advisorRequest);
+    let formData: FormData = new FormData();
+    formData.append('formFile', advisorRequest.file);
+    formData.append('name', advisorRequest.name);
+    formData.append('description', advisorRequest.description);
+    formData.append('changedPicture', advisorRequest.changedPicture + '');
+    return this.httpService.postWithoutContentType(this.advisorsUrl + "/" + id, formData);
   }
 
   getAdvisorDetails(id: string): Observable<AdvisorResponse> {

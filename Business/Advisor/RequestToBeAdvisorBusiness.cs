@@ -63,7 +63,7 @@ namespace Auctus.Business.Advisor
             Update(request);
         }
 
-        public async Task<RequestToBeAdvisor> Create(string name, string description, string previousExperience)
+        public async Task<RequestToBeAdvisor> CreateAsync(string name, string description, string previousExperience)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessException("Name must be filled.");
@@ -92,10 +92,10 @@ namespace Auctus.Business.Advisor
                 UserId = user.Id
             };
             Data.Insert(newRequest);
-            await SendRequestToBeAdvisorEmail(user, newRequest, request);
+            await SendRequestToBeAdvisorEmailAsync(user, newRequest, request);
             return newRequest;
         }
-        private async Task SendRequestToBeAdvisorEmail(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
+        private async Task SendRequestToBeAdvisorEmailAsync(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
         {
             await EmailBusiness.SendErrorEmailAsync(string.Format(@"Email: {0} 
 <br/>

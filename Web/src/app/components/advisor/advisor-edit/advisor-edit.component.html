@@ -1,5 +1,21 @@
-<div *ngIf="advisor">
-<input [(ngModel)]="advisor.name" placeholder="Name">
-<input [(ngModel)]="advisor.description" placeholder="Description">
-<button (click)="save()">SAVE</button>
+<div *ngIf="advisor" class="container" fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="20px" fxLayoutGap.xs="10px">
+    <mat-form-field fxFill>
+        <input matInput required type="text" maxlength="50" [(ngModel)]="advisor.name" placeholder="Name" />
+        <mat-hint align="end">{{advisor.name.length}} / 50</mat-hint>
+    </mat-form-field>
+    <mat-form-field fxFill>
+        <textarea matInput required cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" maxlength="160" 
+            [(ngModel)]="advisor.description" placeholder="Description"></textarea>
+        <mat-hint align="end">{{advisor.description.length}} / 160</mat-hint>
+    </mat-form-field>
+    <div class="file-container"> 
+        <div class="file-uploader">
+            <file-uploader #FileUploadComponent [emptyPictureUrl]="emptyUserUrl"></file-uploader>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayoutGap="10px" class="actions">
+        <button fxFlex="50" mat-raised-button (click)="back()" [promiseBtn]="promise">BACK</button>
+        <button fxFlex="50" mat-raised-button color="primary" mat-button (click)="save()" [promiseBtn]="promise">SAVE</button>
+    </div>
 </div>

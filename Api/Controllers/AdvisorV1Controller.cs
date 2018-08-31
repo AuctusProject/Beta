@@ -52,7 +52,7 @@ namespace Api.Controllers
         [HttpPost]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> EditAdvisorAsync(int id, [FromBody]AdvisorRequest advisorRequest)
+        public new async Task<IActionResult> EditAdvisorAsync(int id, [FromForm]AdvisorRequest advisorRequest)
         {
             return await base.EditAdvisorAsync(id, advisorRequest);
         }
@@ -70,9 +70,9 @@ namespace Api.Controllers
         [HttpPost]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> RequestToBe([FromBody]BeAdvisorRequest beAdvisorRequest)
+        public new async Task<IActionResult> RequestToBeAsync([FromBody]BeAdvisorRequest beAdvisorRequest)
         {
-            return await base.RequestToBe(beAdvisorRequest);
+            return await base.RequestToBeAsync(beAdvisorRequest);
         }
 
         [Route("me/requests")]
@@ -99,9 +99,9 @@ namespace Api.Controllers
         [OnlyAdmin]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> ApproveRequestToBe(int id)
+        public new async Task<IActionResult> ApproveRequestToBeAsync(int id)
         {
-            return await base.ApproveRequestToBe(id);
+            return await base.ApproveRequestToBeAsync(id);
         }
 
         [Route("requests/{id}/reject")]

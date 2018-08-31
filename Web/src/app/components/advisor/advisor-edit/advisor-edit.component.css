@@ -1,0 +1,22 @@
+.container {
+    padding: 10px;
+}
+
+.file-container {
+    width: 100%;
+    padding-top: 100%; 
+    position: relative; 
+}
+
+.file-uploader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.actions {
+    width: 100%;
+    padding: 5px;
+}

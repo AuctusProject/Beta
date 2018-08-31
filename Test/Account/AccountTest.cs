@@ -15,7 +15,7 @@ namespace Auctus.Test.Account
         [InlineData("testenewuser@auctus.org", "testeauctus")]
         public void RegisterUser(string email, string password)
         {
-            Task.WaitAll(UserBusiness.Register(email, password, null, false));
+            Task.WaitAll(UserBusiness.RegisterAsync(email, password, null, false));
             var user = UserBusiness.GetByEmail(email);
             Assert.NotNull(user);
             Assert.Equal(email, user.Email);
@@ -25,7 +25,7 @@ namespace Auctus.Test.Account
         public void ConfirmEmail()
         {
             LoggedEmail = "ConfirmEmail@auctus.org";
-            Task.WaitAll(UserBusiness.Register(LoggedEmail, "testeauctus", null, false));
+            Task.WaitAll(UserBusiness.RegisterAsync(LoggedEmail, "testeauctus", null, false));
             var user = UserBusiness.GetByEmail(LoggedEmail);
             var loginResponse = UserBusiness.ConfirmEmail(user.ConfirmationCode);
             Assert.NotNull(loginResponse);
@@ -57,7 +57,7 @@ namespace Auctus.Test.Account
         [Fact]
         public void RegisterWithReferral()
         {
-            Task.WaitAll(UserBusiness.Register("RegisterWithReferral@auctus.org", "testeauctus", "0000001", false));
+            Task.WaitAll(UserBusiness.RegisterAsync("RegisterWithReferral@auctus.org", "testeauctus", "0000001", false));
 
             var referralInfo = UserBusiness.GetReferralProgramInfo();
 
@@ -76,7 +76,7 @@ namespace Auctus.Test.Account
         {
             LoggedEmail = "SetReferral@auctus.org";
             
-            Task.WaitAll(UserBusiness.Register(LoggedEmail, "testeauctus", null, false));
+            Task.WaitAll(UserBusiness.RegisterAsync(LoggedEmail, "testeauctus", null, false));
 
             Assert.Throws<BusinessException>(() => UserBusiness.SetReferralCode("INVALID_CODE"));
 

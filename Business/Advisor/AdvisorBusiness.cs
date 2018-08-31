@@ -25,7 +25,7 @@ namespace Auctus.Business.Advisor
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-        public async Task EditAdvisor(int id, string name, string description, bool changePicture, Stream pictureStream, string pictureExtension)
+        public async Task EditAdvisorAsync(int id, string name, string description, bool changePicture, Stream pictureStream, string pictureExtension)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessException("Name must be filled.");
