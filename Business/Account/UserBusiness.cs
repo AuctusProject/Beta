@@ -149,7 +149,7 @@ namespace Auctus.Business.Account
 
         public byte[] GetNoUploadedImageForUser(User user)
         {
-            var userData = (user.CreationDate.Ticks * user.Id + user.Id).ToString().Select(c => Convert.ToInt32(c.ToString()));
+            var userData = (user.CreationDate.Ticks * (double)user.Id + user.Id).ToString().Select(c => Convert.ToInt32(c.ToString()));
             using (var bitmap = new Bitmap(32, 32))
             {
                 var dataPosition = 0;
@@ -179,6 +179,7 @@ namespace Auctus.Business.Account
                 using (var stream = new MemoryStream())
                 {
                     bitmap.Save(stream, ImageFormat.Png);
+                    stream.Position = 0;
                     return stream.ToArray();
                 }
             }
