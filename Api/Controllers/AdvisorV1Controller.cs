@@ -136,9 +136,9 @@ namespace Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListLastAdvicesForAllTypes([FromQuery]int top)
+        public new IActionResult ListLastAdvicesForAllTypes([FromQuery]int numberOfAdvicesOfEachType)
         {
-            return base.ListLastAdvicesForAllTypes(top);
+            return base.ListLastAdvicesForAllTypes(numberOfAdvicesOfEachType);
         }
     }
 }

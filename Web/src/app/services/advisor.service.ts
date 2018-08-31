@@ -7,6 +7,7 @@ import { RequestToBeAdvisorRequest } from '../model/advisor/requestToBeAdvisorRe
 import { AdviseRequest } from '../model/advisor/adviseRequest';
 import { AdvisorRequest } from '../model/advisor/advisorRequest';
 import { Advisor } from '../model/advisor/advisor';
+import { FeedResponse } from '../model/advisor/feedResponse';
 
 @Injectable()
 export class AdvisorService {
@@ -18,6 +19,7 @@ export class AdvisorService {
   private rejectRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests/{id}/reject");
   private followAdvisorsUrl = this.httpService.apiUrl("v1/advisors/{id}/followers");
   private adviseUrl = this.httpService.apiUrl("v1/advisors/advices");
+  private listLatestAdvicesForEachTypeUrl = this.httpService.apiUrl("v1/advisors/advices/latest_by_type");
 
   constructor(private httpService : HttpService) { }
 
@@ -73,4 +75,9 @@ export class AdvisorService {
   advise(adviseRequest:AdviseRequest):Observable<void>{
     return this.httpService.post(this.adviseUrl, adviseRequest);
   }
+
+  listLatestAdvicesForEachType(numberOfAdvicesOfEachType:number):Observable<FeedResponse>{
+    return this.httpService.get(this.listLatestAdvicesForEachTypeUrl + "?numberOfAdvicesOfEachType=" + numberOfAdvicesOfEachType);
+  }
+
 }

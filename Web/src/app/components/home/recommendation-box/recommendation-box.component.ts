@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FeedResponse } from '../../../model/advisor/feedResponse';
+import { AdvisorService } from '../../../services/advisor.service';
 
 @Component({
   selector: 'recommendation-box',
@@ -6,10 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recommendation-box.component.css']
 })
 export class RecommendationBoxComponent implements OnInit {
+  advices : FeedResponse[] = [];
 
-  constructor() { }
+  constructor(private advisorServices:AdvisorService) { }
 
   ngOnInit() {
+    this.appendRecommendations();
+  }
+
+  appendRecommendations(){
+    this.advisorServices.listLatestAdvicesForEachType(3).subscribe(result => 
+      this.advices = this.advices.concat(result));
   }
 
 }
