@@ -55,6 +55,7 @@ export class AdvisorEditComponent implements OnInit {
     request.file = this.FileUploadComponent.getFile();
     this.promise = this.advisorService.editAdvisor(this.advisor.id, request).subscribe(result => 
       {
+        this.emptyUserUrl = CONFIG.profileImgUrl.replace("{id}", result);
         this.notificationsService.success(null, "Successfully saved.");
       });
   }

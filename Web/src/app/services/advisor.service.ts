@@ -27,7 +27,7 @@ export class AdvisorService {
     return this.httpService.get(this.advisorsUrl + "/" + id);
   }
 
-  editAdvisor(id: number, advisorRequest: AdvisorRequest): Observable<void> {
+  editAdvisor(id: number, advisorRequest: AdvisorRequest): Observable<string> {
     let formData: FormData = new FormData();
     formData.append('formFile', advisorRequest.file);
     formData.append('name', advisorRequest.name);

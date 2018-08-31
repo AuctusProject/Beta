@@ -26,6 +26,7 @@ namespace Auctus.DataAccessMock.Advisor
                 Description = "Test Advisor description",
                 Enabled = true,
                 BecameAdvisorDate = new DateTime(2018, 5, 8, 0, 0, 0),
+                UrlGuid = Guid.NewGuid(),
                 Wallet = new Wallet()
                 {
                     Id = 1,
@@ -57,6 +58,7 @@ namespace Auctus.DataAccessMock.Advisor
                 Description = "Test Advisor 2 description",
                 Enabled = true,
                 BecameAdvisorDate = new DateTime(2018, 5, 9, 0, 0, 0),
+                UrlGuid = Guid.NewGuid(),
                 Wallet = new Wallet()
                 {
                     Id = 2,
@@ -88,6 +90,7 @@ namespace Auctus.DataAccessMock.Advisor
                 Description = "Test Advisor 3 description",
                 Enabled = true,
                 BecameAdvisorDate = new DateTime(2018, 5, 10, 0, 0, 0),
+                UrlGuid = Guid.NewGuid(),
                 Wallet = new Wallet()
                 {
                     Id = 3,

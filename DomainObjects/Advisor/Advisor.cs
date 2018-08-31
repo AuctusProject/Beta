@@ -16,5 +16,7 @@ namespace Auctus.DomainObjects.Advisor
         public DateTime BecameAdvisorDate { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool Enabled { get; set; }
+        [DapperType(System.Data.DbType.Guid)]
+        public Guid UrlGuid { get; set; }
     }
 }

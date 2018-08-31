@@ -43,12 +43,10 @@ namespace Api.Controllers
                     return BadRequest(new { error = "File extension is invalid." });
 
                 using (var stream = Request.Form.Files[0].OpenReadStream())
-                    await AdvisorBusiness.EditAdvisorAsync(id, advisorRequest.Name, advisorRequest.Description, true, stream, fileExtension);
+                    return Ok(await AdvisorBusiness.EditAdvisorAsync(id, advisorRequest.Name, advisorRequest.Description, true, stream, fileExtension));
             }
             else
-                await AdvisorBusiness.EditAdvisorAsync(id, advisorRequest.Name, advisorRequest.Description, advisorRequest.ChangedPicture, null, null);
-
-            return Ok();
+                return Ok(await AdvisorBusiness.EditAdvisorAsync(id, advisorRequest.Name, advisorRequest.Description, advisorRequest.ChangedPicture, null, null));
         }
 
         protected IActionResult ListAdvisors()

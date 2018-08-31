@@ -46,14 +46,15 @@ namespace Auctus.Business.Advisor
                 throw new BusinessException("Requets is already approved.");
 
             request.Approved = true;
-            var advisor = AdvisorBusiness.CreateFromRequest(request);
+            var urlGuid = Guid.NewGuid();
+            var advisor = AdvisorBusiness.CreateFromRequest(request, urlGuid);
+            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
             using (var transaction = TransactionalDapperCommand)
             {
                 transaction.Insert(advisor);
                 transaction.Update(request);
                 transaction.Commit();
             }
-            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{user.Id}.png", UserBusiness.GetNoUploadedImageForUser(user));
         }
 
         public void Reject(int id)

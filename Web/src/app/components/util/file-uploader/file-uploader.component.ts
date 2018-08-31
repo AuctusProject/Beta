@@ -30,6 +30,9 @@ export class FileUploaderComponent {
 
     ngOnInit() {
         this.imageSrc = this.emptyPictureUrl;
+        if (this.imageSrc) {
+            this.imageLoaded = true;
+        }
     }
 
     handleDragEnter() {

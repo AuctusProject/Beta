@@ -8,6 +8,7 @@ namespace Auctus.Model
     {
         public int UserId { get; set; }
         public string Name { get; set; }
+        public string UrlGuid { get; set; }
         public string Description { get; set; }
         public double SuccessRate { get; set; }
         public double AverageReturn { get; set; }

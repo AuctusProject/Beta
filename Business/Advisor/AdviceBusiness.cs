@@ -156,6 +156,7 @@ Auctus Team");
                     AssetId = advice.AssetId,
                     Date = advice.CreationDate,
                     AdvisorName = advisorResponse.Name,
+                    AdvisorUrlGuid = advisorResponse.UrlGuid.ToString(),
                     AdvisorRanking = advisorResponse.Ranking,
                     FollowingAdvisor = advisorResponse.Following,
                     AssetCode = assetResponse.Code,

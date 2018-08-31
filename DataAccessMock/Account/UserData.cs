@@ -25,6 +25,7 @@ namespace Auctus.DataAccessMock.Account
                 Enabled = true,
                 BecameAdvisorDate = new DateTime(2018, 5, 8, 0, 0, 0),
                 ReferralCode = "0000001",
+                UrlGuid = Guid.NewGuid(),
                 Wallet = new Wallet()
                 {
                     Id = 1,
@@ -75,6 +76,7 @@ namespace Auctus.DataAccessMock.Account
                 Description = "Test Advisor description",
                 Enabled = true,
                 BecameAdvisorDate = new DateTime(2018, 5, 8, 0, 0, 0),
+                UrlGuid = Guid.NewGuid(),
                 ReferralCode = "0000003",
                 ReferredId = 1,
                 ReferralStatus = ReferralStatusType.Finished.Value,
