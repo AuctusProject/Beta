@@ -105,9 +105,9 @@ namespace Api.Controllers
             return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Unfollow));
         }
 
-        protected virtual IActionResult ListLastAdvicesForAllTypes(int top)
+        protected virtual IActionResult ListLastAdvicesForAllTypes(int numberOfAdvicesOfEachType)
         {
-            return Ok(AdviceBusiness.ListLastAdvicesForAllTypes(top));
+            return Ok(AdviceBusiness.ListLastAdvicesForAllTypes(numberOfAdvicesOfEachType));
         }
     }
 }
