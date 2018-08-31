@@ -26,7 +26,7 @@ export class AdvisorCardComponent implements OnInit {
   }
 
   getAdvisorImgUrl(){
-    return CONFIG.profileImgUrl.replace("{id}", this.advisor.userId.toString());
+    return CONFIG.profileImgUrl.replace("{id}", this.advisor.urlGuid);
   }
 
   getTotalRecommendations(){

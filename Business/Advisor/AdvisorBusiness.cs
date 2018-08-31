@@ -24,6 +24,7 @@ namespace Auctus.Business.Advisor
     public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, IAdvisorData<DomainObjects.Advisor.Advisor>>
     {
         public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4 }
+        private const string ADVISORS_CACHE_KEY = "Advisors";
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
@@ -43,7 +44,7 @@ namespace Auctus.Business.Advisor
                 picture = GetPictureBytes(pictureStream, pictureExtension);
 
             var advisor = Data.GetAdvisor(id);
-            if (advisor == null)
+            if (advisor == null || !advisor.Enabled)
                 throw new NotFoundException("Advisor not found");
             if (advisor.Email.ToLower() != LoggedEmail.ToLower())
                 throw new UnauthorizedException("Invalid credentials");
@@ -62,6 +63,8 @@ namespace Auctus.Business.Advisor
             Update(advisor);
 
             ActionBusiness.InsertEditAdvisor(advisor.Id, previousData);
+            RunAsync(() => UpdateAdvisorsCache(Data.ListEnabled()));
+
             return advisor.UrlGuid;
         }
 
@@ -173,15 +176,19 @@ namespace Auctus.Business.Advisor
 
         public List<DomainObjects.Advisor.Advisor> GetAdvisors()
         {
-            string cacheKey = "Advisors";
-            var advisors = MemoryCache.Get<List<DomainObjects.Advisor.Advisor>>(cacheKey);
+            var advisors = MemoryCache.Get<List<DomainObjects.Advisor.Advisor>>(ADVISORS_CACHE_KEY);
             if (advisors == null)
             {
                 advisors = Data.ListEnabled();
-                if (advisors != null && advisors.Any())
-                    MemoryCache.Set(cacheKey, advisors, 240);
+                UpdateAdvisorsCache(advisors);
             }
             return advisors;
+        }
+
+        private void UpdateAdvisorsCache(List<DomainObjects.Advisor.Advisor> advisors)
+        {
+            if (advisors != null && advisors.Any())
+                MemoryCache.Set(ADVISORS_CACHE_KEY, advisors, 240);
         }
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 

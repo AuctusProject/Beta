@@ -32,7 +32,7 @@ export class AdvisorEditComponent implements OnInit {
           if(this.accountService.getLoginData().id == params['id']){
             this.advisorService.getAdvisor(params['id']).subscribe(advisor => 
               {
-                this.emptyUserUrl = CONFIG.profileImgUrl.replace("{id}", params['id']);
+                this.emptyUserUrl = CONFIG.profileImgUrl.replace("{id}", advisor.urlGuid);
                 this.advisor = advisor;
               });
           }
