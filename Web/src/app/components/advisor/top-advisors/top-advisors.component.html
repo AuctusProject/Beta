@@ -1,10 +1,14 @@
-<div>
+<div class="section-title">
   Top Experts
 </div>
-<div>
+<div class="section-subtitle">
   Follow the top experts and get the best recommendations!
 </div>
-
-<div *ngFor="let expert of experts">
-  <advisor-card [advisor]="expert"></advisor-card>
+<div class="advisors-list">
+  <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert" [advisorsLength]="experts.length"></advisor-card>
+</div>
+<div>
+  <div class="access-button" (click)="goToListAdvisors()">
+    ACCESS
+  </div>
 </div>

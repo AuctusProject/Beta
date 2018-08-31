@@ -20,14 +20,18 @@ export class Util {
     }
 
     public static GetRecommendationTypeDescription(type: number){
-        if(type == 0){
+        if(type == this.SELL){
             return "SELL";
           }
-          else if(type == 1){
+          else if(type == this.BUY){
             return "BUY";
           }
           else{
             return "CLOSE";
           }
     }
+
+    public static SELL: number = 0;
+    public static BUY: number = 1;
+    public static CLOSE: number = 2;
   }

@@ -1,0 +1,179 @@
+:host{
+    width: 192px;
+    background-color: #1f1f1f;
+    display: inline-flex;
+    margin-left: 10px;
+    margin-right: 10px;
+    vertical-align: top;
+}
+
+.advisor-card-container{
+    width: 100%;
+}
+
+.expert-picture{
+    width: 72px;
+    height: 72px;
+    margin: auto;
+    margin-top: 10px;
+    position: relative;
+    border-radius: 36px;
+    background-color: white;
+}
+
+.expert-picture img{
+    width: 72px;
+    height: 72px;
+    border-radius: 36px;
+}
+
+.expert-ranking{
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 13px;
+    background-color: #f9c107;
+    font-size: 15px;
+    text-align: center;
+    color: #2c2c2c;
+    bottom: 0px;
+    position: absolute;
+    font-weight: bold;
+}
+
+.expert-name{
+    margin-top: 9px;
+    font-size: 11px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.expert-description{
+    font-size: 9px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.expert-rating{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    /* -webkit-box-pack: center; */
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin: 4px 0 8px 0;
+}
+
+/deep/ .br{
+    margin: 0 0 !important;
+}
+
+/deep/ .br-default .br-unit{
+    margin-right: unset !important; 
+    font-size: unset !important;
+    height: unset !important;
+    width: unset !important;
+    margin: 0 2px;
+}
+
+.card-divider{
+    height: 4px;
+    background-color: #f99d00;
+    width: 100%;
+}
+
+.expert-ranking-description{
+    height: 24px;
+    background-color: #4e4e4e;
+    font-size: 9px;
+    line-height: 24px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.expert-rates{
+    background-color: #9b9b9b;
+}
+
+.success-rate-column,
+.average-return-column{
+    width: 50%;
+    display: inline-block;
+}
+
+.success-rate{
+    height: 56px;
+    width: 56px;
+    line-height: 56px;
+    border-radius: 30px;
+    border: solid 2px #f99d00;
+    font-size: 18px;
+    text-align: center;
+    color: #ffffff;
+    margin: 9px 16px;
+    font-weight: bold;
+}
+
+.average-return{
+    width: 72px;
+    height: 36px;
+    background-color: #f99d00;
+    line-height: 36px;
+    font-size: 20px;
+    text-align: center;
+    color: #ffffff;
+    display: inline-block;
+    margin: 21px auto;
+    font-weight: bold;
+}
+
+.success-rate-description,
+.average-return-description{
+  font-size: 9px;
+  text-align: center;
+  color: #262626;
+  font-weight: bold;
+}
+
+.recommendation-distribution {
+    padding: 8px 8px 8px 8px;
+    line-height: 10px;
+}
+.recommendation-distribution div{
+    width: 50px;
+    display: inline-block;
+    font-size: 8px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.close-distribution{
+    width: 54px;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+.distribution-follow-divider{
+    margin:auto;
+    width: 160px;
+    border: solid 0.3px #9d9d9d;
+    margin-bottom: 8px;
+}
+
+.followed-by,
+.follow-link{
+    margin-bottom: 8px;
+    height: 7px;
+    font-size: 7px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.follow-link{
+    cursor: pointer;
+}
