@@ -36,6 +36,15 @@ namespace Api.Controllers
             return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
         }
 
+        protected virtual IActionResult SocialLogin(SocialLoginRequest socialLoginRequest)
+        {
+            if (socialLoginRequest == null)
+                return BadRequest();
+
+            var loginResponse = UserBusiness.SocialLogin(SocialNetworkType.Get(socialLoginRequest.SocialNetworkType), socialLoginRequest.Email, socialLoginRequest.Token, socialLoginRequest.RequestedToBeAdvisor);
+            return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(socialLoginRequest.Email.ToLower().Trim()), data = loginResponse });
+        }
+
         protected virtual IActionResult RecoverPassword(RecoverPasswordRequest recoverPasswordRequest)
         {
             if (recoverPasswordRequest == null)

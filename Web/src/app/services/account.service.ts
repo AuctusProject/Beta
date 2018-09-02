@@ -19,12 +19,14 @@ import { ConfigurationRequest } from '../model/account/configurationRequest';
 import { NavigationService } from './navigation.service';
 import { DashboardResponse } from '../model/admin/dashboardresponse';
 import { SearchResponse } from '../model/search/searchResponse';
+import { SocialLoginRequest } from '../model/account/socialLoginRequest';
 
 
 @Injectable()
 export class AccountService {
   private validateSignatureUrl = this.httpService.apiUrl("/v1/accounts/me/signatures");
   private loginUrl = this.httpService.apiUrl("v1/accounts/login");
+  private socialLoginUrl = this.httpService.apiUrl("v1/accounts/social_login");
   private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmations");
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
@@ -43,6 +45,10 @@ export class AccountService {
 
   login(loginRequest : LoginRequest):Observable<LoginResult>{
     return this.httpService.post(this.loginUrl, loginRequest);
+  }
+
+  socialLogin(socialLoginRequest : SocialLoginRequest):Observable<LoginResult>{
+    return this.httpService.post(this.socialLoginUrl, socialLoginRequest);
   }
 
   setLoginData(loginData: LoginResponse): void {

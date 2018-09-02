@@ -32,7 +32,7 @@ namespace Auctus.Business.Account
             });
         }
 
-        public void InsertNewLogin(int userId, decimal? aucAmount)
+        public void InsertNewLogin(int userId, decimal? aucAmount, SocialNetworkType socialNetworkType)
         {
             Data.InsertOneAsync(new DomainObjects.Account.Action()
             {
@@ -40,7 +40,8 @@ namespace Auctus.Business.Account
                 UserId = userId,
                 Type = ActionType.NewLogin.Value,
                 AucAmount = aucAmount,
-                Ip = LoggedIp
+                Ip = LoggedIp,
+                Message = socialNetworkType?.GetDescription()
             });
         }
 

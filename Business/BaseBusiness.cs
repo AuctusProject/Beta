@@ -62,6 +62,8 @@ namespace Auctus.Business
         private CoinMarketcapBusiness _coinMarketcapBusiness;
         private CoinGeckoBusiness _coinGeckoBusiness;
         private AzureStorageBusiness _azureStorageBusiness;
+        private FacebookBusiness _facebookBusiness;
+        private GoogleBusiness _googleBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -443,6 +445,26 @@ namespace Auctus.Business
                 if (_azureStorageBusiness == null)
                     _azureStorageBusiness = new AzureStorageBusiness(Configuration, ServiceProvider);
                 return _azureStorageBusiness;
+            }
+        }
+
+        protected FacebookBusiness FacebookBusiness
+        {
+            get
+            {
+                if (_facebookBusiness == null)
+                    _facebookBusiness = new FacebookBusiness(Configuration, ServiceProvider);
+                return _facebookBusiness;
+            }
+        }
+
+        protected GoogleBusiness GoogleBusiness
+        {
+            get
+            {
+                if (_googleBusiness == null)
+                    _googleBusiness = new GoogleBusiness(Configuration, ServiceProvider);
+                return _googleBusiness;
             }
         }
     }

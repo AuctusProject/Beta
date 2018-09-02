@@ -35,6 +35,15 @@ namespace Api.Controllers
             return await base.RegisterAsync(registerRequest);
         }
 
+        [HttpPost]
+        [Route("social_login")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult SocialLogin([FromBody]SocialLoginRequest socialLoginRequest)
+        {
+            return base.SocialLogin(socialLoginRequest);
+        }
+
         [Route("login")]
         [HttpPost]
         [AllowAnonymous]
