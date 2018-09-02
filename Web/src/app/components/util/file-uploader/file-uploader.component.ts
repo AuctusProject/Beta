@@ -5,7 +5,7 @@ import { NotificationsService } from "angular2-notifications";
     selector: 'file-uploader',
     templateUrl: './file-uploader.component.html',
     styleUrls: ['./file-uploader.component.css'],
-    inputs:['emptyPictureUrl']
+    inputs:['pictureUrl']
 })
 export class FileUploaderComponent {
     
@@ -14,7 +14,7 @@ export class FileUploaderComponent {
     activeBox: string = '0 0 9px #17c723';
     baseBox: string = '0 0 4px #161616';
     overlayColor: string = 'rgba(15, 15, 15, 0.5)';
-    emptyPictureUrl: string = '';
+    pictureUrl: string = '';
     
     dragging: boolean = false;
     loaded: boolean = false;
@@ -22,14 +22,14 @@ export class FileUploaderComponent {
     imageSrc: string = '';
     iconColor: string = '';
     fileToUpload: File = null;
-    imageText: string = 'Click here to choose';
+    imageText: string = 'Click here to change';
     wasChanged: boolean = false;
     @ViewChild("fileInput") fileInput: ElementRef;
     
     constructor(private notificationService: NotificationsService) { }
 
     ngOnInit() {
-        this.imageSrc = this.emptyPictureUrl;
+        this.imageSrc = this.pictureUrl;
         if (this.imageSrc) {
             this.imageLoaded = true;
         }
@@ -88,14 +88,9 @@ export class FileUploaderComponent {
     }
 
     clearComponent() {
-        if (this.emptyPictureUrl) {
-            this.imageSrc = this.emptyPictureUrl;
-            this.imageLoaded = true;
-        } else {
-            this.imageSrc = '';
-            this.imageLoaded = false;
-        }
-        this.imageText = 'Click here to choose';
+        this.imageSrc = '';
+        this.imageLoaded = false;
+        this.imageText = 'Click here to change';
         this.loaded = false;
         this.fileToUpload = null;
         this.fileInput.nativeElement.value = '';

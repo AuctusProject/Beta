@@ -18,7 +18,7 @@ import { NotificationsService } from 'angular2-notifications';
 export class AdvisorEditComponent implements OnInit {
   advisor: Advisor;
   promise: Subscription;
-  emptyUserUrl: string;
+  pictureUrl: string;
   executing: boolean;
   @ViewChild("FileUploadComponent") FileUploadComponent: FileUploaderComponent;
 
@@ -32,7 +32,7 @@ export class AdvisorEditComponent implements OnInit {
           if(this.accountService.getLoginData().id == params['id']){
             this.advisorService.getAdvisor(params['id']).subscribe(advisor => 
               {
-                this.emptyUserUrl = CONFIG.profileImgUrl.replace("{id}", advisor.urlGuid);
+                this.pictureUrl = CONFIG.profileImgUrl.replace("{id}", advisor.urlGuid);
                 this.advisor = advisor;
               });
           }
@@ -55,7 +55,7 @@ export class AdvisorEditComponent implements OnInit {
     request.file = this.FileUploadComponent.getFile();
     this.promise = this.advisorService.editAdvisor(this.advisor.id, request).subscribe(result => 
       {
-        this.emptyUserUrl = CONFIG.profileImgUrl.replace("{id}", result);
+        this.pictureUrl = CONFIG.profileImgUrl.replace("{id}", result);
         this.notificationsService.success(null, "Successfully saved.");
       });
   }

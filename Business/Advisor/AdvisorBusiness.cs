@@ -70,7 +70,7 @@ namespace Auctus.Business.Advisor
 
         public byte[] GetNoUploadedImageForAdvisor(User user)
         {
-            var userData = (user.CreationDate.Ticks * (double)user.Id + user.Id).ToString().Select(c => Convert.ToInt32(c.ToString()));
+            var userData = (user.CreationDate.Ticks * (double)user.Id + user.Id).ToString("##############################################################").Select(c => Convert.ToInt32(c.ToString()));
             using (var bitmap = new Bitmap(32, 32))
             {
                 var dataPosition = 0;
