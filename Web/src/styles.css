@@ -183,3 +183,10 @@ button.is-loading .btn-spinner {
   margin-top: 9px;
   margin-bottom: 35px;
 }
+
+.fullscreen-modal {
+  margin-left: 2.5% !important;
+  margin-top: 2.5% !important;
+  background-color: white;
+  opacity: 0.95;
+}

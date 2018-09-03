@@ -66,6 +66,9 @@ import { RecaptchaComponent }  from './components/util/recaptcha/recaptcha.compo
 import { RecaptchaModule } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
+import { FullscreenModalComponent } from './components/util/fullscreen-modal/fullscreen-modal.component';
+import { ModalDirective } from './directives/modal.directive';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -121,7 +124,9 @@ export function getAuthServiceConfigs() {
     HomeComponent,
     TopAdvisorsComponent,
     FileUploaderComponent,
-    RecaptchaComponent
+    RecaptchaComponent,
+    FullscreenModalComponent,
+    ModalDirective
   ],
   imports: [
     BrowserModule,
@@ -161,9 +166,10 @@ export function getAuthServiceConfigs() {
     {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules},
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
-    { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs }
+    { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '100%', height: '95%', hasBackdrop: true, maxWidth: '95vw', disableClose: false, panelClass: 'fullscreen-modal'}}
   ],
-  entryComponents:[ConfirmAdviceDialogComponent, TopLoadingComponent],
+  entryComponents:[FullscreenModalComponent, ConfirmAdviceDialogComponent, TopLoadingComponent, LoginComponent],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]
 })

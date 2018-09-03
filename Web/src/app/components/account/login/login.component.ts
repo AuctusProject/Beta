@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, NgZone, ViewChild, Inject } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { LoginRequest } from '../../../model/account/loginRequest';
 import { Subscription } from '../../../../../node_modules/rxjs';
@@ -9,16 +9,19 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular
 import { SocialLoginRequest } from '../../../model/account/socialLoginRequest';
 import { LoginResult } from '../../../model/account/loginResult';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ModalComponent } from '../../../model/modal/modalComponent';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements ModalComponent, OnInit {
+  @Input() data: any;
   loginRequest: LoginRequest = new LoginRequest();
-  loginPromise: Subscription;
   loginForm: FormGroup;
+  promise: Subscription;
   @ViewChild("RecaptchaComponent") RecaptchaComponent: RecaptchaComponent;
 
   constructor(private formBuilder: FormBuilder, 
@@ -27,7 +30,7 @@ export class LoginComponent implements OnInit {
     private authRedirect : AuthRedirect,
     private socialAuthService: AuthService,
     private zone : NgZone) { 
-    this.buildForm();
+    this.buildForm(); 
   }
 
   private buildForm() {
@@ -45,7 +48,7 @@ export class LoginComponent implements OnInit {
   }
 
   doLogin() {
-    this.loginPromise = this.accountService.login(this.loginRequest)
+    this.accountService.login(this.loginRequest)
       .subscribe(this.loginResponse, this.RecaptchaComponent.reset);
   }
 
@@ -79,7 +82,7 @@ export class LoginComponent implements OnInit {
         request.email = userData.email;
         request.token = userData.token;
         request.socialNetworkType = socialNetworkType;
-        this.accountService.socialLogin(request).subscribe(result => this.zone.run(() => {this.loginResponse(result);}));
+        this.accountService.socialLogin(request).subscribe(result => this.zone.run(() => { this.loginResponse(result); }));
       }
     );
   }

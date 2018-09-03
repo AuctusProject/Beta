@@ -1,0 +1,27 @@
+.mobile {
+    width: 100%;
+}
+
+.tablet {
+    width: 70%;
+}
+
+.web {
+    width: 35%;
+}
+
+.btn-login {
+    margin-top: 20px;
+}
+
+.btn-mobile {
+    width: 70%;
+}
+
+.btn-tablet {
+    width: 40%;
+}
+
+.btn-web {
+    width: 20%;
+}

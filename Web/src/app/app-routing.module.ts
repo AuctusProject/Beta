@@ -24,7 +24,6 @@ import { HomeComponent } from './components/home/home/home.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent  },
-    { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
     { path: 'confirm-email', component: ConfirmEmailComponent, canActivate: [AuthRedirect] },

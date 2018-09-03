@@ -1,33 +1,16 @@
-
-<div class="main-content">
-    <form [formGroup]="loginForm" (ngSubmit)="onLoginClick()" fxLayoutAlign="space-evenly center">
-      <div class="blue-box" fxLayout="column" fxLayoutGap="20px">
-        <div fxLayout="column" fxLayoutAlign="space-evenly center">
-          <div fxLayout="row" fxLayoutGap="20px">
-              <input matInput placeholder="Email" [(ngModel)]="loginRequest.email" formControlName="email" type="text"
-                autocomplete="username email" />
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px">
-              <input matInput placeholder="Password" [(ngModel)]="loginRequest.password" type="password" formControlName="password" autocomplete="current-password"/>
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px">
-              <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px">
-            <button type="submit" class="primary-button bold login" >
-              LOGIN
-            </button>
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px">
-            <a routerLink="/forgot-password" class="element-margin-top">Forgot my password</a>
-          </div>
-          <div fxLayout="row" fxLayoutGap="20px">
-            <a routerLink="/register" class="element-margin-top">Don't have an account?</a>
-          </div>
-        </div>
-      </div>
-    </form>
-    
-<button (click)="socialSignIn('facebook')">Sign in with Facebook</button>
-<button (click)="socialSignIn('google')">Signin in with Google</button> 
-  </div>
+<form [formGroup]="loginForm" (ngSubmit)="onLoginClick()" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
+  <mat-form-field ngClass.xs="mobile" ngClass.sm="tablet" ngClass.gt-sm="web">
+    <input cdkFocusInitial matInput required placeholder="Email" [(ngModel)]="loginRequest.email" formControlName="email" type="text" autocomplete="username email" />
+  </mat-form-field>
+  <mat-form-field ngClass.xs="mobile" ngClass.sm="tablet" ngClass.gt-sm="web">
+    <input matInput required placeholder="Password" [(ngModel)]="loginRequest.password" type="password" formControlName="password" autocomplete="current-password"/>
+  </mat-form-field>
+</form>
+<div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
+  <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
+  <button mat-flat-button (click)="socialSignIn('facebook')">Sign in with Facebook</button>
+  <button mat-flat-button (click)="socialSignIn('google')">Signin in with Google</button> 
+  <a routerLink="/forgot-password">Forgot my password</a>
+  <a routerLink="/register">Don't have an account?</a>
+  <button class="btn-login" ngClass.xs="btn-mobile" ngClass.sm="btn-tablet" ngClass.gt-sm="btn-web" mat-flat-button (click)="onLoginClick()" [promiseBtn]="promise">Access</button>
+</div>
