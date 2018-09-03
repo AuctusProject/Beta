@@ -53,7 +53,6 @@ namespace Auctus.Business.Account
         private LoginResponse SocialRegister(string email, bool requestedToBeAdvisor, SocialNetworkType socialNetworkType)
         {
             var user = CreateUser(email, null, null, true);
-            Data.Insert(user);
             
             ActionBusiness.InsertNewLogin(user.Id, null, socialNetworkType);
             return new LoginResponse()
