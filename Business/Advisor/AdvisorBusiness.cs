@@ -134,7 +134,8 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            CalculateForAdvisorsData(CalculationMode.AdvisorBase, out advisorsResult, out assetsResult);
+            var user = LoggedEmail != null ? GetValidUser() : null;
+            CalculateForAdvisorsData(user, CalculationMode.AdvisorBase, out advisorsResult, out assetsResult);
             return advisorsResult;
         }
 
@@ -142,7 +143,8 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            CalculateForAdvisorsData(CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult, advisorId);
+            var user = GetValidUser();
+            CalculateForAdvisorsData(user, CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult, advisorId);
             var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
             result.Assets.ForEach(a => a.AssetAdvisor = a.AssetAdvisor.Where(c => c.UserId == advisorId).ToList());
@@ -163,9 +165,8 @@ namespace Auctus.Business.Advisor
             return advisor;
         }
 
-        private void CalculateForAdvisorsData(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, int? advisorId = null)
+        private void CalculateForAdvisorsData(User user, CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, int? advisorId = null)
         {
-            var user = UserBusiness.GetByEmail(LoggedEmail);
             var advisors = GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
