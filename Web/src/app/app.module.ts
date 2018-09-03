@@ -67,6 +67,7 @@ import { RecaptchaModule } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
 import { AdviceCardComponent } from './components/advisor/advice-card/advice-card.component';
+import { HeaderComponent } from './components/header/header.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -123,7 +124,8 @@ export function getAuthServiceConfigs() {
     TopAdvisorsComponent,
     FileUploaderComponent,
     RecaptchaComponent,
-    AdviceCardComponent
+    AdviceCardComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

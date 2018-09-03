@@ -65,7 +65,7 @@ export class AccountService {
 
   logout(): void {
     this.httpService.logout();
-    this.navigationService.goToLogin();
+    this.navigationService.goToHome();
   }
 
   logoutWithoutRedirect(): void {

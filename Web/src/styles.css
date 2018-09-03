@@ -183,3 +183,7 @@ button.is-loading .btn-spinner {
   margin-top: 9px;
   margin-bottom: 35px;
 }
+
+.spacer {
+  flex: 1 1 auto;
+}
