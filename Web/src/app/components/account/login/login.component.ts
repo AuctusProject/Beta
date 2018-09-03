@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, Input, NgZone, ViewChild } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { LoginRequest } from '../../../model/account/loginRequest';
 import { Subscription } from '../../../../../node_modules/rxjs';
@@ -8,6 +8,7 @@ import { AuthRedirect } from '../../../providers/authRedirect';
 import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
 import { SocialLoginRequest } from '../../../model/account/socialLoginRequest';
 import { LoginResult } from '../../../model/account/loginResult';
+import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 
 @Component({
   selector: 'login',
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
   loginRequest: LoginRequest = new LoginRequest();
   loginPromise: Subscription;
   loginForm: FormGroup;
+  @ViewChild("RecaptchaComponent") RecaptchaComponent: RecaptchaComponent;
 
   constructor(private formBuilder: FormBuilder, 
     private accountService: AccountService, 
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
 
   doLogin() {
     this.loginPromise = this.accountService.login(this.loginRequest)
-      .subscribe(this.loginResponse);
+      .subscribe(this.loginResponse, this.RecaptchaComponent.reset);
   }
 
   loginResponse(response: LoginResult){
@@ -55,6 +57,7 @@ export class LoginComponent implements OnInit {
       }
       else {
         this.notificationsService.info("Info", response.error);
+        this.RecaptchaComponent.reset();
       }
     }
   }
@@ -79,5 +82,9 @@ export class LoginComponent implements OnInit {
         this.accountService.socialLogin(request).subscribe(result => this.zone.run(() => {this.loginResponse(result);}));
       }
     );
+  }
+
+  public onCaptchaResponse(captchaResponse: string) {
+    this.loginRequest.captcha = captchaResponse;
   }
 }

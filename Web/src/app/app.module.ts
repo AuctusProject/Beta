@@ -62,6 +62,9 @@ import { HomeComponent } from './components/home/home/home.component';
 import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
 import { FileUploaderComponent } from './components/util/file-uploader/file-uploader.component';
 import { BarRatingModule } from "ngx-bar-rating";
+import { RecaptchaComponent }  from './components/util/recaptcha/recaptcha.component';
+import { RecaptchaModule } from 'ng-recaptcha';
+import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
 
 export function loadConfigService(configService: ConfigService): Function
@@ -117,7 +120,8 @@ export function getAuthServiceConfigs() {
     RecommendationBoxComponent,
     HomeComponent,
     TopAdvisorsComponent,
-    FileUploaderComponent
+    FileUploaderComponent,
+    RecaptchaComponent
   ],
   imports: [
     BrowserModule,
@@ -141,7 +145,9 @@ export function getAuthServiceConfigs() {
     MatModule,
     FlexLayoutModule,
     BarRatingModule,
-    SocialLoginModule
+    SocialLoginModule,
+    RecaptchaModule.forRoot(), 
+    RecaptchaFormsModule
   ],
   providers: [
     HttpService,

@@ -195,6 +195,21 @@ namespace Api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        protected bool IsValidRecaptcha(string recaptchaResponse)
+        {
+            string url = $"https://www.google.com/recaptcha/api/siteverify?secret={Startup.Configuration.GetSection("RecaptchaSecret").Get<string>()}&response={recaptchaResponse}";
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                using (HttpResponseMessage response = client.PostAsync(url, null).Result)
+                {
+                    RecaptchaResponse result = JsonConvert.DeserializeObject<RecaptchaResponse>(response.Content.ReadAsStringAsync().Result);
+                    return result != null && result.Success;
+                }
+            }
+        }
+
         protected UserBusiness UserBusiness { get { return new UserBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected WalletBusiness WalletBusiness { get { return new WalletBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected ActionBusiness ActionBusiness { get { return new ActionBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
