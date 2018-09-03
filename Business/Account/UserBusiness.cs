@@ -382,7 +382,7 @@ namespace Auctus.Business.Account
             Data.Update(user);
             if (user.ConfirmationDate.HasValue)
             {
-                var cacheKey = GetUserCacheKey();
+                var cacheKey = GetUserCacheKey(user.Email);
                 if (user.IsAdvisor)
                     MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
                 else
