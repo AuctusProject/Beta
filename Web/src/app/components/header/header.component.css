@@ -25,6 +25,7 @@ a{
     font-weight: 600;
     padding-left: 12px;
     padding-right: 12px;
+    cursor:pointer;
 }
 
 a:hover,

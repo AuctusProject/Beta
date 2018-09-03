@@ -3,7 +3,7 @@
 <div class="menu" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-around center">
     <a routerLink="/top-advisors" routerLinkActive="active">TOP ADVISORS</a>
     <a routerLink="/top-assets" routerLinkActive="active">TOP ASSETS</a>
-    <a routerLink="" routerLinkActive="active">ABOUT US</a>
+    <a routerLink="/about-us" routerLinkActive="active">ABOUT US</a>
     <div class="separator"></div>
     <a *ngIf="!loginData" (click)="login()">LOGIN/SIGN UP</a>
     <a *ngIf="loginData" (click)="logout()">LOGOUT</a>
