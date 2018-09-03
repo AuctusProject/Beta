@@ -31,6 +31,8 @@ namespace Api.Controllers
         {
             if (loginRequest == null)
                 return BadRequest();
+            if (!IsValidRecaptcha(loginRequest.Captcha))
+                return BadRequest(new { error = "Invalid Captcha." });
 
             var loginResponse = UserBusiness.Login(loginRequest.Email, loginRequest.Password);
             return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
