@@ -48,8 +48,8 @@ export class LoginComponent implements ModalComponent, OnInit {
   }
 
   doLogin() {
-    this.accountService.login(this.loginRequest)
-      .subscribe(this.loginResponse, this.RecaptchaComponent.reset);
+    this.loginPromise = this.accountService.login(this.loginRequest)
+      .subscribe(result => this.zone.run(() => {this.loginResponse(result);}), this.RecaptchaComponent.reset);
   }
 
   loginResponse(response: LoginResult){

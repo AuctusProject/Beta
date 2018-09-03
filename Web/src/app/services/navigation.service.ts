@@ -39,7 +39,7 @@ export class NavigationService {
   }
 
   public goToHome(){
-    this.goToUrl('home');
+    this.goToUrl('');
   }
 
   public goToListAdvisors(){

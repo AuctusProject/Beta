@@ -65,7 +65,8 @@ Auctus Team", WebUrl, code));
             if (Data.GetDateTimeNow() > recovery.CreationDate.AddMinutes(60))
                 throw new BusinessException("Recover password code is expired.");
 
-            UserBusiness.UpdatePassword(UserBusiness.GetById(recovery.UserId), password);
+            var user = UserBusiness.GetById(recovery.UserId);
+            UserBusiness.UpdatePassword(user, password);
         }
     }
 }

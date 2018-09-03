@@ -108,7 +108,7 @@ namespace Auctus.Business
 
         public User GetValidUser()
         {
-            var cacheKey = GetUserCacheKey();
+            var cacheKey = GetUserCacheKey(LoggedEmail);
             var user = MemoryCache.Get<User>(cacheKey);
             if (user == null)
             {
@@ -138,10 +138,10 @@ namespace Auctus.Business
             }
         }
 
-        protected string GetUserCacheKey()
+        protected string GetUserCacheKey(string userEmail)
         {
-            UserBusiness.BaseEmailValidation(LoggedEmail);
-            return LoggedEmail.ToLower().Trim();
+            UserBusiness.BaseEmailValidation(userEmail);
+            return userEmail.ToLower().Trim();
         }
 
         protected void RunAsync(System.Action action)

@@ -53,7 +53,6 @@ namespace Auctus.Business.Account
         private LoginResponse SocialRegister(string email, bool requestedToBeAdvisor, SocialNetworkType socialNetworkType)
         {
             var user = CreateUser(email, null, null, true);
-            Data.Insert(user);
             
             ActionBusiness.InsertNewLogin(user.Id, null, socialNetworkType);
             return new LoginResponse()
@@ -383,7 +382,7 @@ namespace Auctus.Business.Account
             Data.Update(user);
             if (user.ConfirmationDate.HasValue)
             {
-                var cacheKey = GetUserCacheKey();
+                var cacheKey = GetUserCacheKey(user.Email);
                 if (user.IsAdvisor)
                     MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
                 else
