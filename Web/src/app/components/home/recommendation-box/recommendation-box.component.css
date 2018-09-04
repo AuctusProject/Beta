@@ -6,3 +6,31 @@
     margin-right: 10px;
     vertical-align: top;
 }
+
+.box-title{
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.45;
+    letter-spacing: 0.5px;
+    color: #626262;
+    margin-top: 14px;
+    margin-bottom: 7.5px;
+}
+
+.recommendation-table{
+    text-align: left;
+
+}
+
+.recommendation-table th{
+    background-color: #4e4e4e;
+    color: #ffffff;
+    font-size: 9px;
+}
+
+.recommendation-table td{
+    color: #4e4e4e;
+    font-size: 9px;
+}

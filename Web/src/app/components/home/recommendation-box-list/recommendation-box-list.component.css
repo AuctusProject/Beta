@@ -1,5 +1,6 @@
 .recommendation-box-container {
     background-color: #d5d5d5;
+    display: grid;
 }
 
 .recommendation-list{
