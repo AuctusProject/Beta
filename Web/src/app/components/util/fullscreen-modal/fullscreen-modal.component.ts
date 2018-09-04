@@ -1,31 +1,51 @@
-import { Component, OnInit, Input, ViewChild, Inject, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject, ComponentFactoryResolver } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ModalDirective } from '../../../directives/modal.directive';
 import { ModalComponent } from '../../../model/modal/modalComponent';
+import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 
 @Component({
   selector: 'fullscreen-modal',
   templateUrl: './fullscreen-modal.component.html',
   styleUrls: ['./fullscreen-modal.component.css']
 })
-export class FullscreenModalComponent implements OnInit {
+export class FullscreenModalComponent implements OnInit, OnDestroy {
   @ViewChild(ModalDirective) modalHost: ModalDirective;
+  private modalComponent: ModalComponent;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
     public dialogRef: MatDialogRef<FullscreenModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    @Inject(MAT_DIALOG_DATA) public data: FullscreenModalComponentInput) { 
   }
 
   ngOnInit() {
-    this.loadContentComponent();
+    this.loadContentComponent(this.data);
   }
 
-  loadContentComponent() {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.data.component);
+  ngOnDestroy() {
+    this.destroy();
+  }
+
+  loadContentComponent(inputData: FullscreenModalComponentInput) {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(inputData.component);
     let viewContainerRef = this.modalHost.viewContainerRef;
     viewContainerRef.clear();
+    this.destroy();
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    (<ModalComponent>componentRef.instance).data = this.data.input;
-    (<ModalComponent>componentRef.instance).setClose.subscribe(() => this.dialogRef.close());
+    this.modalComponent = (<ModalComponent>componentRef.instance);
+    this.modalComponent.data = inputData.componentInput;
+    this.modalComponent.setClose.subscribe(() => this.dialogRef.close());
+    this.modalComponent.setNewModal.subscribe(newModalInput => 
+      {
+        this.data = newModalInput;
+        this.loadContentComponent(newModalInput);
+      });
+  }
+
+  destroy() {
+    if (!!this.modalComponent) {
+      this.modalComponent.setClose.unsubscribe();
+      this.modalComponent.setNewModal.unsubscribe();
+    }
   }
 }

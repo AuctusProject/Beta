@@ -190,7 +190,44 @@ button.is-loading .btn-spinner {
 
 .fullscreen-modal {
   margin-left: 2.5% !important;
-  margin-top: 2.5% !important;
+  margin-top: 2% !important;
   background-color: white;
   opacity: 0.95;
+}
+
+.input-modal-mobile {
+  width: 100%;
+}
+
+.input-modal-tablet {
+  width: 70%;
+}
+
+.input-modal-web {
+  width: 35%;
+}
+
+.btn-modal {
+  margin-top: 20px;
+}
+
+.btn-modal-mobile {
+  width: 70%;
+}
+
+.btn-modal-tablet {
+  width: 40%;
+}
+
+.btn-modal-web {
+  width: 20%;
+}
+
+.modal-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.simple-notification-wrapper {
+  z-index: 10000 !important;
 }

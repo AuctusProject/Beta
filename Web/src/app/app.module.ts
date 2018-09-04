@@ -71,6 +71,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FullscreenModalComponent } from './components/util/fullscreen-modal/fullscreen-modal.component';
 import { ModalDirective } from './directives/modal.directive';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { MessageFullscreenModalComponent } from './components/util/message-fullscreen-modal/message-fullscreen-modal.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -130,7 +131,8 @@ export function getAuthServiceConfigs() {
     AdviceCardComponent,
     HeaderComponent,
     FullscreenModalComponent,
-    ModalDirective
+    ModalDirective,
+    MessageFullscreenModalComponent
   ],
   imports: [
     BrowserModule,
@@ -167,13 +169,13 @@ export function getAuthServiceConfigs() {
     AccountService,
     NavigationService,
     AuthRedirect,
-    {provide:HIGHCHARTS_MODULES, useFactory:highchartsModules},
+    { provide:HIGHCHARTS_MODULES, useFactory:highchartsModules },
     ConfigService,
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '100%', height: '95%', hasBackdrop: true, maxWidth: '95vw', disableClose: false, panelClass: 'fullscreen-modal'}}
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '100%', height: '92%', hasBackdrop: true, maxWidth: '95vw', disableClose: false, panelClass: 'fullscreen-modal'}}
   ],
-  entryComponents:[FullscreenModalComponent, ConfirmAdviceDialogComponent, TopLoadingComponent, LoginComponent],
+  entryComponents:[FullscreenModalComponent, ConfirmAdviceDialogComponent, TopLoadingComponent, LoginComponent, ForgotPasswordComponent, MessageFullscreenModalComponent],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]
 })

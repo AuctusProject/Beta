@@ -1,0 +1,20 @@
+.message {
+    opacity: 0.95;
+    background-color: #101010;
+    height: 100%;
+    color: white;
+    padding: 25px;
+    margin: auto;
+}
+
+.mobile {
+    width: 90%;
+}
+
+.tablet {
+    width: 75%;
+}
+
+.web {
+    width: 60%;
+}
