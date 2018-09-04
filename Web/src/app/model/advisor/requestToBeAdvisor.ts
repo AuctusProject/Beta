@@ -6,6 +6,7 @@ export class RequestToBeAdvisor {
   description: string;
   previousExperience: string;
   approved?: boolean;
+  urlGuid: string;
 
   constructor(){
   }

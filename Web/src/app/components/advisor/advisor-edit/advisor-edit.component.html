@@ -6,7 +6,7 @@
     <mat-form-field fxFill>
         <textarea matInput required cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
             cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" maxlength="160" 
-            [(ngModel)]="advisor.description" placeholder="Description"></textarea>
+            [(ngModel)]="advisor.description" placeholder="Short description"></textarea>
         <mat-hint align="end">{{advisor.description.length}} / 160</mat-hint>
     </mat-form-field>
     <div class="file-container"> 

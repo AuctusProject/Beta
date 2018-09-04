@@ -70,7 +70,7 @@ namespace Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> RequestToBeAsync([FromBody]BeAdvisorRequest beAdvisorRequest)
+        public new async Task<IActionResult> RequestToBeAsync([FromForm]BeAdvisorRequest beAdvisorRequest)
         {
             return await base.RequestToBeAsync(beAdvisorRequest);
         }

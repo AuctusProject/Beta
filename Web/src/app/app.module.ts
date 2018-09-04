@@ -175,7 +175,15 @@ export function getAuthServiceConfigs() {
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '100%', height: '92%', hasBackdrop: true, maxWidth: '95vw', disableClose: false, panelClass: 'fullscreen-modal'}}
   ],
-  entryComponents:[FullscreenModalComponent, ConfirmAdviceDialogComponent, TopLoadingComponent, LoginComponent, ForgotPasswordComponent, MessageFullscreenModalComponent],
+  entryComponents:[
+    FullscreenModalComponent, 
+    ConfirmAdviceDialogComponent, 
+    TopLoadingComponent, 
+    LoginComponent, 
+    ForgotPasswordComponent, 
+    MessageFullscreenModalComponent,
+    BecomeAdvisorComponent
+  ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]
 })

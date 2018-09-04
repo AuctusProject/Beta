@@ -10,6 +10,8 @@
     
     <img [src]="imageSrc" (load)="handleImageLoad()" 
     [style.box-shadow]="dragging ? activeBox : baseBox" [class.loaded]="imageLoaded"/>
+
+    <div *ngIf="!loaded" class="empty-img" [style.box-shadow]="dragging ? activeBox : baseBox"></div>
     
     <input type="file" #fileInput id="fileInput" name="fileInput" accept=".png,.jpg,.jpeg" (change)="handleInputChange($event)">
 </label>

@@ -52,13 +52,13 @@ export class AuthRedirect implements CanActivate {
       }
     }
     else if (loginResponse.requestedToBeAdvisor && !loginResponse.isAdvisor){
-      if(currentUrl != '/become-advisor' && currentUrl != '/wallet-login') {
+      if(currentUrl != '/wallet-login') {
         this.navigationService.goToBecomeAdvisor();
         return true;
       }
     }    
     else if (!loginResponse.isAdvisor && !loginResponse.hasInvestment){
-      if(currentUrl != '/wallet-login' && currentUrl != '/become-advisor') {
+      if(currentUrl != '/wallet-login') {
         this.navigationService.goToWalletLogin();
         return true;
       }

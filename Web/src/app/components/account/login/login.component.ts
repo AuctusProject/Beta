@@ -39,8 +39,8 @@ export class LoginComponent implements ModalComponent, OnInit {
 
   private buildForm() {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required])],
-      password: ['', Validators.compose([Validators.required])]
+      email: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+      password: ['', Validators.compose([Validators.required, Validators.maxLength(100), Validators.minLength(8)])]
     });
   }
 

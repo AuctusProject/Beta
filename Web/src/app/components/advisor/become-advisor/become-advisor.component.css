@@ -1,0 +1,34 @@
+.file-container {
+    position: relative; 
+}
+
+.file-container-web {
+    padding-top: 25%; 
+    width: 25%;  
+}
+
+.file-container-mobile {
+    padding-top: 80%; 
+    width: 80%;  
+}
+
+.file-container-tablet {
+    padding-top: 45%; 
+    width: 45%;  
+}
+
+.file-uploader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.lastDiv {
+    padding-bottom: 20px;
+}
+
+.input-experience {
+    width: 95%;
+}

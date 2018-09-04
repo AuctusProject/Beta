@@ -61,7 +61,16 @@ export class AdvisorService {
   }
 
   postRequestToBeAdvisor(requestToBeAdvisorRequest: RequestToBeAdvisorRequest): Observable<RequestToBeAdvisor> {
-    return this.httpService.post(this.requestToBeAdvisorsUrl, requestToBeAdvisorRequest);
+    let formData: FormData = new FormData();
+    formData.append('formFile', requestToBeAdvisorRequest.file);
+    formData.append('name', requestToBeAdvisorRequest.name);
+    formData.append('description', requestToBeAdvisorRequest.description);
+    formData.append('previousExperience', requestToBeAdvisorRequest.previousExperience);
+    formData.append('changedPicture', requestToBeAdvisorRequest.changedPicture + '');
+    formData.append('captcha', requestToBeAdvisorRequest.captcha);
+    formData.append('email', requestToBeAdvisorRequest.email);
+    formData.append('password', requestToBeAdvisorRequest.password);
+    return this.httpService.postWithoutContentType(this.requestToBeAdvisorsUrl, formData);
   }
 
   followAdvisor(advisorId:number):Observable<void>{

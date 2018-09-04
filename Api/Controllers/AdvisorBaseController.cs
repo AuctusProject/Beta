@@ -61,6 +61,9 @@ namespace Api.Controllers
             if (beAdvisorRequest == null)
                 return BadRequest();
 
+            if (!IsValidRecaptcha(beAdvisorRequest.Captcha))
+                return BadRequest(new { error = "Invalid Captcha." });
+
             if (beAdvisorRequest.ChangedPicture && RequestHasFile())
             {
                 var fileExtension = GetValidPictureExtension();

@@ -34,7 +34,7 @@ export class ForgotPasswordComponent implements ModalComponent, OnInit {
 
   private buildForm() {
     this.forgotPasswordForm = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required])]
+      email: ['', Validators.compose([Validators.required, Validators.maxLength(50)])]
     });
   }
 
