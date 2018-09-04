@@ -1,7 +1,7 @@
 
     <div class="recommendation-box" fxLayout="column">
-      <h3>{{adviceType}}</h3>
-      <table mat-table [dataSource]="adviceList">
+      <div class="box-title">{{adviceType}}</div>
+      <table mat-table [dataSource]="adviceList" class="recommendation-table">
         <ng-container matColumnDef="assetCode">
           <th mat-header-cell *matHeaderCellDef> Asset </th>
           <td mat-cell *matCellDef="let advice"> {{advice.assetCode}}<br>{{advice.assetName}} </td>
