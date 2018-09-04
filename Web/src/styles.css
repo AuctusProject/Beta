@@ -196,15 +196,15 @@ button.is-loading .btn-spinner {
 }
 
 .input-modal-mobile {
-  width: 100%;
+  width: 95%;
 }
 
 .input-modal-tablet {
-  width: 70%;
+  width: 65%;
 }
 
 .input-modal-web {
-  width: 35%;
+  width: 30%;
 }
 
 .btn-modal {
