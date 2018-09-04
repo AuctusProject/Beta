@@ -10,6 +10,8 @@ import { SocialLoginRequest } from '../../../model/account/socialLoginRequest';
 import { LoginResult } from '../../../model/account/loginResult';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { ModalComponent } from '../../../model/modal/modalComponent';
+import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 
 @Component({
   selector: 'login',
@@ -19,6 +21,7 @@ import { ModalComponent } from '../../../model/modal/modalComponent';
 export class LoginComponent implements ModalComponent, OnInit {
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
+  @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
 
   loginRequest: LoginRequest = new LoginRequest();
   loginForm: FormGroup;
@@ -91,5 +94,16 @@ export class LoginComponent implements ModalComponent, OnInit {
 
   public onCaptchaResponse(captchaResponse: string) {
     this.loginRequest.captcha = captchaResponse;
+  }
+
+  onForgotPasswordClick() {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = ForgotPasswordComponent;
+    modalData.title = "Forgot password";
+    this.setNewModal.emit(modalData);
+  }
+
+  onRegisterClick() {
+    
   }
 }

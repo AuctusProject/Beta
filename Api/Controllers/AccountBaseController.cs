@@ -60,6 +60,8 @@ namespace Api.Controllers
         {
             if (forgotPasswordRequest == null || String.IsNullOrWhiteSpace(forgotPasswordRequest.Email))
                 return BadRequest();
+            if (!IsValidRecaptcha(forgotPasswordRequest.Captcha))
+                return BadRequest(new { error = "Invalid Captcha." });
 
             await PasswordRecoveryBusiness.SendEmailForForgottenPasswordAsync(forgotPasswordRequest.Email);
             return Ok();

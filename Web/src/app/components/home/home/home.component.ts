@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginComponent } from '../../account/login/login.component';
 import { MatDialog } from '@angular/material';
 import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
+import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 
 @Component({
   selector: 'home',
@@ -16,7 +17,9 @@ export class HomeComponent implements OnInit {
   }
 
   onLogin(){
-    const dialogRef = this.dialog.open(FullscreenModalComponent, 
-      { data: { component: LoginComponent, title: "Login" } }); 
+    let loginModalData = new FullscreenModalComponentInput();
+    loginModalData.component = LoginComponent;
+    loginModalData.title = "Login";
+    this.dialog.open(FullscreenModalComponent, { data: loginModalData }); 
   }
 }
