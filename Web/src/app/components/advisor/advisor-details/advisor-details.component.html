@@ -1,22 +1,24 @@
-<div *ngIf="advisor">
+<div *ngIf="!!advisor">
   <advisor-card [advisor]="advisor"></advisor-card>
   <recommendation-distribution [data]="advisor.recommendationDistribution"></recommendation-distribution>
-  <div *ngFor="let asset of advisor.assets">
-    <div>
-      <img [src]="getAssetImgUrl(asset)">
+  <div *ngIf="!!advisor.assets">
+    <div *ngFor="let asset of advisor.assets">
+      <div>
+        <img [src]="getAssetImgUrl(asset)">
+      </div>
+      <div>Asset: {{asset.code}} - {{asset.name}}</div>
+      <div>Total Ratings: {{asset.totalRatings}}</div>
+      <div>Total Advisors: {{asset.totalAdvisors}}</div>
+      <div>Last Value: {{asset.lastValue}}</div>
+      <div>24h: {{asset.variation24h}}</div>
+      <div>7d: {{asset.variation7d}}</div>
+      <div>30d: {{asset.variation30d}}</div>
+      <div># of Followers: {{asset.numberOfFollowers}}</div>
+
+      <asset-history-chart [assetValues]="asset.values" [advices]="asset.assetAdvisor[0].advices"></asset-history-chart>
+
+      Success rate: {{asset.assetAdvisor[0].successRate}}
+      Average return: {{asset.assetAdvisor[0].averageReturn}}
     </div>
-    <div>Asset: {{asset.code}} - {{asset.name}}</div>
-    <div>Total Ratings: {{asset.totalRatings}}</div>
-    <div>Total Advisors: {{asset.totalAdvisors}}</div>
-    <div>Last Value: {{asset.lastValue}}</div>
-    <div>24h: {{asset.variation24h}}</div>
-    <div>7d: {{asset.variation7d}}</div>
-    <div>30d: {{asset.variation30d}}</div>
-    <div># of Followers: {{asset.numberOfFollowers}}</div>
-
-    <asset-history-chart [assetValues]="asset.values" [advices]="asset.assetAdvisor[0].advices"></asset-history-chart>
-
-    Success rate: {{asset.assetAdvisor[0].successRate}}
-    Average return: {{asset.assetAdvisor[0].averageReturn}}
   </div>
 </div>

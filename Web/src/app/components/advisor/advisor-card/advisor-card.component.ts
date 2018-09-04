@@ -31,16 +31,20 @@ export class AdvisorCardComponent implements OnInit {
 
   getTotalRecommendations(){
     var total = 0;
-    for(var i =0; i < this.advisor.recommendationDistribution.length; i++){
-      total += this.advisor.recommendationDistribution[i].total;
+    if (!!this.advisor.recommendationDistribution) {
+      for(var i =0; i < this.advisor.recommendationDistribution.length; i++){
+        total += this.advisor.recommendationDistribution[i].total;
+      }
     }
     return total;
   }
 
   getRecommendationPercentage(type: number){
-    for(var i =0; i < this.advisor.recommendationDistribution.length; i++){
-      if(this.advisor.recommendationDistribution[i].type == type)
-        return this.advisor.recommendationDistribution[i].total/this.getTotalRecommendations() * 100;
+    if (!!this.advisor.recommendationDistribution) {
+      for(var i =0; i < this.advisor.recommendationDistribution.length; i++){
+        if(this.advisor.recommendationDistribution[i].type == type)
+          return this.advisor.recommendationDistribution[i].total/this.getTotalRecommendations() * 100;
+      }
     }
     return 0;
   }

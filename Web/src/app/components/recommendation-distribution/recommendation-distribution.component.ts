@@ -22,11 +22,13 @@ export class RecommendationDistributionComponent implements OnInit {
 
   fillPieData(){
     this.pieData = [];
-    for(var i =0;i<this.data.length;i++){
-        this.pieData.push({
-            name: Util.GetRecommendationTypeDescription(this.data[i].type),
-            y: this.data[i].total
-        });
+    if (!!this.data) {
+        for(var i = 0; i < this.data.length; i++){
+            this.pieData.push({
+                name: Util.GetRecommendationTypeDescription(this.data[i].type),
+                y: this.data[i].total
+            });
+        }
     }
   }
 

@@ -24,17 +24,19 @@ export class AssetHistoryChartComponent implements OnInit {
   }
 
   fillChartData(){
-    for(var i =0;i<this.assetValues.length;i++){
-      this.chartData.push(
-        [Date.parse(this.assetValues[i].date),
-        this.assetValues[i].value]
-      );
-    }    
+    if(!!this.assetValues) {
+      for(var i = 0; i < this.assetValues.length; i++){
+        this.chartData.push(
+          [Date.parse(this.assetValues[i].date),
+          this.assetValues[i].value]
+        );
+      }    
+    }
   }
 
   fillAdvicesData(){
-    if(this.advices){
-      for(var i =0;i<this.advices.length;i++){
+    if(!!this.advices) {
+      for(var i =0; i< this.advices.length; i++){
         this.advicesData.push({
           x: Date.parse(this.advices[i].date),
           title: Util.GetRecommendationTypeDescription(this.advices[i].adviceType)
