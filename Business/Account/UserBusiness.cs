@@ -138,8 +138,13 @@ namespace Auctus.Business.Account
             bool hasInvestment = true;
             if (!IsValidAdvisor(user) && !IsAdmin)
             {
-                aucAmount = WalletBusiness.GetAucAmount(user.Wallet?.Address);
-                hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
+                if (user.Wallet == null)
+                    hasInvestment = false;
+                else
+                {
+                    aucAmount = WalletBusiness.GetAucAmount(user.Wallet.Address);
+                    hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
+                }
             }
             return hasInvestment;
         }
