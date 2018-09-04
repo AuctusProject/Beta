@@ -67,27 +67,25 @@ namespace Auctus.DataAccess.Account
                                                        [User] u
                                                        LEFT JOIN [Wallet] w ON u.Id = w.UserId";
 
-        private const string SQL_FOLLOWING = @"SELECT u.*, w.*
+        private const string SQL_FOLLOWING = @"SELECT u.*
                                                 FROM 
                                                 [User] u
-                                                INNER JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
                                                 INNER JOIN [Follow] f ON f.UserId = u.Id 
                                                 INNER JOIN [FollowAdvisor] fa ON fa.Id = f.Id 
                                                 WHERE 
-                                                f.ActionType = @ActionType AND fa.AdvisorId = @AdvisorId AND u.AllowNotifications = @AllowNotifications AND
+                                                u.ConfirmationDate IS NOT NULL AND f.ActionType = @ActionType AND fa.AdvisorId = @AdvisorId AND u.AllowNotifications = @AllowNotifications AND
                                                 f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 
                                                                     [Follow] f2 
                                                                     INNER JOIN [FollowAdvisor] fa2 ON fa2.Id = f2.Id 
                                                                     WHERE f2.UserId = u.Id AND fa2.AdvisorId = @AdvisorId)
-                                                UNION ALL
-                                                SELECT u.*, w.*
+                                                UNION 
+                                                SELECT u.*
                                                 FROM 
                                                 [User] u
-                                                INNER JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
                                                 INNER JOIN [Follow] f ON f.UserId = u.Id 
                                                 INNER JOIN [FollowAsset] fa ON fa.Id = f.Id 
                                                 WHERE 
-                                                f.ActionType = @ActionType AND fa.AssetId = @AssetId AND u.AllowNotifications = @AllowNotifications AND
+                                                u.ConfirmationDate IS NOT NULL AND f.ActionType = @ActionType AND fa.AssetId = @AssetId AND u.AllowNotifications = @AllowNotifications AND
                                                 f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 
                                                                     [Follow] f2 
                                                                     INNER JOIN [FollowAsset] fa2 ON fa2.Id = f2.Id 
@@ -245,12 +243,7 @@ namespace Auctus.DataAccess.Account
             parameters.Add("AssetId", assetId, DbType.Int32);
             parameters.Add("ActionType", FollowActionType.Follow.Value, DbType.Int32);
             parameters.Add("AllowNotifications", true, DbType.Boolean);
-            return Query<User, Wallet, User>(SQL_FOLLOWING,
-                       (user, wallet) =>
-                       {
-                           user.Wallet = wallet;
-                           return user;
-                       }, "Id", parameters).ToList();
+            return Query<User>(SQL_FOLLOWING, parameters).ToList();
         }
     }
 }
