@@ -52,7 +52,8 @@ namespace Auctus.Business.Account
 
         private LoginResponse SocialRegister(string email, bool requestedToBeAdvisor, SocialNetworkType socialNetworkType)
         {
-            var user = CreateUser(email, null, null, true);
+            var user = SetNewUser(email, null, null, true);
+            Data.Insert(user);
             
             ActionBusiness.InsertNewLogin(user.Id, null, socialNetworkType);
             return new LoginResponse()
@@ -159,7 +160,24 @@ namespace Auctus.Business.Account
             return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? DiscountPercentageOnAuc : 0)));
         }
 
-        public async Task<LoginResponse> RegisterAsync(string email, string password, string referralCode, bool requestedToBeAdvisor)
+        public async Task<LoginResponse> RegisterAsync(string email, string password, string referralCode)
+        {
+            var user = GetValidUserToRegister(email, password, referralCode);
+            Data.Insert(user);
+
+            await SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
+
+            return new LoginResponse()
+            {
+                Email = user.Email,
+                HasInvestment = false,
+                PendingConfirmation = true,
+                IsAdvisor = false,
+                RequestedToBeAdvisor = false
+            };
+        }
+
+        public User GetValidUserToRegister(string email, string password, string referralCode)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
@@ -172,21 +190,10 @@ namespace Auctus.Business.Account
 
             var referredUser = GetReferredUser(referralCode);
 
-            user = CreateUser(email, password, referredUser, false);
-
-            await SendEmailConfirmationAsync(user.Email, user.ConfirmationCode, requestedToBeAdvisor);
-
-            return new LoginResponse()
-            {
-                Email = user.Email,
-                HasInvestment = false,
-                PendingConfirmation = true,
-                IsAdvisor = false,
-                RequestedToBeAdvisor = requestedToBeAdvisor
-            };
+            return SetNewUser(email, password, referredUser, false);
         }
 
-        private User CreateUser(string email, string password, User referredUser, bool emailConfirmed)
+        private User SetNewUser(string email, string password, User referredUser, bool emailConfirmed)
         {
             User user = new User();
             user.Email = email.ToLower().Trim();
@@ -197,7 +204,6 @@ namespace Auctus.Business.Account
             user.ReferredId = referredUser?.Id;
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
-            Data.Insert(user);
             return user;
         }
 
@@ -255,7 +261,7 @@ namespace Auctus.Business.Account
             user.ConfirmationCode = Guid.NewGuid().ToString();
             Data.Update(user);
 
-            await SendEmailConfirmationAsync(email, user.ConfirmationCode, false);
+            await SendEmailConfirmationAsync(email, user.ConfirmationCode);
         }
 
         public LoginResponse ConfirmEmail(string code)
@@ -400,19 +406,19 @@ namespace Auctus.Business.Account
             return Data.ListAllUsersData();
         }
 
-        private async Task SendEmailConfirmationAsync(string email, string code, bool requestedToBeAdvisor)
+        public async Task SendEmailConfirmationAsync(string email, string code)
         {
             await EmailBusiness.SendAsync(new string[] { email },
                 "Verify your email address - Auctus Beta",
                 string.Format(@"Hello,
 <br/><br/>
-To activate your account please verify your email address and complete your registration <a href='{0}/confirm-email?c={1}{2}' target='_blank'>click here</a>.
+To activate your account please verify your email address and complete your registration <a href='{0}/confirm-email?c={1}' target='_blank'>click here</a>.
 <br/><br/>
 <small>If you didn’t ask to verify this address, you can ignore this email.</small>
 <br/><br/>
 Thanks,
 <br/>
-Auctus Team", WebUrl, code, requestedToBeAdvisor ? "&a=" : ""));
+Auctus Team", WebUrl, code));
         }
 
         public static void BaseEmailValidation(string email)

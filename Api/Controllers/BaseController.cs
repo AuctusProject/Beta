@@ -92,6 +92,27 @@ namespace Api.Controllers
                 .ToList();
         }
 
+        protected bool RequestHasFile()
+        {
+            return Request.Form != null && Request.Form.Files != null && Request.Form.Files.Count == 1 && Request.Form.Files[0].Length > 0
+                && !string.IsNullOrWhiteSpace(Request.Form.Files[0].FileName) && !string.IsNullOrWhiteSpace(Request.Form.Files[0].ContentType);
+        }
+
+        protected string GetValidPictureExtension()
+        {
+            if (!RequestHasFile())
+                throw new BusinessException("File not found.");
+
+            if (!FileTypeMatcher.GetValidFileExtensions().Any(c => Request.Form.Files[0].ContentType.ToUpper().Contains(c)))
+                throw new BusinessException("Invalid file.");
+
+            var fileExtension = Request.Form.Files[0].FileName.Split('.').Last().ToUpper();
+            if (string.IsNullOrWhiteSpace(fileExtension) || !FileTypeMatcher.GetValidFileExtensions().Any(c => c == fileExtension))
+                throw new BusinessException("File extension is invalid.");
+
+            return fileExtension;
+        }
+
         protected new OkObjectResult Ok()
         {
             return Ok(new { });

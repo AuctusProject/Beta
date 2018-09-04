@@ -81,7 +81,7 @@ namespace Api.Controllers
             if (registerRequest == null)
                 return BadRequest();
 
-            var loginResponse = await UserBusiness.RegisterAsync(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode, registerRequest.RequestedToBeAdvisor);
+            var loginResponse = await UserBusiness.RegisterAsync(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode);
             return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
         }
 

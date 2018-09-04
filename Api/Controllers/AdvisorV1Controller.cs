@@ -68,7 +68,7 @@ namespace Api.Controllers
 
         [Route("me/requests")]
         [HttpPost]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new async Task<IActionResult> RequestToBeAsync([FromBody]BeAdvisorRequest beAdvisorRequest)
         {
@@ -77,7 +77,7 @@ namespace Api.Controllers
 
         [Route("me/requests")]
         [HttpGet]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetRequestToBe()
         {
