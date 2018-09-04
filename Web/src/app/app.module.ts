@@ -71,6 +71,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FullscreenModalComponent } from './components/util/fullscreen-modal/fullscreen-modal.component';
 import { ModalDirective } from './directives/modal.directive';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { RecommendationBoxListComponent } from './components/home/recommendation-box-list/recommendation-box-list.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -130,7 +131,8 @@ export function getAuthServiceConfigs() {
     AdviceCardComponent,
     HeaderComponent,
     FullscreenModalComponent,
-    ModalDirective
+    ModalDirective,
+    RecommendationBoxListComponent
   ],
   imports: [
     BrowserModule,

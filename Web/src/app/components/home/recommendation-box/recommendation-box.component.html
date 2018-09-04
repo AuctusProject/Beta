@@ -1,27 +1,23 @@
-<div class="recommendation-box-container">
-  <div class="section-title">
-    Expert Recommendations
-  </div>
-  <div class="section-subtitle">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  </div>
-  <div class="recommendation-list" fxLayout="row">
+
     <div class="recommendation-box" fxLayout="column">
-      <h3>BUY</h3>
-      <advice-card *ngFor="let advice of buyAdvices" class="advice-card" [advice]="advice"></advice-card>
+      <h3>{{adviceType}}</h3>
+      <table mat-table [dataSource]="adviceList">
+        <ng-container matColumnDef="assetCode">
+          <th mat-header-cell *matHeaderCellDef> Asset </th>
+          <td mat-cell *matCellDef="let advice"> {{advice.assetCode}}<br>{{advice.assetName}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="adviceType">
+          <th mat-header-cell *matHeaderCellDef> Rating </th>
+          <td mat-cell *matCellDef="let advice"> {{adviceType}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="advisorName">
+          <th mat-header-cell *matHeaderCellDef> Expert </th>
+          <td mat-cell *matCellDef="let advice"> {{advice.advisorName}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
     </div>
-    <div class="recommendation-box" fxLayout="column">
-      <h3>SELL</h3>
-      <advice-card *ngFor="let advice of sellAdvices" class="advice-card" [advice]="advice"></advice-card>
-    </div>
-    <div class="recommendation-box" fxLayout="column">
-      <h3>CLOSE POSITION</h3>
-      <advice-card *ngFor="let advice of closePositionAdvices" class="advice-card" [advice]="advice"></advice-card>
-    </div>
-  </div>
-  <div>
-    <div class="access-button" (click)="accessRecommendations()">
-      ACCESS
-    </div>
-  </div>
-</div>
