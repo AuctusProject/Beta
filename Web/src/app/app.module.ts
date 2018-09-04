@@ -66,12 +66,12 @@ import { RecaptchaComponent }  from './components/util/recaptcha/recaptcha.compo
 import { RecaptchaModule } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
-import { AdviceCardComponent } from './components/advisor/advice-card/advice-card.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FullscreenModalComponent } from './components/util/fullscreen-modal/fullscreen-modal.component';
 import { ModalDirective } from './directives/modal.directive';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
 import { MessageFullscreenModalComponent } from './components/util/message-fullscreen-modal/message-fullscreen-modal.component';
+import { RecommendationBoxListComponent } from './components/home/recommendation-box-list/recommendation-box-list.component';
 import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
 import { TrendingAssetCardComponent } from './components/asset/trending-asset-card/trending-asset-card.component';
 import { PercentageDisplayComponent } from './components/util/percentage-display/percentage-display.component';
@@ -131,11 +131,11 @@ export function getAuthServiceConfigs() {
     TopAdvisorsComponent,
     FileUploaderComponent,
     RecaptchaComponent,
-    AdviceCardComponent,
     HeaderComponent,
     FullscreenModalComponent,
     ModalDirective,
     MessageFullscreenModalComponent,
+    RecommendationBoxListComponent,
     TrendingAssetsComponent,
     TrendingAssetCardComponent,
     PercentageDisplayComponent

@@ -22,5 +22,7 @@ namespace Auctus.DomainObjects.Advisor
         public string PreviousExperience { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool? Approved { get; set; }
+        [DapperType(System.Data.DbType.Guid)]
+        public Guid? UrlGuid { get; set; }
     }
 }

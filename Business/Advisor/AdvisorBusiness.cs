@@ -106,7 +106,7 @@ namespace Auctus.Business.Advisor
             }
         }
 
-        private byte[] GetPictureBytes(Stream pictureStream, string pictureExtension)
+        public byte[] GetPictureBytes(Stream pictureStream, string pictureExtension)
         {
             pictureExtension = pictureExtension == "JPEG" ? "JPG" : pictureExtension;
             var extensionFound = FileTypeMatcher.GetFileExtension(pictureStream);
@@ -119,7 +119,7 @@ namespace Auctus.Business.Advisor
                 pictureStream.CopyTo(memoryStream);
                 picture = memoryStream.ToArray();
             }
-            if (picture.Length > (1.5 * 1024 * 1024))
+            if (picture.Length > (1 * 1024 * 1024))
                 throw new BusinessException("File is too large.");
 
             return picture;

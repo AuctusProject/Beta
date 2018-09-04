@@ -32,16 +32,9 @@ namespace Api.Controllers
 
         protected async Task<IActionResult> EditAdvisorAsync(int id, AdvisorRequest advisorRequest)
         {
-            if (advisorRequest.ChangedPicture && Request.Form != null && Request.Form.Files != null && Request.Form.Files.Count == 1 && Request.Form.Files[0].Length > 0
-                && !string.IsNullOrWhiteSpace(Request.Form.Files[0].FileName) && !string.IsNullOrWhiteSpace(Request.Form.Files[0].ContentType))
+            if (advisorRequest.ChangedPicture && RequestHasFile())
             {
-                if (!FileTypeMatcher.GetValidFileExtensions().Any(c => Request.Form.Files[0].ContentType.ToUpper().Contains(c)))
-                    return BadRequest(new { error = "Invalid file." });
-
-                var fileExtension = Request.Form.Files[0].FileName.Split('.').Last().ToUpper();
-                if (string.IsNullOrWhiteSpace(fileExtension) || !FileTypeMatcher.GetValidFileExtensions().Any(c => c == fileExtension))
-                    return BadRequest(new { error = "File extension is invalid." });
-
+                var fileExtension = GetValidPictureExtension();
                 using (var stream = Request.Form.Files[0].OpenReadStream())
                     return Ok(await AdvisorBusiness.EditAdvisorAsync(id, advisorRequest.Name, advisorRequest.Description, true, stream, fileExtension));
             }
@@ -68,7 +61,16 @@ namespace Api.Controllers
             if (beAdvisorRequest == null)
                 return BadRequest();
 
-            return Ok(await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Name, beAdvisorRequest.Description, beAdvisorRequest.PreviousExperience));
+            if (beAdvisorRequest.ChangedPicture && RequestHasFile())
+            {
+                var fileExtension = GetValidPictureExtension();
+                using (var stream = Request.Form.Files[0].OpenReadStream())
+                    return Ok(await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description,
+                        beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, stream, fileExtension));
+            }
+            else
+                return Ok(await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description, 
+                    beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, null, null));
         }
 
         protected IActionResult GetRequestToBe()

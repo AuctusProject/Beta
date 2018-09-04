@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +26,9 @@ namespace Auctus.Business.Advisor
 
         public RequestToBeAdvisor GetByLoggedEmail()
         {
+            if (string.IsNullOrWhiteSpace(LoggedEmail))
+                return null;
+
             var user = UserBusiness.GetByEmail(LoggedEmail);
             if(user == null)
                 throw new NotFoundException("Invalid email.");
@@ -64,35 +68,75 @@ namespace Auctus.Business.Advisor
             Update(request);
         }
 
-        public async Task<RequestToBeAdvisor> CreateAsync(string name, string description, string previousExperience)
+        public async Task<RequestToBeAdvisor> CreateAsync(string email, string password, string name, string description, string previousExperience, 
+            bool changePicture, Stream pictureStream, string pictureExtension)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessException("Name must be filled.");
-            if (name.Length > 100)
-                throw new BusinessException("Name cannot have more than 100 characters.");
+            if (name.Length > 50)
+                throw new BusinessException("Name cannot have more than 50 characters.");
             if (string.IsNullOrWhiteSpace(description))
-                throw new BusinessException("Description must be filled.");
-            if (description.Length > 4000)
-                throw new BusinessException("Description cannot have more than 4000 characters.");
+                throw new BusinessException("Short description must be filled.");
+            if (description.Length > 160)
+                throw new BusinessException("Short description cannot have more than 160 characters.");
             if (string.IsNullOrWhiteSpace(previousExperience))
                 throw new BusinessException("Previous experience must be filled.");
             if (previousExperience.Length > 4000)
                 throw new BusinessException("Previous experience cannot have more than 4000 characters.");
 
-            var user = GetValidUser();
-            var request = GetByUser(user.Id);
-            if (request?.Approved == true)
-                throw new BusinessException("User was already approved as advisor.");
+            byte[] picture = null;
+            if (changePicture && pictureStream != null)
+                picture = AdvisorBusiness.GetPictureBytes(pictureStream, pictureExtension);
 
-            var newRequest = new RequestToBeAdvisor()
+            RequestToBeAdvisor request = null;
+            User user = null;
+            if (LoggedEmail != null)
             {
-                CreationDate = Data.GetDateTimeNow(),
-                Name = name,
-                Description = description,
-                PreviousExperience = previousExperience,
-                UserId = user.Id
-            };
-            Data.Insert(newRequest);
+                if (!string.IsNullOrWhiteSpace(email) && email != LoggedEmail)
+                    throw new BusinessException("Invalid email.");
+                if (!string.IsNullOrWhiteSpace(password))
+                    throw new BusinessException("Invalid password.");
+
+                user = UserBusiness.GetByEmail(LoggedEmail);
+                if (user == null)
+                    throw new NotFoundException("User not found.");
+                if (user.IsAdvisor)
+                    throw new BusinessException("User was already approved as advisor.");
+
+                request = GetByUser(user.Id);
+            }
+            else 
+                user = UserBusiness.GetValidUserToRegister(email, password, null);
+
+            Guid? urlGuid = null;
+            if (picture != null)
+            {
+                urlGuid = Guid.NewGuid();
+                if (await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture) && request != null && request.UrlGuid.HasValue)
+                    await AzureStorageBusiness.DeleteUserPicture($"{request.UrlGuid.Value}.png");
+            }
+
+            RequestToBeAdvisor newRequest = null;
+            using (var transaction = TransactionalDapperCommand)
+            {
+                if (LoggedEmail == null)
+                    transaction.Insert(user);
+                
+                newRequest = new RequestToBeAdvisor()
+                {
+                    CreationDate = Data.GetDateTimeNow(),
+                    Name = name,
+                    Description = description,
+                    PreviousExperience = previousExperience,
+                    UserId = user.Id,
+                    UrlGuid = urlGuid
+                };
+                transaction.Insert(newRequest);
+                transaction.Commit();
+            }
+            if (LoggedEmail == null)
+                await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
+
             await SendRequestToBeAdvisorEmailAsync(user, newRequest, request);
             return newRequest;
         }
