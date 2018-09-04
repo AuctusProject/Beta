@@ -12,7 +12,9 @@ export class RecommendationDistributionComponent implements OnInit {
   pieChart: Chart;
   @Input() data : RecommendationDistributionResponse[];
   pieData: any;
-
+  totalBuy =0;
+  totalSell =0;
+  totalClose =0;
   constructor() { }
 
   ngOnInit() {
@@ -28,6 +30,13 @@ export class RecommendationDistributionComponent implements OnInit {
                 name: Util.GetRecommendationTypeDescription(this.data[i].type),
                 y: this.data[i].total
             });
+
+            if(this.data[i].type == Util.BUY)
+                this.totalBuy = this.data[i].total;
+            if(this.data[i].type == Util.SELL)
+                this.totalSell = this.data[i].total;
+            if(this.data[i].type == Util.CLOSE)
+                this.totalClose = this.data[i].total;
         }
     }
   }
@@ -35,7 +44,7 @@ export class RecommendationDistributionComponent implements OnInit {
   createPieChart(){
     this.pieChart = new Chart({
         chart: {
-          plotBackgroundColor: null,
+          backgroundColor: null,
           plotBorderWidth: null,
           plotShadow: false,
           type: 'pie'
@@ -43,18 +52,14 @@ export class RecommendationDistributionComponent implements OnInit {
       credits:{
         enabled: false
       },
-      legend:{
-        labelFormat: '{name}: {percentage:.1f}%'
-      },
-      title: {
-          text: 'Recommendation Distribution'
-      },
+      legend:{enabled:false},
+      title: {text:null},
       tooltip: {
           pointFormat: '<b>{point.percentage:.1f}%</b>'
       },
       plotOptions: {
           pie: {
-              allowPointSelect: true,
+              allowPointSelect: false,
               cursor: 'pointer',
               dataLabels: {
                   enabled: false,
@@ -63,11 +68,14 @@ export class RecommendationDistributionComponent implements OnInit {
                       color: 'black'
                   }
               },
-              showInLegend: true
+              borderColor: null,
+              showInLegend: true,
+              center: ['50%', '50%']
           }
       },
       series: [{
           name: 'Recommendations',
+          innerSize: '70%',
           data: this.pieData
       }]
       });

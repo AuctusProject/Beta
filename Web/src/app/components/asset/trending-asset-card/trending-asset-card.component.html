@@ -1,0 +1,28 @@
+<div fxLayout="column" class="card-container">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="column">
+      <div class="asset-code">
+        {{asset.code}}
+      </div>
+      <div class="asset-name">
+        {{asset.name}}
+      </div>
+    </div>
+    <div fxLayout="column">
+      <div class="asset-price">
+        {{asset.lastValue | currency}}
+      </div>
+      <percentage-display [value]="asset.variation24h"></percentage-display>
+    </div>
+  </div>
+  <div class="general-recommendation">
+    {{getGeneralRecommendation()}}
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
+  </div>
+  <div class="separator"></div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <a (click)="seeAllRatingsClick()" >See all ratings on {{asset.code}}</a>
+  </div>
+</div>

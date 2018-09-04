@@ -145,7 +145,7 @@ export class HttpService {
       if (response.status == "401") {
         this.logout();
         this.localStorageService.setLocalStorage("redirectUrl", this.router.url);
-        this.navigationService.goToLogin();
+        this.navigationService.goToHome();
       }
       else if (response.status != "200") {
         if (response.error) {
