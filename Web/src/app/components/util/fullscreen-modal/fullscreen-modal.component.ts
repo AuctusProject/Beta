@@ -26,5 +26,6 @@ export class FullscreenModalComponent implements OnInit {
     viewContainerRef.clear();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     (<ModalComponent>componentRef.instance).data = this.data.input;
+    (<ModalComponent>componentRef.instance).setClose.subscribe(() => this.dialogRef.close());
   }
 }

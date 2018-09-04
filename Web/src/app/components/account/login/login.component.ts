@@ -1,15 +1,14 @@
-import { Component, OnInit, Input, NgZone, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, Input, NgZone, ViewChild, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { LoginRequest } from '../../../model/account/loginRequest';
 import { Subscription } from '../../../../../node_modules/rxjs';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { AuthRedirect } from '../../../providers/authRedirect';
 import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
 import { SocialLoginRequest } from '../../../model/account/socialLoginRequest';
 import { LoginResult } from '../../../model/account/loginResult';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 
 @Component({
@@ -19,6 +18,8 @@ import { ModalComponent } from '../../../model/modal/modalComponent';
 })
 export class LoginComponent implements ModalComponent, OnInit {
   @Input() data: any;
+  @Output() setClose = new EventEmitter<void>();
+
   loginRequest: LoginRequest = new LoginRequest();
   loginForm: FormGroup;
   promise: Subscription;
@@ -49,13 +50,14 @@ export class LoginComponent implements ModalComponent, OnInit {
 
   doLogin() {
     this.promise = this.accountService.login(this.loginRequest)
-      .subscribe(result => this.zone.run(() => {this.loginResponse(result);}), this.RecaptchaComponent.reset);
+      .subscribe(result => this.zone.run(() => { this.loginResponse(result); }), this.RecaptchaComponent.reset);
   }
 
   loginResponse(response: LoginResult){
     if (response){
       if (!response.error && response.data) {
         this.accountService.setLoginData(response.data);
+        this.setClose.emit();
         this.authRedirect.redirectAfterLoginAction();
       }
       else {
