@@ -1,0 +1,11 @@
+.pie-chart{
+    width: 100px;
+    height: 100px;
+}
+
+:host{
+    font-size: 8px;
+    line-height: 16px;
+    font-weight: 300;
+    color: #4e4e4e;
+}

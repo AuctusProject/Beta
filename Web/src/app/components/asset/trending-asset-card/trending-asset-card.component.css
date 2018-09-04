@@ -1,0 +1,55 @@
+:host{
+    width: 220px;
+    padding: 11px;
+    background-color: #e6e6e6;
+    display: inline-flex;
+    margin: 10px;
+    vertical-align: top;
+}
+
+.card-container{
+    width: 100%;
+}
+
+.asset-code{
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+    color: #4e4e4e;
+}
+
+.asset-name{
+    font-size: 9px;
+    font-weight: 300;
+    text-align: left;
+    color: #4e4e4e;
+}
+
+.asset-price{
+    font-size: 16px;
+    color: #4e4e4e;
+    text-align: right;
+}
+
+.general-recommendation{
+    height: 24px;
+    background-color: #4e4e4e;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 24px;
+    text-align: center;
+    color: #ffffff;
+    margin-top:8px;
+}
+
+.separator{
+    border: solid 0.3px #3b3b3b;
+}
+
+a{
+    margin-top: 9px;
+    font-size: 9px;
+    font-weight: 300;
+    text-align: left;
+    color: #1d3b9f;
+}

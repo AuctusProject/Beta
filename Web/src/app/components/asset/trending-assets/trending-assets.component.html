@@ -1,0 +1,17 @@
+<div class="section-title">
+  Trending Assets
+</div>
+<div class="section-subtitle">
+  Follow the trending assets and get the best recommendations!
+</div>
+<div class="assets-list">
+  <div fxLayout="column" fxLayoutAlign="center center" fxFlexAlign="stretch" class="blocked-content" *ngIf="!isLoggedIn()">
+      <a (click)="onLoginClick()">Login to access</a>
+  </div>
+  <trending-asset-card *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>
+</div>
+<div>
+  <div class="access-button" [class.blur]="!isLoggedIn()" (click)="goToTopAssets()">
+    ACCESS
+  </div>
+</div>

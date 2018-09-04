@@ -39,7 +39,7 @@ a.active{
 a:hover::after,
 a.active::after{
     content: "";
-    background-color: #f9c107;
+    background-color: #f99d00;
     width: calc(100% + 24px);
     left: -12px;
     bottom: -18px;

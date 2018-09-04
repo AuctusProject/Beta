@@ -1,0 +1,13 @@
+:host{
+    text-align: right;
+    font-size: 7px;
+    font-weight: 300;       
+}
+
+.positive{
+    color: #18af3a;
+}
+
+.negative{
+    color: #f40505;
+}

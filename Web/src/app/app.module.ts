@@ -72,6 +72,9 @@ import { FullscreenModalComponent } from './components/util/fullscreen-modal/ful
 import { ModalDirective } from './directives/modal.directive';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
 import { MessageFullscreenModalComponent } from './components/util/message-fullscreen-modal/message-fullscreen-modal.component';
+import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
+import { TrendingAssetCardComponent } from './components/asset/trending-asset-card/trending-asset-card.component';
+import { PercentageDisplayComponent } from './components/util/percentage-display/percentage-display.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -132,7 +135,10 @@ export function getAuthServiceConfigs() {
     HeaderComponent,
     FullscreenModalComponent,
     ModalDirective,
-    MessageFullscreenModalComponent
+    MessageFullscreenModalComponent,
+    TrendingAssetsComponent,
+    TrendingAssetCardComponent,
+    PercentageDisplayComponent
   ],
   imports: [
     BrowserModule,

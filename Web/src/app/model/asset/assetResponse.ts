@@ -5,20 +5,20 @@ export class AssetResponse {
   assetId: number;
   name: string;
   code: string;
-  totalRatings: number;
-  totalAdvisors: number;
-  lastValue: number;
-  variation24h: number;
-  variation7d: number;
-  variation30d: number;
+  totalRatings?: number;
+  totalAdvisors?: number;
+  lastValue?: number;
+  variation24h?: number;
+  variation7d?: number;
+  variation30d?: number;
   numberOfFollowers?: number;
   following?:boolean;
   mode: number;
   recommendationDistribution: RecommendationDistributionResponse[];
-  values:ValuesResponse[];
-  assetAdvisor: AssetAdvisorResponse[];
-  advices: AdviceResponse[];
-  advisors: AdvisorResponse[];
+  values?:ValuesResponse[];
+  assetAdvisor?: AssetAdvisorResponse[];
+  advices?: AdviceResponse[];
+  advisors?: AdvisorResponse[];
 }
 
 export class AssetAdvisorResponse

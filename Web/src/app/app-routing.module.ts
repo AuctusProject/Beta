@@ -21,6 +21,7 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 import { HomeComponent } from './components/home/home/home.component';
+import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent  },
@@ -42,6 +43,7 @@ const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
     { path: 'advisor-edit/:id', component: AdvisorEditComponent, canActivate:[AuthRedirect] },
+    { path: 'trending-assets', component: TrendingAssetsComponent },
 ];
 
 @NgModule({
