@@ -37,7 +37,7 @@ export class AdvisorService {
   }
 
   getExpertDetails(id: string): Observable<AdvisorResponse> {
-    return this.httpService.get(this.advisorsUrl.replace("{id}", id));
+    return this.httpService.get(this.advisorsDetailsUrl.replace("{id}", id));
   }
 
   getAdvisors(): Observable<AdvisorResponse[]> {

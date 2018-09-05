@@ -52,6 +52,21 @@ export class Util {
         }
     }
 
+    public static GetAdviceModeDescription(type: number){
+        if(type == this.AdviceModeType.Initiate){
+            return "Initiate";
+        }
+        else if(type == this.AdviceModeType.Reiterate){
+            return "Reiterate";
+        }
+        else if(type == this.AdviceModeType.Upgrade){
+            return "Upgrade";
+        }
+        else if(type == this.AdviceModeType.Downgrade){
+            return "Downgrade";
+        }
+    }
+
     public static SELL: number = 0;
     public static BUY: number = 1;
     public static CLOSE: number = 2;
@@ -63,5 +78,12 @@ export class Util {
         public static ModerateSell = 3;
         public static StrongSell = 4;
         public static Close = 5;
+    }
+
+    static AdviceModeType = class{
+        public static Initiate = 0;
+        public static Reiterate = 1;
+        public static Upgrade = 2;
+        public static Downgrade = 3;
     }
 }
