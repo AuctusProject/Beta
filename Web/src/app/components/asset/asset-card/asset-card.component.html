@@ -1,41 +1,31 @@
-<div  class="filter-form" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="left center">
+<div class="asset-card" fxLayout="row"  fxLayoutGap="10px" fxLayoutAlign="left center">
   <div>
       <img [src]="getAssetImgUrl()">
     </div>
-  <div>
-    Name: {{asset.name}}
+  <div fxLayout="column">
+    <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
+    <div *ngIf="asset.following">
+        <button (click)="onUnfollowClick()">UNFOLLOW</button>
+    </div>
+    <div *ngIf="!asset.following">
+      <button (click)="onFollowClick()">FOLLOW</button>
+    </div>
+  </div>
+  <div class="ratings" fxLayout="column" fxLayoutAlign="center center">
+    <div class="rating-value">{{asset.totalRatings}}</div><br>{{getRatingLabel()}}
+  </div>
+  <div class="ratings-distribution" fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>81.0% Buy</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>18.9% Hold</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>0.1% Sell</div></div>
+  </div>
+  <div fxLayoutAlign="center center" class="general-recommendation-box" [class.neutral]="asset.mode==0" [class.moderate-buy]="asset.mode==1" [class.strong-buy]="asset.mode==2" [class.moderate-sell]="asset.mode==3" [class.strong-sell]="asset.mode==4" [class.close]="asset.mode==5">
+    {{getGeneralRecommendation()}}
+  </div>
+  <div class="price">
+    {{getLastValue()}}
   </div>
   <div>
-    Acronym: {{asset.name}}
-  </div>
-  <div>
-    Success Rate: {{asset.name}}
-  </div>
-  <div>
-    Current Value: {{asset.name}}
-  </div>
-  <div>
-    24h Variation: {{asset.name}}
-  </div>
-  <div>
-    30 days recomendation:
-    <br/>
-    Buy: 
-    <br/>
-    Close
-    <br/>
-    Sell
-  </div>
-  <div>
-    General Consensus: {{asset.name}}
-  </div>
-  <div>
-    Rating: {{asset.name}}
-  </div>
-  <div *ngIf="asset.following">
-      <button (click)="onUnfollowClick()">UNFOLLOW</button>
-  </div>
-  <div *ngIf="!asset.following">
-    <button (click)="onFollowClick()">FOLLOW</button>
+    {{asset.variation24h}}
   </div>
 </div>
