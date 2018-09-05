@@ -42,7 +42,7 @@ export class GlobalSearchComponent implements OnInit {
       if (event.option.value.code) {
         this.navigationService.goToAssetDetails(event.option.value.id);
       } else {
-        this.navigationService.goToAdvisorDetails(event.option.value.id);
+        this.navigationService.goToExpertDetails(event.option.value.id);
       }
     } else {
       this.inputText = "";

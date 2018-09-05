@@ -36,7 +36,7 @@ import { BecomeAdvisorComponent } from './components/advisor/become-advisor/beco
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
-import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
+import { ExpertDetailsComponent } from './components/advisor/expert-details/expert-details.component';
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetCardComponent } from './components/asset/asset-card/asset-card.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
@@ -111,7 +111,7 @@ export function getAuthServiceConfigs() {
     ForgotPasswordComponent,
     ForgotPasswordResetComponent,
     ChangePasswordComponent,
-    AdvisorDetailsComponent,
+    ExpertDetailsComponent,
     ListAssetsComponent,
     AssetCardComponent,
     AssetDetailsComponent,
