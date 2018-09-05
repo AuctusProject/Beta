@@ -3,6 +3,36 @@
     border-bottom: solid 0.5px #707070;
 }
 
+.symbol {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.4px;
+    color: #626262;
+}
+
+.asset-name {
+    font-size: 9px;
+    font-weight: 300;
+    line-height: 1.06;
+    letter-spacing: 0.2px;
+    color: #555555;
+  }
+
+  .ratings-bullet-point {
+    width: 9px;
+    height: 9.5px;
+    background-color: #f99d00;
+  }
+
+  .ratings-distribution{
+    font-size: 7px;
+    font-weight: 300;
+    line-height: 2.14;
+    letter-spacing: 0.2px;
+    color: #262626;
+  }
+
 .ratings{
     height: 56px;
     width: 56px;
@@ -11,8 +41,6 @@
     border: solid 2px #f99d00;
     font-size: 8.5px;
     font-weight: 600;
-    font-style: normal;
-    font-stretch: normal;
     line-height: 1.18;
     letter-spacing: 0.2px;
     text-align: center;
@@ -27,13 +55,20 @@
     letter-spacing: 0.5px;
 }
 
+.price {
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.07;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #5d5d5d;
+}
+
 .general-recommendation-box{
     height: 25px;
     width: 114px;
     font-size: 11px;
     font-weight: 600;
-    font-style: normal;
-    font-stretch: normal;
     line-height: 1.27;
     letter-spacing: 0.3px;
     text-align: center;
