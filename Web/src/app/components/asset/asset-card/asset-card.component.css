@@ -26,3 +26,40 @@
     line-height: 0.56;
     letter-spacing: 0.5px;
 }
+
+.general-recommendation-box{
+    height: 25px;
+    width: 114px;
+    font-size: 11px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.27;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.general-recommendation-box.neutral{
+    background-color: black;
+}
+
+.general-recommendation-box.moderate-buy{
+    background-color: blue;
+}
+
+.general-recommendation-box.strong-buy{
+    background-color: green;
+}
+
+.general-recommendation-box.moderate-sell{
+    background-color: #f99d00;
+}
+
+.general-recommendation-box.strong-sell{
+    background-color: brown;
+}
+
+.general-recommendation-box.close{
+    background-color: grey;
+}
