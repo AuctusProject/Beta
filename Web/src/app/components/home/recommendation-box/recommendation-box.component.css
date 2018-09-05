@@ -22,6 +22,11 @@
 
 .recommendation-table{
     text-align: left;
+    font-family: 'Gilroy'
+}
+
+.recommendation-table .mat-header-row{
+    height: 25px;
 }
 
 .recommendation-table th{
