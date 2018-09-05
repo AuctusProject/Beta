@@ -22,7 +22,6 @@
 
 .recommendation-table{
     text-align: left;
-
 }
 
 .recommendation-table th{
@@ -34,4 +33,10 @@
 .recommendation-table td{
     color: #4e4e4e;
     font-size: 9px;
+}
+
+.table-cell-title{
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1;
 }
