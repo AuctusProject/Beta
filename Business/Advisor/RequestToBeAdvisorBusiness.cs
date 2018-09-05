@@ -105,6 +105,8 @@ namespace Auctus.Business.Advisor
                     throw new BusinessException("User was already approved as advisor.");
 
                 request = GetByUser(user.Id);
+                if (request?.Approved == true)
+                    throw new BusinessException("Request was already approved.");
             }
             else 
                 user = UserBusiness.GetValidUserToRegister(email, password, null);
@@ -116,6 +118,8 @@ namespace Auctus.Business.Advisor
                 if (await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture) && request != null && request.UrlGuid.HasValue)
                     await AzureStorageBusiness.DeleteUserPicture($"{request.UrlGuid.Value}.png");
             }
+            else if (!changePicture)
+                urlGuid = request?.UrlGuid;
 
             RequestToBeAdvisor newRequest = null;
             using (var transaction = TransactionalDapperCommand)
