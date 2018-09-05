@@ -42,7 +42,6 @@
     </mat-form-field>
 </div>
 
-<div *ngFor="let asset of assets">
-<asset-card [asset]="asset"></asset-card>
-<br/>
+<div  fxLayout="column"  fxLayoutAlign="center center">
+  <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
 </div>
