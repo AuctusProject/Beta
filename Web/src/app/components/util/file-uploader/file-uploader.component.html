@@ -8,8 +8,7 @@
 
     <i class="icon icon-upload" [style.color]="dragging ? activeColor : overlayColor">{{imageText}}</i>
     
-    <img [src]="imageSrc" (load)="handleImageLoad()" 
-    [style.box-shadow]="dragging ? activeBox : baseBox" [class.loaded]="imageLoaded"/>
+    <img [src]="imageSrc" [style.box-shadow]="dragging ? activeBox : baseBox" [class.loaded]="loaded"/>
 
     <div *ngIf="!loaded" class="empty-img" [style.box-shadow]="dragging ? activeBox : baseBox"></div>
     

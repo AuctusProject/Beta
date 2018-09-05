@@ -50,9 +50,10 @@ namespace Auctus.Business.Advisor
                 throw new BusinessException("Requets is already approved.");
 
             request.Approved = true;
-            var urlGuid = Guid.NewGuid();
+            var urlGuid = request.UrlGuid ?? Guid.NewGuid();
             var advisor = AdvisorBusiness.CreateFromRequest(request, urlGuid);
-            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
+            if (!request.UrlGuid.HasValue)
+                await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
             using (var transaction = TransactionalDapperCommand)
             {
                 transaction.Insert(advisor);

@@ -11,6 +11,7 @@ import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { FileUploaderComponent } from '../../util/file-uploader/file-uploader.component';
 import { CONFIG } from '../../../services/config.service';
 import { AccountService } from '../../../services/account.service';
+import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 
 @Component({
   selector: 'become-advisor',
@@ -70,7 +71,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
           this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
           this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
           if (!!currentRequestToBeAdvisor.urlGuid) {
-            this.pictureUrl = CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid);
+            this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
           }
         }
       });
@@ -98,9 +99,14 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     } else if (this.requestForm.valid) {
       this.requestToBeAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
       this.requestToBeAdvisorRequest.file = this.FileUploadComponent.getFile();
-      this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(
-        result => this.notificationsService.success(null, "Request was successfully sent.")
-      );
+      this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(result => 
+      {
+        let modalData = new FullscreenModalComponentInput();
+        modalData.component = MessageFullscreenModalComponent;
+        modalData.componentInput = { message: "Request was successfully sent.", redirectUrl: "" };
+        modalData.title = "";
+        this.setNewModal.emit(modalData);
+      }, this.RecaptchaComponent.reset);
     }
   }
 
