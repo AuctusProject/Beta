@@ -33,4 +33,9 @@ export class AssetCardComponent implements OnInit {
   getLastValue(){
     return '$'+Math.round(this.asset.lastValue * 100) / 100;
   }
+
+  getRatingLabel(){
+    if(this.asset.totalRatings == 1.0) return 'Rating';
+    return 'Ratings';
+  }
 }

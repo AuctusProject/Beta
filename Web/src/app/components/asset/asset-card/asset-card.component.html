@@ -14,8 +14,8 @@
   <div>
     {{getLastValue()}}<br>{{asset.variation24h}}
   </div>
-  <div>
-    {{asset.totalRatings}}<br>Ratings
+  <div class="ratings" fxLayout="column" fxLayoutAlign="center center">
+    <div class="rating-value">{{asset.totalRatings}}</div><br>{{getRatingLabel()}}
   </div>
   <div>
     {{getGeneralRecommendation()}}
