@@ -4,17 +4,24 @@
       <table mat-table [dataSource]="adviceList" class="recommendation-table">
         <ng-container matColumnDef="assetCode">
           <th mat-header-cell *matHeaderCellDef> Asset </th>
-          <td mat-cell *matCellDef="let advice"> {{advice.assetCode}}<br>{{advice.assetName}} </td>
+          <td mat-cell *matCellDef="let advice"> <div class="table-cell-title">{{advice.assetCode}}</div>{{advice.assetName}} </td>
         </ng-container>
       
         <ng-container matColumnDef="adviceType">
           <th mat-header-cell *matHeaderCellDef> Rating </th>
-          <td mat-cell *matCellDef="let advice"> {{adviceType}} </td>
+          <td mat-cell *matCellDef="let advice"> <div class="table-cell-title">{{adviceType}}</div> 
+            At price ${{advice.assetValueAtAdviceTime}} 
+          </td>
         </ng-container>
       
         <ng-container matColumnDef="advisorName">
           <th mat-header-cell *matHeaderCellDef> Expert </th>
-          <td mat-cell *matCellDef="let advice"> {{advice.advisorName}} </td>
+          <td mat-cell *matCellDef="let advice">
+              <div class="expert-rating">
+                <bar-rating [readOnly]="'true'" [rate]="advice.advisorRanking"></bar-rating>
+              </div>
+            {{advice.advisorName}} 
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

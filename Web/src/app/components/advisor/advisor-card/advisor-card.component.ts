@@ -3,6 +3,7 @@ import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { AdvisorService } from '../../../services/advisor.service';
 import { CONFIG} from "../../../services/config.service";
 import { Util } from '../../../util/Util';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'advisor-card',
@@ -13,7 +14,7 @@ export class AdvisorCardComponent implements OnInit {
   @Input() advisor: AdvisorResponse;
   @Input() advisorsLength: number;
   
-  constructor(private advisorServices:AdvisorService) { }
+  constructor(private advisorServices:AdvisorService, private navigationService: NavigationService) { }
 
   ngOnInit() {
   }
@@ -27,6 +28,10 @@ export class AdvisorCardComponent implements OnInit {
 
   getAdvisorImgUrl(){
     return CONFIG.profileImgUrl.replace("{id}", this.advisor.urlGuid);
+  }
+
+  goToExpertDetails(){
+    this.navigationService.goToExpertDetails(this.advisor.userId);
   }
 
   getTotalRecommendations(){

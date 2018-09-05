@@ -34,8 +34,8 @@ export class NavigationService {
     this.goToUrl('confirm-email');
   }
 
-  public goToAdvisorDetails(advisorId:number){
-    this.goToUrl('advisor-details/'+advisorId);
+  public goToExpertDetails(advisorId:number){
+    this.goToUrl('expert-details/'+advisorId);
   }
 
   public goToAssetDetails(assetId:number){
@@ -46,7 +46,7 @@ export class NavigationService {
     this.goToUrl('');
   }
 
-  public goToListAdvisors(){
-    this.goToUrl('list-advisors');
+  public goToTopExperts(){
+    this.goToUrl('top-experts');
   }
 }

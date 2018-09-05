@@ -1,11 +1,11 @@
-// import { NgModule } from '@angular/core';
-// import { IconEye, IconEyeOff, IconCheckCircle, IconEdit, IconChevronDown, IconPlusCircle, IconMinusCircle, IconPlus, IconSave, IconAlertTriangle, IconCheck, IconX, IconArrowRight, IconHelpCircle, IconArrowDown, IconArrowUp, IconMinus } from 'angular-feather';
+import { NgModule } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
-
-// var icons = [IconEye, IconEyeOff, IconCheckCircle, IconEdit, IconChevronDown, IconPlusCircle, IconMinusCircle, IconPlus, IconSave, IconAlertTriangle, IconCheck, IconX, IconArrowRight, IconHelpCircle, IconArrowDown, IconArrowUp, IconMinus];
-
-// @NgModule({
-//   imports: icons,
-//   exports: icons
-// })
-// export class IconsModule { }
+library.add(faLock);
+@NgModule({
+   imports: [FontAwesomeModule],
+   exports: [FontAwesomeModule]
+})
+export class IconsModule { }

@@ -36,7 +36,7 @@ export class AdvisorEditComponent implements OnInit {
               });
           }
           else{
-            this.navigationService.goToAdvisorDetails(params['id']);
+            this.navigationService.goToExpertDetails(params['id']);
           }
         }
         else{

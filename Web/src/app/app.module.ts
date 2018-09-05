@@ -36,8 +36,7 @@ import { BecomeAdvisorComponent } from './components/advisor/become-advisor/beco
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
-import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-advisors.component';
-import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
+import { ExpertDetailsComponent } from './components/advisor/expert-details/expert-details.component';
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetCardComponent } from './components/asset/asset-card/asset-card.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
@@ -59,7 +58,7 @@ import {Angular2PromiseButtonModule} from 'angular2-promise-buttons/dist';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 import { RecommendationBoxComponent } from './components/home/recommendation-box/recommendation-box.component';
 import { HomeComponent } from './components/home/home/home.component';
-import { TopAdvisorsComponent } from './components/advisor/top-advisors/top-advisors.component';
+import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 import { FileUploaderComponent } from './components/util/file-uploader/file-uploader.component';
 import { BarRatingModule } from "ngx-bar-rating";
 import { RecaptchaComponent }  from './components/util/recaptcha/recaptcha.component';
@@ -75,6 +74,7 @@ import { RecommendationBoxListComponent } from './components/home/recommendation
 import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
 import { TrendingAssetCardComponent } from './components/asset/trending-asset-card/trending-asset-card.component';
 import { PercentageDisplayComponent } from './components/util/percentage-display/percentage-display.component';
+import { IconsModule } from './icons.module';
 import { InheritanceInputComponent } from './components/util/inheritance-input/inheritance-input.component';
 
 export function loadConfigService(configService: ConfigService): Function
@@ -112,8 +112,7 @@ export function getAuthServiceConfigs() {
     ForgotPasswordComponent,
     ForgotPasswordResetComponent,
     ChangePasswordComponent,
-    ListAdvisorsComponent,
-    AdvisorDetailsComponent,
+    ExpertDetailsComponent,
     ListAssetsComponent,
     AssetCardComponent,
     AssetDetailsComponent,
@@ -129,7 +128,7 @@ export function getAuthServiceConfigs() {
     AdvisorEditComponent,
     RecommendationBoxComponent,
     HomeComponent,
-    TopAdvisorsComponent,
+    TopExpertsComponent,
     FileUploaderComponent,
     RecaptchaComponent,
     HeaderComponent,
@@ -162,6 +161,7 @@ export function getAuthServiceConfigs() {
     ReactiveFormsModule,
     InfiniteScrollModule,
     MatModule,
+    IconsModule,
     FlexLayoutModule,
     BarRatingModule,
     SocialLoginModule,

@@ -1,4 +1,4 @@
-<div class="advisor-card-container">
+<div (click)="goToExpertDetails()" class="advisor-card-container">
   <div class="card-header">
     <div class="expert-picture">
       <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
@@ -13,7 +13,7 @@
       {{advisor.description}}
     </div>
     <div class="expert-rating">
-      <bar-rating [readOnly]="'true'" [rate]="'1.899999'"></bar-rating>
+      <bar-rating [readOnly]="'true'" [rate]="advisor.rating"></bar-rating>
     </div>
   </div>
   <div class="card-divider"></div>
@@ -23,26 +23,26 @@
   <div class="expert-rates">
     <div class="success-rate-column">
       <div class="success-rate">
-          {{advisor.successRate}}%
+          {{advisor.successRate * 100 | number:'1.0-0'}}%
       </div>
       <div class="success-rate-description">Success Rate</div>
     </div>
     <div class="average-return-column">
       <div class="average-return">
-          {{advisor.averageReturn}}%
+          {{advisor.averageReturn * 100 | number:'1.1-1'}}%
       </div>
       <div class="average-return-description">Average Return</div>
     </div>
   </div>
   <div class="recommendation-distribution">
     <div class="buy-distribution">
-      Buy: {{getBuyRecommendationPercentage()}}%
+      Buy: {{getBuyRecommendationPercentage() | number:'1.1-1'}}%
     </div>
     <div class="close-distribution">
-      Close: {{getCloseRecommendationPercentage()}}%
+      Close: {{getCloseRecommendationPercentage() | number:'1.1-1'}}%
     </div>
     <div class="sell-distribution">
-      Sell: {{getSellRecommendationPercentage()}}%
+      Sell: {{getSellRecommendationPercentage() | number:'1.1-1'}}%
     </div>
   </div>
   <div class="distribution-follow-divider"></div>

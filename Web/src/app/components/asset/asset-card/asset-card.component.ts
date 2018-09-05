@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AssetResponse } from '../../../model/asset/assetResponse';
 import { AssetService } from '../../../services/asset.service';
 import { CONFIG} from "../../../services/config.service";
+import { Util } from '../../../util/Util';
 
 @Component({
   selector: 'asset-card',
@@ -23,5 +24,18 @@ export class AssetCardComponent implements OnInit {
 
   getAssetImgUrl(){
     return CONFIG.assetImgUrl.replace("{id}", this.asset.assetId.toString());
+  }
+
+  getGeneralRecommendation(){
+    return Util.GetGeneralRecommendationDescription(this.asset.mode);
+  }
+
+  getLastValue(){
+    return '$'+Math.round(this.asset.lastValue * 100) / 100;
+  }
+
+  getRatingLabel(){
+    if(this.asset.totalRatings == 1.0) return 'Rating';
+    return 'Ratings';
   }
 }
