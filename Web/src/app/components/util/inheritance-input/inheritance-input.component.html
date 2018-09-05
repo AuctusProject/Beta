@@ -2,19 +2,7 @@
   <mat-label>{{placeholder}}</mat-label>
 
   <input matInput *ngIf="showTextField()"
-    type="text"
-    [(ngModel)]="value" 
-    [formControl]="formControl" 
-    placeholder="{{placeholder}}" 
-    required="{{required}}" 
-    disabled="{{disabled}}"
-    minlength="{{minlength}}" 
-    maxlength="{{maxlength}}" 
-    autocomplete="{{autocomplete}}"
-    (change)="onChangeInput()"/>
-
-  <input matInput *ngIf="showPasswordField()"
-    type="password"
+    [type]="passwordHide ? 'password' : 'text'"
     [(ngModel)]="value" 
     [formControl]="formControl" 
     placeholder="{{placeholder}}" 

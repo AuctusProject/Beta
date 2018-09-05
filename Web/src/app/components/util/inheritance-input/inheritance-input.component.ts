@@ -29,7 +29,7 @@ export class InheritanceInputComponent implements OnInit {
   private maxRows: number = 4;
 
   private formControl: FormControl; 
-  private passwordHide: boolean = true;
+  private passwordHide: boolean = false;
 
   constructor() { }
 
@@ -37,7 +37,10 @@ export class InheritanceInputComponent implements OnInit {
     if (!!this.options) {
       this.inputType = this.setValue(this.inputType, this.options.inputType);
 
-      if (this.options.inputType == InputType.Password) this.autocomplete = "current-password";
+      if (this.options.inputType == InputType.Password) {
+        this.autocomplete = "current-password";
+        this.passwordHide = true;
+      }
       else if (this.options.inputType == InputType.Email) this.autocomplete = "email";
 
       if (!!this.options.textOptions) {
@@ -77,12 +80,8 @@ export class InheritanceInputComponent implements OnInit {
     return this.inputType == InputType.TextArea;
   }
 
-  private showPasswordField() : boolean {
-    return this.inputType == InputType.Password;
-  }
-
   private showTextField() : boolean {
-    return this.inputType == InputType.Text || this.inputType == InputType.Email;
+    return this.inputType == InputType.Text || this.inputType == InputType.Email || this.inputType == InputType.Password;
   }
 
   private setValue(defaultValue: any, optionValue?: any) : any {
