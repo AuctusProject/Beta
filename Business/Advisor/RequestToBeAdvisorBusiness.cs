@@ -105,6 +105,8 @@ namespace Auctus.Business.Advisor
                     throw new BusinessException("User was already approved as advisor.");
 
                 request = GetByUser(user.Id);
+                if (request?.Approved == true)
+                    throw new BusinessException("Request was already approved.");
             }
             else 
                 user = UserBusiness.GetValidUserToRegister(email, password, null);
