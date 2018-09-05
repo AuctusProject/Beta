@@ -1,3 +1,4 @@
+<div class="separator"></div>
 <div class="section-title">
   Trending Assets
 </div>
@@ -6,6 +7,7 @@
 </div>
 <div class="assets-list">
   <div fxLayout="column" fxLayoutAlign="center center" fxFlexAlign="stretch" class="blocked-content" *ngIf="!isLoggedIn()">
+      <fa-icon icon="lock" size="lg"></fa-icon>
       <a (click)="onLoginClick()">Login to access</a>
   </div>
   <trending-asset-card *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>

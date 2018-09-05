@@ -5,7 +5,6 @@ import { ConfirmEmailComponent } from './components/account/confirm-email/confir
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
-import { ListAdvisorsComponent } from './components/advisor/list-advisors/list-advisors.component';
 import { RegisterComponent } from './components/account/register/register.component';
 import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
@@ -19,6 +18,7 @@ import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
+import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent  },
@@ -28,7 +28,7 @@ const routes: Routes = [
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
     { path: 'forgot-password-reset', component: ForgotPasswordResetComponent },
     { path: 'change-password', component: ChangePasswordComponent, canActivate:[AuthRedirect] },
-    { path: 'top-advisors', component: ListAdvisorsComponent },
+    { path: 'top-experts', component: TopExpertsComponent },
     { path: 'advisor-details/:id', component: AdvisorDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },

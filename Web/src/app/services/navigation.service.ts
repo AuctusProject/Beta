@@ -46,7 +46,7 @@ export class NavigationService {
     this.goToUrl('');
   }
 
-  public goToListAdvisors(){
-    this.goToUrl('list-advisors');
+  public goToTopExperts(){
+    this.goToUrl('top-experts');
   }
 }
