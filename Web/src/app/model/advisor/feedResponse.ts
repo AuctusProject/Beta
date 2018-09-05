@@ -10,5 +10,6 @@ export class FeedResponse {
   followingAdvisor: boolean;
   followingAsset: boolean;
   adviceType: number;
-  dateTime: Date;
+  adviceDate: Date;
+  assetValueAtAdviceTime: number;
 }

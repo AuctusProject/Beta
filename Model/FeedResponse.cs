@@ -17,6 +17,7 @@ namespace Auctus.Model
         public bool FollowingAdvisor { get; set; }
         public bool FollowingAsset{ get; set; }
         public int AdviceType { get; set; }
-        public DateTime Date { get; set; }        
+        public DateTime AdviceDate { get; set; }
+        public double AssetValueAtAdviceTime { get; set; }
     }
 }

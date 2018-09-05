@@ -154,17 +154,18 @@ Auctus Team");
                     AdviceType = advice.AdviceType.Value,
                     AdvisorId = advice.AdvisorId,
                     AssetId = advice.AssetId,
-                    Date = advice.CreationDate,
+                    AdviceDate = advice.CreationDate,
                     AdvisorName = advisorResponse.Name,
                     AdvisorUrlGuid = advisorResponse.UrlGuid.ToString(),
                     AdvisorRanking = advisorResponse.Ranking,
                     FollowingAdvisor = advisorResponse.Following,
                     AssetCode = assetResponse.Code,
                     AssetName = assetResponse.Name,
-                    FollowingAsset = assetResponse.Following == true
+                    FollowingAsset = assetResponse.Following == true,
+                    AssetValueAtAdviceTime = advice.AssetValue
                 });
             }
-            return feedResult.OrderByDescending(c => c.Date).ToList();
+            return feedResult.OrderByDescending(c => c.AdviceDate).ToList();
         }
 
         public IEnumerable<FeedResponse> ListLastAdvicesForAllTypes(int? numberOfAdvicesOfEachType)
