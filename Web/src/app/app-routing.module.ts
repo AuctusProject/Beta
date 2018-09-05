@@ -6,7 +6,7 @@ import { MessageSignatureComponent } from './components/account/message-signatur
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
 import { RegisterComponent } from './components/account/register/register.component';
-import { AdvisorDetailsComponent } from './components/advisor/advisor-details/advisor-details.component';
+import { ExpertDetailsComponent } from './components/advisor/expert-details/expert-details.component';
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
@@ -29,7 +29,7 @@ const routes: Routes = [
     { path: 'forgot-password-reset', component: ForgotPasswordResetComponent },
     { path: 'change-password', component: ChangePasswordComponent, canActivate:[AuthRedirect] },
     { path: 'top-experts', component: TopExpertsComponent },
-    { path: 'advisor-details/:id', component: AdvisorDetailsComponent, canActivate:[AuthRedirect] },
+    { path: 'expert-details/:id', component: ExpertDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'new-advice', component: NewAdviceComponent, canActivate:[AuthRedirect] },

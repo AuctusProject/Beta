@@ -36,7 +36,7 @@ export class AdvisorService {
     return this.httpService.postWithoutContentType(this.advisorsUrl + "/" + id, formData);
   }
 
-  getAdvisorDetails(id: string): Observable<AdvisorResponse> {
+  getExpertDetails(id: string): Observable<AdvisorResponse> {
     return this.httpService.get(this.advisorsUrl.replace("{id}", id));
   }
 

@@ -6,17 +6,17 @@ import { AssetResponse } from '../../../model/asset/assetResponse';
 import { CONFIG } from "../../../services/config.service";
 
 @Component({
-  selector: 'advisor-details',
-  templateUrl: './advisor-details.component.html',
-  styleUrls: ['./advisor-details.component.css']
+  selector: 'expert-details',
+  templateUrl: './expert-details.component.html',
+  styleUrls: ['./expert-details.component.css']
 })
-export class AdvisorDetailsComponent implements OnInit {
+export class ExpertDetailsComponent implements OnInit {
   advisor: AdvisorResponse;
   constructor(private route: ActivatedRoute, private advisorService: AdvisorService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
-      this.advisorService.getAdvisorDetails(params['id']).subscribe(advisor => this.advisor = advisor)
+      this.advisorService.getExpertDetails(params['id']).subscribe(advisor => this.advisor = advisor)
     )
   }
   getAssetImgUrl(asset: AssetResponse){
