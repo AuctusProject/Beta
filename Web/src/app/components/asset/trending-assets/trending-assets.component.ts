@@ -57,7 +57,6 @@ export class TrendingAssetsComponent implements OnInit {
   onLoginClick(){
     let loginModalData = new FullscreenModalComponentInput();
     loginModalData.component = LoginComponent;
-    loginModalData.title = "Login";
     this.dialog.open(FullscreenModalComponent, { data: loginModalData }); 
   }
 }

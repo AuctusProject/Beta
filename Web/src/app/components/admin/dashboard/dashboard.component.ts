@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit {
           onSeries:'usersStartedRegistrationData'
         },
         {
-          name: 'Advisors', 
+          name: 'Experts', 
           data: this.advisorsData,
           id: 'advisorsData'
         },
@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit {
           onSeries:'advisorsData'
         },
         {
-          name: 'Request to be Advisor', 
+          name: 'Request to be Expert', 
           data: this.requestToBeAdvisorData,
           id: 'requestToBeAdvisorData'
         },

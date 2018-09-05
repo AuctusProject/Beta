@@ -19,6 +19,7 @@ import { ForgotPasswordComponent } from '../forgot-password/forgot-password.comp
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements ModalComponent, OnInit {
+  modalTitle: string = "Login";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -99,7 +100,6 @@ export class LoginComponent implements ModalComponent, OnInit {
   onForgotPasswordClick() {
     let modalData = new FullscreenModalComponentInput();
     modalData.component = ForgotPasswordComponent;
-    modalData.title = "Forgot password";
     this.setNewModal.emit(modalData);
   }
 

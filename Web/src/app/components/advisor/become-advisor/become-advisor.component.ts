@@ -5,13 +5,14 @@ import { RequestToBeAdvisorRequest } from '../../../model/advisor/requestToBeAdv
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { FileUploaderComponent } from '../../util/file-uploader/file-uploader.component';
 import { CONFIG } from '../../../services/config.service';
 import { AccountService } from '../../../services/account.service';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
+import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
+import { InheritanceInputOptions, InputType } from '../../../model/inheritanceInputOptions';
 
 @Component({
   selector: 'become-advisor',
@@ -19,50 +20,31 @@ import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-m
   styleUrls: ['./become-advisor.component.css']
 })
 export class BecomeAdvisorComponent implements ModalComponent, OnInit {
+  modalTitle: string = "Expert register";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
   
   requestToBeAdvisorRequest: RequestToBeAdvisorRequest = new RequestToBeAdvisorRequest();
-  requestForm: FormGroup;
   promise: Subscription;
-  pictureUrl: string;
-  confirmedPassword: string;
-  invalidPassword: boolean;
-  acceptTermsAndConditions: boolean;
   @ViewChild("RecaptchaComponent") RecaptchaComponent: RecaptchaComponent;
   @ViewChild("FileUploadComponent") FileUploadComponent: FileUploaderComponent;
+  @ViewChild("Name") Name: InheritanceInputComponent;
+  @ViewChild("Email") Email: InheritanceInputComponent;
+  @ViewChild("Password") Password: InheritanceInputComponent;
+  @ViewChild("Description") Description: InheritanceInputComponent;
+  @ViewChild("Experience") Experience: InheritanceInputComponent;
+  
+  acceptTermsAndConditions: boolean;
 
-  constructor(private formBuilder: FormBuilder,
-    private advisorService: AdvisorService, 
+  constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
-    private notificationsService: NotificationsService) { 
-    this.buildForm();
-  }
-
-  private buildForm() {
-    if (this.isNewUser()) {
-      this.requestForm = this.formBuilder.group({
-        email: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-        password: ['', Validators.compose([Validators.required, Validators.maxLength(100), Validators.minLength(8)])],
-        name: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-        description: ['', Validators.compose([Validators.required, Validators.maxLength(160)])],
-        experience: ['', Validators.compose([Validators.required, Validators.maxLength(4000)])]
-      });
-    } else {
-      this.requestForm = this.formBuilder.group({
-        name: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-        description: ['', Validators.compose([Validators.required, Validators.maxLength(160)])],
-        experience: ['', Validators.compose([Validators.required, Validators.maxLength(4000)])]
-      });
-    }
-  }
+    private notificationsService: NotificationsService) { }
 
   ngOnInit() {
     this.advisorService.getRequestToBeAdvisor().subscribe(result => 
       {
         this.acceptTermsAndConditions = false;
-        this.invalidPassword = false;
         this.requestToBeAdvisorRequest.email = "";
         this.requestToBeAdvisorRequest.password = "";
         let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
@@ -85,56 +67,55 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     this.requestToBeAdvisorRequest.captcha = captchaResponse;
   }
 
-  onChangePassword() {
-    this.invalidPassword = !!this.confirmedPassword && this.confirmedPassword !== this.requestToBeAdvisorRequest.password;
-  }
-
   onSubmit() {
     if (!this.acceptTermsAndConditions) {
       this.notificationsService.error(null, "You must accept the terms and conditions to continue.");
-    } else if (this.isNewUser() && this.confirmedPassword !== this.requestToBeAdvisorRequest.password) {
-      this.notificationsService.error(null, "Passwords do not match.");
-    } else if (!this.requestToBeAdvisorRequest.captcha) {
-      this.notificationsService.error(null, "Fill the captcha.");
-    } else if (this.requestForm.valid) {
+    } else if (this.isNewUser() && !this.requestToBeAdvisorRequest.captcha) {
+      this.notificationsService.error(null, "You must fill the captcha.");
+    } else if (this.isValidRequest()) {
       this.requestToBeAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
       this.requestToBeAdvisorRequest.file = this.FileUploadComponent.getFile();
       this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(result => 
       {
         let modalData = new FullscreenModalComponentInput();
         modalData.component = MessageFullscreenModalComponent;
-        modalData.componentInput = { message: "Request was successfully sent.", redirectUrl: "" };
-        modalData.title = "";
+        modalData.componentInput = { message: "Request to be Expert was successfully sent. We will contact you by email about your request within 3 business days.", redirectUrl: "" };
         this.setNewModal.emit(modalData);
-      }, this.RecaptchaComponent.reset);
+      }, error =>
+      {
+        if (!!this.RecaptchaComponent) this.RecaptchaComponent.reset();
+      });
     }
   }
 
-  canSubmit() {
-    return this.acceptTermsAndConditions && !this.invalidPassword && !!this.requestToBeAdvisorRequest.captcha && this.requestForm.valid;
+  isValidRequest() : boolean {
+    let isValid = this.Name.isValid();
+    isValid = this.Description.isValid() && isValid;
+    isValid = this.Experience.isValid() && isValid;
+    if (this.isNewUser()) {
+      isValid = this.Email.isValid() && isValid;
+      isValid = this.Password.isValid() && isValid;
+    }
+    return isValid;
   }
 
-  getRequestNameLength() {
-    if (!!this.requestToBeAdvisorRequest.name) {
-      return this.requestToBeAdvisorRequest.name.length;
-    } else {
-      return 0;
-    }
+  getNameOptions() {
+    return { textOptions: { placeHolder: "Name", setFocus: true, browserAutocomplete: "name", maxLength: 50 } };
   }
 
-  getRequestDescriptionLength() {
-    if (!!this.requestToBeAdvisorRequest.description) {
-      return this.requestToBeAdvisorRequest.description.length;
-    } else {
-      return 0;
-    }
+  getEmailOptions() {
+    return { inputType: InputType.Email, textOptions: { placeHolder: "Email", showHintSize: false, maxLength: 50 } };
   }
 
-  getRequestEmailLength() {
-    if (!!this.requestToBeAdvisorRequest.email) {
-      return this.requestToBeAdvisorRequest.email.length;
-    } else {
-      return 0;
-    }
+  getPasswordOptions() {
+    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", browserAutocomplete: "", minLenth: 8, maxLength: 100 } };
+  }
+
+  getDescriptionOptions() {
+    return { inputType: InputType.TextArea, textOptions: { placeHolder: "Short description", maxLength: 160 } };
+  }
+
+  getExperienceOptions() {
+    return { inputType: InputType.TextArea, textOptions: { placeHolder: "Describe your expertise" }, textAreaOptions: { maxRows: 20, minRows: 5 } };
   }
 }

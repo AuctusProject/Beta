@@ -25,10 +25,18 @@
     right: 0;
 }
 
-.lastDiv {
-    padding-bottom: 20px;
+.input-experience-tablet {
+    width: 75%;
 }
 
-.input-experience {
-    width: 95%;
+.input-experience-web {
+    width: 60%;
+}
+
+.form-div {
+    padding-top: 25px;
+}
+
+.last-div {
+    padding-bottom: 25px;
 }

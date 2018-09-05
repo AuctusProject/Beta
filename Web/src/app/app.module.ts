@@ -75,6 +75,7 @@ import { RecommendationBoxListComponent } from './components/home/recommendation
 import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
 import { TrendingAssetCardComponent } from './components/asset/trending-asset-card/trending-asset-card.component';
 import { PercentageDisplayComponent } from './components/util/percentage-display/percentage-display.component';
+import { InheritanceInputComponent } from './components/util/inheritance-input/inheritance-input.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -138,7 +139,8 @@ export function getAuthServiceConfigs() {
     RecommendationBoxListComponent,
     TrendingAssetsComponent,
     TrendingAssetCardComponent,
-    PercentageDisplayComponent
+    PercentageDisplayComponent,
+    InheritanceInputComponent
   ],
   imports: [
     BrowserModule,

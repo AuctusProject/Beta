@@ -15,6 +15,7 @@ import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-m
   styleUrls: ['./forgot-password.component.css']
 })
 export class ForgotPasswordComponent implements ModalComponent, OnInit {
+  modalTitle: string = "Forgot password";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -44,7 +45,6 @@ export class ForgotPasswordComponent implements ModalComponent, OnInit {
         let modalData = new FullscreenModalComponentInput();
         modalData.component = MessageFullscreenModalComponent;
         modalData.componentInput = { message: "Please follow the instructions on your email to recover your password.", redirectUrl: "" };
-        modalData.title = "";
         this.setNewModal.emit(modalData);
       }, this.RecaptchaComponent.reset);
   }

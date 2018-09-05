@@ -246,6 +246,25 @@ button.is-loading .btn-spinner {
   cursor: pointer;
 }
 
-a{
+a {
   cursor: pointer;
+}
+
+.container-field {
+  width: 100%;
+  margin: 0;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-end {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-start {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
 }
