@@ -116,6 +116,8 @@ namespace Auctus.Business.Advisor
                 if (await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture) && request != null && request.UrlGuid.HasValue)
                     await AzureStorageBusiness.DeleteUserPicture($"{request.UrlGuid.Value}.png");
             }
+            else if (!changePicture)
+                urlGuid = request?.UrlGuid;
 
             RequestToBeAdvisor newRequest = null;
             using (var transaction = TransactionalDapperCommand)
