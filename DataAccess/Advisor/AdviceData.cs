@@ -83,23 +83,21 @@ namespace Auctus.DataAccess.Advisor
         public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> advisorsIds, IEnumerable<int> assetsIds, int? top, int? lastAdviceId)
         {
             if (!advisorsIds.Any() && !assetsIds.Any())
-            {
                 return Enumerable.Empty<Advice>();
-            }
 
             var complement = "";
             var parameters = new DynamicParameters();
-            if (advisorsIds.Count() > 0)
+            if (advisorsIds.Any())
             {
                 complement = string.Join(" OR ", advisorsIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
                 for (int i = 0; i < advisorsIds.Count(); ++i)
                     parameters.Add($"AdvisorId{i}", advisorsIds.ElementAt(i), DbType.Int32);
             }
-            if (assetsIds.Count() > 0)
+            if (assetsIds.Any())
             {
                 complement = string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
-                for (int i = 0; i < advisorsIds.Count(); ++i)
-                    parameters.Add($"AssetId{i}", advisorsIds.ElementAt(i), DbType.Int32);
+                for (int i = 0; i < assetsIds.Count(); ++i)
+                    parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
             }
 
             var topCondition = (top.HasValue ? "TOP " + top.Value : String.Empty);
