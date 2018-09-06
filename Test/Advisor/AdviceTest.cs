@@ -44,7 +44,7 @@ namespace Auctus.Test.Advisor
 
             for (var i = 1; i<response.Count(); i++)
             {
-                Assert.True(response.ElementAt(i).Date <= response.ElementAt(i - 1).Date);
+                Assert.True(response.ElementAt(i).AdviceDate <= response.ElementAt(i - 1).AdviceDate);
             }
 
             response.ToList().ForEach(f => AssertPropertiesAreFilled(f));
