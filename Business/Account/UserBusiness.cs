@@ -116,10 +116,9 @@ namespace Auctus.Business.Account
             BasePasswordValidation(password);
 
             var user = Data.GetForLogin(email);
-            if (user == null)
-                throw new BusinessException("Email is invalid.");
-            else if (user.Password != GetHashedPassword(password, user.Email, user.CreationDate))
-                throw new BusinessException("Password is invalid.");
+            if (user == null || user.Password != GetHashedPassword(password, user.Email, user.CreationDate))
+                throw new BusinessException("Invalid credentials.");
+
             bool hasInvestment = GetUserHasInvestment(user, out decimal? aucAmount);
             ActionBusiness.InsertNewLogin(user.Id, aucAmount, null);
             return new Model.LoginResponse()
