@@ -1,21 +1,17 @@
-<div *ngIf="advisor" class="container" fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="20px" fxLayoutGap.xs="10px">
-    <mat-form-field fxFill>
-        <input matInput required type="text" maxlength="50" [(ngModel)]="advisor.name" placeholder="Name" />
-        <mat-hint align="end">{{advisor.name.length}} / 50</mat-hint>
-    </mat-form-field>
-    <mat-form-field fxFill>
-        <textarea matInput required cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" maxlength="160" 
-            [(ngModel)]="advisor.description" placeholder="Short description"></textarea>
-        <mat-hint align="end">{{advisor.description.length}} / 160</mat-hint>
-    </mat-form-field>
-    <div class="file-container"> 
+<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
+    <div class="file-container" ngClass.xs="file-container-mobile" ngClass.sm="file-container-tablet" ngClass.gt-sm="file-container-web"> 
         <div class="file-uploader">
             <file-uploader #FileUploadComponent></file-uploader>
         </div>
     </div>
-    <div fxLayout="row" fxLayoutGap="10px" class="actions">
-        <button fxFlex="50" mat-raised-button (click)="back()" [promiseBtn]="promise">BACK</button>
-        <button fxFlex="50" mat-raised-button color="primary" mat-button (click)="save()" [promiseBtn]="promise">SAVE</button>
-    </div>
+</div>
+<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
+    <inheritance-input #Name [options]="getNameOptions()"  ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+        [value]="advisor.name" (onChange)="advisor.name = $event"></inheritance-input>
+    <inheritance-input #Description [options]="getDescriptionOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-description-tablet" ngClass.gt-sm="input-description-web"
+        [value]="advisor.description" (onChange)="advisor.description = $event"></inheritance-input>
+</div>
+<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
+    <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" 
+        mat-flat-button (click)="save()" [promiseBtn]="promise">Save</button>
 </div>
