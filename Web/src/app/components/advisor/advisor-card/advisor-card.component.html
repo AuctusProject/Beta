@@ -1,4 +1,5 @@
 <div (click)="goToExpertDetails()" class="advisor-card-container">
+  <div class="top-border"></div>
   <div class="card-header">
     <div class="expert-picture">
       <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
@@ -13,25 +14,30 @@
       {{advisor.description}}
     </div>
     <div class="expert-rating">
-      <bar-rating [readOnly]="'true'" [rate]="advisor.rating"></bar-rating>
+      <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advisor.rating" [title]="advisor.rating | number: '1.2-2'"></bar-rating>
     </div>
   </div>
-  <div class="card-divider"></div>
-  <div class="expert-ranking-description">
-      Ranked #{{advisor.ranking}} out of {{advisorsLength}} experts
-  </div>
-  <div class="expert-rates">
-    <div class="success-rate-column">
-      <div class="success-rate">
-          {{advisor.successRate * 100 | number:'1.0-0'}}%
-      </div>
-      <div class="success-rate-description">Success Rate</div>
+  <div class="expert-card-content">
+    <div class="expert-ranking-description">
+        Ranked #{{advisor.ranking}} out of {{advisorsLength}} experts
     </div>
-    <div class="average-return-column">
-      <div class="average-return">
-          {{advisor.averageReturn * 100 | number:'1.1-1'}}%
+    <div class="followed-by">
+      Followed by {{advisor.numberOfFollowers}} investors
+    </div>
+    <div class="separator"></div>
+    <div class="expert-rates">
+      <div class="success-rate-column">
+        <div class="success-rate">
+            {{advisor.successRate * 100 | number:'1.0-0'}}%
+        </div>
+        <div class="success-rate-description">Success Rate</div>
       </div>
-      <div class="average-return-description">Average Return</div>
+      <div class="average-return-column">
+        <div class="average-return">
+            {{advisor.averageReturn * 100 | number:'1.1-1'}}%
+        </div>
+        <div class="average-return-description">Average Return</div>
+      </div>
     </div>
   </div>
   <div class="recommendation-distribution">
@@ -45,10 +51,7 @@
       Sell: {{getSellRecommendationPercentage() | number:'1.1-1'}}%
     </div>
   </div>
-  <div class="distribution-follow-divider"></div>
-  <div class="followed-by">
-    Followed by {{advisor.numberOfFollowers}} investors
-  </div>
+  <div class="separator distribution-follow-divider"></div>
   <div class="follow-link" *ngIf="advisor.following" (click)="onUnfollowClick()">
     Unfollow
   </div>

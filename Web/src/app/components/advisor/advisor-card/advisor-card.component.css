@@ -1,56 +1,63 @@
 :host{
-    width: 192px;
-    background-color: #1f1f1f;
+    width: 200px;
+    background-color: #252525;
     display: inline-flex;
     vertical-align: top;
+    font-size: 11px;
 }
 
 .advisor-card-container{
     width: 100%;
 }
 
+.top-border{
+    width: 100%;
+    height: 3px;
+    background-image: linear-gradient(to left, #07d1ff, #126efd);
+}
+
 .expert-picture{
-    width: 72px;
-    height: 72px;
+    width: 84px;
+    height: 84px;
+    border-radius: 42px;
     margin: auto;
-    margin-top: 10px;
-    position: relative;
-    border-radius: 36px;
+    margin-top: 14px;
+    position: relative;    
     background-color: white;
 }
 
 .expert-picture img{
-    width: 72px;
-    height: 72px;
-    border-radius: 36px;
+    width: 84px;
+    height: 84px;
+    border-radius: 42px;
 }
 
 .expert-ranking{
-    width: 26px;
-    height: 26px;
-    line-height: 26px;
-    border-radius: 13px;
-    background-color: #f9c107;
-    font-size: 15px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 15px;
+    background-color: #126efd;
+    font-size: 13px;
     text-align: center;
-    color: #2c2c2c;
+    color: #FFFFFF;
     bottom: 0px;
     position: absolute;
     font-weight: bold;
 }
 
 .expert-name{
-    margin-top: 9px;
-    font-size: 11px;
+    margin-top: 11px;
+    font-size: 13px;
     text-align: center;
     color: #ffffff;
     font-weight: bold;
 }
 
 .expert-description{
-    font-size: 9px;
+    font-size: 10px;
     text-align: center;
-    color: #ffffff;
+    color: #e6e6e6;
 }
 
 .expert-rating{
@@ -63,14 +70,14 @@
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin: 4px 0 8px 0;
+    margin: 8px 0;
 }
 
 /deep/ .br{
     margin: 0 0 !important;
 }
 
-/deep/ .br-default .br-unit{
+/deep/ .br-fontawesome-o .br-unit{
     margin-right: unset !important; 
     font-size: unset !important;
     height: unset !important;
@@ -78,23 +85,47 @@
     margin: 0 2px;
 }
 
-.card-divider{
-    height: 4px;
-    background-color: #f99d00;
-    width: 100%;
+/deep/ .br-fontawesome-o .br-unit:after{
+    color:#343434;
+}
+
+/deep/ .br-fontawesome-o .br-fraction:after,
+/deep/ .br-fontawesome-o .br-selected:after{
+    color:#999999;
+}
+
+
+.expert-card-content{
+    background-color: #cccccc;
+    color: #333333;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .expert-ranking-description{
-    height: 24px;
-    background-color: #4e4e4e;
-    font-size: 9px;
-    line-height: 24px;
+    font-size: 10px;
     text-align: center;
-    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.followed-by{
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    color: #126efd;
+    margin-bottom: 7px;
+}
+
+.separator{
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 1px;
+    background-color: #00000033;
 }
 
 .expert-rates{
-    background-color: #9b9b9b;
+    padding-top: 10px;
 }
 
 .success-rate-column,
@@ -103,30 +134,29 @@
     display: inline-block;
 }
 
-.success-rate{
-    height: 56px;
-    width: 56px;
-    line-height: 56px;
-    border-radius: 30px;
-    border: solid 2px #f99d00;
-    font-size: 18px;
+.success-rate,
+.average-return{
+    height: 52px;
+    width: 52px;
+    line-height: 52px;
+    font-weight: bold;
     text-align: center;
-    color: #ffffff;
-    margin: 9px 16px;
+    margin: 0 auto 6px auto;
+    border-width: 3.5px;
+    border-style: solid;
+    border-color: transparent;
+}
+
+.success-rate{
+    border-radius: 30px;
+    border-color: #333333;
+    font-size: 14px;
     font-weight: bold;
 }
 
 .average-return{
-    width: 72px;
-    height: 36px;
-    background-color: #f99d00;
-    line-height: 36px;
-    font-size: 20px;
-    text-align: center;
-    color: #ffffff;
-    display: inline-block;
-    margin: 21px auto;
-    font-weight: bold;
+    font-size: 19px;
+    display: inline-block;    
 }
 
 .success-rate-description,
@@ -138,40 +168,39 @@
 }
 
 .recommendation-distribution {
-    padding: 8px 8px 8px 8px;
+    padding: 11px 0;
     line-height: 10px;
 }
+
 .recommendation-distribution div{
-    width: 50px;
+    min-width: 50px;
     display: inline-block;
-    font-size: 8px;
+    font-size: 10px;
     text-align: center;
-    color: #ffffff;
-    font-weight: 500;
+    color: #e6e6e6;
+    font-weight: 100;
+    text-align: center;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .close-distribution{
-    width: 54px;
     border-left: 1px solid;
     border-right: 1px solid;
 }
 
 .distribution-follow-divider{
-    margin:auto;
-    width: 160px;
-    border: solid 0.3px #9d9d9d;
-    margin-bottom: 8px;
+    border: solid 0.3px #898989;
+    margin-bottom: 9px;
 }
 
-.followed-by,
+
 .follow-link{
     margin-bottom: 8px;
-    height: 7px;
-    font-size: 7px;
+    font-size: 10px;
+    font-weight: 100;
     text-align: center;
-    color: #ffffff;
-}
-
-.follow-link{
+    color: #126ffd;
     cursor: pointer;
+    text-decoration: underline;
 }
