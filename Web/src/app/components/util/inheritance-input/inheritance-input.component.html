@@ -38,7 +38,7 @@
     (change)="onChangeInput()"
     rows="{{maxRows}}"></textarea>
   
-  <mat-icon matSuffix *ngIf="inputType == 2" (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility' : 'visibility_off'}}</mat-icon>
+  <mat-icon matSuffix *ngIf="inputType == 2 && showPasswordVisibility" (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility' : 'visibility_off'}}</mat-icon>
   <mat-hint *ngIf="getErrorMessage().length == 0 && (showHintSize || !!specificHint)" align="end">{{getHintText()}}</mat-hint>
   <mat-error *ngIf="getErrorMessage().length > 0">{{getErrorMessage()}}</mat-error>
 </mat-form-field>
