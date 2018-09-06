@@ -45,24 +45,20 @@ export class AuthRedirect implements CanActivate {
   }
 
   private redirect(loginResponse: LoginResponse, currentUrl?: string):boolean{
-    if(loginResponse.pendingConfirmation){
-      if(currentUrl == null || !currentUrl.startsWith('/confirm-email')) {
-        this.navigationService.goToConfirmEmail();
-        return true;
-      }
-    }
-    else if (loginResponse.requestedToBeAdvisor && !loginResponse.isAdvisor){
-      if(currentUrl != '/wallet-login') {
-        this.navigationService.goToBecomeAdvisor();
-        return true;
-      }
-    }    
-    else if (!loginResponse.isAdvisor && !loginResponse.hasInvestment){
+    if (!loginResponse.isAdvisor && !loginResponse.hasInvestment){
       if(currentUrl != '/wallet-login') {
         this.navigationService.goToWalletLogin();
         return true;
       }
-    }
+    } else if (loginResponse.requestedToBeAdvisor && !loginResponse.isAdvisor) {
+      if(currentUrl != '/wallet-login') {
+        this.navigationService.goToBecomeAdvisor();
+        return true;
+      }
+    } else if(loginResponse.pendingConfirmation) {
+        this.navigationService.goToConfirmEmail();
+        return true;
+    }   
     return false;
   }
 

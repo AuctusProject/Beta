@@ -19,6 +19,7 @@ export class NavigationService {
   }
   
   public goToBecomeAdvisor(){
+    //TODO put the register as expert route
     this.goToUrl('', { becomeadvisor: true });
   }
 
@@ -31,7 +32,7 @@ export class NavigationService {
   }
 
   public goToConfirmEmail(){
-    this.goToUrl('confirm-email');
+    this.goToUrl('', { confirmemail: true });
   }
 
   public goToExpertDetails(advisorId:number){

@@ -259,6 +259,8 @@ namespace Auctus.Business.Account
             var user = Data.GetByEmail(email);
             if (user == null)
                 throw new NotFoundException("User cannot be found.");
+            else if (user.ConfirmationDate.HasValue)
+                throw new BusinessException("Email already confirmed.");
 
             user.ConfirmationCode = Guid.NewGuid().ToString();
             Data.Update(user);
@@ -271,6 +273,8 @@ namespace Auctus.Business.Account
             var user = Data.GetByConfirmationCode(code);
             if (user == null)
                 throw new BusinessException("Invalid confirmation code.");
+            else if (user.ConfirmationDate.HasValue)
+                throw new BusinessException("Email already confirmed.");
 
             user.ConfirmationDate = Data.GetDateTimeNow();
             Data.Update(user);
@@ -414,7 +418,7 @@ namespace Auctus.Business.Account
                 "Verify your email address - Auctus Beta",
                 string.Format(@"Hello,
 <br/><br/>
-To activate your account please verify your email address and complete your registration <a href='{0}/confirm-email?c={1}' target='_blank'>click here</a>.
+To activate your account please verify your email address and complete your registration <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.
 <br/><br/>
 <small>If you didn’t ask to verify this address, you can ignore this email.</small>
 <br/><br/>
