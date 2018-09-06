@@ -2,13 +2,14 @@
   <div>
       <img [src]="getAssetImgUrl()">
     </div>
-  <div fxLayout="column">
+  <div class="asset-info" fxLayout="column">
     <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
     <div *ngIf="asset.following">
-        <button (click)="onUnfollowClick()">UNFOLLOW</button>
+        <button mat-raised-button disabled>Following</button>
+        <button mat-button (click)="onUnfollowClick()">Unfollow</button>
     </div>
     <div *ngIf="!asset.following">
-      <button (click)="onFollowClick()">FOLLOW</button>
+      <button mat-raised-button color="primary" (click)="onFollowClick()">Follow</button>
     </div>
   </div>
   <div class="ratings" fxLayout="column" fxLayoutAlign="center center">
@@ -26,6 +27,6 @@
     {{getLastValue()}}
   </div>
   <div>
-    {{asset.variation24h}}
+    {{get24hVariation()}}
   </div>
 </div>

@@ -3,6 +3,10 @@
     border-bottom: solid 0.5px #707070;
 }
 
+img {
+    width: 50px;
+}
+
 .symbol {
     font-size: 15px;
     font-weight: 600;
@@ -17,6 +21,34 @@
     line-height: 1.06;
     letter-spacing: 0.2px;
     color: #555555;
+    margin-bottom: 7px;
+  }
+
+  .asset-info {
+      width: 100px;
+  }
+
+  button {
+      min-width: 0px;
+      padding: 0 9px;
+  }
+
+  .mat-raised-button {
+    
+    height: 15px;
+    font-size: 7px;
+    font-weight: 500;
+    line-height: 1.29;
+    letter-spacing: 0.2px;
+  }
+
+  .mat-button {
+    height: 15px;
+    font-size: 6px;
+    font-weight: 500;
+    line-height: 1.29;
+    letter-spacing: 0.2px;
+    color: #4e4e4e;
   }
 
   .ratings-bullet-point {
@@ -80,7 +112,7 @@
 }
 
 .general-recommendation-box.moderate-buy{
-    background-color: blue;
+    background-color: #63c96f;
 }
 
 .general-recommendation-box.strong-buy{
