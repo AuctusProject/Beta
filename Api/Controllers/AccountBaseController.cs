@@ -58,7 +58,7 @@ namespace Api.Controllers
 
         protected virtual async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest forgotPasswordRequest)
         {
-            if (forgotPasswordRequest == null || String.IsNullOrWhiteSpace(forgotPasswordRequest.Email))
+            if (forgotPasswordRequest == null)
                 return BadRequest();
             if (!IsValidRecaptcha(forgotPasswordRequest.Captcha))
                 return BadRequest(new { error = "Invalid Captcha." });
@@ -80,6 +80,8 @@ namespace Api.Controllers
         {
             if (registerRequest == null)
                 return BadRequest();
+            if (!IsValidRecaptcha(registerRequest.Captcha))
+                return BadRequest(new { error = "Invalid Captcha." });
 
             var loginResponse = await UserBusiness.RegisterAsync(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode);
             return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
@@ -113,6 +115,14 @@ namespace Api.Controllers
         protected virtual IActionResult GetReferralProgramInfo()
         {
             return Ok(UserBusiness.GetReferralProgramInfo());
+        }
+
+        protected virtual IActionResult IsValidReferralCode(string referralCode)
+        {
+            if (String.IsNullOrWhiteSpace(referralCode) || referralCode.Length != 7)
+                return BadRequest();
+
+            return Ok(UserBusiness.IsValidReferralCode(referralCode));
         }
 
         protected virtual IActionResult SetConfiguration(SetConfigurationRequest setConfigurationRequest)

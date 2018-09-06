@@ -20,6 +20,7 @@ import { NavigationService } from './navigation.service';
 import { DashboardResponse } from '../model/admin/dashboardresponse';
 import { SearchResponse } from '../model/search/searchResponse';
 import { SocialLoginRequest } from '../model/account/socialLoginRequest';
+import { ValidReferralCodeResponse } from '../model/account/validReferralCodeResponse';
 
 
 @Injectable()
@@ -32,7 +33,8 @@ export class AccountService {
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
   private registerUrl = this.httpService.apiUrl("v1/accounts");
   private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
-  private referralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
+  private meReferralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
+  private referralsUrl = this.httpService.apiUrl("v1/accounts/referrals");
   private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
   private dashboardUrl = this.httpService.apiUrl("v1/accounts/dashboard");
   private searchUrl = this.httpService.apiUrl("v1/accounts/search");
@@ -112,11 +114,15 @@ export class AccountService {
   }
 
   getReferralProgramInfo() : Observable<ReferralProgramInfoResponse>{
-    return this.httpService.get(this.referralsUrl);
+    return this.httpService.get(this.meReferralsUrl);
   }
 
   setReferralCode(setReferralRequest: SetReferralRequest) : Observable<void>{
-    return this.httpService.post(this.referralsUrl, setReferralRequest);
+    return this.httpService.post(this.meReferralsUrl, setReferralRequest);
+  }
+
+  isValidReferralCode(referralCode: string) : Observable<ValidReferralCodeResponse>{
+    return this.httpService.get(this.referralsUrl + "?referralCode=" + referralCode);
   }
 
   getConfiguration() : Observable<ConfigurationResponse>{

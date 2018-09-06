@@ -157,7 +157,7 @@ namespace Auctus.Business.Account
 
         public decimal GetMinimumAucAmountForUser(User user)
         {
-            return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? DiscountPercentageOnAuc : 0)));
+            return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? user.ReferralDiscount.Value / 100 : 0)));
         }
 
         public async Task<LoginResponse> RegisterAsync(string email, string password, string referralCode)
@@ -202,6 +202,7 @@ namespace Auctus.Business.Account
             user.Password = String.IsNullOrWhiteSpace(password) ? null : GetHashedPassword(password, user.Email, user.CreationDate);
             user.ReferralCode = GenerateReferralCode();
             user.ReferredId = referredUser?.Id;
+            user.ReferralDiscount = referredUser != null ? DiscountPercentageOnAuc : (double?)null;
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
             return user;
@@ -212,6 +213,7 @@ namespace Auctus.Business.Account
             var user = GetByEmail(LoggedEmail);
             var referredUser = GetReferredUser(referralCode);
             user.ReferredId = referredUser.Id;
+            user.ReferralDiscount = DiscountPercentageOnAuc;
             Data.Update(user);
         }
 
@@ -468,6 +470,16 @@ Auctus Team", WebUrl, code));
             ReferralProgramInfoResponse response = ConvertReferredUsersToReferralProgramInfo(referredUsers);
             response.ReferralCode = user.ReferralCode;
             return response;
+        }
+
+        public ValidateReferralCodeResponse IsValidReferralCode(string referralCode)
+        {
+            var user = Data.GetByReferralCode(referralCode);
+            return new ValidateReferralCodeResponse()
+            {
+                Valid = user != null,
+                Discount = user != null ? DiscountPercentageOnAuc : 0
+            };
         }
 
         public void SetConfiguration(bool allowNotifications)

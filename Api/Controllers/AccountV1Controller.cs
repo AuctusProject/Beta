@@ -134,6 +134,15 @@ namespace Api.Controllers
             return base.GetReferralProgramInfo();
         }
 
+        [Route("referrals")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult IsValidReferralCode([FromQuery]string referralCode)
+        {
+            return base.IsValidReferralCode(referralCode);
+        }
+
         [Route("me/configuration")]
         [HttpPost]
         [Authorize("Bearer")]

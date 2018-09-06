@@ -18,6 +18,7 @@ interface InputTypeOptions {
     showValidatorError?: boolean;
     setFocus?: boolean;
     specificHint?: string;
+    outlineField?: boolean;
 }
 
 interface InputTextTypeOptions extends InputTypeOptions {

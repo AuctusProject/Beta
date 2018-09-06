@@ -1,4 +1,4 @@
-<mat-form-field appearance="outline" class="container-field" hideRequiredMarker>
+<mat-form-field appearance="{{outlineField ? 'outline' : 'standard'}}" class="container-field" hideRequiredMarker>
   <mat-label>{{placeholder}}</mat-label>
 
   <input matInput *ngIf="showTextField()"

@@ -5,12 +5,10 @@ import { FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'inheritance-input',
   templateUrl: './inheritance-input.component.html',
-  styleUrls: ['./inheritance-input.component.css'],
-  styles: ['width: 100%;']
+  styleUrls: ['./inheritance-input.component.css']
 })
 export class InheritanceInputComponent implements OnInit {
   @Input() options: InheritanceInputOptions;
-  @Input() forcedError: string;
   @Input() value: string;
   @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
 
@@ -25,12 +23,14 @@ export class InheritanceInputComponent implements OnInit {
   private specificHint?: string;
   private showHintSize: boolean = true;
   private showPasswordVisibility: boolean = true;
+  private outlineField: boolean = true;
   private autosizeTextArea: boolean = true;
   private minRows: number = 2;
   private maxRows: number = 4;
 
   private formControl: FormControl; 
   private passwordHide: boolean = false;
+  private forcedError: string;
 
   constructor() { }
 
@@ -48,6 +48,7 @@ export class InheritanceInputComponent implements OnInit {
         this.required = this.setValue(this.required, this.options.textOptions.required);
         this.placeholder = this.options.textOptions.placeHolder + (this.required ? ' *' : '');
         this.disabled = this.setValue(this.disabled, this.options.textOptions.disabled);
+        this.outlineField = this.setValue(this.outlineField, this.options.textOptions.outlineField);
         this.showValidatorError = this.setValue(this.showValidatorError, this.options.textOptions.showValidatorError);
         this.showHintSize = this.setValue(this.showHintSize, this.options.textOptions.showHintSize);
         this.showPasswordVisibility = this.setValue(this.showPasswordVisibility, this.options.textOptions.showPasswordVisibility);
@@ -76,6 +77,16 @@ export class InheritanceInputComponent implements OnInit {
   public isValid() : boolean {
     this.formControl.markAsTouched();
     return !this.forcedError && (!this.showValidatorError || this.formControl.valid);
+  }
+
+  public setForcedError(errorMessage: string) : void {
+    this.forcedError = errorMessage;
+    if (this.getErrorMessage().length > 0) {
+      this.formControl.setErrors({'incorrect': true});
+    } else {
+      this.formControl.setErrors(null);
+    }
+    this.formControl.markAsTouched();
   }
 
   private showTextAreaField() : boolean {

@@ -14,6 +14,7 @@ import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenMo
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InputType } from '../../../model/inheritanceInputOptions';
+import { RegisterComponent } from '../register/register.component';
 
 @Component({
   selector: 'login',
@@ -53,16 +54,13 @@ export class LoginComponent implements ModalComponent, OnInit {
   }
 
   loginResponse(response: LoginResult){
-    if (response){
-      if (!response.error && response.data) {
-        this.accountService.setLoginData(response.data);
-        this.setClose.emit();
-        this.authRedirect.redirectAfterLoginAction();
-      }
-      else {
-        this.notificationsService.info("Info", response.error);
-        this.RecaptchaComponent.reset();
-      }
+    if (!!response && !response.error && response.data) {
+      this.accountService.setLoginData(response.data);
+      this.setClose.emit();
+      this.authRedirect.redirectAfterLoginAction();
+    } else {
+      if (!!response) this.notificationsService.info("Info", response.error);
+      this.RecaptchaComponent.reset();
     }
   }
 
@@ -83,7 +81,7 @@ export class LoginComponent implements ModalComponent, OnInit {
         request.email = userData.email;
         request.token = userData.token;
         request.socialNetworkType = socialNetworkType;
-        this.accountService.socialLogin(request).subscribe(result => this.zone.run(() => { this.loginResponse(result); }));
+        this.accountService.socialLogin(request).subscribe(result => this.zone.run(() => { this.loginResponse(result); }, this.RecaptchaComponent.reset));
       }
     );
   }
@@ -99,7 +97,9 @@ export class LoginComponent implements ModalComponent, OnInit {
   }
 
   onRegisterClick() {
-    
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = RegisterComponent;
+    this.setNewModal.emit(modalData);
   }
 
   isValidRequest() : boolean {
