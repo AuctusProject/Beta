@@ -1,3 +1,4 @@
+<div class="global-container">
 <img src="./assets/logo.png" routerLink="" class="landing-logo">
 <span class="spacer"></span>
 <div class="menu" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-around center">
@@ -7,4 +8,5 @@
     <div class="separator"></div>
     <a *ngIf="!loginData" (click)="login()">LOGIN/SIGN UP</a>
     <a *ngIf="loginData" (click)="logout()">LOGOUT</a>
+</div>
 </div>

@@ -1,47 +1,15 @@
-<div class="section-title">
-  Top Assets
-</div>
-<div class="section-subtitle">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br> 
-    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br> 
-    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-</div>
-<div class="filter-title">
-  Filtering options
-</div>
-<div class="filter-form" fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column" fxLayoutAlign="center top" fxLayoutAlign.xs="center center">
-    <mat-form-field>
-      <mat-select placeholder="Ranking Parameters">
-        <mat-option [value]="'1'">
-          Option 1
-        </mat-option>
-        <mat-option [value]="'2'">
-          Option 2
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-select placeholder="Ranking Parameters">
-        <mat-option [value]="'1'">
-          Option 1
-        </mat-option>
-        <mat-option [value]="'2'">
-          Option 2
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-select placeholder="Ranking Parameters">
-        <mat-option [value]="'1'">
-          Option 1
-        </mat-option>
-        <mat-option [value]="'2'">
-          Option 2
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-</div>
+<div class="global-container">
+  <div class="section-title">
+    Top Assets
+  </div>
+  <div class="section-subtitle">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br> 
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br> 
+      nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  </div>
 
-<div  fxLayout="column"  fxLayoutAlign="center center">
-  <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
+  <div  fxLayout="column"  fxLayoutAlign="center center">
+    <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
+  </div>
+  <trending-assets></trending-assets>
 </div>

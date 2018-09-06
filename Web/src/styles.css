@@ -24,8 +24,32 @@
 
 @font-face {
   font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-Thin.ttf");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-UltraLight.ttf");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "Gilroy";
   src: url("/assets/fonts/Gilroy-Light.ttf");
   font-weight: 300;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-Medium.ttf");
+  font-weight: 500;
 }
 
 @font-face {
@@ -38,6 +62,18 @@
   font-family: "Gilroy";
   src: url("/assets/fonts/Gilroy-Bold.ttf");
   font-weight: 700;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-ExtraBold.ttf");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/assets/fonts/Gilroy-Black.ttf");
+  font-weight: 900;
 }
 
 html {
@@ -273,4 +309,10 @@ input:read-only {
 
 textarea:read-only {
   color: rgba(0,0,0,.38);
+}
+
+
+.global-container{
+  margin: 0 auto;
+  width: 1024px;
 }

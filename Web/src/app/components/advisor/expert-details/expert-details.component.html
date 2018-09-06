@@ -1,21 +1,21 @@
-<div *ngIf="expert">
+<div class="global-container" *ngIf="expert">
   <div class="breadcrumbs">Home  >  Top Experts  >  <span>{{expert.name}}</span></div> 
   <div fxLayout="row" fxLayoutGap="30px">
     <div fxLayout="column"> 
       <advisor-card [advisor]="expert"></advisor-card>
       <recommendation-distribution [data]="expert.recommendationDistribution"></recommendation-distribution>
     </div>
-    <div fxLayout="column" >
+    <div class="expert-details-content" fxLayout="column" fxFlex>
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <div fxLayout="column">
           <div class="expert-name">{{expert.name}}</div>
           <div class="expert-description">{{expert.description}}</div>
           <div class="expert-followers">Followed by {{expert.numberOfFollowers}} investors</div>
         </div>
-        <div>Follow</div>
+        <div class="expert-details-action-button">Follow</div>
       </div>
       <div *ngIf="expert.assets">
-        <table mat-table [dataSource]="expert.assets" class="assets-table">
+        <table mat-table [dataSource]="assets" class="assets-table">
           <ng-container matColumnDef="assetName">
             <th mat-header-cell *matHeaderCellDef> Crypto Names </th>
             <td mat-cell *matCellDef="let asset"> 
@@ -36,68 +36,50 @@
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Action </th>
             <td mat-cell *matCellDef="let asset">
-                {{getAdviceMode(asset)}}
+              {{getAdviceMode(asset)}}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef> Date </th>
             <td mat-cell *matCellDef="let asset">
-                {{getLastAdviceDate(asset)}}
+              {{getLastAdviceDate(asset)}}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="ratings">
             <th mat-header-cell *matHeaderCellDef> # of Ratings </th>
             <td mat-cell *matCellDef="let asset">
-                {{getTotalRatings(asset)}}
+              {{getTotalRatings(asset)}}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="followButton">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let asset">
-                Follow
+              Follow
             </td>
           </ng-container>
 
           <ng-container matColumnDef="expandedDetail">
-              <mat-cell *matCellDef="let asset"> 
-                Teste
-              </mat-cell>
-            </ng-container>
+            <td colspan=6 mat-cell *matCellDef="let asset"> 
+              <asset-history-chart [assetValues]="asset.element.values" [advices]="asset.element.assetAdvisor[0].advices"></asset-history-chart>
+              <div>
+                Success rate: {{asset.element.assetAdvisor[0].successRate}}
+                Average return: {{asset.element.assetAdvisor[0].averageReturn}}
+              </div>
+            </td>
+          </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" class="element-row" [class.expanded]="expandedElement == row"
-          (click)="expandedElement = row"></tr>
+          (click)="onRowClick(row)"></tr>
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
             [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"
+            class="{{row.element == expandedElement ? 'expanded' : 'collapsed'}}"
             style="overflow: hidden"> 
           </tr>
         </table>
-
-
-        <div fxLayout="column" *ngFor="let asset of expert.assets">
-          <div fxLayout="row">
-            <div>
-              <img [src]="getAssetImgUrl(asset)">
-            </div>
-            <div>Asset: {{asset.code}} - {{asset.name}}</div>
-            <div>Total Ratings: {{asset.totalRatings}}</div>
-            <div>Total Advisors: {{asset.totalAdvisors}}</div>
-            <div>Last Value: {{asset.lastValue}}</div>
-            <div>24h: {{asset.variation24h}}</div>
-            <div>7d: {{asset.variation7d}}</div>
-            <div>30d: {{asset.variation30d}}</div>
-            <div># of Followers: {{asset.numberOfFollowers}}</div>
-          </div>
-          
-          <asset-history-chart [assetValues]="asset.values" [advices]="asset.assetAdvisor[0].advices"></asset-history-chart>
-          <div>
-            Success rate: {{asset.assetAdvisor[0].successRate}}
-            Average return: {{asset.assetAdvisor[0].averageReturn}}
-          </div>
-        </div>
       </div>
     </div>
   </div>
