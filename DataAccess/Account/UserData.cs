@@ -100,13 +100,7 @@ namespace Auctus.DataAccess.Account
                         {
                             if (advisor != null)
                             {
-                                advisor.Id = user.Id;
-                                advisor.Email = user.Email;
-                                advisor.Password = user.Password;
-                                advisor.CreationDate = user.CreationDate;
-                                advisor.ConfirmationCode = user.ConfirmationCode;
-                                advisor.ConfirmationDate = user.ConfirmationDate;
-                                advisor.IsAdvisor = true;
+                                FillAdvisorWithUserData(ref advisor, user);
                                 advisor.Wallet = wallet;
                                 advisor.RequestToBeAdvisor = request;
                                 return advisor;
@@ -141,13 +135,7 @@ namespace Auctus.DataAccess.Account
                         {
                             if (advisor != null)
                             {
-                                advisor.Id = user.Id;
-                                advisor.Email = user.Email;
-                                advisor.Password = user.Password;
-                                advisor.CreationDate = user.CreationDate;
-                                advisor.ConfirmationCode = user.ConfirmationCode;
-                                advisor.ConfirmationDate = user.ConfirmationDate;
-                                advisor.IsAdvisor = true;
+                                FillAdvisorWithUserData(ref advisor, user);
                                 advisor.RequestToBeAdvisor = request;
                                 return advisor;
                             }
@@ -168,13 +156,7 @@ namespace Auctus.DataAccess.Account
                         {
                             if (advisor != null)
                             {
-                                advisor.Id = user.Id;
-                                advisor.Email = user.Email;
-                                advisor.Password = user.Password;
-                                advisor.CreationDate = user.CreationDate;
-                                advisor.ConfirmationCode = user.ConfirmationCode;
-                                advisor.ConfirmationDate = user.ConfirmationDate;
-                                advisor.IsAdvisor = true;
+                                FillAdvisorWithUserData(ref advisor, user);
                                 return advisor;
                             }
                             else
@@ -191,17 +173,7 @@ namespace Auctus.DataAccess.Account
                         {
                             if (advisor != null)
                             {
-                                advisor.Id = user.Id;
-                                advisor.Email = user.Email;
-                                advisor.Password = user.Password;
-                                advisor.CreationDate = user.CreationDate;
-                                advisor.ConfirmationCode = user.ConfirmationCode;
-                                advisor.ConfirmationDate = user.ConfirmationDate;
-                                advisor.ReferralCode = user.ReferralCode;
-                                advisor.ReferralStatus = user.ReferralStatus;
-                                advisor.ReferredId = user.ReferredId;
-                                advisor.AllowNotifications = user.AllowNotifications;
-                                advisor.IsAdvisor = true;
+                                FillAdvisorWithUserData(ref advisor, user);
                                 return advisor;
                             }
                             else
@@ -244,6 +216,22 @@ namespace Auctus.DataAccess.Account
             parameters.Add("ActionType", FollowActionType.Follow.Value, DbType.Int32);
             parameters.Add("AllowNotifications", true, DbType.Boolean);
             return Query<User>(SQL_FOLLOWING, parameters).ToList();
+        }
+
+        private void FillAdvisorWithUserData(ref DomainObjects.Advisor.Advisor advisor, User user)
+        {
+            advisor.Id = user.Id;
+            advisor.Email = user.Email;
+            advisor.Password = user.Password;
+            advisor.CreationDate = user.CreationDate;
+            advisor.ConfirmationCode = user.ConfirmationCode;
+            advisor.ConfirmationDate = user.ConfirmationDate;
+            advisor.ReferralCode = user.ReferralCode;
+            advisor.ReferralStatus = user.ReferralStatus;
+            advisor.ReferralDiscount = user.ReferralDiscount;
+            advisor.ReferredId = user.ReferredId;
+            advisor.AllowNotifications = user.AllowNotifications;
+            advisor.IsAdvisor = true;
         }
     }
 }

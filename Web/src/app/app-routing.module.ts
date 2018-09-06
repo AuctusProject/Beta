@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthRedirect } from './providers/authRedirect';
-import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
-import { RegisterComponent } from './components/account/register/register.component';
 import { ExpertDetailsComponent } from './components/advisor/expert-details/expert-details.component';
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
@@ -22,9 +20,7 @@ import { TopExpertsComponent } from './components/advisor/top-experts/top-expert
 
 const routes: Routes = [
     { path: '', component: HomeComponent  },
-    { path: 'register', component: RegisterComponent },
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
-    { path: 'confirm-email', component: ConfirmEmailComponent, canActivate: [AuthRedirect] },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
     { path: 'forgot-password-reset', component: ForgotPasswordResetComponent },
     { path: 'change-password', component: ChangePasswordComponent, canActivate:[AuthRedirect] },

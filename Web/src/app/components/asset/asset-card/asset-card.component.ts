@@ -45,7 +45,7 @@ export class AssetCardComponent implements OnInit {
 
   getRecommendationDistribution(type: number) {
     var distribution = this.asset.recommendationDistribution.find(this.findRecommendationPercentageByType(type));
-    if (distribution != null) return (distribution.total / this.asset.totalRatings) * 100;
+    if (distribution != null) return Math.round((distribution.total / this.asset.totalRatings) * 10000) / 100;
     return 0.0;
   }
 
