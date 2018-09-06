@@ -1,11 +1,20 @@
-.container {
-    padding: 10px;
+.file-container {
+    position: relative; 
 }
 
-.file-container {
-    width: 100%;
-    padding-top: 100%; 
-    position: relative; 
+.file-container-web {
+    padding-top: 25%; 
+    width: 25%;  
+}
+
+.file-container-mobile {
+    padding-top: 80%; 
+    width: 80%;  
+}
+
+.file-container-tablet {
+    padding-top: 45%; 
+    width: 45%;  
 }
 
 .file-uploader {
@@ -16,7 +25,14 @@
     right: 0;
 }
 
-.actions {
-    width: 100%;
-    padding: 5px;
+.div-padding-bottom {
+    padding-bottom: 25px;
+}
+
+.input-description-tablet {
+    width: 75%;
+}
+
+.input-description-web {
+    width: 60%;
 }
