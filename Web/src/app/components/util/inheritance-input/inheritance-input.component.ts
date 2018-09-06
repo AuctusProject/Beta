@@ -24,6 +24,7 @@ export class InheritanceInputComponent implements OnInit {
   private showValidatorError: boolean = true;
   private specificHint?: string;
   private showHintSize: boolean = true;
+  private showPasswordVisibility: boolean = true;
   private autosizeTextArea: boolean = true;
   private minRows: number = 2;
   private maxRows: number = 4;
@@ -49,6 +50,7 @@ export class InheritanceInputComponent implements OnInit {
         this.disabled = this.setValue(this.disabled, this.options.textOptions.disabled);
         this.showValidatorError = this.setValue(this.showValidatorError, this.options.textOptions.showValidatorError);
         this.showHintSize = this.setValue(this.showHintSize, this.options.textOptions.showHintSize);
+        this.showPasswordVisibility = this.setValue(this.showPasswordVisibility, this.options.textOptions.showPasswordVisibility);
         this.specificHint = this.options.textOptions.specificHint;
         this.maxlength = this.setValue(this.maxlength, this.options.textOptions.maxLength);
         this.minlength = this.setValue(this.minlength, this.options.textOptions.minLength);

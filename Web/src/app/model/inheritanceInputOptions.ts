@@ -25,6 +25,7 @@ interface InputTextTypeOptions extends InputTypeOptions {
     maxLength?: number;
     showHintSize?: boolean;
     browserAutocomplete?: string;
+    showPasswordVisibility?: boolean;
 }
 
 interface InputTextAreaTypeOptions {
