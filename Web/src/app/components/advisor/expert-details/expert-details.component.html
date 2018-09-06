@@ -17,9 +17,9 @@
       <div *ngIf="expert.assets">
         <table mat-table [dataSource]="assets" class="assets-table">
           <ng-container matColumnDef="assetName">
-            <th mat-header-cell *matHeaderCellDef> Crypto Names </th>
+            <th mat-header-cell *matHeaderCellDef> Asset </th>
             <td mat-cell *matCellDef="let asset"> 
-              <div class="table-cell-title">
+              <div class="table-asset-code">
                 {{asset.code}}
               </div>
               {{asset.name}} 
@@ -29,7 +29,7 @@
           <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Position </th>
             <td mat-cell *matCellDef="let asset"> 
-              {{getLastAdviceTypeDescription(asset)}}
+              <div>{{getLastAdviceTypeDescription(asset)}}</div>
             </td>
           </ng-container>
 
@@ -43,7 +43,7 @@
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef> Date </th>
             <td mat-cell *matCellDef="let asset">
-              {{getLastAdviceDate(asset)}}
+              {{getLastAdviceDate(asset) | timeAgo}}
             </td>
           </ng-container>
 
