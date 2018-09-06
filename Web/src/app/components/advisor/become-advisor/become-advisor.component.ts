@@ -36,6 +36,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @ViewChild("Experience") Experience: InheritanceInputComponent;
   
   acceptTermsAndConditions: boolean;
+  alreadySent: boolean = false;
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
@@ -45,10 +46,11 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     this.advisorService.getRequestToBeAdvisor().subscribe(result => 
       {
         this.acceptTermsAndConditions = false;
-        this.requestToBeAdvisorRequest.email = "";
+        this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
         this.requestToBeAdvisorRequest.password = "";
         let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
         if(!!currentRequestToBeAdvisor){
+          this.alreadySent = true;
           this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
           this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
           this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
@@ -100,11 +102,11 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   getNameOptions() {
-    return { textOptions: { placeHolder: "Name", setFocus: true, browserAutocomplete: "name", maxLength: 50 } };
+    return { textOptions: { placeHolder: "Name", browserAutocomplete: "name", maxLength: 50 } };
   }
 
   getEmailOptions() {
-    return { inputType: InputType.Email, textOptions: { placeHolder: "Email", showHintSize: false, maxLength: 50 } };
+    return { inputType: InputType.Email, textOptions: { disabled: !this.isNewUser(), placeHolder: "Email", showHintSize: false, maxLength: 50 } };
   }
 
   getPasswordOptions() {

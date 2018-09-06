@@ -1,4 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
+  <p *ngIf="alreadySent" class="already-sent">Your request was already submitted and it still is been evaluated by Auctus team.<br/>You can edit your information.</p>
   <p>Please fill the form to resquest to be a Expert</p>
   <div class="file-container" ngClass.xs="file-container-mobile" ngClass.sm="file-container-tablet" ngClass.gt-sm="file-container-web"> 
     <div class="file-uploader">
@@ -9,12 +10,10 @@
 <div class="form-div" fxLayout="column" fxLayoutAlign="space-evenly center">
   <inheritance-input #Name [options]="getNameOptions()"  ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
     [value]="requestToBeAdvisorRequest.name" (onChange)="requestToBeAdvisorRequest.name = $event"></inheritance-input>
-  <div *ngIf="isNewUser()">
-    <inheritance-input #Email [options]="getEmailOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
-      [value]="requestToBeAdvisorRequest.email" (onChange)="requestToBeAdvisorRequest.email = $event"></inheritance-input>
-    <inheritance-input #Password [options]="getPasswordOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
-      [value]="requestToBeAdvisorRequest.password" (onChange)="requestToBeAdvisorRequest.password = $event"></inheritance-input>
-  </div>   
+  <inheritance-input #Email [options]="getEmailOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="requestToBeAdvisorRequest.email" (onChange)="requestToBeAdvisorRequest.email = $event"></inheritance-input>
+  <inheritance-input *ngIf="isNewUser()"  #Password [options]="getPasswordOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="requestToBeAdvisorRequest.password" (onChange)="requestToBeAdvisorRequest.password = $event"></inheritance-input>
   <inheritance-input #Description [options]="getDescriptionOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-experience-tablet" ngClass.gt-sm="input-experience-web"
     [value]="requestToBeAdvisorRequest.description" (onChange)="requestToBeAdvisorRequest.description = $event"></inheritance-input>
   <inheritance-input #Experience [options]="getExperienceOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-experience-tablet" ngClass.gt-sm="input-experience-web"
@@ -22,7 +21,7 @@
 </div>
 <div class="last-div" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <recaptcha *ngIf="isNewUser()" #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
-  <mat-checkbox [(ngModel)]="acceptTermsAndConditions">Agree with all terms</mat-checkbox>
+  <mat-checkbox required [(ngModel)]="acceptTermsAndConditions">Agree with all terms</mat-checkbox>
   <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" 
     mat-flat-button (click)="onSubmit()" [promiseBtn]="promise">Submit</button>
 </div>

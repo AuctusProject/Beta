@@ -40,3 +40,9 @@
 .last-div {
     padding-bottom: 25px;
 }
+
+.already-sent {
+    color: orange;
+    font-weight: 700;
+    text-align: center;
+}

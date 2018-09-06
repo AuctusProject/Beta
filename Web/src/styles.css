@@ -49,7 +49,7 @@ body {
   min-height:100%;
 }
 
-body, p, span {
+body, p, span, input, textarea, select, button, div {
   font-family: 'Gilroy';
   margin: 0px;
   font-weight: 300;
@@ -58,8 +58,6 @@ body, p, span {
 .bold {
   font-weight: bold;
 }
-
-
 
 @-webkit-keyframes three-quarters {
   0% {
@@ -267,4 +265,12 @@ a {
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
+}
+
+input:read-only {
+  color:rgba(0,0,0,.38);
+}
+
+textarea:read-only {
+  color: rgba(0,0,0,.38);
 }

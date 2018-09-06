@@ -46,7 +46,7 @@ export class InheritanceInputComponent implements OnInit {
       if (!!this.options.textOptions) {
         this.required = this.setValue(this.required, this.options.textOptions.required);
         this.placeholder = this.options.textOptions.placeHolder + (this.required ? ' *' : '');
-        this.disabled = this.setValue(this.disabled, this.options.textOptions.disable);
+        this.disabled = this.setValue(this.disabled, this.options.textOptions.disabled);
         this.showValidatorError = this.setValue(this.showValidatorError, this.options.textOptions.showValidatorError);
         this.showHintSize = this.setValue(this.showHintSize, this.options.textOptions.showHintSize);
         this.specificHint = this.options.textOptions.specificHint;

@@ -14,7 +14,7 @@ export enum InputType {
 interface InputTypeOptions {
     placeHolder: string;
     required?: boolean;
-    disable?: boolean;
+    disabled?: boolean;
     showValidatorError?: boolean;
     setFocus?: boolean;
     specificHint?: string;
