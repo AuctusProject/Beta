@@ -6,6 +6,8 @@ import { AssetResponse } from '../../../model/asset/assetResponse';
 import { CONFIG } from "../../../services/config.service";
 import { Util } from '../../../util/Util';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { DataSource } from '@angular/cdk/table';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'expert-details',
@@ -22,15 +24,35 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 export class ExpertDetailsComponent implements OnInit {
   expert: AdvisorResponse;
   displayedColumns: string[] = ['assetName', 'position', 'action', 'date', 'ratings', 'followButton'];
+  assets = [];
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   expandedElement: any;
+
   constructor(private route: ActivatedRoute, private advisorService: AdvisorService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
-      this.advisorService.getExpertDetails(params['id']).subscribe(expert => this.expert = expert)
-    )
+      this.advisorService.getExpertDetails(params['id']).subscribe(expert => 
+        {
+          this.expert = expert;
+          this.fillDataSource();
+        })
+    );
   }
+
+  onRowClick(row){
+    if(this.expandedElement == row){
+      this.expandedElement = null;
+    }
+    else{
+      this.expandedElement = row;
+    }
+  }
+
+  fillDataSource(){
+    this.expert.assets.forEach(element => this.assets.push(element, { detailRow: true, element }));
+  }
+
   getAssetImgUrl(asset: AssetResponse){
     return CONFIG.assetImgUrl.replace("{id}", asset.assetId.toString());
   }

@@ -2,6 +2,14 @@
     text-align: center;
 }
 
+.advisors-list advisor-card{
+    margin-left: 20px;
+}
+
+.advisors-list advisor-card:first-child{
+    margin-left: 0px;
+}
+
 .section-filter{
     max-width:200px;
     margin: 10px auto;

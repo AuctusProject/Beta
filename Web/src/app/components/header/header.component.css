@@ -1,14 +1,12 @@
 :host{
     height: 62px;
     background-color: #101010;
-    padding: 0px 30px;
     width: 100%;
-    display: inline-flex;
-    flex-direction: row;
-    box-sizing: border-box;
     display: flex;
-    max-height: 100%;
-    place-content: center space-around;
+}
+
+:host > div{
+    display: flex;
     align-items: center;
 }
 
@@ -49,7 +47,6 @@ a.active::after{
 }
 
 .menu{
-    padding-right: 50px;
     height:100%;
 }
 
