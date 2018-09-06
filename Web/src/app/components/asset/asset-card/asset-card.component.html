@@ -15,9 +15,9 @@
     <div class="rating-value">{{asset.totalRatings}}</div><br>{{getRatingLabel()}}
   </div>
   <div class="ratings-distribution" fxLayout="column">
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>81.0% Buy</div></div>
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>18.9% Hold</div></div>
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>0.1% Sell</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getBuyRecommendationPercentageLabel()}}</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getCloseRecommendationPercentageLabel()}}</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getSellRecommendationPercentageLabel()}}</div></div>
   </div>
   <div fxLayoutAlign="center center" class="general-recommendation-box" [class.neutral]="asset.mode==0" [class.moderate-buy]="asset.mode==1" [class.strong-buy]="asset.mode==2" [class.moderate-sell]="asset.mode==3" [class.strong-sell]="asset.mode==4" [class.close]="asset.mode==5">
     {{getGeneralRecommendation()}}
