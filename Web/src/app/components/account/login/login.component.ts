@@ -29,7 +29,7 @@ export class LoginComponent implements ModalComponent, OnInit {
   loginRequest: LoginRequest = new LoginRequest();
   promise: Subscription;
   @ViewChild("RecaptchaComponent") RecaptchaComponent: RecaptchaComponent;
-  @ViewChild("Name") Name: InheritanceInputComponent;
+  @ViewChild("Password") Password: InheritanceInputComponent;
   @ViewChild("Email") Email: InheritanceInputComponent;
 
   constructor(private formBuilder: FormBuilder, 
@@ -103,7 +103,7 @@ export class LoginComponent implements ModalComponent, OnInit {
   }
 
   isValidRequest() : boolean {
-    let isValid = this.Name.isValid();
+    let isValid = this.Password.isValid();
     return this.Email.isValid() && isValid;
   }
 
