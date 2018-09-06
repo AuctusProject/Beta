@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./message-fullscreen-modal.component.css']
 })
 export class MessageFullscreenModalComponent implements ModalComponent, OnInit {
+  modalTitle: string = "";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();

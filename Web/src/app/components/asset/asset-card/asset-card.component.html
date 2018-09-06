@@ -2,22 +2,23 @@
   <div>
       <img [src]="getAssetImgUrl()">
     </div>
-  <div fxLayout="column">
+  <div class="asset-info" fxLayout="column">
     <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
     <div *ngIf="asset.following">
-        <button (click)="onUnfollowClick()">UNFOLLOW</button>
+        <button mat-raised-button disabled>Following</button>
+        <button mat-button (click)="onUnfollowClick()">Unfollow</button>
     </div>
     <div *ngIf="!asset.following">
-      <button (click)="onFollowClick()">FOLLOW</button>
+      <button mat-raised-button color="primary" (click)="onFollowClick()">Follow</button>
     </div>
   </div>
   <div class="ratings" fxLayout="column" fxLayoutAlign="center center">
     <div class="rating-value">{{asset.totalRatings}}</div><br>{{getRatingLabel()}}
   </div>
   <div class="ratings-distribution" fxLayout="column">
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>81.0% Buy</div></div>
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>18.9% Hold</div></div>
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>0.1% Sell</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getBuyRecommendationPercentageLabel()}}</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getCloseRecommendationPercentageLabel()}}</div></div>
+    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getSellRecommendationPercentageLabel()}}</div></div>
   </div>
   <div fxLayoutAlign="center center" class="general-recommendation-box" [class.neutral]="asset.mode==0" [class.moderate-buy]="asset.mode==1" [class.strong-buy]="asset.mode==2" [class.moderate-sell]="asset.mode==3" [class.strong-sell]="asset.mode==4" [class.close]="asset.mode==5">
     {{getGeneralRecommendation()}}
@@ -26,6 +27,6 @@
     {{getLastValue()}}
   </div>
   <div>
-    {{asset.variation24h}}
+    {{get24hVariation()}}
   </div>
 </div>

@@ -11,6 +11,7 @@ import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenMo
 })
 export class FullscreenModalComponent implements OnInit, OnDestroy {
   @ViewChild(ModalDirective) modalHost: ModalDirective;
+  title: string;
   private modalComponent: ModalComponent;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
@@ -32,7 +33,8 @@ export class FullscreenModalComponent implements OnInit, OnDestroy {
     viewContainerRef.clear();
     this.destroy();
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    this.modalComponent = (<ModalComponent>componentRef.instance);
+    this.modalComponent = (<ModalComponent>componentRef.instance)
+    this.title = this.modalComponent.modalTitle;
     this.modalComponent.data = inputData.componentInput;
     this.modalComponent.setClose.subscribe(() => this.dialogRef.close());
     this.modalComponent.setNewModal.subscribe(newModalInput => 

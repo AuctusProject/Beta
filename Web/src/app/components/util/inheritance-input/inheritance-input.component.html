@@ -1,0 +1,44 @@
+<mat-form-field appearance="outline" class="container-field" hideRequiredMarker>
+  <mat-label>{{placeholder}}</mat-label>
+
+  <input matInput *ngIf="showTextField()"
+    [type]="passwordHide ? 'password' : 'text'"
+    [(ngModel)]="value" 
+    [formControl]="formControl" 
+    placeholder="{{placeholder}}" 
+    required="{{required}}" 
+    readonly="{{disabled}}"
+    minlength="{{minlength}}" 
+    maxlength="{{maxlength}}" 
+    autocomplete="{{autocomplete}}"
+    (change)="onChangeInput()"/>
+
+  <textarea matInput *ngIf="showTextAreaField() && autosizeTextArea"
+    [(ngModel)]="value" 
+    [formControl]="formControl" 
+    placeholder="{{placeholder}}" 
+    required="{{required}}" 
+    readonly="{{disabled}}"
+    minlength="{{minlength}}" 
+    maxlength="{{maxlength}}" 
+    (change)="onChangeInput()"
+    cdkTextareaAutosize 
+    #autosize="cdkTextareaAutosize" 
+    cdkAutosizeMinRows="{{minRows}}" 
+    cdkAutosizeMaxRows="{{maxRows}}"></textarea>
+
+  <textarea matInput *ngIf="showTextAreaField() && !autosizeTextArea"
+    [(ngModel)]="value" 
+    [formControl]="formControl" 
+    placeholder="{{placeholder}}" 
+    required="{{required}}" 
+    readonly="{{disabled}}"
+    minlength="{{minlength}}" 
+    maxlength="{{maxlength}}" 
+    (change)="onChangeInput()"
+    rows="{{maxRows}}"></textarea>
+  
+  <mat-icon matSuffix *ngIf="inputType == 2 && showPasswordVisibility" (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility' : 'visibility_off'}}</mat-icon>
+  <mat-hint *ngIf="getErrorMessage().length == 0 && (showHintSize || !!specificHint)" align="end">{{getHintText()}}</mat-hint>
+  <mat-error *ngIf="getErrorMessage().length > 0">{{getErrorMessage()}}</mat-error>
+</mat-form-field>

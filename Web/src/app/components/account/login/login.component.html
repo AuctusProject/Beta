@@ -1,11 +1,9 @@
-<form [formGroup]="loginForm" (ngSubmit)="onLoginClick()" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
-  <mat-form-field ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-    <input cdkFocusInitial matInput maxlength="50" required placeholder="Email" [(ngModel)]="loginRequest.email" formControlName="email" type="text" autocomplete="username email" />
-  </mat-form-field>
-  <mat-form-field ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-    <input matInput required minlength="8" maxlength="100" placeholder="Password" [(ngModel)]="loginRequest.password" type="password" formControlName="password" autocomplete="current-password"/>
-  </mat-form-field>
-</form>
+<div fxLayout="column" fxLayoutAlign="space-evenly center">
+  <inheritance-input #Email [options]="getEmailOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="loginRequest.email" (onChange)="loginRequest.email = $event"></inheritance-input>
+  <inheritance-input #Password [options]="getPasswordOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="loginRequest.password" (onChange)="loginRequest.password = $event"></inheritance-input>
+</div>
 <div class="lastDiv" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
   <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onLoginClick()" [promiseBtn]="promise">Sign In</button>

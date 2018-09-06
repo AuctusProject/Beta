@@ -26,14 +26,12 @@ export class HomeComponent implements OnInit {
   onBecomeAdvisor(){
     let loginModalData = new FullscreenModalComponentInput();
     loginModalData.component = BecomeAdvisorComponent;
-    loginModalData.title = "Expert register";
     this.dialog.open(FullscreenModalComponent, { data: loginModalData }); 
   }
 
   onLogin(){
     let loginModalData = new FullscreenModalComponentInput();
     loginModalData.component = LoginComponent;
-    loginModalData.title = "Login";
     this.dialog.open(FullscreenModalComponent, { data: loginModalData }); 
   }
 }

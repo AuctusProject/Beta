@@ -1,4 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
+  <p *ngIf="alreadySent" class="already-sent">Your request was already submitted and it still is been evaluated by Auctus team.<br/>You can edit your information.</p>
   <p>Please fill the form to resquest to be a Expert</p>
   <div class="file-container" ngClass.xs="file-container-mobile" ngClass.sm="file-container-tablet" ngClass.gt-sm="file-container-web"> 
     <div class="file-uploader">
@@ -6,43 +7,21 @@
     </div>
   </div>
 </div>
-<form [formGroup]="requestForm" (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
-  <mat-form-field ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-    <input cdkFocusInitial matInput maxlength="50" required placeholder="Name" 
-      [(ngModel)]="requestToBeAdvisorRequest.name" formControlName="name" type="text" />
-    <mat-hint align="end">{{getRequestNameLength()}} / 50</mat-hint>
-  </mat-form-field>
-  <div *ngIf="isNewUser()">
-    <mat-form-field ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-      <input matInput maxlength="50" required placeholder="Email" [(ngModel)]="requestToBeAdvisorRequest.email" 
-        formControlName="email" type="text" autocomplete="email" />
-        <mat-hint align="end">{{getRequestEmailLength()}} / 50</mat-hint>
-    </mat-form-field>
-    <mat-form-field ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-      <input matInput required minlength="8" maxlength="100" placeholder="Password" type="password" (change)="onChangePassword()"
-        [(ngModel)]="requestToBeAdvisorRequest.password" formControlName="password" autocomplete="current-password"/>
-    </mat-form-field>
-    <mat-form-field ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-      <input matInput required minlength="8" maxlength="100" [(ngModel)]="confirmedPassword" 
-        placeholder="Confirmed password" type="password" (change)="onChangePassword()"/>
-      <mat-error *ngIf="invalidPassword">Password does not match</mat-error>
-    </mat-form-field>
-  </div>
-  <mat-form-field ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-    <textarea matInput required cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-            cdkAutosizeMinRows="2" cdkAutosizeMaxRows="3" maxlength="160" formControlName="description"
-            [(ngModel)]="requestToBeAdvisorRequest.description" placeholder="Short description"></textarea>
-    <mat-hint align="end">{{getRequestDescriptionLength()}} / 160</mat-hint>
-  </mat-form-field>
-  <mat-form-field class="input-experience">
-    <textarea matInput required cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-            cdkAutosizeMinRows="4" cdkAutosizeMaxRows="20" maxlength="4000" formControlName="experience"
-            [(ngModel)]="requestToBeAdvisorRequest.previousExperience" placeholder="Describe your expertise"></textarea>
-  </mat-form-field>
-</form>
-<div class="lastDiv" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
+<div class="form-div" fxLayout="column" fxLayoutAlign="space-evenly center">
+  <inheritance-input #Name [options]="getNameOptions()"  ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="requestToBeAdvisorRequest.name" (onChange)="requestToBeAdvisorRequest.name = $event"></inheritance-input>
+  <inheritance-input #Email [options]="getEmailOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="requestToBeAdvisorRequest.email" (onChange)="requestToBeAdvisorRequest.email = $event"></inheritance-input>
+  <inheritance-input *ngIf="isNewUser()"  #Password [options]="getPasswordOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="requestToBeAdvisorRequest.password" (onChange)="requestToBeAdvisorRequest.password = $event"></inheritance-input>
+  <inheritance-input #Description [options]="getDescriptionOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-experience-tablet" ngClass.gt-sm="input-experience-web"
+    [value]="requestToBeAdvisorRequest.description" (onChange)="requestToBeAdvisorRequest.description = $event"></inheritance-input>
+  <inheritance-input #Experience [options]="getExperienceOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-experience-tablet" ngClass.gt-sm="input-experience-web"
+    [value]="requestToBeAdvisorRequest.previousExperience" (onChange)="requestToBeAdvisorRequest.previousExperience = $event"></inheritance-input>
+</div>
+<div class="last-div" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <recaptcha *ngIf="isNewUser()" #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
-  <mat-checkbox [(ngModel)]="acceptTermsAndConditions">Agree with all terms</mat-checkbox>
+  <mat-checkbox required [(ngModel)]="acceptTermsAndConditions">Agree with all terms</mat-checkbox>
   <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" 
-    mat-flat-button (click)="onSubmit()" [promiseBtn]="promise" [disabled]="!canSubmit()">Submit</button>
+    mat-flat-button (click)="onSubmit()" [promiseBtn]="promise">Submit</button>
 </div>

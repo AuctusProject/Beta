@@ -12,6 +12,8 @@ import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
+import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
+import { InputType } from '../../../model/inheritanceInputOptions';
 
 @Component({
   selector: 'login',
@@ -19,14 +21,16 @@ import { ForgotPasswordComponent } from '../forgot-password/forgot-password.comp
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements ModalComponent, OnInit {
+  modalTitle: string = "Login";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
 
   loginRequest: LoginRequest = new LoginRequest();
-  loginForm: FormGroup;
   promise: Subscription;
   @ViewChild("RecaptchaComponent") RecaptchaComponent: RecaptchaComponent;
+  @ViewChild("Password") Password: InheritanceInputComponent;
+  @ViewChild("Email") Email: InheritanceInputComponent;
 
   constructor(private formBuilder: FormBuilder, 
     private accountService: AccountService, 
@@ -34,26 +38,18 @@ export class LoginComponent implements ModalComponent, OnInit {
     private authRedirect : AuthRedirect,
     private socialAuthService: AuthService,
     private zone : NgZone) { 
-    this.buildForm(); 
-  }
-
-  private buildForm() {
-    this.loginForm = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-      password: ['', Validators.compose([Validators.required, Validators.maxLength(100), Validators.minLength(8)])]
-    });
   }
 
   ngOnInit() {
   }
 
   onLoginClick(){
-    this.doLogin();
-  }
-
-  doLogin() {
-    this.promise = this.accountService.login(this.loginRequest)
-      .subscribe(result => this.zone.run(() => { this.loginResponse(result); }), this.RecaptchaComponent.reset);
+    if (!this.loginRequest.captcha) {
+      this.notificationsService.error(null, "You must fill the captcha.");
+    } else if (this.isValidRequest()) {
+      this.promise = this.accountService.login(this.loginRequest)
+        .subscribe(result => this.zone.run(() => { this.loginResponse(result); }), this.RecaptchaComponent.reset);
+    }
   }
 
   loginResponse(response: LoginResult){
@@ -99,11 +95,23 @@ export class LoginComponent implements ModalComponent, OnInit {
   onForgotPasswordClick() {
     let modalData = new FullscreenModalComponentInput();
     modalData.component = ForgotPasswordComponent;
-    modalData.title = "Forgot password";
     this.setNewModal.emit(modalData);
   }
 
   onRegisterClick() {
     
+  }
+
+  isValidRequest() : boolean {
+    let isValid = this.Password.isValid();
+    return this.Email.isValid() && isValid;
+  }
+
+  getEmailOptions() {
+    return { inputType: InputType.Email, textOptions: { placeHolder: "Email", showHintSize: false, maxLength: 50 } };
+  }
+
+  getPasswordOptions() {
+    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", showHintSize: false, showPasswordVisibility: false, minLenth: 8, maxLength: 100 } };
   }
 }

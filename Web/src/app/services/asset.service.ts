@@ -9,7 +9,7 @@ export class AssetService {
   private getAssetsDetailsUrl = this.httpService.apiUrl("v1/assets/details");
   private getAssetDetailsUrl = this.httpService.apiUrl("v1/assets/{id}/details");
   private getAssetsUrl = this.httpService.apiUrl("v1/assets/");
-  private followAssetUrl = this.httpService.apiUrl("vi/assets/{id}/followers")
+  private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers")
   constructor(private httpService : HttpService) { }
 
   getAssetDetails(id: string): Observable<AssetResponse> {

@@ -5,4 +5,5 @@ export interface ModalComponent {
     setClose: EventEmitter<void>;
     setNewModal: EventEmitter<FullscreenModalComponentInput>;
     data: any;
+    modalTitle: string;
 }
