@@ -42,6 +42,10 @@ export class LoginComponent implements ModalComponent, OnInit {
   }
 
   ngOnInit() {
+    if (this.accountService.isLoggedIn()) {
+      this.setClose.emit();
+      this.authRedirect.redirectAfterLoginAction();
+    }
   }
 
   onLoginClick(){
