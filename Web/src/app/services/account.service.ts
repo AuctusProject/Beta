@@ -104,12 +104,8 @@ export class AccountService {
 
   listFeed(top? : number, lastAdviceId? : number) : Observable<FeedResponse>{
     var url = this.listFeedUrl + "?";
-    if(top != null){
-      url += "top="+top;
-    }
-    if(lastAdviceId != null){
-      url += "&lastAdviceId="+lastAdviceId;
-    }
+    if(!!top) url += "top="+top;
+    if(!!lastAdviceId) url += "&lastAdviceId="+lastAdviceId;
     return this.httpService.get(url);
   }
 
