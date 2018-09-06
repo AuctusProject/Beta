@@ -38,4 +38,26 @@ export class AssetCardComponent implements OnInit {
     if(this.asset.totalRatings == 1.0) return 'Rating';
     return 'Ratings';
   }
+
+  findRecommendationPercentageByType(type: number) {
+    return recommendation => recommendation.type === type;
+  }
+
+  getRecommendationDistribution(type: number) {
+    var distribution = this.asset.recommendationDistribution.find(this.findRecommendationPercentageByType(type));
+    if (distribution != null) return (distribution.total / this.asset.totalRatings) * 100;
+    return 0.0;
+  }
+
+  getBuyRecommendationPercentageLabel(){
+    return this.getRecommendationDistribution(Util.BUY) + '% Buy';
+  }
+
+  getSellRecommendationPercentageLabel(){
+    return this.getRecommendationDistribution(Util.SELL) + '% Sell';
+  }
+
+  getCloseRecommendationPercentageLabel(){
+    return this.getRecommendationDistribution(Util.CLOSE) + '% Close';
+  }
 }
