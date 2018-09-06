@@ -59,6 +59,7 @@ img {
 
   .ratings-distribution{
     font-size: 7px;
+    width: 86px;
     font-weight: 300;
     line-height: 2.14;
     letter-spacing: 0.2px;
@@ -92,8 +93,9 @@ img {
     font-weight: 600;
     line-height: 1.07;
     letter-spacing: 0.3px;
-    text-align: center;
+    text-align: right;
     color: #5d5d5d;
+    width: 62px;
 }
 
 .general-recommendation-box{
