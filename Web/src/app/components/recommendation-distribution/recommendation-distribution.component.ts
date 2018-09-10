@@ -28,7 +28,8 @@ export class RecommendationDistributionComponent implements OnInit {
         for(var i = 0; i < this.data.length; i++){
             this.pieData.push({
                 name: Util.GetRecommendationTypeDescription(this.data[i].type),
-                y: this.data[i].total
+                y: this.data[i].total,
+                color: Util.GetRecommendationTypeColor(this.data[i].type)
             });
 
             if(this.data[i].type == Util.BUY)
@@ -75,7 +76,7 @@ export class RecommendationDistributionComponent implements OnInit {
       },
       series: [{
           name: 'Recommendations',
-          innerSize: '70%',
+          innerSize: '80%',
           data: this.pieData
       }]
       });

@@ -77,6 +77,7 @@ import { PercentageDisplayComponent } from './components/util/percentage-display
 import { IconsModule } from './icons.module';
 import { InheritanceInputComponent } from './components/util/inheritance-input/inheritance-input.component';
 import {TimeAgoPipe} from 'time-ago-pipe';
+import { NewsletterComponent } from './components/util/newsletter/newsletter.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -141,7 +142,8 @@ export function getAuthServiceConfigs() {
     TrendingAssetCardComponent,
     PercentageDisplayComponent,
     InheritanceInputComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    NewsletterComponent
   ],
   imports: [
     BrowserModule,

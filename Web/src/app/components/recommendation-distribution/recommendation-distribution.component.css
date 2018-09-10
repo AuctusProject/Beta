@@ -4,8 +4,20 @@
 }
 
 :host{
-    font-size: 8px;
+    font-size: 14px;
     line-height: 16px;
     font-weight: 300;
     color: #4e4e4e;
+}
+
+.buy{
+    color:#3ed142;
+}
+
+.sell{
+    color:#d13e3e;
+}
+
+.close{
+    color:#e6e6e6;
 }

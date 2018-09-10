@@ -1,55 +1,89 @@
 :host{
-    width: 220px;
-    padding: 11px;
-    background-color: #e6e6e6;
+    width: 369px;
+    padding: 16px 0;
+    background-color: #151515;
     display: inline-flex;
     margin: 10px;
     vertical-align: top;
+    color: #FFFFFF;
 }
 
+:host > div,
 .card-container{
     width: 100%;
 }
 
+.card-container > div{
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.card-container{
+    cursor: pointer;
+}
+
+.asset-icon,
+.asset-icon img{
+    width: 50px;
+    height: 50px;
+    background-color: #e6e6e6;
+    border-radius: 25px;
+}
+
 .asset-code{
-    font-size: 11px;
-    font-weight: 800;
+    font-size: 23px;
+    font-weight: 600;
     text-align: left;
-    color: #4e4e4e;
 }
 
 .asset-name{
-    font-size: 9px;
+    font-size: 13px;
     font-weight: 300;
     text-align: left;
-    color: #4e4e4e;
 }
 
 .asset-price{
-    font-size: 16px;
-    color: #4e4e4e;
+    font-size: 25px;
     text-align: right;
 }
 
 .general-recommendation{
-    height: 24px;
-    background-color: #4e4e4e;
-    font-size: 14px;
+    font-size: 23px;
     font-weight: 300;
-    line-height: 24px;
     text-align: center;
-    color: #ffffff;
-    margin-top:8px;
+    margin-top:12px;
+    margin-bottom:8px;
+}
+
+.green .general-recommendation{
+    color: #3ed142;
+}
+
+.red .general-recommendation{
+    color: #d13e3e;
 }
 
 .separator{
+    margin-top: 12px;
     border: solid 0.3px #3b3b3b;
 }
 
-a{
-    margin-top: 9px;
-    font-size: 9px;
-    font-weight: 300;
-    text-align: left;
-    color: #1d3b9f;
+.green .separator{
+    border: solid 0.3px #37b63b;
+}
+
+.ratings-distribution{
+    background-color: #333333;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.follow-link{
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 100;
+    text-align: center;
+    color: #e6e6e6;
+    text-decoration: underline;
+    cursor: pointer;
 }

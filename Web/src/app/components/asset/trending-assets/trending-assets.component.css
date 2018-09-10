@@ -1,3 +1,13 @@
+:host{
+    background-color: #f7f7f7;
+    display: block;
+}
+
+.section-title{
+    padding-top: 84px;
+    padding-bottom: 56px;
+}
+
 .assets-list{
     text-align: center;
 }
@@ -19,7 +29,8 @@ a{
     font-size: 16px;
     font-weight: 300;
     text-align: center;
-    color: #626262;
+    color: #ffffff;
+    margin-top: 16px;
 }
 
 .separator{
@@ -29,4 +40,17 @@ a{
     min-width: 420px;
     border: solid 0.3px #3b3b3b;
     height: 1px;
+}
+
+.lock-wrapper{
+    width: 84px;
+    height: 84px;
+    border: solid 1px #ffffff;
+    border-radius: 44px;
+    color: #ffffff;
+}
+
+.lock-wrapper fa-icon{
+    margin-top: 26px;
+    margin-bottom: 26px;
 }

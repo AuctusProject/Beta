@@ -31,6 +31,18 @@ export class Util {
           }
     }
 
+    public static GetRecommendationTypeColor(type: number){
+        if(type == this.SELL){
+            return "#d13e3e";
+        }
+        else if(type == this.BUY){
+            return "#3ed142";
+        }
+        else{
+            return "#e6e6e6";
+        }
+    }
+
     public static GetGeneralRecommendationDescription(type: number){
         if(type == this.AssetModeType.Neutral){
             return "Neutral";
