@@ -1,5 +1,5 @@
 .recommendation-box-container {
-    background-color: #d5d5d5;
+    background-color: #151515;
     display: grid;
 }
 
@@ -7,7 +7,7 @@
     text-align: center;
 }
 
-.access-button{
+.old-access-button{
     margin: 38px auto;
     width: 132px;
     height: 32px;

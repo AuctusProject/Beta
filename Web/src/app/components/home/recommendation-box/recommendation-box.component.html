@@ -1,6 +1,6 @@
 
     <div class="recommendation-box" fxLayout="column">
-      <div class="box-title">{{adviceType}}</div>
+      <div class="box-title" [class.buy]="adviceType=='BUY'" [class.sell]="adviceType=='SELL'" [class.close]="adviceType=='CLOSE POSITION'">{{adviceType}}</div>
       <table mat-table [dataSource]="adviceList" class="recommendation-table">
         <ng-container matColumnDef="assetCode">
           <th mat-header-cell *matHeaderCellDef> Asset </th>
@@ -18,7 +18,7 @@
           <th mat-header-cell *matHeaderCellDef> Expert </th>
           <td mat-cell *matCellDef="let advice">
               <div class="expert-rating">
-                <bar-rating [readOnly]="'true'" [rate]="advice.advisorRanking"></bar-rating>
+                <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRanking" [title]="advice.advisorRanking | number: '1.2-2'"></bar-rating>
               </div>
             {{advice.advisorName}} 
           </td>
