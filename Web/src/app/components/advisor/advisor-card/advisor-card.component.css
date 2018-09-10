@@ -1,61 +1,64 @@
 :host{
-    width: 200px;
+    width: 268px;
     background-color: #252525;
     display: inline-flex;
     vertical-align: top;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .advisor-card-container{
     width: 100%;
 }
 
+.expert-details-div{
+    cursor: pointer;
+}
+
 .top-border{
     width: 100%;
-    height: 3px;
+    height: 4px;
     background-image: linear-gradient(to left, #07d1ff, #126efd);
 }
 
 .expert-picture{
-    width: 84px;
-    height: 84px;
-    border-radius: 42px;
     margin: auto;
-    margin-top: 14px;
+    margin-top: 21px;
     position: relative;    
     background-color: white;
 }
 
+.expert-picture,
 .expert-picture img{
-    width: 84px;
-    height: 84px;
-    border-radius: 42px;
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
 }
 
 .expert-ranking{
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 15px;
+    width: 43px;
+    height: 43px;
+    line-height: 43px;
+    border-radius: 22px;
     background-color: #126efd;
-    font-size: 13px;
+    font-size: 18px;
     text-align: center;
     color: #FFFFFF;
     bottom: 0px;
     position: absolute;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .expert-name{
-    margin-top: 11px;
-    font-size: 13px;
+    margin-top: 16px;
+    font-size: 18px;
     text-align: center;
     color: #ffffff;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .expert-description{
-    font-size: 10px;
+    font-size: 14px;
+    font-weight: 100;
     text-align: center;
     color: #e6e6e6;
 }
@@ -64,13 +67,12 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    /* -webkit-box-pack: center; */
     -ms-flex-pack: center;
     justify-content: center;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin: 8px 0;
+    margin: 12px 0;
 }
 
 /deep/ .br{
@@ -98,34 +100,34 @@
 .expert-card-content{
     background-color: #cccccc;
     color: #333333;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
 
 .expert-ranking-description{
-    font-size: 10px;
+    font-size: 14px;
     text-align: center;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .followed-by{
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 600;
     text-align: center;
     color: #126efd;
-    margin-bottom: 7px;
+    margin-bottom: 14px;
 }
 
 .separator{
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 12px;
+    margin-right: 12px;
     height: 1px;
     background-color: #00000033;
 }
 
 .expert-rates{
-    padding-top: 10px;
+    padding-top: 15px;
 }
 
 .success-rate-column,
@@ -136,52 +138,52 @@
 
 .success-rate,
 .average-return{
-    height: 52px;
-    width: 52px;
-    line-height: 52px;
+    height: 74px;
+    width: 74px;
+    line-height: 74px;
     font-weight: bold;
     text-align: center;
     margin: 0 auto 6px auto;
-    border-width: 3.5px;
+    border-width: 5px;
     border-style: solid;
     border-color: transparent;
 }
 
 .success-rate{
-    border-radius: 30px;
+    border-radius: 50px;
     border-color: #333333;
-    font-size: 14px;
+    font-size: 19px;
     font-weight: bold;
 }
 
 .average-return{
-    font-size: 19px;
+    font-size: 26px;
     display: inline-block;    
 }
 
 .success-rate-description,
 .average-return-description{
-  font-size: 9px;
+  font-size: 11px;
   text-align: center;
   color: #262626;
   font-weight: bold;
 }
 
 .recommendation-distribution {
-    padding: 11px 0;
-    line-height: 10px;
+    padding: 16px 0;
+    line-height: 14px;
 }
 
 .recommendation-distribution div{
     min-width: 50px;
     display: inline-block;
-    font-size: 10px;
+    font-size: 14px;
     text-align: center;
     color: #e6e6e6;
     font-weight: 100;
     text-align: center;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .close-distribution{
@@ -190,17 +192,38 @@
 }
 
 .distribution-follow-divider{
-    border: solid 0.3px #898989;
-    margin-bottom: 9px;
+    background-color: #898989;
+    margin-bottom: 13px;
 }
 
 
 .follow-link{
-    margin-bottom: 8px;
-    font-size: 10px;
+    margin-bottom: 13px;
+    font-size: 14px;
     font-weight: 100;
     text-align: center;
     color: #126ffd;
     cursor: pointer;
     text-decoration: underline;
+}
+
+.circle {
+    fill: none;
+    stroke-width: 2px;
+    animation: progress 1s ease-out forwards;
+}
+
+.circular-chart.black{
+    width: 90px;
+}
+
+.circular-chart.black .circle {
+    stroke: #333333;
+}
+
+.percentage {
+    fill: #333;
+    font-size: 8px;
+    text-anchor: middle;
+    font-weight: bold;
 }
