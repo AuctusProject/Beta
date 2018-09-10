@@ -44,8 +44,13 @@ export class RegisterComponent implements ModalComponent, OnInit {
     private zone: NgZone) { }
 
   ngOnInit() {
-    this.registerRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
-    if (!!this.registerRequest.referralCode) this.validateReferralCode(this.registerRequest.referralCode);
+    if (this.accountService.isLoggedIn()) {
+      this.setClose.emit();
+      this.authRedirect.redirectAfterLoginAction();
+    } else {
+      this.registerRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
+      if (!!this.registerRequest.referralCode) this.validateReferralCode(this.registerRequest.referralCode);
+    }
   }
 
   onCreateAccountClick(){ 

@@ -516,24 +516,26 @@ Auctus Team", WebUrl, code));
             };
         }
 
-        private static ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)
+        private ReferralProgramInfoResponse ConvertReferredUsersToReferralProgramInfo(List<User> referredUsers)
         {
             var response = new ReferralProgramInfoResponse();
             foreach (var group in referredUsers.GroupBy(c => c.ReferralStatus))
             {
                 if (group.Key == ReferralStatusType.InProgress.Value)
-                    response.InProgressCount = group.Count();
+                    response.Pending = GetReferralStatusValue(group);
                 else if (group.Key == ReferralStatusType.Interrupted.Value)
-                    response.InterruptedCount = group.Count();
+                    response.Canceled = GetReferralStatusValue(group);
                 else if (group.Key == ReferralStatusType.Finished.Value)
-                    response.FinishedCount = group.Count();
+                    response.Available = GetReferralStatusValue(group);
                 else if (group.Key == ReferralStatusType.Paid.Value)
-                    response.PaidCount = group.Count();
-                else
-                    response.NotStartedCount = group.Count();
+                    response.CashedOut = GetReferralStatusValue(group);
             }
-
             return response;
+        }
+
+        private double GetReferralStatusValue(IEnumerable<User> groupedData)
+        {
+            return Math.Floor(groupedData.Sum(c => c.ReferralDiscount.Value * MinimumAucLogin / 100.0));
         }
 
         public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)

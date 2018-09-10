@@ -79,6 +79,7 @@ namespace Auctus.DataAccessMock.Account
                 UrlGuid = Guid.NewGuid(),
                 ReferralCode = "0000003",
                 ReferredId = 1,
+                ReferralDiscount = 20,
                 ReferralStatus = ReferralStatusType.Finished.Value,
                 Wallet = new Wallet()
                 {
@@ -109,6 +110,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000004",
                 ReferredId = 1,
+                ReferralDiscount = 20,
                 ReferralStatus = ReferralStatusType.InProgress.Value,
                 Wallet = new Wallet()
                 {
@@ -130,6 +132,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000005",
                 ReferredId = 1,
+                ReferralDiscount = 20,
                 ReferralStatus = ReferralStatusType.Interrupted.Value,
                 Wallet = new Wallet()
                 {
@@ -151,6 +154,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000006",
                 ReferredId = 1,
+                ReferralDiscount = 20,
                 ReferralStatus = ReferralStatusType.Paid.Value,
                 Wallet = new Wallet()
                 {
@@ -172,6 +176,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000007",
                 ReferredId = 1,
+                ReferralDiscount = 20,
                 ReferralStatus = ReferralStatusType.Finished.Value,
                 Wallet = new Wallet()
                 {

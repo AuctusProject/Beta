@@ -46,7 +46,7 @@ import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.c
 import { MatModule } from './mat.module';
 import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
 import { ConfigService } from './services/config.service';
-import { ReferralComponent } from './components/account/referral/referral.component';
+import { ReferralDetailsComponent } from './components/account/referral-details/referral-details.component';
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { NavigationService } from './services/navigation.service';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
@@ -76,7 +76,7 @@ import { TrendingAssetCardComponent } from './components/asset/trending-asset-ca
 import { PercentageDisplayComponent } from './components/util/percentage-display/percentage-display.component';
 import { IconsModule } from './icons.module';
 import { InheritanceInputComponent } from './components/util/inheritance-input/inheritance-input.component';
-import {TimeAgoPipe} from 'time-ago-pipe';
+import { TimeAgoPipe } from 'time-ago-pipe';
 import { NewsletterComponent } from './components/util/newsletter/newsletter.component';
 
 export function loadConfigService(configService: ConfigService): Function
@@ -121,7 +121,7 @@ export function getAuthServiceConfigs() {
     AdvicesComponent,
     NewAdviceComponent,
     ConfirmAdviceDialogComponent,
-    ReferralComponent,
+    ReferralDetailsComponent,
     ConfigurationComponent, 
     DashboardComponent,
     GlobalSearchComponent,
@@ -200,7 +200,8 @@ export function getAuthServiceConfigs() {
     ConfigurationComponent,
     ForgotPasswordResetComponent,
     ChangePasswordComponent,
-    RegisterComponent
+    RegisterComponent,
+    ReferralDetailsComponent
   ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]
