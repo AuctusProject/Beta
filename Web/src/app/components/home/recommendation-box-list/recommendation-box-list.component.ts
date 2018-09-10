@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { AdvisorService } from '../../../services/advisor.service';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'recommendation-box-list',
@@ -14,7 +15,7 @@ export class RecommendationBoxListComponent implements OnInit {
   sellAdvices : FeedResponse[] = [];
   closePositionAdvices : FeedResponse[] = [];
 
-  constructor(private advisorServices:AdvisorService) { }
+  constructor(private advisorServices:AdvisorService, private navigationService: NavigationService) { }
 
   ngOnInit() {
     this.appendRecommendations();
@@ -31,8 +32,8 @@ export class RecommendationBoxListComponent implements OnInit {
     );
   }
 
-  accessRecommendations(){
-    alert('test');
+  goToTopAssets(){
+    this.navigationService.goToTopAssets();
   }
 
 }
