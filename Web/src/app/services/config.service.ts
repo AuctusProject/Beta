@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 export class Config
 {
   readonly apiUrl: string;
+  readonly webUrl: string;
   readonly assetImgUrl:string;
   readonly profileImgUrl:string;
 }

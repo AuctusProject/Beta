@@ -1,0 +1,36 @@
+<div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+  <p>You can share the follow link to people register using your referral code:</p>
+  <mat-form-field appearance="outline" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
+    <mat-label>Referral Link</mat-label>
+    <input matInput #Link placeholder="Referral Link" type="text" [(ngModel)]="link" readonly />
+    <span matSuffix class="copy" (click)="copyClick()">Copy</span>
+    <mat-hint *ngIf="copied" align="start">Link copied</mat-hint>
+  </mat-form-field>
+</div>
+<div class="data-div" fxLayout="column" fxLayoutAlign="space-evenly center"  fxLayoutGap="15px">
+  <inheritance-input [options]="getReferralCodeOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    [value]="code"></inheritance-input>
+  
+  <div ngClass.xs="input-modal-mobile" ngClass.sm="table-tablet" ngClass.gt-sm="table-web" fxLayout="column" fxLayoutAlign="center start">
+    <span class="table-header bold" fxFlex="100">Earned</span>
+    <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+      <span class="table-status" fxFlex="50">Available</span>
+      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{available}}</div>
+    </div>
+    <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+      <span class="table-status" fxFlex="50">Pending</span>
+      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{pending}}</div>
+    </div>
+  </div>
+  <div ngClass.xs="input-modal-mobile" ngClass.sm="table-tablet" ngClass.gt-sm="table-web" fxLayout="column" fxLayoutAlign="center start">
+    <span class="table-header bold" fxFlex="100">Used</span>
+    <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+      <span class="table-status" fxFlex="50">Cashed Out</span>
+      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{cashedOut}}</div>
+    </div>
+    <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+      <span class="table-status" fxFlex="50">Canceled</span>
+      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{canceled}}</div>
+    </div>
+  </div>
+</div>

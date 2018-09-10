@@ -46,11 +46,10 @@ namespace Auctus.Test.Account
         {
             var referralInfo = UserBusiness.GetReferralProgramInfo();
             Assert.NotNull(referralInfo);
-            Assert.Equal(2, referralInfo.FinishedCount);
-            Assert.Equal(1, referralInfo.InProgressCount);
-            Assert.Equal(1, referralInfo.InterruptedCount);
-            Assert.Equal(0, referralInfo.NotStartedCount);
-            Assert.Equal(1, referralInfo.PaidCount);
+            Assert.Equal(2000, referralInfo.Available);
+            Assert.Equal(1000, referralInfo.Pending);
+            Assert.Equal(1000, referralInfo.Canceled);
+            Assert.Equal(1000, referralInfo.CashedOut);
             Assert.Equal("0000001", referralInfo.ReferralCode);
         }
 
@@ -62,12 +61,10 @@ namespace Auctus.Test.Account
             var referralInfo = UserBusiness.GetReferralProgramInfo();
 
             Assert.NotNull(referralInfo);
-            Assert.Equal(2, referralInfo.FinishedCount);
-            Assert.Equal(1, referralInfo.InProgressCount);
-            Assert.Equal(1, referralInfo.InterruptedCount);
-            Assert.Equal(1, referralInfo.NotStartedCount);
-            Assert.Equal(1, referralInfo.PaidCount);
-
+            Assert.Equal(2000, referralInfo.Available);
+            Assert.Equal(1000, referralInfo.Pending);
+            Assert.Equal(1000, referralInfo.Canceled);
+            Assert.Equal(1000, referralInfo.CashedOut);
             Assert.Equal("0000001", referralInfo.ReferralCode);
         }
 

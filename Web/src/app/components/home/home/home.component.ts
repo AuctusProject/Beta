@@ -7,6 +7,7 @@ import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { BecomeAdvisorComponent } from '../../advisor/become-advisor/become-advisor.component';
 import { ConfirmEmailComponent } from '../../account/confirm-email/confirm-email.component';
 import { ForgotPasswordResetComponent } from '../../account/forgot-password-reset/forgot-password-reset.component';
+import { RegisterComponent } from '../../account/register/register.component';
 
 @Component({
   selector: 'home',
@@ -26,6 +27,8 @@ export class HomeComponent implements OnInit {
       this.onConfirmEmail();
     } else if (!!this.route.snapshot.queryParams['resetpassword']) {
       this.onResetPassword();
+    } else if (!!this.route.snapshot.queryParams['register']) {
+      this.onRegister();
     }
   }
 
@@ -33,6 +36,12 @@ export class HomeComponent implements OnInit {
     let modalData = new FullscreenModalComponentInput();
     modalData.component = ConfirmEmailComponent;
     modalData.hiddenClose = true;
+    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+  }
+
+  onRegister() {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = RegisterComponent;
     this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 

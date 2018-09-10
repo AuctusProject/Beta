@@ -1,0 +1,48 @@
+.data-div {
+    padding-bottom: 25px;
+}
+
+.copy {
+    background-color: #5d5d5d;
+    border: solid 0.5px #707070;
+    color: white;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    min-width: 50px;
+    cursor: pointer;
+    padding: 5px;
+    display: table-caption;
+    text-align: center;
+}
+
+.div-status {
+    width: 100%;
+}
+
+.div-status:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.table-header {
+    background-color: rgba(0,0,0,0.15);
+    width: 100%;
+    padding: 5px;
+}
+
+.table-status {
+    padding: 5px;
+}
+
+.div-value {
+    width: 100%;
+    padding: 5px;
+}
+
+.table-tablet {
+    width: 75%;
+}
+
+.table-web {
+    width: 60%;
+}
