@@ -15,5 +15,6 @@ namespace Auctus.DataAccessInterfaces.Account
         List<User> ListReferredUsers(int referredId);
         List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId);
         List<User> ListAllUsersData();
+        User GetForLoginById(int id);
     }
 }

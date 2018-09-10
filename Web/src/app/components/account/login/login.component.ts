@@ -33,8 +33,7 @@ export class LoginComponent implements ModalComponent, OnInit {
   @ViewChild("Password") Password: InheritanceInputComponent;
   @ViewChild("Email") Email: InheritanceInputComponent;
 
-  constructor(private formBuilder: FormBuilder, 
-    private accountService: AccountService, 
+  constructor(private accountService: AccountService, 
     private notificationsService: NotificationsService,
     private authRedirect : AuthRedirect,
     private socialAuthService: AuthService,
@@ -116,6 +115,6 @@ export class LoginComponent implements ModalComponent, OnInit {
   }
 
   getPasswordOptions() {
-    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", showHintSize: false, showPasswordVisibility: false, minLenth: 8, maxLength: 100 } };
+    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", showHintSize: false, showPasswordVisibility: false, maxLength: 100 } };
   }
 }

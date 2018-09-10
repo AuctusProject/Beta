@@ -251,5 +251,10 @@ namespace Auctus.DataAccessMock.Account
         {
             throw new NotImplementedException();
         }
+
+        public User GetForLoginById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

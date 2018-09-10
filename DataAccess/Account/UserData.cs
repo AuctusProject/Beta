@@ -26,6 +26,15 @@ namespace Auctus.DataAccess.Account
                                                 WHERE 
                                                 u.Email = @Email";
 
+        private const string SQL_FOR_LOGIN_BY_ID = @"SELECT u.*, a.*, r.*, w.* 
+                                                    FROM 
+                                                    [User] u
+                                                    LEFT JOIN [Advisor] a ON a.Id = u.Id
+                                                    LEFT JOIN [RequestToBeAdvisor] r ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = u.Id)
+                                                    LEFT JOIN [Wallet] w ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                    WHERE 
+                                                    u.Id = @Id";
+
         private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, r.*
                                                 FROM 
                                                 [User] u
@@ -179,6 +188,29 @@ namespace Auctus.DataAccess.Account
                             else
                                 return user;
                         }, "Id", parameters).SingleOrDefault();
+        }
+
+        public User GetForLoginById(int id)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, Wallet, User>(SQL_FOR_LOGIN_BY_ID,
+                        (user, advisor, request, wallet) =>
+                        {
+                            if (advisor != null)
+                            {
+                                FillAdvisorWithUserData(ref advisor, user);
+                                advisor.Wallet = wallet;
+                                advisor.RequestToBeAdvisor = request;
+                                return advisor;
+                            }
+                            else
+                            {
+                                user.Wallet = wallet;
+                                user.RequestToBeAdvisor = request;
+                                return user;
+                            }
+                        }, "Id,Id,Id", parameters).SingleOrDefault();
         }
 
         public List<User> ListForAucSituation()

@@ -32,6 +32,11 @@ namespace Auctus.Business.Account
             return Data.GetById(id);
         }
 
+        public User GetForLoginById(int id)
+        {
+            return Data.GetForLoginById(id);
+        }
+
         public LoginResponse SocialLogin(SocialNetworkType socialNetworkType, string email, string accessToken, bool requestedToBeAdvisor)
         {
             BaseEmailValidation(email);
@@ -132,7 +137,7 @@ namespace Auctus.Business.Account
             };
         }
 
-        private bool GetUserHasInvestment(User user, out decimal? aucAmount)
+        public bool GetUserHasInvestment(User user, out decimal? aucAmount)
         {
             aucAmount = null;
             bool hasInvestment = true;
@@ -390,6 +395,8 @@ namespace Auctus.Business.Account
             PasswordValidation(password);
 
             user.Password = GetHashedPassword(password, user.Email, user.CreationDate);
+            if (!user.ConfirmationDate.HasValue)
+                user.ConfirmationDate = Data.GetDateTimeNow();
             Update(user);
         }
 
@@ -399,7 +406,7 @@ namespace Auctus.Business.Account
             if (user.ConfirmationDate.HasValue)
             {
                 var cacheKey = GetUserCacheKey(user.Email);
-                if (user.IsAdvisor)
+                if (UserBusiness.IsValidAdvisor(user))
                     MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
                 else
                     MemoryCache.Set<User>(cacheKey, user);

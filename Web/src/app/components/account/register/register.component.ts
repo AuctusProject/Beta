@@ -139,10 +139,10 @@ export class RegisterComponent implements ModalComponent, OnInit {
   }
 
   getPasswordOptions() {
-    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", browserAutocomplete: "", minLenth: 8, maxLength: 100 } };
+    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", browserAutocomplete: "", minLength: 8, maxLength: 100 } };
   }
 
   getReferralOptions() {
-    return { textOptions: { outlineField: false, placeHolder: "Referral code (optional)", required: false, showHintSize: false, minLenth: 7, maxLength: 7 } };
+    return { textOptions: { outlineField: false, placeHolder: "Referral code (optional)", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
   }
 }

@@ -10,6 +10,7 @@ import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InputType } from '../../../model/inheritanceInputOptions';
+import { AuthRedirect } from '../../../providers/authRedirect';
 
 @Component({
   selector: 'forgot-password',
@@ -28,10 +29,15 @@ export class ForgotPasswordComponent implements ModalComponent, OnInit {
   @ViewChild("Email") Email: InheritanceInputComponent;
 
   constructor(private notificationsService: NotificationsService, 
+    private authRedirect : AuthRedirect,
     private accountService: AccountService) { 
   }
 
   ngOnInit() {
+    if (this.accountService.isLoggedIn()) {
+      this.setClose.emit();
+      this.authRedirect.redirectAfterLoginAction();
+    }
   }
 
   send(){

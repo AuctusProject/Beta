@@ -90,7 +90,7 @@ export class AccountService {
     return this.httpService.post(this.recoverPasswordUrl, forgotPasswordRequest);
   }
   
-  recoverPassword(recoverPasswordRequest: RecoverPasswordRequest) : Observable<void>{
+  recoverPassword(recoverPasswordRequest: RecoverPasswordRequest) : Observable<LoginResult>{
     return this.httpService.put(this.recoverPasswordUrl, recoverPasswordRequest);
   }
 

@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccess.Account;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DomainObjects.Account;
+using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
@@ -48,7 +49,7 @@ namespace Auctus.Business.Account
                 "Reset your password - Auctus Platform",
                 string.Format(@"Hello,
 <br/><br/>
-You told us you forgot your password. If you really did, <a href='{0}/forgot-password-reset?c={1}' target='_blank'>click here</a> to choose a new one.
+You told us you forgot your password. If you really did, <a href='{0}?resetpassword=true&c={1}' target='_blank'>click here</a> to choose a new one.
 <br/><br/>
 If you didn't mean to reset your password, then you can just ignore this email. Your password will not change.
 <br/><br/>
@@ -57,7 +58,7 @@ Thanks,
 Auctus Team", WebUrl, code));
         }
 
-        public void RecoverPassword(string code, string password)
+        public LoginResponse RecoverPassword(string code, string password)
         {
             var recovery = Data.Get(code);
             if (recovery == null)
@@ -65,8 +66,19 @@ Auctus Team", WebUrl, code));
             if (Data.GetDateTimeNow() > recovery.CreationDate.AddMinutes(60))
                 throw new BusinessException("Recover password code is expired.");
 
-            var user = UserBusiness.GetById(recovery.UserId);
+            var user = UserBusiness.GetForLoginById(recovery.UserId);
             UserBusiness.UpdatePassword(user, password);
+
+            bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
+            return new LoginResponse()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
+                IsAdvisor = UserBusiness.IsValidAdvisor(user),
+                HasInvestment = hasInvestment,
+                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+            };
         }
     }
 }

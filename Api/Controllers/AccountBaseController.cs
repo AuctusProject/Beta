@@ -52,8 +52,8 @@ namespace Api.Controllers
             if (recoverPasswordRequest == null)
                 return BadRequest();
 
-            PasswordRecoveryBusiness.RecoverPassword(recoverPasswordRequest.Code, recoverPasswordRequest.Password);
-            return Ok();
+            var loginResponse = PasswordRecoveryBusiness.RecoverPassword(recoverPasswordRequest.Code, recoverPasswordRequest.Password);
+            return Ok(new { jwt = GenerateToken(loginResponse.Email), data = loginResponse });
         }
 
         protected virtual async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordRequest forgotPasswordRequest)

@@ -316,3 +316,10 @@ textarea:read-only {
   margin: 0 auto;
   width: 1024px;
 }
+
+.mat-flat-button.mat-primary {
+  background-color: #5d5d5d;
+  border: solid 0.5px #707070;
+  max-width: 250px;
+  min-width: 120px;
+}
