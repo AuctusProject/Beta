@@ -73,7 +73,7 @@ namespace Api.Controllers
 
         [Route("me/passwords")]
         [HttpPut]
-        [AllowAnonymous]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ChangePassword([FromBody]ChangePasswordRequest changePasswordRequest)
         {

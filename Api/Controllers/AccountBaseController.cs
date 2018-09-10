@@ -69,7 +69,7 @@ namespace Api.Controllers
 
         protected virtual IActionResult ChangePassword(ChangePasswordRequest changePasswordRequest)
         {
-            if (changePasswordRequest == null || String.IsNullOrWhiteSpace(changePasswordRequest.CurrentPassword) || String.IsNullOrWhiteSpace(changePasswordRequest.NewPassword))
+            if (changePasswordRequest == null)
                 return BadRequest();
 
             UserBusiness.ChangePassword(changePasswordRequest.CurrentPassword, changePasswordRequest.NewPassword);

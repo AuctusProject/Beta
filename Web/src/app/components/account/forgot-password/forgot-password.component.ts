@@ -44,7 +44,7 @@ export class ForgotPasswordComponent implements ModalComponent, OnInit {
     if (!this.forgotPasswordRequest.captcha) {
       this.notificationsService.error(null, "You must fill the captcha.");
     } else if (this.Email.isValid()) {
-      this.accountService.forgotPassword(this.forgotPasswordRequest).subscribe(result => 
+      this.promise = this.accountService.forgotPassword(this.forgotPasswordRequest).subscribe(result => 
         {
           let modalData = new FullscreenModalComponentInput();
           modalData.component = MessageFullscreenModalComponent;

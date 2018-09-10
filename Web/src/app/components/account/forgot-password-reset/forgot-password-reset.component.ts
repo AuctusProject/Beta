@@ -43,7 +43,7 @@ export class ForgotPasswordResetComponent implements ModalComponent, OnInit {
 
   send() {
     if (this.Password.isValid()) {
-      this.accountService.recoverPassword(this.recoverPasswordRequest).subscribe(result => 
+      this.promise = this.accountService.recoverPassword(this.recoverPasswordRequest).subscribe(result => 
         {
           this.accountService.setLoginData(result.data);
           this.notificationService.success(null, "Password was changed successfully");
