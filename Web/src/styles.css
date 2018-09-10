@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import '~ngx-bar-rating/themes/br-default-theme.css';
+@import '~font-awesome/css/font-awesome.css';
+@import '~ngx-bar-rating/themes/br-fontawesome-o-theme.css';
 
 @font-face {
   font-family: "HelveticaNeueBold";
@@ -81,7 +83,7 @@ html {
 }
 
 body {
-  background-color: #fafafa;
+  background-color: #151515;
   min-height:100%;
 }
 
@@ -206,7 +208,7 @@ button.is-loading .btn-spinner {
 .section-title{
   font-size: 25px;
   text-align: center;
-  color: #626262;
+  color: #FFFFFF;
   margin-top:36px;
 }
 
@@ -268,15 +270,26 @@ button.is-loading .btn-spinner {
 
 .access-button{
   margin: 38px auto;
-  width: 132px;
-  height: 32px;
-  line-height: 32px;
-  background-color: #5d5d5d;
-  border: solid 0.5px #707070;
+  max-width: 120px;
+  height: 35px;
+  line-height: 35px;
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-image: 
+      -webkit-gradient(linear, 0 0, 0 100%, from(#07d1ff), to(#126efd)) 1 100%;
+    -webkit-border-image: 
+      -webkit-linear-gradient(#07d1ff, #126efd) 1 100%;
+    -moz-border-image:
+      -moz-linear-gradient(#07d1ff, #126efd) 1 100%;    
+    -o-border-image:
+      -o-linear-gradient(#07d1ff, #126efd) 1 100%;
+    border-image:
+      linear-gradient(to top, #07d1ff 1%, #126efd) 1 100%;
+  border-image-slice: 1;
   font-size: 11px;
   font-weight: 500;
   text-align: center;
-  color: #ffffff;
+  color: #07d1ff;
   cursor: pointer;
 }
 
