@@ -271,9 +271,9 @@ button.is-loading .btn-spinner {
 
 .access-button{
   margin: 38px auto;
-  max-width: 120px;
-  height: 35px;
-  line-height: 35px;
+  max-width: 168px;
+  height: 50px;
+  line-height: 50px;
   border-style: solid;
   border-width: 1px;
   -webkit-border-image: 
@@ -287,7 +287,7 @@ button.is-loading .btn-spinner {
     border-image:
       linear-gradient(to top, #07d1ff 1%, #126efd) 1 100%;
   border-image-slice: 1;
-  font-size: 11px;
+  font-size: 14.5px;
   font-weight: 500;
   text-align: center;
   color: #07d1ff;
