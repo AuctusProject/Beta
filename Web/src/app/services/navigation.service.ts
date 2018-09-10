@@ -50,4 +50,8 @@ export class NavigationService {
   public goToTopExperts(){
     this.goToUrl('top-experts');
   }
+
+  public goToTopAssets(){
+    this.goToUrl('top-assets');
+  }
 }
