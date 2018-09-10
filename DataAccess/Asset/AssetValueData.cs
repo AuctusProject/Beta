@@ -33,7 +33,12 @@ namespace Auctus.DataAccess.Asset
                 else
                     filter = filter | (filterBuilder.Eq(asset => asset.AssetId, pair.Key) & filterBuilder.Gte(asset => asset.Date, pair.Value));
             }
-            return Collection.Find(filter).ToList();
+            var options = new FindOptions()
+            {
+                BatchSize = 99999999,
+                NoCursorTimeout = true
+            };
+            return Collection.Find(filter, options).ToList();
         }
     }
 }

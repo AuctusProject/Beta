@@ -21,7 +21,7 @@ namespace Api.Controllers
             base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         [HttpGet]
-        [Authorize]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAssets()
         {
@@ -30,7 +30,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("details")]
-        [Authorize]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAssetsDetails()
         {
@@ -39,7 +39,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("{id}/details")]
-        [Authorize]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetAsset(int id)
         {
@@ -48,7 +48,7 @@ namespace Api.Controllers
 
         [Route("{id}/followers")]
         [HttpPost]
-        [Authorize]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult FollowAsset([FromRoute]int id)
         {
@@ -57,7 +57,7 @@ namespace Api.Controllers
 
         [Route("{id}/followers")]
         [HttpDelete]
-        [Authorize]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult UnfollowAsset([FromRoute]int id)
         {

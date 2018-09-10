@@ -194,7 +194,11 @@ export function getAuthServiceConfigs() {
     MessageFullscreenModalComponent,
     BecomeAdvisorComponent,
     ConfirmEmailComponent,
-    AdvisorEditComponent
+    AdvisorEditComponent,
+    ConfigurationComponent,
+    ForgotPasswordResetComponent,
+    ChangePasswordComponent,
+    RegisterComponent
   ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]

@@ -134,7 +134,7 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            var user = LoggedEmail != null ? GetValidUser() : null;
+            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             CalculateForAdvisorsData(user, CalculationMode.AdvisorBase, out advisorsResult, out assetsResult);
             return advisorsResult;
         }

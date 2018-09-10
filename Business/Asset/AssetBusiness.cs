@@ -20,7 +20,7 @@ namespace Auctus.Business.Asset
 
         public IEnumerable<AssetResponse> ListAssetData()
         {
-            var user = GetValidUser();
+            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());

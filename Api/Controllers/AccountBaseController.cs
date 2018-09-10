@@ -105,7 +105,7 @@ namespace Api.Controllers
 
         protected virtual IActionResult SetReferralCode(SetReferralRequest setReferralRequest)
         {
-            if(setReferralRequest == null || String.IsNullOrWhiteSpace(setReferralRequest.ReferralCode))
+            if(setReferralRequest == null)
                 return BadRequest();
 
             UserBusiness.SetReferralCode(setReferralRequest.ReferralCode);

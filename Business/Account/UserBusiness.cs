@@ -215,7 +215,13 @@ namespace Auctus.Business.Account
         public void SetReferralCode(string referralCode)
         {
             var user = GetByEmail(LoggedEmail);
+            if (user == null)
+                throw new NotFoundException("User cannot be found.");
+
             var referredUser = GetReferredUser(referralCode);
+            if (referredUser == null)
+                throw new BusinessException("Invalid referral code.");
+
             user.ReferredId = referredUser.Id;
             user.ReferralDiscount = DiscountPercentageOnAuc;
             Data.Update(user);
