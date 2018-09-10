@@ -211,6 +211,11 @@ button.is-loading .btn-spinner {
   text-align: center;
   color: #FFFFFF;
   margin-top:36px;
+  font-weight: 500;
+}
+
+.section-title.inverted{
+  color: #212121;
 }
 
 .section-subtitle{

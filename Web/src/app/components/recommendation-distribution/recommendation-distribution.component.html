@@ -1,14 +1,14 @@
 <div fxLayout="row">
     <div class="pie-chart" [chart]="pieChart"></div>
     <div fxLayout="column" fxLayoutAlign="center start">
-        <div>
-            {{totalBuy}} buy
+        <div class="buy">
+            Buy: {{totalBuy}}
         </div>
-        <div>
-            {{totalClose}} close
+        <div class="sell">
+            Sell: {{totalSell}}
         </div>
-        <div>
-            {{totalSell}} sell
+        <div class="close">
+            Close: {{totalClose}}
         </div>
     </div>
 </div>
