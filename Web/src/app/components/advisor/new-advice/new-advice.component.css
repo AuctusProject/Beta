@@ -1,0 +1,42 @@
+.div-data {
+    padding-bottom: 25px;
+}
+
+.code {
+    min-width: 50px;
+    padding: 5px;
+    display: table-caption;
+    text-align: center;
+}
+
+.btn-option {
+    margin-top: 15px;
+    color: rgba(0, 0, 0, 0.9); 
+}
+
+.btn-buy {
+    background-color: rgba(62, 209, 66, 0.1);
+}
+
+.btn-buy:hover {
+    background-color: rgba(62, 209, 66, 0.95);
+    color: white;
+}
+
+.btn-sell {
+    background-color: rgba(255, 0, 0, 0.07);
+}
+
+.btn-sell:hover {
+    background-color: rgba(255, 0, 0, 0.9);
+    color: white;
+}
+
+.btn-close {
+    background-color: rgba(0, 0, 0, 0.05);  
+}
+
+.btn-close:hover {
+    background-color: rgba(0, 0, 0, 0.4);   
+    color: white;
+}

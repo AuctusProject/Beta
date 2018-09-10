@@ -199,7 +199,8 @@ export function getAuthServiceConfigs() {
     ForgotPasswordResetComponent,
     ChangePasswordComponent,
     RegisterComponent,
-    ReferralDetailsComponent
+    ReferralDetailsComponent,
+    NewAdviceComponent
   ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]

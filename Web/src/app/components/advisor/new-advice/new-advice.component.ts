@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { AdviseRequest } from '../../../model/advisor/adviseRequest';
 import { AdvisorService } from '../../../services/advisor.service';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
@@ -10,85 +10,112 @@ import {map, startWith} from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '../../../../../node_modules/@angular/material';
 import {MatDialog} from '@angular/material';
 import { ConfirmAdviceDialogComponent } from './confirm-advice-dialog/confirm-advice-dialog.component';
+import { ModalComponent } from '../../../model/modal/modalComponent';
+import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
+import { AccountService } from '../../../services/account.service';
+import { NavigationService } from '../../../services/navigation.service';
+import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'new-advice',
   templateUrl: './new-advice.component.html', 
   styleUrls: ['./new-advice.component.css']
 })
-export class NewAdviceComponent implements OnInit {
+export class NewAdviceComponent implements ModalComponent, OnInit {
+  modalTitle: string = "Set new recommendation";
+  @Input() data: any;
+  @Output() setClose = new EventEmitter<void>();
+  @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
+
   options: Asset[];
   advise: AdviseRequest = new AdviseRequest();
-  myControl = new FormControl();
+  coinControl = new FormControl();
   filteredOptions: Observable<Asset[]>;
-  allSignalOptions = [
-  {
-    value: 0,
-    text: "SELL"
-  },
-  {
-    value: 1,
-    text: "BUY"
-  },
-  {
-    value: 2,
-    text: "CLOSE"
-  },
-];
+  showSell: boolean = false;
+  showButtons: boolean = false;
 
-  currentAssetSignalOptions = [];
-  constructor(private assetService: AssetService, private advisorService: AdvisorService, private notificationService: NotificationsService, public dialog: MatDialog) { }
+  constructor(private assetService: AssetService, 
+    private advisorService: AdvisorService, 
+    private accountService : AccountService, 
+    private notificationService: NotificationsService,
+    private navigationService : NavigationService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.assetService.getAssets().subscribe(result => {
-      this.options = result;
-      this.filteredOptions = this.myControl.valueChanges
-      .pipe(
-        startWith<string | Asset>(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this._filter(name) : this.options.slice())
-      );
-    });
+    if (!this.accountService.isLoggedIn()) {
+      this.setClose.emit();
+      this.navigationService.goToLogin();
+    } else {
+      this.assetService.getAssets().subscribe(result => {
+        this.options = result;
+        this.filteredOptions = this.coinControl.valueChanges
+        .pipe(
+          startWith<string | Asset>(''),
+          map(value => typeof value === 'string' ? value : value.name),
+          map(name => name ? this._filter(name) : this.options.slice())
+        );
+      });
+    }
   }
 
   displayFn(asset?: Asset): string | undefined {
-    return asset ? asset.name : undefined;
+    return !!asset ? asset.name : undefined;
   }
 
   private _filter(name: string): Asset[] {
     const filterValue = name.toLowerCase();
 
-    return this.options.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  onSubmit(){
-    const dialogRef = this.dialog.open(ConfirmAdviceDialogComponent, {width: '250px',data: {adviceType:this.advise.adviceType,assetName: this.myControl.value.name}}); 
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result){
-        this.advisorService.advise(this.advise).subscribe(result => this.notificationService.success("New advise was successfully created."));
-      }
-    });
-    
+    return !!filterValue ? this.options.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0
+      || (filterValue.length > 1 && option.code.toLowerCase().indexOf(filterValue) === 0)) : [];
   }
 
   optionSelected(selected: MatAutocompleteSelectedEvent){
-    if(selected && selected.option && selected.option.value)
+    if(!!selected && !!selected.option && selected.option.value) {
       this.advise.assetId = selected.option.value.id;
+    }
+    this.setButtons();
+  }
 
-      this.fillOptions();
+  buy() {
+    this.advise.adviceType = 1;
+    this.openConfirmation();
+  }
+
+  sell() {
+    this.advise.adviceType = 0;
+    this.openConfirmation();
+  }
+
+  close() {
+    this.advise.adviceType = 2;
+    this.openConfirmation();
+  }
+
+  openConfirmation() {
+    const dialogRef = this.dialog.open(ConfirmAdviceDialogComponent, 
+      { width: '60%', height: '35%', hasBackdrop: true, disableClose: true, panelClass: 'fullscreen-modal', 
+        data: { adviceType:this.advise.adviceType, assetName: this.coinControl.value.code + ' - ' + this.coinControl.value.name } }); 
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.advisorService.advise(this.advise).subscribe(ret => 
+          {
+            this.setClose.emit();
+            this.notificationService.success("New recommendation was successfully created.");
+          });
+      }
+    });
   }
 
   onAssetInputBlur() {
-    if (this.myControl.value && !this.myControl.value.id)
-      this.myControl.setValue("");
-    
-    this.fillOptions();
+    if (!this.coinControl.value || this.coinControl.invalid) {
+      this.coinControl.setValue("");
+    }
+    this.setButtons();
   }
 
-  fillOptions(){
-    this.currentAssetSignalOptions = this.allSignalOptions;
-    if(this.myControl.value && !this.myControl.value.shortSellingEnabled)
-    this.currentAssetSignalOptions = this.currentAssetSignalOptions.slice(1,3);
+  setButtons() {
+    this.showButtons = !!this.coinControl.value && !!this.coinControl.value.id;
+    this.showSell = !!this.coinControl.value && this.coinControl.value.shortSellingEnabled;
   }  
 }

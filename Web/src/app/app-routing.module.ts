@@ -6,7 +6,6 @@ import { ExpertDetailsComponent } from './components/advisor/expert-details/expe
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
-import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
@@ -22,7 +21,6 @@ const routes: Routes = [
     { path: 'expert-details/:id', component: ExpertDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
-    { path: 'new-advice', component: NewAdviceComponent, canActivate:[AuthRedirect] },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
     { path: 'advisor-edit/:id', component: AdvisorEditComponent, canActivate:[AuthRedirect] },

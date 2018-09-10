@@ -1,0 +1,31 @@
+.modal-title {
+    text-align: center;
+}
+
+.modal-container {
+    height: 100%;
+}
+
+.modal-content {
+    width: 100%;
+    overflow: unset;
+}
+
+.modal-close {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    float: right;
+    cursor: pointer;
+    border-width: 0px;
+    font-size: 20px;
+}
+
+.btn-actions {
+    width: 100%;
+}
+
+p {
+    padding-bottom: 5px;
+    text-align: center;
+}

@@ -21,5 +21,4 @@ export class ConfirmAdviceDialogComponent implements OnInit {
   getAdviceType(){
     return Util.GetRecommendationTypeDescription(this.data.adviceType);
   }
-
 }

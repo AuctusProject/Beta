@@ -17,7 +17,7 @@ namespace Api.Controllers
 
         protected IActionResult ListAssets()
         {
-            var assetResponse = AssetBusiness.ListAssets();
+            var assetResponse = AssetBusiness.ListAssets().OrderByDescending(c => c.MarketCap ?? 0);
             return Ok(assetResponse);
             
         }
