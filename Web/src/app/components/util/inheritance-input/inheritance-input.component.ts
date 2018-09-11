@@ -18,7 +18,7 @@ export class InheritanceInputComponent implements OnInit {
   private placeholder: string = "";
   private minlength: number = 0;
   private maxlength: number = 4000;
-  private autocomplete: string = "";
+  private autocomplete: string = "off";
   private showValidatorError: boolean = true;
   private specificHint?: string;
   private showHintSize: boolean = true;

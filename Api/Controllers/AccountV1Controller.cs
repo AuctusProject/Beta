@@ -163,6 +163,7 @@ namespace Api.Controllers
 
         [Route("search")]
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult Search([FromQuery]string term)
         {

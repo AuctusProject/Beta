@@ -55,6 +55,6 @@ export class ForgotPasswordResetComponent implements ModalComponent, OnInit {
   }
 
   getPasswordOptions() {
-    return { inputType: InputType.Password, textOptions: { placeHolder: "New password", browserAutocomplete: "", minLength: 8, maxLength: 100 } };
+    return { inputType: InputType.Password, textOptions: { placeHolder: "New password", browserAutocomplete: "off", minLength: 8, maxLength: 100 } };
   }
 }

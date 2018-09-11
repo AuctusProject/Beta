@@ -24,6 +24,7 @@ namespace Auctus.Model
             public string Name { get; set; }
             public string Description { get; set; }
             public int Advices { get; set; }
+            public string UrlGuid { get; set; }
         }
 
         public SearchResponse()

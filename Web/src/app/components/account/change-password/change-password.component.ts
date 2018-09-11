@@ -54,6 +54,6 @@ export class ChangePasswordComponent implements ModalComponent, OnInit {
   }
 
   getNewPasswordOptions() {
-    return { inputType: InputType.Password, textOptions: { placeHolder: "New password", browserAutocomplete: "", minLength: 8, maxLength: 100 } };
+    return { inputType: InputType.Password, textOptions: { placeHolder: "New password", browserAutocomplete: "off", minLength: 8, maxLength: 100 } };
   }
 }
