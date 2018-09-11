@@ -12,20 +12,20 @@
         <global-search fxShow="true" fxHide.lt-md="true" class="search"></global-search>
         <span class="login" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
         <span class="signin" *ngIf="!isLogged()" (click)="register()">SIGN IN</span>
-        <a *ngIf="isLogged()" fxShow="true" fxHide.xs="true" [matMenuTriggerFor]="profile">
+        <a *ngIf="isLogged()" fxShow="true" fxHide.xs="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="profile">
             <span fxLayout="row" fxLayoutAlign="space-around center">
                 <span>PROFILE</span>
-                <mat-icon>arrow_drop_down</mat-icon>
+                <mat-icon>{{menuOpen ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
             </span>
         </a>
-        <span class="mobile-menu" fxShow="true" fxHide.gt-xs="true" [matMenuTriggerFor]="mobile"><mat-icon>reorder</mat-icon></span>
-        <mat-menu class="sub-menu" #profile="matMenu">
+        <span class="mobile-menu" fxShow="true" fxHide.gt-xs="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="mobile"><mat-icon>{{menuOpen ? 'close' : 'reorder'}}</mat-icon></span>
+        <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #profile="matMenu">
             <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
             <button class="sub-menu-item" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
             <button class="sub-menu-item" (click)="changePassword()" mat-menu-item>CHANGE PASSWORD</button>
             <button class="sub-menu-item" (click)="logout()" mat-menu-item>LOGOUT</button>
         </mat-menu>
-        <mat-menu class="sub-menu" #mobile="matMenu">
+        <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #mobile="matMenu">
             <button class="sub-menu-item" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecameExpert()" mat-menu-item>BECAME AN EXPERT</button>
             <button class="sub-menu-item" (click)="onTopExperts()" mat-menu-item>TOP EXPERTS</button>
             <button class="sub-menu-item" (click)="onTopAssets()" mat-menu-item>TOP ASSETS</button>

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccountService } from '../../services/account.service';
 import { LoginResponse } from '../../model/account/loginResponse';
 import { FullscreenModalComponentInput } from '../../model/modal/fullscreenModalComponentInput';
 import { LoginComponent } from '../account/login/login.component';
 import { FullscreenModalComponent } from '../util/fullscreen-modal/fullscreen-modal.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatMenu } from '@angular/material';
 import { RegisterComponent } from '../account/register/register.component';
 import { ChangePasswordComponent } from '../account/change-password/change-password.component';
 import { ReferralDetailsComponent } from '../account/referral-details/referral-details.component';
@@ -17,7 +17,10 @@ import { NavigationService } from '../../services/navigation.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  loginData : LoginResponse;
+  loginData: LoginResponse;
+  menuOpen: boolean = false;
+  @ViewChild("profile") profile: MatMenu;
+  @ViewChild("mobile") mobile: MatMenu;
   
   constructor(public dialog: MatDialog, 
     private accountService : AccountService, 
@@ -25,13 +28,19 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.loginData = this.accountService.getLoginData();
+    if (!!this.profile) {
+      this.profile.closed.subscribe(() => this.menuOpen = false);
+    }
+    if (!!this.mobile) {
+      this.mobile.closed.subscribe(() => this.menuOpen = false);
+    }
   }
 
   isLogged(): boolean {
     this.loginData = this.accountService.getLoginData();
     return !!this.loginData;
   }
-
+  
   onBecameExpert() {
     //TODO navigation
   }
