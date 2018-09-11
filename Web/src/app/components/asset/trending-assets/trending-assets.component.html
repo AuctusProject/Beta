@@ -1,12 +1,20 @@
-<div class="section-title inverted">
-  Trending Assets
-</div>
-<div class="assets-list">
-  <div (click)="onLoginClick()" fxLayout="column" fxLayoutAlign="center center" fxFlexAlign="stretch" class="blocked-content" *ngIf="!isLoggedIn()">
-      <div class="lock-wrapper">
-        <fa-icon icon="lock" size="2x" fxLayoutAlign="center stretch"></fa-icon>
-      </div>
-      <a>Login to access</a>
+<div class="global-container">
+  <div class="section-title inverted">
+    Trending Assets
   </div>
-  <trending-asset-card *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>
+  <div class="assets-list">
+    <div (click)="onLoginClick()" fxLayout="column" fxLayoutAlign="center center" class="global-container blocked-content" *ngIf="!isLoggedIn()">
+        <div class="lock-wrapper">
+          <fa-icon icon="lock" size="2x" fxLayoutAlign="center stretch"></fa-icon>
+        </div>
+        <a>Login to access</a>
+    </div>
+    <trending-asset-card fxHide.lt-md *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>
+    <owl-carousel fxHide.gt-sm *ngIf="assets"
+      [options]="{items: 1, dots: true, navigation: false}"
+      [carouselClasses]="['owl-theme', 'row', 'sliding']">
+      <trending-asset-card *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>
+    </owl-carousel>
+
+  </div>
 </div>

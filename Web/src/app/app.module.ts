@@ -78,6 +78,8 @@ import { IconsModule } from './icons.module';
 import { InheritanceInputComponent } from './components/util/inheritance-input/inheritance-input.component';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { NewsletterComponent } from './components/util/newsletter/newsletter.component';
+import { FooterComponent } from './components/util/footer/footer.component';
+import { OwlModule } from 'ngx-owl-carousel';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -143,7 +145,8 @@ export function getAuthServiceConfigs() {
     PercentageDisplayComponent,
     InheritanceInputComponent,
     TimeAgoPipe,
-    NewsletterComponent
+    NewsletterComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -170,7 +173,8 @@ export function getAuthServiceConfigs() {
     BarRatingModule,
     SocialLoginModule,
     RecaptchaModule.forRoot(), 
-    RecaptchaFormsModule
+    RecaptchaFormsModule,
+    OwlModule
   ],
   providers: [
     HttpService,
@@ -181,8 +185,8 @@ export function getAuthServiceConfigs() {
     AccountService,
     NavigationService,
     AuthRedirect,
-    { provide:HIGHCHARTS_MODULES, useFactory:highchartsModules },
     ConfigService,
+    { provide:HIGHCHARTS_MODULES, useFactory:highchartsModules },
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '100%', height: '92%', hasBackdrop: true, maxWidth: '95vw', disableClose: false, panelClass: 'fullscreen-modal'}}

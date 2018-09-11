@@ -1,0 +1,41 @@
+<div class="global-container">
+  <div class="separator"></div>
+  <div fxLayout="row" fxLayoutAlign="space-between start">
+    <img src="./assets/logo_black.png" routerLink="" class="landing-logo">
+    <div fxLayout="row" fxLayoutGap="100px">
+      <div fxLayout="column" fxHide.lt-md>
+        <div class="footer-item-title">HOME</div>
+        <div routerLink="/top-experts" class="footer-item"><a>Top Experts</a></div>
+        <div routerLink="/top-assets" class="footer-item"><a>Top Assets</a></div>
+        <div routerLink="/about-us" class="footer-item"><a>About Us</a></div>
+      </div>
+      <div fxLayout="column" fxHide.lt-sm>
+        <div class="footer-item-title">CONTACT</div>
+        <div class="footer-item"><a href="mailto:contact@auctus.org">contact@auctus.org</a></div>
+      </div>
+      <div fxLayout="column">
+        <div class="footer-item-title text-right">FOLLOW US</div>
+        <div class="footer-item" fxLayout="row" fxLayoutGap="8px">
+          <div class="icon-wrapper">
+            <a><fa-icon [icon]="['fab','facebook-f']" size="lg" fxLayoutAlign="center stretch"></fa-icon></a>
+          </div>
+          <div class="icon-wrapper">
+            <a><fa-icon [icon]="['fab','twitter']" size="lg" fxLayoutAlign="center stretch"></fa-icon></a>
+          </div>
+          <div class="icon-wrapper">
+            <a><fa-icon [icon]="['fab','linkedin-in']" size="lg" fxLayoutAlign="center stretch"></fa-icon></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <div class="copright-terms-privacy" fxLayout="row" fxLayoutAlign="space-between center">
+    <div>All rights reserved. Copyrights © 2016</div>
+    <div class="terms-privacy" fxLayoutGap="6px">
+      <a>Privacy</a>
+      <span>|</span>
+      <a>Terms</a>
+    </div>
+  </div>
+</div>
