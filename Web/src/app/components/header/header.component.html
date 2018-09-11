@@ -2,25 +2,38 @@
     <img src="./assets/logo.png" routerLink="" class="landing-logo" />
     <span class="spacer"></span>
     <div class="menu" fxLayout="row" fxLayoutAlign="space-around center">
-        <a routerLink="/top-experts" routerLinkActive="active"><span>TOP EXPERTS</span></a>
-        <div class="separator"></div>
-        <a routerLink="/top-assets" routerLinkActive="active"><span>TOP ASSETS</span></a>
-        <div class="separator"></div>
-        <a routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a>
-        <global-search class="search"></global-search>
+        <a fxShow="true" fxHide.lt-md="true" *ngIf="!loginData || !loginData.isAdvisor" routerLink="/TODO" routerLinkActive="active"><span>BECAME AN EXPERT</span></a>
+        <div fxShow="true" fxHide.lt-md="true" *ngIf="!loginData || !loginData.isAdvisor" class="separator"></div>
+        <a fxShow="true" fxHide.lt-sm="true" routerLink="/top-experts" routerLinkActive="active"><span>TOP EXPERTS</span></a>
+        <div fxShow="true" fxHide.lt-sm="true" class="separator"></div>
+        <a fxShow="true" fxHide.lt-sm="true" routerLink="/top-assets" routerLinkActive="active"><span>TOP ASSETS</span></a>
+        <div fxShow="true" fxHide.lt-md="true" class="separator"></div>
+        <a fxShow="true" fxHide.lt-md="true" routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a>
+        <global-search fxShow="true" fxHide.lt-md="true" class="search"></global-search>
         <span class="login" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
         <span class="signin" *ngIf="!isLogged()" (click)="register()">SIGN IN</span>
-        <a *ngIf="isLogged()" [matMenuTriggerFor]="profile">
+        <a *ngIf="isLogged()" fxShow="true" fxHide.xs="true" [matMenuTriggerFor]="profile">
             <span fxLayout="row" fxLayoutAlign="space-around center">
                 <span>PROFILE</span>
                 <mat-icon>arrow_drop_down</mat-icon>
             </span>
         </a>
-        <mat-menu class="profile-menu" #profile="matMenu">
-            <button class="profile-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
-            <button class="profile-menu-item" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
-            <button class="profile-menu-item" (click)="changePassword()" mat-menu-item>CHANGE PASSWORD</button>
-            <button class="profile-menu-item" (click)="logout()" mat-menu-item>LOGOUT</button>
+        <span class="mobile-menu" fxShow="true" fxHide.gt-xs="true" [matMenuTriggerFor]="mobile"><mat-icon>reorder</mat-icon></span>
+        <mat-menu class="sub-menu" #profile="matMenu">
+            <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
+            <button class="sub-menu-item" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
+            <button class="sub-menu-item" (click)="changePassword()" mat-menu-item>CHANGE PASSWORD</button>
+            <button class="sub-menu-item" (click)="logout()" mat-menu-item>LOGOUT</button>
+        </mat-menu>
+        <mat-menu class="sub-menu" #mobile="matMenu">
+            <button class="sub-menu-item" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecameExpert()" mat-menu-item>BECAME AN EXPERT</button>
+            <button class="sub-menu-item" (click)="onTopExperts()" mat-menu-item>TOP EXPERTS</button>
+            <button class="sub-menu-item" (click)="onTopAssets()" mat-menu-item>TOP ASSETS</button>
+            <button class="sub-menu-item" *ngIf="!isLogged()" mat-menu-item><a class="about-mobile" routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a></button>
+            <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
+            <button class="sub-menu-item" *ngIf="isLogged()" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
+            <button class="sub-menu-item" *ngIf="isLogged()" (click)="changePassword()" mat-menu-item>CHANGE PASSWORD</button>
+            <button class="sub-menu-item" *ngIf="isLogged()" (click)="logout()" mat-menu-item>LOGOUT</button>
         </mat-menu>
     </div>
 </div>

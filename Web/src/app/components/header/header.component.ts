@@ -9,6 +9,7 @@ import { RegisterComponent } from '../account/register/register.component';
 import { ChangePasswordComponent } from '../account/change-password/change-password.component';
 import { ReferralDetailsComponent } from '../account/referral-details/referral-details.component';
 import { AdvisorEditComponent } from '../advisor/advisor-edit/advisor-edit.component';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'header',
@@ -19,7 +20,8 @@ export class HeaderComponent implements OnInit {
   loginData : LoginResponse;
   
   constructor(public dialog: MatDialog, 
-    private accountService : AccountService) { }
+    private accountService : AccountService, 
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
     this.loginData = this.accountService.getLoginData();
@@ -30,9 +32,22 @@ export class HeaderComponent implements OnInit {
     return !!this.loginData;
   }
 
+  onBecameExpert() {
+    //TODO navigation
+  }
+
+  onTopExperts() {
+    this.navigationService.goToTopExperts();
+  }
+
+  onTopAssets() {
+    this.navigationService.goToTopAssets();
+  }
+
   logout() {
     this.accountService.logout();
     this.isLogged();
+    this.navigationService.goToHome();
   }
 
   editAdvisor() {

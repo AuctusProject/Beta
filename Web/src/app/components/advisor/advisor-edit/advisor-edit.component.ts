@@ -25,7 +25,7 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
   
-  advisor: Advisor;
+  advisor: Advisor = new Advisor();
   promise: Subscription;
   @ViewChild("FileUploadComponent") FileUploadComponent: FileUploaderComponent;  
   @ViewChild("Name") Name: InheritanceInputComponent;
