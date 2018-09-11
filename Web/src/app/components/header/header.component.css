@@ -12,8 +12,18 @@
 
 .landing-logo {
     height: 34px;
-    cursor:pointer;
+    cursor: pointer;
     margin-right: 20px;
+    margin-left: 20px;
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.landing-logo:focus {
+    outline: none;
 }
 
 a {
