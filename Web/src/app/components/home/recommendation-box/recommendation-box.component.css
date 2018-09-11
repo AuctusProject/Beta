@@ -1,5 +1,10 @@
+:host{
+    display: inline-flex;
+    max-width: 389px;
+    width: calc(100vw - 20px);
+}
 .recommendation-box{
-    width: 369px;
+    width:100%;
     background-color: #151515;
     display: inline-flex;
     margin-left: 10px;

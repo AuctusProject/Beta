@@ -10,7 +10,7 @@ export class RecommendationBoxComponent implements OnInit {
   @Input() adviceList: FeedResponse[];
   @Input() adviceType: string;
   displayedColumns: string[] = ['assetCode', 'adviceType', 'advisorName'];
-
+  
   constructor() { }
 
   ngOnInit() {

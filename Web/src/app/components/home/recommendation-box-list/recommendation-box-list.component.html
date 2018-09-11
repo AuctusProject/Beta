@@ -1,14 +1,23 @@
-<div class="recommendation-box-container">
+<div class="global-container">
   <div class="section-title">
     Expert Recommendations
   </div>
   <div class="section-subtitle">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   </div>
-  <div class="recommendation-list" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center top" fxLayoutAlign.xs="center center">
-    <recommendation-box [adviceType]="'BUY'" [adviceList]="buyAdvices"></recommendation-box>
-    <recommendation-box [adviceType]="'SELL'" [adviceList]="sellAdvices"></recommendation-box>
-    <recommendation-box [adviceType]="'CLOSE POSITION'" [adviceList]="closePositionAdvices"></recommendation-box>
+  <div class="recommendation-list" fxHide.lt-md>
+    <recommendation-box  [adviceType]="'BUY'" [adviceList]="buyAdvices"></recommendation-box>
+    <recommendation-box fxHide.lt-md [adviceType]="'SELL'" [adviceList]="sellAdvices"></recommendation-box>
+    <recommendation-box fxHide.lt-md [adviceType]="'CLOSE POSITION'" [adviceList]="closePositionAdvices"></recommendation-box>  
+  </div>
+  <div class="recommendation-list" fxHide.gt-sm>
+      <owl-carousel 
+      [options]="{items: 1, dots: true, navigation: false}"
+      [carouselClasses]="['owl-theme', 'row', 'sliding']">
+        <recommendation-box [adviceType]="'BUY'" [adviceList]="buyAdvices"></recommendation-box>
+        <recommendation-box [adviceType]="'SELL'" [adviceList]="sellAdvices"></recommendation-box>
+        <recommendation-box [adviceType]="'CLOSE POSITION'" [adviceList]="closePositionAdvices"></recommendation-box>
+      </owl-carousel>
   </div>
   <div>
     <div class="access-button" (click)="goToTopAssets()">

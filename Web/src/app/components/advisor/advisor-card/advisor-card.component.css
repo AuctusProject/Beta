@@ -1,5 +1,4 @@
 :host{
-    width: 268px;
     background-color: #252525;
     display: inline-flex;
     vertical-align: top;
@@ -7,7 +6,7 @@
 }
 
 .advisor-card-container{
-    width: 100%;
+    width: 268px;
 }
 
 .expert-details-div{
@@ -75,11 +74,11 @@
     margin: 12px 0;
 }
 
-/deep/ .br{
+::ng-deep .br{
     margin: 0 0 !important;
 }
 
-/deep/ .br-fontawesome-o .br-unit{
+::ng-deep .br-fontawesome-o .br-unit{
     margin-right: unset !important; 
     font-size: unset !important;
     height: unset !important;
@@ -87,12 +86,12 @@
     margin: 0 2px;
 }
 
-/deep/ .br-fontawesome-o .br-unit:after{
+::ng-deep .br-fontawesome-o .br-unit:after{
     color:#343434;
 }
 
-/deep/ .br-fontawesome-o .br-fraction:after,
-/deep/ .br-fontawesome-o .br-selected:after{
+::ng-deep .br-fontawesome-o .br-fraction:after,
+::ng-deep .br-fontawesome-o .br-selected:after{
     color:#999999;
 }
 

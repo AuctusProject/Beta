@@ -1,5 +1,4 @@
 :host{
-    background-color: #f7f7f7;
     display: block;
 }
 
@@ -12,13 +11,12 @@
     text-align: center;
 }
 
-
 .blocked-content{
     height: 300px;
     position: absolute;
-    width: 100%;
-    z-index: 1;
+    z-index: 2;
     background-color: rgb(255,255,255,0.6);
+    max-width: unset !important;
 }
 
 .blur{
@@ -48,6 +46,7 @@ a{
     border: solid 1px #ffffff;
     border-radius: 44px;
     color: #ffffff;
+    
 }
 
 .lock-wrapper fa-icon{

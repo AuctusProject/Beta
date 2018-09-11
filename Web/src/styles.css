@@ -3,6 +3,8 @@
 @import '~ngx-bar-rating/themes/br-default-theme.css';
 @import '~font-awesome/css/font-awesome.css';
 @import '~ngx-bar-rating/themes/br-fontawesome-o-theme.css';
+@import "~owl.carousel/dist/assets/owl.carousel.css";
+@import "~owl.carousel/dist/assets/owl.theme.default.css";
 
 @font-face {
   font-family: "HelveticaNeueBold";
@@ -214,6 +216,12 @@ button.is-loading .btn-spinner {
   font-weight: 500;
 }
 
+@media(max-width:960px){
+  .section-title{
+    font-size: 20px;
+  }
+}
+
 .section-title.inverted{
   color: #212121;
 }
@@ -330,10 +338,22 @@ textarea:read-only {
   color: rgba(0,0,0,.38);
 }
 
-
 .global-container{
   margin: 0 auto;
-  width: 1024px;
+  width:calc(100% - 5px);
+}
+
+@media(min-width: 960px){
+  .global-container{
+    width: 1168px;
+  }
+}
+
+@media(min-width: 960px){
+  .global-container-min{
+    width:100%;
+    min-width: 1168px;
+  }
 }
 
 .mat-flat-button.mat-primary {
@@ -341,4 +361,33 @@ textarea:read-only {
   border: solid 0.5px #707070;
   max-width: 250px;
   min-width: 90px;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.owl-theme .owl-dots .owl-dot span{
+  border: 1px solid white;
+  background: unset;
+}
+
+.inverted .owl-theme .owl-dots .owl-dot span{
+  border: 1px solid #151515;
+}
+
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+    background: white;
+}
+
+.inverted .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+  background: #151515;
+}
+
+.inverted{
+  background-color: #f7f7f7;
 }

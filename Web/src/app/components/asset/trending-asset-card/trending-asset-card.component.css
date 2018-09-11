@@ -1,5 +1,6 @@
 :host{
-    width: 369px;
+    max-width: 369px;
+    width: calc(100% - 20px);
     padding: 16px 0;
     background-color: #151515;
     display: inline-flex;

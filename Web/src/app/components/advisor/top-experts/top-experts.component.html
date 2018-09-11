@@ -1,23 +1,32 @@
-<div class="section-title">
-  TOP EXPERTS
-</div>
-<div class="section-filter" *ngIf="!hideFilters">
-  <mat-form-field>
-    <mat-select placeholder="Experts sorted by"
-          (selectionChange)="onSortOptionChanged()" [(ngModel)]="selectedSortOption">
-          <mat-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
-<div class="advisors-list">
-  <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert" [advisorsLength]="experts.length"></advisor-card>
-</div>
-<div>
-  <div *ngIf="resultsLimit > 0" class="access-button" (click)="goToTopExperts()">
-    FIND MORE
+<div class="global-container">
+  <div class="section-title">
+    TOP EXPERTS
   </div>
-  <div *ngIf="!resultsLimit && hasMoreExperts()" class="access-button" (click)="loadMoreExperts()">
-    LOAD MORE
+  <div class="section-filter" *ngIf="!hideFilters">
+    <mat-form-field>
+      <mat-select placeholder="Experts sorted by"
+            (selectionChange)="onSortOptionChanged()" [(ngModel)]="selectedSortOption">
+            <mat-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="advisors-list" fxHide.lt-md>
+    <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert" [advisorsLength]="experts.length"></advisor-card>
+  </div>
+  <div class="advisors-list" fxHide.gt-sm>
+    <owl-carousel *ngIf="experts && experts.length > 0"
+      [options]="{items: 1, dots: true, navigation: false}"
+      [carouselClasses]="['owl-theme', 'row', 'sliding']">
+      <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert" [advisorsLength]="experts.length"></advisor-card>
+    </owl-carousel>
+  </div>
+  <div>
+    <div *ngIf="resultsLimit > 0" class="access-button" (click)="goToTopExperts()">
+      FIND MORE
+    </div>
+    <div *ngIf="!resultsLimit && hasMoreExperts()" class="access-button" (click)="loadMoreExperts()">
+      LOAD MORE
+    </div>
   </div>
 </div>
-<trending-assets *ngIf="!resultsLimit"></trending-assets>
+<trending-assets class="inverted" *ngIf="!resultsLimit"></trending-assets>
