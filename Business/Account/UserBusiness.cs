@@ -565,7 +565,8 @@ Auctus Team", WebUrl, code));
                     Id = advisor.Id,
                     Description = advisor.Description,
                     Name = advisor.Name,
-                    Advices = advices.Count(c => c.AdvisorId == advisor.Id)
+                    Advices = advices.Count(c => c.AdvisorId == advisor.Id),
+                    UrlGuid = advisor.UrlGuid.ToString()
                 });
             }
             foreach (DomainObjects.Asset.Asset asset in assets)

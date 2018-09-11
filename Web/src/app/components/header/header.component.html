@@ -1,12 +1,26 @@
 <div class="global-container">
-<img src="./assets/logo.png" routerLink="" class="landing-logo">
-<span class="spacer"></span>
-<div class="menu" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-around center">
-    <a routerLink="/top-experts" routerLinkActive="active">TOP EXPERTS</a>
-    <a routerLink="/top-assets" routerLinkActive="active">TOP ASSETS</a>
-    <a routerLink="/about-us" routerLinkActive="active">ABOUT US</a>
-    <div class="separator"></div>
-    <a *ngIf="!loginData" (click)="login()">LOGIN/SIGN UP</a>
-    <a *ngIf="loginData" (click)="logout()">LOGOUT</a>
-</div>
+    <img src="./assets/logo.png" routerLink="" class="landing-logo" />
+    <span class="spacer"></span>
+    <div class="menu" fxLayout="row" fxLayoutAlign="space-around center">
+        <a routerLink="/top-experts" routerLinkActive="active"><span>TOP EXPERTS</span></a>
+        <div class="separator"></div>
+        <a routerLink="/top-assets" routerLinkActive="active"><span>TOP ASSETS</span></a>
+        <div class="separator"></div>
+        <a routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a>
+        <global-search class="search"></global-search>
+        <span class="login" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
+        <span class="signin" *ngIf="!isLogged()" (click)="register()">SIGN IN</span>
+        <a *ngIf="isLogged()" [matMenuTriggerFor]="profile">
+            <span fxLayout="row" fxLayoutAlign="space-around center">
+                <span>PROFILE</span>
+                <mat-icon>arrow_drop_down</mat-icon>
+            </span>
+        </a>
+        <mat-menu class="profile-menu" #profile="matMenu">
+            <button class="profile-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
+            <button class="profile-menu-item" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
+            <button class="profile-menu-item" (click)="changePassword()" mat-menu-item>CHANGE PASSWORD</button>
+            <button class="profile-menu-item" (click)="logout()" mat-menu-item>LOGOUT</button>
+        </mat-menu>
+    </div>
 </div>

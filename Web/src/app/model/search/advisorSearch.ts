@@ -3,4 +3,5 @@ export class AdvisorSearch {
     name: string;
     description: string;
     advices: number;
+    urlGuid: string;
 }

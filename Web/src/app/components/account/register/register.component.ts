@@ -144,7 +144,7 @@ export class RegisterComponent implements ModalComponent, OnInit {
   }
 
   getPasswordOptions() {
-    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", browserAutocomplete: "", minLength: 8, maxLength: 100 } };
+    return { inputType: InputType.Password, textOptions: { placeHolder: "Password", browserAutocomplete: "off", minLength: 8, maxLength: 100 } };
   }
 
   getReferralOptions() {

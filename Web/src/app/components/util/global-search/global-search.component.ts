@@ -3,6 +3,7 @@ import { AccountService } from '../../../services/account.service';
 import { SearchResponse } from '../../../model/search/searchResponse';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { NavigationService } from '../../../services/navigation.service';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'global-search',
@@ -13,6 +14,9 @@ export class GlobalSearchComponent implements OnInit {
   searchResults: SearchResponse = new SearchResponse();
   timer: any;
   inputText: string;
+  showExperts: boolean = true;
+  showAssets: boolean = true;
+
   constructor(private accountService: AccountService,
     private navigationService: NavigationService) { }
 
@@ -33,6 +37,8 @@ export class GlobalSearchComponent implements OnInit {
   search(searchStr: string) {
     this.accountService.search(searchStr).subscribe(result => {
       this.searchResults = result;
+      this.showAssets = !!result && !!result.assets && result.assets.length > 0;
+      this.showExperts = !!result && !!result.advisors && result.advisors.length > 0;
     });
   }
 
@@ -47,5 +53,13 @@ export class GlobalSearchComponent implements OnInit {
     } else {
       this.inputText = "";
     }
+  }
+  
+  getAssetImgUrl(assetId: number) {
+    return CONFIG.assetImgUrl.replace("{id}", assetId.toString());
+  }
+
+  getAdvisorImgUrl(guid: string) {
+    return CONFIG.profileImgUrl.replace("{id}", guid);
   }
 }

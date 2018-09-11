@@ -1,0 +1,95 @@
+.search-label {
+    color: #959595;
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+input::placeholder {
+    color: #959595;
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.9; 
+}
+
+.search-icon {
+    color: white;
+}
+
+.search-input {
+    color: white;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: #959595;
+}
+
+:host ::ng-deep .mat-focused .mat-form-field-ripple {
+    background-color: #126efd !important;
+}
+
+:host ::ng-deep .mat-input-element {
+    caret-color:  #126efd;
+}
+
+:host ::ng-deep .mat-form-field .mat-focused .mat-form-field-label {
+    color: #126efd;
+}
+
+::ng-deep .search-autocomplete {
+    background-color:  #101010;
+    box-shadow: 0 0 4px #959595 !important;
+}
+
+::ng-deep .search-autocomplete-header label {
+    color: white;
+    font-size: 14px;
+    font-style: italic;
+    opacity: 0.9; 
+    border-bottom-color: #959595;
+    border-bottom-style: solid;
+    border-bottom-width: 0.5px;
+}
+
+::ng-deep .search-autocomplete-option {
+    padding-left: 8px !important;
+    background-color: #101010 !important;
+}
+
+::ng-deep .search-autocomplete-option span {
+    color: white;
+    font-size: 12px;
+    opacity: 0.9; 
+}
+
+::ng-deep .search-autocomplete-option:hover span {
+    color: #126efd;
+}
+
+::ng-deep .search-autocomplete-option.mat-selected span {
+    color: #126efd;
+}
+
+::ng-deep .search-autocomplete-option-separation {
+    border-color: #959595;
+    border-style: solid;
+    border-width: 0.5px;
+    height: 1px;
+    width: 100%;
+    margin-left: 24px;
+}
+
+::ng-deep .search-autocomplete-option-div-img {
+    width: 17px;
+    height: 100%;
+    display: inline-flex;
+    padding-bottom: 2px;
+    padding-right: 6px;
+    vertical-align: middle;
+}
+
+::ng-deep .search-autocomplete-option-div-img img {
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+}

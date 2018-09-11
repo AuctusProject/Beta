@@ -75,7 +75,7 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
   }
 
   getNameOptions() {
-    return { textOptions: { placeHolder: "Name", browserAutocomplete: "", maxLength: 50 } };
+    return { textOptions: { placeHolder: "Name", browserAutocomplete: "name", maxLength: 50 } };
   }
 
   getDescriptionOptions() {
