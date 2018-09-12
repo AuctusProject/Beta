@@ -1,5 +1,5 @@
 :host{
-    height: 62px;
+    height: 82px;
     background-color: #101010;
     width: 100%;
     display: flex;
@@ -8,22 +8,6 @@
 :host > div {
     display: flex;
     align-items: center;
-}
-
-.landing-logo {
-    height: 34px;
-    cursor: pointer;
-    margin-right: 15px;
-    margin-left: 15px;
-    -khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-.landing-logo:focus {
-    outline: none;
 }
 
 a {
