@@ -3,25 +3,21 @@
     border-bottom: solid 0.5px #707070;
 }
 
-img {
-    width: 50px;
-}
-
 .symbol {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.4;
-    letter-spacing: 0.4px;
-    color: #626262;
+    font-size: 20px;
+    line-height: 0.7;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    margin-bottom: 5px;
 }
 
 .asset-name {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 300;
-    line-height: 1.06;
-    letter-spacing: 0.2px;
-    color: #555555;
-    margin-bottom: 7px;
+    line-height: 1.4;
+  letter-spacing: 0.3px;
+    color: #ffffff;
+    margin-bottom: 5px;
   }
 
   .asset-info {
@@ -51,51 +47,31 @@ img {
     color: #4e4e4e;
   }
 
-  .ratings-bullet-point {
-    width: 9px;
-    height: 9.5px;
-    background-color: #f99d00;
-  }
-
-  .ratings-distribution{
-    font-size: 7px;
-    width: 86px;
-    font-weight: 300;
-    line-height: 2.14;
-    letter-spacing: 0.2px;
-    color: #262626;
-  }
-
-.ratings{
-    height: 56px;
-    width: 56px;
-    line-height: 56px;
-    border-radius: 30px;
-    border: solid 2px #f99d00;
-    font-size: 8.5px;
-    font-weight: 600;
-    line-height: 1.18;
-    letter-spacing: 0.2px;
-    text-align: center;
-    color: #393939;
-    margin: 9px 16px;
-    line-height: 1;
-}
-
-.ratings .rating-value{
-    font-size: 18px;
-    line-height: 0.56;
-    letter-spacing: 0.5px;
-}
-
 .price {
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.07;
     letter-spacing: 0.3px;
     text-align: right;
-    color: #5d5d5d;
-    width: 62px;
+    color: #ffffff;
+    width: 70px;
+}
+
+.variation{
+    width: 50px;
+    color: #ffffff;
+}
+
+.variation.bull{
+    color: #3ed142;
+}
+
+.variation.bear{
+    color: #d13e3e;
+}
+
+.arrow{
+    display: inline;
 }
 
 .general-recommendation-box{

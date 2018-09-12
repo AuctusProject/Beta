@@ -212,7 +212,7 @@ namespace Auctus.Business.Account
                 result.AdvisorReferral = groupedReferred.Select(c => new DashboardResponse.AdvisorData()
                 {
                     Id = c.Id,
-                    Name = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).Name : consideredUsers.First(u => u.Id == c.Id).Email,
+                    Name = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).Name : consideredUsers.Any(u => u.Id == c.Id) ? consideredUsers.First(u => u.Id == c.Id).Email : "admin",
                     UrlGuid = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString() : null,
                     Total = c.Value,
                     SubValue1 = consideredReferred.Count(a => a.ReferredId == c.Id && a.ReferralStatusType == ReferralStatusType.InProgress),

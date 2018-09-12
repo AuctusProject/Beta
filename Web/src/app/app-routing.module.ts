@@ -8,7 +8,6 @@ import { AssetDetailsComponent } from './components/asset/asset-details/asset-de
 import { AdvicesComponent } from './components/advisor/advices/advices.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
-import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 
@@ -21,8 +20,7 @@ const routes: Routes = [
     { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
-    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
-    { path: 'advisor-edit/:id', component: AdvisorEditComponent, canActivate:[AuthRedirect] }
+    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] }
 ];
 
 @NgModule({
