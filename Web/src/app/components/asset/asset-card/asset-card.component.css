@@ -55,6 +55,8 @@
     text-align: right;
     color: #ffffff;
     width: 70px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .variation{
@@ -75,36 +77,38 @@
 }
 
 .general-recommendation-box{
-    height: 25px;
-    width: 114px;
+    height: 26px;
+    width: 163px;
     font-size: 11px;
     font-weight: 600;
     line-height: 1.27;
     letter-spacing: 0.3px;
     text-align: center;
     color: #ffffff;
+    margin-left: 35px;
+    margin-right: 35px;
 }
 
 .general-recommendation-box.neutral{
-    background-color: black;
+    background-color: #999999;
 }
 
 .general-recommendation-box.moderate-buy{
-    background-color: #63c96f;
+    background-color: #3ed142;
 }
 
 .general-recommendation-box.strong-buy{
-    background-color: green;
+    background-color: #3ed142;
 }
 
 .general-recommendation-box.moderate-sell{
-    background-color: #f99d00;
+    background-color: #d13e3e;
 }
 
 .general-recommendation-box.strong-sell{
-    background-color: brown;
+    background-color: #d13e3e;
 }
 
 .general-recommendation-box.close{
-    background-color: grey;
+    background-color: #999999;
 }
