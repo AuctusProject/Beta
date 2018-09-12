@@ -61,6 +61,7 @@ export class TopExpertsComponent implements OnInit {
   onEditProfileClick() {
     let modalData = new FullscreenModalComponentInput();
     modalData.component = AdvisorEditComponent;
+    modalData.componentInput = { id: this.accountService.getLoginData().id };
     this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 
