@@ -11,6 +11,7 @@ import { Util } from '../../util/Util';
 export class RecommendationDistributionComponent implements OnInit {
   pieChart: Chart;
   @Input() data : RecommendationDistributionResponse[];
+  @Input() chartTitle : string;
   pieData: any;
   totalBuy =0;
   totalSell =0;
@@ -54,7 +55,13 @@ export class RecommendationDistributionComponent implements OnInit {
         enabled: false
       },
       legend:{enabled:false},
-      title: {text:null},
+      title: {
+        text: this.chartTitle,
+        align: 'center',
+        verticalAlign: 'middle',
+        y: -4,
+        style: { "color": "#ffffff", "fontSize": "8px" }
+      },
       tooltip: {
           pointFormat: '<b>{point.percentage:.1f}%</b>'
       },

@@ -63,6 +63,6 @@ export class AssetCardComponent implements OnInit {
 
   get24hVariation(){
     if (this.asset.variation24h == null) return '0.00%';
-    return this.asset.variation24h + '%';
+    return Math.round(this.asset.variation24h * 10000) / 100 + '%';
   }
 }

@@ -2,7 +2,10 @@
   <div fxLayout="row" fxLayoutGap="30px">
     <div fxLayout="column">   
       <advisor-card [advisor]="expert"></advisor-card>
-      <recommendation-distribution [data]="expert.recommendationDistribution"></recommendation-distribution>
+      <div class="distribution-box">
+        <div class="distribution-box-title">Currency Ratings Distribution</div>
+        <recommendation-distribution [data]="expert.recommendationDistribution"></recommendation-distribution>
+      </div>
     </div>
     <div class="expert-details-content" fxLayout="column" fxFlex>
       <div fxLayout="row" fxLayoutAlign="space-between end">
@@ -12,12 +15,12 @@
           <div class="expert-followers">Followed by {{expert.numberOfFollowers}} investors</div>
         </div>
         <div fxLayout="row" fxLayoutAlign="end end" fxLayoutGap="10px">
-          <div class="access-button follow-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>   
-          <div class="access-button follow-button" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
-          <div class="access-button follow-button" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
+          <div class="blue-button action-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>   
+          <div class="blue-button action-button" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
+          <div class="white-button action-button" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
             UNFOLLOW
           </div>
-          <div class="access-button follow-button" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
+          <div class="blue-button action-button" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
             FOLLOW
           </div>
         </div>
@@ -37,7 +40,15 @@
           <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Position </th>
             <td mat-cell *matCellDef="let asset"> 
-              <div>{{getLastAdviceTypeDescription(asset)}}</div>
+              <div [style.background-color]="getLastAdviceTypeColor(asset)">{{getLastAdviceTypeDescription(asset)}}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef> Value </th>
+            <td mat-cell *matCellDef="let asset"> 
+              At price
+              <div>{{asset.assetAdvisor[0].lastAdviceAssetValue | currency}}</div>
             </td>
           </ng-container>
 
@@ -56,7 +67,7 @@
           </ng-container>
 
           <ng-container matColumnDef="ratings">
-            <th mat-header-cell *matHeaderCellDef> # of Ratings </th>
+            <th mat-header-cell *matHeaderCellDef> No. of Ratings </th>
             <td mat-cell *matCellDef="let asset">
               {{getTotalRatings(asset)}}
             </td>
@@ -65,17 +76,39 @@
           <ng-container matColumnDef="followButton">
             <th mat-header-cell *matHeaderCellDef> </th>
             <td mat-cell *matCellDef="let asset">
-              Follow
+              <div class="white-button action-button-sm" *ngIf="asset.following" (click)="onUnfollowAssetClick($event, asset)">
+                UNFOLLOW
+              </div>
+              <div class="blue-button action-button-sm" *ngIf="!asset.following" (click)="onFollowAssetClick($event, asset)">
+                FOLLOW
+              </div>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="expandedDetail">
-            <td colspan=6 mat-cell *matCellDef="let asset"> 
+            <td colspan=7 mat-cell *matCellDef="let asset"> 
               <div>
                 <asset-history-chart [assetValues]="asset.element.values" [advices]="asset.element.assetAdvisor[0].advices"></asset-history-chart>
-                <div>
-                  Success rate: {{asset.element.assetAdvisor[0].successRate}}
-                  Average return: {{asset.element.assetAdvisor[0].averageReturn}}
+                <div class="rates" fxLayout="row" fxLayoutAlign="space-around center">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                    <svg viewBox="0 0 36 36" class="circular-chart blue" fxFlex="80px">
+                      <path class="circle"
+                      [attr.stroke-dasharray]="asset.element.assetAdvisor[0].successRate * 100 +', 100'"
+                        d="M18 2.0845
+                          a 15.9155 15.9155 0 0 1 0 31.831
+                          a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <text x="18" y="20.35" class="percentage">{{asset.element.assetAdvisor[0].successRate * 100 | number:'1.0-0'}}%</text>
+                    </svg>
+                    <div class="success-rate-description" fxFlex>Success Rate</div>
+                  </div>
+                  <div class="separator"></div>
+                  <div fxLayout="row" fxLayoutAlign="start center"  fxLayoutGap="20px" >
+                    <div class="average-return" fxFlex="80px">
+                        {{asset.element.assetAdvisor[0].averageReturn * 100 | number:'1.1-1'}}%
+                    </div>
+                    <div class="average-return-description" fxFlex>Average Return</div>
+                  </div>
                 </div>
               </div>
             </td>
@@ -94,3 +127,4 @@
     </div>
   </div>
 </div>
+<trending-assets class="global-container-min inverted"></trending-assets>

@@ -282,30 +282,7 @@ button.is-loading .btn-spinner {
   z-index: 10000 !important;
 }
 
-.access-button{
-  margin: 38px auto;
-  max-width: 168px;
-  height: 50px;
-  line-height: 50px;
-  border-style: solid;
-  border-width: 1px;
-  -webkit-border-image: 
-      -webkit-gradient(linear, 0 0, 0 100%, from(#07d1ff), to(#126efd)) 1 100%;
-    -webkit-border-image: 
-      -webkit-linear-gradient(#07d1ff, #126efd) 1 100%;
-    -moz-border-image:
-      -moz-linear-gradient(#07d1ff, #126efd) 1 100%;    
-    -o-border-image:
-      -o-linear-gradient(#07d1ff, #126efd) 1 100%;
-    border-image:
-      linear-gradient(to top, #07d1ff 1%, #126efd) 1 100%;
-  border-image-slice: 1;
-  font-size: 14.5px;
-  font-weight: 500;
-  text-align: center;
-  color: #07d1ff;
-  cursor: pointer;
-}
+
 
 a {
   cursor: pointer;
@@ -412,4 +389,86 @@ textarea:read-only {
 
 .landing-logo:focus {
   outline: none;
+}
+
+.access-button{
+  margin: 38px auto;
+  max-width: 168px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.action-button{
+  margin:unset;
+  height: 50px;
+  line-height: 50px;
+  min-width: 168px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.action-button-sm{
+  margin:unset;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 90px;
+  height: 27px;
+  line-height: 27px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.white-button{
+  border-style: solid;
+  border-width: 1px;
+  border-color: white;
+  border-image: none;
+  color: white;
+}
+
+.blue-button{
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-image: 
+      -webkit-gradient(linear, 0 0, 0 100%, from(#07d1ff), to(#126efd)) 1 100%;
+    -webkit-border-image: 
+      -webkit-linear-gradient(#07d1ff, #126efd) 1 100%;
+    -moz-border-image:
+      -moz-linear-gradient(#07d1ff, #126efd) 1 100%;    
+    -o-border-image:
+      -o-linear-gradient(#07d1ff, #126efd) 1 100%;
+    border-image:
+      linear-gradient(to top, #07d1ff 1%, #126efd) 1 100%;
+  border-image-slice: 1;
+  color: #07d1ff;
+}
+
+.white-button,
+.blue-button{  
+  text-align: center;
+  cursor: pointer;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2px;
+  animation: progress 1s ease-out forwards;
+}
+
+.circular-chart.black .circle {
+  stroke: #333333;
+}
+
+.circular-chart.blue .circle {
+  stroke: #2c8b8b;
+}
+
+.asset-icon,
+.asset-icon img{
+    width: 50px;
+    height: 50px;
+    background-color: #e6e6e6;
+    border-radius: 25px;
 }

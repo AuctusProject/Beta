@@ -15,7 +15,7 @@ a {
     padding-left: 25px;
     padding-right: 25px;
     cursor: pointer;
-    height: 100%;
+    height: calc(100% - 2px);
     display: inline-flex;
     align-items: center;
     border-bottom: solid 2px #101010;

@@ -1,7 +1,7 @@
 <div class="asset-card" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign="left center">
-  <div>
-      <img [src]="getAssetImgUrl()">
-    </div>
+  <div class="asset-icon">
+    <img [src]="getAssetImgUrl()">
+  </div>
   <div class="asset-info" fxLayout="column">
     <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
     <div *ngIf="asset.following">
@@ -12,13 +12,8 @@
       <button mat-raised-button color="primary" (click)="onFollowClick()">Follow</button>
     </div>
   </div>
-  <div class="ratings" fxLayout="column" fxLayoutAlign="center center">
-    <div class="rating-value">{{asset.totalRatings}}</div><br>{{getRatingLabel()}}
-  </div>
-  <div class="ratings-distribution" fxLayout="column">
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getBuyRecommendationPercentageLabel()}}</div></div>
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getCloseRecommendationPercentageLabel()}}</div></div>
-    <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="6px"><div class="ratings-bullet-point"></div><div>{{getSellRecommendationPercentageLabel()}}</div></div>
+  <div class="ratings-distribution" fxLayout="row">
+    <recommendation-distribution [data]="asset.recommendationDistribution" [chartTitle]="'<b>'+asset.totalRatings+'</b><br />Ratings'"></recommendation-distribution>
   </div>
   <div fxLayoutAlign="center center" class="general-recommendation-box" [class.neutral]="asset.mode==0" [class.moderate-buy]="asset.mode==1" [class.strong-buy]="asset.mode==2" [class.moderate-sell]="asset.mode==3" [class.strong-sell]="asset.mode==4" [class.close]="asset.mode==5">
     {{getGeneralRecommendation()}}
@@ -26,7 +21,7 @@
   <div class="price">
     {{getLastValue()}}
   </div>
-  <div>
-    {{get24hVariation()}}
+  <div class="variation" [class.bull]="asset.variation24h>0" [class.bear]="asset.variation24h<0">
+    <div class="arrow" *ngIf="asset.variation24h>0">&uarr;</div><div class="arrow" *ngIf="asset.variation24h<0">&darr;</div>&nbsp;{{get24hVariation()}}
   </div>
 </div>

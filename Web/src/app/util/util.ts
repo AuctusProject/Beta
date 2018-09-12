@@ -39,7 +39,7 @@ export class Util {
             return "#3ed142";
         }
         else{
-            return "#e6e6e6";
+            return "#999999";
         }
     }
 

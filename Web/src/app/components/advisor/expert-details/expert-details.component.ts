@@ -14,6 +14,7 @@ import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenMo
 import { NewAdviceComponent } from '../new-advice/new-advice.component';
 import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
 import { AdvisorEditComponent } from '../advisor-edit/advisor-edit.component';
+import { AssetService } from '../../../services/asset.service';
 
 @Component({
   selector: 'expert-details',
@@ -30,7 +31,7 @@ import { AdvisorEditComponent } from '../advisor-edit/advisor-edit.component';
 export class ExpertDetailsComponent implements OnInit {
   expert: AdvisorResponse;
   showOwnerButton: boolean = false;
-  displayedColumns: string[] = ['assetName', 'position', 'action', 'date', 'ratings', 'followButton'];
+  displayedColumns: string[] = ['assetName', 'position', 'value', 'action', 'date', 'ratings', 'followButton'];
   assets = [];
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   expandedElement: any;
@@ -38,7 +39,8 @@ export class ExpertDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,  
     public dialog: MatDialog, 
     public accountService: AccountService,
-    private advisorService: AdvisorService) { }
+    private advisorService: AdvisorService,
+    private assetService: AssetService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
@@ -88,6 +90,10 @@ export class ExpertDetailsComponent implements OnInit {
     return Util.GetRecommendationTypeDescription(asset.assetAdvisor[0].lastAdviceType);
   }
 
+  getLastAdviceTypeColor(asset: AssetResponse){
+    return Util.GetRecommendationTypeColor(asset.assetAdvisor[0].lastAdviceType);
+  }
+
   getLastAdviceDate(asset: AssetResponse){
     return asset.assetAdvisor[0].lastAdviceDate;
   }
@@ -99,4 +105,23 @@ export class ExpertDetailsComponent implements OnInit {
   getAdviceMode(asset:AssetResponse){
     return Util.GetAdviceModeDescription(asset.assetAdvisor[0].lastAdviceMode);
   }
+
+  onFollowClick(){
+    this.advisorService.followAdvisor(this.expert.userId).subscribe(result =>this.expert.following = true);
+  }
+
+  onUnfollowClick(){
+    this.advisorService.unfollowAdvisor(this.expert.userId).subscribe(result =>this.expert.following = false);
+  }
+
+  onFollowAssetClick(event: Event, asset: AssetResponse){
+    this.assetService.followAsset(asset.assetId).subscribe(result =>asset.following = true);
+    event.stopPropagation();
+  }
+
+  onUnfollowAssetClick(event: Event, asset: AssetResponse){
+    this.assetService.unfollowAsset(asset.assetId).subscribe(result =>asset.following = false);
+    event.stopPropagation();
+  }
+
 }
