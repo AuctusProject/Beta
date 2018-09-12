@@ -8,9 +8,9 @@
 
   <div class="section-filter" *ngIf="!hideFilters">
     <mat-form-field>
-      <mat-select placeholder="Experts sorted by"
+      <mat-select class="experts-sort" placeholder="Experts sorted by"
             (selectionChange)="onSortOptionChanged()" [(ngModel)]="selectedSortOption">
-            <mat-option *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.name}}</mat-option>
+            <mat-option class="experts-sort-option" *ngFor="let sortOption of sortOptions" [value]="sortOption.value">{{sortOption.name}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
