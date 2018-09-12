@@ -42,9 +42,13 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
     public dialog: MatDialog) { }
 
   ngOnInit() {
-    if (!this.accountService.isLoggedIn()) {
+    let loginData = this.accountService.getLoginData();
+    if (!loginData) {
       this.setClose.emit();
       this.navigationService.goToLogin();
+    } else if (!loginData.isAdvisor) {
+      this.setClose.emit();
+      this.navigationService.goToBecomeAdvisor();
     } else {
       this.assetService.getAssets().subscribe(result => {
         this.options = result;
@@ -54,6 +58,14 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
           map(value => typeof value === 'string' ? value : value.name),
           map(name => name ? this._filter(name) : this.options.slice())
         );
+        if (!!this.data && !this.data.assetId) {
+          let asset = this.options.filter(option => option.id == this.data.assetId);
+          if (!!asset && asset.length == 1) {
+            this.advise.assetId = this.data.assetId;
+            this.coinControl.setValue(asset);
+            this.setButtons();
+          }
+        }
       });
     }
   }

@@ -3,6 +3,11 @@ import { AdvisorService } from '../../../services/advisor.service';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { NavigationService } from '../../../services/navigation.service';
 import { Util } from '../../../util/Util';
+import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
+import { NewAdviceComponent } from '../new-advice/new-advice.component';
+import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
+import { MatDialog } from '@angular/material';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'top-experts',
@@ -14,6 +19,7 @@ export class TopExpertsComponent implements OnInit {
   @Input() hideFilters?: boolean;
   experts : AdvisorResponse[] = [];
   expertsResponse : AdvisorResponse[];
+  showNewAdviceButton: boolean = false;
   
   pageSize = 12;
   currentPage = 1;
@@ -27,9 +33,13 @@ export class TopExpertsComponent implements OnInit {
     {value:5, name:"Name"},
   ];
 
-  constructor(private advisorService: AdvisorService, private navigationService: NavigationService) { }
+  constructor(private advisorService: AdvisorService, 
+    public dialog: MatDialog, 
+    public accountService: AccountService,
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
+    this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.advisorService.getAdvisors().subscribe(result => {
       this.expertsResponse = result;
       if(this.resultsLimit != null && result != null){
@@ -39,6 +49,12 @@ export class TopExpertsComponent implements OnInit {
         this.setVisibleExperts();
       }
     });
+  }
+
+  onNewAdviceClick() {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = NewAdviceComponent;
+    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 
   loadMoreExperts(){
