@@ -14,7 +14,7 @@ Highcharts.setOptions({
           ]
       },
       style: {
-          fontFamily: '\'Unica One\', sans-serif'
+          fontFamily: '\'Gilroy\''
       },
       plotBorderColor: '#606063'
   },
@@ -78,13 +78,18 @@ Highcharts.setOptions({
           },
           marker: {
               lineColor: '#333'
-          }
+          },
+          
       },
       boxplot: {
           fillColor: '#505053'
       },
       errorbar: {
           color: 'white'
+      },
+      flags:{
+        color:'#2c8b8b',
+        fillColor: '#2c8b8b',
       }
   },
   legend: {

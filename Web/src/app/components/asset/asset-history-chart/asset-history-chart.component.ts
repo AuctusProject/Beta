@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { StockChart, Chart } from 'angular-highcharts';
+import { StockChart, Highcharts } from 'angular-highcharts';
 import { ValuesResponse, AdviceResponse } from '../../../model/asset/assetResponse';
 import { Util } from '../../../util/Util';
 
@@ -11,6 +11,7 @@ import { Util } from '../../../util/Util';
 export class AssetHistoryChartComponent implements OnInit {
   @Input() assetValues : ValuesResponse[];
   @Input() advices : AdviceResponse[];
+  @Input() chartTitle?: string;
   assetChart: StockChart;  
   advicesData: any = [];
   chartData: any = [];
@@ -39,7 +40,8 @@ export class AssetHistoryChartComponent implements OnInit {
       for(var i =0; i< this.advices.length; i++){
         this.advicesData.push({
           x: Date.parse(this.advices[i].date),
-          title: Util.GetRecommendationTypeDescription(this.advices[i].adviceType)
+          title: Util.GetRecommendationTypeDescription(this.advices[i].adviceType),
+          text: Util.GetRecommendationTypeDescription(this.advices[i].adviceType)
         });
       }
     }
@@ -50,39 +52,17 @@ export class AssetHistoryChartComponent implements OnInit {
       chart:{
         zoomType: 'x'
       },
-      rangeSelector: {
-        selected: 1,
-        buttonTheme: {
-          fill: '#505053',
-          stroke: '#000000',
-          style: {
-            color: '#CCC'
-          },
-          states: {
-            hover: {
-              fill: '#707073',
-              stroke: '#000000',
-              style: {
-                color: 'white'
-              }
-            },
-            select: {
-              fill: '#000003',
-              stroke: '#000000',
-              style: {
-                color: 'white'
-              }
-            }
-          }
-        },
-        inputBoxBorderColor: '#505053',
-        inputStyle: {
-            
-            color: 'silver'
-        },
-        labelStyle: {
-            color: 'silver'
+      plotOptions:{
+        flags:{
+          color:'#2c8b8b',
+          fillColor: '#2c8b8b'
         }
+      },
+      rangeSelector: {
+        enabled:false,
+      },
+      title: {
+        text: this.chartTitle,
       },
       credits:{
         enabled: false
@@ -91,14 +71,22 @@ export class AssetHistoryChartComponent implements OnInit {
         {
           name: 'Price', 
           data: this.chartData,
-          id: 'dataseries'
+          id: 'dataseries',
         },
         {
           type: 'flags',
           data: this.advicesData,
-          onSeries:'dataseries'
+          onSeries:'dataseries',
+          
         }
       ]
-    }); 
+    });
+
+    this.refresh();
+  }
+
+  refresh(){
+    var self = this;
+    setTimeout(() => {self.assetChart.ref.reflow()}, 100);
   }
 }
