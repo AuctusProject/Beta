@@ -45,14 +45,17 @@
     background-color: #1270fd;
 }
 
-::ng-deep .mat-select-content, .mat-select-panel-done-animating {
+::ng-deep .experts-sort-option.mat-option.mat-selected:not(.mat-option-disabled) {
+    color: #1270fd;
     background: #151515;
 }
 
-::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-    color: #1270fd;
+::ng-deep .experts-sort-option.mat-option {
+    color: white;
+    background: #151515;
 }
 
-::ng-deep .mat-option {
-    color: white;
+::ng-deep .mat-option:focus:not(.mat-option-disabled), 
+::ng-deep .mat-option:hover:not(.mat-option-disabled) {
+    background: #252525;
 }

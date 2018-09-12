@@ -1,8 +1,6 @@
 <div class="global-container" *ngIf="expert">
   <div fxLayout="row" fxLayoutGap="30px">
     <div fxLayout="column">   
-      <button mat-flat-button *ngIf="showOwnerButton" (click)="onNewAdviceClick()">New Recommendation</button>   
-      <button mat-flat-button *ngIf="showOwnerButton" (click)="onEditProfileClick()">Edit Profile</button>     
       <advisor-card [advisor]="expert"></advisor-card>
       <recommendation-distribution [data]="expert.recommendationDistribution"></recommendation-distribution>
     </div>
@@ -13,7 +11,16 @@
           <div class="expert-description">{{expert.description}}</div>
           <div class="expert-followers">Followed by {{expert.numberOfFollowers}} investors</div>
         </div>
-        <div class="access-button follow-button">FOLLOW</div>
+        <div fxLayout="row" fxLayoutAlign="end end" fxLayoutGap="10px">
+          <div class="access-button follow-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>   
+          <div class="access-button follow-button" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
+          <div class="access-button follow-button" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
+            UNFOLLOW
+          </div>
+          <div class="access-button follow-button" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
+            FOLLOW
+          </div>
+        </div>
       </div>
       <div *ngIf="expert.assets">
         <table mat-table [dataSource]="assets" class="assets-table">
