@@ -30,9 +30,13 @@ export class ConfigurationComponent implements ModalComponent, OnInit {
     private navigationService : NavigationService) { }
 
   ngOnInit() {
-    if (!this.accountService.isLoggedIn()) {
+    let loginData = this.accountService.getLoginData();
+    if (!loginData) {
       this.setClose.emit();
       this.navigationService.goToLogin();
+    } else if (!loginData.isAdvisor && !loginData.hasInvestment) {
+      this.setClose.emit();
+      this.navigationService.goToWalletLogin();
     } else {
       this.accountService.getConfiguration().subscribe(result =>
         {
@@ -52,7 +56,12 @@ export class ConfigurationComponent implements ModalComponent, OnInit {
     );
   }
 
+  setNewWallet() {
+    this.setClose.emit();
+    this.navigationService.goToWalletLogin();
+  }
+
   getWalletOptions() {
-    return { textOptions: { placeHolder: "Registered wallet", showValidatorError: false, showHintSize: false, disabled: true } };
+    return { textOptions: { placeHolder: "Registered wallet", showValidatorError: false, showHintSize: false, required: false, disabled: true } };
   }
 }

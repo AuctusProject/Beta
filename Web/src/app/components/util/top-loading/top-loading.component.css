@@ -1,9 +1,9 @@
 #top-loading
 {
-    position: absolute;
+    position: fixed;
     left: 0;
     width: 100%;
-    top: 83px;
+    top: 0px;
 }
 
 ::ng-deep .mat-progress-bar-fill::after {
