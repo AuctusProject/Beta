@@ -538,9 +538,9 @@ Auctus Team", WebUrl, code));
             return Math.Floor(groupedData.Sum(c => c.ReferralDiscount.Value * MinimumAucLogin / 100.0));
         }
 
-        public List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
+        public IEnumerable<User> ListValidUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
-            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId);
+            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId).Where(c => c.Wallet != null && c.Wallet.AUCBalance.HasValue && c.Wallet.AUCBalance.Value >= GetMinimumAucAmountForUser(c));
         }
 
         public SearchResponse Search(string searchTerm)

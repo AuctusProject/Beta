@@ -51,7 +51,7 @@ namespace Auctus.Business.Advisor
 
         private async Task SendAdviceNotificationForFollowersAsync(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            var usersFollowing = UserBusiness.ListUsersFollowingAdvisorOrAsset(advisor.Id, asset.Id);
+            var usersFollowing = UserBusiness.ListValidUsersFollowingAdvisorOrAsset(advisor.Id, asset.Id);
             foreach (var user in usersFollowing)
                 await SendAdviceNotificationAsync(user, advisor, asset, type);
         }
