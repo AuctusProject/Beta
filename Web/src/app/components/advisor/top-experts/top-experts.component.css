@@ -1,5 +1,6 @@
 .advisors-list{
     text-align: center;
+    margin-bottom: 38px;
 }
 
 .advisors-list advisor-card{
@@ -14,4 +15,44 @@
 
 .section-title{
     padding-bottom: 56px;
+}
+
+:host ::ng-deep .mat-select-value {
+    color: white;
+}
+
+:host ::ng-deep .mat-select-arrow {
+    color: white;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+    color: white;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: white;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: #1270fd;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color: #1270fd;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: #1270fd;
+}
+
+::ng-deep .mat-select-content, .mat-select-panel-done-animating {
+    background: #151515;
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: #1270fd;
+}
+
+::ng-deep .mat-option {
+    color: white;
 }
