@@ -1,18 +1,20 @@
-<div class="global-container">
-  <div class="section-title">
-    Top Assets
-  </div>
-  <div class="section-subtitle">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br> 
-      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br> 
-      nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </div>
+<div class="top-assets-container">
+  <div class="global-container">
+    <div class="section-title">
+      Top Assets
+    </div>
+    <div class="section-subtitle">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br> 
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br> 
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </div>
 
-  <div  fxLayout="column"  fxLayoutAlign="center center">
-    <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
-    <button mat-button *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">
-      Load more
-    </button>
+    <div  fxLayout="column"  fxLayoutAlign="center center">
+      <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
+      <button mat-button *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">
+        Load more
+      </button>
+    </div>
+    <trending-assets></trending-assets>
   </div>
-  <trending-assets></trending-assets>
 </div>
