@@ -1,3 +1,8 @@
+.top-assets-container{
+    background-color: #252525;
+    display: flex;
+}
+
 .filter-title {
     font-size: 11px;
     font-weight: 500;
