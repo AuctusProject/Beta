@@ -18,7 +18,7 @@ export class CoinSearchComponent implements OnInit {
   @Input() assetId: number;
   @Output() onSelect: EventEmitter<Asset> = new EventEmitter<Asset>();
 
-  private required: boolean = true;
+  private required: boolean = false;
   private placeholder: string = "Select a Coin *";
   private outlineField: boolean = true;
   private darkStyle: boolean = true;
