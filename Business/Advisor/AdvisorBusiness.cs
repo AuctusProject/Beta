@@ -120,7 +120,7 @@ namespace Auctus.Business.Advisor
                 picture = memoryStream.ToArray();
             }
             if (picture.Length > (1 * 1024 * 1024))
-                throw new BusinessException("File is too large.");
+                throw new BusinessException("File is too big. The maximum is 1MB.");
 
             return picture;
         }
