@@ -10,8 +10,8 @@
       </mat-select>
     </mat-form-field>
     <div class="spacer"></div>
-    <div class="access-button action-button" *ngIf="showAdvisorButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>
-    <div class="access-button action-button" *ngIf="showAdvisorButton" (click)="onEditProfileClick()">EDIT PROFILE</div>
+    <div class="blue-button action-button" *ngIf="showAdvisorButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>
+    <div class="white-button action-button" *ngIf="showAdvisorButton" (click)="onEditProfileClick()">EDIT PROFILE</div>
   </div>
   <div class="advisors-list" fxHide.lt-md>
     <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert" [advisorsLength]="experts.length"></advisor-card>
@@ -24,10 +24,10 @@
     </owl-carousel>
   </div>
   <div>
-    <div *ngIf="resultsLimit > 0" class="access-button" (click)="goToTopExperts()">
+    <div *ngIf="resultsLimit > 0" class="blue-button access-button" (click)="goToTopExperts()">
       FIND MORE
     </div>
-    <div *ngIf="!resultsLimit && hasMoreExperts()" class="access-button" (click)="loadMoreExperts()">
+    <div *ngIf="!resultsLimit && hasMoreExperts()" class="blue-button access-button" (click)="loadMoreExperts()">
       LOAD MORE
     </div>
   </div>

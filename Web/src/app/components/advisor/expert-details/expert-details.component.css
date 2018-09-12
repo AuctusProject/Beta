@@ -1,7 +1,21 @@
 :host{
     background: #252525;
-    padding-top: 20px;
+    padding-top: 70px;
     display: block;
+}
+
+.distribution-box{
+    background: #151515;
+    color: white;
+    padding: 24px 4px 4px 4px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.distribution-box-title{
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .expert-name{
@@ -65,12 +79,35 @@
     background: #15151540;
 }
 
+/* 959595 */
+
 .element-row.expanded .mat-cell{
     border-bottom-color: transparent;
 }
 
+.element-row:not(.expanded) .mat-cell,
+.mat-column-expandedDetail{
+    border-bottom-color: #959595;
+}
+
 .element-row.expanded {
     border-bottom-color: transparent;
+}
+
+.expanded{
+    background-color: #404040;
+}
+
+.expanded td:first-child{
+    border-left: 1px solid #959595;
+}
+
+.expanded td:last-child{
+    border-right: 1px solid #959595;
+}
+
+.assets-table tr:first-child.expanded td{
+    border-top: 1px solid #959595;
 }
 
 :host ::ng-deep .collapsed .highcharts-container{
@@ -85,29 +122,98 @@
     background: #252525;
 }
 
-/*.expert-details-action-button{
-    width: 132px;
-    height: 26px;
-    line-height: 26px;
-    background-color: #f99d00;
-    font-size: 11px;
-    font-weight: 500;
-    text-align: center;
-    color: #ffffff;
-}*/
-
 .mat-column-assetName .table-asset-code{
     font-size: 18px;
     font-weight: 300;
 }
 
 .mat-column-position div{
-    width: 70px;
-    height: 16px;
-    line-height: 16px;
-    background-color: #63c96f;
-    font-size: 11px;
+    width: 99px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 12px;
     font-weight: 500;
     color: #ffffff;
-    margin:auto;
+    margin: auto;
+}
+
+.mat-column-value div{
+    font-size: 16px;
+}
+
+
+
+/* 
+.success-rate-column,
+.average-return-column{
+    width: 50%;
+    display: inline-block;
+}
+
+.success-rate,
+.average-return{
+    height: 74px;
+    width: 74px;
+    line-height: 74px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto 6px auto;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent;
+}
+
+.success-rate{
+    border-radius: 50px;
+    border-color: #333333;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.average-return{
+    font-size: 26px;
+    display: inline-block;    
+}
+
+.success-rate-description,
+.average-return-description{
+  font-size: 11px;
+  text-align: center;
+  color: #262626;
+  font-weight: bold;
+} */
+.circular-chart{
+    height: 80px;
+}
+
+.circular-chart .percentage {
+    fill: #2c8b8b;
+    font-size: 8px;
+    text-anchor: middle;
+    font-weight: bold;
+}
+
+.average-return{
+    color:#2c8b8b;
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.success-rate-description,
+.average-return-description{
+    font-size: 20px;
+    font-weight: 500;
+    color: #ffffff;
+    text-align: left;
+}
+
+.rates{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.separator{
+    width: 1px;
+    height: 59px;
+    background-color: #959595;
 }
