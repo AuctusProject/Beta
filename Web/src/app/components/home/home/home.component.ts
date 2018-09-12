@@ -8,6 +8,7 @@ import { BecomeAdvisorComponent } from '../../advisor/become-advisor/become-advi
 import { ConfirmEmailComponent } from '../../account/confirm-email/confirm-email.component';
 import { ForgotPasswordResetComponent } from '../../account/forgot-password-reset/forgot-password-reset.component';
 import { RegisterComponent } from '../../account/register/register.component';
+import { ConfigurationComponent } from '../../account/configuration/configuration.component';
 
 @Component({
   selector: 'home',
@@ -29,37 +30,40 @@ export class HomeComponent implements OnInit {
       this.onResetPassword();
     } else if (!!this.route.snapshot.queryParams['register']) {
       this.onRegister();
+    } else if (!!this.route.snapshot.queryParams['configuration']) {
+      this.onConfiguration();
     }
   }
 
   onConfirmEmail() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = ConfirmEmailComponent;
-    modalData.hiddenClose = true;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.setModal(ConfirmEmailComponent, null, true);
+  }
+
+  onConfiguration() {
+    this.setModal(ConfigurationComponent);
   }
 
   onRegister() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = RegisterComponent;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.setModal(RegisterComponent);
   }
 
   onResetPassword() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = ForgotPasswordResetComponent;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.setModal(ForgotPasswordResetComponent);
   }
 
   onBecomeAdvisor() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = BecomeAdvisorComponent;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.setModal(BecomeAdvisorComponent);
   }
 
   onLogin() {
+    this.setModal(LoginComponent);
+  }
+
+  setModal(component: any, componentInputData?: any, hiddenClose: boolean = false) {
     let modalData = new FullscreenModalComponentInput();
-    modalData.component = LoginComponent;
+    modalData.component = component;
+    modalData.componentInput = componentInputData;
+    modalData.hiddenClose = hiddenClose;
     this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 }

@@ -81,7 +81,7 @@ namespace Auctus.DataAccess.Account
                                                 [User] u
                                                 INNER JOIN [Follow] f ON f.UserId = u.Id 
                                                 INNER JOIN [FollowAdvisor] fa ON fa.Id = f.Id 
-                                                INNER JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
                                                 WHERE 
                                                 u.ConfirmationDate IS NOT NULL AND f.ActionType = @ActionType AND fa.AdvisorId = @AdvisorId AND u.AllowNotifications = @AllowNotifications AND
                                                 f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 
@@ -94,7 +94,7 @@ namespace Auctus.DataAccess.Account
                                                 [User] u
                                                 INNER JOIN [Follow] f ON f.UserId = u.Id 
                                                 INNER JOIN [FollowAsset] fa ON fa.Id = f.Id
-                                                INNER JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
                                                 WHERE 
                                                 u.ConfirmationDate IS NOT NULL AND f.ActionType = @ActionType AND fa.AssetId = @AssetId AND u.AllowNotifications = @AllowNotifications AND
                                                 f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 

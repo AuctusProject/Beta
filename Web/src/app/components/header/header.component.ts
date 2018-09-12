@@ -10,6 +10,7 @@ import { ChangePasswordComponent } from '../account/change-password/change-passw
 import { ReferralDetailsComponent } from '../account/referral-details/referral-details.component';
 import { AdvisorEditComponent } from '../advisor/advisor-edit/advisor-edit.component';
 import { NavigationService } from '../../services/navigation.service';
+import { ConfigurationComponent } from '../account/configuration/configuration.component';
 
 @Component({
   selector: 'header',
@@ -40,7 +41,7 @@ export class HeaderComponent implements OnInit {
     this.loginData = this.accountService.getLoginData();
     return !!this.loginData;
   }
-  
+
   onBecameExpert() {
     //TODO navigation
   }
@@ -61,6 +62,10 @@ export class HeaderComponent implements OnInit {
 
   editAdvisor() {
     this.setModal(AdvisorEditComponent, { id: this.loginData.id });
+  }
+
+  configuration() {
+    this.setModal(ConfigurationComponent);
   }
 
   referralDetails() {

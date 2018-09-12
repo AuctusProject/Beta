@@ -20,7 +20,9 @@
         </a>
         <span class="mobile-menu" fxShow="true" fxHide.gt-xs="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="mobile"><mat-icon>{{menuOpen ? 'close' : 'reorder'}}</mat-icon></span>
         <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #profile="matMenu">
+            <button class="sub-menu-item" fxShow="true" fxHide.gt-sm="true" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecameExpert()" mat-menu-item>BECAME AN EXPERT</button>
             <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
+            <button class="sub-menu-item" (click)="configuration()" mat-menu-item>CONFIGURATION</button>
             <button class="sub-menu-item" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
             <button class="sub-menu-item" (click)="changePassword()" mat-menu-item>CHANGE PASSWORD</button>
             <button class="sub-menu-item" (click)="logout()" mat-menu-item>LOGOUT</button>
@@ -31,6 +33,7 @@
             <button class="sub-menu-item" (click)="onTopAssets()" mat-menu-item>TOP ASSETS</button>
             <button class="sub-menu-item" *ngIf="!isLogged()" mat-menu-item><a class="about-mobile" routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a></button>
             <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
+            <button class="sub-menu-item" *ngIf="isLogged()" (click)="configuration()" mat-menu-item>CONFIGURATION</button>
             <button class="sub-menu-item" *ngIf="isLogged()" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
             <button class="sub-menu-item" *ngIf="isLogged()" (click)="changePassword()" mat-menu-item>CHANGE PASSWORD</button>
             <button class="sub-menu-item" *ngIf="isLogged()" (click)="logout()" mat-menu-item>LOGOUT</button>
