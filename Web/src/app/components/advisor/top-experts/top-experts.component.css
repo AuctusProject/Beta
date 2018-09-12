@@ -9,8 +9,9 @@
 }
 
 .section-filter{
-    max-width:200px;
-    margin: 10px auto;
+    margin-right: 18px;
+    margin-left: 18px;
+    margin-bottom: 16px;
 }
 
 .section-title{

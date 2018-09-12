@@ -413,3 +413,11 @@ textarea:read-only {
 .landing-logo:focus {
   outline: none;
 }
+
+.action-button{
+  margin:unset;
+  height: 50px;
+  width: 168px;
+  padding-left: 10px;
+  padding-right: 10px;
+}

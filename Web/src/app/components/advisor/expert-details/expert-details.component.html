@@ -12,12 +12,12 @@
           <div class="expert-followers">Followed by {{expert.numberOfFollowers}} investors</div>
         </div>
         <div fxLayout="row" fxLayoutAlign="end end" fxLayoutGap="10px">
-          <div class="access-button follow-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>   
-          <div class="access-button follow-button" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
-          <div class="access-button follow-button" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
+          <div class="access-button action-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>   
+          <div class="access-button action-button" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
+          <div class="access-button action-button" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
             UNFOLLOW
           </div>
-          <div class="access-button follow-button" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
+          <div class="access-button action-button" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
             FOLLOW
           </div>
         </div>
