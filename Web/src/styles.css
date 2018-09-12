@@ -216,7 +216,7 @@ button.is-loading .btn-spinner {
   font-weight: 500;
 }
 
-@media(max-width:960px){
+@media(max-width:959px){
   .section-title{
     font-size: 20px;
   }
@@ -340,7 +340,7 @@ textarea:read-only {
 
 .global-container{
   margin: 0 auto;
-  width:calc(100% - 5px);
+  width:calc(100% - 40px);
 }
 
 @media(min-width: 960px){
@@ -395,4 +395,21 @@ textarea:read-only {
 
 .inverted{
   background-color: #f7f7f7;
+}
+
+.landing-logo {
+  height: 47px;
+  cursor: pointer;
+  margin-right: 15px;
+  margin-left: 15px;
+  margin-top: -5px;
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.landing-logo:focus {
+  outline: none;
 }
