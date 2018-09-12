@@ -15,6 +15,9 @@ import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenMo
 import { AccountService } from '../../../services/account.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
+import { CoinSearchComponent } from '../../util/coin-search/coin-search.component';
+import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
+import { Util } from '../../../util/Util';
 
 @Component({
   selector: 'new-advice',
@@ -27,12 +30,11 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
 
-  options: Asset[];
+  @ViewChild("CoinSearch") CoinSearch: CoinSearchComponent;
   advise: AdviseRequest = new AdviseRequest();
-  coinControl = new FormControl();
-  filteredOptions: Observable<Asset[]>;
   showSell: boolean = false;
   showButtons: boolean = false;
+  asset: Asset;
 
   constructor(private assetService: AssetService, 
     private advisorService: AdvisorService, 
@@ -49,43 +51,20 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
     } else if (!loginData.isAdvisor) {
       this.setClose.emit();
       this.navigationService.goToBecomeAdvisor();
-    } else {
-      this.assetService.getAssets().subscribe(result => {
-        this.options = result;
-        this.filteredOptions = this.coinControl.valueChanges
-        .pipe(
-          startWith<string | Asset>(''),
-          map(value => typeof value === 'string' ? value : value.name),
-          map(name => name ? this._filter(name) : this.options.slice())
-        );
-        if (!!this.data && !this.data.assetId) {
-          let asset = this.options.filter(option => option.id == this.data.assetId);
-          if (!!asset && asset.length == 1) {
-            this.advise.assetId = this.data.assetId;
-            this.coinControl.setValue(asset);
-            this.setButtons();
-          }
+    } 
+    this.CoinSearch.onSelect.subscribe(newValue => 
+      {
+        this.asset = newValue;
+        if (this.asset) {
+          this.advise.assetId = this.asset.id;
+        } else {
+          this.advise.assetId = 0;
         }
+        this.setButtons();
       });
+    if (!!this.data && this.data.assetId) {
+      this.CoinSearch.setForcedCoin(this.data.assetId);
     }
-  }
-
-  displayFn(asset?: Asset): string | undefined {
-    return !!asset ? asset.name : undefined;
-  }
-
-  private _filter(name: string): Asset[] {
-    const filterValue = name.toLowerCase();
-
-    return !!filterValue ? this.options.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0
-      || (filterValue.length > 1 && option.code.toLowerCase().indexOf(filterValue) === 0)) : [];
-  }
-
-  optionSelected(selected: MatAutocompleteSelectedEvent){
-    if(!!selected && !!selected.option && selected.option.value) {
-      this.advise.assetId = selected.option.value.id;
-    }
-    this.setButtons();
   }
 
   buy() {
@@ -106,28 +85,28 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
   openConfirmation() {
     const dialogRef = this.dialog.open(ConfirmAdviceDialogComponent, 
       { width: '60%', height: '35%', hasBackdrop: true, disableClose: true, panelClass: 'fullscreen-modal', 
-        data: { adviceType:this.advise.adviceType, assetName: this.coinControl.value.code + ' - ' + this.coinControl.value.name } }); 
+        data: { adviceType: this.advise.adviceType, assetName: this.asset.code + ' - ' + this.asset.name } }); 
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
         this.advisorService.advise(this.advise).subscribe(ret => 
           {
-            this.setClose.emit();
-            this.notificationService.success("New recommendation was successfully created.");
+            let recommendation = Util.GetRecommendationTypeDescription(this.advise.adviceType);
+            let modalData = new FullscreenModalComponentInput();
+            modalData.component = MessageFullscreenModalComponent;
+            modalData.componentInput = { message: "New " + recommendation + " recommendation was successfully created to " + this.asset.code + " - " + this.asset.name, redirectUrl: "" };
+            this.setNewModal.emit(modalData);
           });
       }
     });
   }
 
-  onAssetInputBlur() {
-    if (!this.coinControl.value || this.coinControl.invalid) {
-      this.coinControl.setValue("");
-    }
-    this.setButtons();
+  getSearchOptions() {
+    return { required: true, outlineField: true, darkStyle: false };
   }
 
   setButtons() {
-    this.showButtons = !!this.coinControl.value && !!this.coinControl.value.id;
-    this.showSell = !!this.coinControl.value && this.coinControl.value.shortSellingEnabled;
+    this.showButtons = !!this.asset && !!this.asset.id;
+    this.showSell = !!this.asset && this.asset.shortSellingEnabled;
   }  
 }

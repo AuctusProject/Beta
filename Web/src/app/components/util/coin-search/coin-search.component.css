@@ -1,0 +1,113 @@
+.container-field {
+    width: 100%;
+}
+
+.search-coin-label {
+    color: #959595;
+    font-size: 14px;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.search-coin-code {
+    min-width: 50px;
+    padding: 5px;
+    display: table-caption;
+    text-align: center;
+}
+
+input::placeholder {
+    color: #959595;
+    font-size: 14px;
+    font-style: italic;
+    opacity: 0.9; 
+}
+
+::ng-deep .search-coin-color-dark {
+    color: white !important;
+}
+
+::ng-deep .search-coin-color-light {
+    color: #101010 !important;
+}
+
+::ng-deep .search-coin-background-dark {
+    background-color: #101010 !important;
+}
+
+::ng-deep .search-coin-background-light {
+    background-color: white !important;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: #959595;
+}
+
+:host ::ng-deep .mat-focused .mat-form-field-ripple {
+    background-color: #126efd !important;
+}
+
+:host ::ng-deep .mat-input-element {
+    caret-color:  #126efd;
+}
+
+:host ::ng-deep .mat-form-field .mat-focused .mat-form-field-label {
+    color: #126efd;
+}
+
+::ng-deep .search-coin-autocomplete {
+    box-shadow: 0 0 4px #959595 !important;
+    width: 100%;
+}
+
+::ng-deep .search-coin-autocomplete-option {
+    padding-left: 8px !important;
+    width: 100%;
+}
+
+::ng-deep .search-coin-autocomplete-option.search-coin-background-dark span {
+    color: white;
+    font-size: 14px;
+    opacity: 0.9; 
+    display: block;
+}
+
+::ng-deep .search-coin-autocomplete-option.search-coin-background-light span {
+    color: #101010;
+    font-size: 14px;
+    opacity: 0.9; 
+    display: block;
+}
+
+::ng-deep .search-coin-autocomplete-option:hover span {
+    color: #126efd;
+}
+
+::ng-deep .search-coin-autocomplete-option.mat-selected span {
+    color: #126efd;
+}
+
+::ng-deep .search-coin-autocomplete-option-separation {
+    border-color: #959595;
+    border-style: solid;
+    border-width: 0.5px;
+    margin-left: 35px;
+    margin-right: 7px;
+    margin-top: 6px;
+}
+
+::ng-deep .search-coin-autocomplete-option-div-img {
+    width: 17px;
+    height: 100%;
+    display: inline-flex;
+    padding-bottom: 2px;
+    padding-right: 6px;
+    padding-left: 9px;
+    vertical-align: middle;
+}
+
+::ng-deep .search-coin-autocomplete-option-div-img img {
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+}
