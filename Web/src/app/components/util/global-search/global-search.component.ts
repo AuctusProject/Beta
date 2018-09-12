@@ -4,6 +4,7 @@ import { SearchResponse } from '../../../model/search/searchResponse';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { NavigationService } from '../../../services/navigation.service';
 import { CONFIG } from '../../../services/config.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'global-search',
@@ -16,6 +17,7 @@ export class GlobalSearchComponent implements OnInit {
   inputText: string;
   showExperts: boolean = true;
   showAssets: boolean = true;
+  searchControl: FormControl = new FormControl(); 
 
   constructor(private accountService: AccountService,
     private navigationService: NavigationService) { }
@@ -44,6 +46,7 @@ export class GlobalSearchComponent implements OnInit {
 
   onSelectionChanged(event: MatAutocompleteSelectedEvent) {
     if (event.option.value) {
+      this.searchControl.setValue(event.option.value.name);
       this.inputText = event.option.value.name;
       if (event.option.value.code) {
         this.navigationService.goToAssetDetails(event.option.value.id);
@@ -51,6 +54,7 @@ export class GlobalSearchComponent implements OnInit {
         this.navigationService.goToExpertDetails(event.option.value.id);
       }
     } else {
+      this.searchControl.setValue("");
       this.inputText = "";
     }
   }

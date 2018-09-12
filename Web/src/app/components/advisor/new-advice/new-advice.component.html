@@ -1,14 +1,5 @@
 <div class="div-data" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-  <mat-form-field appearance="outline" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web">
-    <mat-label>Select a coin</mat-label>
-    <input matInput [formControl]="coinControl" placeholder="Select a coin" type="text" (change)="onAssetInputBlur()" required [matAutocomplete]="auto" />
-    <mat-autocomplete (optionSelected)="optionSelected($event)"  #auto="matAutocomplete" [displayWith]="displayFn">
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-        {{option.name}}
-      </mat-option>
-    </mat-autocomplete>
-    <span matSuffix class="code" *ngIf="showButtons">{{coinControl.value.code}}</span>
-  </mat-form-field>
+  <coin-search #CoinSearch [options]="getSearchOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"></coin-search>
   
   <button *ngIf="showButtons" class="btn-buy btn-option" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="buy()">BUY</button>
   <button *ngIf="showButtons && showSell" class="btn-sell btn-option" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="sell()">SELL</button>
