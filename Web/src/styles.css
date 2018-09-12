@@ -413,3 +413,11 @@ textarea:read-only {
 .landing-logo:focus {
   outline: none;
 }
+
+.asset-icon,
+.asset-icon img{
+    width: 50px;
+    height: 50px;
+    background-color: #e6e6e6;
+    border-radius: 25px;
+}
