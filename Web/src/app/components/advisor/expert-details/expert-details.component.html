@@ -1,18 +1,17 @@
 <div class="global-container" *ngIf="expert">
-  <div class="breadcrumbs">Home  >  Top Experts  >  <span>{{expert.name}}</span></div> 
   <div fxLayout="row" fxLayoutGap="30px">
     <div fxLayout="column"> 
       <advisor-card [advisor]="expert"></advisor-card>
       <recommendation-distribution [data]="expert.recommendationDistribution"></recommendation-distribution>
     </div>
     <div class="expert-details-content" fxLayout="column" fxFlex>
-      <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxLayout="row" fxLayoutAlign="space-between end">
         <div fxLayout="column">
           <div class="expert-name">{{expert.name}}</div>
           <div class="expert-description">{{expert.description}}</div>
           <div class="expert-followers">Followed by {{expert.numberOfFollowers}} investors</div>
         </div>
-        <div class="expert-details-action-button">Follow</div>
+        <div class="access-button follow-button">FOLLOW</div>
       </div>
       <div *ngIf="expert.assets">
         <table mat-table [dataSource]="assets" class="assets-table">
@@ -63,10 +62,12 @@
 
           <ng-container matColumnDef="expandedDetail">
             <td colspan=6 mat-cell *matCellDef="let asset"> 
-              <asset-history-chart [assetValues]="asset.element.values" [advices]="asset.element.assetAdvisor[0].advices"></asset-history-chart>
               <div>
-                Success rate: {{asset.element.assetAdvisor[0].successRate}}
-                Average return: {{asset.element.assetAdvisor[0].averageReturn}}
+                <asset-history-chart [assetValues]="asset.element.values" [advices]="asset.element.assetAdvisor[0].advices"></asset-history-chart>
+                <div>
+                  Success rate: {{asset.element.assetAdvisor[0].successRate}}
+                  Average return: {{asset.element.assetAdvisor[0].averageReturn}}
+                </div>
               </div>
             </td>
           </ng-container>
