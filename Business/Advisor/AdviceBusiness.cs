@@ -59,14 +59,14 @@ namespace Auctus.Business.Advisor
         private async Task SendAdviceNotificationAsync(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
             await EmailBusiness.SendAsync(new string[] { user.Email },
-                $"New tip on Auctus Beta for {asset.Code}",
+                $"New recommendation on Auctus Beta for {asset.Code}",
                 $@"Hello,
 <br/><br/>
-The advisor {advisor.Name} set a new {type.GetDescription()} tip for the asset {asset.Code} - {asset.Name}.
+The advisor {advisor.Name} set a new {type.GetDescription()} recommendation for the asset {asset.Code} - {asset.Name}.
 <br/>
 To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.
 <br/><br/>
-<small>If you do not want to receive these tips for advisors/assets that you are following <a href='{WebUrl}/configuration' target='_blank'>click here</a>.</small>
+<small>If you do not want to receive these recommendations for advisors/assets that you are following <a href='{WebUrl}?configuration=true' target='_blank'>click here</a>.</small>
 <br/><br/>
 Thanks,
 <br/>

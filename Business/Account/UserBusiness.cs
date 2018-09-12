@@ -540,7 +540,10 @@ Auctus Team", WebUrl, code));
 
         public IEnumerable<User> ListValidUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
-            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId).Where(c => c.Wallet != null && c.Wallet.AUCBalance.HasValue && c.Wallet.AUCBalance.Value >= GetMinimumAucAmountForUser(c));
+            var advisors = AdvisorBusiness.GetAdvisors();
+            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId).Where(c => c.Id != advisorId && 
+                (advisors.Any(a => a.Id == c.Id) || (c.Wallet != null && c.Wallet.AUCBalance.HasValue && c.Wallet.AUCBalance.Value >= GetMinimumAucAmountForUser(c))
+                    || Admins.Contains(c.Email)));
         }
 
         public SearchResponse Search(string searchTerm)
