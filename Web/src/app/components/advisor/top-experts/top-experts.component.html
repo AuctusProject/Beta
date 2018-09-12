@@ -3,7 +3,8 @@
     TOP EXPERTS
   </div>
   
-  <button mat-flat-button *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">New Recommendation</button>
+  <button mat-flat-button *ngIf="showAdvisorButton" (click)="onNewAdviceClick()">New Recommendation</button>
+  <button mat-flat-button *ngIf="showAdvisorButton" (click)="onEditProfileClick()">Edit Profile</button>   
 
   <div class="section-filter" *ngIf="!hideFilters">
     <mat-form-field>
