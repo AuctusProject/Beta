@@ -8,6 +8,7 @@ import { NewAdviceComponent } from '../new-advice/new-advice.component';
 import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
 import { MatDialog } from '@angular/material';
 import { AccountService } from '../../../services/account.service';
+import { AdvisorEditComponent } from '../advisor-edit/advisor-edit.component';
 
 @Component({
   selector: 'top-experts',
@@ -19,7 +20,7 @@ export class TopExpertsComponent implements OnInit {
   @Input() hideFilters?: boolean;
   experts : AdvisorResponse[] = [];
   expertsResponse : AdvisorResponse[];
-  showNewAdviceButton: boolean = false;
+  showAdvisorButton: boolean = false;
   
   pageSize = 12;
   currentPage = 1;
@@ -39,7 +40,7 @@ export class TopExpertsComponent implements OnInit {
     private navigationService: NavigationService) { }
 
   ngOnInit() {
-    this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
+    this.showAdvisorButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.advisorService.getAdvisors().subscribe(result => {
       this.expertsResponse = result;
       if(this.resultsLimit != null && result != null){
@@ -54,6 +55,12 @@ export class TopExpertsComponent implements OnInit {
   onNewAdviceClick() {
     let modalData = new FullscreenModalComponentInput();
     modalData.component = NewAdviceComponent;
+    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+  }
+
+  onEditProfileClick() {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = AdvisorEditComponent;
     this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 
