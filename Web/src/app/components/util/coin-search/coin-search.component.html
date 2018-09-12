@@ -1,0 +1,22 @@
+<mat-form-field appearance="{{outlineField ? 'outline' : 'standard'}}" class="container-field" hideRequiredMarker>
+    <mat-label class="search-coin-label">{{placeholder}}</mat-label>
+    <input matInput type="text" autocomplete="off" [matAutocomplete]="coinsearch"
+        [(ngModel)]="inputText"
+        [style.color]="darkStyle ? 'white' : '#101010'"
+        placeholder="{{placeholder}}" 
+        required="{{required}}"  
+        [formControl]="coinControl"
+        (input)="onInputChanged($event.target.value)" />
+    <mat-autocomplete [class]="autocompleteClass" (optionSelected)="onSelectAsset($event)" #coinsearch="matAutocomplete">
+        <mat-option [class]="optionClass" *ngFor="let option of searchResults" [value]="option">
+            <div class="search-coin-autocomplete-option-div-img">
+                <img onerror="this.style.display='none'" height="17" width="17" [src]="getAssetImgUrl(option.id)">
+            </div>
+            {{option.name}}
+            <div class="search-coin-autocomplete-option-separation"></div>
+        </mat-option>
+    </mat-autocomplete>
+    <mat-icon matSuffix *ngIf="!assetSelected" [style.color]="darkStyle ? 'white' : '#101010'">search</mat-icon>
+    <span matSuffix  *ngIf="assetSelected" [class]="codeClass">{{assetSelected.code}}</span>
+    <mat-error *ngIf="getErrorMessage().length > 0">{{getErrorMessage()}}</mat-error>
+</mat-form-field>

@@ -16,12 +16,20 @@ namespace Auctus.DataAccess.Asset
         public override string TableName => "FollowAsset";
         public FollowAssetData(IConfigurationRoot configuration) : base(configuration) { }
 
-        private const string SQL_LIST = @"SELECT f.*, fa.AssetId FROM 
-                                        [FollowAsset] fa
-                                        INNER JOIN [Follow] f ON f.Id = fa.Id
-                                        INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
-                                            ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-                                        WHERE f.ActionType = @ActionType {0}";
+        private const string SQL_LIST = @"
+		SELECT 
+			f.*, fa.AssetId 
+		FROM 
+			[FollowAsset] fa
+			INNER JOIN [Follow] f ON f.Id = fa.Id
+			INNER JOIN (
+				SELECT f2.UserId, fa2.AssetId, MAX(f2.CreationDate) CreationDate 
+				FROM [FollowAsset] fa2
+				INNER JOIN [Follow] f2 ON f2.Id = fa2.Id 
+				GROUP BY f2.UserId, fa2.AssetId) b 
+		    ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AssetId = fa.AssetId
+		WHERE 
+			f.ActionType = @ActionType {0}";
 
         public List<FollowAsset> ListFollowers(IEnumerable<int> assetsIds)
         {

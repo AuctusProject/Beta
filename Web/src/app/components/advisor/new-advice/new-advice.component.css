@@ -2,13 +2,6 @@
     padding-bottom: 25px;
 }
 
-.code {
-    min-width: 50px;
-    padding: 5px;
-    display: table-caption;
-    text-align: center;
-}
-
 .btn-option {
     margin-top: 15px;
     color: rgba(0, 0, 0, 0.9); 

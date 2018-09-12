@@ -4,12 +4,11 @@
   </div>
   <div class="asset-info" fxLayout="column">
     <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
-    <div *ngIf="asset.following">
-        <button mat-raised-button disabled>Following</button>
-        <button mat-button (click)="onUnfollowClick()">Unfollow</button>
+    <div class="white-button action-button-sm" *ngIf="asset.following" (click)="onUnfollowClick()">
+      Unfollow
     </div>
-    <div *ngIf="!asset.following">
-      <button mat-raised-button color="primary" (click)="onFollowClick()">Follow</button>
+    <div class="blue-button action-button-sm" *ngIf="!asset.following" (click)="onFollowClick()">
+      Follow
     </div>
   </div>
   <div class="ratings-distribution" fxLayout="row">
