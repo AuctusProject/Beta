@@ -10,7 +10,6 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 import { HomeComponent } from './components/home/home/home.component';
-import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
 import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 
 const routes: Routes = [
@@ -23,8 +22,7 @@ const routes: Routes = [
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
-    { path: 'advisor-edit/:id', component: AdvisorEditComponent, canActivate:[AuthRedirect] },
-    { path: 'trending-assets', component: TrendingAssetsComponent },
+    { path: 'advisor-edit/:id', component: AdvisorEditComponent, canActivate:[AuthRedirect] }
 ];
 
 @NgModule({

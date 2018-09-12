@@ -10,4 +10,6 @@
     <div>Last Advice Mode: {{assetAdvisor.lastAdviceMode}}</div>
     <div>Last Advice Date: {{assetAdvisor.lastAdviceDate}}</div>
   </div>
+
+  <button mat-flat-button *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">New Recommendation</button>
 </div>

@@ -31,9 +31,13 @@ export class ChangePasswordComponent implements ModalComponent, OnInit {
     private navigationService : NavigationService) { }
 
   ngOnInit() {
-    if (!this.accountService.isLoggedIn()) {
+    let loginData = this.accountService.getLoginData();
+    if (!loginData) {
       this.setClose.emit();
       this.navigationService.goToLogin();
+    } else if (!loginData.isAdvisor && !loginData.hasInvestment) {
+      this.setClose.emit();
+      this.navigationService.goToWalletLogin();
     }
   }
 
