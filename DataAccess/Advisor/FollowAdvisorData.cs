@@ -17,20 +17,38 @@ namespace Auctus.DataAccess.Advisor
         public override string TableName => "FollowAdvisor";
         public FollowAdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
-        private const string SQL_LIST = @"SELECT f.*, fa.AdvisorId FROM 
-                                        [FollowAdvisor] fa
-                                        INNER JOIN [Follow] f ON f.Id = fa.Id
-                                        INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
-                                            ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-                                         WHERE f.ActionType = @ActionType AND ({0})";
+        private const string SQL_LIST = @"
+		SELECT 
+			f.*, fa.AdvisorId 
+		FROM 
+		    [FollowAdvisor] fa
+		    INNER JOIN [Follow] f ON f.Id = fa.Id
+		    INNER JOIN (
+		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
+		    	FROM 
+		    		[FollowAdvisor] fa2
+		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
+		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
+			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
+		WHERE 
+			f.ActionType = @ActionType AND ({0})";
 
-        private const string SQL_GET_LAST_BY_USER = @"SELECT f.*, fa.AdvisorId FROM 
-                                        [FollowAdvisor] fa
-                                        INNER JOIN [Follow] f ON f.Id = fa.Id
-                                        INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
-                                            ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
-                                         WHERE f.UserId = @UserId
-                                            AND fa.AdvisorId = @AdvisorId";
+        private const string SQL_GET_LAST_BY_USER = @"
+		SELECT 
+			f.*, fa.AdvisorId 
+		FROM 
+		    [FollowAdvisor] fa
+		    INNER JOIN [Follow] f ON f.Id = fa.Id
+		    INNER JOIN (
+		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
+		    	FROM 
+		    		[FollowAdvisor] fa2
+		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
+		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
+			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
+		WHERE 
+			f.UserId = @UserId
+		    AND fa.AdvisorId = @AdvisorId";
 
         public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds)
         {
