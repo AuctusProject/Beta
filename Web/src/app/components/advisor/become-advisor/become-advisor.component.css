@@ -3,18 +3,18 @@
 }
 
 .file-container-web {
-    padding-top: 25%; 
-    width: 25%;  
+    padding-top: 15%; 
+    width: 15%;  
 }
 
 .file-container-mobile {
-    padding-top: 80%; 
-    width: 80%;  
+    padding-top: 50%; 
+    width: 50%;  
 }
 
 .file-container-tablet {
-    padding-top: 45%; 
-    width: 45%;  
+    padding-top: 25%; 
+    width: 25%;  
 }
 
 .file-uploader {
