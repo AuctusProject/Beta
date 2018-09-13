@@ -4,7 +4,7 @@
       <advisor-card [advisor]="expert"></advisor-card>
       <div class="distribution-box">
         <div class="distribution-box-title">Currency Ratings Distribution</div>
-        <recommendation-distribution [data]="expert.recommendationDistribution"></recommendation-distribution>
+        <recommendation-distribution [data]="expert.recommendationDistribution" [showTitle]="'true'"></recommendation-distribution>
       </div>
     </div>
     <div class="expert-details-content" fxLayout="column" fxFlex>
@@ -12,15 +12,15 @@
         <div fxLayout="column">
           <div class="expert-name">{{expert.name}}</div>
           <div class="expert-description">{{expert.description}}</div>
-          <div class="expert-followers">Followed by {{expert.numberOfFollowers}} investors</div>
+          <div class="expert-followers">Followed by {{expert.numberOfFollowers}} {{getInvestorsWordPluralOrSingular()}}</div>
         </div>
         <div fxLayout="row" fxLayoutAlign="end end" fxLayoutGap="10px">
-          <div class="blue-button action-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>   
-          <div class="blue-button action-button" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
-          <div class="white-button action-button" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
+          <div class="blue-button action-button truncate" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>   
+          <div class="blue-button action-button truncate" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
+          <div class="white-button action-button truncate" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
             UNFOLLOW
           </div>
-          <div class="blue-button action-button" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
+          <div class="blue-button action-button truncate" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
             FOLLOW
           </div>
         </div>

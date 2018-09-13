@@ -11,11 +11,12 @@ import { Util } from '../../util/Util';
 export class RecommendationDistributionComponent implements OnInit {
   pieChart: Chart;
   @Input() data : RecommendationDistributionResponse[];
-  @Input() chartTitle : string;
+  @Input() showTitle : boolean;
   pieData: any;
   totalBuy =0;
   totalSell =0;
   totalClose =0;
+  totalRecommendations = 0;
   constructor() { }
 
   ngOnInit() {
@@ -40,6 +41,7 @@ export class RecommendationDistributionComponent implements OnInit {
             if(this.data[i].type == Util.CLOSE)
                 this.totalClose = this.data[i].total;
         }
+        this.totalRecommendations = this.totalBuy + this.totalSell + this.totalClose;
     }
   }
 
@@ -56,7 +58,7 @@ export class RecommendationDistributionComponent implements OnInit {
       },
       legend:{enabled:false},
       title: {
-        text: this.chartTitle,
+        text: this.showTitle ? "<b>"+ this.totalRecommendations+"</b><br />Ratings" : null,
         align: 'center',
         verticalAlign: 'middle',
         y: -4,

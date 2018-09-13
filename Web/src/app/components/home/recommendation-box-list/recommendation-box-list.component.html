@@ -8,7 +8,7 @@
   <div class="recommendation-list" fxHide.lt-md>
     <recommendation-box  [adviceType]="'BUY'" [adviceList]="buyAdvices"></recommendation-box>
     <recommendation-box fxHide.lt-md [adviceType]="'SELL'" [adviceList]="sellAdvices"></recommendation-box>
-    <recommendation-box fxHide.lt-md [adviceType]="'CLOSE POSITION'" [adviceList]="closePositionAdvices"></recommendation-box>  
+    <recommendation-box fxHide.lt-md [adviceType]="'CLOSE'" [adviceList]="closePositionAdvices"></recommendation-box>  
   </div>
   <div class="recommendation-list" fxHide.gt-sm>
       <owl-carousel 
@@ -16,7 +16,7 @@
       [carouselClasses]="['owl-theme', 'row', 'sliding']">
         <recommendation-box [adviceType]="'BUY'" [adviceList]="buyAdvices"></recommendation-box>
         <recommendation-box [adviceType]="'SELL'" [adviceList]="sellAdvices"></recommendation-box>
-        <recommendation-box [adviceType]="'CLOSE POSITION'" [adviceList]="closePositionAdvices"></recommendation-box>
+        <recommendation-box [adviceType]="'CLOSE'" [adviceList]="closePositionAdvices"></recommendation-box>
       </owl-carousel>
   </div>
   <div>

@@ -13,6 +13,7 @@ namespace Auctus.Model
         public double SuccessRate { get; set; }
         public double AverageReturn { get; set; }
         public int Ranking { get; set; }
+        public int TotalAdvisors { get; set; }
         public double Rating { get; set; }
         public int NumberOfFollowers { get; set; }
         public int TotalAssetsAdvised { get; set; }

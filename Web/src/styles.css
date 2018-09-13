@@ -472,3 +472,9 @@ textarea:read-only {
     background-color: #e6e6e6;
     border-radius: 25px;
 }
+
+.truncate{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

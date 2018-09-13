@@ -451,7 +451,10 @@ namespace Auctus.Business.Advisor
             });
             advisorsResult = advisorsResult.OrderByDescending(c => c.Rating).ToList();
             for (int i = 0; i < advisorsResult.Count; ++i)
+            {
                 advisorsResult[i].Ranking = i + 1;
+                advisorsResult[i].TotalAdvisors = advisorsResult.Count;
+            }
         }
 
         private AdviceDetail SetAdviceDetail(List<AdviceDetail> assetAdviceDetails, Advice advice, AdviceDetail previousAdvice, AdviceDetail startAdviceType)

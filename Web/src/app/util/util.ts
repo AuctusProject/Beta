@@ -5,6 +5,21 @@ export class Util {
         return diffDays;
     }
 
+    public static ConvertUTCDateStringToLocalDate(date) {
+        return this.ConvertUTCDateToLocalDate(new Date(date));
+    }
+
+    public static ConvertUTCDateToLocalDate(date) {
+        var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+    
+        var offset = date.getTimezoneOffset() / 60;
+        var hours = date.getHours();
+    
+        newDate.setHours(hours - offset);
+    
+        return newDate;   
+    }
+
     public static Sort<T>(list: T[],  prop: (c: T) => any, order?: "ASC" | "DESC"): void {
       list.sort((a, b) => {
           if (prop(a) < prop(b))

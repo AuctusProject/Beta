@@ -87,3 +87,8 @@
     margin: 4px 0;
     font-size: 11px;
 }
+
+span.truncate{
+    width: 100px;
+    display: inline-block;
+}

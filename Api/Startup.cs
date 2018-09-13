@@ -87,7 +87,9 @@ namespace Api
                     .AllowCredentials());
             });
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.DateFormatString = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFF'Z'";
+            });
             services.AddSingleton<Cache>();
 
             DataAccessDependencyResolver.RegisterDataAccess(services, Configuration, Enviroment.IsDevelopment());

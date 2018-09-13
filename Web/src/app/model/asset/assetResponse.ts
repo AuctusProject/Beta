@@ -41,4 +41,5 @@ export class ValuesResponse{
 export class AdviceResponse{
   date: string;
   adviceType: number;
+  assetValue : number;
 }
