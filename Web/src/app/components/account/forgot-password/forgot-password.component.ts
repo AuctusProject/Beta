@@ -4,13 +4,13 @@ import { AccountService } from '../../../services/account.service';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { ModalComponent } from '../../../model/modal/modalComponent';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from '../../../../../node_modules/rxjs';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InputType } from '../../../model/inheritanceInputOptions';
 import { AuthRedirect } from '../../../providers/authRedirect';
+import { EntryOptionComponent } from '../entry-option/entry-option.component';
 
 @Component({
   selector: 'forgot-password',
@@ -60,5 +60,20 @@ export class ForgotPasswordComponent implements ModalComponent, OnInit {
 
   getEmailOptions() {
     return { inputType: InputType.Email, textOptions: { placeHolder: "Email", showHintSize: false, maxLength: 50 } };
+  }
+
+  onLoginClick() {
+    this.setEntryModal(true);
+  }
+
+  onSignUpClick() {
+    this.setEntryModal(false);
+  }
+
+  setEntryModal(isLogin: boolean) {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = EntryOptionComponent;
+    modalData.componentInput = { login: isLogin };
+    this.setNewModal.emit(modalData);
   }
 }

@@ -4,7 +4,6 @@ import { NotificationsService } from 'angular2-notifications';
 import { ConfigurationRequest } from '../../../model/account/configurationRequest';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { InputType } from '../../../model/inheritanceInputOptions';
 import { Subscription } from 'rxjs';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { NavigationService } from '../../../services/navigation.service';

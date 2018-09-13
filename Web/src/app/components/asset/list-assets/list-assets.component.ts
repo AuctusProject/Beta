@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AssetService } from '../../../services/asset.service';
 import { AssetResponse } from '../../../model/asset/assetResponse';
-import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { NewAdviceComponent } from '../../advisor/new-advice/new-advice.component';
-import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
-import { MatDialog } from '@angular/material';
 import { AccountService } from '../../../services/account.service';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'list-assets',
@@ -17,7 +14,7 @@ export class ListAssetsComponent implements OnInit {
   assets : AssetResponse[] = [];
   showNewAdviceButton: boolean = false;
 
-  constructor(public dialog: MatDialog, 
+  constructor(private modalService: ModalService, 
     public accountService: AccountService, 
     private assetService: AssetService) { }
 
@@ -34,9 +31,7 @@ export class ListAssetsComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = NewAdviceComponent;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.modalService.setNewAdvice();
   }
   
   loadMoreAssets(){

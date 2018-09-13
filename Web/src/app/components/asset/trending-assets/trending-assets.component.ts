@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AssetService } from '../../../services/asset.service';
 import { AssetResponse } from '../../../model/asset/assetResponse';
 import { AccountService } from '../../../services/account.service';
-import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
-import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { LoginComponent } from '../../account/login/login.component';
-import { MatDialog } from '@angular/material';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'trending-assets',
@@ -32,7 +29,8 @@ export class TrendingAssetsComponent implements OnInit {
     {"type":1,"total":2.0},
     {"type":2,"total":2.0}]}]
 
-  constructor(private accountService: AccountService, private assetService: AssetService, private dialog: MatDialog) { }
+  constructor(private accountService: AccountService, 
+    private assetService: AssetService, private modalService: ModalService) { }
 
   ngOnInit() {
     if(this.isLoggedIn()){
@@ -54,9 +52,7 @@ export class TrendingAssetsComponent implements OnInit {
     return this.accountService.isLoggedIn();
   }
 
-  onLoginClick(){
-    let loginModalData = new FullscreenModalComponentInput();
-    loginModalData.component = LoginComponent;
-    this.dialog.open(FullscreenModalComponent, { data: loginModalData }); 
+  onLoginClick() {
+    this.modalService.setLogin();
   }
 }

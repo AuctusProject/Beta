@@ -6,17 +6,11 @@ import { AssetResponse } from '../../../model/asset/assetResponse';
 import { CONFIG } from "../../../services/config.service";
 import { Util } from '../../../util/Util';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { DataSource } from '@angular/cdk/table';
-import { Observable, of } from 'rxjs';
-import { MatDialog } from '@angular/material';
 import { AccountService } from '../../../services/account.service';
-import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { NewAdviceComponent } from '../new-advice/new-advice.component';
-import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
-import { AdvisorEditComponent } from '../advisor-edit/advisor-edit.component';
 import { AssetService } from '../../../services/asset.service';
 import { ViewChildren, QueryList } from '@angular/core';
 import { AssetHistoryChartComponent } from '../../asset/asset-history-chart/asset-history-chart.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'expert-details',
@@ -41,10 +35,10 @@ export class ExpertDetailsComponent implements OnInit {
   @ViewChildren('assetHistoryChart') assetHistoryCharts:QueryList<AssetHistoryChartComponent>;
 
   constructor(private route: ActivatedRoute,  
-    public dialog: MatDialog, 
     public accountService: AccountService,
     private advisorService: AdvisorService,
-    private assetService: AssetService) { }
+    private assetService: AssetService,
+    private modalService: ModalService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
@@ -61,16 +55,11 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = NewAdviceComponent;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.modalService.setNewAdvice();
   }
 
   onEditProfileClick() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = AdvisorEditComponent;
-    modalData.componentInput = { id: this.accountService.getLoginData().id };
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.modalService.setEditAdvisor(this.accountService.getLoginData().id);
   }
 
   onRowClick(row){

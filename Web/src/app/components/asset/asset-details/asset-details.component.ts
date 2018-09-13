@@ -5,10 +5,7 @@ import { AssetService } from '../../../services/asset.service';
 import { Util } from '../../../util/Util';
 import { CONFIG} from "../../../services/config.service";
 import { AccountService } from '../../../services/account.service';
-import { MatDialog } from '@angular/material';
-import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { NewAdviceComponent } from '../../advisor/new-advice/new-advice.component';
-import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'asset-details',
@@ -21,7 +18,7 @@ export class AssetDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     private assetService: AssetService,
-    public dialog: MatDialog, 
+    public modalService: ModalService, 
     public accountService: AccountService) { }
 
   ngOnInit() {
@@ -32,10 +29,7 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = NewAdviceComponent;
-    modalData.componentInput = { assetId: this.asset.assetId };
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.modalService.setNewAdvice(this.asset.assetId);
   }
 
   getAssetImgUrl(asset: AssetResponse){

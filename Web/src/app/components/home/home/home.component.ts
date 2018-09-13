@@ -1,14 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginComponent } from '../../account/login/login.component';
-import { MatDialog } from '@angular/material';
-import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
-import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
-import { BecomeAdvisorComponent } from '../../advisor/become-advisor/become-advisor.component';
-import { ConfirmEmailComponent } from '../../account/confirm-email/confirm-email.component';
-import { ForgotPasswordResetComponent } from '../../account/forgot-password-reset/forgot-password-reset.component';
-import { RegisterComponent } from '../../account/register/register.component';
-import { ConfigurationComponent } from '../../account/configuration/configuration.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'home',
@@ -17,53 +9,21 @@ import { ConfigurationComponent } from '../../account/configuration/configuratio
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private modalService: ModalService) { }
 
   ngOnInit() {
     if (!!this.route.snapshot.queryParams['login']) {
-      this.onLogin();
+      this.modalService.setLogin();
     } else if (!!this.route.snapshot.queryParams['becomeadvisor']) {
-      this.onBecomeAdvisor();
+      this.modalService.setBecomeAdvisor();
     } else if (!!this.route.snapshot.queryParams['confirmemail']) {
-      this.onConfirmEmail();
+      this.modalService.setConfirmEmail();
     } else if (!!this.route.snapshot.queryParams['resetpassword']) {
-      this.onResetPassword();
+      this.modalService.setResetPassword();
     } else if (!!this.route.snapshot.queryParams['register']) {
-      this.onRegister();
+      this.modalService.setRegister();
     } else if (!!this.route.snapshot.queryParams['configuration']) {
-      this.onConfiguration();
+      this.modalService.setConfiguration();
     }
-  }
-
-  onConfirmEmail() {
-    this.setModal(ConfirmEmailComponent, null, true);
-  }
-
-  onConfiguration() {
-    this.setModal(ConfigurationComponent);
-  }
-
-  onRegister() {
-    this.setModal(RegisterComponent);
-  }
-
-  onResetPassword() {
-    this.setModal(ForgotPasswordResetComponent);
-  }
-
-  onBecomeAdvisor() {
-    this.setModal(BecomeAdvisorComponent);
-  }
-
-  onLogin() {
-    this.setModal(LoginComponent);
-  }
-
-  setModal(component: any, componentInputData?: any, hiddenClose: boolean = false) {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = component;
-    modalData.componentInput = componentInputData;
-    modalData.hiddenClose = hiddenClose;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 }

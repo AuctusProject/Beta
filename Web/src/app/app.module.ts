@@ -81,6 +81,9 @@ import { NewsletterComponent } from './components/util/newsletter/newsletter.com
 import { FooterComponent } from './components/util/footer/footer.component';
 import { OwlModule } from 'ngx-owl-carousel';
 import { CoinSearchComponent } from './components/util/coin-search/coin-search.component';
+import { EntryOptionComponent } from './components/account/entry-option/entry-option.component';
+import { ModalService } from './services/modal.service';
+import { RegisterBecomeAdvisorComponent } from './components/advisor/register-become-advisor/register-become-advisor.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -148,7 +151,9 @@ export function getAuthServiceConfigs() {
     TimeAgoPipe,
     NewsletterComponent,
     FooterComponent,
-    CoinSearchComponent
+    CoinSearchComponent,
+    EntryOptionComponent,
+    RegisterBecomeAdvisorComponent
   ],
   imports: [
     BrowserModule,
@@ -188,10 +193,11 @@ export function getAuthServiceConfigs() {
     NavigationService,
     AuthRedirect,
     ConfigService,
+    ModalService,
     { provide:HIGHCHARTS_MODULES, useFactory:highchartsModules },
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '100%', height: '92%', hasBackdrop: true, maxWidth: '95vw', disableClose: false, panelClass: 'fullscreen-modal'}}
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '95vw', height: '92%', hasBackdrop: true, disableClose: false, panelClass: 'fullscreen-modal'}}
   ],
   entryComponents:[
     FullscreenModalComponent, 
@@ -208,7 +214,9 @@ export function getAuthServiceConfigs() {
     ChangePasswordComponent,
     RegisterComponent,
     ReferralDetailsComponent,
-    NewAdviceComponent
+    NewAdviceComponent,
+    EntryOptionComponent,
+    RegisterBecomeAdvisorComponent
   ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]

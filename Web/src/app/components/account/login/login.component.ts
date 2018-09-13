@@ -5,8 +5,7 @@ import { Subscription } from '../../../../../node_modules/rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { AuthRedirect } from '../../../providers/authRedirect';
-import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
-import { SocialLoginRequest } from '../../../model/account/socialLoginRequest';
+import { AuthService } from 'angular5-social-login';
 import { LoginResult } from '../../../model/account/loginResult';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { ModalComponent } from '../../../model/modal/modalComponent';
@@ -14,7 +13,7 @@ import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenMo
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InputType } from '../../../model/inheritanceInputOptions';
-import { RegisterComponent } from '../register/register.component';
+import { EntryOptionComponent } from '../entry-option/entry-option.component';
 
 @Component({
   selector: 'login',
@@ -22,7 +21,7 @@ import { RegisterComponent } from '../register/register.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Login";
+  modalTitle: string = "Sign In";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -67,28 +66,6 @@ export class LoginComponent implements ModalComponent, OnInit {
     }
   }
 
-  public socialSignIn(socialPlatform : string) {
-    let socialPlatformProvider;
-    var socialNetworkType;
-    if(socialPlatform == "facebook"){
-      socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
-      socialNetworkType = 0;
-    }else if(socialPlatform == "google"){
-      socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
-      socialNetworkType = 1;
-    }
-    
-    this.socialAuthService.signIn(socialPlatformProvider).then(
-      (userData) => {
-        var request = new SocialLoginRequest();
-        request.email = userData.email;
-        request.token = userData.token;
-        request.socialNetworkType = socialNetworkType;
-        this.accountService.socialLogin(request).subscribe(result => this.zone.run(() => { this.loginResponse(result); }, this.RecaptchaComponent.reset));
-      }
-    );
-  }
-
   public onCaptchaResponse(captchaResponse: string) {
     this.loginRequest.captcha = captchaResponse;
   }
@@ -101,7 +78,7 @@ export class LoginComponent implements ModalComponent, OnInit {
 
   onRegisterClick() {
     let modalData = new FullscreenModalComponentInput();
-    modalData.component = RegisterComponent;
+    modalData.component = EntryOptionComponent;
     this.setNewModal.emit(modalData);
   }
 
