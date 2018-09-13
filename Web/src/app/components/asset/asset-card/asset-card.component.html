@@ -1,4 +1,4 @@
-<div class="asset-card" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign="left center">
+<div class="asset-card" fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutGap.xs="5px" fxLayoutAlign="left center">
   <div class="asset-icon">
     <img [src]="getAssetImgUrl()">
   </div>
@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="ratings-distribution" fxLayout="row">
-    <recommendation-distribution [data]="asset.recommendationDistribution" [chartTitle]="'<b>'+asset.totalRatings+'</b><br />Ratings'"></recommendation-distribution>
+    <recommendation-distribution [data]="asset.recommendationDistribution" [showTitle]="'true'"></recommendation-distribution>
   </div>
   <div fxLayoutAlign="center center" class="general-recommendation-box" [class.neutral]="asset.mode==0" [class.moderate-buy]="asset.mode==1" [class.strong-buy]="asset.mode==2" [class.moderate-sell]="asset.mode==3" [class.strong-sell]="asset.mode==4" [class.close]="asset.mode==5">
     {{getGeneralRecommendation()}}
@@ -22,5 +22,8 @@
   </div>
   <div class="variation" [class.bull]="asset.variation24h>0" [class.bear]="asset.variation24h<0">
     <div class="arrow" *ngIf="asset.variation24h>0">&uarr;</div><div class="arrow" *ngIf="asset.variation24h<0">&darr;</div>&nbsp;{{get24hVariation()}}
+  </div>
+  <div class="blue-button action-button" *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick()">
+    Recommend
   </div>
 </div>

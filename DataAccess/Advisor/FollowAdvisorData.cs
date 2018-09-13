@@ -29,7 +29,7 @@ namespace Auctus.DataAccess.Advisor
 		    		[FollowAdvisor] fa2
 		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
 		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
-			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
+			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
 		WHERE 
 			f.ActionType = @ActionType AND ({0})";
 
@@ -45,7 +45,7 @@ namespace Auctus.DataAccess.Advisor
 		    		[FollowAdvisor] fa2
 		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
 		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
-			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
+			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
 		WHERE 
 			f.UserId = @UserId
 		    AND fa.AdvisorId = @AdvisorId";

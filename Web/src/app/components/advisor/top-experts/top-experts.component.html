@@ -14,13 +14,13 @@
     <div class="white-button action-button" *ngIf="showAdvisorButton" (click)="onEditProfileClick()">EDIT PROFILE</div>
   </div>
   <div class="advisors-list" fxHide.lt-md>
-    <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert" [advisorsLength]="experts.length"></advisor-card>
+    <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert"></advisor-card>
   </div>
   <div class="advisors-list" fxHide.gt-sm>
     <owl-carousel *ngIf="experts && experts.length > 0"
       [options]="{items: 1, dots: true, navigation: false}"
       [carouselClasses]="['owl-theme', 'row', 'sliding']">
-      <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert" [advisorsLength]="experts.length"></advisor-card>
+      <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert"></advisor-card>
     </owl-carousel>
   </div>
   <div>

@@ -8,10 +8,10 @@
             {{advisor.ranking}}
           </div>
       </div>
-      <div class="expert-name">
+      <div class="expert-name truncate" title="{{advisor.name}}">
         {{advisor.name}}
       </div>
-      <div class="expert-description">
+      <div class="expert-description truncate" title="{{advisor.description}}">
         {{advisor.description}}
       </div>
       <div class="expert-rating">
@@ -20,7 +20,7 @@
     </div>
     <div class="expert-card-content">
       <div class="expert-ranking-description">
-          Ranked #{{advisor.ranking}} out of {{advisorsLength}} experts
+          Ranked #{{advisor.ranking}} out of {{advisor.totalAdvisors}} experts
       </div>
       <div class="followed-by">
         Followed by {{advisor.numberOfFollowers}} investors

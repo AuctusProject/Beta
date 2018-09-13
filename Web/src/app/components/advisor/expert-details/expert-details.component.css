@@ -1,7 +1,15 @@
 :host{
     background: #252525;
+    
     padding-top: 70px;
     display: block;
+}
+
+@media (min-width: 960px){
+    :host {
+        width: 100%;
+        min-width: 1168px;
+    }
 }
 
 .distribution-box{

@@ -89,7 +89,7 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   getLastAdviceDate(asset: AssetResponse){
-    return asset.assetAdvisor[0].lastAdviceDate;
+    return Util.ConvertUTCDateStringToLocalDate(asset.assetAdvisor[0].lastAdviceDate);
   }
 
   getTotalRatings(asset:AssetResponse){
@@ -118,4 +118,10 @@ export class ExpertDetailsComponent implements OnInit {
     event.stopPropagation();
   }
 
+  getInvestorsWordPluralOrSingular(){
+    var word = "investor";
+    if(this.expert.numberOfFollowers != 1)
+      word += "s";
+    return word;
+  }
 }

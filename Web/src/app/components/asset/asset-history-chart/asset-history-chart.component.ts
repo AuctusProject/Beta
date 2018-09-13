@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { StockChart, Highcharts } from 'angular-highcharts';
 import { ValuesResponse, AdviceResponse } from '../../../model/asset/assetResponse';
 import { Util } from '../../../util/Util';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'asset-history-chart',
@@ -28,20 +29,22 @@ export class AssetHistoryChartComponent implements OnInit {
     if(!!this.assetValues) {
       for(var i = 0; i < this.assetValues.length; i++){
         this.chartData.push(
-          [Date.parse(this.assetValues[i].date),
-          this.assetValues[i].value]
+          [
+            new Date(this.assetValues[i].date).getTime(),
+            this.assetValues[i].value
+          ]
         );
-      }    
+      }
     }
   }
 
   fillAdvicesData(){
-    if(!!this.advices) {
+    if(!!this.advices) {      
       for(var i =0; i< this.advices.length; i++){
         this.advicesData.push({
-          x: Date.parse(this.advices[i].date),
+          x: new Date(this.advices[i].date).getTime(),
           title: Util.GetRecommendationTypeDescription(this.advices[i].adviceType),
-          text: Util.GetRecommendationTypeDescription(this.advices[i].adviceType)
+          text: Util.GetRecommendationTypeDescription(this.advices[i].adviceType) + ' at price ' + new CurrencyPipe("en-US").transform(this.advices[i].assetValue)
         });
       }
     }
@@ -54,8 +57,17 @@ export class AssetHistoryChartComponent implements OnInit {
       },
       plotOptions:{
         flags:{
-          color:'#2c8b8b',
-          fillColor: '#2c8b8b'
+          color:'#252525',
+          fillColor: '#252525',
+          style: {
+            color: 'white'
+          },
+          states: {
+              hover: {
+                color:'#151515',
+                fillColor: '#151515'
+              }
+          }
         }
       },
       rangeSelector: {
@@ -79,7 +91,7 @@ export class AssetHistoryChartComponent implements OnInit {
           onSeries:'dataseries',
           
         }
-      ]
+      ],
     });
 
     this.refresh();

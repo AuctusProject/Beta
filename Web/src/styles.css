@@ -491,3 +491,10 @@ textarea:read-only {
 .social-media-button span {
   margin: auto;
 }
+}
+
+.truncate{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

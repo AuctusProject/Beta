@@ -12,7 +12,6 @@ import { NavigationService } from '../../../services/navigation.service';
 })
 export class AdvisorCardComponent implements OnInit {
   @Input() advisor: AdvisorResponse;
-  @Input() advisorsLength: number;
   
   constructor(private advisorServices:AdvisorService, private navigationService: NavigationService) { }
 

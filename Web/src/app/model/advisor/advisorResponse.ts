@@ -9,6 +9,7 @@ export class AdvisorResponse {
   successRate:number;
   averageReturn:number;
   ranking:number;
+  totalAdvisors: number;
   rating:number;
   numberOfFollowers?: number;
   totalAssetsAdvised: number;

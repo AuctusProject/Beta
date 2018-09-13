@@ -17,8 +17,13 @@ namespace Auctus.DataAccess.Advisor
             [Advisor] a
             INNER JOIN [FollowAdvisor] fa ON fa.AdvisorId = a.Id
             INNER JOIN [Follow] f ON f.Id = fa.Id
-            INNER JOIN (SELECT f2.UserId, MAX(f2.CreationDate) CreationDate FROM [Follow] f2 GROUP BY f2.UserId) b 
-                ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate 
+            INNER JOIN (
+		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
+		    	FROM 
+		    		[FollowAdvisor] fa2
+		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
+		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
+			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
              WHERE f.ActionType = @ActionType
 	            AND f.UserId = @UserId";
 
