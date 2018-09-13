@@ -15,6 +15,8 @@ import { NewAdviceComponent } from '../new-advice/new-advice.component';
 import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
 import { AdvisorEditComponent } from '../advisor-edit/advisor-edit.component';
 import { AssetService } from '../../../services/asset.service';
+import { ViewChildren, QueryList } from '@angular/core';
+import { AssetHistoryChartComponent } from '../../asset/asset-history-chart/asset-history-chart.component';
 
 @Component({
   selector: 'expert-details',
@@ -31,10 +33,12 @@ import { AssetService } from '../../../services/asset.service';
 export class ExpertDetailsComponent implements OnInit {
   expert: AdvisorResponse;
   showOwnerButton: boolean = false;
-  displayedColumns: string[] = ['assetName', 'position', 'value', 'action', 'date', 'ratings', 'followButton'];
+  displayedColumns: string[] = ['assetName', 'position', 'value', 'action', 'date', 'ratings', 'followButton','chevron'];
   assets = [];
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   expandedElement: any;
+
+  @ViewChildren('assetHistoryChart') assetHistoryCharts:QueryList<AssetHistoryChartComponent>;
 
   constructor(private route: ActivatedRoute,  
     public dialog: MatDialog, 
@@ -75,6 +79,7 @@ export class ExpertDetailsComponent implements OnInit {
     }
     else{
       this.expandedElement = row;
+      this.assetHistoryCharts.toArray()[this.assets.indexOf(row)/2].refresh();
     }
   }
 
