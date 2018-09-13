@@ -1,4 +1,4 @@
-<div class="asset-card" fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign="left center">
+<div class="asset-card" fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutGap.xs="5px" fxLayoutAlign="left center">
   <div class="asset-icon">
     <img [src]="getAssetImgUrl()">
   </div>
@@ -22,5 +22,8 @@
   </div>
   <div class="variation" [class.bull]="asset.variation24h>0" [class.bear]="asset.variation24h<0">
     <div class="arrow" *ngIf="asset.variation24h>0">&uarr;</div><div class="arrow" *ngIf="asset.variation24h<0">&darr;</div>&nbsp;{{get24hVariation()}}
+  </div>
+  <div class="blue-button action-button" *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick()">
+    Recommend
   </div>
 </div>

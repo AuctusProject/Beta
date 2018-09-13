@@ -3,6 +3,11 @@ import { AssetResponse } from '../../../model/asset/assetResponse';
 import { AssetService } from '../../../services/asset.service';
 import { CONFIG} from "../../../services/config.service";
 import { Util } from '../../../util/Util';
+import { AccountService } from '../../../services/account.service';
+import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
+import { NewAdviceComponent } from '../../advisor/new-advice/new-advice.component';
+import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'asset-card',
@@ -11,9 +16,14 @@ import { Util } from '../../../util/Util';
 })
 export class AssetCardComponent implements OnInit {
   @Input() asset: AssetResponse;
-  constructor(private assetService:AssetService) { }
+  showButtonForExpert: boolean = false;
+
+  constructor(public dialog: MatDialog, 
+    private assetService:AssetService,
+    public accountService: AccountService) { }
 
   ngOnInit() {
+    this.showButtonForExpert = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
   }
   onFollowClick(){
     this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
@@ -64,5 +74,12 @@ export class AssetCardComponent implements OnInit {
   get24hVariation(){
     if (this.asset.variation24h == null) return '0.00%';
     return Math.round(this.asset.variation24h * 10000) / 100 + '%';
+  }
+
+  onGiveRecommendationClick() {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = NewAdviceComponent;
+    modalData.componentInput = { assetId: this.asset.assetId };
+    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 }
