@@ -32,8 +32,13 @@ export class FullscreenModalComponent implements OnInit, OnDestroy {
     let viewContainerRef = this.modalHost.viewContainerRef;
     viewContainerRef.clear();
     this.destroy();
+    if (inputData.hiddenClose) {
+      this.dialogRef.disableClose = true;
+    } else {
+      this.dialogRef.disableClose = false;
+    }
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    this.modalComponent = (<ModalComponent>componentRef.instance)
+    this.modalComponent = (<ModalComponent>componentRef.instance);
     this.title = this.modalComponent.modalTitle;
     this.modalComponent.data = inputData.componentInput;
     this.modalComponent.setClose.subscribe(() => this.dialogRef.close());

@@ -62,8 +62,9 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
       this.promise = this.advisorService.editAdvisor(this.advisor.id, request).subscribe(result => 
         {
           let modalData = new FullscreenModalComponentInput();
+          modalData.hiddenClose = true;
           modalData.component = MessageFullscreenModalComponent;
-          modalData.componentInput = { message: "Expert data was updated with success.", redirectUrl: "" };
+          modalData.componentInput = { message: "Expert data was updated with success.", reload: true };
           this.setNewModal.emit(modalData);
         });
     }
