@@ -89,20 +89,20 @@ namespace Auctus.DataAccess.Advisor
             var parameters = new DynamicParameters();
             if (advisorsIds.Any())
             {
-                complement = string.Join(" OR ", advisorsIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
+                complement += string.Join(" OR ", advisorsIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
                 for (int i = 0; i < advisorsIds.Count(); ++i)
                     parameters.Add($"AdvisorId{i}", advisorsIds.ElementAt(i), DbType.Int32);
             }
             if (assetsIds.Any())
             {
-                complement = string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
+                complement += string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
                 for (int i = 0; i < assetsIds.Count(); ++i)
                     parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
             }
 
             var topCondition = (top.HasValue ? "TOP " + top.Value : String.Empty);
             if (lastAdviceId.HasValue) {
-                complement = " AND a.Id < @LastAdviceId ";
+                complement += " AND a.Id < @LastAdviceId ";
                 parameters.Add("LastAdviceId", lastAdviceId.Value, DbType.Int32);
             }
 
