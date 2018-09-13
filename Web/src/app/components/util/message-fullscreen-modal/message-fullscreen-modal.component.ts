@@ -21,8 +21,13 @@ export class MessageFullscreenModalComponent implements ModalComponent, OnInit {
   }
 
   onOk() {
-    if (!!this.data && (this.data.redirectUrl !== undefined && this.data.redirectUrl !== null)) {
-      this.zone.run(() => this.router.navigateByUrl(this.data.redirectUrl));
+    if (!!this.data) {
+      if (this.data.redirectUrl !== undefined && this.data.redirectUrl !== null) {
+        this.zone.run(() => this.router.navigateByUrl(this.data.redirectUrl));
+        this.setClose.emit();
+      } else if (this.data.reload) {
+        window.location.reload();
+      }
     }
     this.setClose.emit();
   }

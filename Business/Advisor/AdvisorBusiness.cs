@@ -170,9 +170,10 @@ namespace Auctus.Business.Advisor
             var advisors = GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
-            Task.WaitAll(advices, advisorFollowers);
+            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
+            Task.WaitAll(advices, advisorFollowers, assetFollowers);
 
-            Calculation(mode, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, null, null, advisorId);
+            Calculation(mode, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, assetFollowers.Result, null, advisorId);
         }
 
         public List<DomainObjects.Advisor.Advisor> GetAdvisors()
