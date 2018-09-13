@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { NewAdviceComponent } from '../../advisor/new-advice/new-advice.component';
 import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
+import { AdvisorService } from '../../../services/advisor.service';
+import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 
 @Component({
   selector: 'asset-details',
@@ -16,13 +18,15 @@ import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen
   styleUrls: ['./asset-details.component.css']
 })
 export class AssetDetailsComponent implements OnInit {
+  displayedColumns: string[] = ['expertName', 'rankin', 'value', 'action', 'position', 'date', 'followButton'];
   asset: AssetResponse;
   showNewAdviceButton: boolean = false;
 
   constructor(private route: ActivatedRoute, 
     private assetService: AssetService,
     public dialog: MatDialog, 
-    public accountService: AccountService) { }
+    public accountService: AccountService,
+    private advisorService:AdvisorService) { }
 
   ngOnInit() {
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
@@ -38,12 +42,35 @@ export class AssetDetailsComponent implements OnInit {
     this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 
-  getAssetImgUrl(asset: AssetResponse){
-    return CONFIG.assetImgUrl.replace("{id}", asset.assetId.toString());
+  getAssetImgUrl(){
+    return CONFIG.assetImgUrl.replace("{id}", this.asset.assetId.toString());
   }
 
   getRecommendationFromType(type: number){
     return Util.GetRecommendationTypeDescription(type);
   }
+
+  getRecomendationFromType(mode: number){
+    return Util.GetAdviceModeDescription(mode);
+  }
   
+  getAdviceTypeColor(type: number){
+    return Util.GetRecommendationTypeColor(type);
+  }
+  
+  onFollowExpertClick(event: Event, expert: AdvisorResponse){
+    this.advisorService.followAdvisor(expert.userId).subscribe(result =>expert.following = true);
+  }
+
+  onUnfollowExpertClick(event: Event, expert: AdvisorResponse){
+    this.advisorService.unfollowAdvisor(expert.userId).subscribe(result =>expert.following = false);
+  }
+
+  onFollowAssetClick(){
+    this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
+  }
+
+  onUnfollowAssetClick(){
+    this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
+  }
 }

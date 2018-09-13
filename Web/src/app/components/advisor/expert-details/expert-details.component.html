@@ -62,7 +62,7 @@
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef> Date </th>
             <td mat-cell *matCellDef="let asset">
-              {{getLastAdviceDate(asset) | timeAgo}}
+              <div [title]="getLastAdviceDate(asset) | date: 'medium'">{{getLastAdviceDate(asset) | timeAgo}}</div>
             </td>
           </ng-container>
 

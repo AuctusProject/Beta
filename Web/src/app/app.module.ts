@@ -81,6 +81,7 @@ import { NewsletterComponent } from './components/util/newsletter/newsletter.com
 import { FooterComponent } from './components/util/footer/footer.component';
 import { OwlModule } from 'ngx-owl-carousel';
 import { CoinSearchComponent } from './components/util/coin-search/coin-search.component';
+import { GeneralRecommendationTagComponent } from './components/util/general-recommendation-tag/general-recommendation-tag.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -148,7 +149,8 @@ export function getAuthServiceConfigs() {
     TimeAgoPipe,
     NewsletterComponent,
     FooterComponent,
-    CoinSearchComponent
+    CoinSearchComponent,
+    GeneralRecommendationTagComponent
   ],
   imports: [
     BrowserModule,

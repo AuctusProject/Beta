@@ -48,69 +48,40 @@
     color: #126efd;
 }
 
-.assets-table{
-    width: 100%;
-    margin-top: 16px;
-    text-align: center;
-}
-
-.assets-table .mat-cell{
-    font-size: 12px;
-    font-weight: 300;
-    color: white;
-}
-
-.assets-table th{
-    background-color: #151515;
-    font-size: 12px;
-    font-weight: 600;
-    color: #ffffff;
-}
-
-.assets-table th.mat-header-cell{
-    text-align: center;
-}
-
-.mat-header-row{
-    height: 40px !important;
-}
-
-.element-row {
+.assets-table .element-row {
     position: relative;
 }
   
-.element-row:not(.expanded) {
+.assets-table .element-row:not(.expanded) {
     cursor: pointer;
 }
 
-.element-row:not(.expanded):hover {
+.assets-table .element-row:not(.expanded):hover {
     background: #15151540;
 }
 
-/* 959595 */
-
-.element-row.expanded .mat-cell{
+.assets-table .element-row.expanded .mat-cell{
     border-bottom-color: transparent;
 }
 
-.element-row:not(.expanded) .mat-cell,
-.mat-column-expandedDetail{
+.assets-table .element-row:not(.expanded) .mat-cell,
+.assets-table .mat-column-expandedDetail{
     border-bottom-color: #959595;
 }
 
-.element-row.expanded {
+.assets-table .element-row.expanded {
     border-bottom-color: transparent;
 }
 
-.expanded{
+.assets-table .expanded{
     background-color: #404040;
 }
 
-.expanded td:first-child{
+.assets-table .expanded td:first-child{
     border-left: 1px solid #959595;
 }
 
-.expanded td:last-child{
+.assets-table .expanded td:last-child{
     border-right: 1px solid #959595;
 }
 
@@ -135,61 +106,6 @@
     font-weight: 300;
 }
 
-.mat-column-position div{
-    width: 99px;
-    height: 26px;
-    line-height: 26px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #ffffff;
-    margin: auto;
-}
-
-.mat-column-value div{
-    font-size: 16px;
-}
-
-
-
-/* 
-.success-rate-column,
-.average-return-column{
-    width: 50%;
-    display: inline-block;
-}
-
-.success-rate,
-.average-return{
-    height: 74px;
-    width: 74px;
-    line-height: 74px;
-    font-weight: bold;
-    text-align: center;
-    margin: 0 auto 6px auto;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent;
-}
-
-.success-rate{
-    border-radius: 50px;
-    border-color: #333333;
-    font-size: 19px;
-    font-weight: bold;
-}
-
-.average-return{
-    font-size: 26px;
-    display: inline-block;    
-}
-
-.success-rate-description,
-.average-return-description{
-  font-size: 11px;
-  text-align: center;
-  color: #262626;
-  font-weight: bold;
-} */
 .circular-chart{
     height: 80px;
 }
@@ -224,4 +140,8 @@
     width: 1px;
     height: 59px;
     background-color: #959595;
+}
+
+expert-details ::ng-deep .expert-details-div{
+    cursor: unset;
 }

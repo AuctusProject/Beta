@@ -10,6 +10,7 @@ export class PercentageDisplayComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.value = Math.round(this.value * 10000) / 100;
   }
 
 }

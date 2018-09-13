@@ -58,11 +58,15 @@
 
 .separator{
     margin-top: 12px;
-    border: solid 0.3px #3b3b3b;
+    border-bottom: solid 0.5px #3b3b3b;
 }
 
 .green .separator{
-    border: solid 0.3px #37b63b;
+    border-bottom: solid 0.5px #37b63b;
+}
+
+.red .separator{
+    border-bottom: solid 0.5px #d13e3e;
 }
 
 .ratings-distribution{
@@ -79,4 +83,9 @@
     color: #e6e6e6;
     text-decoration: underline;
     cursor: pointer;
+}
+
+percentage-display{
+    font-size: 13px;
+    text-align: right;
 }

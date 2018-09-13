@@ -1,15 +1,128 @@
 <div *ngIf="asset">
-  <asset-card [asset]="asset"></asset-card>
-  <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
-  <asset-history-chart [assetValues]="asset.values"></asset-history-chart>
-  <div *ngFor="let assetAdvisor of asset.assetAdvisor; let i = index">
-    <br/>
-    <div>User: {{asset.advisors[i].name}}</div>
-    <div>Ranking: {{asset.advisors[i].ranking}}</div>
-    <div>Last Advice Type: {{getRecommendationFromType(assetAdvisor.lastAdviceType)}}</div>
-    <div>Last Advice Mode: {{assetAdvisor.lastAdviceMode}}</div>
-    <div>Last Advice Date: {{assetAdvisor.lastAdviceDate}}</div>
+  <div class="expert-details-header global-container-min">
+    <div class="global-container">
+      <div class="section-title">
+        EXPERTS RECOMMENDATIONS ON {{asset.name}}
+      </div>
+      <div class="section-subtitle">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </div>
+      <div fxLayout="column" fxLayoutGap="60px">
+        <div fxLayout="row" fxLayoutGap="36px" fxLayoutAlign="space-between center">
+          <div class="asset-icon">
+            <img [src]="getAssetImgUrl()">
+          </div>
+          <div fxLayout="column">
+            <div class="symbol">{{asset.code}}</div>
+            <div class="asset-name">{{asset.name}}</div>
+          </div>
+          <div fxLayout="column">
+            <div class="recommendations">
+              {{asset.totalAdvisors}} experts recomend
+            </div>
+            <div class="followers">
+              {{asset.numberOfFollowers}} investors are following
+            </div>
+          </div>
+          <div fxLayout="column">
+            <percentage-display [value]="asset.variation24h"></percentage-display>
+            Last 24 hours
+          </div>
+          <div fxLayout="column">
+            <percentage-display [value]="asset.variation7d"></percentage-display>
+            Last 7 days
+          </div>
+          <div fxLayout="column">
+            <percentage-display [value]="asset.variation30d"></percentage-display>
+            Last 30 days
+          </div>
+          <div class="white-button action-button-sm" *ngIf="asset.following" (click)="onUnfollowAssetClick()">
+            Unfollow
+          </div>
+          <div class="blue-button action-button-sm" *ngIf="!asset.following" (click)="onFollowAssetClick()">
+            Follow
+          </div>
+          <div class="blue-button action-button-sm" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">
+            Recommend
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="29px" fxLayoutAlign="space-between start">
+          <div class="general-recommendation-box" fxLayout="column" fxFlex="267px" fxLayoutAlign="center center">
+            <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
+            <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
+            <div class="disclaimer">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.
+            </div>
+          </div>
+          <asset-history-chart fxFlex [assetValues]="asset.values"></asset-history-chart>
+        </div>
+      </div>
+    </div>
   </div>
+  <div class="global-container">
+    <table mat-table [dataSource]="asset.assetAdvisor" class="assets-table">
+        <ng-container matColumnDef="expertName">
+          <th mat-header-cell *matHeaderCellDef> Expert </th>
+          <td mat-cell *matCellDef="let assetAdvisor; let i = index"> 
+            <span class="truncate">{{asset.advisors[i].name}}</span>
+          </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="rankin">
+          <th mat-header-cell *matHeaderCellDef> Ranking </th>
+          <td mat-cell *matCellDef="let assetAdvisor; let i = index"> 
+            <div class="expert-rating">
+              <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="asset.advisors[i].ranking" [title]="asset.advisors[i].ranking | number: '1.2-2'"></bar-rating>
+            </div>
+          </td>
+        </ng-container>
 
-  <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef> Value </th>
+          <td mat-cell *matCellDef="let assetAdvisor; let i = index">  
+            At price
+            <div>{{assetAdvisor.lastAdviceAssetValue | currency}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let assetAdvisor">
+            {{getRecomendationFromType(assetAdvisor.lastAdviceMode)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> Recommendation </th>
+          <td mat-cell *matCellDef="let assetAdvisor">
+              <div [style.background-color]="getAdviceTypeColor(assetAdvisor.lastAdviceType)">{{getRecommendationFromType(assetAdvisor.lastAdviceType)}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let assetAdvisor">
+            <div [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="followButton">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let assetAdvisor; let i = index">
+            <div class="white-button action-button-sm" *ngIf="asset.advisors[i].following" (click)="onUnfollowExpertClick($event, asset.advisors[i])">
+              UNFOLLOW
+            </div>
+            <div class="blue-button action-button-sm" *ngIf="!asset.advisors[i].following" (click)="onFollowExpertClick($event, asset.advisors[i])">
+              FOLLOW
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" class="element-row"></tr>
+      </table>
+    </div>
 </div>
+<trending-assets class="global-container-min inverted"></trending-assets>

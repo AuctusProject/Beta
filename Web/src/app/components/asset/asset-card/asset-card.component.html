@@ -14,15 +14,11 @@
   <div class="ratings-distribution" fxLayout="row">
     <recommendation-distribution [data]="asset.recommendationDistribution" [showTitle]="'true'"></recommendation-distribution>
   </div>
-  <div fxLayoutAlign="center center" class="general-recommendation-box" [class.neutral]="asset.mode==0" [class.moderate-buy]="asset.mode==1" [class.strong-buy]="asset.mode==2" [class.moderate-sell]="asset.mode==3" [class.strong-sell]="asset.mode==4" [class.close]="asset.mode==5">
-    {{getGeneralRecommendation()}}
-  </div>
+  <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
   <div class="price">
     {{getLastValue()}}
   </div>
-  <div class="variation" [class.bull]="asset.variation24h>0" [class.bear]="asset.variation24h<0">
-    <div class="arrow" *ngIf="asset.variation24h>0">&uarr;</div><div class="arrow" *ngIf="asset.variation24h<0">&darr;</div>&nbsp;{{get24hVariation()}}
-  </div>
+  <percentage-display [value]="asset.variation24h"></percentage-display>
   <div class="blue-button action-button" *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick()">
     Recommend
   </div>

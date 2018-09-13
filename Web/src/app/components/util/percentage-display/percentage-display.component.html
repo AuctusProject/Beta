@@ -1,1 +1,3 @@
-<span [class.positive]="value > 0" [class.negative]="value < 0">{{value * 100 | number:'1.2-2'}}%</span>
+<div class="variation" [class.bull]="value > 0" [class.bear]="value < 0">
+    <div class="arrow" *ngIf="value > 0">&uarr;</div><div class="arrow" *ngIf="value < 0">&darr;</div>&nbsp;{{value | number:'1.2-2'}}%
+</div>
