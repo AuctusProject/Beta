@@ -7,8 +7,8 @@
 <div class="lastDiv" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
   <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onLoginClick()" [promiseBtn]="promise">Sign In</button>
-  <a class="modal-link" (click)="onForgotPasswordClick()">Forgot my password</a>
-  <a class="modal-link" (click)="onRegisterClick()">Don't have an account?</a>
-  <button mat-flat-button (click)="socialSignIn('facebook')">Sign in with Facebook</button>
-  <button mat-flat-button (click)="socialSignIn('google')">Signin in with Google</button> 
+</div>
+<div class="lastDiv" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+    <a class="modal-link" (click)="onForgotPasswordClick()">I forgot my password</a>
+    <a class="modal-link" (click)="onRegisterClick()">I don't have an account</a>
 </div>

@@ -1,6 +1,6 @@
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
   <p class="header">Fill your data to create an account and improve your investments.
-    <br/>You need to hold some AUC in your own wallet.</p>
+    <br/>You only need to hold some AUC in your own wallet.</p>
 </div>
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
   <inheritance-input #Email [options]="getEmailOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
@@ -15,8 +15,9 @@
   <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
   <mat-checkbox required [(ngModel)]="acceptTermsAndConditions">Agree with all terms</mat-checkbox>
   <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onCreateAccountClick()" [promiseBtn]="promise">Register</button>
+</div>
+<div class="div-padding-bottom div-padding-top" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+  <a class="modal-link" (click)="onForgotPasswordClick()">I forgot my password</a>
   <a class="modal-link" (click)="onLoginClick()">I have an account. Go to Login</a>
-  <button mat-flat-button (click)="socialSignIn('facebook')">Sign in with Facebook</button>
-  <button mat-flat-button (click)="socialSignIn('google')">Signin in with Google</button> 
 </div>
   

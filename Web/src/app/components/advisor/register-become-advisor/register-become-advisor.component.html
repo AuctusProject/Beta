@@ -1,0 +1,17 @@
+<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
+    <p class="header">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt 
+        ut labore et dolore magna aliqua.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt 
+        ut labore et dolore magna aliqua.</p>
+</div>
+<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+    <div class="social-media-button" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','facebook-f']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Facebook</span></div>
+    <div class="social-media-button" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','google']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Google</span></div> 
+    <p>or</p>
+    <button mat-flat-button ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" (click)="emailClick()">Sign up with email</button> 
+</div>
+<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+    <a class="modal-link" (click)="onForgotPasswordClick()">I forgot my password</a>
+    <a class="modal-link" (click)="onLoginClick()">I have an account. Go to Login</a>
+</div>
+    

@@ -1,20 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { AdviseRequest } from '../../../model/advisor/adviseRequest';
 import { AdvisorService } from '../../../services/advisor.service';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
 import { Asset } from '../../../model/asset/asset';
-import { AssetService } from '../../../services/asset.service';
-import { FormControl } from '../../../../../node_modules/@angular/forms';
-import { Observable } from '../../../../../node_modules/rxjs';
-import {map, startWith} from 'rxjs/operators';
-import { MatAutocompleteSelectedEvent } from '../../../../../node_modules/@angular/material';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { ConfirmAdviceDialogComponent } from './confirm-advice-dialog/confirm-advice-dialog.component';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { AccountService } from '../../../services/account.service';
 import { NavigationService } from '../../../services/navigation.service';
-import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { CoinSearchComponent } from '../../util/coin-search/coin-search.component';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { Util } from '../../../util/Util';
@@ -36,12 +29,10 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
   showButtons: boolean = false;
   asset: Asset;
 
-  constructor(private assetService: AssetService, 
-    private advisorService: AdvisorService, 
+  constructor(private advisorService: AdvisorService, 
     private accountService : AccountService, 
-    private notificationService: NotificationsService,
     private navigationService : NavigationService,
-    public dialog: MatDialog) { }
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     let loginData = this.accountService.getLoginData();

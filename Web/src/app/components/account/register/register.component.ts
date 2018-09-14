@@ -8,12 +8,12 @@ import { AuthRedirect } from '../../../providers/authRedirect';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InputType } from '../../../model/inheritanceInputOptions';
-import { SocialLoginRequest } from '../../../model/account/socialLoginRequest';
-import { FacebookLoginProvider, GoogleLoginProvider, AuthService } from 'angular5-social-login';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { LoginComponent } from '../login/login.component';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { LoginResult } from '../../../model/account/loginResult';
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { EntryOptionComponent } from '../entry-option/entry-option.component';
 
 @Component({
   selector: 'register',
@@ -40,8 +40,7 @@ export class RegisterComponent implements ModalComponent, OnInit {
     private accountService: AccountService,
     private authRedirect : AuthRedirect,
     private activatedRoute: ActivatedRoute,
-    private socialAuthService: AuthService,
-    private zone: NgZone) { }
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit() {
     if (this.accountService.isLoggedIn()) {
@@ -49,7 +48,9 @@ export class RegisterComponent implements ModalComponent, OnInit {
       this.authRedirect.redirectAfterLoginAction();
     } else {
       this.registerRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
-      if (!!this.registerRequest.referralCode) this.validateReferralCode(this.registerRequest.referralCode);
+      if (!!this.registerRequest.referralCode) {
+        this.validateReferralCode(this.registerRequest.referralCode);
+      }
     }
   }
 
@@ -64,26 +65,10 @@ export class RegisterComponent implements ModalComponent, OnInit {
     }
   }
   
-  public socialSignIn(socialPlatform : string) {
-    let socialPlatformProvider;
-    var socialNetworkType;
-    if(socialPlatform == "facebook"){
-      socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
-      socialNetworkType = 0;
-    }else if(socialPlatform == "google"){
-      socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
-      socialNetworkType = 1;
-    }
-    
-    this.socialAuthService.signIn(socialPlatformProvider).then(
-      (userData) => {
-        var request = new SocialLoginRequest();
-        request.email = userData.email;
-        request.token = userData.token;
-        request.socialNetworkType = socialNetworkType;
-        this.accountService.socialLogin(request).subscribe(result => this.zone.run(() => { this.registerResponse(result); }, this.RecaptchaComponent.reset));
-      }
-    );
+  onForgotPasswordClick() {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = ForgotPasswordComponent;
+    this.setNewModal.emit(modalData);
   }
 
   registerResponse(response: LoginResult){
@@ -91,9 +76,10 @@ export class RegisterComponent implements ModalComponent, OnInit {
       this.accountService.setLoginData(response.data);
       this.setClose.emit();
       this.authRedirect.redirectAfterLoginAction();
-    }
-    else {
-      if (!!response) this.notificationsService.info("Info", response.error);
+    } else {
+      if (!!response && response.error) {
+        this.notificationsService.info("Info", response.error);
+      }
       this.RecaptchaComponent.reset();
     }
   }
@@ -105,22 +91,25 @@ export class RegisterComponent implements ModalComponent, OnInit {
 
   validateReferralCode(value: string) {
     if (!value || value.length == 0) {
-      this.Referral.setForcedError("");
-      this.discountMessage = "";
+      this.setInvalidReferral("");
     } else if (!!value && value.length == 7) {
       this.accountService.isValidReferralCode(value).subscribe(response => {
         if (!!response && response.valid) {
-          this.Referral.setForcedError("");
-          this.discountMessage = "Congratulations, using the referral code you need hold " + response.discount + "% less AUC in your wallet!" 
+          this.localStorageService.setLocalStorage("referralCode", value);
+          this.discountMessage = "Congratulations, using the referral code you need hold " + response.discount + "% less AUC in your own wallet!" 
         } else {
-          this.Referral.setForcedError("Invalid referral code");
-          this.discountMessage = "";
+          this.setInvalidReferral("Invalid referral code");
         }
       });
     } else {
-      this.Referral.setForcedError("Invalid referral code");
-      this.discountMessage = "";
+      this.setInvalidReferral("Invalid referral code");
     }
+  }
+
+  setInvalidReferral(message: string) {
+    this.Referral.setForcedError(message);
+    this.discountMessage = "";
+    this.localStorageService.setLocalStorage("referralCode", "");
   }
 
   public onCaptchaResponse(captchaResponse: string) {
@@ -129,7 +118,8 @@ export class RegisterComponent implements ModalComponent, OnInit {
 
   onLoginClick() {
     let modalData = new FullscreenModalComponentInput();
-    modalData.component = LoginComponent;
+    modalData.component = EntryOptionComponent;
+    modalData.componentInput = { login: true };
     this.setNewModal.emit(modalData);
   }
 

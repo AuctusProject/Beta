@@ -3,12 +3,8 @@ import { AdvisorService } from '../../../services/advisor.service';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { NavigationService } from '../../../services/navigation.service';
 import { Util } from '../../../util/Util';
-import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
-import { NewAdviceComponent } from '../new-advice/new-advice.component';
-import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
-import { MatDialog } from '@angular/material';
 import { AccountService } from '../../../services/account.service';
-import { AdvisorEditComponent } from '../advisor-edit/advisor-edit.component';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'top-experts',
@@ -35,9 +31,9 @@ export class TopExpertsComponent implements OnInit {
   ];
 
   constructor(private advisorService: AdvisorService, 
-    public dialog: MatDialog, 
     public accountService: AccountService,
-    private navigationService: NavigationService) { }
+    private navigationService: NavigationService,
+    private modalService: ModalService) { }
 
   ngOnInit() {
     this.showAdvisorButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
@@ -53,16 +49,11 @@ export class TopExpertsComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = NewAdviceComponent;
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.modalService.setNewAdvice();
   }
 
   onEditProfileClick() {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = AdvisorEditComponent;
-    modalData.componentInput = { id: this.accountService.getLoginData().id };
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.modalService.setEditAdvisor(this.accountService.getLoginData().id);
   }
 
   loadMoreExperts(){

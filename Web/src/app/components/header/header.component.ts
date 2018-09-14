@@ -1,16 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AccountService } from '../../services/account.service';
 import { LoginResponse } from '../../model/account/loginResponse';
-import { FullscreenModalComponentInput } from '../../model/modal/fullscreenModalComponentInput';
-import { LoginComponent } from '../account/login/login.component';
-import { FullscreenModalComponent } from '../util/fullscreen-modal/fullscreen-modal.component';
-import { MatDialog, MatMenu } from '@angular/material';
-import { RegisterComponent } from '../account/register/register.component';
-import { ChangePasswordComponent } from '../account/change-password/change-password.component';
-import { ReferralDetailsComponent } from '../account/referral-details/referral-details.component';
-import { AdvisorEditComponent } from '../advisor/advisor-edit/advisor-edit.component';
+import { MatMenu } from '@angular/material';
 import { NavigationService } from '../../services/navigation.service';
-import { ConfigurationComponent } from '../account/configuration/configuration.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'header',
@@ -23,7 +16,7 @@ export class HeaderComponent implements OnInit {
   @ViewChild("profile") profile: MatMenu;
   @ViewChild("mobile") mobile: MatMenu;
   
-  constructor(public dialog: MatDialog, 
+  constructor(private modalService: ModalService, 
     private accountService : AccountService, 
     private navigationService: NavigationService) { }
 
@@ -42,8 +35,12 @@ export class HeaderComponent implements OnInit {
     return !!this.loginData;
   }
 
-  onBecameExpert() {
-    //TODO navigation
+  onBecomeExpert() {
+    if (this.isLogged()) {
+      this.modalService.setBecomeAdvisorForm();
+    } else {
+      this.modalService.setBecomeAdvisor();
+    }
   }
 
   onTopExperts() {
@@ -61,35 +58,26 @@ export class HeaderComponent implements OnInit {
   }
 
   editAdvisor() {
-    this.setModal(AdvisorEditComponent, { id: this.loginData.id });
+    this.modalService.setEditAdvisor(this.loginData.id);
   }
 
   configuration() {
-    this.setModal(ConfigurationComponent);
+    this.modalService.setConfiguration();
   }
 
   referralDetails() {
-    this.setModal(ReferralDetailsComponent);
+    this.modalService.setReferralDetails();
   }
 
   changePassword() {
-    this.setModal(ChangePasswordComponent);
+    this.modalService.setChangePassword();
   }
 
   login() {
-    this.setModal(LoginComponent);
+    this.modalService.setLogin();
   }
 
   register() {
-    this.setModal(RegisterComponent);
-  }
-
-  setModal(modal: any, data?: any) {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = modal;
-    modalData.componentInput = data;
-    const dialogRef = this.dialog.open(FullscreenModalComponent, { data: modalData }); 
-
-    dialogRef.afterClosed().subscribe(result => { this.isLogged(); });
+    this.modalService.setRegister();
   }
 }
