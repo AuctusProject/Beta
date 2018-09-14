@@ -320,8 +320,6 @@ namespace Auctus.Business.Account
             var user = Data.GetForNewWallet(LoggedEmail);
             if (user == null)
                 throw new NotFoundException("User cannot be found.");
-            if (!user.ConfirmationDate.HasValue)
-                throw new BusinessException("Email was not confirmed.");
             if (string.IsNullOrWhiteSpace(signature))
                 throw new BusinessException("Signature cannot be empty.");
 
@@ -366,7 +364,7 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 HasInvestment = true,
                 IsAdvisor = IsValidAdvisor(user),
-                PendingConfirmation = false,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
         }
