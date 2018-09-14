@@ -3,6 +3,7 @@ export class FeedResponse {
   assetId: number;
   assetName: string;
   assetCode: string;
+  assetMode: number;
   advisorId: number;
   advisorName: string;
   advisorUrlGuid: string;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { AccountService } from '../../../services/account.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'advices',
@@ -9,8 +10,9 @@ import { AccountService } from '../../../services/account.service';
 })
 export class AdvicesComponent implements OnInit {
   advices : FeedResponse[] = [];
-  hasMoreAdvices = true;
+  hasMoreAdvices = false;
   pageSize = 10;
+  promise : Subscription;
   constructor(private accountService: AccountService) { }
 
   ngOnInit() {
@@ -18,9 +20,10 @@ export class AdvicesComponent implements OnInit {
   }
 
   loadMore(){
-    this.accountService.listFeed(this.pageSize, this.getLastAdviceId()).subscribe(result => 
+    this.promise = this.accountService.listFeed(this.pageSize, this.getLastAdviceId()).subscribe(result => 
       {
         this.advices = this.advices.concat(result);
+        this.hasMoreAdvices = true;
         if(!result || result.length == 0 || result.length < this.pageSize){
           this.hasMoreAdvices = false;
         }

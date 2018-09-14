@@ -158,9 +158,11 @@ Auctus Team");
                     AdvisorName = advisorResponse.Name,
                     AdvisorUrlGuid = advisorResponse.UrlGuid.ToString(),
                     AdvisorRanking = advisorResponse.Ranking,
+                    AdvisorRating = advisorResponse.Rating,
                     FollowingAdvisor = advisorResponse.Following,
                     AssetCode = assetResponse.Code,
                     AssetName = assetResponse.Name,
+                    AssetMode = assetResponse.Mode,
                     FollowingAsset = assetResponse.Following == true,
                     AssetValueAtAdviceTime = advice.AssetValue
                 });

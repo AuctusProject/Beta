@@ -1,6 +1,14 @@
+:host{
+    color: white;
+    font-size: 19.5px;
+    font-weight: 300;
+    padding-bottom: 12px; 
+    margin-bottom: 16px;
+    border-bottom: solid 1px #ffffff99;
+    display: block;
+}
+
 .expert-picture{
-    margin: auto;
-    margin-top: 21px;
     position: relative;    
     background-color: white;
 }
@@ -24,4 +32,45 @@
     bottom: 0px;
     position: absolute;
     font-weight: 500;
+}
+
+.expert-name{
+    width: 260px;
+}
+
+.asset-column{
+    width: 200px;
+}
+
+.asset-icon{
+    margin-right: 12px;
+}
+
+.asset-icon,
+.asset-icon img{
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+}
+
+.follow-btn{
+    margin-left: 43px;
+}
+
+.advice-mode-box{
+    width: 168px;
+    height: 51px;
+    text-align: center;
+    font-size: 14.5px;
+}
+
+.advice-type{
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    
+}
+
+.advice-time{
+    width: 140px;
 }

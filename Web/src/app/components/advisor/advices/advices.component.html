@@ -1,6 +1,6 @@
 <div class="global-container">
     <div class="section-title">
-        Top Assets
+        Hello
     </div>
     <div class="section-subtitle">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
@@ -8,7 +8,9 @@
         nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     </div>
     <advice-card *ngFor="let advice of advices" [advice]="advice"></advice-card>
-    <div class="pagination-link" *ngIf="hasMoreAdvices" (click)="loadMore()">
-        LOAD MORE
+    <div fxLayoutAlign="center center">
+      <button [promiseBtn]="promise" class="pagination-link" *ngIf="hasMoreAdvices" (click)="loadMore()">
+          LOAD MORE
+      </button>
     </div>
 </div>

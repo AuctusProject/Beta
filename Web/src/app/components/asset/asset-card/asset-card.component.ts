@@ -27,10 +27,12 @@ export class AssetCardComponent implements OnInit {
   ngOnInit() {
     this.showButtonForExpert = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
   }
+  
   onFollowClick(event: Event){
     this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
     event.stopPropagation();
   }
+  
   onUnfollowClick(event: Event){
     this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
     event.stopPropagation();
