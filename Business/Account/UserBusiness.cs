@@ -303,11 +303,11 @@ namespace Auctus.Business.Account
 
             user.ConfirmationDate = Data.GetDateTimeNow();
             Data.Update(user);
-
+        
             return new Model.LoginResponse()
             {
                 Email = user.Email,
-                HasInvestment = false,
+                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
                 PendingConfirmation = false,
                 IsAdvisor = false,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null

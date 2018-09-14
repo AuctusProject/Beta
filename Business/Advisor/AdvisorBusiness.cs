@@ -348,7 +348,7 @@ namespace Auctus.Business.Advisor
             IEnumerable<Advice> assetAdvices, IEnumerable<int> assetAdvisorsId, IEnumerable<AssetValue> values, CalculationMode mode)
         {
             var assFollowers = assetFollowers?.Where(c => c.AssetId == asset.Id);
-            var firstData = values.First();
+            var firstData = values.Last();
             var vl30d = values.Where(c => c.Date <= firstData.Date.AddDays(-30) && c.Date > firstData.Date.AddDays(-31));
             var vl7d = values.Where(c => c.Date <= firstData.Date.AddDays(-7) && c.Date > firstData.Date.AddDays(-8)); 
             var vl24h = values.Where(c => c.Date <= firstData.Date.AddDays(-1) && c.Date > firstData.Date.AddDays(-2));

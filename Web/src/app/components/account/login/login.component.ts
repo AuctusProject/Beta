@@ -50,7 +50,7 @@ export class LoginComponent implements ModalComponent, OnInit {
       this.notificationsService.error(null, "You must fill the captcha.");
     } else if (this.isValidRequest()) {
       this.promise = this.accountService.login(this.loginRequest)
-        .subscribe(result => this.zone.run(() => { this.loginResponse(result); }), this.RecaptchaComponent.reset);
+        .subscribe(result => this.loginResponse(result)), this.RecaptchaComponent.reset);
     }
   }
 
