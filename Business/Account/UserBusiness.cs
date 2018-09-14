@@ -272,7 +272,7 @@ namespace Auctus.Business.Account
 
         private string GetHashedPassword(string password, string email, DateTime creationDate)
         {
-            return Security.Hash(password, $"{email}{creationDate.Ticks}{HashSecret}");
+            return Security.Hash(password, $"{email}{(new DateTime(creationDate.Ticks - (creationDate.Ticks % TimeSpan.TicksPerSecond), DateTimeKind.Utc)).Ticks}{HashSecret}");
         }
 
         public async Task ResendEmailConfirmationAsync()
