@@ -27,6 +27,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   discountMessage: string = "";
   standardAUCAmount: number;
   aucRequired: number;
+  aucAmount: number = 0;
   @ViewChild("Referral") Referral: InheritanceInputComponent;
 
   constructor(private web3Service : Web3Service, 
@@ -46,6 +47,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
         this.aucRequired = result.aucRequired;
         if (!result.referralCode) {
           this.referralCode = this.localStorageService.getLocalStorage("referralCode");
+          this.validateReferralCode(this.referralCode);
         } else {
           this.referralCode = result.referralCode;
         }
@@ -95,6 +97,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
           {
             this.lastCheck = new Date();
             this.lastAccountChecked = this.account;
+            this.aucAmount = ret;
             this.hasAUC = ret >= this.aucRequired;
           });
       }
@@ -150,10 +153,10 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
       this.setInvalidReferral("");
     } else if (!!value && value.length == 7) {
       this.accountService.setReferralCode(value).subscribe(response => {
-        if (!!response && response.valid) {
+        this.standardAUCAmount = response.standardAUCAmount;
+        this.aucRequired = response.aucRequired;
+        if (response.valid) {
           this.Referral.setForcedError("");
-          this.standardAUCAmount = response.standardAUCAmount;
-          this.aucRequired = response.aucRequired;
           this.setDiscountMessage(response.discount); 
         } else {
           this.setInvalidReferral("Invalid referral code");
@@ -166,6 +169,14 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
 
   setDiscountMessage(discount: number) {
     this.discountMessage = "Congratulations, using the referral code you need hold " + discount + "% less AUC in your own wallet!" 
+  }
+
+  missingAmountMessage() {
+    if (!this.hasAUC && this.aucAmount > 0) {
+      return "Missing " + (this.aucRequired - this.aucAmount) + " AUC in your wallet." 
+    } else {
+      return "";
+    }
   }
 
   setInvalidReferral(message: string) {
