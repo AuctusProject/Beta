@@ -13,7 +13,6 @@ namespace Auctus.DomainObjects.Asset
         public static readonly AssetModeType StrongBuy = new AssetModeType(2);
         public static readonly AssetModeType ModerateSell = new AssetModeType(3);
         public static readonly AssetModeType StrongSell = new AssetModeType(4);
-        public static readonly AssetModeType Close = new AssetModeType(5);
 
         private AssetModeType(int type) : base(type)
         { }
@@ -32,8 +31,6 @@ namespace Auctus.DomainObjects.Asset
                     return ModerateSell;
                 case 4:
                     return StrongSell;
-                case 5:
-                    return Close;
                 default:
                     throw new BusinessException("Invalid type.");
             }
