@@ -62,17 +62,17 @@
     </div>
   </div>
   <div class="global-container">
-    <table mat-table [dataSource]="asset.assetAdvisor" class="assets-table">
+    <table mat-table [dataSource]="visibleAdvices" class="assets-table">
         <ng-container matColumnDef="expertName">
           <th mat-header-cell *matHeaderCellDef> Expert </th>
-          <td mat-cell *matCellDef="let assetAdvisor; let i = index"> 
+          <td mat-cell *matCellDef="let assetAdvisor"> 
             <span class="truncate">{{getAdvisor(assetAdvisor.userId).name}}</span>
           </td>
         </ng-container>
       
         <ng-container matColumnDef="rankin">
           <th mat-header-cell *matHeaderCellDef> Ranking </th>
-          <td mat-cell *matCellDef="let assetAdvisor; let i = index"> 
+          <td mat-cell *matCellDef="let assetAdvisor"> 
             <div class="expert-rating">
               <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="getAdvisor(assetAdvisor.userId).rating" [title]="getAdvisor(assetAdvisor.userId).rating | number: '1.2-2'"></bar-rating>
             </div>
@@ -81,7 +81,7 @@
 
         <ng-container matColumnDef="value">
           <th mat-header-cell *matHeaderCellDef> Value </th>
-          <td mat-cell *matCellDef="let assetAdvisor; let i = index">  
+          <td mat-cell *matCellDef="let assetAdvisor">  
             At price
             <div>{{assetAdvisor.lastAdviceAssetValue | currency}}</div>
           </td>
@@ -110,7 +110,7 @@
 
         <ng-container matColumnDef="followButton">
           <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let assetAdvisor; let i = index">
+          <td mat-cell *matCellDef="let assetAdvisor">
             <div class="white-button action-button-sm" *ngIf="getAdvisor(assetAdvisor.userId).following" (click)="onUnfollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
               UNFOLLOW
             </div>
@@ -123,6 +123,9 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" class="element-row"></tr>
       </table>
+      <div class="pagination-link" *ngIf="hasMoreAdvices()" (click)="loadMoreAdvices()">
+        LOAD MORE
+      </div>
     </div>
 </div>
 <trending-assets class="global-container-min inverted"></trending-assets>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AssetResponse } from '../../../model/asset/assetResponse';
+import { AssetResponse, AssetAdvisorResponse } from '../../../model/asset/assetResponse';
 import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { AssetService } from '../../../services/asset.service';
 import { Util } from '../../../util/Util';
@@ -21,6 +21,10 @@ export class AssetDetailsComponent implements OnInit {
   displayedColumns: string[] = ['expertName', 'rankin', 'value', 'action', 'position', 'date', 'followButton'];
   asset: AssetResponse;
   showNewAdviceButton: boolean = false;
+  visibleAdvices: AssetAdvisorResponse[];
+  currentPage = 1;
+  pageSize = 10;
+
 
   constructor(private route: ActivatedRoute, 
     private assetService: AssetService,
@@ -31,7 +35,11 @@ export class AssetDetailsComponent implements OnInit {
   ngOnInit() {
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.route.params.subscribe(params => 
-      this.assetService.getAssetDetails(params['id']).subscribe(asset => this.asset = asset)
+      this.assetService.getAssetDetails(params['id']).subscribe(
+        asset => {
+          this.asset = asset;
+          this.setVisibleAdvices();
+        })
     )
   }
 
@@ -80,5 +88,19 @@ export class AssetDetailsComponent implements OnInit {
         return this.asset.advisors[i];
     }
     return null;
+  }
+
+  loadMoreAdvices(){
+    this.currentPage++;
+    this.setVisibleAdvices();
+  }
+
+  hasMoreAdvices(){
+    return this.asset.assetAdvisor != null && this.visibleAdvices.length != this.asset.assetAdvisor.length;
+  }
+
+  setVisibleAdvices(){
+    var numberToShow = this.pageSize * this.currentPage;
+    this.visibleAdvices = this.asset.assetAdvisor.slice(0, numberToShow);
   }
 }
