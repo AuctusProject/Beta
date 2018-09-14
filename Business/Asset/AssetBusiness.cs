@@ -46,6 +46,7 @@ namespace Auctus.Business.Asset
             AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetDetailed, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, assetFollowers.Result, assetId);
             var result = assetsResult.Single(c => c.AssetId == assetId);
             result.Advisors = advisorsResult.Where(c => result.AssetAdvisor.Any(a => a.UserId == c.UserId)).ToList();
+            result.AssetAdvisor = result.AssetAdvisor.OrderByDescending(a => a.LastAdviceDate).ToList();
             return result;
         }
 
