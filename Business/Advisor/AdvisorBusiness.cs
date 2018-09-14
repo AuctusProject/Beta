@@ -327,7 +327,7 @@ namespace Auctus.Business.Advisor
 
             var filterValues = new Dictionary<int, DateTime>();
             filterValues[selectAssetId] = Data.GetDateTimeNow().AddDays(-30);
-            var values = AssetValueBusiness.FilterAssetValues(filterValues);
+            var values = AssetValueBusiness.FilterAssetValues(filterValues).OrderByDescending(c => c.Date);
 
             assetsResult.Add(GetAssetBaseResponse(loggedUser, asset, assetFollowers, new Advice[] { }, new int[] { }, values, mode));
         }
