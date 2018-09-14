@@ -11,6 +11,7 @@
 .expert-picture{
     position: relative;    
     background-color: white;
+    cursor: pointer;
 }
 
 .expert-picture,
@@ -38,8 +39,13 @@
     width: 260px;
 }
 
+.expert-name-rating{
+    cursor: pointer;
+}
+
 .asset-column{
     width: 200px;
+    cursor: pointer;
 }
 
 .asset-icon{
