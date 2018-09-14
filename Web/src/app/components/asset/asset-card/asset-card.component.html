@@ -1,13 +1,13 @@
-<div class="asset-card" fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutGap.xs="5px" fxLayoutAlign="left center">
+<div class="asset-card" (click)="goToAssetDetails()" fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutGap.xs="5px" fxLayoutAlign="left center">
   <div class="asset-icon">
     <img [src]="getAssetImgUrl()">
   </div>
   <div class="asset-info" fxLayout="column">
     <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
-    <div class="white-button action-button-sm" *ngIf="asset.following" (click)="onUnfollowClick()">
+    <div class="white-button action-button-sm" *ngIf="asset.following" (click)="onUnfollowClick($event)">
       Unfollow
     </div>
-    <div class="blue-button action-button-sm" *ngIf="!asset.following" (click)="onFollowClick()">
+    <div class="blue-button action-button-sm" *ngIf="!asset.following" (click)="onFollowClick($event)">
       Follow
     </div>
   </div>
@@ -19,7 +19,7 @@
     {{getLastValue()}}
   </div>
   <percentage-display [value]="asset.variation24h"></percentage-display>
-  <div class="blue-button action-button" *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick()">
+  <div class="blue-button action-button" *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick($event)">
     Recommend
   </div>
 </div>

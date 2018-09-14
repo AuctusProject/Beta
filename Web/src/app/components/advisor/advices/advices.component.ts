@@ -9,15 +9,23 @@ import { AccountService } from '../../../services/account.service';
 })
 export class AdvicesComponent implements OnInit {
   advices : FeedResponse[] = [];
+  hasMoreAdvices = true;
+  pageSize = 10;
   constructor(private accountService: AccountService) { }
 
   ngOnInit() {
-    this.appendFeed();
+    this.loadMore();
   }
 
-  appendFeed(){
-    this.accountService.listFeed(10, this.getLastAdviceId()).subscribe(result => 
-      this.advices = this.advices.concat(result));
+  loadMore(){
+    this.accountService.listFeed(this.pageSize, this.getLastAdviceId()).subscribe(result => 
+      {
+        this.advices = this.advices.concat(result);
+        if(!result || result.length == 0 || result.length < this.pageSize){
+          this.hasMoreAdvices = false;
+        }
+      }
+    );
   }
 
   getLastAdviceId(){

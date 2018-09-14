@@ -1,0 +1,20 @@
+<div fxLayout="row">
+  <div class="expert-picture">
+    <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
+    <div class="expert-ranking">
+      {{advice.advisorRanking}}
+    </div>
+  </div>
+  <div fxLayout="column">
+    <div class="expert-name truncate" title="{{advice.advisorName}}">
+      {{advice.advisorName}}
+    </div>
+    <div class="expert-rating">
+      <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
+    </div>
+  </div>
+  <div fxLayout="column">
+    <div></div>
+    <div></div>
+  </div>
+</div>

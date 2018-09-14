@@ -11,7 +11,7 @@
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
             nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </div>
-
+        <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
         <div fxLayout="column" fxLayoutAlign="center center">
             <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
             <div class="pagination-link" *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">
@@ -25,6 +25,5 @@
                 expressed on the site.
             </div>
         </div>
-        <trending-assets></trending-assets>
     </div>
 </div>

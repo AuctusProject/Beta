@@ -106,7 +106,7 @@ export class AccountService {
     return this.httpService.post(this.registerUrl, registerRequest)
   }
 
-  listFeed(top? : number, lastAdviceId? : number) : Observable<FeedResponse>{
+  listFeed(top? : number, lastAdviceId? : number) : Observable<FeedResponse[]>{
     var url = this.listFeedUrl + "?";
     if(!!top) url += "top="+top;
     if(!!lastAdviceId) url += "&lastAdviceId="+lastAdviceId;
