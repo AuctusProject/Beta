@@ -136,7 +136,7 @@ namespace Auctus.Test.Asset
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.Sell.Value] = 1;
             expRecommendation[AdviceType.ClosePosition.Value] = 2;
-            AssertExtraAssetData(asset, 5, true, 5, expRecommendation);
+            AssertExtraAssetData(asset, 5, true, 0, expRecommendation);
         }
 
         internal static void AssertExtraAsset2Data(AssetResponse asset)
@@ -158,7 +158,7 @@ namespace Auctus.Test.Asset
         {
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.ClosePosition.Value] = 1;
-            AssertExtraAssetData(asset, 0, false, 5, expRecommendation);
+            AssertExtraAssetData(asset, 0, false, 0, expRecommendation);
         }
 
         internal static void AssertAsset1AdvicesData(List<AssetResponse.AdviceResponse> advices)

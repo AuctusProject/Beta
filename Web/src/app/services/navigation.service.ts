@@ -3,15 +3,32 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class NavigationService {
-  constructor(private router:Router, private zone : NgZone) {
+  constructor(private router: Router, private zone : NgZone) {
   }
 
   public goToUrl(url: string, queryString?: any) {
     if (!!queryString) {
-      this.zone.run(() => this.router.navigateByUrl(url, { queryParams: queryString }));
+      let reloadPage = this.isSameRoute(url);
+      this.zone.run(() => this.router.navigate([url], { queryParams: queryString, queryParamsHandling: "merge" }).then(result => 
+      {
+        if (reloadPage) {
+          window.location.reload();
+        }
+      }));
     } else {
       this.zone.run(() => this.router.navigateByUrl(url));
     }
+  }
+
+  private isSameRoute(url: string): boolean {
+    let currentRoute = this.router.url.split("?")[0];
+    if (currentRoute && currentRoute.length > 0 && currentRoute[0] === "/") {
+      currentRoute = currentRoute.slice(1);
+    }
+    if (url && url.length > 0 && url[0] === "/") {
+      url = url.slice(1);
+    }
+    return url === currentRoute;
   }
 
   public goToLogin(){

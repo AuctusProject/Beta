@@ -6,6 +6,14 @@
     background-color: #959595;
 }
 
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-underline {
+    background-color: #959595;
+}
+
+:host ::ng-deep .mat-form-field-appearance-standard .mat-form-field-underline {
+    background-color: #959595;
+}
+
 input::placeholder {
     color: #959595;
 }

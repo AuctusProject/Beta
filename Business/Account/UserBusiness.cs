@@ -225,6 +225,9 @@ namespace Auctus.Business.Account
             var referredUser = GetReferredUser(referralCode, false);
             if (referredUser == null)
             {
+                user.ReferredId = null;
+                user.ReferralDiscount = null;
+                Data.Update(user);
                 response.Valid = false;
                 response.AUCRequired = MinimumAucLogin;
                 response.Discount = 0;
@@ -256,7 +259,7 @@ namespace Auctus.Business.Account
 
         private User GetReferredUser(string referralCode, bool throwException = true)
         {
-            if (!string.IsNullOrWhiteSpace(referralCode))
+            if (!string.IsNullOrWhiteSpace(referralCode) && referralCode.Length == 7)
             {
                 var user = Data.GetByReferralCode(referralCode.ToUpper());
                 if (user == null && throwException)
@@ -317,8 +320,6 @@ namespace Auctus.Business.Account
             var user = Data.GetForNewWallet(LoggedEmail);
             if (user == null)
                 throw new NotFoundException("User cannot be found.");
-            if (!user.ConfirmationDate.HasValue)
-                throw new BusinessException("Email was not confirmed.");
             if (string.IsNullOrWhiteSpace(signature))
                 throw new BusinessException("Signature cannot be empty.");
 
@@ -363,7 +364,7 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 HasInvestment = true,
                 IsAdvisor = IsValidAdvisor(user),
-                PendingConfirmation = false,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
         }

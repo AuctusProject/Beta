@@ -9,23 +9,25 @@
     Stay tuned! 
   </div>
   <div class="main-content" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
-    <div [style.color]="hasMetamask ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-      <span *ngIf="!hasMetamask"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-      <span *ngIf="hasMetamask"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-      <p>Have a Web3 provider such as Metamask</p>
+    <div fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="15px">
+      <div [style.color]="hasMetamask ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <span *ngIf="!hasMetamask"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <span *ngIf="hasMetamask"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <p>Have a Web3 provider such as Metamask</p>
+      </div>
+      <div [style.color]="hasUnlockedAccount ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <span *ngIf="!hasUnlockedAccount"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <span *ngIf="hasUnlockedAccount"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <p *ngIf="!hasUnlockedAccount">Login to unlock your account</p>
+        <p *ngIf="hasUnlockedAccount">Logged with {{account}}</p>
+      </div>
+      <div [style.color]="hasAUC ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <span *ngIf="!hasAUC"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <span *ngIf="hasAUC"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <p>You need to have <b>{{aucRequired}} AUC</b> in your wallet. {{missingAmountMessage()}}</p>
+      </div>
     </div>
-    <div [style.color]="hasUnlockedAccount ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-      <span *ngIf="!hasUnlockedAccount"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-      <span *ngIf="hasUnlockedAccount"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-      <p *ngIf="!hasUnlockedAccount">Login to unlock your account</p>
-      <p *ngIf="hasUnlockedAccount">Logged with {{account}}</p>
-    </div>
-    <div [style.color]="hasAUC ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-      <span *ngIf="!hasAUC"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-      <span *ngIf="hasAUC"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-      <p>You need to have <b>{{aucRequired}} AUC</b> in your wallet</p>
-    </div>
-    <div *ngIf="!hasAUC" fxLayout="column" fxLayoutAlign="space-evenly center">
+    <div *ngIf="!hasAUC" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
       <p>You can buy AUC in:</p>
       <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
         <a href="https://www.bitfinex.com" target="_blank"><img src="./assets/bitfinex.png" height="100" /></a>
@@ -37,7 +39,7 @@
     </div>
     <inheritance-input *ngIf="showReferral" #Referral [options]="getReferralOptions()" [value]="referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
     <p class="discount" *ngIf="showReferral && discountMessage.length > 0">{{discountMessage}}</p>
-    <p *ngIf="hasMetamask && hasUnlockedAccount && hasAUC">Confirm that you are the wallet owner.</p>
+    <p *ngIf="hasMetamask && hasUnlockedAccount && hasAUC">Please sign a message to confirm that you are the wallet owner.</p>
     <div class="action-button truncate" [ngClass]="hasMetamask && hasUnlockedAccount && hasAUC ? 'blue-button' : 'disabled-button'" (click)="signMessage()">CONFIRM</div>   
   </div>
   <div class="request-expert" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
