@@ -103,4 +103,26 @@ export class AssetDetailsComponent implements OnInit {
     var numberToShow = this.pageSize * this.currentPage;
     this.visibleAdvices = this.asset.assetAdvisor.slice(0, numberToShow);
   }
+
+  getTotalAdvisorsSentence(){
+    var sentence = this.asset.totalAdvisors+" ";
+    if(this.asset.totalAdvisors == 1){
+      sentence += "expert recommend"
+    }
+    else{
+      sentence += "experts recommend"
+    }
+    return sentence;
+  }
+
+  getFollowersSentence(){
+    var sentence = this.asset.numberOfFollowers+" ";
+    if(this.asset.numberOfFollowers == 1){
+      sentence += "investor is following"
+    }
+    else{
+      sentence += "investors are following"
+    }
+    return sentence;
+  }
 }
