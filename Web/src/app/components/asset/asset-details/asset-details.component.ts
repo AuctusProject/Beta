@@ -67,4 +67,12 @@ export class AssetDetailsComponent implements OnInit {
   onUnfollowAssetClick(){
     this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
   }
+
+  getAdvisor(userId : number) : AdvisorResponse{
+    for(var i = 0; i < this.asset.assetAdvisor.length; i++){
+      if(this.asset.advisors[i].userId == userId)
+        return this.asset.advisors[i];
+    }
+    return null;
+  }
 }
