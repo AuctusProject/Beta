@@ -19,7 +19,6 @@ export class NavigationService {
   }
   
   public goToBecomeAdvisor(){
-    //TODO put the register as expert route
     this.goToUrl('', { becomeadvisor: true });
   }
 

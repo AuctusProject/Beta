@@ -16,5 +16,7 @@ namespace Auctus.DataAccessInterfaces.Account
         List<User> ListUsersFollowingAdvisorOrAsset(int advisorId, int assetId);
         List<User> ListAllUsersData();
         User GetForLoginById(int id);
+        User GetForWalletLogin(string email);
+        User GetSimpleWithWallet(string email);
     }
 }

@@ -1,10 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
 import { Web3Service } from '../../../services/web3.service';
 import { AccountService } from '../../../services/account.service';
 import { ValidateSignatureRequest } from '../../../model/account/validateSignatureRequest';
 import { Constants } from '../../../util/constants';
 import { AuthRedirect } from '../../../providers/authRedirect';
 import { NavigationService } from '../../../services/navigation.service';
+import { NotificationsService } from 'angular2-notifications';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 
 @Component({
   selector: 'message-signature',
@@ -12,68 +15,107 @@ import { NavigationService } from '../../../services/navigation.service';
   styleUrls: ['./message-signature.component.css']
 })
 export class MessageSignatureComponent implements OnInit, OnDestroy {
-  hasMetamask : boolean;
-  hasUnlockedAccount : boolean;
+  hasMetamask: boolean = false;
+  hasUnlockedAccount: boolean = false;
+  hasAUC: boolean = false;
+  showReferral: boolean = true;
   account: string;
-  accountInterval;
+  lastAccountChecked: string;
+  lastCheck: Date;
+  timer: any;
+  referralCode: string;
+  discountMessage: string = "";
+  standardAUCAmount: number;
+  aUCRequired: number;
+  @ViewChild("Referral") Referral: InheritanceInputComponent;
+
   constructor(private web3Service : Web3Service, 
     private navigationService: NavigationService,
     private accountService : AccountService,
+    private localStorageService : LocalStorageService,
     private authRedirect: AuthRedirect,
+    private notificationsService: NotificationsService,
     private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.monitorMetamaskAccount();
+    this.checkMetamask();
+    this.accountService.getWalletLoginInfo().subscribe(result =>
+      {
+        this.showReferral = !result.registeredWallet;
+        this.standardAUCAmount = result.standardAUCAmount;
+        this.aUCRequired = result.aucRequired;
+        if (!result.referralCode) {
+          this.referralCode = this.localStorageService.getLocalStorage("referralCode");
+        } else {
+          this.referralCode = result.referralCode;
+        }
+        if (result.discount > 0) {
+          this.setDiscountMessage(result.discount);
+        }
+      });
   }
 
   ngOnDestroy(){
-    clearInterval(this.accountInterval);
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
   }
 
-  private monitorMetamaskAccount() {
+  checkMetamask() {
     let self = this;
-    this.accountInterval = setInterval(function () {
-      self.web3Service.getWeb3().subscribe(result => 
-        {
-          if(result){
-            self.hasMetamask = true;
-            self.changeDetector.detectChanges();
-            self.web3Service.getAccount().subscribe(
-              account => {
-                if (account) {
-                  self.hasUnlockedAccount = true;
-                }
-                else{
-                  self.hasUnlockedAccount = false;
-                }
-                self.account = account;
-                self.changeDetector.detectChanges();
-              })
-          }
-          else{
-            self.hasMetamask = false;
-          }
+    this.web3Service.getWeb3().subscribe(result => 
+      {
+        if(result) {
+          self.hasMetamask = true;
+          self.changeDetector.detectChanges();
+          self.web3Service.getAccount().subscribe(
+            account => {
+              self.account = account;
+              if (account) {
+                self.hasUnlockedAccount = true;
+                this.checkAUCAmout();
+              } else {
+                self.hasUnlockedAccount = false;
+                self.hasAUC = false;
+              }
+              self.changeDetector.detectChanges();
+            })
+        } else {
+          self.hasMetamask = false;
         }
-      )}, 100);
+        self.timer = setTimeout(() => self.checkMetamask(), 1000);
+      });
   }
 
-  signMessage(){
-    this.sendMessage();
+  checkAUCAmout() {
+    if (this.account) {
+      if (this.account != this.lastAccountChecked || 
+          (!this.hasAUC && !!this.lastCheck && ((new Date()) <= (new Date(this.lastCheck.getTime() + 20000))))) {
+        this.accountService.getAUCAmount(this.account).subscribe(ret => 
+          {
+            this.lastCheck = new Date();
+            this.lastAccountChecked = this.account;
+            this.hasAUC = ret >= this.aUCRequired;
+          });
+      }
+    } else {
+      this.hasAUC = false;
+    }
   }
 
-  private sendMessage(){
+  signMessage() {
     var message = (Constants.signatureMessage);
     this.web3Service.getWeb3().subscribe(web3 => web3.currentProvider.sendAsync({
       jsonrpc: "2.0",
       method: "personal_sign",
       params: [this.web3Service.toHex(message), this.account]
-    },(a,signatureInfo)=>{
+    }, (a,signatureInfo) => {
       this.handleSignatureResult(signatureInfo);      
     }));
   }
 
-  handleSignatureResult(signatureInfo){
-    if(signatureInfo.result){
+  handleSignatureResult(signatureInfo) {
+    if(signatureInfo.result) {
       var validateSignatureRequest = new ValidateSignatureRequest();
       validateSignatureRequest.address = this.account;
       validateSignatureRequest.signature = signatureInfo.result;
@@ -82,17 +124,52 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
           this.accountService.setLoginData(result);
           this.authRedirect.redirectAfterLoginAction();
         }
-      )
-    }
-    else if(signatureInfo.error && signatureInfo.error.message){
-      alert(signatureInfo.error.message);
-    }
-    else{
-      alert("Error signing message");
+      );
+    } else if (signatureInfo.error && signatureInfo.error.message) {
+      this.notificationsService.error(signatureInfo.error.message);
+    } else {
+      this.notificationsService.error("Error signing message");
     }
   }
 
-  becomeAdvisor(){
+  becomeAdvisor() {
     this.navigationService.goToBecomeAdvisor();
+  }
+
+  getReferralOptions() {
+    return { darkLayout: true, textOptions: { outlineField: false, placeHolder: "Referral code (optional)", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
+  }
+
+  onChangeReferralCode(value: string) {
+    this.referralCode = value;
+    this.validateReferralCode(value);
+  }
+
+  validateReferralCode(value: string) {
+    if (!value || value.length == 0) {
+      this.setInvalidReferral("");
+    } else if (!!value && value.length == 7) {
+      this.accountService.setReferralCode(value).subscribe(response => {
+        if (!!response && response.valid) {
+          this.Referral.setForcedError("");
+          this.standardAUCAmount = response.standardAUCAmount;
+          this.aUCRequired = response.aUCRequired;
+          this.setDiscountMessage(response.discount); 
+        } else {
+          this.setInvalidReferral("Invalid referral code");
+        }
+      });
+    } else {
+      this.setInvalidReferral("Invalid referral code");
+    }
+  }
+
+  setDiscountMessage(discount: number) {
+    this.discountMessage = "Congratulations, using the referral code you need hold " + discount + "% less AUC in your own wallet!" 
+  }
+
+  setInvalidReferral(message: string) {
+    this.Referral.setForcedError(message);
+    this.discountMessage = "";
   }
 }

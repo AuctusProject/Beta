@@ -261,5 +261,15 @@ namespace Auctus.DataAccessMock.Account
         {
             throw new NotImplementedException();
         }
+
+        public User GetForWalletLogin(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetSimpleWithWallet(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

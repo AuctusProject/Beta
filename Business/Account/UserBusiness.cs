@@ -212,19 +212,33 @@ namespace Auctus.Business.Account
             return user;
         }
 
-        public void SetReferralCode(string referralCode)
+        public SetReferralCodeResponse SetReferralCode(string referralCode)
         {
-            var user = GetByEmail(LoggedEmail);
+            var user = Data.GetSimpleWithWallet(LoggedEmail);
             if (user == null)
                 throw new NotFoundException("User cannot be found.");
+            if (user.Wallet != null)
+                throw new BusinessException("User with wallet already registered.");
 
-            var referredUser = GetReferredUser(referralCode);
+            var response = new SetReferralCodeResponse();
+            response.StandardAUCAmount = MinimumAucLogin;
+            var referredUser = GetReferredUser(referralCode, false);
             if (referredUser == null)
-                throw new BusinessException("Invalid referral code.");
-
-            user.ReferredId = referredUser.Id;
-            user.ReferralDiscount = DiscountPercentageOnAuc;
-            Data.Update(user);
+            {
+                response.Valid = false;
+                response.AUCRequired = MinimumAucLogin;
+                response.Discount = 0;
+            }
+            else
+            {
+                user.ReferredId = referredUser.Id;
+                user.ReferralDiscount = DiscountPercentageOnAuc;
+                Data.Update(user);
+                response.Valid = true;
+                response.Discount = DiscountPercentageOnAuc;
+                response.AUCRequired = GetMinimumAucAmountForUser(user);
+            }
+            return response;
         }
 
         private string GenerateReferralCode()
@@ -240,16 +254,14 @@ namespace Auctus.Business.Account
             return referralCode;
         }
 
-        private User GetReferredUser(string referralCode)
+        private User GetReferredUser(string referralCode, bool throwException = true)
         {
             if (!string.IsNullOrWhiteSpace(referralCode))
             {
                 var user = Data.GetByReferralCode(referralCode.ToUpper());
-
-                if (user == null)
-                {
+                if (user == null && throwException)
                     throw new BusinessException("Invalid referral code");
-                }
+
                 return user;
             }
             return null;
@@ -486,6 +498,22 @@ Auctus Team", WebUrl, code));
             ReferralProgramInfoResponse response = ConvertReferredUsersToReferralProgramInfo(referredUsers);
             response.ReferralCode = user.ReferralCode;
             return response;
+        }
+
+        public WalletLoginInfoResponse GetWalletLoginInfo()
+        {
+            var user = Data.GetForWalletLogin(LoggedEmail);
+            if (user == null)
+                throw new NotFoundException("User cannot be found.");
+
+            return new WalletLoginInfoResponse()
+            {
+                ReferralCode = user.ReferredUser?.ReferralCode,
+                StandardAUCAmount = MinimumAucLogin,
+                Discount = user.ReferralDiscount ?? 0,
+                RegisteredWallet = user.Wallet?.Address,
+                AUCRequired = GetMinimumAucAmountForUser(user)
+            };
         }
 
         public ValidateReferralCodeResponse IsValidReferralCode(string referralCode)

@@ -134,6 +134,24 @@ namespace Api.Controllers
             return base.GetReferralProgramInfo();
         }
 
+        [Route("me/wallet_login")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetWalletLoginInfo()
+        {
+            return base.GetWalletLoginInfo();
+        }
+
+        [Route("auc/{address}")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAUCAmount([FromRoute]string address)
+        {
+            return base.GetAUCAmount(address);
+        }
+
         [Route("referrals")]
         [HttpGet]
         [AllowAnonymous]

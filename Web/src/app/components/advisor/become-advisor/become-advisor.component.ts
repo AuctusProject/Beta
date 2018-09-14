@@ -13,6 +13,7 @@ import { AccountService } from '../../../services/account.service';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InheritanceInputOptions, InputType } from '../../../model/inheritanceInputOptions';
+import { AuthRedirect } from '../../../providers/authRedirect';
 
 @Component({
   selector: 'become-advisor',
@@ -40,25 +41,31 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
-    private notificationsService: NotificationsService) { }
+    private notificationsService: NotificationsService,
+    private authRedirect: AuthRedirect) { }
 
   ngOnInit() {
-    this.advisorService.getRequestToBeAdvisor().subscribe(result => 
-      {
-        this.acceptTermsAndConditions = false;
-        this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
-        this.requestToBeAdvisorRequest.password = "";
-        let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
-        if(!!currentRequestToBeAdvisor){
-          this.alreadySent = true;
-          this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
-          this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
-          this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
-          if (!!currentRequestToBeAdvisor.urlGuid) {
-            this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
+    if (this.accountService.getLoginData().isAdvisor) {
+      this.setClose.emit();
+      this.authRedirect.redirectAfterLoginAction();
+    } else {
+      this.advisorService.getRequestToBeAdvisor().subscribe(result => 
+        {
+          this.acceptTermsAndConditions = false;
+          this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
+          this.requestToBeAdvisorRequest.password = "";
+          let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
+          if(!!currentRequestToBeAdvisor){
+            this.alreadySent = true;
+            this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
+            this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
+            this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
+            if (!!currentRequestToBeAdvisor.urlGuid) {
+              this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
+            }
           }
-        }
-      });
+        });
+    }
   }
 
   isNewUser() {

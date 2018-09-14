@@ -14,6 +14,7 @@ export class InheritanceInputComponent implements OnInit {
 
   private inputType: InputType = InputType.Text; 
   private required: boolean = true;
+  private darkLayout: boolean = false;
   private disabled: boolean = false;
   private placeholder: string = "";
   private minlength: number = 0;
@@ -37,6 +38,7 @@ export class InheritanceInputComponent implements OnInit {
   ngOnInit() {
     if (!!this.options) {
       this.inputType = this.setValue(this.inputType, this.options.inputType);
+      this.darkLayout = this.setValue(this.darkLayout, this.options.darkLayout);
 
       if (this.options.inputType == InputType.Password) {
         this.autocomplete = "current-password";

@@ -35,7 +35,6 @@ export class LoginComponent implements ModalComponent, OnInit {
   constructor(private accountService: AccountService, 
     private notificationsService: NotificationsService,
     private authRedirect : AuthRedirect,
-    private socialAuthService: AuthService,
     private zone : NgZone) { 
   }
 

@@ -76,6 +76,19 @@ namespace Auctus.DataAccess.Account
                                                        [User] u
                                                        LEFT JOIN [Wallet] w ON u.Id = w.UserId";
 
+        private const string SQL_FOR_WALLET_LOGIN = @"SELECT u.*, w.*, u2.*
+                                                       FROM 
+                                                       [User] u
+                                                       LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                       LEFT JOIN [User] u2 ON u2.Id = u.ReferredId
+                                                       WHERE u.Email = @Email";
+
+        private const string SQL_SIMPLE_WITH_WALLET = @"SELECT u.*, w.*
+                                                        FROM 
+                                                        [User] u
+                                                        LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                        WHERE u.Email = @Email";
+
         private const string SQL_FOLLOWING = @"SELECT u.*, w.*
                                                 FROM 
                                                 [User] u
@@ -156,6 +169,31 @@ namespace Auctus.DataAccess.Account
                                 return user;
                             }
                         }, "Id,Id", parameters).SingleOrDefault();
+        }
+
+        public User GetForWalletLogin(string email)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Email", email, DbType.AnsiString);
+            return Query<User, Wallet, User, User>(SQL_FOR_WALLET_LOGIN,
+                        (user, wallet, referred) =>
+                        {
+                            user.Wallet = wallet;
+                            user.ReferredUser = referred;
+                            return user;
+                        }, "Id,Id", parameters).SingleOrDefault();
+        }
+
+        public User GetSimpleWithWallet(string email)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Email", email, DbType.AnsiString);
+            return Query<User, Wallet, User>(SQL_SIMPLE_WITH_WALLET,
+                        (user, wallet) =>
+                        {
+                            user.Wallet = wallet;
+                            return user;
+                        }, "Id", parameters).SingleOrDefault();
         }
 
         public User GetByEmail(string email)

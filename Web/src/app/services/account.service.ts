@@ -21,6 +21,8 @@ import { DashboardResponse } from '../model/admin/dashboardresponse';
 import { SearchResponse } from '../model/search/searchResponse';
 import { SocialLoginRequest } from '../model/account/socialLoginRequest';
 import { ValidReferralCodeResponse } from '../model/account/validReferralCodeResponse';
+import { SetReferralCodeReponse } from '../model/account/setReferralCodeReponse';
+import { WalletLoginInfoResponse } from '../model/account/walletLoginInfoResponse';
 
 
 @Injectable()
@@ -34,7 +36,9 @@ export class AccountService {
   private registerUrl = this.httpService.apiUrl("v1/accounts");
   private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
   private meReferralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
+  private meWalletLoginUrl = this.httpService.apiUrl("v1/accounts/me/wallet_login");
   private referralsUrl = this.httpService.apiUrl("v1/accounts/referrals");
+  private aucAmountUrl = this.httpService.apiUrl("v1/accounts/auc");
   private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
   private dashboardUrl = this.httpService.apiUrl("v1/accounts/dashboard");
   private searchUrl = this.httpService.apiUrl("v1/accounts/search");
@@ -113,12 +117,22 @@ export class AccountService {
     return this.httpService.get(this.meReferralsUrl);
   }
 
-  setReferralCode(setReferralRequest: SetReferralRequest) : Observable<void>{
-    return this.httpService.post(this.meReferralsUrl, setReferralRequest);
+  setReferralCode(referralCode: string) : Observable<SetReferralCodeReponse> {
+    let request = new SetReferralRequest();
+    request.referralCode = referralCode;
+    return this.httpService.post(this.meReferralsUrl, request);
+  }
+
+  getWalletLoginInfo() : Observable<WalletLoginInfoResponse>{
+    return this.httpService.get(this.meWalletLoginUrl);
   }
 
   isValidReferralCode(referralCode: string) : Observable<ValidReferralCodeResponse>{
     return this.httpService.get(this.referralsUrl + "?referralCode=" + referralCode);
+  }
+
+  getAUCAmount(address: string) : Observable<number> {
+    return this.httpService.get(this.aucAmountUrl + "/" + address);
   }
 
   getConfiguration() : Observable<ConfigurationResponse>{
