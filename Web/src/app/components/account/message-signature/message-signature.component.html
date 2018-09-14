@@ -23,7 +23,7 @@
     <div [style.color]="hasAUC ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
       <span *ngIf="!hasAUC"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
       <span *ngIf="hasAUC"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-      <p>You need to have <b>{{aUCRequired}} AUC</b> in your wallet</p>
+      <p>You need to have <b>{{aucRequired}} AUC</b> in your wallet</p>
     </div>
     <div *ngIf="!hasAUC" fxLayout="column" fxLayoutAlign="space-evenly center">
       <p>You can buy AUC in:</p>

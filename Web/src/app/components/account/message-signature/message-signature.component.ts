@@ -26,7 +26,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   referralCode: string;
   discountMessage: string = "";
   standardAUCAmount: number;
-  aUCRequired: number;
+  aucRequired: number;
   @ViewChild("Referral") Referral: InheritanceInputComponent;
 
   constructor(private web3Service : Web3Service, 
@@ -43,7 +43,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
       {
         this.showReferral = !result.registeredWallet;
         this.standardAUCAmount = result.standardAUCAmount;
-        this.aUCRequired = result.aucRequired;
+        this.aucRequired = result.aucRequired;
         if (!result.referralCode) {
           this.referralCode = this.localStorageService.getLocalStorage("referralCode");
         } else {
@@ -95,7 +95,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
           {
             this.lastCheck = new Date();
             this.lastAccountChecked = this.account;
-            this.hasAUC = ret >= this.aUCRequired;
+            this.hasAUC = ret >= this.aucRequired;
           });
       }
     } else {
@@ -153,7 +153,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
         if (!!response && response.valid) {
           this.Referral.setForcedError("");
           this.standardAUCAmount = response.standardAUCAmount;
-          this.aUCRequired = response.aUCRequired;
+          this.aucRequired = response.aucRequired;
           this.setDiscountMessage(response.discount); 
         } else {
           this.setInvalidReferral("Invalid referral code");
