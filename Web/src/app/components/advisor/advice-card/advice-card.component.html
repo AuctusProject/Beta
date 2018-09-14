@@ -1,11 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px">
-  <div class="expert-picture">
+  <div class="expert-picture" (click)="goToExpertDetails()" >
     <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
     <div class="expert-ranking">
       {{advice.advisorRanking}}
     </div>
   </div>
-  <div fxLayout="column" class="expert-name-rating" fxLayoutAlign="center start" >
+  <div fxLayout="column" class="expert-name-rating" (click)="goToExpertDetails()" fxLayoutAlign="center start" >
     <div class="expert-name truncate" title="{{advice.advisorName}}">
       {{advice.advisorName}}
     </div>
@@ -13,7 +13,7 @@
       <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
     </div>
   </div>
-  <div fxLayout="column" class="asset-column">
+  <div fxLayout="column" (click)="goToAssetDetails()" class="asset-column">
     <div fxLayout="row">
       <div class="asset-icon">
         <img [src]="getAssetImgUrl()">

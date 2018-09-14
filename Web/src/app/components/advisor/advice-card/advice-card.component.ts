@@ -3,6 +3,7 @@ import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { CONFIG } from '../../../services/config.service';
 import { AssetService } from '../../../services/asset.service';
 import { Util } from '../../../util/Util';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'advice-card',
@@ -12,7 +13,8 @@ import { Util } from '../../../util/Util';
 export class AdviceCardComponent implements OnInit {
   @Input() advice : FeedResponse;
 
-  constructor(private assetService : AssetService) { }
+  constructor(private assetService : AssetService,
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
   }
@@ -41,5 +43,13 @@ export class AdviceCardComponent implements OnInit {
 
   getAdviceTypeColor(){
     return Util.GetRecommendationTypeColor(this.advice.adviceType);
+  }
+
+  goToAssetDetails(){
+    this.navigationService.goToAssetDetails(this.advice.assetId);
+  }
+  
+  goToExpertDetails(){
+    this.navigationService.goToExpertDetails(this.advice.advisorId);
   }
 }
