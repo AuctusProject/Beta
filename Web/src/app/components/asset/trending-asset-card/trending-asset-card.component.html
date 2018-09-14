@@ -3,7 +3,7 @@
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="left center">
         <div class="asset-icon" fxFlex="50px">
-            <img [src]="getAssetImgUrl()">
+            <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
         </div>
         <div fxLayout="column">
           <div class="asset-code">

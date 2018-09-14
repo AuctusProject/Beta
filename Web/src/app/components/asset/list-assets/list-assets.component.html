@@ -4,14 +4,15 @@
             Top Assets
         </div>
 
-        <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>
-
         <div class="section-subtitle">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
             nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </div>
-        <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left top" fxLayoutGap="16px">
+            <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
+            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>
+        </div>
         <div fxLayout="column" fxLayoutAlign="center center">
             <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
             <div class="pagination-link" *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">

@@ -1,4 +1,4 @@
-<mat-form-field appearance="{{outlineField ? 'outline' : 'standard'}}" class="container-field" hideRequiredMarker>
+<mat-form-field appearance="{{outlineField ? 'outline' : 'standard'}}" class="container-field" [class]="darkStyle ? 'dark-border' : ''" hideRequiredMarker>
     <mat-label class="search-coin-label">{{placeholder}}</mat-label>
     <input matInput type="text" autocomplete="off" [matAutocomplete]="coinsearch"
         [(ngModel)]="inputText"

@@ -112,3 +112,11 @@ input::placeholder {
     -moz-border-radius:50%;
     -webkit-border-radius:50%;
 }
+
+::ng-deep .dark-border .mat-form-field-outline{
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+::ng-deep .dark-border .mat-form-field-outline-thick {
+    color: rgba(255,255,255,1) !important;
+}
