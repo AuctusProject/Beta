@@ -63,6 +63,7 @@ input::placeholder {
 ::ng-deep .search-coin-autocomplete-option {
     padding-left: 8px !important;
     width: 100%;
+    cursor: pointer;
 }
 
 ::ng-deep .search-coin-autocomplete-option.search-coin-background-dark span {
