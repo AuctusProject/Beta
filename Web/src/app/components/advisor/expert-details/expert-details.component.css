@@ -142,6 +142,6 @@
     background-color: #959595;
 }
 
-expert-details ::ng-deep .expert-details-div{
-    cursor: unset;
+:host ::ng-deep .expert-details-div{
+    cursor: default !important;
 }
