@@ -21,8 +21,9 @@ export class AssetDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     private assetService: AssetService,
-    public accountService: AccountService,
-    public modalService: ModalService) { }
+    private accountService: AccountService,
+    private modalService: ModalService,
+    private advisorService: AdvisorService) { }
 
   ngOnInit() {
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
