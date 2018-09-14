@@ -172,7 +172,7 @@ export function getAuthServiceConfigs() {
         spinnerTpl: '<span class="btn-spinner"></span>',
         disableBtn: true,
         btnLoadingClass: 'is-loading',
-        handleCurrentBtnOnly: false,
+        handleCurrentBtnOnly: true,
     }),
     ChartModule,
     FormsModule,

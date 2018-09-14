@@ -20,10 +20,10 @@
       </div>
       <div class="asset-name truncate" title="{{advice.assetCode}}&nbsp;({{advice.assetName}})">{{advice.assetCode}}&nbsp;({{advice.assetName}})</div>
     </div>  
-    <div class="follow-btn white-button action-button-sm" *ngIf="advice.followingAsset" (click)="onUnfollowClick($event)">
+    <div class="follow-btn white-button action-button-sm" *ngIf="advice.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
       Unfollow
     </div>
-    <div class="follow-btn blue-button action-button-sm" *ngIf="!advice.followingAsset" (click)="onFollowClick($event)">
+    <div class="follow-btn blue-button action-button-sm" *ngIf="!advice.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
       Follow
     </div>
   </div>

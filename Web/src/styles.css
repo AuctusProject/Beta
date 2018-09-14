@@ -174,7 +174,8 @@ body, p, span, input, textarea, select, button, div {
 }
 
 /* Styles for old versions of IE */
-button .btn-spinner {
+button .btn-spinner,
+div .btn-spinner {
   font-family: sans-serif;
   font-weight: 100;
   -webkit-animation: three-quarters 1250ms infinite linear;
@@ -195,13 +196,15 @@ button .btn-spinner {
   height: 18px;
 }
 
-  button .btn-spinner:not(:required) {
+  button .btn-spinner:not(:required),
+  div .btn-spinner:not(:required) {
     margin-left: -22px;
     opacity: 0;
     transition: 0.4s margin ease-out, 0.2s opacity ease-out;
   }
 
-button.is-loading .btn-spinner {
+button.is-loading .btn-spinner,
+div.is-loading .btn-spinner {
   transition: 0.2s margin ease-in, 0.4s opacity ease-in;
   margin-left: 5px;
   opacity: 1;
@@ -414,7 +417,7 @@ textarea:read-only {
   margin:unset;
   padding-left: 10px;
   padding-right: 10px;
-  width: 70px;
+  width: 74px;
   height: 27px;
   line-height: 27px;
   font-size: 12px;
@@ -593,7 +596,16 @@ textarea:read-only {
   border: none;
 }
 
-.pagination-link.is-loading {
-  color: gray;
-  text-decoration: none;
+.pagination-link.is-loading,
+.follow-link.is-loading,
+.button.is-loading {
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+.pagination-link.is-loading,
+.follow-link.is-loading
+{
+  color: gray !important;
+  text-decoration: none !important;
 }

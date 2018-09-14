@@ -47,7 +47,7 @@ export class ConfigurationComponent implements ModalComponent, OnInit {
   }
 
   save() {
-    this.accountService.setConfiguration(this.configurationRequest).subscribe(result =>
+    this.promise = this.accountService.setConfiguration(this.configurationRequest).subscribe(result =>
       {
         this.notificationsService.success(null, "Successfully saved.");
         this.setClose.emit();

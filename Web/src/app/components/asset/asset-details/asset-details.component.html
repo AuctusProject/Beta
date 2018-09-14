@@ -38,10 +38,10 @@
             <percentage-display [value]="asset.variation30d"></percentage-display>
             Last 30 days
           </div>
-          <div class="white-button action-button-sm" *ngIf="asset.following" (click)="onUnfollowAssetClick()">
+          <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowAssetClick()">
             Unfollow
           </div>
-          <div class="blue-button action-button-sm" *ngIf="!asset.following" (click)="onFollowAssetClick()">
+          <div class="blue-button action-button-sm" [promiseBtn]="promise" *ngIf="!asset.following" (click)="onFollowAssetClick()">
             Follow
           </div>
           <div class="blue-button action-button-sm" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">
@@ -111,11 +111,11 @@
         <ng-container matColumnDef="followButton">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let assetAdvisor">
-            <div class="white-button action-button-sm" *ngIf="getAdvisor(assetAdvisor.userId).following" (click)="onUnfollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
-              UNFOLLOW
+            <div class="white-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="getAdvisor(assetAdvisor.userId).following" (click)="onUnfollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
+              Unfollow
             </div>
-            <div class="blue-button action-button-sm" *ngIf="!getAdvisor(assetAdvisor.userId).following" (click)="onFollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
-              FOLLOW
+            <div class="blue-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="!getAdvisor(assetAdvisor.userId).following" (click)="onFollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
+              Follow
             </div>
           </td>
         </ng-container>

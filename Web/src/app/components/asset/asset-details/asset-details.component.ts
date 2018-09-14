@@ -8,6 +8,7 @@ import { AccountService } from '../../../services/account.service';
 import { ModalService } from '../../../services/modal.service';
 import { AdvisorService } from '../../../services/advisor.service';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'asset-details',
@@ -19,6 +20,8 @@ export class AssetDetailsComponent implements OnInit {
   asset: AssetResponse;
   showNewAdviceButton: boolean = false;
   visibleAdvices: AssetAdvisorResponse[];
+  promise: Subscription;
+  promiseExpert: Subscription;
   currentPage = 1;
   pageSize = 10;
 
@@ -60,19 +63,19 @@ export class AssetDetailsComponent implements OnInit {
   }
   
   onFollowExpertClick(event: Event, expert: AdvisorResponse){
-    this.advisorService.followAdvisor(expert.userId).subscribe(result =>expert.following = true);
+    this.promiseExpert = this.advisorService.followAdvisor(expert.userId).subscribe(result =>expert.following = true);
   }
 
   onUnfollowExpertClick(event: Event, expert: AdvisorResponse){
-    this.advisorService.unfollowAdvisor(expert.userId).subscribe(result =>expert.following = false);
+    this.promiseExpert = this.advisorService.unfollowAdvisor(expert.userId).subscribe(result =>expert.following = false);
   }
 
   onFollowAssetClick(){
-    this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
+    this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
   }
 
   onUnfollowAssetClick(){
-    this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
+    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
   }
 
   getAdvisor(userId : number) : AdvisorResponse{

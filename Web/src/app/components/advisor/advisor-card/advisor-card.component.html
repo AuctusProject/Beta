@@ -60,10 +60,10 @@
     </div>
   </div>
   <div class="separator distribution-follow-divider"></div>
-  <div class="follow-link" *ngIf="advisor.following" (click)="onUnfollowClick()">
-    Unfollow
+  <div class="follow-link" *ngIf="advisor.following" [promiseBtn]="promise" (click)="onUnfollowClick()">
+    <span>Unfollow</span>
   </div>
-  <div class="follow-link" *ngIf="!advisor.following" (click)="onFollowClick()">
-    Follow
+  <div class="follow-link" *ngIf="!advisor.following" [promiseBtn]="promise" (click)="onFollowClick()">
+    <span>Follow</span>
   </div>
 </div>

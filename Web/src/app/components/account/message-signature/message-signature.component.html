@@ -40,7 +40,7 @@
     <inheritance-input *ngIf="showReferral" #Referral [options]="getReferralOptions()" [value]="referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
     <p class="discount" *ngIf="showReferral && discountMessage.length > 0">{{discountMessage}}</p>
     <p *ngIf="hasMetamask && hasUnlockedAccount && hasAUC">Please sign a message to confirm that you are the wallet owner.</p>
-    <div class="action-button truncate" [ngClass]="hasMetamask && hasUnlockedAccount && hasAUC ? 'blue-button' : 'disabled-button'" (click)="signMessage()">CONFIRM</div>   
+    <div class="action-button truncate" [promiseBtn]="promise" [ngClass]="hasMetamask && hasUnlockedAccount && hasAUC ? 'blue-button' : 'disabled-button'" (click)="signMessage()">CONFIRM</div>   
   </div>
   <div class="request-expert" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
     <p>You can request to be an Expert to access without have the need to hold AUC.</p><a class="link-request" (click)="becomeAdvisor()">Request to be a Expert</a>

@@ -8,6 +8,7 @@ import { NavigationService } from '../../../services/navigation.service';
 import { NotificationsService } from 'angular2-notifications';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'message-signature',
@@ -29,6 +30,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   aucRequired: number;
   aucAmount: number = 0;
   @ViewChild("Referral") Referral: InheritanceInputComponent;
+  promise: Subscription;
 
   constructor(private web3Service : Web3Service, 
     private navigationService: NavigationService,
@@ -110,7 +112,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
 
   signMessage() {
     var message = (Constants.signatureMessage);
-    this.web3Service.getWeb3().subscribe(web3 => web3.currentProvider.sendAsync({
+    this.promise = this.web3Service.getWeb3().subscribe(web3 => web3.currentProvider.sendAsync({
       jsonrpc: "2.0",
       method: "personal_sign",
       params: [this.web3Service.toHex(message), this.account]
@@ -124,7 +126,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
       var validateSignatureRequest = new ValidateSignatureRequest();
       validateSignatureRequest.address = this.account;
       validateSignatureRequest.signature = signatureInfo.result;
-      this.accountService.validateSignature(validateSignatureRequest).subscribe(result =>
+      this.promise = this.accountService.validateSignature(validateSignatureRequest).subscribe(result =>
         {
           this.accountService.setLoginData(result);
           this.authRedirect.redirectAfterLoginAction();

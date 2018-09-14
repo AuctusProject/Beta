@@ -9,6 +9,7 @@ import { NewAdviceComponent } from '../../advisor/new-advice/new-advice.componen
 import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
 import { MatDialog } from '@angular/material';
 import { NavigationService } from '../../../services/navigation.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'asset-card',
@@ -18,6 +19,7 @@ import { NavigationService } from '../../../services/navigation.service';
 export class AssetCardComponent implements OnInit {
   @Input() asset: AssetResponse;
   showButtonForExpert: boolean = false;
+  promise: Subscription;
 
   constructor(public dialog: MatDialog, 
     private assetService:AssetService,
@@ -29,12 +31,12 @@ export class AssetCardComponent implements OnInit {
   }
   
   onFollowClick(event: Event){
-    this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
+    this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
     event.stopPropagation();
   }
   
   onUnfollowClick(event: Event){
-    this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
+    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
     event.stopPropagation();
   }
 

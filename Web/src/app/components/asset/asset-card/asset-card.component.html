@@ -4,10 +4,10 @@
   </div>
   <div class="asset-info" fxLayout="column">
     <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
-    <div class="white-button action-button-sm" *ngIf="asset.following" (click)="onUnfollowClick($event)">
+    <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowClick($event)">
       Unfollow
     </div>
-    <div class="blue-button action-button-sm" *ngIf="!asset.following" (click)="onFollowClick($event)">
+    <div class="blue-button action-button-sm" [promiseBtn]="promise" *ngIf="!asset.following" (click)="onFollowClick($event)">
       Follow
     </div>
   </div>
