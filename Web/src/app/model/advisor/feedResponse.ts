@@ -7,6 +7,7 @@ export class FeedResponse {
   advisorName: string;
   advisorUrlGuid: string;
   advisorRanking: number;
+  advisorRating: number;
   followingAdvisor: boolean;
   followingAsset: boolean;
   adviceType: number;

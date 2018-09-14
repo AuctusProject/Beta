@@ -87,6 +87,7 @@ html {
 body {
   background-color: #151515;
   min-height:100%;
+  margin-top: 83px;
 }
 
 body, p, span, input, textarea, select, button, div {

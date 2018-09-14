@@ -1,0 +1,27 @@
+.expert-picture{
+    margin: auto;
+    margin-top: 21px;
+    position: relative;    
+    background-color: white;
+}
+
+.expert-picture,
+.expert-picture img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+}
+
+.expert-ranking{
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 19px;
+    background-color: #126efd;
+    font-size: 15px;
+    text-align: center;
+    color: #FFFFFF;
+    bottom: 0px;
+    position: absolute;
+    font-weight: 500;
+}
