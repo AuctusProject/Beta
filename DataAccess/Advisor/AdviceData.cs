@@ -34,7 +34,7 @@ namespace Auctus.DataAccess.Advisor
             INNER JOIN Advisor ON Advisor.Id = a.AdvisorId AND Advisor.Enabled = 1
             WHERE 
             {1}
-            ORDER BY CreationDate DESC";
+            ORDER BY Id DESC";
 
         private const string SQL_LIST_LAST_BY_TYPE = @"
 	    SELECT * FROM
@@ -95,6 +95,11 @@ namespace Auctus.DataAccess.Advisor
             }
             if (assetsIds.Any())
             {
+                if (!String.IsNullOrWhiteSpace(complement))
+                {
+                    complement += " OR ";
+                }
+
                 complement += string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
                 for (int i = 0; i < assetsIds.Count(); ++i)
                     parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
@@ -102,6 +107,10 @@ namespace Auctus.DataAccess.Advisor
 
             var topCondition = (top.HasValue ? "TOP " + top.Value : String.Empty);
             if (lastAdviceId.HasValue) {
+                if (!string.IsNullOrWhiteSpace(complement))
+                {
+                    complement = " ( " + complement + " ) ";
+                }
                 complement += " AND a.Id < @LastAdviceId ";
                 parameters.Add("LastAdviceId", lastAdviceId.Value, DbType.Int32);
             }

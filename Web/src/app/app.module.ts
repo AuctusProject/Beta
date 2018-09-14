@@ -85,6 +85,7 @@ import { GeneralRecommendationTagComponent } from './components/util/general-rec
 import { EntryOptionComponent } from './components/account/entry-option/entry-option.component';
 import { ModalService } from './services/modal.service';
 import { RegisterBecomeAdvisorComponent } from './components/advisor/register-become-advisor/register-become-advisor.component';
+import { AdviceCardComponent } from './components/advisor/advice-card/advice-card.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -155,7 +156,8 @@ export function getAuthServiceConfigs() {
     CoinSearchComponent,
     EntryOptionComponent,
     RegisterBecomeAdvisorComponent,
-    GeneralRecommendationTagComponent
+    GeneralRecommendationTagComponent,
+    AdviceCardComponent
   ],
   imports: [
     BrowserModule,

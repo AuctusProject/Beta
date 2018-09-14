@@ -1,14 +1,14 @@
-<div class="search-results"
-		    infiniteScroll
-		    [infiniteScrollDistance]="2"
-		    [infiniteScrollThrottle]="50"
-        (scrolled)="appendFeed()">
-        <div *ngFor="let advice of advices">
-          <p>{{advice.adviceId}}<br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-          </p>
-        </div>
+<div class="global-container">
+    <div class="section-title">
+        Top Assets
+    </div>
+    <div class="section-subtitle">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </div>
+    <advice-card *ngFor="let advice of advices" [advice]="advice"></advice-card>
+    <div class="pagination-link" *ngIf="hasMoreAdvices" (click)="loadMore()">
+        LOAD MORE
+    </div>
 </div>

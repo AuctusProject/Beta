@@ -3,6 +3,9 @@
     background-color: #101010;
     width: 100%;
     display: flex;
+    position: fixed;
+    top: 0;
+    z-index: 3;
 }
 
 :host > div {
