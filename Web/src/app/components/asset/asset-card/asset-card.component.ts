@@ -8,6 +8,7 @@ import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenMo
 import { NewAdviceComponent } from '../../advisor/new-advice/new-advice.component';
 import { FullscreenModalComponent } from '../../util/fullscreen-modal/fullscreen-modal.component';
 import { MatDialog } from '@angular/material';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'asset-card',
@@ -20,16 +21,19 @@ export class AssetCardComponent implements OnInit {
 
   constructor(public dialog: MatDialog, 
     private assetService:AssetService,
-    public accountService: AccountService) { }
+    public accountService: AccountService,
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
     this.showButtonForExpert = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
   }
-  onFollowClick(){
+  onFollowClick(event: Event){
     this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
+    event.stopPropagation();
   }
-  onUnfollowClick(){
+  onUnfollowClick(event: Event){
     this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
+    event.stopPropagation();
   }
 
   getAssetImgUrl(){
@@ -72,10 +76,15 @@ export class AssetCardComponent implements OnInit {
     return Math.round(this.asset.variation24h * 10000) / 100 + '%';
   }
 
-  onGiveRecommendationClick() {
+  onGiveRecommendationClick(event: Event) {
     let modalData = new FullscreenModalComponentInput();
     modalData.component = NewAdviceComponent;
     modalData.componentInput = { assetId: this.asset.assetId };
-    this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    this.dialog.open(FullscreenModalComponent, { data: modalData });
+    event.stopPropagation(); 
+  }
+
+  goToAssetDetails() {
+    this.navigationService.goToAssetDetails(this.asset.assetId);
   }
 }
