@@ -27,8 +27,10 @@
     <div *ngIf="resultsLimit > 0" class="blue-button access-button" (click)="goToTopExperts()">
       FIND MORE
     </div>
-    <div *ngIf="!resultsLimit && hasMoreExperts()" class="blue-button access-button" (click)="loadMoreExperts()">
-      LOAD MORE
+    <div *ngIf="!resultsLimit && hasMoreExperts()" fxLayoutAlign="center center">
+      <button [promiseBtn]="promise" class="pagination-link" (click)="loadMoreExperts()">
+          LOAD MORE
+      </button>
     </div>
   </div>
 </div>

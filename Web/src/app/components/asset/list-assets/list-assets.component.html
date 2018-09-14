@@ -15,9 +15,9 @@
         </div>
         <div fxLayout="column" fxLayoutAlign="center center">
             <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
-            <div class="pagination-link" *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">
+            <button class="pagination-link" *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">
                 LOAD MORE
-            </div>
+            </button>
             <div class="section-subtitle">
                 Disclaimer: Auctus Experts collects ratings and price targets of analysts by scanning publicly available 
                 reports on financial websites and by receiving reports directly from the analysts or from our users. 

@@ -22,7 +22,6 @@ export class AssetDetailsComponent implements OnInit {
   currentPage = 1;
   pageSize = 10;
 
-
   constructor(private route: ActivatedRoute, 
     private assetService: AssetService,
     private accountService: AccountService,

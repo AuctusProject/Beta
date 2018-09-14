@@ -1,11 +1,11 @@
-<div fxLayout="row">
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px">
   <div class="expert-picture">
     <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
     <div class="expert-ranking">
       {{advice.advisorRanking}}
     </div>
   </div>
-  <div fxLayout="column">
+  <div fxLayout="column" class="expert-name-rating" fxLayoutAlign="center start" >
     <div class="expert-name truncate" title="{{advice.advisorName}}">
       {{advice.advisorName}}
     </div>
@@ -13,8 +13,29 @@
       <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
     </div>
   </div>
+  <div fxLayout="column" class="asset-column">
+    <div fxLayout="row">
+      <div class="asset-icon">
+        <img [src]="getAssetImgUrl()">
+      </div>
+      <div class="asset-name truncate" title="{{advice.assetCode}}&nbsp;({{advice.assetName}})">{{advice.assetCode}}&nbsp;({{advice.assetName}})</div>
+    </div>  
+    <div class="follow-btn white-button action-button-sm" *ngIf="advice.followingAsset" (click)="onUnfollowClick($event)">
+      Unfollow
+    </div>
+    <div class="follow-btn blue-button action-button-sm" *ngIf="!advice.followingAsset" (click)="onFollowClick($event)">
+      Follow
+    </div>
+  </div>
+  <div class="advice-time" title="{{advice.adviceDate | date: 'medium'}}">
+    {{advice.adviceDate | timeAgo}}
+  </div>
   <div fxLayout="column">
-    <div></div>
-    <div></div>
+    <div fxLayout="column" class="advice-mode-box" [style.background-color]="getAdviceTypeColor()" fxLayoutAlign="center center">
+      <div class="advice-type">
+        {{getAdviceTypeDescription()}}
+      </div>
+      at price {{advice.assetValueAtAdviceTime | currency}}
+    </div>
   </div>
 </div>

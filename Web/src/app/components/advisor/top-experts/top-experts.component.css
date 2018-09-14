@@ -60,3 +60,7 @@
 ::ng-deep .mat-option:hover:not(.mat-option-disabled) {
     background: #252525;
 }
+
+.pagination-link{
+    margin-bottom: 76px;
+}

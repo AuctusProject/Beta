@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { CONFIG } from '../../../services/config.service';
+import { AssetService } from '../../../services/asset.service';
+import { Util } from '../../../util/Util';
 
 @Component({
   selector: 'advice-card',
@@ -10,13 +12,34 @@ import { CONFIG } from '../../../services/config.service';
 export class AdviceCardComponent implements OnInit {
   @Input() advice : FeedResponse;
 
-  constructor() { }
+  constructor(private assetService : AssetService) { }
 
   ngOnInit() {
   }
-
   
   getAdvisorImgUrl(){
     return CONFIG.profileImgUrl.replace("{id}", this.advice.advisorUrlGuid);
+  }
+
+  getAssetImgUrl(){
+    return CONFIG.assetImgUrl.replace("{id}", this.advice.assetId.toString());
+  }
+  
+  onFollowClick(event: Event){
+    this.assetService.followAsset(this.advice.assetId).subscribe(result =>this.advice.followingAsset = true);
+    event.stopPropagation();
+  }
+  
+  onUnfollowClick(event: Event){
+    this.assetService.unfollowAsset(this.advice.assetId).subscribe(result =>this.advice.followingAsset = false);
+    event.stopPropagation();
+  }
+
+  getAdviceTypeDescription(){
+    return Util.GetRecommendationTypeDescription(this.advice.adviceType);
+  }
+
+  getAdviceTypeColor(){
+    return Util.GetRecommendationTypeColor(this.advice.adviceType);
   }
 }
