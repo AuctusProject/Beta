@@ -47,7 +47,9 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
         this.aucRequired = result.aucRequired;
         if (!result.referralCode) {
           this.referralCode = this.localStorageService.getLocalStorage("referralCode");
-          this.validateReferralCode(this.referralCode);
+          if (this.referralCode) {
+            this.validateReferralCode(this.referralCode);
+          }
         } else {
           this.referralCode = result.referralCode;
         }
@@ -149,22 +151,18 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   validateReferralCode(value: string) {
-    if (!value || value.length == 0) {
-      this.setInvalidReferral("");
-    } else if (!!value && value.length == 7) {
-      this.accountService.setReferralCode(value).subscribe(response => {
-        this.standardAUCAmount = response.standardAUCAmount;
-        this.aucRequired = response.aucRequired;
-        if (response.valid) {
-          this.Referral.setForcedError("");
-          this.setDiscountMessage(response.discount); 
-        } else {
-          this.setInvalidReferral("Invalid referral code");
-        }
-      });
-    } else {
-      this.setInvalidReferral("Invalid referral code");
-    }
+    this.accountService.setReferralCode(value).subscribe(response => {
+      this.standardAUCAmount = response.standardAUCAmount;
+      this.aucRequired = response.aucRequired;
+      if (response.valid) {
+        this.Referral.setForcedError("");
+        this.setDiscountMessage(response.discount); 
+      } else if (!!value && value.length > 0) {
+        this.setInvalidReferral("Invalid referral code");
+      } else {
+        this.setInvalidReferral("");
+      }
+    });
   }
 
   setDiscountMessage(discount: number) {

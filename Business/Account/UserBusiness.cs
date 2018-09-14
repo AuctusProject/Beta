@@ -259,7 +259,7 @@ namespace Auctus.Business.Account
 
         private User GetReferredUser(string referralCode, bool throwException = true)
         {
-            if (!string.IsNullOrWhiteSpace(referralCode))
+            if (!string.IsNullOrWhiteSpace(referralCode) && referralCode.Length == 7)
             {
                 var user = Data.GetByReferralCode(referralCode.ToUpper());
                 if (user == null && throwException)
