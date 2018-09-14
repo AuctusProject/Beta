@@ -327,7 +327,7 @@ namespace Auctus.Business.Advisor
 
             var filterValues = new Dictionary<int, DateTime>();
             filterValues[selectAssetId] = Data.GetDateTimeNow().AddDays(-30);
-            var values = AssetValueBusiness.FilterAssetValues(filterValues);
+            var values = AssetValueBusiness.FilterAssetValues(filterValues).OrderByDescending(c => c.Date);
 
             assetsResult.Add(GetAssetBaseResponse(loggedUser, asset, assetFollowers, new Advice[] { }, new int[] { }, values, mode));
         }
@@ -348,7 +348,7 @@ namespace Auctus.Business.Advisor
             IEnumerable<Advice> assetAdvices, IEnumerable<int> assetAdvisorsId, IEnumerable<AssetValue> values, CalculationMode mode)
         {
             var assFollowers = assetFollowers?.Where(c => c.AssetId == asset.Id);
-            var firstData = values.Last();
+            var firstData = values.First();
             var vl30d = values.Where(c => c.Date <= firstData.Date.AddDays(-30) && c.Date > firstData.Date.AddDays(-31));
             var vl7d = values.Where(c => c.Date <= firstData.Date.AddDays(-7) && c.Date > firstData.Date.AddDays(-8)); 
             var vl24h = values.Where(c => c.Date <= firstData.Date.AddDays(-1) && c.Date > firstData.Date.AddDays(-2));
