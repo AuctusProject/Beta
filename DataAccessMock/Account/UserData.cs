@@ -269,7 +269,7 @@ namespace Auctus.DataAccessMock.Account
 
         public User GetSimpleWithWallet(string email)
         {
-            throw new NotImplementedException();
+            return users.FirstOrDefault(c => c.Email == email.ToLower());
         }
     }
 }
