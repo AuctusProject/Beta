@@ -225,6 +225,9 @@ namespace Auctus.Business.Account
             var referredUser = GetReferredUser(referralCode, false);
             if (referredUser == null)
             {
+                user.ReferredId = null;
+                user.ReferralDiscount = null;
+                Data.Update(user);
                 response.Valid = false;
                 response.AUCRequired = MinimumAucLogin;
                 response.Discount = 0;
