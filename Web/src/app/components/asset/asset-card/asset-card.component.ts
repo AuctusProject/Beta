@@ -36,10 +36,6 @@ export class AssetCardComponent implements OnInit {
     return CONFIG.assetImgUrl.replace("{id}", this.asset.assetId.toString());
   }
 
-  getGeneralRecommendation(){
-    return Util.GetGeneralRecommendationDescription(this.asset.mode);
-  }
-
   getLastValue(){
     return '$'+Math.round(this.asset.lastValue * 100) / 100;
   }

@@ -81,6 +81,7 @@ import { NewsletterComponent } from './components/util/newsletter/newsletter.com
 import { FooterComponent } from './components/util/footer/footer.component';
 import { OwlModule } from 'ngx-owl-carousel';
 import { CoinSearchComponent } from './components/util/coin-search/coin-search.component';
+import { GeneralRecommendationTagComponent } from './components/util/general-recommendation-tag/general-recommendation-tag.component';
 import { EntryOptionComponent } from './components/account/entry-option/entry-option.component';
 import { ModalService } from './services/modal.service';
 import { RegisterBecomeAdvisorComponent } from './components/advisor/register-become-advisor/register-become-advisor.component';
@@ -153,7 +154,8 @@ export function getAuthServiceConfigs() {
     FooterComponent,
     CoinSearchComponent,
     EntryOptionComponent,
-    RegisterBecomeAdvisorComponent
+    RegisterBecomeAdvisorComponent,
+    GeneralRecommendationTagComponent
   ],
   imports: [
     BrowserModule,

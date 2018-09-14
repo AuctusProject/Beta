@@ -1,13 +1,15 @@
-:host{
-    text-align: right;
-    font-size: 13px;
-    font-weight: 100;       
+.variation{
+    color: #ffffff;
 }
 
-.positive{
-    color: #36af39;
+.variation.bull{
+    color: #3ed142;
 }
 
-.negative{
-    color: #f40505;
+.variation.bear{
+    color: #d13e3e;
+}
+
+.arrow{
+    display: inline;
 }

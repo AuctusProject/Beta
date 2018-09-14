@@ -1,4 +1,4 @@
-<div class="global-container">
+<div class="global-container" *ngIf="assets">
   <div class="section-title inverted">
     Trending Assets
   </div>
@@ -15,6 +15,5 @@
       [carouselClasses]="['owl-theme', 'row', 'sliding']">
       <trending-asset-card *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>
     </owl-carousel>
-
   </div>
 </div>

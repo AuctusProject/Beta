@@ -1,0 +1,32 @@
+.general-recommendation-tag{
+    height: 26px;
+    width: 163px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    color: #ffffff;
+}
+
+.general-recommendation-tag.neutral{
+    background-color: #999999;
+}
+
+.general-recommendation-tag.moderate-buy{
+    background-color: #3ed142;
+}
+
+.general-recommendation-tag.strong-buy{
+    background-color: #3ed142;
+}
+
+.general-recommendation-tag.moderate-sell{
+    background-color: #d13e3e;
+}
+
+.general-recommendation-tag.strong-sell{
+    background-color: #d13e3e;
+}
+
+.general-recommendation-tag.close{
+    background-color: #999999;
+}
