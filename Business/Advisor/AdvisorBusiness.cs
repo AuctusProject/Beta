@@ -497,11 +497,8 @@ namespace Auctus.Business.Advisor
                 var total = asset.RecommendationDistribution.Sum(c => c.Total);
                 var percentages = asset.RecommendationDistribution.Select(c => new { Type = c.Type, Percentage = 100.0 * c.Total / total });
                 var majorityType = percentages.SingleOrDefault(c => c.Percentage > 50);
-                if (majorityType != null)
+                if (majorityType != null && majorityType.Type != AdviceType.ClosePosition.Value)
                 {
-                    if (majorityType.Type == AdviceType.ClosePosition.Value)
-                        return AssetModeType.Close.Value;
-
                     if (total < 5 || majorityType.Percentage < 70)
                         return majorityType.Type == AdviceType.Buy.Value ? AssetModeType.ModerateBuy.Value : AssetModeType.ModerateSell.Value;
                     else

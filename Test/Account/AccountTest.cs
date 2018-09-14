@@ -75,7 +75,7 @@ namespace Auctus.Test.Account
             
             Task.WaitAll(UserBusiness.RegisterAsync(LoggedEmail, "testeauctus", null));
 
-            Assert.Throws<BusinessException>(() => UserBusiness.SetReferralCode("INVALID_CODE"));
+            Assert.False(UserBusiness.SetReferralCode("INVALID_CODE").Valid);
 
             UserBusiness.SetReferralCode("0000001");
             var user = UserBusiness.GetByEmail(LoggedEmail);

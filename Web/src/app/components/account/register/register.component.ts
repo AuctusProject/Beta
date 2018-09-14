@@ -95,6 +95,7 @@ export class RegisterComponent implements ModalComponent, OnInit {
     } else if (!!value && value.length == 7) {
       this.accountService.isValidReferralCode(value).subscribe(response => {
         if (!!response && response.valid) {
+          this.Referral.setForcedError("");
           this.localStorageService.setLocalStorage("referralCode", value);
           this.discountMessage = "Congratulations, using the referral code you need hold " + response.discount + "% less AUC in your own wallet!" 
         } else {

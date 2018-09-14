@@ -1,5 +1,6 @@
 export interface InheritanceInputOptions {
     inputType: InputType;
+    darkLayout: boolean;
     textOptions?: InputTextTypeOptions;
     textAreaOptions?: InputTextAreaTypeOptions;
 }

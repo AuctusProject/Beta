@@ -108,13 +108,25 @@ namespace Api.Controllers
             if(setReferralRequest == null)
                 return BadRequest();
 
-            UserBusiness.SetReferralCode(setReferralRequest.ReferralCode);
-            return Ok();
+            return Ok(UserBusiness.SetReferralCode(setReferralRequest.ReferralCode));
         }
 
         protected virtual IActionResult GetReferralProgramInfo()
         {
             return Ok(UserBusiness.GetReferralProgramInfo());
+        }
+
+        protected virtual IActionResult GetWalletLoginInfo()
+        {
+            return Ok(UserBusiness.GetWalletLoginInfo());
+        }
+
+        protected virtual IActionResult GetAUCAmount(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address))
+                return BadRequest();
+
+            return Ok(WalletBusiness.GetAucAmount(address));
         }
 
         protected virtual IActionResult IsValidReferralCode(string referralCode)
