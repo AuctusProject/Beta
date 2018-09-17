@@ -11,6 +11,7 @@ import { NavigationService } from '../../../services/navigation.service';
 import { CoinSearchComponent } from '../../util/coin-search/coin-search.component';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { Util } from '../../../util/Util';
+import { AssetService } from '../../../services/asset.service';
 
 @Component({
   selector: 'new-advice',
@@ -27,12 +28,15 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
   advise: AdviseRequest = new AdviseRequest();
   showSell: boolean = false;
   showButtons: boolean = false;
+  showClose: boolean = false;
+  lastValue: number;
   asset: Asset;
 
   constructor(private advisorService: AdvisorService, 
     private accountService : AccountService, 
     private navigationService : NavigationService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private assetService: AssetService) { }
 
   ngOnInit() {
     let loginData = this.accountService.getLoginData();
@@ -76,7 +80,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
   openConfirmation() {
     const dialogRef = this.dialog.open(ConfirmAdviceDialogComponent, 
       { width: '60%', height: '35%', hasBackdrop: true, disableClose: true, panelClass: 'fullscreen-modal', 
-        data: { adviceType: this.advise.adviceType, assetName: this.asset.code + ' - ' + this.asset.name } }); 
+        data: { adviceType: this.advise.adviceType, assetName: this.asset.code + ' - ' + this.asset.name, lastValue: this.lastValue} }); 
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
@@ -97,8 +101,22 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
     return { required: true, outlineField: true, darkStyle: false };
   }
 
+
+
   setButtons() {
-    this.showButtons = !!this.asset && !!this.asset.id;
-    this.showSell = !!this.asset && this.asset.shortSellingEnabled;
+    this.showClose = false;
+    this.showSell = false;
+    this.lastValue = null;
+    this.showButtons = false;
+    if(!!this.asset && !!this.asset.id){
+      this.assetService.getAssetRecommendationInfo(this.asset.id).subscribe(result => 
+        {
+          this.showClose = result.closeRecommendationEnabled;
+          this.showSell = !!this.asset && this.asset.shortSellingEnabled;
+          this.lastValue = result.lastValue;
+          this.showButtons = true;
+        })
+    }
+    
   }  
 }

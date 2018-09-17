@@ -46,6 +46,15 @@ namespace Api.Controllers
             return base.GetAsset(id);
         }
 
+        [HttpGet]
+        [Route("{id}/recommendation_info")]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAssetRecommendationInfo(int id)
+        {
+            return base.GetAssetRecommendationInfo(id);
+        }
+
         [Route("{id}/followers")]
         [HttpPost]
         [Authorize("Bearer")]

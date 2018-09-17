@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccessInterfaces.Asset;
+using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Exchange;
 using Auctus.Model;
@@ -30,6 +31,24 @@ namespace Auctus.Business.Asset
             List<AssetResponse> assetsResult;
             AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetBase, out advisorsResult, out assetsResult, user, advices.Result, null, null, assetFollowers.Result);
             return assetsResult;
+        }
+
+        public AssetRecommendationInfoResponse GetAssetRecommendationInfo(int assetId)
+        {
+            var user = GetValidUser();
+            var asset = GetById(assetId);
+            var lastAdvice = AdviceBusiness.GetLastAdviceForAssetByAdvisor(user.Id, assetId);
+
+            var lastValue = AssetValueBusiness.LastAssetValue(assetId);
+            if (lastValue == null)
+                throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
+
+            return new AssetRecommendationInfoResponse()
+            {
+                AssetId = assetId,
+                LastValue = lastValue.Value,
+                CloseRecommendationEnabled = lastAdvice != null && lastAdvice.AdviceType != AdviceType.ClosePosition                
+            };
         }
 
         public AssetResponse GetAssetData(int assetId)

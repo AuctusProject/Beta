@@ -20,9 +20,15 @@ namespace Auctus.Business.Advisor
     {
         public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
+
+        public Advice GetLastAdviceForAssetByAdvisor(int advisorId, int assetId)
+        {
+            return Data.GetLastAdviceForAssetByAdvisor(assetId, advisorId);
+        }
+
         internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            Advice lastAdvice = Data.GetLastAdviceForAssetByAdvisor(asset.Id, advisor.Id);
+            Advice lastAdvice = GetLastAdviceForAssetByAdvisor(asset.Id, advisor.Id);
 
             if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
                 throw new BusinessException("You need to wait before advising again for this asset.");
