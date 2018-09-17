@@ -26,3 +26,7 @@
 .discount {
     padding-bottom: 25px;
 }
+
+.widget-bancor {
+    max-width: 85vw;
+}

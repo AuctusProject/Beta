@@ -24,8 +24,13 @@ export class AuthRedirect implements CanActivate {
     return new Observable (observer => observer.next(false));
   }
 
-  redirectAfterLoginAction() {
-    let loginData = this.accountService.getLoginData();
+  redirectAfterLoginAction(loginResponse?: LoginResponse) {
+    let loginData;
+    if (!!loginResponse) {
+      loginData = loginResponse;
+    } else {
+      loginData = this.accountService.getLoginData();
+    }
     if (!!loginData) {
       this.redirect(loginData).subscribe(redirected =>
         {

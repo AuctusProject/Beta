@@ -75,7 +75,7 @@ export class RegisterComponent implements ModalComponent, OnInit {
     if (!!response && !response.error && response.data) {
       this.accountService.setLoginData(response.data);
       this.setClose.emit();
-      this.authRedirect.redirectAfterLoginAction();
+      this.authRedirect.redirectAfterLoginAction(response.data);
     } else {
       if (!!response && response.error) {
         this.notificationsService.info("Info", response.error);

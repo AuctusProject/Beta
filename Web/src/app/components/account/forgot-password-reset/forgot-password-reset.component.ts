@@ -48,7 +48,7 @@ export class ForgotPasswordResetComponent implements ModalComponent, OnInit {
           this.accountService.setLoginData(result.data);
           this.notificationService.success(null, "Password was changed successfully");
           this.setClose.emit();
-          this.authRedirect.redirectAfterLoginAction();
+          this.authRedirect.redirectAfterLoginAction(result.data);
         }
       );
     }
