@@ -2,7 +2,7 @@
   <div class="expert-details-header global-container-min">
     <div class="global-container">
       <div class="section-title">
-        EXPERTS RECOMMENDATIONS ON {{asset.name}}
+        EXPERTS RATINGS ON {{asset.name}}
       </div>
       <div class="section-subtitle">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
@@ -45,7 +45,7 @@
             Follow
           </div>
           <div class="blue-button action-button-sm" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">
-            Recommend
+            Rate It
           </div>
         </div>
         <div fxLayout="row" fxLayoutGap="29px" fxLayoutAlign="space-between start">
@@ -95,7 +95,7 @@
         </ng-container>
 
         <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef> Recommendation </th>
+          <th mat-header-cell *matHeaderCellDef> Rating </th>
           <td mat-cell *matCellDef="let assetAdvisor">
               <div [style.background-color]="getAdviceTypeColor(assetAdvisor.lastAdviceType)">{{getRecommendationFromType(assetAdvisor.lastAdviceType)}}</div>
           </td>

@@ -11,7 +11,7 @@
         </div>
         <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left top" fxLayoutGap="16px">
             <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
-            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>
+            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RATING</div>
         </div>
         <div fxLayout="column" fxLayoutAlign="center center">
             <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>

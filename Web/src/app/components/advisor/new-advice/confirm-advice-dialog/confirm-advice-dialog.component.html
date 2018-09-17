@@ -1,9 +1,9 @@
 <button class="modal-close" [mat-dialog-close]="false" mat-dialog-close>&times;</button>
 <div fxLayout="column" fxLayoutAlign="center center" class="modal-container">
-  <h2 mat-dialog-title class="modal-title">Confirm recommendation</h2>
+  <h2 mat-dialog-title class="modal-title">Confirm rating</h2>
   <mat-dialog-content class="modal-content">
     <p>Are you sure?</p> 
-    <p><b>{{getAdviceType()}}</b> recommendation to <b>{{data.assetName}}</b> at <b>{{data.lastValue | currency}}</b></p>
+    <p><b>{{getAdviceType()}}</b> rating to <b>{{data.assetName}}</b> at <b>{{data.lastValue | currency}}</b></p>
   </mat-dialog-content>
   <mat-dialog-actions class="btn-actions">
     <button mat-stroked-button fxFlex="50" [mat-dialog-close]="false" mat-dialog-close>Cancel</button>
