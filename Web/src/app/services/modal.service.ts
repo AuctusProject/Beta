@@ -30,7 +30,7 @@ export class ModalService {
   }
 
   public setConfirmEmail(): MatDialogRef<FullscreenModalComponent, any> {
-    return this.setModal(ConfirmEmailComponent, null, true);
+    return this.setModal(ConfirmEmailComponent);
   }
 
   public setConfiguration(): MatDialogRef<FullscreenModalComponent, any> {
