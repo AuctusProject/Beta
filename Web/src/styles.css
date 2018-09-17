@@ -612,3 +612,7 @@ textarea:read-only {
   color: gray !important;
   text-decoration: none !important;
 }
+
+.text-center{
+  text-align: center;
+}
