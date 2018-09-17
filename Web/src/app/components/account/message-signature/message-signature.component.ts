@@ -29,6 +29,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   standardAUCAmount: number;
   aucRequired: number;
   aucAmount: number = 0;
+  hasBancorWidget: boolean = false;
   @ViewChild("Referral") Referral: InheritanceInputComponent;
   promise: Subscription;
 
@@ -42,6 +43,17 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.checkMetamask();
+    if (window && window["BancorConvertWidget"]) {
+      this.hasBancorWidget = true;
+      window["BancorConvertWidget"].init({
+          "type": "1",
+          "blockchainType": "ethereum",
+          "baseCurrencyId": "5ad9c1d54c4998a2f940e933",
+          "pairCurrencyId": "5937d635231e97001f744267",
+          "primaryColor": "#102644",
+          "displayCurrency": "ETH"
+      });
+    }
     this.accountService.getWalletLoginInfo().subscribe(result =>
       {
         this.showReferral = !result.registeredWallet;
@@ -129,7 +141,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
       this.promise = this.accountService.validateSignature(validateSignatureRequest).subscribe(result =>
         {
           this.accountService.setLoginData(result);
-          this.authRedirect.redirectAfterLoginAction();
+          this.authRedirect.redirectAfterLoginAction(result);
         }
       );
     } else if (signatureInfo.error && signatureInfo.error.message) {

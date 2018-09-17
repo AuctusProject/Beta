@@ -145,20 +145,16 @@ export class HttpService {
       if (response.status == "401") {
         this.logout();
         this.localStorageService.setLocalStorage("redirectUrl", this.router.url);
-        this.navigationService.goToHome();
-      }
-      else if (response.status != "200") {
+        this.navigationService.goToLogin();
+      } else if (response.status != "200") {
         if (response.error) {
           this.notificationService.error("Error", response.error.error);
-        }
-        else if (response.statusText) {
+        }  else if (response.statusText) {
           this.notificationService.error("Error", response.statusText);
-        }
-        else {
+        }  else {
           this.notificationService.error("Error", "An unexpected error happened.");
         }
       }
-
       return throwError("error");
     };
   }

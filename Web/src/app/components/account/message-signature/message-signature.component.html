@@ -28,12 +28,21 @@
       </div>
     </div>
     <div *ngIf="!hasAUC" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
-      <p>You can buy AUC in:</p>
-      <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
+      <p *ngIf="!hasBancorWidget">You can buy AUC in:</p>
+      <div class="widget-bancor" id="bancor-wc"></div>
+      <div *ngIf="!hasBancorWidget" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
         <a href="https://www.bitfinex.com" target="_blank"><img src="./assets/bitfinex.png" height="100" /></a>
         <a href="https://idex.market/eth/auc" target="_blank"><img src="./assets/idex.png" height="100" /></a>
         <a href="https://www.bancor.network/communities/5ad9c1c5c7d1460001bc9bfa" target="_blank"><img src="./assets/bancor.png" height="100" /></a>
         <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img src="./assets/hitbtc.png" height="100" /></a>
+      </div>
+      <div *ngIf="hasBancorWidget" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <p>You also can buy AUC in:</p>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
+          <a href="https://www.bitfinex.com" target="_blank"><img src="./assets/bitfinex.png" height="35" /></a>
+          <a href="https://idex.market/eth/auc" target="_blank"><img src="./assets/idex.png" height="35" /></a>
+          <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img src="./assets/hitbtc.png" height="35" /></a>
+        </div>
       </div>
       <p>But remember, you need to put and hold the AUC in your own wallet.</p>
     </div>

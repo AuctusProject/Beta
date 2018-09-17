@@ -9,6 +9,7 @@ import { ModalComponent } from '../../../model/modal/modalComponent';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../../services/navigation.service';
+import { LoginResponse } from '../../../model/account/loginResponse';
 
 @Component({
   selector: 'confirm-email',
@@ -55,15 +56,15 @@ export class ConfirmEmailComponent implements ModalComponent, OnInit {
     this.accountService.confirmEmail(confirmEmailRequest).subscribe(result => 
       {
         this.accountService.setLoginData(result);
-        this.setConfirmedEmailAction();
+        this.setConfirmedEmailAction(result);
       }
     );
   }
 
-  setConfirmedEmailAction() {
+  setConfirmedEmailAction(loginResponse?: LoginResponse) {
     this.notificationService.success(null, "Email confirmed successfully");
     this.setClose.emit();
-    this.authRedirect.redirectAfterLoginAction();
+    this.authRedirect.redirectAfterLoginAction(loginResponse);
   }
 
   resendEmailConfirmation() {
