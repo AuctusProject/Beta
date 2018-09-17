@@ -20,7 +20,8 @@ const routes: Routes = [
     { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
-    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] }
+    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
+    { path: '**', redirectTo: ''  }
 ];
 
 @NgModule({

@@ -27,7 +27,7 @@ import { ModalService } from '../../../services/modal.service';
 export class ExpertDetailsComponent implements OnInit {
   expert: AdvisorResponse;
   showOwnerButton: boolean = false;
-  displayedColumns: string[] = ['assetName', 'position', 'value', 'action', 'date', 'ratings', 'followButton','chevron'];
+  displayedColumns: string[] = ['assetName', 'position', 'value', 'action', 'date', 'ratings', 'chevron'];
   assets = [];
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   expandedElement: any;
