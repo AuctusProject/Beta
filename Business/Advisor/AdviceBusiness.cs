@@ -28,7 +28,7 @@ namespace Auctus.Business.Advisor
 
         internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            Advice lastAdvice = GetLastAdviceForAssetByAdvisor(asset.Id, advisor.Id);
+            Advice lastAdvice = GetLastAdviceForAssetByAdvisor(advisor.Id, asset.Id);
 
             if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
                 throw new BusinessException("You need to wait before advising again for this asset.");
