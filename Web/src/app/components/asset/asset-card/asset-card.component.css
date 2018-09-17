@@ -1,6 +1,7 @@
 .asset-card{
     padding: 15px;
     border-bottom: solid 0.5px #707070;
+    cursor: pointer;
 }
 
 .symbol {

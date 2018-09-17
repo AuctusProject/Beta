@@ -12,7 +12,7 @@ import { HomeComponent } from './components/home/home/home.component';
 import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent  },
+    { path: '', component: HomeComponent, pathMatch: 'full'  },
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
     { path: 'top-experts', component: TopExpertsComponent },
