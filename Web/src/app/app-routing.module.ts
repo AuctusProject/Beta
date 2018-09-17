@@ -12,7 +12,7 @@ import { HomeComponent } from './components/home/home/home.component';
 import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, pathMatch: 'full'  },
+    { path: '', component: HomeComponent  },
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
     { path: 'top-experts', component: TopExpertsComponent },
@@ -20,7 +20,8 @@ const routes: Routes = [
     { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
     { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
-    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] }
+    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
+    { path: '**', redirectTo: ''  }
 ];
 
 @NgModule({
