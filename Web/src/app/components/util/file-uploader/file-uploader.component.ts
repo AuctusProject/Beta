@@ -79,6 +79,7 @@ export class FileUploaderComponent {
         this.loaded = false;
         this.fileToUpload = null;
         this.fileInput.nativeElement.value = '';
+        this.wasChanged = true;
     }
 
     forceImageUrl(imageUrl: string) {
