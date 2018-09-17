@@ -24,9 +24,9 @@ export class AuthRedirect implements CanActivate {
 
   redirectAfterLoginAction(){
     let loginData = this.accountService.getLoginData();
-    if (loginData) {
-      let redirected = this.redirect(loginData)
-      if(!redirected){
+    if (!!loginData) {
+      let redirected = this.redirect(loginData);
+      if(!redirected) {
         var redirectUrl = this.localStorageService.getLocalStorage("redirectUrl");
         this.localStorageService.removeLocalStorage("redirectUrl");
         if(redirectUrl)
