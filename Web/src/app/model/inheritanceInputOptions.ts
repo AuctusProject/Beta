@@ -9,7 +9,8 @@ export enum InputType {
     Text = 0,
     Email = 1,
     Password = 2,
-    TextArea = 3
+    TextArea = 3,
+    Search = 4
 }
 
 interface InputTypeOptions {

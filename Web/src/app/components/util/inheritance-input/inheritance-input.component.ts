@@ -76,6 +76,18 @@ export class InheritanceInputComponent implements OnInit {
     this.formControl = new FormControl('', validators);
   }
 
+  private getInputType() : string {
+    if (this.passwordHide) {
+      return "password";
+    } else if (this.inputType == InputType.Search) {
+      return "search";
+    } else if (this.inputType == InputType.Email) {
+      return "email";
+    } else {
+      return "text";
+    }
+  }
+
   public isValid() : boolean {
     this.formControl.markAsTouched();
     return !this.forcedError && (!this.showValidatorError || this.formControl.valid);

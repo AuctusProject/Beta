@@ -1,6 +1,6 @@
 <mat-form-field floatLabel="never">
   <mat-label class="search-label">Search for Expert or Coin</mat-label>
-  <input autocomplete="off" [formControl]="searchControl" class="search-input" type="text" matInput [(ngModel)]="inputText" placeholder="Search for Expert or Coin" (input)="onInputChanged($event.target.value)" [matAutocomplete]="auto">
+  <input autocomplete="off" [formControl]="searchControl" class="search-input" type="search" matInput [(ngModel)]="inputText" placeholder="Search for Expert or Coin" (input)="onInputChanged($event.target.value)" [matAutocomplete]="auto">
   <mat-autocomplete class="search-autocomplete" #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)">
     <mat-optgroup class="search-autocomplete-header" label="Assets" *ngIf="showAssets">
       <mat-option class="search-autocomplete-option" *ngFor="let asset of searchResults.assets" [value]="asset">
