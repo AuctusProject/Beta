@@ -137,6 +137,23 @@ namespace Auctus.Business.Account
             };
         }
 
+        public LoginResponse GetLoginResponse()
+        {
+            var user = Data.GetForLogin(LoggedEmail);
+            if (user == null)
+                throw new NotFoundException("User not found.");
+            
+            return new Model.LoginResponse()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
+                IsAdvisor = IsValidAdvisor(user),
+                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
+                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+            };
+        }
+
         public bool GetUserHasInvestment(User user, out decimal? aucAmount)
         {
             aucAmount = null;

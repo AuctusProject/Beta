@@ -89,6 +89,15 @@ namespace Api.Controllers
             return base.ValidateSignature(signatureRequest);
         }
 
+        [Route("me")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetLoginData()
+        {
+            return base.GetLoginData();
+        }
+
         [Route("me/confirmations")]
         [HttpGet]
         [Authorize("Bearer")]

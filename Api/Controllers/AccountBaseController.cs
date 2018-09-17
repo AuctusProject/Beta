@@ -38,6 +38,11 @@ namespace Api.Controllers
             return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginRequest.Email.ToLower().Trim()), data = loginResponse });
         }
 
+        protected virtual IActionResult GetLoginData()
+        {
+            return Ok(UserBusiness.GetLoginResponse());
+        }
+
         protected virtual IActionResult SocialLogin(SocialLoginRequest socialLoginRequest)
         {
             if (socialLoginRequest == null)
