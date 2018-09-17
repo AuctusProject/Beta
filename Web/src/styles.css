@@ -286,8 +286,6 @@ div.is-loading .btn-spinner {
   z-index: 10000 !important;
 }
 
-
-
 a {
   cursor: pointer;
 }
@@ -338,8 +336,8 @@ textarea:read-only {
 }
 
 .mat-flat-button.mat-primary {
-  background-color: #5d5d5d;
-  border: solid 0.5px #707070;
+  background-color: #126efd;
+  border: none;
   max-width: 250px;
   min-width: 90px;
 }
@@ -480,10 +478,6 @@ textarea:read-only {
 .social-media-button {
   border: solid 1px rgba(0,0,0,.87);
   color: rgba(0,0,0,.87);
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 16px;
-  padding-right: 16px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -494,6 +488,16 @@ textarea:read-only {
 
 .social-media-button span {
   margin: auto;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.social-media-button fa-icon {
+  margin: auto;
+  padding-left: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .truncate{

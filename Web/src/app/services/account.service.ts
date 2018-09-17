@@ -29,6 +29,7 @@ import { WalletLoginInfoResponse } from '../model/account/walletLoginInfoRespons
 export class AccountService {
   private validateSignatureUrl = this.httpService.apiUrl("/v1/accounts/me/signatures");
   private loginUrl = this.httpService.apiUrl("v1/accounts/login");
+  private userDataUrl = this.httpService.apiUrl("v1/accounts/me");
   private socialLoginUrl = this.httpService.apiUrl("v1/accounts/social_login");
   private confirmationEmailUrl = this.httpService.apiUrl("v1/accounts/me/confirmations");
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
@@ -49,11 +50,15 @@ export class AccountService {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
   }
 
-  login(loginRequest : LoginRequest):Observable<LoginResult>{
+  login(loginRequest: LoginRequest) : Observable<LoginResult>{
     return this.httpService.post(this.loginUrl, loginRequest);
   }
 
-  socialLogin(socialLoginRequest : SocialLoginRequest):Observable<LoginResult>{
+  getUserData() : Observable<LoginResponse>{
+    return this.httpService.get(this.userDataUrl);
+  }
+
+  socialLogin(socialLoginRequest: SocialLoginRequest) : Observable<LoginResult>{
     return this.httpService.post(this.socialLoginUrl, socialLoginRequest);
   }
 
@@ -61,20 +66,20 @@ export class AccountService {
     this.httpService.setLoginData(loginData);
   }
 
-  getLoginData(): LoginResponse {
+  getLoginData() : LoginResponse {
     return this.httpService.getLoginData();
   }
 
-  getUserEmail(): string {
+  getUserEmail() : string {
     return this.httpService.getUserEmail();
   }
 
-  logout(): void {
+  logout() : void {
     this.httpService.logout();
     this.navigationService.goToHome();
   }
 
-  logoutWithoutRedirect(): void {
+  logoutWithoutRedirect() : void {
     this.httpService.logout();
   }
 
@@ -147,7 +152,7 @@ export class AccountService {
     return this.httpService.get(this.dashboardUrl);
   }
 
-  search(searchTerm: string): Observable<SearchResponse> {
+  search(searchTerm: string) : Observable<SearchResponse> {
     return this.httpService.get(this.searchUrl + "?term=" + searchTerm);
   }
 }

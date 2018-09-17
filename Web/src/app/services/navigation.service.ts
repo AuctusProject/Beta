@@ -20,15 +20,18 @@ export class NavigationService {
     }
   }
 
-  private isSameRoute(url: string): boolean {
-    let currentRoute = this.router.url.split("?")[0];
+  public isSameRoute(url: string, currentUrl?: string): boolean {
+    if (currentUrl === undefined || currentUrl === null) {
+      currentUrl = this.router.url;
+    }
+    let currentRoute = currentUrl.split("?")[0];
     if (currentRoute && currentRoute.length > 0 && currentRoute[0] === "/") {
       currentRoute = currentRoute.slice(1);
     }
     if (url && url.length > 0 && url[0] === "/") {
       url = url.slice(1);
     }
-    return url === currentRoute;
+    return url.toLowerCase() === currentRoute.toLowerCase();
   }
 
   public goToLogin(){

@@ -2,7 +2,7 @@
   <mat-label [style.color]="darkLayout ? 'white' : '#101010'">{{placeholder}}</mat-label>
 
   <input matInput *ngIf="showTextField()"
-    [type]="passwordHide ? 'password' : 'text'"
+    [type]="getInputType()"
     [(ngModel)]="value" 
     [formControl]="formControl" 
     [style.color]="darkLayout ? 'white' : '#101010'"
