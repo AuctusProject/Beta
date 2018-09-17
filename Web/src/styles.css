@@ -286,8 +286,6 @@ div.is-loading .btn-spinner {
   z-index: 10000 !important;
 }
 
-
-
 a {
   cursor: pointer;
 }
@@ -338,8 +336,8 @@ textarea:read-only {
 }
 
 .mat-flat-button.mat-primary {
-  background-color: #5d5d5d;
-  border: solid 0.5px #707070;
+  background-color: #126efd;
+  border: none;
   max-width: 250px;
   min-width: 90px;
 }
