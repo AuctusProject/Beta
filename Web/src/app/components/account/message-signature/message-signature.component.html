@@ -40,19 +40,19 @@
         <p [style.color]="this.hasAuc() ? '#616161' : 'white'">3 . You need to have <b>{{aucRequired}} AUC</b> on your wallet. {{missingAmountMessage()}}</p>
       </div>
     </div>
-    <div class="buy-auctus" *ngIf="!this.hasAuc()" fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutGap="25px">
-      <div class="buy-auctus" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+    <div class="width100" *ngIf="!this.hasAuc()" fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutGap="25px">
+      <div class="width100" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
         <fa-icon icon="arrow-right" size="1x" fxLayoutAlign="center stretch"></fa-icon>
         <span>You can buy AUC on:</span>
       </div>
-      <div class="buy-auctus" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+      <div class="width100" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap="30px">
         <a href="https://www.bitfinex.com" target="_blank"><img src="./assets/bitfinex.png" height="60" /></a>
         <a href="https://idex.market/eth/auc" target="_blank"><img src="./assets/idex.png" height="60" /></a>
         <a *ngIf="!shouldShowBancorWidget()" href="https://www.bancor.network/communities/5ad9c1c5c7d1460001bc9bfa" target="_blank"><img src="./assets/bancor.png" height="60" /></a>
         <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img src="./assets/hitbtc.png" height="60" /></a>
       </div>
-      <div class="buy-auctus" fxLayout="column" fxLayoutAlign="space-evenly center">
-        <div *ngIf="shouldShowBancorWidget()" class="buy-auctus" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+      <div class="width100" fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div *ngIf="shouldShowBancorWidget()" class="width100" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
           <fa-icon icon="arrow-right" size="1x" fxLayoutAlign="center stretch"></fa-icon>
           <span>You can also buy on Bancor:</span>
         </div>
@@ -69,5 +69,8 @@
   </div>
   <div class="request-expert" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
     <span>Do you think you can give expert advise to others, or can refer more users. Apply to become a verified expert and get rewarded with AUC.&nbsp;<a class="link-request" (click)="becomeAdvisor()">Request</a></span>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+    <trending-assets class="width100" [isWalletLogin]="true"></trending-assets>
   </div>
 </div>
