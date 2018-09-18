@@ -289,6 +289,10 @@ a {
   cursor: pointer;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .container-field {
   width: 100%;
   margin: 0;
@@ -339,6 +343,10 @@ textarea:read-only {
   border: none;
   max-width: 250px;
   min-width: 90px;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #126efd;
 }
 
 .mat-menu-content:not(:empty) {
@@ -611,4 +619,25 @@ textarea:read-only {
 {
   color: gray !important;
   text-decoration: none !important;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.blur {
+  filter:blur(4px);
+}
+
+.lock-wrapper {
+  width: 84px;
+  height: 84px;
+  border: solid 1px #ffffff;
+  border-radius: 44px;
+  color: #ffffff;
+}
+
+.lock-wrapper fa-icon{
+  margin-top: 26px;
+  margin-bottom: 26px;
 }

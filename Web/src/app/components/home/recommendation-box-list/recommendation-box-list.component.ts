@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { AdvisorService } from '../../../services/advisor.service';
 import { NavigationService } from '../../../services/navigation.service';
+import { ModalService } from '../../../services/modal.service';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'recommendation-box-list',
@@ -15,7 +17,10 @@ export class RecommendationBoxListComponent implements OnInit {
   sellAdvices : FeedResponse[] = [];
   closePositionAdvices : FeedResponse[] = [];
 
-  constructor(private advisorServices:AdvisorService, private navigationService: NavigationService) { }
+  constructor(private advisorServices:AdvisorService, 
+    private navigationService: NavigationService,
+    private modalService: ModalService,
+    private accountService: AccountService) { }
 
   ngOnInit() {
     this.appendRecommendations();
@@ -32,8 +37,19 @@ export class RecommendationBoxListComponent implements OnInit {
     );
   }
 
+  isLoggedIn(){
+    return this.accountService.isLoggedIn();
+  }
+
+  onLoginClick() {
+    this.modalService.setLogin();
+  }
+
   goToTopAssets(){
-    this.navigationService.goToTopAssets();
+    if (this.isLoggedIn())
+      this.navigationService.goToTopAssets();
+    else
+      this.onLoginClick();
   }
 
 }

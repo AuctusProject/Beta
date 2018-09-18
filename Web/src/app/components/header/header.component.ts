@@ -57,6 +57,10 @@ export class HeaderComponent implements OnInit {
     this.navigationService.goToHome();
   }
 
+  advisorDetails() {
+    this.navigationService.goToExpertDetails(this.loginData.id);
+  }
+
   editAdvisor() {
     this.modalService.setEditAdvisor(this.loginData.id);
   }

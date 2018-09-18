@@ -5,8 +5,8 @@
     <p>Are you sure?</p> 
     <p><b>{{getAdviceType()}}</b> rating to <b>{{data.assetName}}</b> at <b>{{data.lastValue | currency}}</b></p>
   </mat-dialog-content>
-  <mat-dialog-actions class="btn-actions">
-    <button mat-stroked-button fxFlex="50" [mat-dialog-close]="false" mat-dialog-close>Cancel</button>
-    <button mat-flat-button fxFlex="50" [mat-dialog-close]="true">Confirm</button>
+  <mat-dialog-actions class="btn-actions" fxLayoutGap="20px">
+    <button fxFlex mat-stroked-button [mat-dialog-close]="false" mat-dialog-close>Cancel</button>
+    <button fxFlex mat-flat-button [mat-dialog-close]="true">Confirm</button>
   </mat-dialog-actions>
 </div>

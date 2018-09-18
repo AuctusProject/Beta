@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'recommendation-box',
@@ -11,9 +12,17 @@ export class RecommendationBoxComponent implements OnInit {
   @Input() adviceType: string;
   displayedColumns: string[] = ['assetCode', 'adviceType', 'advisorName'];
   
-  constructor() { }
+  constructor(private navigationService: NavigationService) { }
 
   ngOnInit() {
+  }
+
+  goToExpertDetails(expertId: number){
+    this.navigationService.goToExpertDetails(expertId);
+  }
+
+  goToAssetDetails(assetId: number){
+    this.navigationService.goToAssetDetails(assetId);
   }
 
 }

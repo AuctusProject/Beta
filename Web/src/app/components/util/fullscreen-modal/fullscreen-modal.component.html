@@ -1,6 +1,6 @@
 <button *ngIf="!data.hiddenClose" class="modal-close" [mat-dialog-close]="true">&times;</button>
 <div fxLayout="column" fxLayoutAlign="center center" class="modal-container">
-  <h2 mat-dialog-title class="modal-title">{{title}}</h2>
+  <h2 mat-dialog-title *ngIf="title" class="modal-title">{{title}}</h2>
   <mat-dialog-content class="modal-content">
     <ng-template modal-host></ng-template>
   </mat-dialog-content>
