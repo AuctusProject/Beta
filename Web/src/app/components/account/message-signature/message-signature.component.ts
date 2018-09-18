@@ -46,12 +46,13 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
     if (window && window["BancorConvertWidget"]) {
       this.hasBancorWidget = true;
       window["BancorConvertWidget"].init({
-          "type": "1",
+          "type": "2",
           "blockchainType": "ethereum",
           "baseCurrencyId": "5ad9c1d54c4998a2f940e933",
           "pairCurrencyId": "5937d635231e97001f744267",
           "primaryColor": "#102644",
-          "displayCurrency": "ETH"
+          "displayCurrency": "ETH",
+          "hideVolume": true
       });
     }
     this.accountService.getWalletLoginInfo().subscribe(result =>
