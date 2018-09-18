@@ -1,13 +1,12 @@
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
-  <p class="header">Fill your data to create an account and improve your investments.
-    <br/>You only need to hold some AUC in your own wallet.</p>
+  <p class="subtitle">By registering, you will get full platform access.</p>
 </div>
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
-  <inheritance-input #Email [options]="getEmailOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+  <inheritance-input #Email [options]="getEmailOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
     [value]="registerRequest.email" (onChange)="registerRequest.email = $event"></inheritance-input>
-  <inheritance-input #Password [options]="getPasswordOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+  <inheritance-input #Password [options]="getPasswordOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
     [value]="registerRequest.password" (onChange)="registerRequest.password = $event"></inheritance-input>
-  <inheritance-input #Referral [options]="getReferralOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+  <inheritance-input #Referral [options]="getReferralOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
     [value]="registerRequest.referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
   <p class="discount" *ngIf="discountMessage.length > 0">{{discountMessage}}</p>
 </div>

@@ -588,7 +588,7 @@ textarea:read-only {
 
 .expert-rating .br-fontawesome-o .br-fraction:after,
 .expert-rating .br-fontawesome-o .br-selected:after{
-  color:#999999;
+  color:#ce9355;
 }
 
 .pagination-link{
@@ -623,4 +623,12 @@ textarea:read-only {
 .links-container{
   font-size: 12px;
   font-style: italic;
+}
+
+.subtitle{
+  max-width: 350px;
+  width: calc(100% - 20px);
+  text-align: center;
+  font-size: 12px;
+  margin-top: 18px;
 }

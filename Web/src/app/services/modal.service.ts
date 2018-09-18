@@ -46,7 +46,7 @@ export class ModalService {
   }
 
   public setBecomeAdvisor(): MatDialogRef<FullscreenModalComponent, any> {
-    return this.setModal(RegisterBecomeAdvisorComponent);
+    return this.setModal(EntryOptionComponent, { becomeExpert: true });
   }
 
   public setBecomeAdvisorForm(): MatDialogRef<FullscreenModalComponent, any> {
