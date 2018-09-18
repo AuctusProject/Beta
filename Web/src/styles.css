@@ -289,6 +289,10 @@ a {
   cursor: pointer;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .container-field {
   width: 100%;
   margin: 0;
