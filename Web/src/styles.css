@@ -260,25 +260,20 @@ div.is-loading .btn-spinner {
   width: 30%;
 }
 
+.input-modal{
+  max-width: 265px;
+  width: calc(100% - 20px);
+}
+
 .btn-modal {
   margin-top: 20px;
 }
 
-.btn-modal-mobile {
-  width: 70%;
-}
-
-.btn-modal-tablet {
-  width: 40%;
-}
-
-.btn-modal-web {
-  width: 20%;
-}
 
 .modal-link {
   text-decoration: underline;
   cursor: pointer;
+  color: #126efd;
 }
 
 .simple-notification-wrapper {
@@ -341,8 +336,14 @@ textarea:read-only {
 .mat-flat-button.mat-primary {
   background-color: #126efd;
   border: none;
+  height: 50px;
   max-width: 250px;
-  min-width: 90px;
+  min-width: 168px;
+}
+
+.mat-flat-button.mat-primary.large{
+  max-width: 265px;
+  width: calc(100% - 20px);
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
@@ -488,8 +489,9 @@ textarea:read-only {
   display: flex;
   align-items: center;
   cursor: pointer;
-  min-width: 215px;
-  max-width: 250px;
+  width: calc(100% - 20px);
+  max-width: 265px;
+  height: 50px;
   justify-content: flex-start;
 }
 
@@ -593,7 +595,7 @@ textarea:read-only {
 
 .expert-rating .br-fontawesome-o .br-fraction:after,
 .expert-rating .br-fontawesome-o .br-selected:after{
-  color:#999999;
+  color:#ce9355;
 }
 
 .pagination-link{
@@ -640,4 +642,17 @@ textarea:read-only {
 .lock-wrapper fa-icon{
   margin-top: 26px;
   margin-bottom: 26px;
+}
+
+.links-container{
+  font-size: 12px;
+  font-style: italic;
+}
+
+.subtitle{
+  max-width: 350px;
+  width: calc(100% - 20px);
+  text-align: center;
+  font-size: 12px;
+  margin-top: 18px;
 }

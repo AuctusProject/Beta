@@ -1,15 +1,46 @@
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
-    <p class="header">{{headerFirstMessage}}<br *ngIf="headerSecondMessage.length > 0" />{{headerSecondMessage}}</p>
+    <div class="header">{{headerFirstMessage}}</div>
+    <div class="subtitle" *ngIf="headerSecondMessage.length > 0">{{headerSecondMessage}}</div>
 </div>
-<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-    <div class="social-media-button" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','facebook-f']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Facebook</span></div>
-    <div class="social-media-button" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','google']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Google</span></div> 
-    <p>or</p>
-    <button mat-flat-button ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" (click)="emailClick()">{{emailButtonMessage}}</button> 
+<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="50px">
+    <div *ngIf="!isLogin() && !isBecomeExpert()" class="registration-description" fxLayout="column" fxFlex="250px" fxLayoutGap="12px" fxHide.lt-md>
+        <div>
+            To become an investor and unlock all features, you need to fulfill the following three requirements:
+        </div>
+        <ul>
+            <li>Have Metamask Plugin installed dowload here.</li>
+            <li>Hold AUC in your wallet.</li>
+        </ul>
+    </div>
+    <div *ngIf="!isLogin() && isBecomeExpert()" class="registration-description" fxLayout="column" fxFlex="250px" fxLayoutGap="12px" fxHide.lt-md>
+        <div>
+            By becoming an Expert you get the following advantages:
+        </div>
+        <ul>
+            <li>Get rewarded for good advice.</li>
+            <li>Invite new users and get rewarded.</li>
+            <li>Grow your user base by getting market attention.</li>
+            <li>Build your reputation as an industry expert.</li>
+        </ul>
+    </div>
+    <div *ngIf="!isLogin()" class="separator" fxHide.lt-md></div>
+    <div fxLayout="column" fxFlex="265px">
+        <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+            <div class="social-media-button" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','facebook-f']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Facebook</span></div>
+            <div class="social-media-button" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','google']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Google</span></div> 
+            <p>or</p>
+            <button class="large" mat-flat-button (click)="emailClick()">{{emailButtonMessage}}</button> 
+        </div>
+        <div class="div-padding-bottom links-container" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+            <div>
+                Forgot password? <a class="modal-link" (click)="onForgotPasswordClick()">Click here</a>
+            </div>
+            <div *ngIf="!isLogin()">
+                I have an account. <a class="modal-link" (click)="onLoginClick()">Go to login</a>
+            </div>
+            <div *ngIf="isLogin()">
+                I don't have an account. <a class="modal-link" (click)="onSignUpClick()">Go to sign up</a>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
-    <a class="modal-link" (click)="onForgotPasswordClick()">I forgot my password</a>
-    <a class="modal-link" *ngIf="!isLogin()" (click)="onLoginClick()">I have an account. Go to Login</a>
-    <a class="modal-link" *ngIf="isLogin()" (click)="onSignUpClick()">I don't have an account</a>
-</div>
-    

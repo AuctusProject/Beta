@@ -48,7 +48,7 @@ export class ForgotPasswordComponent implements ModalComponent, OnInit {
         {
           let modalData = new FullscreenModalComponentInput();
           modalData.component = MessageFullscreenModalComponent;
-          modalData.componentInput = { message: "Please follow the instructions on your email to recover your password.", redirectUrl: "" };
+          modalData.componentInput = { message: "A link has been sent to your email to reset your password.", redirectUrl: "" };
           this.setNewModal.emit(modalData);
         }, this.RecaptchaComponent.reset);
     }

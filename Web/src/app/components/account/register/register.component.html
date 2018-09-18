@@ -1,13 +1,12 @@
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
-  <p class="header">Fill your data to create an account and improve your investments.
-    <br/>You only need to hold some AUC in your own wallet.</p>
+  <p class="subtitle">By registering, you will get full platform access.</p>
 </div>
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
-  <inheritance-input #Email [options]="getEmailOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+  <inheritance-input #Email [options]="getEmailOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
     [value]="registerRequest.email" (onChange)="registerRequest.email = $event"></inheritance-input>
-  <inheritance-input #Password [options]="getPasswordOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+  <inheritance-input #Password [options]="getPasswordOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
     [value]="registerRequest.password" (onChange)="registerRequest.password = $event"></inheritance-input>
-  <inheritance-input #Referral [options]="getReferralOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+  <inheritance-input #Referral [options]="getReferralOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
     [value]="registerRequest.referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
   <p class="discount" *ngIf="discountMessage.length > 0">{{discountMessage}}</p>
 </div>
@@ -16,8 +15,12 @@
   <mat-checkbox required [(ngModel)]="acceptTermsAndConditions">Agree with all terms</mat-checkbox>
   <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onCreateAccountClick()" [promiseBtn]="promise">Register</button>
 </div>
-<div class="div-padding-bottom div-padding-top" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
-  <a class="modal-link" (click)="onForgotPasswordClick()">I forgot my password</a>
-  <a class="modal-link" (click)="onLoginClick()">I have an account. Go to Login</a>
+<div class="div-padding-bottom div-padding-top links-container" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
+  <div>
+      Forgot password? <a class="modal-link" (click)="onForgotPasswordClick()">Click here</a>
+  </div>
+  <div>
+      I have an account. <a class="modal-link" (click)="onLoginClick()">Go to login</a>
+  </div>
 </div>
   

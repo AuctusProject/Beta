@@ -17,7 +17,7 @@ import { AuthRedirect } from '../../../providers/authRedirect';
   styleUrls: ['./forgot-password-reset.component.css']
 })
 export class ForgotPasswordResetComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Set a new password";
+  modalTitle: string = "New password";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
