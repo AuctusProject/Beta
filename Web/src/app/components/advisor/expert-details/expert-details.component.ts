@@ -124,4 +124,15 @@ export class ExpertDetailsComponent implements OnInit {
       word += "s";
     return word;
   }
+
+  noRecommendationsYet() {
+    return this.assets != null && this.assets.length == 0;
+  }
+
+  getNoRecommendationMessage() {
+    if(this.showOwnerButton)
+      return "You haven't rated any asset yet.<br>Start now!";
+    else
+      return "This expert hasn't made any recommendation yet.";
+  }
 }

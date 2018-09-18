@@ -145,3 +145,11 @@
 :host ::ng-deep .expert-details-div{
     cursor: default !important;
 }
+
+.no-advices-yet-message{
+    font-size: 28px;
+    font-weight: 400;
+    text-align: center;
+    color: white;
+    margin: 20px;
+}
