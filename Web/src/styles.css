@@ -260,25 +260,20 @@ div.is-loading .btn-spinner {
   width: 30%;
 }
 
+.input-modal{
+  max-width: 265px;
+  width: calc(100% - 20px);
+}
+
 .btn-modal {
   margin-top: 20px;
 }
 
-.btn-modal-mobile {
-  width: 70%;
-}
-
-.btn-modal-tablet {
-  width: 40%;
-}
-
-.btn-modal-web {
-  width: 20%;
-}
 
 .modal-link {
   text-decoration: underline;
   cursor: pointer;
+  color: #126efd;
 }
 
 .simple-notification-wrapper {
@@ -337,9 +332,16 @@ textarea:read-only {
 .mat-flat-button.mat-primary {
   background-color: #126efd;
   border: none;
+  height: 50px;
   max-width: 250px;
-  min-width: 90px;
+  min-width: 168px;
 }
+
+.mat-flat-button.mat-primary.large{
+  max-width: 265px;
+  width: calc(100% - 20px);
+}
+
 
 .mat-menu-content:not(:empty) {
   padding-top: 0px !important;
@@ -480,8 +482,9 @@ textarea:read-only {
   display: flex;
   align-items: center;
   cursor: pointer;
-  min-width: 215px;
-  max-width: 250px;
+  width: calc(100% - 20px);
+  max-width: 265px;
+  height: 50px;
   justify-content: flex-start;
 }
 
@@ -615,4 +618,9 @@ textarea:read-only {
 
 .text-center{
   text-align: center;
+}
+
+.links-container{
+  font-size: 12px;
+  font-style: italic;
 }

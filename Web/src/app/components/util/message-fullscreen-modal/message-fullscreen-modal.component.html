@@ -1,4 +1,6 @@
-<div class="message" ngClass.xs="mobile" ngClass.sm="tablet" ngClass.gt-sm="web" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="25px">
-    <h2>{{data.message}}</h2>
-    <a class="modal-link" (click)="onOk()">OK</a>
+<div class="message">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="25px">
+        <div>{{data.message}}</div>
+        <a class="modal-link" (click)="onOk()">OK</a>
+    </div>
 </div>

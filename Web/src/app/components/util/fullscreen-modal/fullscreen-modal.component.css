@@ -1,5 +1,9 @@
 .modal-title {
     text-align: center;
+    color: #191919;
+    font-size: 26px;
+    font-weight: 300;
+    font-family: 'Gilroy';
 }
 
 .modal-container {

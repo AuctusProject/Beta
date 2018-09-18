@@ -21,7 +21,7 @@ import { EntryOptionComponent } from '../entry-option/entry-option.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Sign In";
+  modalTitle: string = "Login with email";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();

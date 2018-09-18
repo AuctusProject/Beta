@@ -38,11 +38,11 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
     } else {
       if (this.isLogin()) {
         this.modalTitle = "Sign In";
-        this.emailButtonMessage = "Sign in with Email";
-        this.headerFirstMessage = "Choose how you want sign in.";
+        this.emailButtonMessage = "Login with email";
+        this.headerFirstMessage = "Login";
       } else {
-        this.modalTitle = "Investor register";
-        this.emailButtonMessage = "Sign up with Email";
+        this.modalTitle = "Investor registration";
+        this.emailButtonMessage = "Sign up with email";
         this.headerFirstMessage = "Choose how you want to register. It's totally free!";
         this.headerSecondMessage = "You only need to hold some AUC in your own wallet.";
       }
