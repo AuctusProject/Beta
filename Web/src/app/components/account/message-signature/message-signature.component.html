@@ -3,55 +3,73 @@
     HELLO
   </div>
   <div class="section-subtitle">
-    See all Experts recommendations and discover the trending assets.<br>
-    Auctus Experts platform is free. You only need to <b>hold</b> some AUC in your own wallet.<br>
-    No transactions, no fees, and the AUC stay with you all the time.<br>
-    Stay tuned! 
+      <div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <span>Welcome to Auctus Experts. We are pleased that you are joining our community.<br>
+        See all Experts recommendations and discover the trending assets.</span>
+        <span><b>Auctus Experts platform is free. You only need to hold some AUC on your own wallet.<br>
+        No transactions, no fees, no lock, and the AUC stay with you all the time.</b></span>
+        <span>Stay tuned!</span>
+      </div>
   </div>
   <div class="main-content" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px">
     <div fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="15px">
-      <div [style.color]="hasMetamask ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-        <span *ngIf="!hasMetamask"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-        <span *ngIf="hasMetamask"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-        <p>Have a Web3 provider such as Metamask</p>
-      </div>
-      <div [style.color]="hasUnlockedAccount ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-        <span *ngIf="!hasUnlockedAccount"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-        <span *ngIf="hasUnlockedAccount"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-        <p *ngIf="!hasUnlockedAccount">Login to unlock your account</p>
-        <p *ngIf="hasUnlockedAccount">Logged with {{account}}</p>
-      </div>
-      <div [style.color]="hasAUC ? 'green' : 'red'" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-        <span *ngIf="!hasAUC"><fa-icon icon="times" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-        <span *ngIf="hasAUC"><fa-icon icon="check" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
-        <p>You need to have <b>{{aucRequired}} AUC</b> in your wallet. {{missingAmountMessage()}}</p>
-      </div>
-    </div>
-    <div *ngIf="!hasAUC" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
-      <p *ngIf="!hasBancorWidget">You can buy AUC in:</p>
-      <div class="widget-bancor" id="bancor-wc"></div>
-      <div *ngIf="!hasBancorWidget" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
-        <a href="https://www.bitfinex.com" target="_blank"><img src="./assets/bitfinex.png" height="100" /></a>
-        <a href="https://idex.market/eth/auc" target="_blank"><img src="./assets/idex.png" height="100" /></a>
-        <a href="https://www.bancor.network/communities/5ad9c1c5c7d1460001bc9bfa" target="_blank"><img src="./assets/bancor.png" height="100" /></a>
-        <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img src="./assets/hitbtc.png" height="100" /></a>
-      </div>
-      <div *ngIf="hasBancorWidget" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-        <p>You also can buy AUC in:</p>
-        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
-          <a href="https://www.bitfinex.com" target="_blank"><img src="./assets/bitfinex.png" height="35" /></a>
-          <a href="https://idex.market/eth/auc" target="_blank"><img src="./assets/idex.png" height="35" /></a>
-          <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img src="./assets/hitbtc.png" height="35" /></a>
+      <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <span *ngIf="!hasMetamask"><fa-icon icon="times"class="times-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <span *ngIf="hasMetamask"><fa-icon icon="check" class="check-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <div fxHide.xs="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
+          <span [style.color]="hasMetamask ? '#616161' : 'white'">1 . Metamask is instaled on your computer.&nbsp;<a *ngIf="!hasMetamask" [style.color]="hasMetamask ? '#616161' : 'white'" href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">Click here to install</a></span>
+        </div>
+        <div fxHide.gt-xs="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
+          <span [style.color]="hasMetamask ? '#616161' : 'white'">1 . Web3 provider such as <a href="https://wallet.coinbase.com/" [style.color]="hasMetamask ? '#616161' : 'white'" target="_blank">Coinbase Wallet</a>, <a href="https://www.cipherbrowser.com/" [style.color]="hasMetamask ? '#616161' : 'white'" target="_blank">Cipher</a> or <a href="https://status.im/" [style.color]="hasMetamask ? '#616161' : 'white'" target="_blank">Status</a>.</span>
         </div>
       </div>
-      <p>But remember, you need to put and hold the AUC in your own wallet.</p>
+      <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <span *ngIf="!hasUnlockedAccount"><fa-icon icon="times"class="times-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <span *ngIf="hasUnlockedAccount"><fa-icon icon="check" class="check-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <div *ngIf="!hasUnlockedAccount" fxHide.xs="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
+          <p>2 . Metamask is unlocked.</p>
+        </div>
+        <div *ngIf="!hasUnlockedAccount" fxHide.gt-xs="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
+          <p>2 . Wallet is unlocked.</p>
+        </div>
+        <p *ngIf="hasUnlockedAccount" class="logged-wallet" [style.max-width]="isMobile() ? '220px' : '100%'">2 . Logged with {{account}}</p>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <span *ngIf="!this.hasAuc()"><fa-icon icon="times"class="times-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <span *ngIf="this.hasAuc()"><fa-icon icon="check" class="check-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
+        <p [style.color]="this.hasAuc() ? '#616161' : 'white'">3 . You need to have <b>{{aucRequired}} AUC</b> on your wallet. {{missingAmountMessage()}}</p>
+      </div>
     </div>
-    <inheritance-input *ngIf="showReferral" #Referral [options]="getReferralOptions()" [value]="referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
-    <p class="discount" *ngIf="showReferral && discountMessage.length > 0">{{discountMessage}}</p>
-    <p *ngIf="hasMetamask && hasUnlockedAccount && hasAUC">Please sign a message to confirm that you are the wallet owner.</p>
-    <div class="action-button truncate" [promiseBtn]="promise" [ngClass]="hasMetamask && hasUnlockedAccount && hasAUC ? 'blue-button' : 'disabled-button'" (click)="signMessage()">CONFIRM</div>   
+    <div class="width100" *ngIf="!this.hasAuc()" fxLayout="column" fxLayoutAlign="space-evenly start" fxLayoutGap="25px">
+      <div class="width100" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+        <fa-icon icon="arrow-right" size="1x" fxLayoutAlign="center stretch"></fa-icon>
+        <span>You can buy AUC on:</span>
+      </div>
+      <div class="width100" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+        <a href="https://www.bitfinex.com" target="_blank"><img src="./assets/bitfinex.png" height="60" /></a>
+        <a href="https://idex.market/eth/auc" target="_blank"><img src="./assets/idex.png" height="60" /></a>
+        <a *ngIf="!shouldShowBancorWidget()" href="https://www.bancor.network/communities/5ad9c1c5c7d1460001bc9bfa" target="_blank"><img src="./assets/bancor.png" height="60" /></a>
+        <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img src="./assets/hitbtc.png" height="60" /></a>
+      </div>
+      <div class="width100" fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div *ngIf="shouldShowBancorWidget()" class="width100" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+          <fa-icon icon="arrow-right" size="1x" fxLayoutAlign="center stretch"></fa-icon>
+          <span>You can also buy on Bancor:</span>
+        </div>
+        <div class="widget-bancor" id="bancor-wc"></div>
+      </div>
+    </div>
+    <div *ngIf="showReferral" class="spacetop" fxLayout="column" fxLayoutAlign="space-evenly center">
+        <span>You can enter a Referral Code and get some discount on the AUC amount to be hold:</span>
+        <inheritance-input #Referral [options]="getReferralOptions()" [value]="referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
+        <p class="spacetop" *ngIf="discountMessage.length > 0"><b>{{discountMessage}}</b></p>
+    </div>
+    <p class="spacetop" *ngIf="hasMetamask && hasUnlockedAccount && this.hasAuc()">Please sign a message to confirm that you are the wallet owner.</p>
+    <div class="action-button truncate" [promiseBtn]="promise" [ngClass]="hasMetamask && hasUnlockedAccount && this.hasAuc() ? 'blue-button' : 'disabled-button'" (click)="signMessage()">CONFIRM</div>   
   </div>
-  <div class="request-expert" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-    <p>You can request to be an Expert to access without have the need to hold AUC.</p><a class="link-request" (click)="becomeAdvisor()">Request to be a Expert</a>
+  <div class="request-expert" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+    <span>Do you think you can give expert advise to others, or can refer more users. Apply to become a verified expert and get rewarded with AUC.&nbsp;<a class="link-request" (click)="becomeAdvisor()">Request</a></span>
   </div>
 </div>
+<advices></advices>
+<trending-assets class="global-container-min inverted" [isWalletLogin]="true"></trending-assets>

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { ModalService } from '../../../services/modal.service';
+import { AccountService } from '../../../services/account.service';
+import { NavigationService } from '../../../services/navigation.service';
+import { AuthRedirect } from '../../../providers/authRedirect';
 
 @Component({
   selector: 'home',
@@ -9,7 +12,11 @@ import { ModalService } from '../../../services/modal.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private modalService: ModalService) { }
+  constructor(private route: ActivatedRoute, 
+    private modalService: ModalService,
+    private accountService: AccountService,
+    private authRedirect : AuthRedirect,
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
     if (!!this.route.snapshot.queryParams['login']) {
@@ -24,6 +31,12 @@ export class HomeComponent implements OnInit {
       this.modalService.setRegister();
     } else if (!!this.route.snapshot.queryParams['configuration']) {
       this.modalService.setConfiguration();
+    } else if(this.isLoggedIn()) {
+      this.authRedirect.redirectToHome(this.accountService.getLoginData());
     }
+  }
+
+  isLoggedIn(){
+    return this.accountService.isLoggedIn();
   }
 }

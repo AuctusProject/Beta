@@ -1,5 +1,5 @@
 .main-content {
-    border: solid 2px #ffffff;
+    border: solid 1px #ffffff;
     color: white;
     padding: 25px;
 }
@@ -17,17 +17,47 @@
 .request-expert {
     color: white;
     padding: 25px;
+    text-align: center;
 }
 
 .link-request {
     text-decoration: underline;
 }
 
-.discount {
-    padding-bottom: 25px;
+.spacetop {
+    padding-top: 20px;
 }
 
-.widget-bancor {
-    max-width: 85vw;
-    background-color: white;
+::ng-deep .widget-bancor {
+    max-width: 90vw;
+    width: 100%;
+    background-color: #151515;
+}
+
+::ng-deep .widget-bancor div {
+    border: none !important;
+}
+
+::ng-deep .widget-bancor span {
+    color: white !important;
+}
+
+.times-icon {
+    color: #e84737;
+    padding-right: 10px;
+}
+
+.check-icon {
+    color: #3ed142;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.logged-wallet {
+    color: #616161;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

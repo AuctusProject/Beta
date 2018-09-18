@@ -3,17 +3,17 @@
     Trending Assets
   </div>
   <div class="assets-list">
-    <div (click)="onLoginClick()" fxLayout="column" fxLayoutAlign="center center" class="global-container blocked-content" *ngIf="!isLoggedIn()">
+    <div (click)="onActionClick()" fxLayout="column" fxLayoutAlign="center center" class="global-container blocked-content" *ngIf="!canView()">
         <div class="lock-wrapper">
           <fa-icon icon="lock" size="2x" fxLayoutAlign="center stretch"></fa-icon>
         </div>
-        <a>Login to access</a>
+        <a>{{getActionText()}}</a>
     </div>
-    <trending-asset-card fxHide.lt-md *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>
+    <trending-asset-card fxHide.lt-md *ngFor="let asset of assets" class="asset-card" [class.blur]="!canView()" [asset]="asset"></trending-asset-card>
     <owl-carousel fxHide.gt-sm *ngIf="assets"
       [options]="{items: 1, dots: true, navigation: false}"
       [carouselClasses]="['owl-theme', 'row', 'sliding']">
-      <trending-asset-card *ngFor="let asset of assets" class="asset-card" [class.blur]="!isLoggedIn()" [asset]="asset"></trending-asset-card>
+      <trending-asset-card *ngFor="let asset of assets" class="asset-card" [class.blur]="!canView()" [asset]="asset"></trending-asset-card>
     </owl-carousel>
   </div>
 </div>
