@@ -8,6 +8,7 @@ import { AssetRecommendationInfoResponse } from '../model/asset/assetRecommendat
 @Injectable()
 export class AssetService {
   private getAssetsDetailsUrl = this.httpService.apiUrl("v1/assets/details");
+  private getTrendingAssetsUrl = this.httpService.apiUrl("v1/assets/trending");
   private getAssetDetailsUrl = this.httpService.apiUrl("v1/assets/{id}/details");
   private getAssetRecommendationInfoUrl = this.httpService.apiUrl("v1/assets/{id}/recommendation_info");
   private getAssetsUrl = this.httpService.apiUrl("v1/assets/");
@@ -20,6 +21,10 @@ export class AssetService {
 
   getAssetsDetails(): Observable<AssetResponse[]> {
     return this.httpService.get(this.getAssetsDetailsUrl);
+  }
+
+  getTrendingAssets(): Observable<AssetResponse[]> {
+    return this.httpService.get(this.getTrendingAssetsUrl);
   }
 
   getAssets(): Observable<Asset[]> {
