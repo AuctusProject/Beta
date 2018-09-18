@@ -87,17 +87,22 @@ a span {
 }
 
 ::ng-deep .sub-menu {
-    background-color:  #101010;
-    box-shadow: 0 0 4px #959595;
+    background-color:  #ffffff;
+    box-shadow: 0 0 4px #151515;
 }
 
 ::ng-deep .sub-menu-item {
     font-family: 'Gilroy';
-    font-weight: 600;
+    font-weight: 300;
+    color: #535353;
+    font-size: 16px;
+    border-top: solid 1px #151515 !important;
+    text-align: center !important;
+}
+
+::ng-deep button.mat-menu-item:hover{
+    background: #151515 !important;
     color: white;
-    font-size: 12px;
-    opacity: 0.9; 
-    border-top: solid 0.5px #959595 !important;
 }
 
 .mobile-menu {

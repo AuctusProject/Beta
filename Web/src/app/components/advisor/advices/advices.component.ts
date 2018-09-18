@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./advices.component.css']
 })
 export class AdvicesComponent implements OnInit {
-  advices : FeedResponse[] = [];
+  advices : FeedResponse[];
   hasMoreAdvices = false;
   pageSize = 10;
   promise : Subscription;
@@ -22,6 +22,8 @@ export class AdvicesComponent implements OnInit {
   loadMore(){
     this.promise = this.accountService.listFeed(this.pageSize, this.getLastAdviceId()).subscribe(result => 
       {
+        if (this.advices == null)
+          this.advices = [];
         this.advices = this.advices.concat(result);
         this.hasMoreAdvices = true;
         if(!result || result.length == 0 || result.length < this.pageSize){
@@ -32,7 +34,7 @@ export class AdvicesComponent implements OnInit {
   }
 
   getLastAdviceId(){
-    if(this.advices.length > 0)
+    if(this.advices != null && this.advices.length > 0)
       return this.advices[this.advices.length-1].adviceId;
 
     return null;
