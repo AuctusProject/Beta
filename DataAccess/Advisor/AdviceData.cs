@@ -47,6 +47,23 @@ namespace Auctus.DataAccess.Advisor
 		    ORDER BY a.CreationDate DESC
 		    ) a{1}";
 
+        private const string SQL_LIST_TRENDING_ADVISED_ASSETS = @"
+                SELECT top {0} 
+                    assetId 
+                FROM 
+                    (SELECT TOP 1000 
+                        * 
+                    FROM 
+                        Advice 
+                    ORDER BY 
+                    creationdate DESC
+                    ) a
+                GROUP BY 
+                    assetId 
+                ORDER BY 
+                    count(*) DESC";
+
+
         public List<Advice> List(IEnumerable<int> advisorIds = null, IEnumerable<int> assetsIds = null)
         {
             if ((!advisorIds?.Any() ?? true) && (!assetsIds?.Any() ?? true))
@@ -136,6 +153,12 @@ namespace Auctus.DataAccess.Advisor
             var query = string.Join(" UNION ", querySegments);
 
             return Query<Advice>(query, parameters);
+        }
+
+        public IEnumerable<int> ListTrendingAdvisedAssets(int? top)
+        {
+            var query = string.Format(SQL_LIST_TRENDING_ADVISED_ASSETS, top);
+            return Query<int>(query);
         }
     }
 }

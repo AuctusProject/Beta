@@ -120,5 +120,10 @@ namespace Auctus.DataAccessMock.Advisor
 
             return result;
         }
+
+        public IEnumerable<int> ListTrendingAdvisedAssets(int? top)
+        {
+            return new int[] { 1, 2, 3 };
+        }
     }
 }

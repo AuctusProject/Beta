@@ -366,6 +366,7 @@ namespace Auctus.Business.Advisor
                 TotalAdvisors = assetAdvisorsId.Count(),
                 TotalRatings = assetAdvices.Count(),
                 LastValue = lastValue,
+                MarketCap = asset.MarketCap,
                 Variation24h = variation24h,
                 Variation7d = variation7d,
                 Variation30d = variation30d,

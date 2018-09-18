@@ -182,5 +182,10 @@ Auctus Team");
 
             return FillFeedListFromAdvicesAndUser(advicesForFeed, null, null);
         }
+
+        public IEnumerable<int> ListTrendingAdvisedAssets(int top = 3)
+        {
+            return Data.ListTrendingAdvisedAssets(top);
+        }
     }
 }

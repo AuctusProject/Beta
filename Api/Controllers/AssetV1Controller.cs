@@ -29,6 +29,16 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("trending/{top?}")]
+        /* [Authorize("Bearer")]*/
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListTrendingAssets(int top = 3)
+        {
+            return base.ListTrendingAssets(top);
+        }
+
+        [HttpGet]
         [Route("details")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

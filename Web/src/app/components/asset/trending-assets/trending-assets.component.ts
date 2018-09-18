@@ -34,7 +34,8 @@ export class TrendingAssetsComponent implements OnInit {
 
   ngOnInit() {
     if(this.isLoggedIn()){
-      this.assetService.getAssetsDetails().subscribe(result => {
+
+      this.assetService.getTrendingAssets().subscribe(result => {
         if(result!= null && result.length > 3){
           this.assets = result.slice(0,3);
         }

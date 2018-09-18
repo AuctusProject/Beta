@@ -21,6 +21,22 @@ namespace Auctus.Business.Asset
 
         public IEnumerable<AssetResponse> ListAssetData()
         {
+            return ListAssetResult().OrderByDescending(c => c.MarketCap) ;
+        }
+
+        public IEnumerable<AssetResponse> ListTrendingAssets(int top = 3)
+        {
+            var trendingAssetsIds = AdviceBusiness.ListTrendingAdvisedAssets(top).ToList();
+            var trendingAssets = new List<AssetResponse>();
+            var assets = ListAssetResult();
+
+            trendingAssetsIds.ForEach(c => trendingAssets.Add(assets.FirstOrDefault(a => a.AssetId == c)));
+
+            return trendingAssets;
+        }
+
+        private IEnumerable<AssetResponse> ListAssetResult()
+        {
             var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
@@ -32,7 +48,7 @@ namespace Auctus.Business.Asset
             AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetBase, out advisorsResult, out assetsResult, user, advices.Result, null, null, assetFollowers.Result);
             return assetsResult;
         }
-
+        
         public AssetRecommendationInfoResponse GetAssetRecommendationInfo(int assetId)
         {
             var user = GetValidUser();
@@ -80,6 +96,11 @@ namespace Auctus.Business.Asset
                     MemoryCache.Set<List<Auctus.DomainObjects.Asset.Asset>>(cacheKey, assets, 720);
             }
             return ids == null ? assets : assets.Where(c => ids.Contains(c.Id)).ToList();
+        }
+
+        public List<Auctus.DomainObjects.Asset.Asset> ListAssetsOrderedByMarketCap(IEnumerable<int> ids = null)
+        {
+            return ListAssets().OrderByDescending(c => c.MarketCap ?? 0).ThenBy(c => c.Name).ToList();
         }
 
         public Auctus.DomainObjects.Asset.Asset GetById(int id)
@@ -130,7 +151,6 @@ namespace Auctus.Business.Asset
         private void UpdateAssetsMarketcap(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
         {
             var assets = AssetBusiness.ListAssets();
-            var assetValues = new List<AssetValue>();
             foreach (var assetValue in assetResults.Where(c => c.MarketCap.HasValue && c.MarketCap > 0))
             {
                 var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));

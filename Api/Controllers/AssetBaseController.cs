@@ -17,10 +17,16 @@ namespace Api.Controllers
 
         protected IActionResult ListAssets()
         {
-            var assetResponse = AssetBusiness.ListAssets().OrderByDescending(c => c.MarketCap ?? 0).ThenBy(c => c.Name);
-            return Ok(assetResponse);
-            
+            var assetResponse = AssetBusiness.ListAssetsOrderedByMarketCap();
+            return Ok(assetResponse);            
         }
+
+        protected IActionResult ListTrendingAssets(int top = 3)
+        {
+            var assetResponse = AssetBusiness.ListTrendingAssets(top);
+            return Ok(assetResponse);
+        }
+
 
         protected IActionResult ListAssetsDetails()
         {
