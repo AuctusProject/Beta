@@ -11,19 +11,7 @@
     text-align: center;
 }
 
-.blocked-content{
-    height: 300px;
-    position: absolute;
-    z-index: 2;
-    background-color: rgb(255,255,255,0.6);
-    max-width: unset !important;
-}
-
-.blur{
-    filter:blur(4px);
-}
-
-a{
+a {
     font-size: 16px;
     font-weight: 300;
     text-align: center;
@@ -40,16 +28,10 @@ a{
     height: 1px;
 }
 
-.lock-wrapper{
-    width: 84px;
-    height: 84px;
-    border: solid 1px #ffffff;
-    border-radius: 44px;
-    color: #ffffff;
-    
-}
-
-.lock-wrapper fa-icon{
-    margin-top: 26px;
-    margin-bottom: 26px;
+.blocked-content {
+    height: 300px;
+    position: absolute;
+    z-index: 2;
+    background-color: rgb(255,255,255,0.6);
+    max-width: unset !important;
 }

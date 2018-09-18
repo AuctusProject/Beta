@@ -28,7 +28,7 @@ export class TrendingAssetsComponent implements OnInit {
   "recommendationDistribution":[
     {"type":0,"total":2.0},
     {"type":1,"total":2.0},
-    {"type":2,"total":2.0}]}]
+    {"type":2,"total":2.0}]}];
 
   constructor(private accountService: AccountService, 
     private assetService: AssetService, private modalService: ModalService) { }

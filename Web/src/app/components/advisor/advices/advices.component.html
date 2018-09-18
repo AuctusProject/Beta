@@ -1,17 +1,25 @@
 <div class="global-container">
-    <div class="section-title">
+    <div *ngIf="canView()" class="section-title">
         Hello
     </div>
-    <div class="section-subtitle">
+    <div *ngIf="canView()" class="section-subtitle">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
         nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     </div>
-    <top-experts *ngIf="advices && advices.length==0" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'"></top-experts>
+    <top-experts *ngIf="canView() && (!advices || advices.length==0)" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'"></top-experts>
     <div *ngIf="advices">
-        <advice-card *ngFor="let advice of advices" [advice]="advice"></advice-card>
+        <div fxLayout="column" fxLayoutAlign="center center" class="global-container blocked-content" *ngIf="!canView()">
+            <div class="lock-wrapper">
+                <fa-icon icon="lock" size="2x" fxLayoutAlign="center stretch"></fa-icon>
+            </div>
+            <a style="color:white">Hold AUC</a>
+        </div>
+        <div [class.blur]="!canView()">
+            <advice-card *ngFor="let advice of advices" [advice]="advice"></advice-card>
+        </div>
     </div>
-    <div fxLayoutAlign="center center">
+    <div *ngIf="canView()" fxLayoutAlign="center center">
       <button [promiseBtn]="promise" class="pagination-link" *ngIf="hasMoreAdvices" (click)="loadMore()">
           LOAD MORE
       </button>

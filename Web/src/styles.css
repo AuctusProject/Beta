@@ -624,3 +624,20 @@ textarea:read-only {
 .text-center{
   text-align: center;
 }
+
+.blur {
+  filter:blur(4px);
+}
+
+.lock-wrapper {
+  width: 84px;
+  height: 84px;
+  border: solid 1px #ffffff;
+  border-radius: 44px;
+  color: #ffffff;
+}
+
+.lock-wrapper fa-icon{
+  margin-top: 26px;
+  margin-bottom: 26px;
+}

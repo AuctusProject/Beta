@@ -74,12 +74,14 @@ export class FileUploaderComponent {
     }
 
     clearComponent() {
+        if (!this.wasChanged && this.loaded) {
+            this.wasChanged = true;
+        }
         this.imageSrc = '';
         this.imageText = 'Click here to change';
         this.loaded = false;
         this.fileToUpload = null;
         this.fileInput.nativeElement.value = '';
-        this.wasChanged = true;
     }
 
     forceImageUrl(imageUrl: string) {
