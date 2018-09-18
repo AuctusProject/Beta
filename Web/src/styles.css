@@ -341,6 +341,10 @@ textarea:read-only {
   min-width: 90px;
 }
 
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #126efd;
+}
+
 .mat-menu-content:not(:empty) {
   padding-top: 0px !important;
   padding-bottom: 0px !important;

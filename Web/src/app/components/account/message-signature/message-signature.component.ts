@@ -18,7 +18,6 @@ import { Subscription } from 'rxjs';
 export class MessageSignatureComponent implements OnInit, OnDestroy {
   hasMetamask: boolean = false;
   hasUnlockedAccount: boolean = false;
-  hasAUC: boolean = false;
   showReferral: boolean = true;
   account: string;
   lastAccountChecked: string;
@@ -29,7 +28,6 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   standardAUCAmount: number;
   aucRequired: number;
   aucAmount: number = 0;
-  hasBancorWidget: boolean = false;
   @ViewChild("Referral") Referral: InheritanceInputComponent;
   promise: Subscription;
 
@@ -43,18 +41,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.checkMetamask();
-    if (window && window["BancorConvertWidget"]) {
-      this.hasBancorWidget = true;
-      window["BancorConvertWidget"].init({
-          "type": "2",
-          "blockchainType": "ethereum",
-          "baseCurrencyId": "5ad9c1d54c4998a2f940e933",
-          "pairCurrencyId": "5937d635231e97001f744267",
-          "primaryColor": "#102644",
-          "displayCurrency": "ETH",
-          "hideVolume": true
-      });
-    }
+    this.setBancorWidget();
     this.accountService.getWalletLoginInfo().subscribe(result =>
       {
         this.showReferral = !result.registeredWallet;
@@ -74,9 +61,40 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
       });
   }
 
+  shouldShowBancorWidget() {
+    return window && window["BancorConvertWidget"] && window["BancorConvertWidget"].isInitialized;
+  }
+
+  setBancorWidget() {
+    if (window && window["BancorConvertWidget"]) {
+      if (this.isMobile() || this.hasAuc()) {
+        if (window["BancorConvertWidget"].isInitialized) {
+          window["BancorConvertWidget"].deinit();
+        }
+      } else if (!window["BancorConvertWidget"].isInitialized) {
+        window["BancorConvertWidget"].init({
+          "type": "2",
+          "blockchainType": "ethereum",
+          "baseCurrencyId": "5ad9c1d54c4998a2f940e933",
+          "pairCurrencyId": "5937d635231e97001f744267",
+          "primaryColor": "#126efd",
+          "displayCurrency": "ETH",
+          "hideVolume": true
+        });
+      }
+    }
+  }
+
+  isMobile() {
+    return window.screen.width <= 600;
+  }
+
   ngOnDestroy(){
     if (this.timer) {
       clearTimeout(this.timer);
+    }
+    if (window && window["BancorConvertWidget"] && window["BancorConvertWidget"].isInitialized) {
+      window["BancorConvertWidget"].deinit();
     }
   }
 
@@ -87,21 +105,25 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
         if(result) {
           self.hasMetamask = true;
           self.changeDetector.detectChanges();
+          self.setBancorWidget();
           self.web3Service.getAccount().subscribe(
             account => {
               self.account = account;
               if (account) {
                 self.hasUnlockedAccount = true;
-                this.checkAUCAmout();
+                self.checkAUCAmout();
               } else {
                 self.hasUnlockedAccount = false;
-                self.hasAUC = false;
+                self.aucAmount = 0;
               }
               self.changeDetector.detectChanges();
-            })
+            });
         } else {
           self.hasMetamask = false;
+          self.hasUnlockedAccount = false;
+          self.aucAmount = 0;
         }
+        self.setBancorWidget();
         self.timer = setTimeout(() => self.checkMetamask(), 1000);
       });
   }
@@ -109,29 +131,35 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   checkAUCAmout() {
     if (this.account) {
       if (this.account != this.lastAccountChecked || 
-          (!this.hasAUC && !!this.lastCheck && ((new Date()) <= (new Date(this.lastCheck.getTime() + 20000))))) {
+          (!this.hasAuc() && !!this.lastCheck && ((new Date()) <= (new Date(this.lastCheck.getTime() + 15000))))) {
         this.accountService.getAUCAmount(this.account).subscribe(ret => 
           {
             this.lastCheck = new Date();
             this.lastAccountChecked = this.account;
             this.aucAmount = ret;
-            this.hasAUC = ret >= this.aucRequired;
+            this.setBancorWidget();
           });
       }
     } else {
-      this.hasAUC = false;
+      this.aucAmount = 0;
     }
   }
 
+  hasAuc() {
+    return this.aucAmount >= this.aucRequired && this.aucAmount > 0;
+  }
+
   signMessage() {
-    var message = (Constants.signatureMessage);
-    this.promise = this.web3Service.getWeb3().subscribe(web3 => web3.currentProvider.sendAsync({
-      jsonrpc: "2.0",
-      method: "personal_sign",
-      params: [this.web3Service.toHex(message), this.account]
-    }, (a,signatureInfo) => {
-      this.handleSignatureResult(signatureInfo);      
-    }));
+    if (this.hasMetamask && this.hasUnlockedAccount && this.hasAuc()) {
+      var message = (Constants.signatureMessage);
+      this.promise = this.web3Service.getWeb3().subscribe(web3 => web3.currentProvider.sendAsync({
+        jsonrpc: "2.0",
+        method: "personal_sign",
+        params: [this.web3Service.toHex(message), this.account]
+      }, (a,signatureInfo) => {
+        this.handleSignatureResult(signatureInfo);      
+      }));
+    }
   }
 
   handleSignatureResult(signatureInfo) {
@@ -157,7 +185,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   getReferralOptions() {
-    return { darkLayout: true, textOptions: { outlineField: false, placeHolder: "Referral code (optional)", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
+    return { darkLayout: true, textOptions: { outlineField: false, placeHolder: "Referral code", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
   }
 
   onChangeReferralCode(value: string) {
@@ -181,12 +209,12 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   setDiscountMessage(discount: number) {
-    this.discountMessage = "Congratulations, using the referral code you need hold " + discount + "% less AUC in your own wallet!" 
+    this.discountMessage = "Congratulations, using the referral code you need to hold " + discount + "% less AUC on your wallet!" 
   }
 
   missingAmountMessage() {
-    if (!this.hasAUC && this.aucAmount > 0) {
-      return "Missing " + (this.aucRequired - this.aucAmount) + " AUC in your wallet." 
+    if (!this.hasAuc() && this.aucAmount > 0) {
+      return "Missing " + (this.aucRequired - this.aucAmount) + " AUC on your wallet." 
     } else {
       return "";
     }
