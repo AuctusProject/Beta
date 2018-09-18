@@ -9,6 +9,7 @@ import { ModalService } from '../../../services/modal.service';
 import { AdvisorService } from '../../../services/advisor.service';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { Subscription } from 'rxjs';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'asset-details',
@@ -29,7 +30,8 @@ export class AssetDetailsComponent implements OnInit {
     private assetService: AssetService,
     private accountService: AccountService,
     private modalService: ModalService,
-    private advisorService: AdvisorService) { }
+    private advisorService: AdvisorService,
+    private navigationService:NavigationService) { }
 
   ngOnInit() {
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
@@ -64,10 +66,12 @@ export class AssetDetailsComponent implements OnInit {
   
   onFollowExpertClick(event: Event, expert: AdvisorResponse){
     this.promiseExpert = this.advisorService.followAdvisor(expert.userId).subscribe(result =>expert.following = true);
+    event.stopPropagation();
   }
 
   onUnfollowExpertClick(event: Event, expert: AdvisorResponse){
     this.promiseExpert = this.advisorService.unfollowAdvisor(expert.userId).subscribe(result =>expert.following = false);
+    event.stopPropagation();
   }
 
   onFollowAssetClick(){
@@ -76,6 +80,10 @@ export class AssetDetailsComponent implements OnInit {
 
   onUnfollowAssetClick(){
     this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
+  }
+
+  onRowClick(row){
+    this.navigationService.goToExpertDetails(row.userId);
   }
 
   getAdvisor(userId : number) : AdvisorResponse{

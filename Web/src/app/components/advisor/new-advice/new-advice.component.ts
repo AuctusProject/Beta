@@ -19,7 +19,7 @@ import { AssetService } from '../../../services/asset.service';
   styleUrls: ['./new-advice.component.css']
 })
 export class NewAdviceComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Set new recommendation";
+  modalTitle: string;//Set new rating";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -79,7 +79,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
 
   openConfirmation() {
     const dialogRef = this.dialog.open(ConfirmAdviceDialogComponent, 
-      { width: '60%', height: '35%', hasBackdrop: true, disableClose: true, panelClass: 'fullscreen-modal', 
+      { width: '370px', height: '35%', hasBackdrop: true, disableClose: true, panelClass: 'fullscreen-modal', 
         data: { adviceType: this.advise.adviceType, assetName: this.asset.code + ' - ' + this.asset.name, lastValue: this.lastValue} }); 
 
     dialogRef.afterClosed().subscribe(result => {
@@ -90,7 +90,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
             let modalData = new FullscreenModalComponentInput();
             modalData.hiddenClose = true;
             modalData.component = MessageFullscreenModalComponent;
-            modalData.componentInput = { message: "New " + recommendation + " recommendation was successfully created to " + this.asset.code + " - " + this.asset.name, reload: true };
+            modalData.componentInput = { message: "New " + recommendation + " rating was successfully created to " + this.asset.code + " - " + this.asset.name, reload: true };
             this.setNewModal.emit(modalData);
           });
       }

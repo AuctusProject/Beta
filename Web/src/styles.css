@@ -245,7 +245,6 @@ div.is-loading .btn-spinner {
 .fullscreen-modal {
   margin-left: auto;
   margin: auto;
-  background-color: white;
   opacity: 0.95;
 }
 
@@ -612,4 +611,8 @@ textarea:read-only {
 {
   color: gray !important;
   text-decoration: none !important;
+}
+
+.text-center{
+  text-align: center;
 }

@@ -60,3 +60,7 @@
 .pagination-link{
     margin-bottom: 76px;
 }
+
+.element-row{
+    cursor: pointer;
+}
