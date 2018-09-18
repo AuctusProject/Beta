@@ -14,6 +14,7 @@ import { ModalService } from '../../../services/modal.service';
 export class TopExpertsComponent implements OnInit {
   @Input() resultsLimit?: number;
   @Input() hideFilters?: boolean;
+  @Input() title: string = "TOP EXPERTS";
   experts : AdvisorResponse[] = [];
   expertsResponse : AdvisorResponse[];
   showAdvisorButton: boolean = false;

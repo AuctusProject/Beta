@@ -7,7 +7,10 @@
         incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
         nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
     </div>
-    <advice-card *ngFor="let advice of advices" [advice]="advice"></advice-card>
+    <top-experts *ngIf="advices && advices.length==0" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'"></top-experts>
+    <div *ngIf="advices">
+        <advice-card *ngFor="let advice of advices" [advice]="advice"></advice-card>
+    </div>
     <div fxLayoutAlign="center center">
       <button [promiseBtn]="promise" class="pagination-link" *ngIf="hasMoreAdvices" (click)="loadMore()">
           LOAD MORE
