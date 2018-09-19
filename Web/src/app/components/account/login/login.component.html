@@ -1,12 +1,13 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center">
-  <inheritance-input #Email [options]="getEmailOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
-    [value]="loginRequest.email" (onChange)="loginRequest.email = $event"></inheritance-input>
-  <inheritance-input #Password [options]="getPasswordOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
-    [value]="loginRequest.password" (onChange)="loginRequest.password = $event"></inheritance-input>
+    <p class="subtitle"></p>
+    <inheritance-input #Email [options]="getEmailOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+        [value]="loginRequest.email" (onChange)="loginRequest.email = $event"></inheritance-input>
+    <inheritance-input #Password [options]="getPasswordOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+        [value]="loginRequest.password" (onChange)="loginRequest.password = $event"></inheritance-input>
 </div>
 <div class="lastDiv" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
-  <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
-  <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onLoginClick()" [promiseBtn]="promise">Enter</button>
+    <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
+    <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onLoginClick()" [promiseBtn]="promise">Enter</button>
 </div>
 <div class="lastDiv links-container" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
     <div>

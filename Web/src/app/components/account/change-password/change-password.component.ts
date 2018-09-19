@@ -46,7 +46,7 @@ export class ChangePasswordComponent implements ModalComponent, OnInit {
     if (this.CurrentPassword.isValid() && isValid) {
       this.promise = this.accountService.changePassword(this.changePasswordRequest).subscribe(result =>
         {
-          this.notificationService.success(null, "Password was changed successfully");
+          this.notificationService.success(null, "Your new password is active.");
           this.setClose.emit();
         }
       );

@@ -656,3 +656,17 @@ textarea:read-only {
   font-size: 12px;
   margin-top: 18px;
 }
+
+.div-padding-bottom {
+  padding-bottom: 25px;
+}
+
+.header {
+  text-align: center;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-end, 
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-gap,
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-start {
+  border-width: 1px !important;
+}
