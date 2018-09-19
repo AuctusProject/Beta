@@ -311,12 +311,16 @@ textarea:read-only {
   }
 }
 
-.mat-flat-button.mat-primary {
-  background-color: #126efd;
+.mat-flat-button.mat-primary,
+.mat-flat-button.mat-warn{
   border: none;
   height: 50px;
   max-width: 250px;
   min-width: 168px;
+}
+
+.mat-flat-button.mat-primary {
+  background-color: #126efd;  
 }
 
 .mat-flat-button.mat-primary.large{

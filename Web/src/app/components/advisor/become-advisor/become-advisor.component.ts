@@ -38,6 +38,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   
   acceptTermsAndConditions: boolean;
   alreadySent: boolean = false;
+  requestDenied: boolean = false;
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
@@ -56,6 +57,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
           this.requestToBeAdvisorRequest.password = "";
           let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
           if(!!currentRequestToBeAdvisor){
+            this.requestDenied = currentRequestToBeAdvisor.approved == false;
             this.alreadySent = true;
             this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
             this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
