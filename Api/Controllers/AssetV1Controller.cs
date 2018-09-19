@@ -30,8 +30,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("trending/{top?}")]
-        /* [Authorize("Bearer")]*/
-        [AllowAnonymous]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListTrendingAssets(int top = 3)
         {
@@ -40,7 +39,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("details")]
-        [AllowAnonymous]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAssetsDetails()
         {

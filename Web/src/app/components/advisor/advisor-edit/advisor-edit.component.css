@@ -1,20 +1,7 @@
 .file-container {
     position: relative; 
-}
-
-.file-container-web {
-    padding-top: 15%; 
-    width: 15%;  
-}
-
-.file-container-mobile {
-    padding-top: 50%; 
-    width: 50%;  
-}
-
-.file-container-tablet {
-    padding-top: 25%; 
-    width: 25%;  
+    width: 130px;
+    height: 130px;
 }
 
 .file-uploader {

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, NgZone, ViewChild, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { LoginRequest } from '../../../model/account/loginRequest';
-import { Subscription } from '../../../../../node_modules/rxjs';
+import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
 import { AuthRedirect } from '../../../providers/authRedirect';
 import { AuthService } from 'angular5-social-login';
 import { LoginResult } from '../../../model/account/loginResult';

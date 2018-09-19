@@ -1,20 +1,7 @@
 .file-container {
-    position: relative; 
-}
-
-.file-container-web {
-    padding-top: 15%; 
-    width: 15%;  
-}
-
-.file-container-mobile {
-    padding-top: 50%; 
-    width: 50%;  
-}
-
-.file-container-tablet {
-    padding-top: 25%; 
-    width: 25%;  
+    position: relative;
+    width: 130px;
+    height: 130px;
 }
 
 .file-uploader {
@@ -25,17 +12,27 @@
     right: 0;
 }
 
-.input-experience-tablet {
-    width: 75%;
+.input-experience{
+    max-width: 550px;
+    width: calc(100% - 20px);
 }
 
-.input-experience-web {
-    width: 60%;
+.input-modal-web{
+    width: calc(50% - 20px);
+    max-width: 265px;
+}
+
+.input-modal-mobile{
+    width: calc(100% - 20px);
+    max-width: 550px;
 }
 
 .form-div {
     padding-top: 25px;
-    padding-bottom: 25px;
+}
+
+.form-row{
+    width: 100%;
 }
 
 .last-div {
@@ -46,4 +43,8 @@
     color: orange;
     font-weight: 700;
     text-align: center;
+}
+
+.subtitle{
+    max-width: 550px;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angu
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 import { AdvisorService } from '../../../services/advisor.service';
 import { RequestToBeAdvisorRequest } from '../../../model/advisor/requestToBeAdvisorRequest';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ import { AuthRedirect } from '../../../providers/authRedirect';
   styleUrls: ['./become-advisor.component.css']
 })
 export class BecomeAdvisorComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Expert register";
+  modalTitle: string = "Become an expert";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -88,7 +88,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       {
         let modalData = new FullscreenModalComponentInput();
         modalData.component = MessageFullscreenModalComponent;
-        modalData.componentInput = { message: "Request to be Expert was successfully sent. We will contact you by email about your request within 3 business days.", redirectUrl: "" };
+        modalData.componentInput = { message: "Thank you for submitting your details. An Auctus representative will be in touch shortly.", redirectUrl: "" };
         this.setNewModal.emit(modalData);
       }, error =>
       {
@@ -121,7 +121,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   getDescriptionOptions() {
-    return { inputType: InputType.TextArea, textOptions: { placeHolder: "Short description", maxLength: 160 } };
+    return { textOptions: { placeHolder: "Short description", maxLength: 160 } };
   }
 
   getExperienceOptions() {

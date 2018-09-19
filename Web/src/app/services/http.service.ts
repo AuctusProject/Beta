@@ -7,7 +7,7 @@ import { CONFIG} from "./config.service";
 import { LocalStorageService } from "./local-storage.service";
 import { LoginResponse } from '../model/account/loginResponse';
 import { NavigationService } from './navigation.service';
-import { Router } from '../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpService {

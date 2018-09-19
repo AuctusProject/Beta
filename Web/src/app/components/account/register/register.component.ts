@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, NgZone, Input, Output, EventEmitter } from '@angular/core';
 import { RegisterRequest } from '../../../model/account/registerRequest';
-import { Subscription } from '../../../../../node_modules/rxjs';
+import { Subscription } from 'rxjs';
 import { AccountService } from '../../../services/account.service';
-import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
 import { AuthRedirect } from '../../../providers/authRedirect';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';

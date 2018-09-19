@@ -48,7 +48,7 @@ input::placeholder {
     opacity: 0.9; 
     border-bottom-color: #959595;
     border-bottom-style: solid;
-    border-bottom-width: 0.5px;
+    border-bottom-width: 1px;
 }
 
 ::ng-deep .search-autocomplete-option {
@@ -73,7 +73,7 @@ input::placeholder {
 ::ng-deep .search-autocomplete-option-separation {
     border-color: #959595;
     border-style: solid;
-    border-width: 0.5px;
+    border-width: 1px;
     height: 1px;
     width: 100%;
     margin-left: 24px;
