@@ -64,6 +64,7 @@ namespace Auctus.Business
         private AzureStorageBusiness _azureStorageBusiness;
         private FacebookBusiness _facebookBusiness;
         private GoogleBusiness _googleBusiness;
+        private AssetCurrentValueBusiness _assetCurrentValueBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -465,6 +466,16 @@ namespace Auctus.Business
                 if (_googleBusiness == null)
                     _googleBusiness = new GoogleBusiness(Configuration, ServiceProvider);
                 return _googleBusiness;
+            }
+        }
+
+        protected AssetCurrentValueBusiness AssetCurrentValueBusiness
+        {
+            get
+            {
+                if (_assetCurrentValueBusiness == null)
+                    _assetCurrentValueBusiness = new AssetCurrentValueBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _assetCurrentValueBusiness;
             }
         }
     }
