@@ -17,15 +17,15 @@ namespace Auctus.DataAccess.Advisor
         public RequestToBeAdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
         private const string SELECT_BY_USER = @"SELECT r.* FROM 
-                                                [RequestToBeAdvisor] r
+                                                [RequestToBeAdvisor] r WITH(NOLOCK)
                                                 WHERE
                                                 r.UserId = @UserId
-                                                AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = r.UserId) ";
+                                                AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = r.UserId) ";
 
         private const string LIST_PENDING = @"SELECT r.* FROM 
-                                                [RequestToBeAdvisor] r
+                                                [RequestToBeAdvisor] r WITH(NOLOCK)
                                                 WHERE
-                                                r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = r.UserId) 
+                                                r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = r.UserId) 
                                                 AND r.Approved IS NULL";
 
         public RequestToBeAdvisor GetById(int id)

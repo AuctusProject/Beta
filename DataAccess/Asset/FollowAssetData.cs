@@ -20,12 +20,12 @@ namespace Auctus.DataAccess.Asset
 		SELECT 
 			f.*, fa.AssetId 
 		FROM 
-			[FollowAsset] fa
-			INNER JOIN [Follow] f ON f.Id = fa.Id
+			[FollowAsset] fa WITH(NOLOCK)
+			INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
 			INNER JOIN (
 				SELECT f2.UserId, fa2.AssetId, MAX(f2.CreationDate) CreationDate 
-				FROM [FollowAsset] fa2
-				INNER JOIN [Follow] f2 ON f2.Id = fa2.Id 
+				FROM [FollowAsset] fa2 WITH(NOLOCK)
+				INNER JOIN [Follow] f2 WITH(NOLOCK) ON f2.Id = fa2.Id 
 				GROUP BY f2.UserId, fa2.AssetId) b 
 		    ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AssetId = fa.AssetId
 		WHERE 

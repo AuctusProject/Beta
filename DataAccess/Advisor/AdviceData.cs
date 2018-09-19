@@ -16,13 +16,13 @@ namespace Auctus.DataAccess.Advisor
         public override string TableName => "Advice";
         public AdviceData(IConfigurationRoot configuration) : base(configuration) { }
 
-        private const string SQL_LIST = @"SELECT a.* FROM [Advice] a WHERE {0}";
+        private const string SQL_LIST = @"SELECT a.* FROM [Advice] a WITH(NOLOCK) WHERE {0}";
 
         private const string SQL_GET_LAST_FOR_ASSET_BY_ADVISOR = @"
 	    SELECT TOP 1
 		    a.*
 	    FROM 
-    	    [Advice] a
+    	    [Advice] a WITH(NOLOCK)
         WHERE 
     	    a.AssetId = @AssetId
             AND a.AdvisorId = @AdvisorId
@@ -30,8 +30,8 @@ namespace Auctus.DataAccess.Advisor
 
         private const string SQL_LIST_LAST_ADVICES_FOR_USER_WITH_PAGINATION = @"
 	    SELECT {0} a.*
-            FROM [Advice] a
-            INNER JOIN Advisor ON Advisor.Id = a.AdvisorId AND Advisor.Enabled = 1
+            FROM [Advice] a WITH(NOLOCK)
+            INNER JOIN Advisor WITH(NOLOCK) ON Advisor.Id = a.AdvisorId AND Advisor.Enabled = 1
             WHERE 
             {1}
             ORDER BY Id DESC";
@@ -41,7 +41,7 @@ namespace Auctus.DataAccess.Advisor
 		    (SELECT {0}
 			    a.* 
 		    FROM 
-			    Advice a
+			    Advice a WITH(NOLOCK)
 		    WHERE
 			    a.Type = @Type{1}
 		    ORDER BY a.CreationDate DESC
@@ -54,7 +54,7 @@ namespace Auctus.DataAccess.Advisor
                     (SELECT TOP 1000 
                         * 
                     FROM 
-                        Advice 
+                        Advice WITH(NOLOCK) 
                     ORDER BY 
                     creationdate DESC
                     ) a

@@ -190,7 +190,7 @@ namespace Auctus.Business.Advisor
         private void UpdateAdvisorsCache(List<DomainObjects.Advisor.Advisor> advisors)
         {
             if (advisors != null && advisors.Any())
-                MemoryCache.Set(ADVISORS_CACHE_KEY, advisors, 240);
+                MemoryCache.Set(ADVISORS_CACHE_KEY, advisors, 120);
         }
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 

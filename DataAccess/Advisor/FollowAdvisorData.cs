@@ -21,13 +21,13 @@ namespace Auctus.DataAccess.Advisor
 		SELECT 
 			f.*, fa.AdvisorId 
 		FROM 
-		    [FollowAdvisor] fa
-		    INNER JOIN [Follow] f ON f.Id = fa.Id
+		    [FollowAdvisor] fa WITH(NOLOCK)
+		    INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
 		    INNER JOIN (
 		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
 		    	FROM 
-		    		[FollowAdvisor] fa2
-		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
+		    		[FollowAdvisor] fa2 WITH(NOLOCK)
+		    		INNER JOIN [Follow] f2 WITH(NOLOCK) ON f2.Id = fa2.Id
 		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
 			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
 		WHERE 
@@ -37,13 +37,13 @@ namespace Auctus.DataAccess.Advisor
 		SELECT 
 			f.*, fa.AdvisorId 
 		FROM 
-		    [FollowAdvisor] fa
-		    INNER JOIN [Follow] f ON f.Id = fa.Id
+		    [FollowAdvisor] fa WITH(NOLOCK)
+		    INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
 		    INNER JOIN (
 		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
 		    	FROM 
-		    		[FollowAdvisor] fa2
-		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
+		    		[FollowAdvisor] fa2 WITH(NOLOCK)
+		    		INNER JOIN [Follow] f2 WITH(NOLOCK) ON f2.Id = fa2.Id
 		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
 			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
 		WHERE 

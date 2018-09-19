@@ -180,7 +180,7 @@ namespace Auctus.DataAccess.Core
 
         private IEnumerable<T> Select<T>(string pairs, DynamicParameters criteria, String orderBy = "")
         {
-            string sql = string.Format("SELECT * FROM [{0}] ", TableName);
+            string sql = string.Format("SELECT * FROM [{0}] WITH(NOLOCK) ", TableName);
             if (!string.IsNullOrEmpty(pairs))
                 sql += " WHERE " + pairs;
 

@@ -14,22 +14,22 @@ namespace Auctus.DataAccess.Advisor
     public class AdvisorData : BaseSql<DomainObjects.Advisor.Advisor>, IAdvisorData<DomainObjects.Advisor.Advisor>
     {
         private const string SQL_LIST_FOLLOWING_ADVISORS = @"SELECT a.* FROM 
-            [Advisor] a
-            INNER JOIN [FollowAdvisor] fa ON fa.AdvisorId = a.Id
-            INNER JOIN [Follow] f ON f.Id = fa.Id
+            [Advisor] a WITH(NOLOCK)
+            INNER JOIN [FollowAdvisor] fa WITH(NOLOCK) ON fa.AdvisorId = a.Id
+            INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
             INNER JOIN (
 		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
 		    	FROM 
-		    		[FollowAdvisor] fa2
-		    		INNER JOIN [Follow] f2 ON f2.Id = fa2.Id
+		    		[FollowAdvisor] fa2 WITH(NOLOCK)
+		    		INNER JOIN [Follow] f2 WITH(NOLOCK) ON f2.Id = fa2.Id
 		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
 			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
              WHERE f.ActionType = @ActionType
 	            AND f.UserId = @UserId";
 
         private const string SQL_GET_BY_ID = @"SELECT * FROM 
-            [Advisor] a 
-            INNER JOIN [User] u ON a.Id = u.Id 
+            [Advisor] a WITH(NOLOCK) 
+            INNER JOIN [User] u WITH(NOLOCK) ON a.Id = u.Id 
             WHERE u.Id = @Id";
 
         public override string TableName => "Advisor";

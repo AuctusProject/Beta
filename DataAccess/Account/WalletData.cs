@@ -16,12 +16,12 @@ namespace Auctus.DataAccess.Account
         public override string TableName => "Wallet";
         public WalletData(IConfigurationRoot configuration) : base(configuration) { }
 
-        private const string SQL_BY_USER = @"SELECT w.* FROM [Wallet] w WHERE w.UserId = @UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = w.UserId)";
+        private const string SQL_BY_USER = @"SELECT w.* FROM [Wallet] w WITH(NOLOCK) WHERE w.UserId = @UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = w.UserId)";
 
         private const string SQL_BY_ADDRESS = @"SELECT w.* 
                                                 FROM 
-                                                [Wallet] w 
-                                                INNER JOIN (SELECT wa.UserId, MAX(wa.CreationDate) AS CreationDate FROM [Wallet] wa GROUP BY wa.UserId) b
+                                                [Wallet] w WITH(NOLOCK) 
+                                                INNER JOIN (SELECT wa.UserId, MAX(wa.CreationDate) AS CreationDate FROM [Wallet] wa WITH(NOLOCK) GROUP BY wa.UserId) b
                                                             ON w.UserId = b.UserId AND w.CreationDate = b.CreationDate
                                                 WHERE 
                                                 w.Address = @Address";
