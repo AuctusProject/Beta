@@ -13,7 +13,7 @@
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <mat-checkbox required [(ngModel)]="acceptTermsAndConditions">Agree with all terms</mat-checkbox>
   <recaptcha #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
-  <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onCreateAccountClick()" [promiseBtn]="promise">Register</button>
+  <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="onCreateAccountClick()" [promiseBtn]="registerPromise">Register</button>
 </div>
 <div class="div-padding-bottom div-padding-top links-container" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="10px">
   <div>
