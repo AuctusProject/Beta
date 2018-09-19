@@ -68,7 +68,7 @@ namespace Auctus.DataAccess.Core
         protected string GetDateTimeSqlFormattedValue(DateTime? dateTime)
         {
             if (dateTime.HasValue)
-                return dateTime.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                return "'" + dateTime.Value.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
             else
                 return "NULL";
         }

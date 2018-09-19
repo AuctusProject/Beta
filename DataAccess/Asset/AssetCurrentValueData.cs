@@ -43,7 +43,7 @@ namespace Auctus.DataAccess.Asset
             var updateSql = "";
             foreach (var value in assetCurrentValues)
             {
-                updateSql += $"UPDATE [AssetCurrentValue] SET UpdateDate = '{GetDateTimeSqlFormattedValue(value.UpdateDate)}', CurrentValue = {GetDoubleSqlFormattedValue(value.CurrentValue)}, " +
+                updateSql += $"UPDATE [AssetCurrentValue] SET UpdateDate = {GetDateTimeSqlFormattedValue(value.UpdateDate)}, CurrentValue = {GetDoubleSqlFormattedValue(value.CurrentValue)}, " +
                             $"Variation24Hours = {GetDoubleSqlFormattedValue(value.Variation24Hours)}, Variation7Days = {GetDoubleSqlFormattedValue(value.Variation7Days)}, " +
                             $"Variation30Days = {GetDoubleSqlFormattedValue(value.Variation30Days)} WHERE Id = {value.Id};";
             }
