@@ -109,9 +109,9 @@ namespace Api.Controllers
         [OnlyAdmin]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult RejectRequestToBe(int id)
+        public new async Task<IActionResult> RejectRequestToBeAsync(int id)
         {
-            return base.RejectRequestToBe(id);
+            return await base.RejectRequestToBeAsync(id);
         }
 
         [Route("{id}/followers")]

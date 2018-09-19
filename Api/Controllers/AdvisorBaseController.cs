@@ -92,9 +92,9 @@ namespace Api.Controllers
             return Ok();
         }
 
-        protected IActionResult RejectRequestToBe(int id)
+        protected async Task<IActionResult> RejectRequestToBeAsync(int id)
         {
-            RequestToBeAdvisorBusiness.Reject(id);
+            await RequestToBeAdvisorBusiness.RejectAsync(id);
             return Ok();
         }
 

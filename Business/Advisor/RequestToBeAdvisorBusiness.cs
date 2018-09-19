@@ -60,13 +60,19 @@ namespace Auctus.Business.Advisor
                 transaction.Update(request);
                 transaction.Commit();
             }
+
+            await SendRequestApprovedNotificationAsync(user);
         }
 
-        public void Reject(int id)
+        public async Task RejectAsync(int id)
         {
             var request = Data.GetById(id);
+            var user = UserBusiness.GetById(request.UserId);
+
             request.Approved = false;
             Update(request);
+
+            await SendRequestRejectedNotificationAsync(user);
         }
 
         public async Task<RequestToBeAdvisor> CreateAsync(string email, string password, string name, string description, string previousExperience, 
@@ -167,6 +173,32 @@ oldRequestToBeAdvisor?.Name ?? "N/A", newRequestToBeAdvisor.Name,
 oldRequestToBeAdvisor?.Description ?? "N/A", newRequestToBeAdvisor.Description,
 oldRequestToBeAdvisor?.PreviousExperience ?? "N/A", newRequestToBeAdvisor.PreviousExperience),
 string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor == null ? "NEW" : "UPDATE"));
+        }
+
+        private async Task SendRequestRejectedNotificationAsync(User user)
+        {
+            await EmailBusiness.SendAsync(new string[] { user.Email },
+                "Your request to become an expert was rejected - Auctus Beta",
+                $@"Hello,
+<br/><br/>
+We are sorry to inform you that at this moment your request to become an expert can not be accepted.
+<br/><br/>
+Thanks,
+<br/>
+Auctus Team");
+        }
+
+        private async Task SendRequestApprovedNotificationAsync(User user)
+        {
+            await EmailBusiness.SendAsync(new string[] { user.Email },
+                "Your request to become an expert was approved! - Auctus Beta",
+                string.Format($@"Hello,
+<br/><br/>
+We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{0}expert-details/{1}' target='_blank'>click here</a>.
+<br/><br/>
+Thanks,
+<br/>
+Auctus Team", WebUrl, user.Id));
         }
     }
 }
