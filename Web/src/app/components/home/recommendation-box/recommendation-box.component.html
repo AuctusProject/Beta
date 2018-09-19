@@ -20,7 +20,7 @@
           <th mat-header-cell *matHeaderCellDef> Expert </th>
           <td mat-cell *matCellDef="let advice" (click)="goToExpertDetails(advice.advisorId)" class="pointer">
               <div class="expert-rating">
-                <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRanking" [title]="advice.advisorRanking | number: '1.2-2'"></bar-rating>
+                <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
               </div>
             <span class="truncate" title="{{advice.advisorName}}">{{advice.advisorName}}</span>
           </td>

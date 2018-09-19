@@ -41,6 +41,10 @@
     font-family: 'Gilroy'
 }
 
+.mat-table {
+    background-color: #151515 !important;
+}
+
 .recommendation-table .mat-header-row{
     height: 44px;
 }
