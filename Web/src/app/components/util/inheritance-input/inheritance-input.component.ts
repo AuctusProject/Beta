@@ -12,26 +12,26 @@ export class InheritanceInputComponent implements OnInit {
   @Input() value: string;
   @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
 
-  private inputType: InputType = InputType.Text; 
-  private required: boolean = true;
-  private darkLayout: boolean = false;
-  private disabled: boolean = false;
-  private placeholder: string = "";
-  private minlength: number = 0;
-  private maxlength: number = 4000;
-  private autocomplete: string = "off";
-  private showValidatorError: boolean = true;
-  private specificHint?: string;
-  private showHintSize: boolean = true;
-  private showPasswordVisibility: boolean = true;
-  private outlineField: boolean = true;
-  private autosizeTextArea: boolean = true;
-  private minRows: number = 2;
-  private maxRows: number = 4;
+  public inputType: InputType = InputType.Text; 
+  public required: boolean = true;
+  public darkLayout: boolean = false;
+  public disabled: boolean = false;
+  public placeholder: string = "";
+  public minlength: number = 0;
+  public maxlength: number = 4000;
+  public autocomplete: string = "off";
+  public showValidatorError: boolean = true;
+  public specificHint?: string;
+  public showHintSize: boolean = true;
+  public showPasswordVisibility: boolean = true;
+  public outlineField: boolean = true;
+  public autosizeTextArea: boolean = true;
+  public minRows: number = 2;
+  public maxRows: number = 4;
 
-  private formControl: FormControl; 
-  private passwordHide: boolean = false;
-  private forcedError: string;
+  public formControl: FormControl; 
+  public passwordHide: boolean = false;
+  public forcedError: string;
 
   constructor() { }
 
@@ -76,7 +76,7 @@ export class InheritanceInputComponent implements OnInit {
     this.formControl = new FormControl('', validators);
   }
 
-  private getInputType() : string {
+  public getInputType() : string {
     if (this.passwordHide) {
       return "password";
     } else if (this.inputType == InputType.Search) {
@@ -103,24 +103,24 @@ export class InheritanceInputComponent implements OnInit {
     this.formControl.markAsTouched();
   }
 
-  private showTextAreaField() : boolean {
+  public showTextAreaField() : boolean {
     return this.inputType == InputType.TextArea;
   }
 
-  private showTextField() : boolean {
+  public showTextField() : boolean {
     return this.inputType == InputType.Text || this.inputType == InputType.Email || this.inputType == InputType.Password;
   }
 
-  private setValue(defaultValue: any, optionValue?: any) : any {
+  public setValue(defaultValue: any, optionValue?: any) : any {
     if (optionValue === undefined || optionValue === null) return defaultValue;
     else return optionValue;
   }
 
-  private onChangeInput() : void {
+  public onChangeInput() : void {
     this.onChange.emit(this.value);
   }
 
-  private getErrorMessage() : string {
+  public getErrorMessage() : string {
     if (!!this.forcedError) return this.forcedError;
     if (!this.showValidatorError) return '';
     if (this.required && this.formControl.hasError('required')) return 'Field must be filled';
@@ -130,11 +130,11 @@ export class InheritanceInputComponent implements OnInit {
     return '';
   }
 
-  private getLength() : number {
+  public getLength() : number {
     return (!!this.value) ? this.value.length : 0;
   }
 
-  private getHintText() : string {
+  public getHintText() : string {
     let hint = '';
     if (!!this.specificHint) hint += this.specificHint;
     if (this.showHintSize) hint += (this.getLength() + ' / ' + this.maxlength);

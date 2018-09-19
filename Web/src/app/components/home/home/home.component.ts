@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ModalService } from '../../../services/modal.service';
 import { AccountService } from '../../../services/account.service';
 import { NavigationService } from '../../../services/navigation.service';

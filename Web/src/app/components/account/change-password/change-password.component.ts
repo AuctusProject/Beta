@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ChangePasswordRequest } from '../../../model/account/changePasswordRequest';
 import { AccountService } from '../../../services/account.service';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { NavigationService } from '../../../services/navigation.service';

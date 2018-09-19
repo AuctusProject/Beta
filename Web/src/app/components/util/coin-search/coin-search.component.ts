@@ -18,23 +18,23 @@ export class CoinSearchComponent implements OnInit {
   @Input() assetId: number;
   @Output() onSelect: EventEmitter<Asset> = new EventEmitter<Asset>();
 
-  private required: boolean = false;
-  private placeholder: string = "Select a Coin *";
-  private outlineField: boolean = true;
-  private darkStyle: boolean = true;
+  public required: boolean = false;
+  public placeholder: string = "Select a Coin *";
+  public outlineField: boolean = true;
+  public darkStyle: boolean = true;
 
-  private coinControl: FormControl; 
-  private assets: Asset[];
-  private searchResults: Asset[] = [];
-  private timer: any;
-  private inputText: string;
-  private assetSelected: Asset;
+  public coinControl: FormControl; 
+  public assets: Asset[];
+  public searchResults: Asset[] = [];
+  public timer: any;
+  public inputText: string;
+  public assetSelected: Asset;
 
-  private autocompleteClass: string = "search-coin-autocomplete";
-  private optionClass: string = "search-coin-autocomplete-option";
-  private codeClass: string = "search-coin-code";
+  public autocompleteClass: string = "search-coin-autocomplete";
+  public optionClass: string = "search-coin-autocomplete-option";
+  public codeClass: string = "search-coin-code";
 
-  constructor(private assetService: AssetService) { }
+  constructor(public assetService: AssetService) { }
 
   ngOnInit() {
     if (!!this.options) {
@@ -63,7 +63,7 @@ export class CoinSearchComponent implements OnInit {
       });
   }
 
-  private getAssetImgUrl(assetId: number) : string {
+  public getAssetImgUrl(assetId: number) : string {
     return CONFIG.assetImgUrl.replace("{id}", assetId.toString());
   }
 
@@ -86,7 +86,7 @@ export class CoinSearchComponent implements OnInit {
     return this.coinControl.valid ? this.coinControl.value : null;
   }
 
-  private setValue(defaultValue: any, optionValue?: any) : any {
+  public setValue(defaultValue: any, optionValue?: any) : any {
     if (optionValue === undefined || optionValue === null) return defaultValue;
     else return optionValue;
   }
@@ -109,7 +109,7 @@ export class CoinSearchComponent implements OnInit {
     }
   }
 
-  private onSelectAsset(selected?: MatAutocompleteSelectedEvent){
+  public onSelectAsset(selected?: MatAutocompleteSelectedEvent){
     if (selected.option.value) {
         this.coinControl.setValue(selected.option.value.name);
         this.inputText = selected.option.value.name;
@@ -120,17 +120,17 @@ export class CoinSearchComponent implements OnInit {
     }
   }
 
-  private setSelected(asset: Asset) {
+  public setSelected(asset: Asset) {
     this.assetSelected = asset;
     this.onSelect.emit(asset);
   }
 
-  private setClear() {
+  public setClear() {
     this.assetSelected = null;
     this.onSelect.emit(null);
   }
 
-  private getErrorMessage() : string {
+  public getErrorMessage() : string {
     if (this.required && (this.coinControl.hasError('required') || !this.assetSelected)) {
         if (this.inputText) {
             this.coinControl.setErrors({'incorrect': true});

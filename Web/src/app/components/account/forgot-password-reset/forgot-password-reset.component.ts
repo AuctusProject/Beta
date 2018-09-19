@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
 import { RecoverPasswordRequest } from '../../../model/account/recoverPasswordRequest';
 import { NavigationService } from '../../../services/navigation.service';
 import { Subscription } from 'rxjs';

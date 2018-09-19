@@ -69,6 +69,7 @@ namespace Auctus.Test
             services.AddScoped<IFollowAdvisorData<FollowAdvisor>, FollowAdvisorData>();
             services.AddScoped<IFollowAssetData<FollowAsset>, FollowAssetData>();
             services.AddScoped<IFollowData<Follow>, FollowData>();
+            services.AddScoped<IAssetCurrentValueData<AssetCurrentValue>, AssetCurrentValueData>();
 
             ServiceProvider = services.BuildServiceProvider();
             ServiceScopeFactory = new ServiceScopeFactory(ServiceProvider);
@@ -95,6 +96,7 @@ namespace Auctus.Test
         private RequestToBeAdvisorBusiness _requestToBeAdvisorBusiness;
         private WalletBusiness _walletBusiness;
         private ActionBusiness _actionBusiness;
+        private AssetCurrentValueBusiness _assetCurrentValueBusiness;
 
         protected UserBusiness UserBusiness
         {
@@ -223,6 +225,16 @@ namespace Auctus.Test
                 if (_actionBusiness == null)
                     _actionBusiness = new ActionBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _actionBusiness;
+            }
+        }
+
+        protected AssetCurrentValueBusiness AssetCurrentValueBusiness
+        {
+            get
+            {
+                if (_assetCurrentValueBusiness == null)
+                    _assetCurrentValueBusiness = new AssetCurrentValueBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _assetCurrentValueBusiness;
             }
         }
     }

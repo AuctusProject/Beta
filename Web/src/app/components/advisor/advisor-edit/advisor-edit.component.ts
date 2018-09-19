@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, EventEmitter, Input, Output } from '@angular/core';
 import { AdvisorService } from '../../../services/advisor.service';
-import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AdvisorRequest } from '../../../model/advisor/advisorRequest';
-import { Subscription } from '../../../../../node_modules/rxjs';
+import { Subscription } from 'rxjs';
 import { AccountService } from '../../../services/account.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { Advisor } from '../../../model/advisor/advisor';
@@ -20,7 +20,7 @@ import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-m
   styleUrls: ['./advisor-edit.component.css']
 })
 export class AdvisorEditComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Expert edit";
+  modalTitle: string = "Edit profile";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -64,7 +64,7 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
           let modalData = new FullscreenModalComponentInput();
           modalData.hiddenClose = true;
           modalData.component = MessageFullscreenModalComponent;
-          modalData.componentInput = { message: "Expert data was updated with success.", reload: true };
+          modalData.componentInput = { message: "Your profile has been updated successfully.", reload: true };
           this.setNewModal.emit(modalData);
         });
     }

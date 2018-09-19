@@ -13,7 +13,7 @@ export class RecaptchaComponent implements OnInit {
   constructor() { }
   ngOnInit() { }
 
-  private resolved(response: string) {
+  public resolved(response: string) {
     this.onCaptchaResponse.emit(response);
   }
 

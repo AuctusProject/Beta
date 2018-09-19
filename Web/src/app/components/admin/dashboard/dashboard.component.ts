@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
 import { DashboardResponse } from '../../../model/admin/dashboardresponse';
-import { StockChart, Chart } from '../../../../../node_modules/angular-highcharts';
+import { StockChart, Chart } from 'angular-highcharts';
 
 @Component({
   selector: 'dashboard',

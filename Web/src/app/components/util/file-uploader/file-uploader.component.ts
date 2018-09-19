@@ -19,7 +19,7 @@ export class FileUploaderComponent {
     loaded: boolean = false;
     imageSrc: string = '';
     fileToUpload: File = null;
-    imageText: string = 'Click here to change';
+    imageText: string = 'Upload photo';
     wasChanged: boolean = false;
     @ViewChild("fileInput") fileInput: ElementRef;
     
@@ -78,7 +78,7 @@ export class FileUploaderComponent {
             this.wasChanged = true;
         }
         this.imageSrc = '';
-        this.imageText = 'Click here to change';
+        this.imageText = 'Upload photo';
         this.loaded = false;
         this.fileToUpload = null;
         this.fileInput.nativeElement.value = '';

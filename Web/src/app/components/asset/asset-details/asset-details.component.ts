@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AssetResponse, AssetAdvisorResponse } from '../../../model/asset/assetResponse';
-import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AssetService } from '../../../services/asset.service';
 import { Util } from '../../../util/Util';
 import { CONFIG} from "../../../services/config.service";

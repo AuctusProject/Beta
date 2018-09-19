@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, Input, EventEmitter, ViewChild } from '@angular/core';
 import { ForgotPasswordRequest } from '../../../model/account/forgotPasswordRequest';
 import { AccountService } from '../../../services/account.service';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { ModalComponent } from '../../../model/modal/modalComponent';
-import { Subscription } from '../../../../../node_modules/rxjs';
+import { Subscription } from 'rxjs';
 import { RecaptchaComponent } from '../../util/recaptcha/recaptcha.component';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';

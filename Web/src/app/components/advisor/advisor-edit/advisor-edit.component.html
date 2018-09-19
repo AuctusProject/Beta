@@ -6,9 +6,9 @@
     </div>
 </div>
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
-    <inheritance-input #Name [options]="getNameOptions()"  ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
+    <inheritance-input #Name [options]="getNameOptions()" class="input-modal"
         [value]="advisor.name" (onChange)="advisor.name = $event"></inheritance-input>
-    <inheritance-input #Description [options]="getDescriptionOptions()" ngClass.xs="input-modal-mobile" ngClass.sm="input-description-tablet" ngClass.gt-sm="input-description-web"
+    <inheritance-input #Description [options]="getDescriptionOptions()" class="input-modal"
         [value]="advisor.description" (onChange)="advisor.description = $event"></inheritance-input>
 </div>
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
