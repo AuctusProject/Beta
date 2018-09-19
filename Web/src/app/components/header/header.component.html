@@ -2,7 +2,7 @@
     <img src="./assets/logo.png" routerLink="" class="landing-logo" />
     <span class="spacer"></span>
     <div class="menu" fxLayout="row" fxLayoutAlign="space-around center">
-        <a fxShow="true" fxHide.lt-md="true" *ngIf="!loginData || !loginData.isAdvisor" href="#" (click)="onBecomeExpert()" routerLinkActive="active"><span>BECOME AN EXPERT</span></a>
+        <a fxShow="true" fxHide.lt-md="true" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecomeExpert()" routerLinkActive="active"><span>BECOME AN EXPERT</span></a>
         <div fxShow="true" fxHide.lt-md="true" *ngIf="!loginData || !loginData.isAdvisor" class="separator"></div>
         <a fxShow="true" fxHide.lt-sm="true" routerLink="/top-experts" routerLinkActive="active"><span>TOP EXPERTS</span></a>
         <div fxShow="true" fxHide.lt-sm="true" class="separator"></div>

@@ -64,11 +64,11 @@ export class AuthRedirect implements CanActivate {
             this.accountService.getUserData().subscribe(ret =>
             {
               this.accountService.setLoginData(ret);
-              if (!ret.isAdvisor && !ret.hasInvestment) {
-                this.navigationService.goToWalletLogin();
-                return observer.next(true);
-              } else if (ret.requestedToBeAdvisor && !ret.isAdvisor) {
+              if (ret.requestedToBeAdvisor && !ret.isAdvisor) {
                 this.navigationService.goToBecomeAdvisor();
+                return observer.next(true);
+              } else if (!loginResponse.requestedToBeAdvisor && !ret.isAdvisor && !ret.hasInvestment) {
+                this.navigationService.goToWalletLogin();
                 return observer.next(true);
               } else if(ret.pendingConfirmation) {
                 this.navigationService.goToConfirmEmail();
