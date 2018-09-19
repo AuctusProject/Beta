@@ -15,13 +15,13 @@ namespace Auctus.DataAccess.Asset
         public override string TableName => "Asset";
 
         private const string SQL_LIST_FOLLOWING_ASSETS = @"SELECT a.* FROM 
-            [Asset] a
-            INNER JOIN [FollowAsset] fa ON fa.AssetId = a.Id
-            INNER JOIN [Follow] f ON f.Id = fa.Id
+            [Asset] a WITH(NOLOCK)
+            INNER JOIN [FollowAsset] fa WITH(NOLOCK) ON fa.AssetId = a.Id
+            INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
             INNER JOIN (
 				SELECT f2.UserId, fa2.AssetId, MAX(f2.CreationDate) CreationDate 
-				FROM [FollowAsset] fa2
-				INNER JOIN [Follow] f2 ON f2.Id = fa2.Id 
+				FROM [FollowAsset] fa2 WITH(NOLOCK)
+				INNER JOIN [Follow] f2 WITH(NOLOCK) ON f2.Id = fa2.Id 
 				GROUP BY f2.UserId, fa2.AssetId) b 
 		    ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AssetId = fa.AssetId
              WHERE f.ActionType = @ActionType

@@ -19,100 +19,100 @@ namespace Auctus.DataAccess.Account
 
         private const string SQL_FOR_LOGIN = @"SELECT u.*, a.*, r.*, w.* 
                                                 FROM 
-                                                [User] u
-                                                LEFT JOIN [Advisor] a ON a.Id = u.Id
-                                                LEFT JOIN [RequestToBeAdvisor] r ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = u.Id)
-                                                LEFT JOIN [Wallet] w ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                [User] u WITH(NOLOCK)
+                                                LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
+                                                LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
+                                                LEFT JOIN [Wallet] w WITH(NOLOCK) ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                 WHERE 
                                                 u.Email = @Email";
 
         private const string SQL_FOR_LOGIN_BY_ID = @"SELECT u.*, a.*, r.*, w.* 
                                                     FROM 
-                                                    [User] u
-                                                    LEFT JOIN [Advisor] a ON a.Id = u.Id
-                                                    LEFT JOIN [RequestToBeAdvisor] r ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = u.Id)
-                                                    LEFT JOIN [Wallet] w ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                    [User] u WITH(NOLOCK)
+                                                    LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
+                                                    LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
+                                                    LEFT JOIN [Wallet] w WITH(NOLOCK) ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                     WHERE 
                                                     u.Id = @Id";
 
         private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, r.*
                                                 FROM 
-                                                [User] u
-                                                LEFT JOIN [RequestToBeAdvisor] r ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = u.Id)
+                                                [User] u WITH(NOLOCK)
+                                                LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
                                                 WHERE 
                                                 u.ConfirmationCode = @Code";
 
         private const string SQL_FOR_NEW_WALLET = @"SELECT u.*, a.*, r.*
                                                 FROM 
-                                                [User] u
-                                                LEFT JOIN [Advisor] a ON a.Id = u.Id
-                                                LEFT JOIN [RequestToBeAdvisor] r ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WHERE r2.UserId = u.Id)
+                                                [User] u WITH(NOLOCK)
+                                                LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
+                                                LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
                                                 WHERE 
                                                 u.Email = @Email";
 
         private const string SQL_BY_EMAIL = @"SELECT u.*, a.*
                                                 FROM 
-                                                [User] u
-                                                LEFT JOIN [Advisor] a ON a.Id = u.Id
+                                                [User] u WITH(NOLOCK)
+                                                LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
                                                 WHERE 
                                                 u.Email = @Email";
 
         private const string SQL_BY_ID = @"SELECT u.*, a.*
                                                 FROM 
-                                                [User] u
-                                                LEFT JOIN [Advisor] a ON a.Id = u.Id
+                                                [User] u WITH(NOLOCK)
+                                                LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
                                                 WHERE 
                                                 u.Id = @Id";
 
         private const string SQL_FOR_AUC_SITUATION = @"SELECT u.*, w.*
                                                     FROM 
-                                                    [User] u
-                                                    INNER JOIN [Wallet] w ON u.Id = w.UserId
+                                                    [User] u WITH(NOLOCK)
+                                                    INNER JOIN [Wallet] w WITH(NOLOCK) ON u.Id = w.UserId
                                                     WHERE 
                                                     u.ReferralStatus = @ReferralStatus OR u.AllowNotifications = @AllowNotifications";
 
         private const string SQL_FOR_ALL_USER_DATA = @"SELECT u.*, w.*
                                                        FROM 
-                                                       [User] u
-                                                       LEFT JOIN [Wallet] w ON u.Id = w.UserId";
+                                                       [User] u WITH(NOLOCK)
+                                                       LEFT JOIN [Wallet] w WITH(NOLOCK) ON u.Id = w.UserId";
 
         private const string SQL_FOR_WALLET_LOGIN = @"SELECT u.*, w.*, u2.*
                                                        FROM 
-                                                       [User] u
-                                                       LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
-                                                       LEFT JOIN [User] u2 ON u2.Id = u.ReferredId
+                                                       [User] u WITH(NOLOCK)
+                                                       LEFT JOIN [Wallet] w WITH(NOLOCK) ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
+                                                       LEFT JOIN [User] u2 WITH(NOLOCK) ON u2.Id = u.ReferredId
                                                        WHERE u.Email = @Email";
 
         private const string SQL_SIMPLE_WITH_WALLET = @"SELECT u.*, w.*
                                                         FROM 
-                                                        [User] u
-                                                        LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                        [User] u WITH(NOLOCK)
+                                                        LEFT JOIN [Wallet] w WITH(NOLOCK) ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                         WHERE u.Email = @Email";
 
         private const string SQL_FOLLOWING = @"SELECT u.*, w.*
                                                 FROM 
-                                                [User] u
-                                                INNER JOIN [Follow] f ON f.UserId = u.Id 
-                                                INNER JOIN [FollowAdvisor] fa ON fa.Id = f.Id 
-                                                LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                [User] u WITH(NOLOCK)
+                                                INNER JOIN [Follow] f WITH(NOLOCK) ON f.UserId = u.Id 
+                                                INNER JOIN [FollowAdvisor] fa WITH(NOLOCK) ON fa.Id = f.Id 
+                                                LEFT JOIN [Wallet] w WITH(NOLOCK) ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                 WHERE 
                                                 u.ConfirmationDate IS NOT NULL AND f.ActionType = @ActionType AND fa.AdvisorId = @AdvisorId AND u.AllowNotifications = @AllowNotifications AND
                                                 f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 
-                                                                    [Follow] f2 
-                                                                    INNER JOIN [FollowAdvisor] fa2 ON fa2.Id = f2.Id 
+                                                                    [Follow] f2 WITH(NOLOCK) 
+                                                                    INNER JOIN [FollowAdvisor] fa2 WITH(NOLOCK) ON fa2.Id = f2.Id 
                                                                     WHERE f2.UserId = u.Id AND fa2.AdvisorId = @AdvisorId)
                                                 UNION 
                                                 SELECT u.*, w.*
                                                 FROM 
-                                                [User] u
-                                                INNER JOIN [Follow] f ON f.UserId = u.Id 
-                                                INNER JOIN [FollowAsset] fa ON fa.Id = f.Id
-                                                LEFT JOIN [Wallet] w ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WHERE w2.UserId = u.Id)
+                                                [User] u WITH(NOLOCK)
+                                                INNER JOIN [Follow] f WITH(NOLOCK) ON f.UserId = u.Id 
+                                                INNER JOIN [FollowAsset] fa WITH(NOLOCK) ON fa.Id = f.Id
+                                                LEFT JOIN [Wallet] w WITH(NOLOCK) ON u.Id = w.UserId AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                 WHERE 
                                                 u.ConfirmationDate IS NOT NULL AND f.ActionType = @ActionType AND fa.AssetId = @AssetId AND u.AllowNotifications = @AllowNotifications AND
                                                 f.CreationDate = (SELECT MAX(f2.CreationDate) FROM 
-                                                                    [Follow] f2 
-                                                                    INNER JOIN [FollowAsset] fa2 ON fa2.Id = f2.Id 
+                                                                    [Follow] f2 WITH(NOLOCK) 
+                                                                    INNER JOIN [FollowAsset] fa2 WITH(NOLOCK) ON fa2.Id = f2.Id 
                                                                     WHERE f2.UserId = u.Id AND fa2.AssetId = @AssetId)";
 
         public User GetForLogin(string email)

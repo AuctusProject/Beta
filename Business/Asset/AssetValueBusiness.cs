@@ -1,7 +1,9 @@
 ﻿using Auctus.DataAccessInterfaces.Asset;
+using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Exchange;
 using Auctus.Util;
+using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Auctus.Business.Asset
 {
@@ -50,7 +53,12 @@ namespace Auctus.Business.Asset
         {
             var currentDate = Data.GetDateTimeNow();
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
-            var assets = AssetBusiness.ListAssets();
+
+            List<DomainObjects.Asset.Asset> assets = null;
+            List<Advice> advices = null;
+            List<AssetCurrentValue> assetCurrentValues = null;
+            Parallel.Invoke(() => assets = AssetBusiness.ListAssets(), () => advices = AdviceBusiness.ListAllCached(), () => assetCurrentValues = AssetCurrentValueBusiness.ListAllAssets());
+
             var assetValues = new List<AssetValue>();
             foreach (var assetValue in assetResults.Where(c => c.Price.HasValue))
             {
@@ -59,6 +67,54 @@ namespace Auctus.Business.Asset
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }
             Data.InsertManyAsync(assetValues);
+
+            var baseDate = currentDate.AddDays(-30).AddHours(-4);
+            var assetsToUpdateLastValues = assetCurrentValues.Where(c => advices.Any(a => a.AssetId == c.Id) && assetValues.Any(a => a.AssetId == c.Id)).ToDictionary(c => c.Id, c => baseDate);
+            var currentValues = new List<AssetCurrentValue>();
+            if (assetsToUpdateLastValues.Any())
+            {
+                var values = FilterAssetValues(assetsToUpdateLastValues);
+                foreach (var assetToUpdate in assetsToUpdateLastValues)
+                {
+                    var lastAssetValue = assetValues.FirstOrDefault(c => c.AssetId == assetToUpdate.Key);
+                    if (lastAssetValue != null)
+                    {
+                        VariantionCalculation(lastAssetValue.Value, currentDate, values.Where(c => c.AssetId == lastAssetValue.AssetId).OrderByDescending(c => c.Date),
+                            out double? variation24h, out double? variation7d, out double? variation30d);
+
+                        currentValues.Add(new AssetCurrentValue()
+                        {
+                            Id = lastAssetValue.AssetId,
+                            UpdateDate = currentDate,
+                            CurrentValue = lastAssetValue.Value,
+                            Variation24Hours = variation24h,
+                            Variation7Days = variation7d,
+                            Variation30Days = variation30d
+                        });
+                    }
+                }
+                if (currentValues.Any())
+                {
+                    using (var transaction = TransactionalDapperCommand)
+                    {
+                        foreach (var value in currentValues)
+                            transaction.Update(value);
+
+                        transaction.Commit();
+                    }
+                }
+            }
+        }
+
+        public void VariantionCalculation(double currentValue, DateTime currentDate, IEnumerable<AssetValue> values, 
+            out double? variation24h, out double? variation7d, out double? variation30d)
+        {
+            var vl30d = values.Where(c => c.Date <= currentDate.AddDays(-30) && c.Date > currentDate.AddDays(-31));
+            var vl7d = values.Where(c => c.Date <= currentDate.AddDays(-7) && c.Date > currentDate.AddDays(-8));
+            var vl24h = values.Where(c => c.Date <= currentDate.AddDays(-1) && c.Date > currentDate.AddDays(-2));
+            variation24h = vl24h.Any() ? (currentValue / vl24h.First().Value) - 1 : (double?)null;
+            variation7d = vl7d.Any() ? (currentValue / vl7d.First().Value) - 1 : (double?)null;
+            variation30d = vl30d.Any() ? (currentValue / vl30d.First().Value) - 1 : (double?)null;
         }
     }
 }

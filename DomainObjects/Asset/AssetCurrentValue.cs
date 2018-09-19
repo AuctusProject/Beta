@@ -7,13 +7,15 @@ namespace Auctus.DomainObjects.Asset
 {
     public class AssetCurrentValue : Asset
     {
+        [DapperType(System.Data.DbType.DateTime)]
+        public DateTime UpdateDate { get; set; }
         [DapperType(System.Data.DbType.Double)]
         public double CurrentValue { get; set; }
         [DapperType(System.Data.DbType.Double)]
-        public double? Last24HoursValue { get; set; }
+        public double? Variation24Hours { get; set; }
         [DapperType(System.Data.DbType.Double)]
-        public double? Last7DaysValue { get; set; }
+        public double? Variation7Days { get; set; }
         [DapperType(System.Data.DbType.Double)]
-        public double? Last30DaysValue { get; set; }
+        public double? Variation30Days { get; set; }
     }
 }

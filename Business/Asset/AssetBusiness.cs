@@ -150,15 +150,37 @@ namespace Auctus.Business.Asset
 
         private void UpdateAssetsMarketcap(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
         {
-            var assets = AssetBusiness.ListAssets();
-            foreach (var assetValue in assetResults.Where(c => c.MarketCap.HasValue && c.MarketCap > 0))
+            List<DomainObjects.Asset.Asset> assets = null;
+            List<AssetCurrentValue> assetCurrentValues = null;
+            Parallel.Invoke(() => assets = AssetBusiness.ListAssets(), () => assetCurrentValues = AssetCurrentValueBusiness.ListAllAssets());
+            
+            var pendingToInsertValue = assets.Where(c => !assetCurrentValues.Any(v => v.Id == c.Id));
+            var resultList = assetResults.Where(c => (c.MarketCap.HasValue && c.MarketCap > 0) || (pendingToInsertValue.Any() && c.Price.HasValue));
+
+            var assetsToUpdate = new List<DomainObjects.Asset.Asset>();
+            var currentValuesToInsert = new List<AssetCurrentValue>();
+            foreach (var assetValue in resultList)
             {
                 var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));
                 if (asset != null)
                 {
-                    asset.MarketCap = assetValue.MarketCap.Value;
-                    Data.Update(asset);
+                    if (assetValue.MarketCap.HasValue && assetValue.MarketCap > 0)
+                    {
+                        asset.MarketCap = assetValue.MarketCap;
+                        assetsToUpdate.Add(asset);
+                    }
+                    if (assetValue.Price.HasValue && pendingToInsertValue.Any(c => c.Id == asset.Id))
+                        currentValuesToInsert.Add(new AssetCurrentValue() { CurrentValue = assetValue.Price.Value, Id = asset.Id, UpdateDate = Data.GetDateTimeNow() });
                 }
+            }
+            using (var transaction = TransactionalDapperCommand)
+            {
+                foreach (var asset in assetsToUpdate)
+                    transaction.Update(asset);
+                foreach (var value in currentValuesToInsert)
+                    transaction.Insert(value);
+
+                transaction.Commit();
             }
         }
 
@@ -185,14 +207,21 @@ namespace Auctus.Business.Asset
                 {
                     Code = asset.Symbol.ToUpper(),
                     Name = asset.Name,
-                    Type = DomainObjects.Asset.AssetType.Crypto.Value
+                    Type = DomainObjects.Asset.AssetType.Crypto.Value,
+                    MarketCap = asset.MarketCap,
+                    ShortSellingEnabled = true
                 };
                 if (isCoingecko)
                     newAsset.CoinGeckoId = asset.Id;
                 else
                     newAsset.CoinMarketCapId = Convert.ToInt32(asset.Id);
 
-                Data.Insert(newAsset);
+                using (var transaction = TransactionalDapperCommand)
+                {
+                    transaction.Insert(newAsset);
+                    transaction.Insert(new AssetCurrentValue() { CurrentValue = asset.Price.Value, Id = newAsset.Id, UpdateDate = Data.GetDateTimeNow() });
+                    transaction.Commit();
+                }
                 await UploadAssetIconAsync(newAsset.Id, asset.ImageUrl);
             }
         }

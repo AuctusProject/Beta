@@ -93,7 +93,7 @@ Auctus Team");
                 var advisorsId = AdvisorBusiness.GetAdvisors().Select(c => c.Id).Distinct();
                 advices = List(advisorsId);
                 if (advices.Any())
-                    MemoryCache.Set<List<Advice>>(advicesCahceKey, advices, 40);
+                    MemoryCache.Set<List<Advice>>(advicesCahceKey, advices, 20);
             }
             return advices;
         }
