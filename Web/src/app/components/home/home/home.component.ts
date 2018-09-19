@@ -19,18 +19,18 @@ export class HomeComponent implements OnInit {
     private navigationService: NavigationService) { }
 
   ngOnInit() {
-    if (!!this.route.snapshot.queryParams['login']) {
-      this.modalService.setLogin();
-    } else if (!!this.route.snapshot.queryParams['becomeadvisor']) {
-      this.modalService.setBecomeAdvisor();
+    if (!!this.route.snapshot.queryParams['configuration']) {
+      this.modalService.setConfiguration();
     } else if (!!this.route.snapshot.queryParams['confirmemail']) {
       this.modalService.setConfirmEmail();
     } else if (!!this.route.snapshot.queryParams['resetpassword']) {
       this.modalService.setResetPassword();
     } else if (!!this.route.snapshot.queryParams['register']) {
       this.modalService.setRegister();
-    } else if (!!this.route.snapshot.queryParams['configuration']) {
-      this.modalService.setConfiguration();
+    } else if (!!this.route.snapshot.queryParams['becomeadvisor']) {
+      this.modalService.setBecomeAdvisor();
+    } else if (!!this.route.snapshot.queryParams['login']) {
+      this.modalService.setLogin();
     } else if(this.isLoggedIn()) {
       this.authRedirect.redirectToHome(this.accountService.getLoginData());
     }

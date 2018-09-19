@@ -35,8 +35,12 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
 
   ngOnInit() {
     if (this.accountService.isLoggedIn()) {
-      this.setClose.emit();
-      this.authRedirect.redirectAfterLoginAction();
+      if (this.isBecomeExpert()) {
+        this.openBecomeAdvisorForm();
+      } else {
+        this.setClose.emit();
+        this.authRedirect.redirectAfterLoginAction();
+      }
     } else {
       if (this.isLogin()) {
         this.modalTitle = "Sign In";
@@ -89,10 +93,9 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
   socialEntryResponse(response: LoginResult){
     if (!!response && !response.error && response.data) {
       this.accountService.setLoginData(response.data);
-      if(this.isBecomeExpert()){
+      if(this.isBecomeExpert()) {
         this.openBecomeAdvisorForm();
-      }
-      else{
+      } else {
         this.setClose.emit();
         this.authRedirect.redirectAfterLoginAction(response.data);
       }
@@ -112,11 +115,9 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
       let modalData = new FullscreenModalComponentInput();
       modalData.component = LoginComponent;
       this.setNewModal.emit(modalData);
-    }
-    else if(this.isBecomeExpert()){
+    } else if(this.isBecomeExpert()) {
       this.openBecomeAdvisorForm();
-    }
-    else {
+    } else {
       let modalData = new FullscreenModalComponentInput();
       modalData.component = RegisterComponent;
       this.setNewModal.emit(modalData);
