@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angu
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 import { AdvisorService } from '../../../services/advisor.service';
 import { RequestToBeAdvisorRequest } from '../../../model/advisor/requestToBeAdvisorRequest';
-import { NotificationsService } from '../../../../../node_modules/angular2-notifications';
+import { NotificationsService } from 'angular2-notifications';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
 import { Subscription } from 'rxjs';

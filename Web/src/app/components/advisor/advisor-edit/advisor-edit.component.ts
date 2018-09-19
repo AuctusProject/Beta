@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, EventEmitter, Input, Output } from '@angular/core';
 import { AdvisorService } from '../../../services/advisor.service';
-import { ActivatedRoute } from '../../../../../node_modules/@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AdvisorRequest } from '../../../model/advisor/advisorRequest';
-import { Subscription } from '../../../../../node_modules/rxjs';
+import { Subscription } from 'rxjs';
 import { AccountService } from '../../../services/account.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { Advisor } from '../../../model/advisor/advisor';

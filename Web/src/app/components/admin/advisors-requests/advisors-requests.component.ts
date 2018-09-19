@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AdvisorService } from '../../../services/advisor.service';
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
-import { MatProgressBar, MatSpinner } from '../../../../../node_modules/@angular/material';
-import { Subscription } from '../../../../../node_modules/rxjs';
+import { MatProgressBar, MatSpinner } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'advisors-requests',
