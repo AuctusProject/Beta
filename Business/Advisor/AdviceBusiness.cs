@@ -90,10 +90,15 @@ Auctus Team");
             var advices = MemoryCache.Get<List<Advice>>(advicesCahceKey);
             if (advices == null)
             {
-                var advisorsId = AdvisorBusiness.GetAdvisors().Select(c => c.Id).Distinct();
-                advices = List(advisorsId);
-                if (advices.Any())
-                    MemoryCache.Set<List<Advice>>(advicesCahceKey, advices, 20);
+                var advisors = AdvisorBusiness.GetAdvisors();
+                if (advisors?.Any() == true)
+                {
+                    advices = List(advisors.Select(c => c.Id).Distinct());
+                    if (advices.Any())
+                        MemoryCache.Set<List<Advice>>(advicesCahceKey, advices, 20);
+                }
+                else
+                    advices = new List<Advice>();
             }
             return advices;
         }
