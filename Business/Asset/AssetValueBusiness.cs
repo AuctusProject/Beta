@@ -26,6 +26,9 @@ namespace Auctus.Business.Asset
 
         public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
         {
+            if (assetsMap?.Any() != true)
+                return new List<AssetValue>();
+
             return Data.FilterAssetValues(assetsMap);
         }
 
@@ -69,18 +72,20 @@ namespace Auctus.Business.Asset
             Data.InsertManyAsync(assetValues);
 
             var baseDate = currentDate.AddDays(-30).AddHours(-4);
-            var assetsToUpdateLastValues = assetCurrentValues.Where(c => advices.Any(a => a.AssetId == c.Id) && assetValues.Any(a => a.AssetId == c.Id)).ToDictionary(c => c.Id, c => baseDate);
+            var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
             var currentValues = new List<AssetCurrentValue>();
             if (assetsToUpdateLastValues.Any())
             {
-                var values = FilterAssetValues(assetsToUpdateLastValues);
+                var assetsWithAdvices = assetsToUpdateLastValues.Where(c => advices.Any(a => a.AssetId == c.Id)).ToDictionary(c => c.Id, c => baseDate);
+                var values = FilterAssetValues(assetsWithAdvices);
                 foreach (var assetToUpdate in assetsToUpdateLastValues)
                 {
-                    var lastAssetValue = assetValues.FirstOrDefault(c => c.AssetId == assetToUpdate.Key);
-                    if (lastAssetValue != null)
+                    var lastAssetValue = assetValues.FirstOrDefault(c => c.AssetId == assetToUpdate.Id);
+
+                    if (assetsWithAdvices.ContainsKey(assetToUpdate.Id))
                     {
                         VariantionCalculation(lastAssetValue.Value, currentDate, values.Where(c => c.AssetId == lastAssetValue.AssetId).OrderByDescending(c => c.Date),
-                            out double? variation24h, out double? variation7d, out double? variation30d);
+                                out double? variation24h, out double? variation7d, out double? variation30d);
 
                         currentValues.Add(new AssetCurrentValue()
                         {
@@ -92,17 +97,17 @@ namespace Auctus.Business.Asset
                             Variation30Days = variation30d
                         });
                     }
-                }
-                if (currentValues.Any())
-                {
-                    using (var transaction = TransactionalDapperCommand)
+                    else
                     {
-                        foreach (var value in currentValues)
-                            transaction.Update(value);
-
-                        transaction.Commit();
+                        currentValues.Add(new AssetCurrentValue()
+                        {
+                            Id = lastAssetValue.AssetId,
+                            UpdateDate = currentDate,
+                            CurrentValue = lastAssetValue.Value
+                        });
                     }
                 }
+                AssetCurrentValueBusiness.UpdateAssetCurrentValues(currentValues);
             }
         }
 

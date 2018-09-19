@@ -12,5 +12,10 @@ namespace Auctus.DataAccessMock.Asset
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateAssetValue(List<AssetCurrentValue> assetCurrentValues)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

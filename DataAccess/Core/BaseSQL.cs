@@ -56,5 +56,21 @@ namespace Auctus.DataAccess.Core
         {
             throw new NotImplementedException();
         }
+
+        protected string GetDoubleSqlFormattedValue(double? value)
+        {
+            if (value.HasValue)
+                return value.Value.ToString("##############0.############################", System.Globalization.CultureInfo.InvariantCulture);
+            else
+                return "NULL";
+        }
+
+        protected string GetDateTimeSqlFormattedValue(DateTime? dateTime)
+        {
+            if (dateTime.HasValue)
+                return dateTime.Value.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            else
+                return "NULL";
+        }
     }
 }
