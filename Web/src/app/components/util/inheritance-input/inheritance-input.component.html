@@ -1,11 +1,11 @@
 <mat-form-field appearance="{{outlineField ? 'outline' : 'standard'}}" class="container-field" hideRequiredMarker>
-  <mat-label [style.color]="darkLayout ? 'white' : '#101010'">{{placeholder}}</mat-label>
+  <mat-label [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')">{{placeholder}}</mat-label>
 
   <input matInput *ngIf="showTextField()"
     [type]="getInputType()"
     [(ngModel)]="value" 
     [formControl]="formControl" 
-    [style.color]="darkLayout ? 'white' : '#101010'"
+    [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')"
     placeholder="{{placeholder}}" 
     required="{{required}}" 
     readonly="{{disabled}}"
@@ -17,7 +17,7 @@
   <textarea matInput *ngIf="showTextAreaField() && autosizeTextArea"
     [(ngModel)]="value" 
     [formControl]="formControl" 
-    [style.color]="darkLayout ? 'white' : '#101010'"
+    [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')"
     placeholder="{{placeholder}}" 
     required="{{required}}" 
     readonly="{{disabled}}"
@@ -32,7 +32,7 @@
   <textarea matInput *ngIf="showTextAreaField() && !autosizeTextArea"
     [(ngModel)]="value" 
     [formControl]="formControl" 
-    [style.color]="darkLayout ? 'white' : '#101010'"
+    [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')"
     placeholder="{{placeholder}}" 
     required="{{required}}" 
     readonly="{{disabled}}"

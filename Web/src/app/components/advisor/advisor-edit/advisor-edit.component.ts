@@ -20,7 +20,7 @@ import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-m
   styleUrls: ['./advisor-edit.component.css']
 })
 export class AdvisorEditComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Expert edit";
+  modalTitle: string = "Edit profile";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -64,7 +64,7 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
           let modalData = new FullscreenModalComponentInput();
           modalData.hiddenClose = true;
           modalData.component = MessageFullscreenModalComponent;
-          modalData.componentInput = { message: "Expert data was updated with success.", reload: true };
+          modalData.componentInput = { message: "Your profile has been updated successfully.", reload: true };
           this.setNewModal.emit(modalData);
         });
     }

@@ -293,27 +293,25 @@ a {
   margin: 0;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-outline-end {
+.mat-form-field-appearance-outline .mat-form-field-outline-end,
+.mat-form-field-appearance-outline .mat-form-field-outline-start{
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-outline-start {
-  border-top-left-radius: 0px !important;
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
-  border-bottom-left-radius: 0px !important;
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-end, 
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-gap,
+.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-start {
+  border-width: 1px !important;
 }
 
-input:read-only {
+input:read-only,
+textarea:read-only {
   color:rgba(0,0,0,.38);
 }
 
-textarea:read-only {
-  color: rgba(0,0,0,.38);
-}
 
 .global-container{
   margin: 0 auto;
@@ -663,10 +661,4 @@ textarea:read-only {
 
 .header {
   text-align: center;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-end, 
-.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-gap,
-.mat-form-field-appearance-outline .mat-form-field-outline-thick .mat-form-field-outline-start {
-  border-width: 1px !important;
 }

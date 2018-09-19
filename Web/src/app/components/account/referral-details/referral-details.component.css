@@ -3,17 +3,15 @@
 }
 
 .copy {
-    background-color: #5d5d5d;
-    border: solid 0.5px #707070;
+    font-size: 12px;
+    font-weight: 300;
+    background-color: #126efd;
     color: white;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
     min-width: 50px;
     cursor: pointer;
-    padding: 5px;
+    line-height: 20px;
     display: table-caption;
-    text-align: center;
+    text-align: center;    
 }
 
 .div-status {
@@ -25,24 +23,47 @@
 }
 
 .table-header {
-    background-color: rgba(0,0,0,0.15);
+    color: white;
     width: 100%;
-    padding: 5px;
+    
 }
 
-.table-status {
-    padding: 5px;
+.table-earned{
+    margin-bottom: 25px;
+}
+
+.table-earned .table-header{
+    background-color:#126efd;
+}
+
+.table-used .table-header{
+    background-color:#252525;
+}
+
+.table-earned > span,
+.table-earned > div,
+.table-used > span,
+.table-used > div
+{
+    padding: 0 15px;
+    line-height: 40px;
 }
 
 .div-value {
     width: 100%;
-    padding: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: right;
+    color: #676767;
 }
 
-.table-tablet {
-    width: 75%;
+.input-modal,
+.table-earned,
+.table-used {
+    max-width: 320px !important;    
+    width: calc(100% - 20px);
 }
 
-.table-web {
-    width: 60%;
+.border-bottom{
+    border-bottom: solid 1px #46464646
 }
