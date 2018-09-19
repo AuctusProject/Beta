@@ -31,6 +31,8 @@ namespace Auctus.DomainObjects.Account
         public double? ReferralDiscount { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool AllowNotifications { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double DiscountProvided { get; set; }
 
         public bool IsAdvisor { get; set; }
         public Wallet Wallet { get; set; }
