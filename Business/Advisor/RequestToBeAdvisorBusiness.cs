@@ -61,6 +61,9 @@ namespace Auctus.Business.Advisor
                 transaction.Commit();
             }
 
+            UserBusiness.ClearUserCache(user.Email);
+            AdvisorBusiness.UpdateAdvisorsCacheAsync();
+
             await SendRequestApprovedNotificationAsync(user);
         }
 

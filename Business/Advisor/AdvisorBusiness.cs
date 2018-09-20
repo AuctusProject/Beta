@@ -63,9 +63,14 @@ namespace Auctus.Business.Advisor
             Update(advisor);
 
             ActionBusiness.InsertEditAdvisor(advisor.Id, previousData);
-            RunAsync(() => UpdateAdvisorsCache(Data.ListEnabled()));
+            UpdateAdvisorsCacheAsync();
 
             return advisor.UrlGuid;
+        }
+
+        public void UpdateAdvisorsCacheAsync()
+        {
+            RunAsync(() => UpdateAdvisorsCache(Data.ListEnabled()));
         }
 
         public byte[] GetNoUploadedImageForAdvisor(User user)
