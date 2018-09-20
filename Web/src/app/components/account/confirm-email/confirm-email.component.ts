@@ -57,8 +57,8 @@ export class ConfirmEmailComponent implements ModalComponent, OnInit {
     confirmEmailRequest.code = this.confirmationCode;
     this.accountService.confirmEmail(confirmEmailRequest).subscribe(result => 
       {
-        this.accountService.setLoginData(result);
-        this.setConfirmedEmailAction(result);
+        this.accountService.setLoginData(result.data);
+        this.setConfirmedEmailAction(result.data);
       }
     );
   }

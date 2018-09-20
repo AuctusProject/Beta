@@ -180,28 +180,16 @@ string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor
 
         private async Task SendRequestRejectedNotificationAsync(User user)
         {
-            await EmailBusiness.SendAsync(new string[] { user.Email },
+            await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 "Your request to become an expert was rejected - Auctus Beta",
-                $@"Hello,
-<br/><br/>
-We are sorry to inform you that at this moment your request to become an expert can not be accepted.
-<br/><br/>
-Thanks,
-<br/>
-Auctus Team");
+                "<p>We are sorry to inform you that at this moment your request to become an expert can not be accepted.</p>");
         }
 
         private async Task SendRequestApprovedNotificationAsync(User user)
         {
-            await EmailBusiness.SendAsync(new string[] { user.Email },
+            await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 "Your request to become an expert was approved! - Auctus Beta",
-                string.Format($@"Hello,
-<br/><br/>
-We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{0}expert-details/{1}' target='_blank'>click here</a>.
-<br/><br/>
-Thanks,
-<br/>
-Auctus Team", WebUrl, user.Id));
+                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{WebUrl}expert-details/{user.Id}' target='_blank'>click here</a>.</p>");
         }
     }
 }

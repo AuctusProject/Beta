@@ -9,7 +9,7 @@ export class NavigationService {
   public goToUrl(url: string, queryString?: any) {
     if (!!queryString) {
       let reloadPage = this.isSameRoute(url);
-      this.zone.run(() => this.router.navigate([url], { queryParams: queryString, queryParamsHandling: "merge" }).then(result => 
+      this.zone.run(() => this.router.navigate([url], { queryParams: queryString }).then(result => 
       {
         if (reloadPage) {
           window.location.reload();

@@ -93,11 +93,11 @@ export class DashboardComponent implements OnInit {
         enabled: false
       },
       chart: {
-        backgroundColor: '#fafafa'
+        backgroundColor: '#ffffff'
       },
       legend: {
         enabled: true,
-        backgroundColor: '#fafafa',
+        backgroundColor: '#ffffff',
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom'
@@ -116,7 +116,7 @@ export class DashboardComponent implements OnInit {
         },
         {
           name: ' ', 
-          color: '#fafafa',
+          color: '#ffffff',
           type: 'flags',
           data: this.usersConfirmedFlag,
           onSeries:'usersConfirmedData'
@@ -128,7 +128,7 @@ export class DashboardComponent implements OnInit {
         },
         {
           name: ' ', 
-          color: '#fafafa',
+          color: '#ffffff',
           type: 'flags',
           data: this.usersStartedRegistrationFlag,
           onSeries:'usersStartedRegistrationData'
@@ -140,7 +140,7 @@ export class DashboardComponent implements OnInit {
         },
         {
           name: ' ', 
-          color: '#fafafa',
+          color: '#ffffff',
           type: 'flags',
           data: this.advisorsFlag,
           onSeries:'advisorsData'
@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit {
         },
         {
           name: ' ', 
-          color: '#fafafa',
+          color: '#ffffff',
           type: 'flags',
           data: this.requestToBeAdvisorFlag,
           onSeries:'requestToBeAdvisorData'
@@ -169,7 +169,7 @@ export class DashboardComponent implements OnInit {
         plotBackgroundColor: null,
         plotBorderWidth: 0,
         plotShadow: false,
-        backgroundColor: '#fafafa'
+        backgroundColor: '#ffffff'
       },
       credits: {
         enabled: false
