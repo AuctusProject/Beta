@@ -17,5 +17,7 @@ namespace Auctus.DomainObjects.Asset
         public double? Variation7Days { get; set; }
         [DapperType(System.Data.DbType.Double)]
         public double? Variation30Days { get; set; }
+
+        public IEnumerable<AssetValue> AssetValues { get; set; }
     }
 }

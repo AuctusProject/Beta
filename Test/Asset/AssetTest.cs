@@ -203,13 +203,6 @@ namespace Auctus.Test.Asset
             Assert.Equal(expVariation30d, asset.Variation30d.Value, 6);
         }
 
-        private static void AssertValuesData(AssetResponse asset, int expCount, double expFirstValue, double expLastValue)
-        {
-            Assert.Equal(expCount, asset.Values.Count);
-            Assert.Equal(expFirstValue, asset.Values.First().Value, 6);
-            Assert.Equal(expLastValue, asset.Values.Last().Value, 6);
-        }
-
         private static void AssertExtraAssetData(AssetResponse asset, int expFollowers, bool expIsFollowing, int expMode, Dictionary<int, double> expRecommendation)
         {
             Assert.Equal(expFollowers, asset.NumberOfFollowers);

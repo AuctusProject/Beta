@@ -55,7 +55,7 @@ namespace Auctus.Business.Asset
             var asset = GetById(assetId);
             var lastAdvice = AdviceBusiness.GetLastAdviceForAssetByAdvisor(user.Id, assetId);
 
-            var lastValue = AssetValueBusiness.LastAssetValue(assetId);
+            var lastValue = AssetCurrentValueBusiness.GetCurrentValue(assetId);
             if (lastValue == null)
                 throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
 
