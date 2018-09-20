@@ -99,7 +99,7 @@ namespace Auctus.Business.Account
             var consideredAdvisors = advisors.Where(c => !adminsId.Contains(c.Id));
             var consideredRequestsToBeAdvisor = requestsToBeAdvisor.Result.Where(c => !adminsId.Contains(c.UserId));
             var consideredAdvices = advices.Result.Where(c => !adminsId.Contains(c.AdvisorId));
-            var consideredAdvisorFollowers = advisorFollowers.Result.Where(c => !adminsId.Contains(c.AdvisorId) && !adminsId.Contains(c.UserId));
+            var consideredAdvisorFollowers = advisorFollowers.Result.Where(c => !adminsId.Contains(c.UserId));
             var consideredAssetFollowers = assetFollowers.Result.Where(c => !adminsId.Contains(c.UserId));
             var consideredActivities = activities.Result.Where(c => !adminsId.Contains(c.UserId));
 
@@ -185,7 +185,7 @@ namespace Auctus.Business.Account
                     Name = consideredAdvisors.First(a => a.Id == c.Id).Name,
                     UrlGuid = consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString(),
                     Total = c.Value,
-                    SubValue1 = consideredFollowers.Count(a => a.CreationDate >= cutDayForActivity)
+                    SubValue1 = consideredFollowers.Count(a => a.CreationDate >= cutDayForActivity && a.AdvisorId == c.Id)
                 }).ToList();
             }
 
@@ -200,7 +200,7 @@ namespace Auctus.Business.Account
                     Name = consideredAdvisors.First(a => a.Id == c.Id).Name,
                     UrlGuid = consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString(),
                     Total = c.Value,
-                    SubValue1 = advisorAdvices.Count(a => a.CreationDate >= cutDayForActivity)
+                    SubValue1 = advisorAdvices.Count(a => a.CreationDate >= cutDayForActivity && a.AdvisorId == c.Id)
                 }).ToList();
             }
 
@@ -212,7 +212,8 @@ namespace Auctus.Business.Account
                 result.AdvisorReferral = groupedReferred.Select(c => new DashboardResponse.AdvisorData()
                 {
                     Id = c.Id,
-                    Name = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).Name : consideredUsers.Any(u => u.Id == c.Id) ? consideredUsers.First(u => u.Id == c.Id).Email : "admin",
+                    Name = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).Name : 
+                        consideredUsers.Any(u => u.Id == c.Id) ? consideredUsers.First(u => u.Id == c.Id).Email : "(ADMIN) " + users.Result.First(u => u.Id == c.Id).Email,
                     UrlGuid = consideredAdvisors.Any(a => a.Id == c.Id) ? consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString() : null,
                     Total = c.Value,
                     SubValue1 = consideredReferred.Count(a => a.ReferredId == c.Id && a.ReferralStatusType == ReferralStatusType.InProgress),
