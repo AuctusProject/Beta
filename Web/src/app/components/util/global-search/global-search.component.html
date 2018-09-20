@@ -5,7 +5,9 @@
     <mat-optgroup class="search-autocomplete-header" label="Assets" *ngIf="showAssets">
       <mat-option class="search-autocomplete-option" *ngFor="let asset of searchResults.assets" [value]="asset">
         <div class="search-autocomplete-option-div-img">
-          <img onerror="this.style.display='none'" height="17" width="17" [src]="getAssetImgUrl(asset.id)">
+          <span class="search-autocomplete-option-div-img-wrapper">
+            <img onerror="this.style.display='none'" height="17" width="17" [src]="getAssetImgUrl(asset.id)">
+          </span>
         </div>
         {{asset.name}}
         <div class="search-autocomplete-option-separation"></div>
@@ -14,7 +16,9 @@
     <mat-optgroup class="search-autocomplete-header" label="Experts" *ngIf="showExperts">
       <mat-option class="search-autocomplete-option" *ngFor="let expert of searchResults.advisors" [value]="expert">
         <div class="search-autocomplete-option-div-img">
-          <img onerror="this.style.display='none'" height="17" width="17" [src]="getAdvisorImgUrl(expert.urlGuid)">
+          <span class="search-autocomplete-option-div-img-wrapper">
+            <img onerror="this.style.display='none'" height="17" width="17" [src]="getAdvisorImgUrl(expert.urlGuid)">
+          </span>
         </div>
         {{expert.name}}
         <div class="search-autocomplete-option-separation"></div>
