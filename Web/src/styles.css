@@ -70,7 +70,7 @@ body {
   padding-top: 83px;
 }
 
-body, p, span, input, textarea, select, button, div {
+body, p, a, span, input, textarea, select, button, div, td, th, tr, table, h1, h2, h3, h4, h5, h6, section {
   font-family: 'Gilroy';
   margin: 0px;
   font-weight: 300;
