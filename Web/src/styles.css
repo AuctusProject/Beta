@@ -379,6 +379,18 @@ textarea:read-only {
   user-select: none;
 }
 
+@media(max-width: 600px){
+  .landing-logo {
+    height: 34px;
+  }
+}
+
+@media(max-width: 400px){
+  .landing-logo {
+    height: 25px;
+  }
+}
+
 .landing-logo:focus {
   outline: none;
 }

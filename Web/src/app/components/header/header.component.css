@@ -13,8 +13,11 @@
     align-items: center;
 }
 
-a {
+a{
     text-decoration: none;
+}
+
+.menu > a {
     padding-left: 25px;
     padding-right: 25px;
     cursor: pointer;
@@ -24,8 +27,8 @@ a {
     border-bottom: solid 2px #101010;
 }
 
-a:hover,
-a.active {
+.menu > a:hover,
+.menu > a.active {
     border-bottom: solid 2px #ffffff;
 }
 
@@ -90,17 +93,21 @@ a span {
     background-color:  #ffffff;
     box-shadow: 0 0 4px #151515;
 }
-
-::ng-deep .sub-menu-item {
+::ng-deep .sub-menu-item,
+::ng-deep .sub-menu-item a{
     font-family: 'Gilroy';
     font-weight: 300;
     color: #535353;
     font-size: 16px;
-    border-top: solid 1px #151515 !important;
     text-align: center !important;
 }
 
-::ng-deep button.mat-menu-item:hover{
+::ng-deep .sub-menu-item {
+    border-top: solid 1px #151515 !important;
+}
+
+::ng-deep button.mat-menu-item:hover,
+::ng-deep button.mat-menu-item:hover a{
     background: #151515 !important;
     color: white;
 }
