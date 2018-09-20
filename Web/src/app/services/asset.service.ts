@@ -4,6 +4,7 @@ import { HttpService } from './http.service';
 import { AssetResponse } from "../model/asset/assetResponse";
 import { Asset } from '../model/asset/asset';
 import { AssetRecommendationInfoResponse } from '../model/asset/assetRecommendationInfoResponse';
+import { LocalCacheService } from './local-cache.service';
 
 @Injectable()
 export class AssetService {
@@ -13,7 +14,7 @@ export class AssetService {
   private getAssetRecommendationInfoUrl = this.httpService.apiUrl("v1/assets/{id}/recommendation_info");
   private getAssetsUrl = this.httpService.apiUrl("v1/assets/");
   private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers")
-  constructor(private httpService : HttpService) { }
+  constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
 
   getAssetDetails(id: string): Observable<AssetResponse> {
     return this.httpService.get(this.getAssetDetailsUrl.replace("{id}", id.toString()));
@@ -24,7 +25,7 @@ export class AssetService {
   }
 
   getTrendingAssets(): Observable<AssetResponse[]> {
-    return this.httpService.get(this.getTrendingAssetsUrl);
+    return this.localCache.requestWithCache(this.httpService.get(this.getTrendingAssetsUrl), this.getTrendingAssetsUrl);
   }
 
   getAssets(): Observable<Asset[]> {
