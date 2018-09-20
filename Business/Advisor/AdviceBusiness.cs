@@ -64,19 +64,10 @@ namespace Auctus.Business.Advisor
 
         private async Task SendAdviceNotificationAsync(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
-            await EmailBusiness.SendAsync(new string[] { user.Email },
-                $"New recommendation on Auctus Beta for {asset.Code}",
-                $@"Hello,
-<br/><br/>
-The advisor {advisor.Name} set a new {type.GetDescription()} recommendation for the asset {asset.Code} - {asset.Name}.
-<br/>
-To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.
-<br/><br/>
-<small>If you do not want to receive these recommendations for advisors/assets that you are following <a href='{WebUrl}?configuration=true' target='_blank'>click here</a>.</small>
-<br/><br/>
-Thanks,
-<br/>
-Auctus Team");
+            await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
+                $"New recommendation on Auctus Experts for {asset.Code}",
+                $@"<p>The advisor {advisor.Name} set a new {type.GetDescription()} recommendation for the asset {asset.Code} - {asset.Name}.</p>
+                        <p>To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.</p>");
         }
 
         public List<Advice> List(IEnumerable<int> advisorsId = null, IEnumerable<int> assetsId = null)

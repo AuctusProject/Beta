@@ -457,17 +457,9 @@ namespace Auctus.Business.Account
 
         public async Task SendEmailConfirmationAsync(string email, string code)
         {
-            await EmailBusiness.SendAsync(new string[] { email },
-                "Verify your email address - Auctus Beta",
-                string.Format(@"Hello,
-<br/><br/>
-To activate your account please verify your email address and complete your registration <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.
-<br/><br/>
-<small>If you didn’t ask to verify this address, you can ignore this email.</small>
-<br/><br/>
-Thanks,
-<br/>
-Auctus Team", WebUrl, code));
+            await EmailBusiness.SendUsingTemplateAsync(new string[] { email }, "Verify your email address - Auctus Beta",
+                string.Format(@"<p>To activate your Auctus Expert account please <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.</p>
+                        <p style=""font-size: 12px; font-style: italic;"">If you didn’t ask to verify this address, you can ignore this email.</p>", WebUrl, code));
         }
 
         public static void BaseEmailValidation(string email)
