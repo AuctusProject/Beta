@@ -57,13 +57,18 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
           this.requestToBeAdvisorRequest.password = "";
           let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
           if(!!currentRequestToBeAdvisor){
-            this.requestDenied = currentRequestToBeAdvisor.approved == false;
-            this.alreadySent = true;
-            this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
-            this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
-            this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
-            if (!!currentRequestToBeAdvisor.urlGuid) {
-              this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
+            if (currentRequestToBeAdvisor.approved == true) {
+              this.setClose.emit();
+              this.authRedirect.redirectAfterLoginAction();
+            } else {
+              this.requestDenied = currentRequestToBeAdvisor.approved == false;
+              this.alreadySent = true;
+              this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
+              this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
+              this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
+              if (!!currentRequestToBeAdvisor.urlGuid) {
+                this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
+              }
             }
           }
         });
