@@ -57,17 +57,13 @@ export class AuthRedirect implements CanActivate {
   private redirect(loginResponse: LoginResponse, currentUrl?: string) : Observable<boolean> {
     if(this.navigationService.isSameRoute('wallet-login', currentUrl)) {
       return new Observable (observer => observer.next(false));
-    } else if ((!loginResponse.isAdvisor && !loginResponse.hasInvestment) || 
-      (loginResponse.requestedToBeAdvisor && !loginResponse.isAdvisor) || loginResponse.pendingConfirmation) {
+    } else if ((!loginResponse.hasInvestment && !loginResponse.isAdvisor) || loginResponse.pendingConfirmation) {
         return new Observable (observer => 
           {
             this.accountService.getUserData().subscribe(ret =>
             {
               this.accountService.setLoginData(ret);
-              if (ret.requestedToBeAdvisor && !ret.isAdvisor) {
-                this.navigationService.goToBecomeAdvisor();
-                return observer.next(true);
-              } else if (!loginResponse.requestedToBeAdvisor && !ret.isAdvisor && !ret.hasInvestment) {
+              if (!ret.isAdvisor && !loginResponse.hasInvestment) {
                 this.navigationService.goToWalletLogin();
                 return observer.next(true);
               } else if(ret.pendingConfirmation) {
