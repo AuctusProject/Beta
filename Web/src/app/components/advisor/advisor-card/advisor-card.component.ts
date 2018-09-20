@@ -5,6 +5,7 @@ import { CONFIG} from "../../../services/config.service";
 import { Util } from '../../../util/Util';
 import { NavigationService } from '../../../services/navigation.service';
 import { Subscribable, Subscription } from 'rxjs';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'advisor-card',
@@ -15,13 +16,24 @@ export class AdvisorCardComponent implements OnInit {
   @Input() advisor: AdvisorResponse;
   promise:Subscription;
   
-  constructor(private advisorServices:AdvisorService, private navigationService: NavigationService) { }
+  constructor(private advisorServices: AdvisorService, 
+    private navigationService: NavigationService,
+    private accountService: AccountService) { }
 
   ngOnInit() {
   }
 
   onFollowClick(){
-    this.promise = this.advisorServices.followAdvisor(this.advisor.userId).subscribe(result =>this.advisor.following = true);
+    let loginData = this.accountService.getLoginData();
+    if (!!loginData && ((!loginData.hasInvestment && !loginData.isAdvisor) || loginData.pendingConfirmation)) {
+      if (!loginData.hasInvestment && !loginData.isAdvisor) {
+        this.navigationService.goToWalletLogin();
+      } else {
+        this.navigationService.goToConfirmEmail();
+      }
+    } else {
+      this.promise = this.advisorServices.followAdvisor(this.advisor.userId).subscribe(result =>this.advisor.following = true);
+    }
   }
   onUnfollowClick(){
     this.promise = this.advisorServices.unfollowAdvisor(this.advisor.userId).subscribe(result =>this.advisor.following = false);
