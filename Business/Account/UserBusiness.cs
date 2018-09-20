@@ -223,8 +223,7 @@ namespace Auctus.Business.Account
             user.Password = String.IsNullOrWhiteSpace(password) ? null : GetHashedPassword(password, user.Email, user.CreationDate);
             user.ReferralCode = GenerateReferralCode();
             user.ReferredId = referredUser?.Id;
-            user.ReferralDiscount = referredUser != null ? referredUser.DiscountProvided : (double?)null;
-            user.DiscountProvided = DiscountPercentageOnAuc;
+            user.ReferralDiscount = referredUser != null ? DiscountPercentageOnAuc : (double?)null;
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
             return user;
@@ -253,10 +252,10 @@ namespace Auctus.Business.Account
             else
             {
                 user.ReferredId = referredUser.Id;
-                user.ReferralDiscount = referredUser.DiscountProvided;
+                user.ReferralDiscount = DiscountPercentageOnAuc;
                 Data.Update(user);
                 response.Valid = true;
-                response.Discount = referredUser.DiscountProvided;
+                response.Discount = DiscountPercentageOnAuc;
                 response.AUCRequired = GetMinimumAucAmountForUser(user);
             }
             return response;
@@ -533,7 +532,7 @@ namespace Auctus.Business.Account
             return new ValidateReferralCodeResponse()
             {
                 Valid = user != null,
-                Discount = user != null ? user.DiscountProvided : 0
+                Discount = user != null ? DiscountPercentageOnAuc : 0
             };
         }
 
@@ -625,6 +624,11 @@ namespace Auctus.Business.Account
             response.Advisors = response.Advisors.OrderByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
             response.Assets = response.Assets.OrderByDescending(c => c.MarketCap).ThenByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
             return response;
+        }
+
+        public void ClearUserCache(string email)
+        {
+            MemoryCache.Set<User>(GetUserCacheKey(email), null);
         }
     }
 }

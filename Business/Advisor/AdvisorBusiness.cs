@@ -63,9 +63,14 @@ namespace Auctus.Business.Advisor
             Update(advisor);
 
             ActionBusiness.InsertEditAdvisor(advisor.Id, previousData);
-            RunAsync(() => UpdateAdvisorsCache(Data.ListEnabled()));
+            UpdateAdvisorsCacheAsync();
 
             return advisor.UrlGuid;
+        }
+
+        public void UpdateAdvisorsCacheAsync()
+        {
+            RunAsync(() => UpdateAdvisorsCache(Data.ListEnabled()));
         }
 
         public byte[] GetNoUploadedImageForAdvisor(User user)
@@ -211,35 +216,7 @@ namespace Auctus.Business.Advisor
                     return;
                 }
 
-                var assets = AssetBusiness.ListAssets(assetsIds);
-
-                var assetDateMapping = new Dictionary<int, DateTime>();
-                foreach (int assetId in assetsIds)
-                {
-                    DateTime startDate;
-                    if (mode == CalculationMode.AdvisorBase)
-                        startDate = Data.GetDateTimeNow().AddHours(-4);
-                    else if (mode == CalculationMode.AssetBase || mode == CalculationMode.Feed)
-                        startDate = Data.GetDateTimeNow().AddDays(-30).AddHours(-4);
-                    else if (mode == CalculationMode.AdvisorDetailed)
-                    {
-                        var selectAdvisorFirstAdvice = allAdvices.Where(c => c.AssetId == assetId && c.AdvisorId == selectAdvisorId.Value).OrderBy(c => c.CreationDate).FirstOrDefault();
-                        if (selectAdvisorFirstAdvice == null)
-                            startDate = Data.GetDateTimeNow().AddHours(-4);
-                        else
-                            startDate = selectAdvisorFirstAdvice.CreationDate.AddDays(-30); 
-                    }
-                    else 
-                    {
-                        if (selectAssetId.Value == assetId)
-                            startDate = new DateTime(Math.Min(allAdvices.Where(c => c.AssetId == assetId).Min(c => c.CreationDate).AddDays(-7).Ticks, Data.GetDateTimeNow().AddDays(-30).AddHours(-4).Ticks));
-                        else
-                            startDate = Data.GetDateTimeNow().AddHours(-4);
-                    }
-                    assetDateMapping.Add(assetId, startDate);
-                }
-                
-                var assetValues = AssetValueBusiness.FilterAssetValues(assetDateMapping);
+                var assets = AssetCurrentValueBusiness.ListAssetsValuesForCalculation(assetsIds, mode, allAdvices, selectAssetId, selectAdvisorId);
 
                 var adviceDetails = new List<AdviceDetail>();
                 foreach (var asset in assets)
@@ -247,62 +224,58 @@ namespace Auctus.Business.Advisor
                     var assetAdviceDetails = new List<AdviceDetail>();
                     var previousAdvice = new Dictionary<int, AdviceDetail>();
                     var startAdviceType = new Dictionary<int, AdviceDetail>();
-                    var values = assetValues.Where(c => c.AssetId == asset.Id).OrderByDescending(c => c.Date);
-                    if (values.Any())
+                    var assetAdvices = allAdvices.Where(a => a.AssetId == asset.Id).OrderBy(c => c.CreationDate);
+                    foreach (var advice in assetAdvices)
                     {
-                        var assetAdvices = allAdvices.Where(a => a.AssetId == asset.Id).OrderBy(c => c.CreationDate);
-                        foreach (var advice in assetAdvices)
+                        var detail = SetAdviceDetail(assetAdviceDetails, advice, previousAdvice.ContainsKey(advice.AdvisorId) ? previousAdvice[advice.AdvisorId] : null,
+                            startAdviceType.ContainsKey(advice.AdvisorId) ? startAdviceType[advice.AdvisorId] : null);
+                        if (detail != null)
                         {
-                            var detail = SetAdviceDetail(assetAdviceDetails, advice, previousAdvice.ContainsKey(advice.AdvisorId) ? previousAdvice[advice.AdvisorId] : null,
-                                startAdviceType.ContainsKey(advice.AdvisorId) ? startAdviceType[advice.AdvisorId] : null);
-                            if (detail != null)
-                            {
-                                previousAdvice[advice.AdvisorId] = detail;
-                                if (detail.Advice.AdviceType == AdviceType.ClosePosition)
-                                    startAdviceType[advice.AdvisorId] = null;
-                                else if (!startAdviceType.ContainsKey(advice.AdvisorId) || startAdviceType[advice.AdvisorId] == null || 
-                                    startAdviceType[advice.AdvisorId].Advice.Type != detail.Advice.Type)
-                                    startAdviceType[advice.AdvisorId] = detail;
-                            }   
-                        }
-
-                        var assetAdvisorsId = assetAdvices.Select(c => c.AdvisorId).Distinct();
-
-                        AssetResponse assetResultData = null;
-                        if (mode != CalculationMode.AdvisorBase)
-                            assetResultData = GetAssetBaseResponse(loggedUser, asset, assetFollowers, assetAdvices, assetAdvisorsId, values, mode);
-
-                        foreach (var advisorId in assetAdvisorsId)
-                        {
-                            SetAdviceDetail(assetAdviceDetails, GetLastAdvice(asset, advisorId, values.First().Value), 
-                                previousAdvice.ContainsKey(advisorId) ? previousAdvice[advisorId] : null, startAdviceType.ContainsKey(advisorId) ? startAdviceType[advisorId] : null);
-
-                            if (mode != CalculationMode.AdvisorBase)
-                                assetResultData.AssetAdvisor.Add(GetAssetAdvisorResponse(advisorId, assetAdviceDetails, mode));
-                        }
-
-                        if (mode != CalculationMode.AdvisorBase)
-                        {
-                            if (mode != CalculationMode.AdvisorDetailed && mode != CalculationMode.Feed)
-                            {
-                                assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.Where(c => c.LastAdviceType.HasValue).GroupBy(c => c.LastAdviceType.Value)
-                                    .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
-                                assetResultData.Mode = GetAssetModeType(assetResultData);
-                                assetResultData.Advices = mode == CalculationMode.AssetBase ? null : assetAdviceDetails
-                                    .Select(c => 
-                                    new AssetResponse.AdviceResponse()
-                                    {
-                                        UserId = c.Advice.AdvisorId,
-                                        AdviceType = c.Advice.Type,
-                                        Date = c.Advice.CreationDate,
-                                        AssetValue = c.Advice.AssetValue
-                                    }).OrderBy(c => c.Date).ToList();
-                            }
-                            assetsResult.Add(assetResultData);
-                        }
-
-                        adviceDetails.AddRange(assetAdviceDetails);
+                            previousAdvice[advice.AdvisorId] = detail;
+                            if (detail.Advice.AdviceType == AdviceType.ClosePosition)
+                                startAdviceType[advice.AdvisorId] = null;
+                            else if (!startAdviceType.ContainsKey(advice.AdvisorId) || startAdviceType[advice.AdvisorId] == null || 
+                                startAdviceType[advice.AdvisorId].Advice.Type != detail.Advice.Type)
+                                startAdviceType[advice.AdvisorId] = detail;
+                        }   
                     }
+
+                    var assetAdvisorsId = assetAdvices.Select(c => c.AdvisorId).Distinct();
+
+                    AssetResponse assetResultData = null;
+                    if (mode != CalculationMode.AdvisorBase)
+                        assetResultData = GetAssetBaseResponse(loggedUser, asset, assetFollowers, assetAdvices, assetAdvisorsId, mode);
+
+                    foreach (var advisorId in assetAdvisorsId)
+                    {
+                        SetAdviceDetail(assetAdviceDetails, GetLastAdvice(asset, advisorId, asset.CurrentValue), 
+                            previousAdvice.ContainsKey(advisorId) ? previousAdvice[advisorId] : null, startAdviceType.ContainsKey(advisorId) ? startAdviceType[advisorId] : null);
+
+                        if (mode != CalculationMode.AdvisorBase)
+                            assetResultData.AssetAdvisor.Add(GetAssetAdvisorResponse(advisorId, assetAdviceDetails, mode));
+                    }
+
+                    if (mode != CalculationMode.AdvisorBase)
+                    {
+                        if (mode != CalculationMode.AdvisorDetailed && mode != CalculationMode.Feed)
+                        {
+                            assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.Where(c => c.LastAdviceType.HasValue).GroupBy(c => c.LastAdviceType.Value)
+                                .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
+                            assetResultData.Mode = GetAssetModeType(assetResultData);
+                            assetResultData.Advices = mode == CalculationMode.AssetBase ? null : assetAdviceDetails
+                                .Select(c => 
+                                new AssetResponse.AdviceResponse()
+                                {
+                                    UserId = c.Advice.AdvisorId,
+                                    AdviceType = c.Advice.Type,
+                                    Date = c.Advice.CreationDate,
+                                    AssetValue = c.Advice.AssetValue
+                                }).OrderBy(c => c.Date).ToList();
+                        }
+                        assetsResult.Add(assetResultData);
+                    }
+
+                    adviceDetails.AddRange(assetAdviceDetails);
                 }
                 var advisorsData = new Dictionary<int, IEnumerable<AdviceDetail>>();
                 if (mode != CalculationMode.AssetBase && allAdvisors?.Any() == true)
@@ -323,13 +296,8 @@ namespace Auctus.Business.Advisor
         private void FillNotAdvicedAsset(out List<AssetResponse> assetsResult, CalculationMode mode, int selectAssetId, User loggedUser, IEnumerable<FollowAsset> assetFollowers)
         {
             assetsResult = new List<AssetResponse>();
-            var asset = AssetBusiness.GetById(selectAssetId);
-
-            var filterValues = new Dictionary<int, DateTime>();
-            filterValues[selectAssetId] = Data.GetDateTimeNow().AddDays(-30);
-            var values = AssetValueBusiness.FilterAssetValues(filterValues).OrderByDescending(c => c.Date);
-
-            assetsResult.Add(GetAssetBaseResponse(loggedUser, asset, assetFollowers, new Advice[] { }, new int[] { }, values, mode));
+            var asset = AssetCurrentValueBusiness.ListAssetsValuesForCalculation(new int[] { selectAssetId }, mode, null, selectAssetId);
+            assetsResult.Add(GetAssetBaseResponse(loggedUser, asset.First(), assetFollowers, new Advice[] { }, new int[] { }, mode));
         }
 
         private Advice GetLastAdvice(DomainObjects.Asset.Asset asset, int advisorId, double lastValue)
@@ -344,33 +312,26 @@ namespace Auctus.Business.Advisor
             };
         }
 
-        private AssetResponse GetAssetBaseResponse(User loggedUser, DomainObjects.Asset.Asset asset, IEnumerable<FollowAsset> assetFollowers, 
-            IEnumerable<Advice> assetAdvices, IEnumerable<int> assetAdvisorsId, IEnumerable<AssetValue> values, CalculationMode mode)
+        private AssetResponse GetAssetBaseResponse(User loggedUser, AssetCurrentValue assetCurrentValue, IEnumerable<FollowAsset> assetFollowers, 
+            IEnumerable<Advice> assetAdvices, IEnumerable<int> assetAdvisorsId, CalculationMode mode)
         {
-            var assFollowers = assetFollowers?.Where(c => c.AssetId == asset.Id);
-            var firstData = values.First();
-            var vl30d = values.Where(c => c.Date <= firstData.Date.AddDays(-30) && c.Date > firstData.Date.AddDays(-31));
-            var vl7d = values.Where(c => c.Date <= firstData.Date.AddDays(-7) && c.Date > firstData.Date.AddDays(-8)); 
-            var vl24h = values.Where(c => c.Date <= firstData.Date.AddDays(-1) && c.Date > firstData.Date.AddDays(-2));
-            var lastValue = firstData.Value;
-            var variation24h = vl24h.Any() ? (lastValue / vl24h.First().Value) - 1 : (double?)null;
-            var variation7d = vl7d.Any() ? (lastValue / vl7d.First().Value) - 1 : (double?)null;
-            var variation30d = vl30d.Any() ? (lastValue / vl30d.First().Value) - 1 : (double?)null;
+            var assFollowers = assetFollowers?.Where(c => c.AssetId == assetCurrentValue.Id);
             return new AssetResponse()
             {
-                AssetId = asset.Id,
-                Code = asset.Code,
-                Name = asset.Name,
+                AssetId = assetCurrentValue.Id,
+                Code = assetCurrentValue.Code,
+                Name = assetCurrentValue.Name,
                 Following = loggedUser != null && assFollowers?.Any(c => c.UserId == loggedUser.Id) == true,
                 NumberOfFollowers = assFollowers?.Count(),
                 TotalAdvisors = assetAdvisorsId.Count(),
                 TotalRatings = assetAdvices.Count(),
-                LastValue = lastValue,
-                MarketCap = asset.MarketCap,
-                Variation24h = variation24h,
-                Variation7d = variation7d,
-                Variation30d = variation30d,
-                Values = mode == CalculationMode.AssetBase || mode == CalculationMode.Feed ? null : SwingingDoorCompression.Compress(values.ToDictionary(c => c.Date, c => c.Value))
+                LastValue = assetCurrentValue.CurrentValue,
+                MarketCap = assetCurrentValue.MarketCap,
+                Variation24h = assetCurrentValue.Variation24Hours,
+                Variation7d = assetCurrentValue.Variation7Days,
+                Variation30d = assetCurrentValue.Variation30Days,
+                Values = mode == CalculationMode.AssetBase || mode == CalculationMode.Feed || assetCurrentValue.AssetValues == null ? null 
+                            : SwingingDoorCompression.Compress(assetCurrentValue.AssetValues.ToDictionary(c => c.Date, c => c.Value))
                                     .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
             };
         }

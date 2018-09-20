@@ -39,7 +39,7 @@ namespace Auctus.Business.Advisor
             if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
                 throw new BusinessException("Sell recommendations are not available for this asset.");
 
-            var assetValue = AssetValueBusiness.LastAssetValue(asset.Id);
+            var assetValue = AssetCurrentValueBusiness.GetCurrentValue(asset.Id);
             if (assetValue == null)
                 throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
 

@@ -9,6 +9,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { Subscription } from 'rxjs';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'message-signature',
@@ -37,7 +38,8 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
     private localStorageService : LocalStorageService,
     private authRedirect: AuthRedirect,
     private notificationsService: NotificationsService,
-    private changeDetector: ChangeDetectorRef) { }
+    private changeDetector: ChangeDetectorRef,
+    private modalService: ModalService) { }
 
   ngOnInit() {
     this.checkMetamask();
@@ -59,6 +61,10 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
           this.setDiscountMessage(result.discount);
         }
       });
+    let loginData = this.accountService.getLoginData();
+    if (loginData && loginData.requestedToBeAdvisor && !loginData.hasInvestment && !loginData.isAdvisor) {
+      this.modalService.setBecomeAdvisor();
+    }
   }
 
   shouldShowBancorWidget() {

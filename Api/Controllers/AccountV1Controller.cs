@@ -109,7 +109,7 @@ namespace Api.Controllers
 
         [Route("me/confirmations")]
         [HttpPost]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ConfirmEmail([FromBody]ConfirmEmailRequest confirmEmailRequest)
         {
