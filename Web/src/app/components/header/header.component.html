@@ -12,7 +12,7 @@
         <global-search fxShow="true" fxHide.lt-md="true" class="search"></global-search>
         <span class="login" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
         <span class="signin" *ngIf="!isLogged()" (click)="register()">SIGN UP</span>
-        <a *ngIf="isLogged()" fxShow="true" fxHide.lt-md="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="profile">
+        <a *ngIf="isLogged()" fxShow="true" fxHide.lt-lg="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="profile">
             <span fxLayout="row" fxLayoutAlign="space-around center">
                 <span>PROFILE</span>
                 <mat-icon>{{menuOpen ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
