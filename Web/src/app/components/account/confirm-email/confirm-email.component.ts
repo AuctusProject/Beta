@@ -33,20 +33,22 @@ export class ConfirmEmailComponent implements ModalComponent, OnInit {
     private navigationService : NavigationService) { }
 
   ngOnInit() { 
+    this.confirmationCode = this.route.snapshot.queryParams['c'];
     if (this.accountService.isLoggedIn()) {
       let userData = this.accountService.getLoginData();
       if (!userData.pendingConfirmation) {
         this.setConfirmedEmailAction();
       } else {
         this.loggedUserEmail = userData.email;
-        this.confirmationCode = this.route.snapshot.queryParams['c'];
-        if(!!this.confirmationCode) {
+        if (!!this.confirmationCode) {
           this.confirmEmail();
         }
       }
-    } else {
+    } else if (!this.confirmationCode) {
       this.setClose.emit();
       this.navigationService.goToLogin();
+    } else {
+      this.confirmEmail();
     }
   }
 
