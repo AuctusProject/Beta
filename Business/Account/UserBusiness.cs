@@ -223,8 +223,7 @@ namespace Auctus.Business.Account
             user.Password = String.IsNullOrWhiteSpace(password) ? null : GetHashedPassword(password, user.Email, user.CreationDate);
             user.ReferralCode = GenerateReferralCode();
             user.ReferredId = referredUser?.Id;
-            user.ReferralDiscount = referredUser != null ? referredUser.DiscountProvided : (double?)null;
-            user.DiscountProvided = DiscountPercentageOnAuc;
+            user.ReferralDiscount = referredUser != null ? DiscountPercentageOnAuc : (double?)null;
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
             return user;
@@ -253,10 +252,10 @@ namespace Auctus.Business.Account
             else
             {
                 user.ReferredId = referredUser.Id;
-                user.ReferralDiscount = referredUser.DiscountProvided;
+                user.ReferralDiscount = DiscountPercentageOnAuc;
                 Data.Update(user);
                 response.Valid = true;
-                response.Discount = referredUser.DiscountProvided;
+                response.Discount = DiscountPercentageOnAuc;
                 response.AUCRequired = GetMinimumAucAmountForUser(user);
             }
             return response;
@@ -457,17 +456,9 @@ namespace Auctus.Business.Account
 
         public async Task SendEmailConfirmationAsync(string email, string code)
         {
-            await EmailBusiness.SendAsync(new string[] { email },
-                "Verify your email address - Auctus Beta",
-                string.Format(@"Hello,
-<br/><br/>
-To activate your account please verify your email address and complete your registration <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.
-<br/><br/>
-<small>If you didn’t ask to verify this address, you can ignore this email.</small>
-<br/><br/>
-Thanks,
-<br/>
-Auctus Team", WebUrl, code));
+            await EmailBusiness.SendUsingTemplateAsync(new string[] { email }, "Verify your email address - Auctus Beta",
+                string.Format(@"<p>To activate your Auctus Expert account please <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.</p>
+                        <p style=""font-size: 12px; font-style: italic;"">If you didn’t ask to verify this address, you can ignore this email.</p>", WebUrl, code));
         }
 
         public static void BaseEmailValidation(string email)
@@ -541,7 +532,7 @@ Auctus Team", WebUrl, code));
             return new ValidateReferralCodeResponse()
             {
                 Valid = user != null,
-                Discount = user != null ? user.DiscountProvided : 0
+                Discount = user != null ? DiscountPercentageOnAuc : 0
             };
         }
 
@@ -633,6 +624,11 @@ Auctus Team", WebUrl, code));
             response.Advisors = response.Advisors.OrderByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
             response.Assets = response.Assets.OrderByDescending(c => c.MarketCap).ThenByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
             return response;
+        }
+
+        public void ClearUserCache(string email)
+        {
+            MemoryCache.Set<User>(GetUserCacheKey(email), null);
         }
     }
 }

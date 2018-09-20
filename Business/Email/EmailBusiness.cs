@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccessInterfaces.Email;
+using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -59,10 +60,17 @@ namespace Auctus.Business.Email
             await SendAsync(EmailErrorList, subject, string.Format("{0}<br/><br/><br/>{1}", message, ex?.ToString()));
         }
 
-        public async Task SendAsync(IEnumerable<string> to, string subject, string body, bool bodyIsHtml = true, string from = "noreply@auctus.org",
+        private async Task SendAsync(IEnumerable<string> to, string subject, string body, bool bodyIsHtml = true, string from = "noreply@auctus.org",
             IEnumerable<string> cc = null, IEnumerable<string> bcc = null, IEnumerable<SendGrid.Helpers.Mail.Attachment> attachment = null)
         {
             await Resource.SendAsync(to, subject, body, bodyIsHtml, from, cc, bcc, attachment);
+        }
+
+        public async Task SendUsingTemplateAsync(IEnumerable<string> to, string subject, string content)
+        {
+            var body = EmailTemplate.EMAIL_TEMPLATE.Replace("@subject", subject).Replace("@content", content);
+
+            await SendAsync(to, subject, body);
         }
     }
 }
