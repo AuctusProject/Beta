@@ -16,7 +16,7 @@
   <div fxLayout="column" (click)="goToAssetDetails()" class="asset-column">
     <div fxLayout="row">
       <div class="asset-icon">
-        <img [src]="getAssetImgUrl()">
+        <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
       </div>
       <div class="asset-name truncate" title="{{advice.assetCode}}&nbsp;({{advice.assetName}})">{{advice.assetCode}}&nbsp;({{advice.assetName}})</div>
     </div>  

@@ -91,7 +91,7 @@ export class AccountService {
     return this.httpService.get(this.confirmationEmailUrl);
   }
 
-  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginResponse>{
+  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginResult>{
     return this.httpService.post(this.confirmationEmailUrl, confirmEmailRequest);
   }
 

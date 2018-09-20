@@ -100,7 +100,8 @@ namespace Api.Controllers
 
         protected virtual IActionResult ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)
         {
-            return Ok(UserBusiness.ConfirmEmail(confirmEmailRequest.Code));
+            var loginResponse = UserBusiness.ConfirmEmail(confirmEmailRequest.Code);
+            return Ok(new { logged = true, jwt = GenerateToken(loginResponse.Email), data = loginResponse });
         }
 
         protected virtual IActionResult ListAdvices(int? top, int? lastAdviceId)

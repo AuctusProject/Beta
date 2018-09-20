@@ -107,6 +107,22 @@ input::placeholder {
     vertical-align: middle;
 }
 
+::ng-deep .search-coin-autocomplete-option-div-img-wrapper {
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    background-color: white;
+    width: 17px;
+    height: 17px;
+    line-height: normal;
+}
+
+::ng-deep .search-coin-autocomplete-option-div-img-wrapper img {
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+}
+
 ::ng-deep .search-coin-autocomplete-option-div-img img {
     border-radius:50%;
     -moz-border-radius:50%;

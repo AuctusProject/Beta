@@ -10,7 +10,9 @@
     <mat-autocomplete [class]="autocompleteClass" (optionSelected)="onSelectAsset($event)" #coinsearch="matAutocomplete">
         <mat-option [class]="optionClass" *ngFor="let option of searchResults" [value]="option">
             <div class="search-coin-autocomplete-option-div-img">
-                <img onerror="this.style.display='none'" height="17" width="17" [src]="getAssetImgUrl(option.id)">
+                <span class="search-coin-autocomplete-option-div-img-wrapper">
+                    <img onerror="this.style.display='none'" height="17" width="17" [src]="getAssetImgUrl(option.id)">
+                </span>
             </div>
             {{option.name}}
             <div class="search-coin-autocomplete-option-separation"></div>

@@ -4,28 +4,26 @@
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <div class="biggerNumber bold">{{dashboardData.totalUsersConfirmed}}<span class="smallNumber">&nbsp;/&nbsp;{{dashboardData.totalActiveUsers}}</span></div>
                 <div class="biggerText totalText">CONFIRMED USERS<span class="numberText">&nbsp;/&nbsp;ACTIVES</span></div>
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <span class="smallNumber bold">{{dashboardData.totalUsersStartedRegistration}}</span>
+                    <span class="smallText totalText">STARTED REGISTRATION</span>
+                </div>
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <span class="biggerNumber bold">{{dashboardData.totalUsersConfirmedFromReferral}}</span>
                 <span class="biggerText totalText">FROM REFERRAL</span>
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <span class="smallNumber bold">{{dashboardData.totalUsersStartedRegistrationFromReferral}}</span>
+                    <span class="smallText totalText">STARTED REGISTRATION<br/>FROM REFERRAL</span>
+                </div>
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <span class="biggerNumber bold">{{dashboardData.totalAdvisors}}<span class="smallNumber bold">&nbsp;/&nbsp;{{dashboardData.totalActiveAdvisors}}</span></span>
                 <div class="biggerText totalText">EXPERTS<span class="numberText">&nbsp;/&nbsp;ACTIVES</span></div>
-            </div>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="80px" fxLayoutGap.xs="30px" fxLayoutGap.sm="45px">
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <span class="smallNumber bold">{{dashboardData.totalUsersStartedRegistration}}</span>
-                <span class="smallText totalText">STARTED REGISTRATION</span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <span class="smallNumber bold">{{dashboardData.totalUsersStartedRegistrationFromReferral}}</span>
-                <span class="smallText totalText">STARTED REGISTRATION<br/>FROM REFERRAL</span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-                <span class="smallNumber bold">{{dashboardData.totalRequestToBeAdvisor}}</span>
-                <span class="smallText totalText">REQUEST TO BE EXPERT</span>
+                <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+                    <span class="smallNumber bold">{{dashboardData.totalRequestToBeAdvisor}}</span>
+                    <span class="smallText totalText">REQUEST TO BE EXPERT</span>
+                </div>
             </div>
         </div>
         <div class="registration-chart" [chart]="registrationChart"></div>
@@ -67,7 +65,7 @@
         <div fxLayout="column" fxLayoutAlign="center center" fxFlex="50" fxFlex.xs="100" fxFlex.sm="100">
             <table>
                 <tr class="totalText" style="border-bottom: 1px;">
-                    <th class="numberText bold"><i>TOP 10</i></th>
+                    <th class="numberText bold"><i>TOP 10 ON REFERRAL</i></th>
                     <th class="numberText bold">Total</th>
                     <th class="smallText">In progress</th>
                     <th class="smallText">Interrupted</th>
@@ -101,7 +99,7 @@
             </div>
             <table>
                 <tr class="totalText" style="border-bottom: 1px;">
-                    <th class="numberText bold"><i>TOP 10</i></th>
+                    <th class="numberText bold"><i>TOP 10 ON ADVICES</i></th>
                     <th class="numberText bold">Total</th>
                     <th class="smallText">Recent</th>
                 </tr>
@@ -131,7 +129,7 @@
             </div>
             <table>
                 <tr class="totalText" style="border-bottom: 1px;">
-                    <th class="numberText bold"><i>TOP 10</i></th>
+                    <th class="numberText bold"><i>TOP 10 ON FOLLOWERS</i></th>
                     <th class="numberText bold">Total</th>
                     <th class="smallText">Recent</th>
                 </tr>
