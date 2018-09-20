@@ -29,11 +29,18 @@
         <table mat-table [dataSource]="assets" class="assets-table">
           <ng-container matColumnDef="assetName">
             <th mat-header-cell *matHeaderCellDef> Asset </th>
-            <td mat-cell *matCellDef="let asset"> 
-              <div class="table-asset-code">
-                {{asset.code}}
-              </div>
-              {{asset.name}} 
+            <td mat-cell *matCellDef="let asset">
+              <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" (click)="goToAssetDetails(asset.assetId, $event)">
+                <div class="asset-icon">
+                  <img [src]="getAssetImgUrl(asset)" onerror="this.style.display='none'">
+                </div>
+                <div fxLayout="column" fxLayoutAlign="center start">
+                  <div class="table-asset-code">
+                    {{asset.code}}
+                  </div>
+                  {{asset.name}} 
+                </div>
+              </div>   
             </td>
           </ng-container>
         

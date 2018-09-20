@@ -11,6 +11,7 @@ import { AssetService } from '../../../services/asset.service';
 import { ViewChildren, QueryList } from '@angular/core';
 import { AssetHistoryChartComponent } from '../../asset/asset-history-chart/asset-history-chart.component';
 import { ModalService } from '../../../services/modal.service';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'expert-details',
@@ -37,6 +38,7 @@ export class ExpertDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,  
     public accountService: AccountService,
     private advisorService: AdvisorService,
+    private navigationService: NavigationService,
     private assetService: AssetService,
     private modalService: ModalService) { }
 
@@ -76,8 +78,15 @@ export class ExpertDetailsComponent implements OnInit {
     this.expert.assets.forEach(element => this.assets.push(element, { detailRow: true, element }));
   }
 
-  getAssetImgUrl(asset: AssetResponse){
+  getAssetImgUrl(asset: AssetResponse) {
     return CONFIG.assetImgUrl.replace("{id}", asset.assetId.toString());
+  }
+
+  goToAssetDetails(assetId: number, event: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.navigationService.goToAssetDetails(assetId);
   }
 
   getLastAdviceTypeDescription(asset: AssetResponse){
