@@ -39,6 +39,12 @@
     width: 260px;
 }
 
+@media(max-width: 599px){
+    .expert-name{
+        text-align: center;
+    }
+}
+
 .expert-name-rating{
     cursor: pointer;
 }
@@ -46,6 +52,11 @@
 .asset-column{
     width: 200px;
     cursor: pointer;
+}
+
+.asset-code-name,
+.asset-name{
+    width: 160px;;
 }
 
 .asset-icon{

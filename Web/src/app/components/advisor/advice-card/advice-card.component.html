@@ -1,41 +1,58 @@
-<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px">
-  <div class="expert-picture" (click)="goToExpertDetails()" >
-    <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
-    <div class="expert-ranking">
-      {{advice.advisorRanking}}
-    </div>
-  </div>
-  <div fxLayout="column" class="expert-name-rating" (click)="goToExpertDetails()" fxLayoutAlign="center start" >
-    <div class="expert-name truncate" title="{{advice.advisorName}}">
-      {{advice.advisorName}}
-    </div>
-    <div class="expert-rating">
-      <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
-    </div>
-  </div>
-  <div fxLayout="column" (click)="goToAssetDetails()" class="asset-column">
-    <div fxLayout="row">
-      <div class="asset-icon">
-        <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
+<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
+  <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
+    <div class="expert-picture" (click)="goToExpertDetails()" >
+      <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
+      <div class="expert-ranking">
+        {{advice.advisorRanking}}
       </div>
-      <div class="asset-name truncate" title="{{advice.assetCode}}&nbsp;({{advice.assetName}})">{{advice.assetCode}}&nbsp;({{advice.assetName}})</div>
-    </div>  
-    <div class="follow-btn white-button action-button-sm" *ngIf="advice.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
-      Unfollow
     </div>
-    <div class="follow-btn blue-button action-button-sm" *ngIf="!advice.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
-      Follow
-    </div>
-  </div>
-  <div class="advice-time" title="{{advice.adviceDate | date: 'medium'}}">
-    {{advice.adviceDate | timeAgo}}
-  </div>
-  <div fxLayout="column">
-    <div fxLayout="column" class="advice-mode-box" [style.background-color]="getAdviceTypeColor()" fxLayoutAlign="center center">
-      <div class="advice-type">
-        {{getAdviceTypeDescription()}}
+    <div fxLayout="column" class="expert-name-rating" (click)="goToExpertDetails()" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
+      <div class="expert-name truncate" title="{{advice.advisorName}}">
+        {{advice.advisorName}}
       </div>
-      at price {{advice.assetValueAtAdviceTime | currency}}
+      <div class="expert-rating">
+        <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
+      </div>
+    </div>
+  </div>
+  <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
+    <div fxLayout="column" (click)="goToAssetDetails()" class="asset-column">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+        <div fxHide.lt-sm class="asset-icon">
+          <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
+        </div>
+        <div class="asset-code-name" fxLayout="column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center">
+          <div class="table-asset-code">
+            {{advice.assetCode}}
+          </div>
+          <span class="asset-name truncate">{{advice.assetName}}</span>
+        </div>
+      </div>  
+      
+      <!-- <div fxLayout="row">
+        <div class="asset-icon">
+          <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
+        </div>
+        <div class="asset-name truncate" title="{{advice.assetCode}}&nbsp;({{advice.assetName}})">{{advice.assetCode}}&nbsp;({{advice.assetName}})</div>
+      </div>   -->
+      <div class="follow-btn white-button action-button-sm" *ngIf="advice.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
+        Unfollow
+      </div>
+      <div class="follow-btn blue-button action-button-sm" *ngIf="!advice.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
+        Follow
+      </div>
+    </div>
+    <div fxHide.lt-md class="advice-time" title="{{advice.adviceDate | date: 'medium'}}">
+      {{advice.adviceDate | timeAgo}}
+    </div>
+    <div fxLayout="column">
+      <div fxLayout="column" class="advice-mode-box" [style.background-color]="getAdviceTypeColor()" fxLayoutAlign="center center">
+        <div class="advice-type">
+          {{getAdviceTypeDescription()}}
+        </div>
+        at price {{advice.assetValueAtAdviceTime | currency}}
+      </div>
+      <span fxLayoutAlign="center center" fxHide.gt-sm>{{advice.adviceDate | timeAgo}}</span>
     </div>
   </div>
 </div>
