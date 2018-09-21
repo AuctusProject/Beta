@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { AccountService } from '../../../services/account.service';
 import { Subscription } from 'rxjs';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'advices',
@@ -57,4 +58,15 @@ export class AdvicesComponent implements OnInit {
     }
   }
 
+  getTopTitle() : string {
+    return "HELLO";
+  }
+
+  getTopImage() : string {
+    return CONFIG.platformImgUrl.replace("{id}", "feed1920px");
+  }
+
+  getTopText() : string {
+    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  }
 }
