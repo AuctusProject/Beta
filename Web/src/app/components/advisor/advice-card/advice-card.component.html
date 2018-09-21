@@ -43,7 +43,7 @@
         <div class="advice-type">
           {{getAdviceTypeDescription()}}
         </div>
-        at price {{advice.assetValueAtAdviceTime | currency}}
+        at price {{advice.assetValueAtAdviceTime | valueDisplay}}
       </div>
       <span fxLayoutAlign="center center" fxHide.gt-sm>{{advice.adviceDate | timeAgo}}</span>
     </div>

@@ -51,7 +51,7 @@
                 {{getLastAdviceTypeDescription(asset)}}
                 <span fxHide.gt-sm>
                   <br/>
-                  At price {{asset.assetAdvisor[0].lastAdviceAssetValue | currency}}
+                  At price {{asset.assetAdvisor[0].lastAdviceAssetValue | valueDisplay}}
                 </span>
               </div>
             </td>
@@ -61,7 +61,7 @@
             <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Value </th>
             <td fxHide.lt-md mat-cell *matCellDef="let asset"> 
               At price
-              <div>{{asset.assetAdvisor[0].lastAdviceAssetValue | currency}}</div>
+              <div>{{asset.assetAdvisor[0].lastAdviceAssetValue | valueDisplay}}</div>
             </td>
           </ng-container>
 
