@@ -4,6 +4,8 @@
     <div class="menu" fxLayout="row" fxLayoutAlign="space-around center">
         <a fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecomeExpert()" routerLinkActive="active"><span>BECOME AN EXPERT</span></a>
         <div fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || !loginData.isAdvisor" class="separator"></div>
+        <a fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || loginData.isAdvisor" [routerLink]="getMyProfile()" routerLinkActive="active"><span>MY PROFILE</span></a>
+        <div fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || loginData.isAdvisor" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLink="/top-experts" routerLinkActive="active"><span>TOP EXPERTS</span></a>
         <div fxShow="true" fxHide.lt-lg="true" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLink="/top-assets" routerLinkActive="active"><span>TOP ASSETS</span></a>
@@ -21,7 +23,7 @@
         <span class="mobile-menu" fxShow="true" fxHide.gt-md="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="mobile"><mat-icon>{{menuOpen ? 'close' : 'reorder'}}</mat-icon></span>
         <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #profile="matMenu">
             <button class="sub-menu-item" fxShow="true" fxHide.gt-sm="true" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecomeExpert()" mat-menu-item>BECOME AN EXPERT</button>
-            <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="advisorDetails()" mat-menu-item>MY DETAILS</button>
+            <button class="sub-menu-item" fxShow="true" fxHide.gt-sm="true" *ngIf="!!loginData && loginData.isAdvisor" (click)="onMyProfile()" mat-menu-item>MY PROFILE</button>
             <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
             <button class="sub-menu-item" (click)="configuration()" mat-menu-item>CONFIGURATION</button>
             <button class="sub-menu-item" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>
@@ -30,12 +32,12 @@
         </mat-menu>
         <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #mobile="matMenu">
             <button class="sub-menu-item" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecomeExpert()" mat-menu-item>BECOME AN EXPERT</button>
+            <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="onMyProfile()" mat-menu-item>MY PROFILE</button>
             <button class="sub-menu-item" (click)="onTopExperts()" mat-menu-item>TOP EXPERTS</button>
             <button class="sub-menu-item" (click)="onTopAssets()" mat-menu-item>TOP ASSETS</button>
             <button class="sub-menu-item" *ngIf="!isLogged()" mat-menu-item>
                 <a class="about-mobile" routerLinkActive="active" href="https://auctus.org/" target="_blank">ABOUT US</a>
             </button>
-            <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="advisorDetails()" mat-menu-item>MY DETAILS</button>
             <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="editAdvisor()" mat-menu-item>EDIT PROFILE</button>
             <button class="sub-menu-item" *ngIf="isLogged()" (click)="configuration()" mat-menu-item>CONFIGURATION</button>
             <button class="sub-menu-item" *ngIf="isLogged()" (click)="referralDetails()" mat-menu-item>REWARDS SUMMARY</button>

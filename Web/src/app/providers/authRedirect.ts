@@ -40,7 +40,7 @@ export class AuthRedirect implements CanActivate {
             if (redirectUrl) {
               this.navigationService.goToUrl(redirectUrl);
             } else {
-              this.redirectToHome(this.accountService.getLoginData());
+              this.navigationService.goToFeed();
             }
           }
         });
@@ -76,14 +76,6 @@ export class AuthRedirect implements CanActivate {
           });
     } else {
       return new Observable (observer => observer.next(false));
-    }
-  }
-
-  redirectToHome(loginResponse: LoginResponse) {
-    if(loginResponse.isAdvisor) {
-      this.navigationService.goToExpertDetails(loginResponse.id);
-    } else {
-      this.navigationService.goToFeed();
     }
   }
 }

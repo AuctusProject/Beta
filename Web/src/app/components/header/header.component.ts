@@ -62,7 +62,11 @@ export class HeaderComponent implements OnInit {
     this.navigationService.goToHome();
   }
 
-  advisorDetails() {
+  getMyProfile() {
+    return 'expert-details/' + this.loginData.id;
+  }
+
+  onMyProfile() {
     this.navigationService.goToExpertDetails(this.loginData.id);
   }
 

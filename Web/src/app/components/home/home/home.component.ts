@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit {
   constructor(private route: ActivatedRoute, 
     private modalService: ModalService,
     private accountService: AccountService,
-    private authRedirect : AuthRedirect,
     private navigationService: NavigationService) { }
 
   ngOnInit() {
@@ -33,7 +32,7 @@ export class HomeComponent implements OnInit {
     } else if (!!this.route.snapshot.queryParams['login']) {
       this.modalService.setLogin();
     } else if(this.isLoggedIn()) {
-      this.authRedirect.redirectToHome(this.accountService.getLoginData());
+      this.navigationService.goToFeed();
     }
   }
 
