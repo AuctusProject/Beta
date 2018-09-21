@@ -539,7 +539,6 @@ textarea:read-only {
 
 .assets-table .mat-column-position div{
   width: 99px;
-  height: 26px;
   line-height: 26px;
   font-size: 12px;
   font-weight: 500;
@@ -547,17 +546,16 @@ textarea:read-only {
   margin: auto;
 }
 
+@media(max-width:959px){
+  .assets-table .mat-column-position div{
+    line-height: unset;
+    padding: 4px;
+  }
+}
+
 .assets-table .mat-column-value div{
   font-size: 16px;
 }
-/* 
-.assets-table .mat-column-position div {
-  width: 80px;
-  margin: auto;
-  height: 22px;
-  line-height: 22px;
-} */
-
 
 .expert-rating{
   display: -webkit-box;

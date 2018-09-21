@@ -1,25 +1,31 @@
 <div class="asset-card" (click)="goToAssetDetails()" fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutGap.xs="5px" fxLayoutAlign="left center">
-  <div class="asset-icon">
-    <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
-  </div>
-  <div class="asset-info" fxLayout="column">
-    <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
-    <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowClick($event)">
-      Unfollow
+  <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="left center">
+    <div class="asset-icon">
+      <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
     </div>
-    <div class="blue-button action-button-sm" [promiseBtn]="promise" *ngIf="!asset.following" (click)="onFollowClick($event)">
-      Follow
+    <div class="asset-info" fxLayout="column">
+      <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>
+      <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowClick($event)">
+        Unfollow
+      </div>
+      <div class="blue-button action-button-sm" [promiseBtn]="promise" *ngIf="!asset.following" (click)="onFollowClick($event)">
+        Follow
+      </div>
     </div>
   </div>
-  <div class="ratings-distribution" fxLayout="row">
+  <div fxHide.lt-md class="ratings-distribution" fxLayout="row">
     <recommendation-distribution [data]="asset.recommendationDistribution" [showTitle]="'true'"></recommendation-distribution>
   </div>
-  <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
-  <div class="price">
-    {{getLastValue()}}
+  <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="40px" fxLayoutGap.lt-md="5px" fxLayoutAlign="left center">
+    <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
+    <div fxLayout="row" fxLayoutGap.gt-sm="40px" fxLayoutGap.lt-md="5px" fxLayoutAlign="left center">
+      <div class="price">
+        {{getLastValue()}}
+      </div>
+      <percentage-display [value]="asset.variation24h"></percentage-display>
+    </div>
   </div>
-  <percentage-display [value]="asset.variation24h"></percentage-display>
-  <div class="blue-button action-button" *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick($event)">
+  <div class="blue-button" ngClass.gt-sm="action-button" ngClass.lt-md="action-button-sm" *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick($event)">
     Rate It
   </div>
 </div>
