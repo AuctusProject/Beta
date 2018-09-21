@@ -122,7 +122,7 @@ namespace Auctus.Util
 					<tr style=""width:100%;text-align:center;height:50px;vertical-align:middle;"">
 						<td colspan=4 style=""font-size: 12px;"">@subject</td>
 					</tr>
-					<tr style=""width:100%;background-image:url('https://dl.auctus.org/img/Img_@backImage.png');height:200px;vertical-align:middle;"">
+					<tr style=""width:100%;background-image:url('https://dl.auctus.org/img/Img_@backImage.png');background-position: center;height:200px;vertical-align:middle;"">
 						<td align=""center"" colspan=4>&nbsp;</td>
 					</tr>
                     <tr>
