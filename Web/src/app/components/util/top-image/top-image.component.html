@@ -1,0 +1,8 @@
+<div class="top-platform-image">
+    <img [src]="urlImage" fxHide.xs="true"/>
+    <div class="top-platform-text" fxHide.xs="true">
+        <h2 *ngIf="title" class="bold">{{title}}</h2>
+        <span *ngIf="subtitle" [style.font-size]="title ? '14px' : '19px'">{{subtitle}}</span>
+    </div>
+    <div class="auctus-blue-bar"></div>
+</div>
