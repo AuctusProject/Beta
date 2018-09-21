@@ -49,7 +49,7 @@ namespace Auctus.Business.Account
                 "Reset your password - Auctus Platform",
                 string.Format(@"<p>You told us you forgot your password. If you really did, <a href='{0}?resetpassword=true&c={1}' target='_blank'>click here</a> to choose a new one.</p>
                     <p style=""font-size: 12px; font-style: italic;"">If you didn't mean to reset your password, then you can just ignore this email. Your password will not change.</p>", 
-                    WebUrl, code));
+                    WebUrl, code), EmailTemplate.NotificationType.ResetPassword);
         }
 
         public LoginResponse RecoverPassword(string code, string password)

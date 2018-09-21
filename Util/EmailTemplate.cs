@@ -6,6 +6,7 @@ namespace Auctus.Util
 {
     public static class EmailTemplate
     {
+        #region Template String
         public const string EMAIL_TEMPLATE = @"
 <!doctype html>
 <html>
@@ -166,5 +167,14 @@ namespace Auctus.Util
     </table>
   </body>
 </html>";
+        #endregion
+
+        public static class NotificationType
+        {
+            public const string BecomeAdvisor = "Request";
+            public const string ConfirmEmail = "Verify";
+            public const string ResetPassword = "Reset";
+            public const string NewRecommendation = "Recomendation";
+        }
     }
 }
