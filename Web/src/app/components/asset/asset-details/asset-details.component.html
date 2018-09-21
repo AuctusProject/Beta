@@ -103,7 +103,7 @@
           <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Value </th>
           <td fxHide.lt-md mat-cell *matCellDef="let assetAdvisor">  
             At price
-            <div>{{assetAdvisor.lastAdviceAssetValue | currency}}</div>
+            <div>{{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</div>
           </td>
         </ng-container>
 
@@ -119,7 +119,7 @@
           <td mat-cell *matCellDef="let assetAdvisor">
               <div [style.background-color]="getAdviceTypeColor(assetAdvisor.lastAdviceType)">
                 {{getRecommendationFromType(assetAdvisor.lastAdviceType)}}
-                <span fxHide.gt-sm><br/>At price {{assetAdvisor.lastAdviceAssetValue | currency}}</span>
+                <span fxHide.gt-sm><br/>At price {{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</span>
               </div>
               <div fxHide.gt-xs [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
           </td>

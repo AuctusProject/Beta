@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { StockChart, Highcharts } from 'angular-highcharts';
 import { ValuesResponse, AdviceResponse } from '../../../model/asset/assetResponse';
 import { Util } from '../../../util/Util';
-import { CurrencyPipe } from '@angular/common';
+import { ValueDisplayPipe } from '../../../util/value-display.pipe';
 
 @Component({
   selector: 'asset-history-chart',
@@ -44,7 +44,7 @@ export class AssetHistoryChartComponent implements OnInit {
         this.advicesData.push({
           x: new Date(this.advices[i].date).getTime(),
           title: Util.GetRecommendationTypeDescription(this.advices[i].adviceType),
-          text: Util.GetRecommendationTypeDescription(this.advices[i].adviceType) + ' at price ' + new CurrencyPipe("en-US").transform(this.advices[i].assetValue)
+          text: Util.GetRecommendationTypeDescription(this.advices[i].adviceType) + ' at price ' + new ValueDisplayPipe().transform(this.advices[i].assetValue)
         });
       }
     }

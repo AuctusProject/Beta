@@ -1,7 +1,7 @@
 <div class="div-data" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
   <div class="text-center">Chose a coin, select one position and hit confirm. The update on your list will be automatic.</div>
   <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
-  <button *ngIf="showButtons" class="btn-buy btn-option" mat-flat-button (click)="showButtons && buy()">BUY<ng-container *ngIf="lastValue"> at {{lastValue | currency}}</ng-container></button>
-  <button *ngIf="(showButtons && showSell)" class="btn-sell btn-option" mat-flat-button (click)="showButtons && showSell && sell()">SELL<ng-container *ngIf="lastValue"> at {{lastValue | currency}}</ng-container></button>
-  <button *ngIf="(showButtons && showClose)" class="btn-close btn-option" mat-flat-button (click)="showButtons && showClose && close()">CLOSE<ng-container *ngIf="lastValue"> at {{lastValue | currency}}</ng-container></button>
+  <button *ngIf="showButtons" class="btn-buy btn-option" mat-flat-button (click)="showButtons && buy()">BUY<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
+  <button *ngIf="(showButtons && showSell)" class="btn-sell btn-option" mat-flat-button (click)="showButtons && showSell && sell()">SELL<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
+  <button *ngIf="(showButtons && showClose)" class="btn-close btn-option" mat-flat-button (click)="showButtons && showClose && close()">CLOSE<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
 </div>

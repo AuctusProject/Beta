@@ -88,6 +88,7 @@ import { RegisterBecomeAdvisorComponent } from './components/advisor/register-be
 import { AdviceCardComponent } from './components/advisor/advice-card/advice-card.component';
 import { LocalCacheService } from './services/local-cache.service';
 import { TopImageComponent } from './components/util/top-image/top-image.component';
+import { ValueDisplayPipe } from './util/value-display.pipe';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -160,7 +161,8 @@ export function getAuthServiceConfigs() {
     RegisterBecomeAdvisorComponent,
     GeneralRecommendationTagComponent,
     AdviceCardComponent,
-    TopImageComponent
+    TopImageComponent,
+    ValueDisplayPipe
   ],
   imports: [
     BrowserModule,

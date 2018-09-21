@@ -16,7 +16,7 @@
       </div>
       <div fxLayout="column">
         <div class="asset-price">
-          {{asset.lastValue | currency}}
+          {{asset.lastValue | valueDisplay}}
         </div>
         <percentage-display [value]="asset.variation24h"></percentage-display>
       </div>
