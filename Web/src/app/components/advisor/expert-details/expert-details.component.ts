@@ -29,8 +29,10 @@ export class ExpertDetailsComponent implements OnInit {
   expert: AdvisorResponse;
   showOwnerButton: boolean = false;
   displayedColumns: string[] = ['assetName', 'position', 'value', 'action', 'date', 'ratings', 'chevron'];
+  displayedMobileColumns: string[] = ['assetName', 'position', 'date', 'chevron'];
   assets = [];
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
+  isMobile = (i: number, row: Object) => true;
   expandedElement: any;
 
   @ViewChildren('assetHistoryChart') assetHistoryCharts:QueryList<AssetHistoryChartComponent>;

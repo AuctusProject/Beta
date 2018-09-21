@@ -1,26 +1,26 @@
 <div class="global-container" *ngIf="expert">
-  <div fxLayout="row" fxLayoutGap="30px">
-    <div fxLayout="column">   
+  <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="30px">
+    <div fxLayout="column" fxLayoutAlign.lt-md="center center">   
       <advisor-card [advisor]="expert"></advisor-card>
       <div class="distribution-box">
         <div class="distribution-box-title">Currency Ratings Distribution</div>
         <recommendation-distribution [data]="expert.recommendationDistribution" [showTitle]="'true'"></recommendation-distribution>
       </div>
     </div>
-    <div class="expert-details-content" fxLayout="column" fxFlex>
-      <div fxLayout="row" fxLayoutAlign="space-between end">
-        <div fxLayout="column">
+    <div class="expert-details-content" fxLayout="column" fxFlex.gt-sm="100%" fxFlex.lt-md="0%">
+      <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-between end" fxLayoutAlign.lt-md="center center" >
+        <div fxHide.lt-md fxLayout="column">
           <div class="expert-name">{{expert.name}}</div>
           <div class="expert-description">{{expert.description}}</div>
           <div class="expert-followers">Followed by {{expert.numberOfFollowers}} {{getInvestorsWordPluralOrSingular()}}</div>
         </div>
-        <div fxLayout="row" fxLayoutAlign="end end" fxLayoutGap="10px">
+        <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="end end" fxLayoutAlign.lt-md="center center"  fxLayoutGap="10px">
           <div class="blue-button action-button truncate" *ngIf="showOwnerButton && !noRecommendationsYet()" (click)="onNewAdviceClick()">NEW RATING</div>   
           <div class="blue-button action-button truncate" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
-          <div class="white-button action-button truncate" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
+          <div fxHide.lt-md class="white-button action-button truncate" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
             UNFOLLOW
           </div>
-          <div class="blue-button action-button truncate" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
+          <div fxHide.lt-md class="blue-button action-button truncate" *ngIf="!showOwnerButton && !expert.following" (click)="onFollowClick()">
             FOLLOW
           </div>
         </div>
@@ -31,7 +31,7 @@
             <th mat-header-cell *matHeaderCellDef> Asset </th>
             <td mat-cell *matCellDef="let asset">
               <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" (click)="goToAssetDetails(asset.assetId, $event)">
-                <div class="asset-icon">
+                <div fxHide.lt-sm class="asset-icon">
                   <img [src]="getAssetImgUrl(asset)" onerror="this.style.display='none'">
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center start">
@@ -47,21 +47,27 @@
           <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Position </th>
             <td mat-cell *matCellDef="let asset"> 
-              <div [style.background-color]="getLastAdviceTypeColor(asset)">{{getLastAdviceTypeDescription(asset)}}</div>
+              <div [style.background-color]="getLastAdviceTypeColor(asset)">
+                {{getLastAdviceTypeDescription(asset)}}
+                <span fxHide.gt-sm>
+                  <br/>
+                  At price {{asset.assetAdvisor[0].lastAdviceAssetValue | currency}}
+                </span>
+              </div>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="value">
-            <th mat-header-cell *matHeaderCellDef> Value </th>
-            <td mat-cell *matCellDef="let asset"> 
+            <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Value </th>
+            <td fxHide.lt-md mat-cell *matCellDef="let asset"> 
               At price
               <div>{{asset.assetAdvisor[0].lastAdviceAssetValue | currency}}</div>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef> Action </th>
-            <td mat-cell *matCellDef="let asset">
+            <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Action </th>
+            <td fxHide.lt-md mat-cell *matCellDef="let asset">
               {{getAdviceMode(asset)}}
             </td>
           </ng-container>
@@ -74,8 +80,8 @@
           </ng-container>
 
           <ng-container matColumnDef="ratings">
-            <th mat-header-cell *matHeaderCellDef> No. of Ratings </th>
-            <td mat-cell *matCellDef="let asset">
+            <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> No. of Ratings </th>
+            <td fxHide.lt-sm mat-cell *matCellDef="let asset">
               {{getTotalRatings(asset)}}
             </td>
           </ng-container>
@@ -103,7 +109,7 @@
             <td colspan=7 mat-cell *matCellDef="let asset; let i = index;">
               <asset-history-chart #assetHistoryChart [assetValues]="asset.element.values" [advices]="asset.element.assetAdvisor[0].advices" [chartTitle]="asset.element.name + ' price'"></asset-history-chart>
               <div class="rates" fxLayout="row" fxLayoutAlign="space-around center">
-                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+                <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center" fxLayoutAlign.gt-xs="start center" fxLayoutGap.gt-xs="20px">
                   <svg viewBox="0 0 36 36" class="circular-chart blue" fxFlex="80px">
                     <path class="circle" d="M18 2.0845
                       a 15.9155 15.9155 0 0 1 0 31.831
@@ -118,9 +124,9 @@
                   </svg>
                   <div class="success-rate-description" fxFlex>Success Rate</div>
                 </div>
-                <div class="separator"></div>
-                <div fxLayout="row" fxLayoutAlign="start center"  fxLayoutGap="20px" >
-                  <div class="average-return" fxFlex="80px">
+                <div fxHide.lt-sm class="separator"></div>
+                <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center" fxLayoutAlign.gt-xs="start center" fxLayoutGap.gt-xs="20px">
+                  <div class="average-return" fxFlex="80px" fxLayoutAlign.lt-sm="center center" >
                       {{asset.element.assetAdvisor[0].averageReturn * 100 | number:'1.1-1'}}%
                   </div>
                   <div class="average-return-description" fxFlex>Average Return</div>
