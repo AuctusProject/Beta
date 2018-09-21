@@ -76,6 +76,14 @@ namespace Auctus.Business.Advisor
         public byte[] GetNoUploadedImageForAdvisor(User user)
         {
             var userData = (user.CreationDate.Ticks * (double)user.Id + user.Id).ToString("##############################################################").Select(c => Convert.ToInt32(c.ToString()));
+            var start = userData.Sum() % 6;
+            var colorDistribution = new Dictionary<int, Color>();
+            colorDistribution[start] = ColorTranslator.FromHtml("#ffffff");
+            colorDistribution[(start + 1) % 6] = ColorTranslator.FromHtml("#07d1ff");
+            colorDistribution[(start + 2) % 6] = ColorTranslator.FromHtml("#343434");
+            colorDistribution[(start + 3) % 6] = ColorTranslator.FromHtml("#50e3c2");
+            colorDistribution[(start + 4) % 6] = ColorTranslator.FromHtml("#126efd");
+            colorDistribution[(start + 5) % 6] = ColorTranslator.FromHtml("#ce9355");
             using (var bitmap = new Bitmap(32, 32))
             {
                 var dataPosition = 0;
@@ -84,17 +92,17 @@ namespace Auctus.Business.Advisor
                     for (var h = 0; h < 32; ++h)
                     {
                         if (userData.ElementAt(dataPosition) < 3)
-                            bitmap.SetPixel(w, h, Color.White);
+                            bitmap.SetPixel(w, h, colorDistribution[0]);
                         else if (userData.ElementAt(dataPosition) < 5)
-                            bitmap.SetPixel(w, h, Color.DeepSkyBlue);
+                            bitmap.SetPixel(w, h, colorDistribution[1]);
                         else if (userData.ElementAt(dataPosition) == 5)
-                            bitmap.SetPixel(w, h, Color.DarkOrange);
+                            bitmap.SetPixel(w, h, colorDistribution[2]);
                         else if (userData.ElementAt(dataPosition) == 6)
-                            bitmap.SetPixel(w, h, Color.LightSkyBlue);
+                            bitmap.SetPixel(w, h, colorDistribution[3]);
                         else if (userData.ElementAt(dataPosition) < 9)
-                            bitmap.SetPixel(w, h, Color.Orange);
+                            bitmap.SetPixel(w, h, colorDistribution[4]);
                         else
-                            bitmap.SetPixel(w, h, Color.Red);
+                            bitmap.SetPixel(w, h, colorDistribution[5]);
 
                         if (dataPosition == userData.Count() - 1)
                             dataPosition = 0;
