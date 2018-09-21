@@ -32,6 +32,7 @@ export class InheritanceInputComponent implements OnInit {
   public formControl: FormControl; 
   public passwordHide: boolean = false;
   public forcedError: string;
+  public width
 
   constructor() { }
 

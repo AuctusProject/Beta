@@ -10,6 +10,7 @@ import { LocalStorageService } from '../../../services/local-storage.service';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { Subscription } from 'rxjs';
 import { ModalService } from '../../../services/modal.service';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'message-signature',
@@ -104,6 +105,10 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
     }
   }
 
+  getImgSrc(imageName: string) {
+   return CONFIG.platformImgUrl.replace("{id}", imageName);
+  }
+
   checkMetamask() {
     let self = this;
     this.web3Service.getWeb3().subscribe(result => 
@@ -191,7 +196,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   getReferralOptions() {
-    return { darkLayout: true, textOptions: { outlineField: false, placeHolder: "Referral code", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
+    return { darkLayout: true, textOptions: { outlineField: false, placeHolder: "Type in your dicount code...", required: false, showHintSize: false, minLength: 7, maxLength: 7} };
   }
 
   onChangeReferralCode(value: string) {

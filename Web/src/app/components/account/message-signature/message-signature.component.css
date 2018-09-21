@@ -4,6 +4,11 @@
     padding: 25px;
 }
 
+.left-container{
+    border-right: gray 1px solid;
+    padding-right: 5%;
+}
+
 .disabled-button {
     border-style: solid;
     border-width: 1px;
@@ -24,9 +29,6 @@
     text-decoration: underline;
 }
 
-.spacetop {
-    padding-top: 20px;
-}
 
 ::ng-deep .widget-bancor {
     max-width: 90vw;
@@ -38,13 +40,37 @@
     border: none !important;
 }
 
+::ng-deep .widget-bancor img {
+    color: white !important;
+}
+
 ::ng-deep .widget-bancor span {
     color: white !important;
 }
 
-.times-icon {
-    color: #e84737;
-    padding-right: 10px;
+::ng-deep .widget-bancor > div > div > div > div > div > div > div > span {
+    display: none;
+}
+
+::ng-deep .widget-bancor > div > div > div > div > div > div:last-child > div:after {
+    content: "BUY";
+}
+
+::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div > span {
+    display: none !important;
+}
+
+::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div > div
+{
+    position: absolute;
+    left: 45px;
+    top: -10px;
+}
+
+.circle-icon {
+    color: gray;
+    padding: 0 11px;
+    font-size: .5em;
 }
 
 .check-icon {
@@ -61,3 +87,42 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.referral-container{
+    padding-top: 20px;
+    position: relative;
+}
+
+.referral-input{
+    width: 225px;
+}
+
+.referral-input input::placeholder{
+    color: #616161;
+}
+
+.valid-referral-check{
+    position: absolute;
+    right: 10px;
+}
+
+.access-free {
+    margin-bottom: 25px;
+    color: #07d0ff;
+    font-size: 35px;
+}
+
+.bancor-border{
+    border-top: gray 1px solid;
+    width:30%;
+    height: 25px;
+}
+
+.bancor-border:first-child{
+    border-left: gray 1px solid;
+}
+
+.bancor-border:last-child{
+    border-right: gray 1px solid;
+}
+
