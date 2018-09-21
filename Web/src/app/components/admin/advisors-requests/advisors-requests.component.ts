@@ -3,6 +3,7 @@ import { AdvisorService } from '../../../services/advisor.service';
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 import { MatProgressBar, MatSpinner } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'advisors-requests',
@@ -16,8 +17,7 @@ export class AdvisorsRequestsComponent implements OnInit {
   promise:Subscription; 
   
   constructor(private advisorService: AdvisorService) 
-  { 
-  }
+  { }
 
   ngOnInit() {
     this.refreshList();
@@ -27,6 +27,10 @@ export class AdvisorsRequestsComponent implements OnInit {
     this.promise = this.advisorService.listPendingRequestToBeAdvisor().subscribe(result => 
       this.requests = result
     );
+  }
+
+  getRequestImage(guid: string) {
+    return CONFIG.profileImgUrl.replace("{id}", guid);
   }
 
   approve(id:number){
