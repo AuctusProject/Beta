@@ -39,9 +39,21 @@
     width: 260px;
 }
 
+
+.follow-btn{
+    margin-left: 43px;
+}
+
 @media(max-width: 599px){
-    .expert-name{
+    .expert-name,
+    .asset-code-name,
+    .asset-name{
         text-align: center;
+    }
+
+    .follow-btn{
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
@@ -68,10 +80,6 @@
     width: 30px;
     height: 30px;
     border-radius: 15px;
-}
-
-.follow-btn{
-    margin-left: 43px;
 }
 
 .advice-mode-box{

@@ -17,7 +17,7 @@
   </div>
   <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
     <div fxLayout="column" (click)="goToAssetDetails()" class="asset-column">
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <div fxLayout="row" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" fxLayoutGap="10px">
         <div fxHide.lt-sm class="asset-icon">
           <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
         </div>
@@ -28,13 +28,6 @@
           <span class="asset-name truncate">{{advice.assetName}}</span>
         </div>
       </div>  
-      
-      <!-- <div fxLayout="row">
-        <div class="asset-icon">
-          <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
-        </div>
-        <div class="asset-name truncate" title="{{advice.assetCode}}&nbsp;({{advice.assetName}})">{{advice.assetCode}}&nbsp;({{advice.assetName}})</div>
-      </div>   -->
       <div class="follow-btn white-button action-button-sm" *ngIf="advice.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
         Unfollow
       </div>
