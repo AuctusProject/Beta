@@ -4,6 +4,7 @@ import { LoginResponse } from '../../model/account/loginResponse';
 import { MatMenu } from '@angular/material';
 import { NavigationService } from '../../services/navigation.service';
 import { ModalService } from '../../services/modal.service';
+import { CONFIG } from '../../services/config.service';
 
 @Component({
   selector: 'header',
@@ -28,6 +29,10 @@ export class HeaderComponent implements OnInit {
     if (!!this.mobile) {
       this.mobile.closed.subscribe(() => this.menuOpen = false);
     }
+  }
+
+  getLogoImgUrl() {
+    return CONFIG.platformImgUrl.replace("{id}", "logo");
   }
 
   isLogged(): boolean {

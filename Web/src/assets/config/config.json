@@ -2,5 +2,6 @@
     "apiUrl": "http://localhost:50427/api/",
     "webUrl": "http://localhost:4200",
     "assetImgUrl": "https://auctusplatform.azureedge.net/assetsicons/{id}.png",
-    "profileImgUrl": "https://auctusplatform.azureedge.net/userpicture/{id}.png"
+    "profileImgUrl": "https://auctusplatform.azureedge.net/userpicture/{id}.png",
+    "platformImgUrl": "https://auctusplatform.azureedge.net/platform/{id}.png"
 }

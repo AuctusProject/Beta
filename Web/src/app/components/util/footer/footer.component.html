@@ -1,7 +1,7 @@
 <div class="global-container">
   <div class="separator"></div>
   <div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between start" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="space-between center" fxLayoutGap.lt-sm="20px">
-    <img src="./assets/logo_black.png" routerLink="" class="landing-logo">
+    <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo">
     <div fxLayout="row" fxLayoutGap="100px">
       <div fxLayout="column" fxHide.lt-md>
         <div class="footer-item-title">HOME</div>

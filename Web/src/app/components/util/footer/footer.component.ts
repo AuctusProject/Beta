@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'footer',
@@ -12,4 +13,7 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
   }
 
+  getLogoImgUrl() {
+    return CONFIG.platformImgUrl.replace("{id}", "logo_black");
+  }
 }

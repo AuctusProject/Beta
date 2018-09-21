@@ -7,8 +7,9 @@ export class Config
 {
   readonly apiUrl: string;
   readonly webUrl: string;
-  readonly assetImgUrl:string;
-  readonly profileImgUrl:string;
+  readonly assetImgUrl: string;
+  readonly profileImgUrl: string;
+  readonly platformImgUrl: string;
 }
 
 export let CONFIG: Config;
@@ -18,8 +19,7 @@ export class ConfigService
 {
 
   constructor(private http: HttpClient)
-  {
-  }
+  { }
 
   public load()
   {
