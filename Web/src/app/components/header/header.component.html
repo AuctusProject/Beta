@@ -4,8 +4,8 @@
     <div class="menu" fxLayout="row" fxLayoutAlign="space-around center">
         <a fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecomeExpert()" routerLinkActive="active"><span>BECOME AN EXPERT</span></a>
         <div fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || !loginData.isAdvisor" class="separator"></div>
-        <a fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || loginData.isAdvisor" [routerLink]="getMyProfile()" routerLinkActive="active"><span>MY PROFILE</span></a>
-        <div fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || loginData.isAdvisor" class="separator"></div>
+        <a fxShow="true" fxHide.lt-lg="true" *ngIf="!!loginData && loginData.isAdvisor" [routerLink]="getMyProfile()" routerLinkActive="active"><span>MY PROFILE</span></a>
+        <div fxShow="true" fxHide.lt-lg="true" *ngIf="!!loginData && loginData.isAdvisor" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLink="/top-experts" routerLinkActive="active"><span>TOP EXPERTS</span></a>
         <div fxShow="true" fxHide.lt-lg="true" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLink="/top-assets" routerLinkActive="active"><span>TOP ASSETS</span></a>
