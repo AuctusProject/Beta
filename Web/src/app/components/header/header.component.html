@@ -1,5 +1,5 @@
 <div class="global-container">
-    <img src="./assets/logo.png" routerLink="" class="landing-logo" />
+    <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo" />
     <span class="spacer"></span>
     <div class="menu" fxLayout="row" fxLayoutAlign="space-around center">
         <a fxShow="true" fxHide.lt-lg="true" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecomeExpert()" routerLinkActive="active"><span>BECOME AN EXPERT</span></a>

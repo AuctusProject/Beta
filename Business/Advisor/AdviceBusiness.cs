@@ -67,7 +67,7 @@ namespace Auctus.Business.Advisor
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 $"New recommendation on Auctus Experts for {asset.Code}",
                 $@"<p>The advisor {advisor.Name} set a new {type.GetDescription()} recommendation for the asset {asset.Code} - {asset.Name}.</p>
-                        <p>To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.</p>");
+                        <p>To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.</p>", EmailTemplate.NotificationType.NewRecommendation);
         }
 
         public List<Advice> List(IEnumerable<int> advisorsId = null, IEnumerable<int> assetsId = null)

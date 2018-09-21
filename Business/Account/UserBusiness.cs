@@ -458,7 +458,8 @@ namespace Auctus.Business.Account
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { email }, "Verify your email address - Auctus Beta",
                 string.Format(@"<p>To activate your Auctus Expert account please <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.</p>
-                        <p style=""font-size: 12px; font-style: italic;"">If you didn’t ask to verify this address, you can ignore this email.</p>", WebUrl, code));
+                        <p style=""font-size: 12px; font-style: italic;"">If you didn’t ask to verify this address, you can ignore this email.</p>", WebUrl, code),
+                EmailTemplate.NotificationType.ConfirmEmail);
         }
 
         public static void BaseEmailValidation(string email)

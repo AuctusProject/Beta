@@ -156,22 +156,26 @@ namespace Auctus.Business.Advisor
         }
         private async Task SendRequestToBeAdvisorEmailAsync(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
         {
-            await EmailBusiness.SendErrorEmailAsync(string.Format(@"Email: {0} 
+            await EmailBusiness.SendErrorEmailAsync(string.Format(@"
+<a target='_blank' href='{0}/advisors-requests'>Link to approve/reject</a>
 <br/>
 <br/>
-<b>Old Name</b>: {1}
-<br/>
-<b>New Name</b>: {2}
+Email: {1} 
 <br/>
 <br/>
-<b>Old Description</b>: {3}
+<b>Old Name</b>: {2}
 <br/>
-<b>New Description</b>: {4}
+<b>New Name</b>: {3}
 <br/>
 <br/>
-<b>Old Previous Experience</b>: {5}
+<b>Old Description</b>: {4}
 <br/>
-<b>New Previous Experience</b>: {6}", user.Email, 
+<b>New Description</b>: {5}
+<br/>
+<br/>
+<b>Old Previous Experience</b>: {6}
+<br/>
+<b>New Previous Experience</b>: {7}", WebUrl, user.Email, 
 oldRequestToBeAdvisor?.Name ?? "N/A", newRequestToBeAdvisor.Name,
 oldRequestToBeAdvisor?.Description ?? "N/A", newRequestToBeAdvisor.Description,
 oldRequestToBeAdvisor?.PreviousExperience ?? "N/A", newRequestToBeAdvisor.PreviousExperience),
@@ -182,14 +186,16 @@ string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 "Your request to become an expert was rejected - Auctus Beta",
-                "<p>We are sorry to inform you that at this moment your request to become an expert can not be accepted.</p>");
+                "<p>We are sorry to inform you that at this moment your request to become an expert can not be accepted.</p>",
+                EmailTemplate.NotificationType.BecomeAdvisor);
         }
 
         private async Task SendRequestApprovedNotificationAsync(User user)
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 "Your request to become an expert was approved! - Auctus Beta",
-                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{WebUrl}expert-details/{user.Id}' target='_blank'>click here</a>.</p>");
+                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{WebUrl}expert-details/{user.Id}' target='_blank'>click here</a>.</p>",
+                EmailTemplate.NotificationType.BecomeAdvisor);
         }
     }
 }

@@ -66,9 +66,9 @@ namespace Auctus.Business.Email
             await Resource.SendAsync(to, subject, body, bodyIsHtml, from, cc, bcc, attachment);
         }
 
-        public async Task SendUsingTemplateAsync(IEnumerable<string> to, string subject, string content)
+        public async Task SendUsingTemplateAsync(IEnumerable<string> to, string subject, string content, string type = EmailTemplate.NotificationType.ConfirmEmail)
         {
-            var body = EmailTemplate.EMAIL_TEMPLATE.Replace("@subject", subject).Replace("@content", content).Replace("@backImage", "Verify");
+            var body = EmailTemplate.EMAIL_TEMPLATE.Replace("@subject", subject).Replace("@content", content).Replace("@backImage", type);
 
             await SendAsync(to, subject, body);
         }
