@@ -1,12 +1,5 @@
+<top-image *ngIf="canView()" [title]="getTopTitle()" [subtitle]="getTopText()" [urlImage]="getTopImage()"></top-image>
 <div class="global-container">
-    <div *ngIf="canView()" class="section-title">
-        Hello
-    </div>
-    <div *ngIf="canView()" class="section-subtitle">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
-        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
-        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </div>
     <top-experts *ngIf="canView() && (!advices || advices.length==0)" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'"></top-experts>
     <div *ngIf="advices">
         <div fxLayout="column" fxLayoutAlign="center center" class="global-container blocked-content" *ngIf="!canView()">

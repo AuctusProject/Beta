@@ -87,6 +87,7 @@ import { ModalService } from './services/modal.service';
 import { RegisterBecomeAdvisorComponent } from './components/advisor/register-become-advisor/register-become-advisor.component';
 import { AdviceCardComponent } from './components/advisor/advice-card/advice-card.component';
 import { LocalCacheService } from './services/local-cache.service';
+import { TopImageComponent } from './components/util/top-image/top-image.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -158,7 +159,8 @@ export function getAuthServiceConfigs() {
     EntryOptionComponent,
     RegisterBecomeAdvisorComponent,
     GeneralRecommendationTagComponent,
-    AdviceCardComponent
+    AdviceCardComponent,
+    TopImageComponent
   ],
   imports: [
     BrowserModule,

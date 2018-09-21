@@ -4,6 +4,7 @@ import { ModalService } from '../../../services/modal.service';
 import { AccountService } from '../../../services/account.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { AuthRedirect } from '../../../providers/authRedirect';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'home',
@@ -36,7 +37,15 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  isLoggedIn(){
+  isLoggedIn() {
     return this.accountService.isLoggedIn();
+  }
+
+  getTopImage() : string {
+    return CONFIG.platformImgUrl.replace("{id}", "home1920px");
+  }
+
+  getTopText() : string {
+    return "An investment platform made for the digital age. Follow your favourite expert, recognize trends early, stay in control.";
   }
 }
