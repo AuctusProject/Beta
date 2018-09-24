@@ -1,0 +1,78 @@
+:host{
+    background: white;
+    display: inline-block;
+    min-width: 100%;
+    margin-top: -83px;
+}
+
+.hotsite-title{
+    font-size: 26px;
+    font-weight: 500;
+    text-align: center;
+    color: #434343;
+    margin: 56px auto;
+    max-width: 760px;
+    width: calc(100% - 40px);
+}
+  
+.hot-site-image {
+    width: 100%; 
+    background-color: #b7b7b7;
+}
+
+.hot-site-phone-image{
+    margin-top: -130px;
+    margin-left: 60px;
+    position: absolute;
+}
+
+.early-access{
+    background-color: #1f1f1f;
+    margin-top: -170px;
+    padding-top: 170px;
+}
+
+.early-access-description{
+    width: 516px;
+    font-size: 21.5px;
+    font-weight: 500;
+    color: #f9f9f9;
+    margin-top: 46px;
+    margin-bottom: 46px;
+}
+
+.early-access-title{
+    font-size: 37.5px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.early-access-content{
+    margin-left: 460px;
+}
+
+.bottom-description{
+    margin-top: 32px;
+    max-width: 425px;
+    width: calc(100% - 40px);
+    font-size: 16px;
+    font-weight: 300;
+    color: #737373;
+}
+
+.item-title{
+    font-size: 29px;
+    font-weight: 600;
+    text-align: center;
+    color: #333333;
+}
+
+.itens{
+    margin-top: 200px;
+}
+
+.separator{
+    width: 1px;
+    height: 306px;
+    border: solid 0.5px #707070;
+}

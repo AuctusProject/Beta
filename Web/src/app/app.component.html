@@ -1,7 +1,7 @@
-<header></header>
-<ng-http-loader 
+<header *ngIf="!isHotSite()"></header>
+<ng-http-loader *ngIf="!isHotSite()"
     [entryComponent]="topLoading">
 </ng-http-loader>
 <simple-notifications [options]="notificationOptions"></simple-notifications>
 <router-outlet></router-outlet>
-<footer class="global-container-min"></footer>
+<footer *ngIf="!isHotSite()" class="global-container-min"></footer>

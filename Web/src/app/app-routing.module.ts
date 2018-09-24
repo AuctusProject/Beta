@@ -10,8 +10,10 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
+import { HotSiteComponent } from './components/hot-site/hot-site.component';
 
 const routes: Routes = [
+    { path: 'hot-site', component: HotSiteComponent  },
     { path: '', component: HomeComponent  },
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
