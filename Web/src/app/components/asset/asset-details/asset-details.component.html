@@ -52,7 +52,7 @@
               <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
               <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
               <div class="disclaimer">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.
+                {{getOperationDisclaimer()}}
               </div>
             </div>
             <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">

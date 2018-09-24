@@ -129,4 +129,14 @@ export class AssetDetailsComponent implements OnInit {
     }
     return sentence;
   }
+
+  getOperationDisclaimer() {
+    let sentence = this.asset.totalAdvisors + " ";
+    if(this.asset.totalAdvisors == 1) {
+      sentence += "expert"
+    } else {
+      sentence += "experts"
+    }
+    return "Based on " + sentence + " offering recommendations for " + this.asset.code + " in the last month.";
+  }
 }
