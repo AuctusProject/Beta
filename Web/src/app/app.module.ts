@@ -84,7 +84,6 @@ import { CoinSearchComponent } from './components/util/coin-search/coin-search.c
 import { GeneralRecommendationTagComponent } from './components/util/general-recommendation-tag/general-recommendation-tag.component';
 import { EntryOptionComponent } from './components/account/entry-option/entry-option.component';
 import { ModalService } from './services/modal.service';
-import { RegisterBecomeAdvisorComponent } from './components/advisor/register-become-advisor/register-become-advisor.component';
 import { AdviceCardComponent } from './components/advisor/advice-card/advice-card.component';
 import { LocalCacheService } from './services/local-cache.service';
 import { TopImageComponent } from './components/util/top-image/top-image.component';
@@ -158,7 +157,6 @@ export function getAuthServiceConfigs() {
     FooterComponent,
     CoinSearchComponent,
     EntryOptionComponent,
-    RegisterBecomeAdvisorComponent,
     GeneralRecommendationTagComponent,
     AdviceCardComponent,
     TopImageComponent,
@@ -225,8 +223,7 @@ export function getAuthServiceConfigs() {
     RegisterComponent,
     ReferralDetailsComponent,
     NewAdviceComponent,
-    EntryOptionComponent,
-    RegisterBecomeAdvisorComponent
+    EntryOptionComponent
   ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]
