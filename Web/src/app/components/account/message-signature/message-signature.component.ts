@@ -137,7 +137,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   checkAUCAmout() {
     if (this.account) {
       if (this.account != this.lastAccountChecked || 
-          (!this.hasAuc() && !!this.lastCheck && ((new Date()) <= (new Date(this.lastCheck.getTime() + 15000))))) {
+          (!this.hasAuc() && !!this.lastCheck && ((new Date()) >= (new Date(this.lastCheck.getTime() + 15000))))) {
         this.accountService.getAUCAmount(this.account).subscribe(ret => 
           {
             this.lastCheck = new Date();
