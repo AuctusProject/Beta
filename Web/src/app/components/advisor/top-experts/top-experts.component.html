@@ -2,7 +2,7 @@
   <div class="section-title">
     {{title}}
   </div>
-  <div class="section-subtitle">
+  <div *ngIf="subtitle" class="section-subtitle">
     {{subtitle}}
   </div>
   <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="16px" class="section-filter" *ngIf="!hideFilters">

@@ -67,6 +67,6 @@ export class AdvicesComponent implements OnInit {
   }
 
   getTopText() : string {
-    return "The most popular Cryptocurrencies. Follow your favorite coins and see what analysts are saying about them";
+    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
   }
 }
