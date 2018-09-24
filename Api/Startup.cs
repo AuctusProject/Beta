@@ -94,15 +94,18 @@ namespace Api
 
             DataAccessDependencyResolver.RegisterDataAccess(services, Configuration, Enviroment.IsDevelopment());
 
-            services.AddSwaggerGen(c =>
+            if (Enviroment.IsDevelopment())
             {
-                c.SwaggerDoc("v1", new Info
+                services.AddSwaggerGen(c =>
                 {
-                    Version = "v1",
-                    Title = "Auctus Platform API",
-                    Description = "Auctus Platform Web API"
+                    c.SwaggerDoc("v1", new Info
+                    {
+                        Version = "v1",
+                        Title = "Auctus Platform API",
+                        Description = "Auctus Platform Web API"
+                    });
                 });
-            });
+            }
 
             services.AddApplicationInsightsTelemetry(Configuration.GetSection("ApplicationInsights:InstrumentationKey").Get<string>());
         }
@@ -117,11 +120,14 @@ namespace Api
             app.UseCors("Default");
             app.UseMvcWithDefaultRoute();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            if (env.IsDevelopment())
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
+            }
         }
     }
 }
