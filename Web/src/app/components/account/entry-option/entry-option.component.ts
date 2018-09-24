@@ -71,10 +71,10 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
   socialEntry(socialPlatform: string) {
     let socialPlatformProvider;
     var socialNetworkType;
-    if(socialPlatform == "facebook"){
+    if (socialPlatform == "facebook") {
       socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
       socialNetworkType = 0;
-    }else if(socialPlatform == "google"){
+    } else if (socialPlatform == "google"){
       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
       socialNetworkType = 1;
     }
