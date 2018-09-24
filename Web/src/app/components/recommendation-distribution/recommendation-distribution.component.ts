@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 import { RecommendationDistributionResponse } from '../../model/recommendationDistributionResponse';
 import { Util } from '../../util/Util';
@@ -8,14 +8,14 @@ import { Util } from '../../util/Util';
   templateUrl: './recommendation-distribution.component.html',
   styleUrls: ['./recommendation-distribution.component.css']
 })
-export class RecommendationDistributionComponent implements OnInit {
+export class RecommendationDistributionComponent implements OnInit, OnChanges {
   pieChart: Chart;
   @Input() data : RecommendationDistributionResponse[];
   @Input() showTitle : boolean;
   pieData: any;
-  totalBuy =0;
-  totalSell =0;
-  totalClose =0;
+  totalBuy = 0;
+  totalSell = 0;
+  totalClose = 0;
   totalRecommendations = 0;
   constructor() { }
 
@@ -24,9 +24,18 @@ export class RecommendationDistributionComponent implements OnInit {
     this.createPieChart();
   }
 
+  ngOnChanges() {
+    this.fillPieData();
+    this.createPieChart();
+  }
+
   fillPieData(){
     this.pieData = [];
-    if (!!this.data) {
+    this.totalBuy = 0;
+    this.totalSell = 0;
+    this.totalClose = 0;
+    this.totalRecommendations = 0;
+    if (this.data) {
         for(var i = 0; i < this.data.length; i++){
             this.pieData.push({
                 name: Util.GetRecommendationTypeDescription(this.data[i].type),
