@@ -147,7 +147,7 @@ export class HttpService {
         this.localStorageService.setLocalStorage("redirectUrl", this.router.url);
         this.navigationService.goToLogin();
       } else if (response.status != "200") {
-        if (response.error) {
+        if (response.error && response.error.error) {
           this.notificationService.error("Error", response.error.error);
         }  else if (response.statusText) {
           this.notificationService.error("Error", response.statusText);

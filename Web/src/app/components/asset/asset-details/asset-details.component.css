@@ -67,7 +67,8 @@
     cursor: pointer;
 }
 
-.assets-table .white-button{
+.assets-table .white-button,
+.assets-table .blue-button{
     margin: auto;
 }
 
