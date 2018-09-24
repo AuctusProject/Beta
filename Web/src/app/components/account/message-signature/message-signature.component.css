@@ -19,6 +19,17 @@
     text-align: center;
 }
 
+.metamask-logo{
+    height: 175px;
+}
+
+.unlock-metamask{
+    height: 260px;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    margin-left: 55px;
+}
+
 .request-expert {
     color: white;
     padding: 25px;
@@ -60,6 +71,11 @@
     display: none !important;
 }
 
+::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div 
+{
+   background-color: unset !important;
+}
+
 ::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div > div
 {
     position: absolute;
@@ -86,6 +102,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 220px;
 }
 
 .referral-container{
@@ -101,7 +118,7 @@
     color: #616161;
 }
 
-.valid-referral-check{
+.valid-referral-check {
     position: absolute;
     right: 10px;
 }
@@ -112,17 +129,17 @@
     font-size: 35px;
 }
 
-.bancor-border{
+.bancor-border {
     border-top: gray 1px solid;
     width:30%;
     height: 25px;
 }
 
-.bancor-border:first-child{
+.bancor-border:first-child {
     border-left: gray 1px solid;
 }
 
-.bancor-border:last-child{
+.bancor-border:last-child {
     border-right: gray 1px solid;
 }
 

@@ -1,20 +1,14 @@
- <div class="global-container">
-  <div class="section-title">
-    HELLO
-  </div>
-  <div class="section-subtitle">
-      <div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-        <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor <br > incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </span>
-      </div>
-  </div>
-  <div class="main-content" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+<top-image [title]="getTopTitle()" [subtitle]="getTopText()" [urlImage]="getTopImage()"></top-image>
+<div class="global-container">
+  <div class="main-content" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
     <div class="left-container">
       <div fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="50px">
         <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
           <span *ngIf="!hasMetamask"><fa-icon icon="circle"class="circle-icon" fxLayoutAlign="center stretch"></fa-icon></span>
           <span *ngIf="hasMetamask"><fa-icon icon="check" class="check-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
           <div fxHide.xs="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
-            <span [style.color]="hasMetamask ? '#616161' : 'white'">1 . Metamask is instaled.&nbsp;<a *ngIf="!hasMetamask" [style.color]="hasMetamask ? '#616161' : 'white'" href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">Click here to install</a></span>
+            <span *ngIf="hasMetamask" [style.color]="'#616161'">1 . Metamask is instaled.</span>
+            <span *ngIf="!hasMetamask" [style.color]="'white'">1 . Please install Metamask.</span>
           </div>
           <div fxHide.gt-xs="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
             <span [style.color]="hasMetamask ? '#616161' : 'white'">1 . Web3 provider such as <a href="https://wallet.coinbase.com/" [style.color]="hasMetamask ? '#616161' : 'white'" target="_blank">Coinbase Wallet</a>, <a href="https://www.cipherbrowser.com/" [style.color]="hasMetamask ? '#616161' : 'white'" target="_blank">Cipher</a> or <a href="https://status.im/" [style.color]="hasMetamask ? '#616161' : 'white'" target="_blank">Status</a>.</span>
@@ -29,7 +23,7 @@
           <div *ngIf="!hasUnlockedAccount" fxHide.gt-xs="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
             <p>2 . Wallet is unlocked.</p>
           </div>
-          <p *ngIf="hasUnlockedAccount" class="logged-wallet" [style.max-width]="isMobile() ? '220px' : '100%'">2 . Logged with {{account}}</p>
+          <p *ngIf="hasUnlockedAccount" class="logged-wallet" >2 . Logged with {{account}}</p>
         </div>
         <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
           <span *ngIf="!this.hasAuc()"><fa-icon icon="circle"class="circle-icon" fxLayoutAlign="center stretch"></fa-icon></span>
@@ -43,38 +37,64 @@
       </div>
     </div>
     <div>
-    <div class="width100" *ngIf="!this.hasAuc()" class="text-center" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
-      <span>
-          To enter the platform you need to hold 5000 AUC.<br>
-          However...
-      </span>
-      <span class="access-free bold">ACCESS IS FREE</span>
-      <span>
-          Your AUC tokens remains in your wallet, under your control at all times.<br>You can SELL your AUC whenever you want.
-      </span>
-      <div class="width100" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap="30px">
-        <a href="https://www.bitfinex.com" target="_blank"><img [src]="getImgSrc('bitfinex')"/></a>
-        <a href="https://idex.market/eth/auc" target="_blank"><img [src]="getImgSrc('idex')"/></a>
-        <a *ngIf="!shouldShowBancorWidget()" href="https://www.bancor.network/communities/5ad9c1c5c7d1460001bc9bfa" target="_blank"><img img [src]="getImgSrc('bancor')"/></a>
-        <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img img [src]="getImgSrc('hitbtc')"/></a>
+      <div class="width100" *ngIf="!hasMetamask" class="text-center" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
+        <span>
+            To get access to the platform please install Metamask plugin.<br> 
+            Click on the image bellow to download it!
+        </span>
+        <div class="width100" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+          <a href="https://metamask.io/" target="_blank"><img class="metamask-logo" [src]="getImgSrc('metamask')"/></a>
+        </div>          
       </div>
-      <div fxLayout="row" class="width100" fxLayoutAlign="space-evenly center">
-        <div class="bancor-border" ></div>
-        <img  [src]="getImgSrc('bancor')">
-        <div class="bancor-border"></div>
+      <div class="width100" *ngIf="hasMetamask && !hasUnlockedAccount" class="text-center" fxLayout="row" fxLayoutAlign="center center">
+        <div>
+          <span>
+              Please, connect to <strong>Ethereum Mainnet</strong> <br> <br> and unlock your wallet.
+          </span>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+          <img class="unlock-metamask" [src]="getImgSrc('unlockmetamask')"/>
+        </div>          
+      </div>
+      <div class="width100" *ngIf="!this.hasAuc() && hasMetamask && hasUnlockedAccount" class="text-center" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
+        <span>
+            To enter the platform you need to hold 5000 AUC.<br>
+            However...
+        </span>
+        <span class="access-free bold">ACCESS IS FREE</span>
+        <span>
+            Your AUC tokens remains in your wallet, under your control at all times.<br>You can SELL your AUC whenever you want.
+        </span>
+        <div class="width100" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+          <a href="https://www.bitfinex.com" target="_blank"><img [src]="getImgSrc('bitfinex')"/></a>
+          <a href="https://idex.market/eth/auc" target="_blank"><img [src]="getImgSrc('idex')"/></a>
+          <a *ngIf="!shouldShowBancorWidget()" href="https://www.bancor.network/communities/5ad9c1c5c7d1460001bc9bfa" target="_blank"><img img [src]="getImgSrc('bancor')"/></a>
+          <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img img [src]="getImgSrc('hitbtc')"/></a>
+        </div>
+        <div fxLayout="row" class="width100" fxLayoutAlign="space-evenly center">
+          <div class="bancor-border" ></div>
+          <img  [src]="getImgSrc('bancor')">
+          <div class="bancor-border"></div>
 
-      </div>
-      <div class="width100" fxLayout="column" fxLayoutAlign="space-evenly center">
-        <div class="widget-bancor" id="bancor-wc"></div>
+        </div>
+        <div class="width100" fxLayout="column" fxLayoutAlign="space-evenly center">
+          <div class="widget-bancor" id="bancor-wc"></div>
+        </div>
       </div>
     </div>
+    <div class="width100" *ngIf="this.hasAuc() && hasMetamask && hasUnlockedAccount" class="text-center" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
+      <p > <span class="access-free bold">ALMOST THERE</span> 
+        <br>
+        <br>
+        <br>
+        Please, sign a message to confirm that you are the wallet owner.</p>
+        <br>
+        <br>
+      <div class="action-button truncate" [promiseBtn]="promise" [ngClass]="hasMetamask && hasUnlockedAccount && this.hasAuc() ? 'blue-button' : 'disabled-button'" (click)="signMessage()">CONFIRM</div>
     </div>
-   
-    <!-- <p class="spacetop" *ngIf="hasMetamask && hasUnlockedAccount && this.hasAuc()">Please sign a message to confirm that you are the wallet owner.</p>
-    <div class="action-button truncate" [promiseBtn]="promise" [ngClass]="hasMetamask && hasUnlockedAccount && this.hasAuc() ? 'blue-button' : 'disabled-button'" (click)="signMessage()">CONFIRM</div>    -->
   </div>
   <div class="request-expert" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
-    <span>Do you think you can give expert advise to others, or can refer more users. Apply to become a verified expert and get rewarded with AUC.&nbsp;<a class="link-request" (click)="becomeAdvisor()">Request</a></span>
+    <span>Do you think you can give expert advise to others,or can refer more users? Apply to become a verified expert and get rewarded with AUC.&nbsp;<a class="link-request" (click)="becomeAdvisor()">Request</a></span>
   </div>
 </div>
 <advices></advices>

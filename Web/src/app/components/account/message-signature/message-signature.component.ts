@@ -68,6 +68,18 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
     }
   }
 
+  getTopTitle() : string {
+    return "HELLO";
+  }
+
+  getTopImage() : string {
+    return CONFIG.platformImgUrl.replace("{id}", "feed1920px");
+  }
+
+  getTopText() : string {
+    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  }
+
   shouldShowBancorWidget() {
     return window && window["BancorConvertWidget"] && window["BancorConvertWidget"].isInitialized;
   }
@@ -78,7 +90,8 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
         if (window["BancorConvertWidget"].isInitialized) {
           window["BancorConvertWidget"].deinit();
         }
-      } else if (!window["BancorConvertWidget"].isInitialized) {
+      } else if (!window["BancorConvertWidget"].isInitialized &&
+                  (!this.hasAuc() && this.hasMetamask && this.hasUnlockedAccount) ) {
         window["BancorConvertWidget"].init({
           "type": "2",
           "blockchainType": "ethereum",
@@ -192,11 +205,11 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   becomeAdvisor() {
-    this.navigationService.goToBecomeAdvisor();
+    this.navigationService.goToBecomeAdvisor()
   }
 
   getReferralOptions() {
-    return { darkLayout: true, textOptions: { outlineField: false, placeHolder: "Type in your dicount code...", required: false, showHintSize: false, minLength: 7, maxLength: 7} };
+    return { darkLayout: true, textOptions: { outlineField: false, placeHolder: "Type in your discount code...", required: false, showHintSize: false, minLength: 7, maxLength: 7} };
   }
 
   onChangeReferralCode(value: string) {
