@@ -97,7 +97,7 @@ namespace Auctus.Test.Advisor
             expRecommendation[AdviceType.Buy.Value] = 7;
             expRecommendation[AdviceType.Sell.Value] = 2;
             expRecommendation[AdviceType.ClosePosition.Value] = 4;
-            AssertAdvisorData(advisor, -0.047146, 0.333333, 4, 2, true, false, 2.590221, 3, expRecommendation);
+            AssertAdvisorData(advisor, -0.047146, 0.333333, 4, 2, true, false, 3.795110, 3, expRecommendation);
         }
 
         internal static void AssertAdvisor2Data(AdvisorResponse advisor)
@@ -106,7 +106,7 @@ namespace Auctus.Test.Advisor
             expRecommendation[AdviceType.Buy.Value] = 5;
             expRecommendation[AdviceType.Sell.Value] = 7;
             expRecommendation[AdviceType.ClosePosition.Value] = 2;
-            AssertAdvisorData(advisor, -0.014205, 0.583333, 3, 4, false, false, 2.937720, 2, expRecommendation);
+            AssertAdvisorData(advisor, -0.014205, 0.583333, 3, 4, false, false, 3.968860, 2, expRecommendation);
         }
 
         internal static void AssertAdvisor3Data(AdvisorResponse advisor)
@@ -114,7 +114,7 @@ namespace Auctus.Test.Advisor
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.Sell.Value] = 1;
             expRecommendation[AdviceType.ClosePosition.Value] = 1;
-            AssertAdvisorData(advisor, 0.070949, 1, 1, 1, false, true, 4.519683, 1, expRecommendation);
+            AssertAdvisorData(advisor, 0.070949, 1, 1, 1, false, true, 4.759841, 1, expRecommendation);
         }
 
         private static void AssertAdvisorData(AdvisorResponse advisor, double expReturn, double expSuccessRate, int expNumberFollowers,
