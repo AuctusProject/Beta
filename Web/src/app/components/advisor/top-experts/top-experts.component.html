@@ -1,5 +1,5 @@
 <div class="global-container">
-  <div class="section-title">
+  <div class="section-title" [style.padding-bottom]="!subtitle ? '36px' : '0px'">
     {{title}}
   </div>
   <div *ngIf="subtitle" class="section-subtitle">
