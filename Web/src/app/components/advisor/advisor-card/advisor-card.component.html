@@ -3,7 +3,7 @@
   <div (click)="goToExpertDetails()" class="expert-details-div">
     <div class="card-header">
       <div class="expert-picture">
-        <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
+        <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
         <div class="expert-ranking">
             {{advisor.ranking}}
           </div>
@@ -55,7 +55,7 @@
         Buy: {{getBuyRecommendationPercentage() | number:'1.1-1'}}%
       </div>
       <div class="close-distribution">
-        Close: {{getCloseRecommendationPercentage() | number:'1.1-1'}}%
+        Hold: {{getCloseRecommendationPercentage() | number:'1.1-1'}}%
       </div>
       <div class="sell-distribution">
         Sell: {{getSellRecommendationPercentage() | number:'1.1-1'}}%

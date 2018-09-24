@@ -21,6 +21,7 @@ interface InputTypeOptions {
     setFocus?: boolean;
     specificHint?: string;
     outlineField?: boolean;
+    width: string;
 }
 
 interface InputTextTypeOptions extends InputTypeOptions {

@@ -34,7 +34,7 @@ namespace Auctus.Business.Advisor
                 throw new BusinessException("You need to wait before advising again for this asset.");
 
             if (type == AdviceType.ClosePosition && (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition))
-                throw new BusinessException("You need a Buy or Sell recommendation before advising to Close Position.");
+                throw new BusinessException("You need to set a Buy or Sell recommendation before advising to Hold.");
 
             if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
                 throw new BusinessException("Sell recommendations are not available for this asset.");
@@ -64,10 +64,41 @@ namespace Auctus.Business.Advisor
 
         private async Task SendAdviceNotificationAsync(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
+            var imgUrl = Configuration.GetSection("Url:ProfileImgCdn").Get<string>().Replace("{id}", advisor.UrlGuid.ToString());
+            var adviceTypeColorCode = "";
+            switch (type.Value)
+            {
+                case 0:
+                    adviceTypeColorCode = "#d13e3e";
+                    break;
+                case 1:
+                    adviceTypeColorCode = "#3fd350";
+                    break;
+                default:
+                    adviceTypeColorCode = "#333333";
+                    break;
+            }
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 $"New recommendation on Auctus Experts for {asset.Code}",
-                $@"<p>The advisor {advisor.Name} set a new {type.GetDescription()} recommendation for the asset {asset.Code} - {asset.Name}.</p>
-                        <p>To see more details <a href='{WebUrl}/asset-details/{asset.Id}' target='_blank'>click here</a>.</p>", EmailTemplate.NotificationType.NewRecommendation);
+                $@"
+            <p>The expert {advisor.Name} set a new recommendation.</p>
+			<a style=""text-decoration: none;color:#ffffff;"" href=""{WebUrl}/asset-details/{asset.Id}"">
+				<div style=""border: solid 1px #404040;text-align:center;padding: 25px;"">
+					<div style=""height:100px;width:100px;border-radius:50px;margin-right:27px;display:inline-block;vertical-align: top;"">
+						<img style=""height:100px;width:100px;border-radius:50px;"" src=""{imgUrl}"">
+					</div>
+					<div style=""display:inline-block;"">
+						<div style=""font-family: sans-serif; font-size: 19px;display:inline;"">
+							<p style=""display:inline;""><strong>{asset.Code}</strong></p>
+							<p style=""color:#cbcaca;display:inline;"">&nbsp;({asset.Name})</p>
+						</div>
+						<br />
+						<div style=""width: 168px;background-color: {adviceTypeColorCode};color:#ffffff;font-size: 18px;text-align: center;padding: 14px;display:inline-block;margin-top:8px;"">{type.GetDescription()}</div>
+					</div>
+				</div>
+			</a>
+			<p style=""font-size:12px;font-style:italic;"">If you do not want to receive these recommendations for experts/assets that you are following, <a href='{WebUrl}?configuration=true' target='_blank'>click here</a>.</p>", 
+                EmailTemplate.NotificationType.NewRecommendation);
         }
 
         public List<Advice> List(IEnumerable<int> advisorsId = null, IEnumerable<int> assetsId = null)

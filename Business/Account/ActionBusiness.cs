@@ -165,7 +165,7 @@ namespace Auctus.Business.Account
             result.RequestToBeAdvisor.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.RequestToBeAdvisor.LastOrDefault()?.Value ?? 0 });
 
             result.Following.Add(new DashboardResponse.DistributionData() { Name = "Asset", Amount = consideredAssetFollowers.Count() });
-            result.Following.Add(new DashboardResponse.DistributionData() { Name = "Advisor", Amount = consideredAdvisorFollowers.Count() });
+            result.Following.Add(new DashboardResponse.DistributionData() { Name = "Expert", Amount = consideredAdvisorFollowers.Count() });
 
             var usersWithReferral = consideredUsers.Where(c => c.ReferralStatus.HasValue);
             result.ReferralStatus = !usersWithReferral.Any() ? new List<DashboardResponse.DistributionData>() : usersWithReferral.GroupBy(c => c.ReferralStatus.Value)

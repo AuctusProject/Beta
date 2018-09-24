@@ -42,7 +42,7 @@ export class Util {
             return "BUY";
           }
           else{
-            return "CLOSE";
+            return "HOLD";
           }
     }
 
@@ -59,7 +59,7 @@ export class Util {
     }
 
     public static GetGeneralRecommendationDescription(type: number){
-        if(type == this.AssetModeType.Neutral){
+        if(type == this.AssetModeType.Neutral || type == this.AssetModeType.Close){
             return "Neutral";
         }
         else if(type == this.AssetModeType.ModerateBuy){
@@ -73,9 +73,6 @@ export class Util {
         }
         else if(type == this.AssetModeType.StrongSell){
             return "Strong Sell";
-        }
-        else if(type == this.AssetModeType.Close){
-            return "Close";
         }
     }
 

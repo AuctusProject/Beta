@@ -3,12 +3,12 @@
     Expert Ratings
   </div>
   <div class="section-subtitle">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    Latest analyst ratings on cryptocurrencies
   </div>
   <div class="recommendation-list" fxHide.lt-md>
     <recommendation-box  [adviceType]="'BUY'" [adviceList]="buyAdvices"></recommendation-box>
     <recommendation-box fxHide.lt-md [adviceType]="'SELL'" [adviceList]="sellAdvices"></recommendation-box>
-    <recommendation-box fxHide.lt-md [adviceType]="'CLOSE'" [adviceList]="closePositionAdvices"></recommendation-box>  
+    <recommendation-box fxHide.lt-md [adviceType]="'HOLD'" [adviceList]="closePositionAdvices"></recommendation-box>  
   </div>
   <div class="recommendation-list" fxHide.gt-sm>
       <owl-carousel 
@@ -16,7 +16,7 @@
       [carouselClasses]="['owl-theme', 'row', 'sliding']">
         <recommendation-box [adviceType]="'BUY'" [adviceList]="buyAdvices"></recommendation-box>
         <recommendation-box [adviceType]="'SELL'" [adviceList]="sellAdvices"></recommendation-box>
-        <recommendation-box [adviceType]="'CLOSE'" [adviceList]="closePositionAdvices"></recommendation-box>
+        <recommendation-box [adviceType]="'HOLD'" [adviceList]="closePositionAdvices"></recommendation-box>
       </owl-carousel>
   </div>
   <div>

@@ -1,7 +1,7 @@
 <div class="asset-card" (click)="goToAssetDetails()" fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutGap.xs="5px" fxLayoutAlign="left center">
   <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="left center">
     <div class="asset-icon">
-      <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
+      <img [src]="getAssetImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
     </div>
     <div class="asset-info" fxLayout="column">
       <div class="symbol">{{asset.code}}</div><div class="asset-name">{{asset.name}}</div>

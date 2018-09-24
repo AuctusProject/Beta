@@ -27,7 +27,7 @@
     <div fxLayout="column" fxFlex="265px">
         <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
             <div class="social-media-button" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','facebook-f']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Facebook</span></div>
-            <div class="social-media-button" (click)="socialEntry('facebook')"><fa-icon [icon]="['fab','google']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Google</span></div> 
+            <div class="social-media-button" (click)="socialEntry('google')"><fa-icon [icon]="['fab','google']" size="2x" fxLayoutAlign="center stretch"></fa-icon><span>Continue with Google</span></div> 
             <p>or</p>
             <button class="large" mat-flat-button (click)="emailClick()">{{emailButtonMessage}}</button> 
         </div>

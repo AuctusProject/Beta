@@ -7,7 +7,7 @@
       <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="30px">
         <div class="request-div-img">
           <span class="request-div-img-wrapper">
-            <img onerror="this.style.display='none'" height="130" width="130" [src]="getRequestImage(request.urlGuid)">
+            <img onerror="this.style.display='none'" onload="this.style.display='unset'" height="130" width="130" [src]="getRequestImage(request.urlGuid)">
           </span>
         </div>
         <div class="request-base-data" fxLayout="column" fxLayoutAlign="space-around start" fxLayoutGap="15px">

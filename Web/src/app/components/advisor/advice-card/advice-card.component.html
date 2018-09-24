@@ -1,7 +1,7 @@
 <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
   <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
     <div class="expert-picture" (click)="goToExpertDetails()" >
-      <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
+      <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
       <div class="expert-ranking">
         {{advice.advisorRanking}}
       </div>
@@ -19,7 +19,7 @@
     <div fxLayout="column" (click)="goToAssetDetails()" class="asset-column" fxLayoutGap="5px">
       <div fxLayout="row" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" fxLayoutGap="10px">
         <div fxHide.lt-sm class="asset-icon">
-          <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
+          <img [src]="getAssetImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
         </div>
         <div class="asset-code-name" fxLayout="column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center">
           <div class="table-asset-code">
