@@ -137,6 +137,6 @@ export class AssetDetailsComponent implements OnInit {
     } else {
       sentence += "experts"
     }
-    return "Based on " + sentence + " offering recommendations for " + this.asset.code + " in the last month.";
+    return "Expert recommendation for " + this.asset.code + " (Based on: " + sentence + ", last 30 days)";
   }
 }
