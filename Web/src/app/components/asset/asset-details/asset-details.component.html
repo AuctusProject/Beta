@@ -9,7 +9,7 @@
           <div fxLayout="row" fxLayoutGap="36px">
             <div fxLayout="row" fxLayoutGap="10px">
               <div class="asset-icon">
-                <img [src]="getAssetImgUrl()" onerror="this.style.display='none'">
+                <img [src]="getAssetImgUrl()" onload="this.style.display='unset'" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
               </div>
               <div fxLayout="column">
                 <div class="symbol">{{asset.code}}</div>

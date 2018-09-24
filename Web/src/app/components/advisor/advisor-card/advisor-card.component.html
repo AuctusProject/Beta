@@ -3,7 +3,7 @@
   <div (click)="goToExpertDetails()" class="expert-details-div">
     <div class="card-header">
       <div class="expert-picture">
-        <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'">
+        <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
         <div class="expert-ranking">
             {{advisor.ranking}}
           </div>
