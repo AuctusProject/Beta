@@ -72,7 +72,7 @@ export class AssetCardComponent implements OnInit {
   }
 
   getCloseRecommendationPercentageLabel(){
-    return this.getRecommendationDistribution(Util.CLOSE) + '% Close';
+    return this.getRecommendationDistribution(Util.CLOSE) + '% Hold';
   }
 
   get24hVariation(){

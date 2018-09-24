@@ -34,7 +34,7 @@ namespace Auctus.Business.Advisor
                 throw new BusinessException("You need to wait before advising again for this asset.");
 
             if (type == AdviceType.ClosePosition && (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition))
-                throw new BusinessException("You need a Buy or Sell recommendation before advising to Close Position.");
+                throw new BusinessException("You need to set a Buy or Sell recommendation before advising to Hold.");
 
             if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
                 throw new BusinessException("Sell recommendations are not available for this asset.");
@@ -81,7 +81,7 @@ namespace Auctus.Business.Advisor
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 $"New recommendation on Auctus Experts for {asset.Code}",
                 $@"
-            <p>The advisor {advisor.Name} set a new recommendation.</p>
+            <p>The expert {advisor.Name} set a new recommendation.</p>
 			<a style=""text-decoration: none;color:#ffffff;"" href=""{WebUrl}/asset-details/{asset.Id}"">
 				<div style=""border: solid 1px #404040;text-align:center;padding: 25px;"">
 					<div style=""height:100px;width:100px;border-radius:50px;margin-right:27px;display:inline-block;vertical-align: top;"">
@@ -97,7 +97,7 @@ namespace Auctus.Business.Advisor
 					</div>
 				</div>
 			</a>
-			<p style=""font-size:12px;font-style:italic;"">If you do not want to receive these recommendations for advisors/assets that you are following, <a href='{WebUrl}?configuration=true' target='_blank'>click here</a>.</p>", 
+			<p style=""font-size:12px;font-style:italic;"">If you do not want to receive these recommendations for experts/assets that you are following, <a href='{WebUrl}?configuration=true' target='_blank'>click here</a>.</p>", 
                 EmailTemplate.NotificationType.NewRecommendation);
         }
 

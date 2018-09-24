@@ -45,7 +45,7 @@ namespace Auctus.Business.Advisor
 
             var advisor = Data.GetAdvisor(id);
             if (advisor == null || !advisor.Enabled)
-                throw new NotFoundException("Advisor not found");
+                throw new NotFoundException("Expert not found");
             if (advisor.Email.ToLower() != LoggedEmail.ToLower())
                 throw new UnauthorizedException("Invalid credentials");
 
@@ -491,7 +491,7 @@ namespace Auctus.Business.Advisor
         {
             var user = GetValidUser();
             if (!UserBusiness.IsValidAdvisor(user))
-                throw new UnauthorizedException("Logged user is not a valid Advisor.");
+                throw new UnauthorizedException("Logged user is not a valid Expert.");
 
             var asset = AssetBusiness.GetById(assetId);
             if (asset == null)
