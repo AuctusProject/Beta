@@ -67,11 +67,16 @@
     cursor: pointer;
 }
 
-.assets-table .white-button{
+.assets-table .white-button,
+.assets-table .blue-button{
     margin: auto;
 }
 
 .mat-column-expertName{
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.section-title {
+    margin-bottom: 36px;
 }

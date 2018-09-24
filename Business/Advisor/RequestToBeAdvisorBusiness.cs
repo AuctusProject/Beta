@@ -45,9 +45,9 @@ namespace Auctus.Business.Advisor
             var request = Data.GetById(id);
             var user = UserBusiness.GetById(id);
             if (user.IsAdvisor)
-                throw new BusinessException("User is already advisor.");
+                throw new BusinessException("User is already an Expert.");
             if (request.Approved == true)
-                throw new BusinessException("Requets is already approved.");
+                throw new BusinessException("Request is already approved.");
 
             request.Approved = true;
             var urlGuid = request.UrlGuid ?? Guid.NewGuid();
@@ -111,7 +111,7 @@ namespace Auctus.Business.Advisor
                 if (user == null)
                     throw new NotFoundException("User not found.");
                 if (user.IsAdvisor)
-                    throw new BusinessException("User was already approved as advisor.");
+                    throw new BusinessException("User was already approved as Expert.");
 
                 request = GetByUser(user.Id);
                 if (request?.Approved == true)

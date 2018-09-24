@@ -15,10 +15,6 @@
     margin-bottom: 16px;
 }
 
-.section-title{
-    padding-bottom: 56px;
-}
-
 :host ::ng-deep .mat-select-value {
     color: white;
 }

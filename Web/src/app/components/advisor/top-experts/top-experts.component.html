@@ -1,6 +1,9 @@
 <div class="global-container">
-  <div class="section-title">
+  <div class="section-title" [style.padding-bottom]="!subtitle ? '36px' : '0px'">
     {{title}}
+  </div>
+  <div *ngIf="subtitle" class="section-subtitle">
+    {{subtitle}}
   </div>
   <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="16px" class="section-filter" *ngIf="!hideFilters">
     <mat-form-field>

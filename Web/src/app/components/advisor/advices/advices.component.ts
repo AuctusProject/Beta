@@ -67,6 +67,6 @@ export class AdvicesComponent implements OnInit {
   }
 
   getTopText() : string {
-    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+    return "Recommendations from experts and cryptocurrencies that you are following";
   }
 }

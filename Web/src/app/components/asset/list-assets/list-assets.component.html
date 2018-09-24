@@ -3,11 +3,8 @@
         <div class="section-title">
             Top Assets
         </div>
-
         <div class="section-subtitle">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor<br>
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis<br>
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            The most popular Cryptocurrencies. Follow your favorite coins and see what analysts are saying about them
         </div>
         <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center top" fxLayoutGap="16px">
             <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
@@ -18,13 +15,6 @@
             <button class="pagination-link" *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">
                 LOAD MORE
             </button>
-            <div class="section-subtitle">
-                Disclaimer: Auctus Experts collects ratings and price targets of analysts by scanning publicly available 
-                reports on financial websites and by receiving reports directly from the analysts or from our users. 
-                The information displayed might not be accurate or up to date. The displayed ratings are made entirely at 
-                the sole discretion of the analysts. Auctus Experts holds no liability over the analysts’ information or opinions 
-                expressed on the site.
-            </div>
         </div>
     </div>
 </div>

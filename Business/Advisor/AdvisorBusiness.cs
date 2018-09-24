@@ -45,7 +45,7 @@ namespace Auctus.Business.Advisor
 
             var advisor = Data.GetAdvisor(id);
             if (advisor == null || !advisor.Enabled)
-                throw new NotFoundException("Advisor not found");
+                throw new NotFoundException("Expert not found");
             if (advisor.Email.ToLower() != LoggedEmail.ToLower())
                 throw new UnauthorizedException("Invalid credentials");
 
@@ -412,13 +412,14 @@ namespace Auctus.Business.Advisor
             advisorsResult.ForEach(c =>
             {
                 var maximumValue = newAdvisors.Any(a => a.UserId == c.UserId) ? 0.7 : 1.0;
-                c.Rating = Math.Min(5.0, generalNormalization * (
+                var rating = Math.Min(5.0, generalNormalization * (
                       (0.35 * 5.0 * Math.Min(maximumValue, maxAvg <= 0 || c.AverageReturn <= 0 ? 0 : c.AverageReturn / maxAvg))
                     + (0.30 * 5.0 * Math.Min(maximumValue, maxSucRate == 0 ? 0 : c.SuccessRate / maxSucRate))
                     + (0.01 * 5.0 * Math.Min(maximumValue, maxAssets == 0 ? 0 : (double)c.TotalAssetsAdvised / maxAssets))
                     + (0.15 * 5.0 * Math.Min(maximumValue, maxAdvices == 0 ? 0 : ((double)advisorsData[c.UserId].Count() / advDays[c.UserId]) / maxAdvices))
                     + (0.15 * 5.0 * Math.Min(maximumValue, maxFollowers == 0 ? 0 : ((double)c.NumberOfFollowers / advDays[c.UserId]) / maxFollowers))
                     + (0.04 * 5.0 * Math.Min(maximumValue, lastActivity.Ticks == 0 ? 0 : (double)c.CreationDate.Ticks / lastActivity.Ticks))));
+                c.Rating = 2.5 + (2.5 * rating / 5.0);
             });
             advisorsResult = advisorsResult.OrderByDescending(c => c.Rating).ToList();
             for (int i = 0; i < advisorsResult.Count; ++i)
@@ -490,7 +491,7 @@ namespace Auctus.Business.Advisor
         {
             var user = GetValidUser();
             if (!UserBusiness.IsValidAdvisor(user))
-                throw new UnauthorizedException("Logged user is not a valid Advisor.");
+                throw new UnauthorizedException("Logged user is not a valid Expert.");
 
             var asset = AssetBusiness.GetById(assetId);
             if (asset == null)

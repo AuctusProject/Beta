@@ -15,6 +15,7 @@ export class TopExpertsComponent implements OnInit {
   @Input() resultsLimit?: number;
   @Input() hideFilters?: boolean;
   @Input() title: string = "TOP EXPERTS";
+  @Input() subtitle: string = "Find the best performing Crypto Analysts. Follow them to get a real-time feed of their recommendations";
   experts : AdvisorResponse[] = [];
   expertsResponse : AdvisorResponse[];
   showAdvisorButton: boolean = false;

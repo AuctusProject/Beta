@@ -3,5 +3,5 @@
   <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
   <button *ngIf="showButtons" class="btn-buy btn-option" mat-flat-button (click)="showButtons && buy()">BUY<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
   <button *ngIf="(showButtons && showSell)" class="btn-sell btn-option" mat-flat-button (click)="showButtons && showSell && sell()">SELL<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
-  <button *ngIf="(showButtons && showClose)" class="btn-close btn-option" mat-flat-button (click)="showButtons && showClose && close()">CLOSE<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
+  <button *ngIf="(showButtons && showClose)" class="btn-close btn-option" mat-flat-button (click)="showButtons && showClose && close()">HOLD<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
 </div>
