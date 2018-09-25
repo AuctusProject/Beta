@@ -1,0 +1,155 @@
+:host{
+    background: white;
+    display: inline-block;
+    min-width: 100%;
+}
+
+.expert-section-title{
+    font-size: 42px;
+    font-weight: 500;
+    text-align: center;
+    color: #343434;
+    margin-top: 72px;
+    margin-bottom: 32px;
+}
+
+.expert-section-subtitle{
+    max-width: 604px;
+    width: calc(100% - 40px);
+    font-size: 26px;
+    font-weight: 500;
+    text-align: center;
+    color: #434343;
+    margin: auto;
+}
+
+
+.separator{
+    width: 1px;
+    height: 126px;
+    border-left: solid 1px #70707070;
+}
+
+.itens-section{
+    background-color: #1a1a1a;
+    color: white;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    margin-top: 140px;
+}
+
+.profit-item-title{
+    font-size: 24.5px;
+    font-weight: 600;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.profit-item-description{
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+    color: #9a9a9a;
+    max-width: 280px;
+}
+
+.sign-up-section .expert-section-title,
+.itens-section .expert-section-title{
+    color: white;
+    font-size: 37.5px;
+    font-weight: 500;
+    margin-top: 0px;
+}
+
+.sign-up-section{
+    background-color: #0d0d0d;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+
+.send-button{
+    background-color: #126efd;
+    width: 200px;
+    line-height: 48px;
+    color: white;
+    text-align: center;
+    margin: auto;
+    margin-top: 13px;    
+}
+
+.send-button-description{
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    text-align: left;
+    color: #9a9a9a;
+    margin-top: 5px;
+}
+
+:host fa-icon{
+    margin-right: 16px;
+}
+
+.itens-list{
+    font-size: 24.5px;
+    text-align: left;
+    color: #ffffff;
+    margin-bottom: 100px;
+}
+
+.itens-list > div{
+    margin: 18px;
+}
+
+.expert-image{
+    background-color: #b7b7b7;
+    margin-top: -170px;
+    margin-left: calc(50% - 791px);
+    position: absolute;
+}
+
+.expert-image-mobile{
+    max-width: 100%;
+    margin: auto;
+}
+
+
+@media(max-width: 959px){
+    .separator{
+        width: calc(100% - 40px);
+        height: 1px;
+        border-bottom: solid 1px #70707070;
+    }
+
+    .itens-section{
+        margin-top: 40px;
+        padding-top: 0px;
+    }
+
+    .itens-list{
+        margin-bottom: 40px;
+        font-size: 13.5px;
+    }
+
+    .expert-section-title{
+        font-size: 24.5px;
+    }
+
+    .expert-section-subtitle{
+        font-size: 15.5px;
+    }
+
+    .profit-item-title{
+        font-size: 17.5px;
+    }
+
+    .profit-item-description{
+        font-size: 14px;
+    }
+
+    .send-button-description{
+        font-size: 14px;
+    }
+}

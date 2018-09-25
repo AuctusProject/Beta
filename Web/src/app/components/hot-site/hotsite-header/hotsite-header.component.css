@@ -45,7 +45,7 @@
     border-bottom: solid 2px #126efd;
 }
 
-.be-an-expert hotsite-header-item.active,
+.be-an-expert.active .hotsite-header-item,
 .be-an-expert .hotsite-header-item:hover{
     border-bottom: solid 2px white;
 }

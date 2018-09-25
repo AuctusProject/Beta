@@ -4,9 +4,19 @@
     padding: 25px;
 }
 
+::ng-deep .main-content a{
+    font-weight: bold;
+    color: white !important;
+}
+
 .left-container{
     border-right: gray 1px solid;
     padding-right: 5%;
+}
+
+.top-container{
+    border-bottom: gray 1px solid;
+    padding-bottom: 5%;
 }
 
 .disabled-button {
@@ -143,3 +153,8 @@
     border-right: gray 1px solid;
 }
 
+::ng-deep .web3-providers > a > span {
+    font-weight: bold;
+    text-decoration: none;
+    color: white !important;
+}
