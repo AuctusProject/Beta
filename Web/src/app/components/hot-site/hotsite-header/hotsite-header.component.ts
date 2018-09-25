@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CONFIG } from '../../../services/config.service';
+import { MatMenu } from '@angular/material';
 
 @Component({
   selector: 'hotsite-header',
@@ -7,10 +8,14 @@ import { CONFIG } from '../../../services/config.service';
   styleUrls: ['./hotsite-header.component.css']
 })
 export class HotsiteHeaderComponent implements OnInit {
-
+  menuOpen: boolean = false;
+  @ViewChild("mobile") mobile: MatMenu;
   constructor() { }
 
   ngOnInit() {
+    if (!!this.mobile) {
+      this.mobile.closed.subscribe(() => this.menuOpen = false);
+    }
   }
 
   getLogoImgUrl() {

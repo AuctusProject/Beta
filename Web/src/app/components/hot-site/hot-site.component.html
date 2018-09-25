@@ -1,15 +1,15 @@
 <hotsite-header></hotsite-header>
-<div class="global-container">
+<div ngClass.gt-sm="global-container">
   <div class="hotsite-title">An investment platform made for the digital age</div>
   <img class="hot-site-image" src="./assets/img/Img_Banner.png">
 </div>
 <div class="early-access">
   <div class="global-container" fxLayout="row" fxLayoutGap="16px">
-    <img class="hot-site-phone-image" src="./assets/img/Img_Mobile.png">
+    <img fxHide.lt-md="true" class="hot-site-phone-image" src="./assets/img/Img_Mobile.png">
     <div fxLayout="column" class="early-access-content">
       <div class="early-access-description">Follow your favorite expert by tracking their performance and learn trading fundamentals, all while staying in control of your funds.</div>
       <div class="early-access-title">Sign up for early access</div>
-      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="20px">
+      <div fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start start" fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="5px">
         <inheritance-input #Referral [options]="getEmailInputOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
         <div class="send-button">Send</div>
       </div>
@@ -21,7 +21,7 @@
     <div class="early-access-content bottom-description">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
     </div> 
-    <div fxLayout="row" class="itens" fxLayoutGap="50px" fxLayoutAlign="center start" >
+    <div class="itens" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="50px" fxLayoutAlign.gt-sm="center start" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px" fxLayoutAlign.lt-md="center center"  >
       <div fxLayout="column" fxLayoutAlign="center center">
         <div class="icon-wrapper" fxLayoutAlign="center center"><img src="./assets/img/Icon_Graph.png"></div>
         <div class="item-title">Crypto Analysts Recommendation</div>
@@ -39,6 +39,7 @@
         <div class="item-title">No Token Holding Period or Locking</div>
         <div class="item-description">Spend your tokens or cash out anytime you want!</div>
       </div>
+      <div class="separator" fxHide.gt-sm="true"></div>
     </div>
     <div class="referral-title">
         Help us, we help you

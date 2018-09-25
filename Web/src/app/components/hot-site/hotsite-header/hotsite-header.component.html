@@ -1,7 +1,7 @@
 <div class="hotsite-header">
   <div class="global-container header-container" fxLayout="row" fxLayoutAlign="space-between center">
     <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo" />
-    <div class="hotsite-header-itens" fxLayout="row" fxLayoutAlign="center center">
+    <div class="hotsite-header-itens" fxHide.lt-md="true" fxLayout="row" fxLayoutAlign="center center">
       <div>
         <a class="hotsite-header-item" routerLink="/hotsite" routerLinkActive="active"><span>HOME</span></a>
       </div>
@@ -29,5 +29,19 @@
         </div>
       </a>
     </div>
+    <span class="mobile-menu" fxHide.gt-sm="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="mobile"><mat-icon>{{menuOpen ? 'close' : 'reorder'}}</mat-icon>
+      <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #mobile="matMenu">
+          <button class="sub-menu-item" mat-menu-item>
+            <a class="about-mobile" routerLinkActive="active" routerLink="/hotsite">HOME</a>
+          </button>
+          <button class="sub-menu-item" mat-menu-item>
+            <a class="about-mobile" routerLinkActive="active" routerLink="/beexpert">BE AN EXPERT</a>
+          </button>
+          <button class="sub-menu-item" mat-menu-item>
+              <a class="about-mobile" routerLinkActive="active" href="https://auctus.org/" target="_blank">ABOUT US</a>
+          </button>
+      </mat-menu>
+    </span>
+    
   </div>
 </div>

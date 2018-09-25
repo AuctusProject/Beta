@@ -33,7 +33,7 @@
 .itens-section{
     background-color: #1a1a1a;
     color: white;
-    padding-top: 60px;
+    padding-top: 30px;
     padding-bottom: 60px;
     margin-top: 140px;
 }
@@ -93,10 +93,10 @@
 }
 
 .itens-list{
-    font-size: 24.5px;
+    font-size: 18px;
     text-align: left;
     color: #ffffff;
-    margin-bottom: 100px;
+    padding-bottom: 90px;
 }
 
 .itens-list > div{
@@ -105,8 +105,8 @@
 
 .expert-image{
     background-color: #b7b7b7;
-    margin-top: -170px;
-    margin-left: calc(50% - 791px);
+    margin-top: -120px;
+    margin-left: calc(50vw - 791px);
     position: absolute;
 }
 
@@ -114,7 +114,6 @@
     max-width: 100%;
     margin: auto;
 }
-
 
 @media(max-width: 959px){
     .separator{
@@ -128,13 +127,29 @@
         padding-top: 0px;
     }
 
+    .maximize-section{
+        padding-top: 30px;
+    }
+
+    .itens-first-section{        
+        background-color: #0d0d0d;
+        margin-bottom: 0px;
+    }
+
     .itens-list{
-        margin-bottom: 40px;
         font-size: 13.5px;
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
     .expert-section-title{
         font-size: 24.5px;
+        margin-top: 32px;
+    }
+    
+    .sign-up-section .expert-section-title,
+    .itens-section .expert-section-title{
+        font-size: 22px;
     }
 
     .expert-section-subtitle{
@@ -151,5 +166,10 @@
 
     .send-button-description{
         font-size: 14px;
+        text-align: center;
+    }
+
+    :host{
+        margin-top: -33px;
     }
 }

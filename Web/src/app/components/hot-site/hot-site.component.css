@@ -128,3 +128,69 @@
     text-align: center;
     margin-top: 13px;    
 }
+
+@media(max-width: 959px){
+    :host{
+        margin-top: -33px;
+    }
+
+    .early-access{
+        background-color: #1f1f1f;
+        margin-top: -4px;
+        padding-top: 20px;
+    }
+    
+    .early-access-description{
+        max-width: 516px;
+        width: calc(100% - 40px);
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .early-access-title{
+        font-size: 28px;
+    }
+    
+    .early-access-content{
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .itens{
+        margin-top: 20px;
+    }
+
+    .separator{
+        width: calc(100% - 40px);
+        height: 1px;
+        border-bottom: solid 1px #70707070;
+    }
+
+
+    .bottom-description{
+        font-size: 13px;
+    }
+    
+    .item-title{
+        font-size: 22px;
+    }
+    
+    .item-description{
+        font-size: 13px;
+    }
+    
+    .referral-title{
+        font-size: 26px;
+    }
+    
+    .referral-subtitle {
+        font-size: 14px;
+    }
+    
+    .referral-description{
+        font-size: 13px;
+    }
+}
