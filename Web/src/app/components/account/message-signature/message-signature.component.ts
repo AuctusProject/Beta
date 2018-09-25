@@ -170,7 +170,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   hasAuc() {
-    return this.aucAmount >= this.aucRequired && this.aucAmount > 0;
+    return this.aucAmount >= this.aucRequired && (this.aucAmount > 0 || this.aucRequired == 0);
   }
 
   signMessage() {
