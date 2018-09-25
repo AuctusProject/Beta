@@ -207,5 +207,14 @@ namespace Api.Controllers
         {
             return base.GetDashboard();
         }
+
+        [Route("early-access-emails")]
+        [HttpPost]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult RequestEarlyAccess([FromBody]EarlyAccessRequest earlyAccessRequest)
+        {
+            return base.RequestEarlyAccess(earlyAccessRequest);
+        }
     }
 }
