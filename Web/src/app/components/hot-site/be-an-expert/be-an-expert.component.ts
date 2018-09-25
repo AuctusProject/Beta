@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CONFIG } from '../../../services/config.service';
+import { AccountService } from '../../../services/account.service';
+import { EarlyAccessRequest } from '../../../model/account/earlyAccessRequest';
 
 @Component({
   selector: 'be-an-expert',
@@ -8,7 +10,9 @@ import { CONFIG } from '../../../services/config.service';
 })
 export class BeAnExpertComponent implements OnInit {
 
-  constructor() { }
+  earlyAccessRequest: EarlyAccessRequest = new EarlyAccessRequest();
+
+  constructor(private accountService: AccountService) { }
 
   ngOnInit() {
   }
@@ -27,5 +31,9 @@ export class BeAnExpertComponent implements OnInit {
 
   getTwitterInputOptions() {
     return { textOptions: { outlineField: false, placeHolder: "Twitter", required: false, showHintSize: false }, darkLayout:true };
+  }
+
+  sendEarlyAccessRequest() {
+    this.accountService.postEarlyAccessRequest(this.earlyAccessRequest).subscribe(result => {});
   }
 }

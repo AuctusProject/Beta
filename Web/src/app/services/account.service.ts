@@ -23,6 +23,7 @@ import { SocialLoginRequest } from '../model/account/socialLoginRequest';
 import { ValidReferralCodeResponse } from '../model/account/validReferralCodeResponse';
 import { SetReferralCodeReponse } from '../model/account/setReferralCodeReponse';
 import { WalletLoginInfoResponse } from '../model/account/walletLoginInfoResponse';
+import { EarlyAccessRequest } from '../model/account/earlyAccessRequest';
 
 
 @Injectable()
@@ -43,6 +44,7 @@ export class AccountService {
   private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
   private dashboardUrl = this.httpService.apiUrl("v1/accounts/dashboard");
   private searchUrl = this.httpService.apiUrl("v1/accounts/search");
+  private earlyAccessUrl = this.httpService.apiUrl("v1/accounts/early-access-emails");
 
   constructor(private httpService : HttpService, private navigationService: NavigationService) { }
 
@@ -154,5 +156,9 @@ export class AccountService {
 
   search(searchTerm: string) : Observable<SearchResponse> {
     return this.httpService.get(this.searchUrl + "?term=" + searchTerm);
+  }
+  
+  postEarlyAccessRequest(earlyAccessRequest: EarlyAccessRequest) : Observable<void> {
+    return this.httpService.post(this.earlyAccessUrl, earlyAccessRequest)
   }
 }
