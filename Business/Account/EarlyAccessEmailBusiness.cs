@@ -18,13 +18,31 @@ namespace Auctus.Business.Account
 
         public void Create(string name, string email, string twitter)
         {
-            Insert(new EarlyAccessEmail()
+            UserBusiness.EmailValidation(email);
+
+            var previousRecord = Data.GetByEmail(email);
+
+            if (name.Length > 50)
+                name = name.Substring(0, 50);
+            if (twitter.Length > 15)
+                twitter = twitter.Substring(0, 15);
+
+            if (previousRecord == null)
             {
-                CreationDate = Data.GetDateTimeNow(),
-                Email = email,
-                Name = name,
-                Twitter = twitter
-            });
+                Insert(new EarlyAccessEmail()
+                {
+                    CreationDate = Data.GetDateTimeNow(),
+                    Email = email,
+                    Name = name,
+                    Twitter = twitter
+                });
+            }
+            else
+            {
+                previousRecord.Name = name;
+                previousRecord.Twitter = twitter;
+                Update(previousRecord);
+            }
         }
     }
 }
