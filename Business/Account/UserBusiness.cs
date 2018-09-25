@@ -223,9 +223,10 @@ namespace Auctus.Business.Account
             user.Password = String.IsNullOrWhiteSpace(password) ? null : GetHashedPassword(password, user.Email, user.CreationDate);
             user.ReferralCode = GenerateReferralCode();
             user.ReferredId = referredUser?.Id;
-            user.ReferralDiscount = referredUser != null ? DiscountPercentageOnAuc : (double?)null;
+            user.ReferralDiscount = referredUser != null ? referredUser.DiscountProvided : (double?)null;
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
+            user.DiscountProvided = DiscountPercentageOnAuc;
             return user;
         }
 
@@ -252,10 +253,10 @@ namespace Auctus.Business.Account
             else
             {
                 user.ReferredId = referredUser.Id;
-                user.ReferralDiscount = DiscountPercentageOnAuc;
+                user.ReferralDiscount = referredUser.DiscountProvided;
                 Data.Update(user);
                 response.Valid = true;
-                response.Discount = DiscountPercentageOnAuc;
+                response.Discount = referredUser.DiscountProvided;
                 response.AUCRequired = GetMinimumAucAmountForUser(user);
             }
             return response;
@@ -533,7 +534,7 @@ namespace Auctus.Business.Account
             return new ValidateReferralCodeResponse()
             {
                 Valid = user != null,
-                Discount = user != null ? DiscountPercentageOnAuc : 0
+                Discount = user != null ? user.DiscountProvided : 0
             };
         }
 

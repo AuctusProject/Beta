@@ -26,6 +26,9 @@
             </div>
           </div>
           <div fxLayout="row" fxLayoutGap="36px">
+            <div class="asset-price">
+              {{asset.lastValue | valueDisplay}}
+            </div>
             <div fxLayout="column">
               <percentage-display [value]="asset.variation24h"></percentage-display>
               Last 24 hours
@@ -60,7 +63,7 @@
             </div>
           </div>
           <div style="width:100%">
-            <asset-history-chart [assetValues]="asset.values"></asset-history-chart>
+            <asset-history-chart [assetId]="asset.assetId"></asset-history-chart>
           </div>
         </div>
       </div>

@@ -44,7 +44,11 @@ export class HomeComponent implements OnInit {
     return CONFIG.platformImgUrl.replace("{id}", "home1920px");
   }
 
-  getTopText() : string {
-    return "An investment platform made for the digital age. Follow your favourite expert, recognize trends early, stay in control.";
+  getTopText1() : string {
+    return "An investment platform made for the digital age.";
+  }
+
+  getTopText2() : string {
+    return "Follow your favourite expert, recognize trends early, stay in control.";
   }
 }

@@ -2,6 +2,7 @@
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
+using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
@@ -80,7 +81,7 @@ namespace Auctus.Business.Advisor
             await SendRequestRejectedNotificationAsync(user);
         }
 
-        public async Task<RequestToBeAdvisor> CreateAsync(string email, string password, string name, string description, string previousExperience, 
+        public async Task<LoginResponse> CreateAsync(string email, string password, string name, string description, string previousExperience,
             bool changePicture, Stream pictureStream, string pictureExtension)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -119,7 +120,7 @@ namespace Auctus.Business.Advisor
                 if (request?.Approved == true)
                     throw new BusinessException("Request was already approved.");
             }
-            else 
+            else
                 user = UserBusiness.GetValidUserToRegister(email, password, null);
 
             Guid? urlGuid = null;
@@ -137,7 +138,7 @@ namespace Auctus.Business.Advisor
             {
                 if (LoggedEmail == null)
                     transaction.Insert(user);
-                
+
                 newRequest = new RequestToBeAdvisor()
                 {
                     CreationDate = Data.GetDateTimeNow(),
@@ -154,7 +155,17 @@ namespace Auctus.Business.Advisor
                 await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
 
             await SendRequestToBeAdvisorEmailAsync(user, newRequest, request);
-            return newRequest;
+
+            bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
+            return new LoginResponse()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
+                HasInvestment = hasInvestment,
+                IsAdvisor = false,
+                RequestedToBeAdvisor = true
+            };
         }
         private async Task SendRequestToBeAdvisorEmailAsync(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
         {

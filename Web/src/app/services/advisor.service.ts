@@ -8,6 +8,7 @@ import { AdviseRequest } from '../model/advisor/adviseRequest';
 import { AdvisorRequest } from '../model/advisor/advisorRequest';
 import { Advisor } from '../model/advisor/advisor';
 import { FeedResponse } from '../model/advisor/feedResponse';
+import { LoginResult } from '../model/account/loginResult';
 
 @Injectable()
 export class AdvisorService {
@@ -60,7 +61,7 @@ export class AdvisorService {
     return this.httpService.post(this.rejectRequestToBeAdvisorUrl.replace("{id}", requestId.toString()));
   }
 
-  postRequestToBeAdvisor(requestToBeAdvisorRequest: RequestToBeAdvisorRequest): Observable<RequestToBeAdvisor> {
+  postRequestToBeAdvisor(requestToBeAdvisorRequest: RequestToBeAdvisorRequest): Observable<LoginResult> {
     let formData: FormData = new FormData();
     formData.append('formFile', requestToBeAdvisorRequest.file);
     formData.append('name', requestToBeAdvisorRequest.name);

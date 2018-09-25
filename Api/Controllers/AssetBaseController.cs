@@ -27,6 +27,10 @@ namespace Api.Controllers
             return Ok(assetResponse);
         }
 
+        protected IActionResult ListAssetValues(int id, DateTime? dateTime)
+        {
+            return Ok(AssetValueBusiness.ListAssetValues(id, dateTime));
+        }
 
         protected IActionResult ListAssetsDetails()
         {

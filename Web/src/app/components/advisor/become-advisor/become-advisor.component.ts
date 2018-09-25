@@ -36,7 +36,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @ViewChild("Description") Description: InheritanceInputComponent;
   @ViewChild("Experience") Experience: InheritanceInputComponent;
   
-  acceptTermsAndConditions: boolean;
   alreadySent: boolean = false;
   requestDenied: boolean = false;
 
@@ -52,7 +51,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     } else {
       this.advisorService.getRequestToBeAdvisor().subscribe(result => 
         {
-          this.acceptTermsAndConditions = false;
           this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
           this.requestToBeAdvisorRequest.password = "";
           let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
@@ -84,19 +82,22 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   onSubmit() {
-    if (!this.acceptTermsAndConditions) {
-      this.notificationsService.error(null, "You must accept the terms and conditions to continue.");
-    } else if (this.isNewUser() && !this.requestToBeAdvisorRequest.captcha) {
+    if (this.isNewUser() && !this.requestToBeAdvisorRequest.captcha) {
       this.notificationsService.error(null, "You must fill the captcha.");
     } else if (this.isValidRequest()) {
       this.requestToBeAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
       this.requestToBeAdvisorRequest.file = this.FileUploadComponent.getFile();
       this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(result => 
       {
-        let modalData = new FullscreenModalComponentInput();
-        modalData.component = MessageFullscreenModalComponent;
-        modalData.componentInput = { message: "Thank you for submitting your details. An Auctus representative will be in touch shortly.", redirectUrl: "" };
-        this.setNewModal.emit(modalData);
+        if (!!result && !result.error && result.data) {
+          this.accountService.setLoginData(result.data);
+          let modalData = new FullscreenModalComponentInput();
+          modalData.component = MessageFullscreenModalComponent;
+          modalData.componentInput = { message: "Thank you for submitting your details. An Auctus representative will be in touch shortly.", redirectUrl: "" };
+          this.setNewModal.emit(modalData);
+        } else if (!!result && result.error) {
+          this.notificationsService.info("Info", result.error);
+        }
       }, error =>
       {
         if (!!this.RecaptchaComponent) this.RecaptchaComponent.reset();

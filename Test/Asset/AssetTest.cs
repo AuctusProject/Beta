@@ -22,19 +22,19 @@ namespace Auctus.Test.Asset
                 switch (i)
                 {
                     case 1:
-                        AssertBaseAsset1Data(asset);
+                        AssertBaseAsset1Data(asset, false);
                         AssertExtraAsset1Data(asset);
                         break;
                     case 2:
-                        AssertBaseAsset2Data(asset);
+                        AssertBaseAsset2Data(asset, false);
                         AssertExtraAsset2Data(asset);
                         break;
                     case 3:
-                        AssertBaseAsset3Data(asset);
+                        AssertBaseAsset3Data(asset, false);
                         AssertExtraAsset3Data(asset);
                         break;
                     case 4:
-                        AssertBaseAsset4Data(asset);
+                        AssertBaseAsset4Data(asset, false);
                         AssertExtraAsset4Data(asset);
                         break;
                 }
@@ -53,7 +53,7 @@ namespace Auctus.Test.Asset
             switch (assetId)
             {
                 case 1:
-                    AssertBaseAsset1Data(response);
+                    AssertBaseAsset1Data(response, false, false);
                     AssertExtraAsset1Data(response);
                     AssertAsset1AdvicesData(response.Advices);
                     Assert.Equal(3, response.Advisors.Count);
@@ -72,7 +72,7 @@ namespace Auctus.Test.Asset
                     AdvisorTest.AssertAssetAdvisor3Data(response.AssetAdvisor.Single(c => c.UserId == 3), 1);
                     break;
                 case 2:
-                    AssertBaseAsset2Data(response);
+                    AssertBaseAsset2Data(response, false, false);
                     AssertExtraAsset2Data(response);
                     AssertAsset2AdvicesData(response.Advices);
                     Assert.Equal(2, response.Advisors.Count);
@@ -87,7 +87,7 @@ namespace Auctus.Test.Asset
                     AdvisorTest.AssertAssetAdvisor2Data(response.AssetAdvisor.Single(c => c.UserId == 2), 2);
                     break;
                 case 3:
-                    AssertBaseAsset3Data(response);
+                    AssertBaseAsset3Data(response, false, false);
                     AssertExtraAsset3Data(response);
                     AssertAsset3AdvicesData(response.Advices);
                     Assert.Single(response.Advisors);
@@ -98,7 +98,7 @@ namespace Auctus.Test.Asset
                     AdvisorTest.AssertAssetAdvisor2Data(response.AssetAdvisor.Single(c => c.UserId == 2), 3);
                     break;
                 case 4:
-                    AssertBaseAsset4Data(response);
+                    AssertBaseAsset4Data(response, false, false);
                     AssertExtraAsset4Data(response);
                     AssertAsset4AdvicesData(response.Advices);
                     Assert.Single(response.Advisors);
@@ -111,24 +111,24 @@ namespace Auctus.Test.Asset
             }
         }
 
-        internal static void AssertBaseAsset1Data(AssetResponse asset)
+        internal static void AssertBaseAsset1Data(AssetResponse asset, bool ignore24hVariationValues = true, bool ignoreLongVariationValues = true)
         {
-            AssertBaseAssetData(asset, 14, 3, 7461.011246, 0.000850, -0.012279, -0.124007);
+            AssertBaseAssetData(asset, 14, 3, 7461.011246, 0.000850, -0.012279, -0.124007, ignore24hVariationValues, ignoreLongVariationValues);
         }
 
-        internal static void AssertBaseAsset2Data(AssetResponse asset)
+        internal static void AssertBaseAsset2Data(AssetResponse asset, bool ignore24hVariationValues = true, bool ignoreLongVariationValues = true)
         {
-            AssertBaseAssetData(asset, 8, 2, 595.289519, 0.015921, 0.023787, -0.168164);
+            AssertBaseAssetData(asset, 8, 2, 595.289519, 0.015921, 0.023787, -0.168164, ignore24hVariationValues, ignoreLongVariationValues);
         }
 
-        internal static void AssertBaseAsset3Data(AssetResponse asset)
+        internal static void AssertBaseAsset3Data(AssetResponse asset, bool ignore24hVariationValues = true, bool ignoreLongVariationValues = true)
         {
-            AssertBaseAssetData(asset, 5, 1, 0.667078, 0.034764, 0.070678, -0.047862);
+            AssertBaseAssetData(asset, 5, 1, 0.667078, 0.034764, 0.070678, -0.047862, ignore24hVariationValues, ignoreLongVariationValues);
         }
 
-        internal static void AssertBaseAsset4Data(AssetResponse asset)
+        internal static void AssertBaseAsset4Data(AssetResponse asset, bool ignore24hVariationValues = true, bool ignoreLongVariationValues = true)
         {
-            AssertBaseAssetData(asset, 2, 1, 0.250155, -0.025706, -0.007870, -0.556870);
+            AssertBaseAssetData(asset, 2, 1, 0.250155, -0.025706, -0.007870, -0.556870, ignore24hVariationValues, ignoreLongVariationValues);
         }
 
         internal static void AssertExtraAsset1Data(AssetResponse asset)
@@ -193,14 +193,18 @@ namespace Auctus.Test.Asset
         }
 
         private static void AssertBaseAssetData(AssetResponse asset, int expTotalRatings, int expTotalAdvisors, double expLastValue, 
-            double expVariation24h, double expVariation7d, double expVariation30d)
+            double expVariation24h, double expVariation7d, double expVariation30d, bool ignore24hVariationValues, bool ignoreLongVariationValues)
         {
             Assert.Equal(expTotalRatings, asset.TotalRatings);
             Assert.Equal(expTotalAdvisors, asset.TotalAdvisors);
             Assert.Equal(expLastValue, asset.LastValue, 6);
-            Assert.Equal(expVariation24h, asset.Variation24h.Value, 6);
-            Assert.Equal(expVariation7d, asset.Variation7d.Value, 6);
-            Assert.Equal(expVariation30d, asset.Variation30d.Value, 6);
+            if (!ignore24hVariationValues)
+                Assert.Equal(expVariation24h, asset.Variation24h.Value, 6);
+            if (!ignoreLongVariationValues)
+            {
+                Assert.Equal(expVariation7d, asset.Variation7d.Value, 6);
+                Assert.Equal(expVariation30d, asset.Variation30d.Value, 6);
+            }
         }
 
         private static void AssertExtraAssetData(AssetResponse asset, int expFollowers, bool expIsFollowing, int expMode, Dictionary<int, double> expRecommendation)

@@ -33,7 +33,6 @@ export class RegisterComponent implements ModalComponent, OnInit {
   @ViewChild("Email") Email: InheritanceInputComponent;
   @ViewChild("Referral") Referral: InheritanceInputComponent;
   
-  acceptTermsAndConditions: boolean;
   discountMessage: string = "";
 
   constructor(private notificationsService: NotificationsService,
@@ -55,9 +54,7 @@ export class RegisterComponent implements ModalComponent, OnInit {
   }
 
   onCreateAccountClick(){ 
-    if (!this.acceptTermsAndConditions) {
-      this.notificationsService.error(null, "You must accept the terms and conditions to continue.");
-    } else if (!this.registerRequest.captcha) {
+    if (!this.registerRequest.captcha) {
       this.notificationsService.error(null, "You must fill the captcha.");
     } else if (this.isValidRequest()) {
       this.registerPromise = this.accountService.register(this.registerRequest)
