@@ -13,7 +13,7 @@ import { TopExpertsComponent } from './components/advisor/top-experts/top-expert
 import { HotSiteComponent } from './components/hot-site/hot-site.component';
 
 const routes: Routes = [
-    { path: 'hot-site', component: HotSiteComponent  },
+    { path: 'hotsite', component: HotSiteComponent  },
     { path: '', component: HomeComponent  },
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },

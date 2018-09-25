@@ -1,0 +1,76 @@
+
+.hotsite-header{
+    background: white;
+    width: 100%;
+    height: 83px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.header-container{
+    border-bottom: solid 1px #303030;
+    height: 83px;
+}
+
+.hotsite-header-itens > div {
+    margin-left: 14px;
+    margin-right: 14px;
+}
+
+.hotsite-header-item.active,
+.hotsite-header-item:hover{
+    border-bottom: solid 2px #252525;
+}
+
+.hotsite-header-item{
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-bottom: 2px;
+    border-bottom: solid 2px white;
+    cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.hotsite-header-item span{
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.be-an-expert .hotsite-header-item{
+    border-bottom: solid 2px #126efd;
+}
+
+.be-an-expert hotsite-header-item.active,
+.be-an-expert .hotsite-header-item:hover{
+    border-bottom: solid 2px white;
+}
+
+.be-an-expert{
+    background-color: #126efd;
+    color: white;
+    padding: 16px 24px 16px 24px;
+    cursor: pointer;
+}
+
+.social-icon-wrapper{
+    width: 34px;
+    height: 34px;
+    border-radius: 22px;
+    border: solid 1px #303030;
+    margin: 17px 17px 17px 0;
+}
+
+.social-icon-wrapper fa-icon{
+    margin-top:9px;
+    margin-bottom:9px;
+}
+
+a{
+    color: inherit;
+    text-decoration: inherit;
+}
