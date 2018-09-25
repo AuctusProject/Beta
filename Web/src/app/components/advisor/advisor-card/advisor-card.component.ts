@@ -32,11 +32,19 @@ export class AdvisorCardComponent implements OnInit {
         this.navigationService.goToConfirmEmail();
       }
     } else {
-      this.promise = this.advisorServices.followAdvisor(this.advisor.userId).subscribe(result =>this.advisor.following = true);
+      this.promise = this.advisorServices.followAdvisor(this.advisor.userId).subscribe(result =>
+        {
+          this.advisor.following = true;
+          this.advisor.numberOfFollowers = this.advisor.numberOfFollowers + 1;
+        });
     }
   }
   onUnfollowClick(){
-    this.promise = this.advisorServices.unfollowAdvisor(this.advisor.userId).subscribe(result =>this.advisor.following = false);
+    this.promise = this.advisorServices.unfollowAdvisor(this.advisor.userId).subscribe(result =>
+      {
+        this.advisor.following = false;
+        this.advisor.numberOfFollowers = this.advisor.numberOfFollowers - 1;
+      });
   }
 
   getAdvisorImgUrl(){

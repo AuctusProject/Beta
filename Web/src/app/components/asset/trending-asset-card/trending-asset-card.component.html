@@ -29,10 +29,10 @@
       <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
     </div>
   </div>  
-  <div class="follow-link" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowClick()"  fxLayout="row" fxLayoutAlign="center center">
-    Unfollow
+  <div class="follow-link unfollow" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowClick()"  fxLayout="row" fxLayoutAlign="center center">
+      <span>UNFOLLOW</span>
   </div>
   <div class="follow-link" [promiseBtn]="promise" *ngIf="!asset.following" (click)="onFollowClick()"  fxLayout="row" fxLayoutAlign="center center">
-    Follow
+      <span>FOLLOW</span>
   </div>
 </div>

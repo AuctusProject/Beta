@@ -157,8 +157,8 @@
 }
 
 .close-distribution{
-    border-left: 1px solid;
-    border-right: 1px solid;
+    border-left: 1px solid #898989;
+    border-right: 1px solid #898989;
 }
 
 .distribution-follow-divider{
@@ -166,15 +166,21 @@
     margin-bottom: 13px;
 }
 
-
 .follow-link{
     margin-bottom: 13px;
-    font-size: 14px;
-    font-weight: 100;
+ 
     text-align: center;
     color: #126ffd;
     cursor: pointer;
-    text-decoration: underline;
+}
+
+.follow-link.unfollow{
+    filter: grayscale(100);
+    -webkit-filter: grayscale(100);
+}
+.follow-link span{
+    font-size: 14px;
+    font-weight: 900;
 }
 
 .circular-chart{
