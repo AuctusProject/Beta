@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
 import { Highcharts } from 'angular-highcharts';
+import { Router } from '@angular/router';
+import { NavigationService } from './services/navigation.service';
 
 Highcharts.setOptions({
     global:{
@@ -205,7 +207,7 @@ Highcharts.setOptions({
 })
 export class AppComponent implements OnInit{
   public topLoading = TopLoadingComponent.prototype.constructor;
-  constructor(){}
+  constructor(private router: Router, private navigationService : NavigationService){}
 
   ngOnInit(){
   }
@@ -216,5 +218,9 @@ export class AppComponent implements OnInit{
     preventDuplicates: true,
     preventLastDuplicates: "visible",
     clickToClose: true
+  }
+
+  public isHotSite(){
+    return this.navigationService.isSameRoute("hot-site", this.router.url);
   }
 }

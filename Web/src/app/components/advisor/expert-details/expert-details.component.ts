@@ -100,7 +100,7 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   getLastAdviceDate(asset: AssetResponse){
-    return Util.ConvertUTCDateStringToLocalDate(asset.assetAdvisor[0].lastAdviceDate);
+    return asset.assetAdvisor[0].lastAdviceDate;
   }
 
   getTotalRatings(asset:AssetResponse){
