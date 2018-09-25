@@ -35,9 +35,7 @@ export class AdvisorCardComponent implements OnInit {
       this.promise = this.advisorServices.followAdvisor(this.advisor.userId).subscribe(result =>
         {
           this.advisor.following = true;
-          if (!!this.advisor.numberOfFollowers) {
-            this.advisor.numberOfFollowers = this.advisor.numberOfFollowers + 1;
-          }
+          this.advisor.numberOfFollowers = this.advisor.numberOfFollowers + 1;
         });
     }
   }
@@ -45,9 +43,7 @@ export class AdvisorCardComponent implements OnInit {
     this.promise = this.advisorServices.unfollowAdvisor(this.advisor.userId).subscribe(result =>
       {
         this.advisor.following = false;
-        if (!!this.advisor.numberOfFollowers) {
-          this.advisor.numberOfFollowers = this.advisor.numberOfFollowers - 1;
-        }
+        this.advisor.numberOfFollowers = this.advisor.numberOfFollowers - 1;
       });
   }
 
