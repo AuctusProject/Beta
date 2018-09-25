@@ -592,10 +592,9 @@ textarea:read-only {
 
 .pagination-link{
   font-size: 14.5px;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   color: #07d1ff;
-  text-decoration: underline;
   cursor: pointer;
   background: transparent;
   border: none;
