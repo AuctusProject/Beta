@@ -38,6 +38,15 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("{id}/values")]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAssetValues([FromRoute] int id, [FromQuery] DateTime? dateTime)
+        {
+            return base.ListAssetValues(id, dateTime);
+        }
+
+        [HttpGet]
         [Route("details")]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

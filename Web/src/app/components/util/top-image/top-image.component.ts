@@ -9,6 +9,7 @@ export class TopImageComponent implements OnInit {
   @Input() urlImage: string; 
   @Input() title: string;
   @Input() subtitle: string;
+  @Input() subtitle2: string;
 
   public constructor() { }
 

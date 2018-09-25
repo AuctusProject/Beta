@@ -41,47 +41,26 @@ namespace Auctus.Business.Asset
             var assetCurrentValues = ListAllAssets(assetIds);
 
             var assetDateMapping = new Dictionary<int, DateTime>();
-            var invalidCurrentValue = new List<int>();
             foreach (var asset in assetCurrentValues)
             {
                 if (asset.UpdateDate < Data.GetDateTimeNow().AddHours(-4))
-                    invalidCurrentValue.Add(asset.Id);
-
-                if (mode == CalculationMode.AdvisorBase)
                 {
-                    if (invalidCurrentValue.Contains(asset.Id))
+                    if (mode == CalculationMode.AdvisorBase || mode == CalculationMode.Feed || mode == CalculationMode.AdvisorDetailed)
                         assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddHours(-4));
-                }
-                else if (mode == CalculationMode.AssetBase || mode == CalculationMode.Feed)
-                {
-                    if (invalidCurrentValue.Contains(asset.Id))
-                        assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-30).AddHours(-4));
-                }
-                else if (mode == CalculationMode.AdvisorDetailed)
-                {
-                    Advice selectAdvisorFirstAdvice = null;
-                    if (allAdvices != null)
-                        selectAdvisorFirstAdvice = allAdvices.Where(c => c.AssetId == asset.Id && c.AdvisorId == selectAdvisorId.Value).OrderBy(c => c.CreationDate).FirstOrDefault();
-                    if (selectAdvisorFirstAdvice == null)
+                    else if (mode == CalculationMode.AssetDetailed)
                     {
-                        if (invalidCurrentValue.Contains(asset.Id))
+                        if (selectAssetId.Value == asset.Id)
+                            assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-30).AddHours(-4));
+                        else
                             assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddHours(-4));
                     }
-                    else
-                        assetDateMapping.Add(asset.Id, selectAdvisorFirstAdvice.CreationDate.AddDays(-30));
+                    else if (mode == CalculationMode.AssetBase)
+                        assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-1).AddHours(-4));
                 }
-                else if(mode == CalculationMode.AssetDetailed)
-                {
-                    if (selectAssetId.Value == asset.Id)
-                    {
-                        if (allAdvices != null && allAdvices.Any())
-                            assetDateMapping.Add(asset.Id, new DateTime(Math.Min(allAdvices.Where(c => c.AssetId == asset.Id).Min(c => c.CreationDate).AddDays(-7).Ticks, Data.GetDateTimeNow().AddDays(-30).AddHours(-4).Ticks)));
-                        else
-                            assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-30).AddHours(-4));
-                    }
-                    else if (invalidCurrentValue.Contains(asset.Id))
-                        assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddHours(-4));
-                }
+                else if (mode == CalculationMode.AssetDetailed && selectAssetId.Value == asset.Id && !asset.Variation24Hours.HasValue)
+                    assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-30).AddHours(-4));
+                else if (mode == CalculationMode.AssetBase && !asset.Variation24Hours.HasValue)
+                    assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-1).AddHours(-4));
             }
 
             var assetValues = AssetValueBusiness.FilterAssetValues(assetDateMapping);
@@ -91,7 +70,7 @@ namespace Auctus.Business.Asset
                 if (assetDateMapping.ContainsKey(asset.Id))
                 {
                     asset.AssetValues = assetValues.Where(c => c.AssetId == asset.Id).OrderByDescending(c => c.Date);
-                    if (asset.AssetValues.Any() && invalidCurrentValue.Contains(asset.Id))
+                    if (asset.AssetValues.Any())
                     {
                         var lastValue = asset.AssetValues.First();
                         asset.CurrentValue = lastValue.Value;

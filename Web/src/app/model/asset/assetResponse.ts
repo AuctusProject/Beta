@@ -15,7 +15,6 @@ export class AssetResponse {
   following?:boolean;
   mode: number;
   recommendationDistribution: RecommendationDistributionResponse[];
-  values?:ValuesResponse[];
   assetAdvisor?: AssetAdvisorResponse[];
   advices?: AdviceResponse[];
   advisors?: AdvisorResponse[];
