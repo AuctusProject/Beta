@@ -45,6 +45,7 @@ namespace Auctus.Business
             services.AddScoped<IFollowAssetData<FollowAsset>, FollowAssetData>(c => new FollowAssetData(configuration));
             services.AddScoped<IFollowData<Follow>, FollowData>(c => new FollowData(configuration));
             services.AddScoped<IAssetCurrentValueData<AssetCurrentValue>, AssetCurrentValueData>(c => new AssetCurrentValueData(configuration));
+            services.AddScoped<IEarlyAccessEmailData<EarlyAccessEmail>, EarlyAccessEmailData>(c => new EarlyAccessEmailData(configuration));
         }
     }
 }

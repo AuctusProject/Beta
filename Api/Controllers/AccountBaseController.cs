@@ -166,5 +166,11 @@ namespace Api.Controllers
         {
             return Ok(ActionBusiness.GetDashboardData());
         }
+
+        protected virtual IActionResult RequestEarlyAccess(EarlyAccessRequest earlyAccessRequest)
+        {
+            EarlyAccessEmailBusiness.Create(earlyAccessRequest.Name, earlyAccessRequest.Email, earlyAccessRequest.Twitter);
+            return Ok();
+        }
     }
 }

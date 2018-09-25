@@ -20,7 +20,7 @@
     <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
     <div fxLayout="row" fxLayoutGap.gt-sm="40px" fxLayoutGap.lt-md="5px" fxLayoutAlign="left center">
       <div class="price">
-        {{getLastValue()}}
+          {{asset.lastValue | valueDisplay}}
       </div>
       <percentage-display [value]="asset.variation24h"></percentage-display>
     </div>

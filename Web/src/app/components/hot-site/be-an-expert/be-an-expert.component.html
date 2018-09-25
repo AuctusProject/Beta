@@ -49,11 +49,11 @@
           Sign up for early access
       </div>
       <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start start" fxLayoutAlign.lt-md="center center" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="4px">
-        <inheritance-input #Name [options]="getNameInputOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
-        <inheritance-input #Email [options]="getEmailInputOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
-        <inheritance-input #Twitter [options]="getTwitterInputOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
+        <inheritance-input #Name [options]="getNameInputOptions()" [value]="earlyAccessRequest.name" (onChange)="earlyAccessRequest.name = $event" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
+        <inheritance-input #Email [options]="getEmailInputOptions()" [value]="earlyAccessRequest.email" (onChange)="earlyAccessRequest.email = $event" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
+        <inheritance-input #Twitter [options]="getTwitterInputOptions()" [value]="earlyAccessRequest.twitter" (onChange)="earlyAccessRequest.twitter = $event" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
         <div class="column" fxFlex.gt-sm="200px">
-          <div class="send-button">Send</div>
+          <div class="send-button" (click)="sendEarlyAccessRequest()" [promiseBtn]="promise">Send</div>
           <div class="send-button-description">Sign up now so you'll be the first to know of new bonuses and additions to the platform!</div>
         </div>
       </div>
