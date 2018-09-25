@@ -43,7 +43,7 @@ namespace Auctus.Business.Advisor
         public async Task ApproveAsync(int id)
         {
             var request = Data.GetById(id);
-            var user = UserBusiness.GetById(id);
+            var user = UserBusiness.GetById(request.UserId);
             if (user.IsAdvisor)
                 throw new BusinessException("User is already an Expert.");
             if (request.Approved == true)
@@ -74,6 +74,8 @@ namespace Auctus.Business.Advisor
 
             request.Approved = false;
             Update(request);
+
+            UserBusiness.ClearUserCache(user.Email);
 
             await SendRequestRejectedNotificationAsync(user);
         }
@@ -194,7 +196,7 @@ string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 "Your request to become an expert was approved! - Auctus Beta",
-                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{WebUrl}expert-details/{user.Id}' target='_blank'>click here</a>.</p>",
+                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{WebUrl}/expert-details/{user.Id}' target='_blank'>click here</a>.</p>",
                 EmailTemplate.NotificationType.BecomeAdvisor);
         }
     }
