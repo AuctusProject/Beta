@@ -14,7 +14,7 @@ export class HotSiteComponent implements OnInit {
   }
 
   getLogoImgUrl() {
-    return CONFIG.platformImgUrl.replace("{id}", "logo");
+    return CONFIG.platformImgUrl.replace("{id}", "logo_black");
   }
 
   getEmailInputOptions() {
