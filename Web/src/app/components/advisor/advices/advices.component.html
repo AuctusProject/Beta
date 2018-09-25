@@ -2,7 +2,7 @@
 <div class="global-container">
     <top-experts *ngIf="canView() && (!advices || advices.length==0)" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'" [subtitle]="''"></top-experts>
     <div *ngIf="advices">
-        <div fxLayout="column" fxLayoutAlign="center center" class="global-container blocked-content" *ngIf="!canView()">
+        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" class="global-container blocked-content" *ngIf="!canView()">
             <div class="lock-wrapper">
                 <fa-icon icon="lock" size="2x" fxLayoutAlign="center stretch"></fa-icon>
             </div>
