@@ -4,64 +4,6 @@
     min-width: 100%;
 }
 
-.hotsite-header{
-    background: white;
-    width: 100%;
-    height: 83px;
-    position: fixed;
-    top: 0;
-    left: 0;
-}
-
-.header-container{
-    border-bottom: solid 1px #303030;
-}
-
-.hotsite-header-itens > div {
-    margin-left: 14px;
-    margin-right: 14px;
-}
-
-.hotsite-header-item.active,
-.hotsite-header-item:hover{
-    border-bottom: solid 2px #252525;
-}
-
-
-
-.hotsite-header-item{
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-bottom: 2px;
-    border-bottom: solid 2px white;
-    cursor: pointer;
-    margin-left: 8px;
-    margin-right: 8px;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.hotsite-header-item span{
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.be-an-expert .hotsite-header-item{
-    border-bottom: solid 2px #126efd;
-}
-
-.be-an-expert hotsite-header-item.active,
-.be-an-expert .hotsite-header-item:hover{
-    border-bottom: solid 2px white;
-}
-
-.be-an-expert{
-    background-color: #126efd;
-    color: white;
-    padding: 16px 24px 16px 24px;
-    cursor: pointer;
-}
-
 .hotsite-title{
     font-size: 26px;
     font-weight: 500;
@@ -136,12 +78,6 @@
     border-left: solid 1px #70707070;
 }
 
-.hotsite-footer .separator{
-    margin-bottom: 18px;
-    height: 1px;
-    background-color: #363636;
-    width: 100%;
-}
 
 .icon-wrapper{
     width: 92px;
@@ -184,37 +120,7 @@
     margin-bottom: 32px;
 }
 
-.social-icon-wrapper{
-    width: 34px;
-    height: 34px;
-    border-radius: 22px;
-    border: solid 1px #303030;
-    margin: 17px 17px 17px 0;
-}
 
-.social-icon-wrapper fa-icon{
-    margin-top:9px;
-    margin-bottom:9px;
-}
-
-a{
-    color: inherit;
-    text-decoration: inherit;
-}
-
-.footer-item-title{
-    font-size: 20px;
-    font-weight: 500;
-    color: #333333;
-}
-
-.footer-item{
-    margin-top: 17px;
-}
-
-.footer-container .landing-logo{
-    margin-top: 8px;
-}
 
 .send-button{
     background-color: #126efd;

@@ -1,0 +1,33 @@
+
+<div class="hotsite-footer">
+    <div class="global-container" fxLayout="column">
+        <div class="separator"></div>
+        <div class="footer-container" fxLayout="row" fxLayoutAlign="space-between stretch">
+          <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo" />
+          <div fxLayout="column" fxHide.lt-sm>
+            <div class="footer-item-title">CONTACT</div>
+            <div class="footer-item"><a href="mailto:contact@auctus.org">contact@auctus.org</a></div>
+          </div>
+          <div fxLayout="column">
+            <div class="footer-item-title" fxHide.lt-sm>SOCIAL</div>
+            <div class="hotsite-footer-icons" fxLayout="row" fxLayoutAlign="center center">
+              <a href="https://www.facebook.com/AuctusProject/" target="_blank">
+                <div class="social-icon-wrapper">
+                  <fa-icon [icon]="['fab','facebook-f']"  fxLayoutAlign="center stretch"></fa-icon>
+                </div>
+              </a>
+              <a href="https://twitter.com/AuctusProject" target="_blank">
+                <div class="social-icon-wrapper">
+                  <fa-icon [icon]="['fab','twitter']"  fxLayoutAlign="center stretch"></fa-icon>
+                </div>
+              </a>
+              <a href="https://t.me/AuctusProject" target="_blank">
+                <div class="social-icon-wrapper">
+                  <fa-icon [icon]="['fab','telegram-plane']"  fxLayoutAlign="center stretch"></fa-icon>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
