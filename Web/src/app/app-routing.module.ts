@@ -11,19 +11,21 @@ import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/
 import { HomeComponent } from './components/home/home/home.component';
 import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 import { HotSiteComponent } from './components/hot-site/hot-site.component';
+import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
 
 const routes: Routes = [
     { path: 'hotsite', component: HotSiteComponent  },
-    { path: '', component: HomeComponent  },
-    { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
-    { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
-    { path: 'top-experts', component: TopExpertsComponent },
-    { path: 'expert-details/:id', component: ExpertDetailsComponent, canActivate:[AuthRedirect] },
-    { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
-    { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
-    { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
-    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
-    { path: '**', redirectTo: ''  }
+    { path: 'beexpert', component: BeAnExpertComponent  },
+    // { path: '', component: HomeComponent  },
+    // { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
+    // { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
+    // { path: 'top-experts', component: TopExpertsComponent },
+    // { path: 'expert-details/:id', component: ExpertDetailsComponent, canActivate:[AuthRedirect] },
+    // { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
+    // { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
+    // { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
+    // { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
+    // { path: '**', redirectTo: ''  }
 ];
 
 @NgModule({

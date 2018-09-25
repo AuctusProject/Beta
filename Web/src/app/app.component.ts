@@ -221,6 +221,7 @@ export class AppComponent implements OnInit{
   }
 
   public isHotSite(){
-    return this.navigationService.isSameRoute("hotsite", this.router.url);
+    return this.navigationService.isSameRoute("hotsite", this.router.url) ||
+        this.navigationService.isSameRoute("beexpert", this.router.url);
   }
 }
