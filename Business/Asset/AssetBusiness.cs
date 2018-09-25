@@ -21,7 +21,7 @@ namespace Auctus.Business.Asset
 
         public IEnumerable<AssetResponse> ListAssetData()
         {
-            return ListAssetResult().OrderByDescending(c => c.MarketCap) ;
+            return ListAssetResult().OrderByDescending(c => c.MarketCap);
         }
 
         public IEnumerable<AssetResponse> ListTrendingAssets(int top = 3)

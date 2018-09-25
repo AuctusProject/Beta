@@ -337,10 +337,7 @@ namespace Auctus.Business.Advisor
                 MarketCap = assetCurrentValue.MarketCap,
                 Variation24h = assetCurrentValue.Variation24Hours,
                 Variation7d = assetCurrentValue.Variation7Days,
-                Variation30d = assetCurrentValue.Variation30Days,
-                Values = mode == CalculationMode.AssetBase || mode == CalculationMode.Feed || assetCurrentValue.AssetValues == null ? null 
-                            : SwingingDoorCompression.Compress(assetCurrentValue.AssetValues.ToDictionary(c => c.Date, c => c.Value))
-                                    .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).ToList()
+                Variation30d = assetCurrentValue.Variation30Days
             };
         }
 

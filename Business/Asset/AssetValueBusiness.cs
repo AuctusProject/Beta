@@ -2,6 +2,7 @@
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Exchange;
+using Auctus.Model;
 using Auctus.Util;
 using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +32,28 @@ namespace Auctus.Business.Asset
 
             return Data.FilterAssetValues(assetsMap);
         }
+
+        public List<AssetResponse.ValuesResponse> ListAssetValues(int assetId, DateTime? dateTime)
+        {
+            var baseTime = Data.GetDateTimeNow().AddDays(-30).AddHours(-4);
+            if (!dateTime.HasValue || dateTime.Value > baseTime)
+                dateTime = baseTime;
+
+            var cacheKey = $"assetValues_{assetId}";
+            var values = MemoryCache.Get<List<AssetResponse.ValuesResponse>>(cacheKey);
+            if (values == null || values.Min(c => c.Date) > dateTime.Value.AddHours(2))
+            {
+                var filter = new Dictionary<int, DateTime>();
+                filter[assetId] = dateTime.Value;
+                values = SwingingDoorCompression.Compress(FilterAssetValues(filter).ToDictionary(c => c.Date, c => c.Value))
+                                        .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).OrderBy(c => c.Date).ToList();
+
+                if (values.Any())
+                    MemoryCache.Set<List<AssetResponse.ValuesResponse>>(cacheKey, values, 30);
+            }
+            return values;
+        }
+
 
         public void UpdateCoinmarketcapAssetsValues()
         {

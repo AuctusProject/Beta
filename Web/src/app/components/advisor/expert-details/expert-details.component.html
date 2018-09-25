@@ -107,7 +107,7 @@
 
           <ng-container matColumnDef="expandedDetail">
             <td colspan=7 mat-cell *matCellDef="let asset; let i = index;">
-              <asset-history-chart #assetHistoryChart [assetValues]="asset.element.values" [advices]="asset.element.assetAdvisor[0].advices" [chartTitle]="asset.element.name + ' price'"></asset-history-chart>
+              <asset-history-chart *ngIf="asset.element == expandedElement" #assetHistoryChart [assetId]="asset.element.assetId" [advices]="asset.element.assetAdvisor[0].advices" [chartTitle]="asset.element.name + ' price'"></asset-history-chart>
               <div class="rates" fxLayout="row" fxLayoutAlign="space-around center">
                 <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center" fxLayoutAlign.gt-xs="start center" fxLayoutGap.gt-xs="20px">
                   <svg viewBox="0 0 36 36" class="circular-chart blue" fxFlex="80px">

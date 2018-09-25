@@ -89,6 +89,9 @@ import { LocalCacheService } from './services/local-cache.service';
 import { TopImageComponent } from './components/util/top-image/top-image.component';
 import { ValueDisplayPipe } from './util/value-display.pipe';
 import { HotSiteComponent } from './components/hot-site/hot-site.component';
+import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
+import { HotsiteHeaderComponent } from './components/hot-site/hotsite-header/hotsite-header.component';
+import { HotsiteFooterComponent } from './components/hot-site/hotsite-footer/hotsite-footer.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -162,7 +165,10 @@ export function getAuthServiceConfigs() {
     AdviceCardComponent,
     TopImageComponent,
     ValueDisplayPipe,
-    HotSiteComponent
+    HotSiteComponent,
+    BeAnExpertComponent,
+    HotsiteHeaderComponent,
+    HotsiteFooterComponent
   ],
   imports: [
     BrowserModule,

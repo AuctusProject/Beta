@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
-import { AssetResponse } from "../model/asset/assetResponse";
+import { AssetResponse, ValuesResponse } from "../model/asset/assetResponse";
 import { Asset } from '../model/asset/asset';
 import { AssetRecommendationInfoResponse } from '../model/asset/assetRecommendationInfoResponse';
 import { LocalCacheService } from './local-cache.service';
@@ -13,7 +13,8 @@ export class AssetService {
   private getAssetDetailsUrl = this.httpService.apiUrl("v1/assets/{id}/details");
   private getAssetRecommendationInfoUrl = this.httpService.apiUrl("v1/assets/{id}/recommendation_info");
   private getAssetsUrl = this.httpService.apiUrl("v1/assets/");
-  private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers")
+  private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers");
+  private getAssetValuesUrl = this.httpService.apiUrl("v1/assets/{id}/values");
   constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
 
   getAssetDetails(id: string): Observable<AssetResponse> {
@@ -22,6 +23,14 @@ export class AssetService {
 
   getAssetsDetails(): Observable<AssetResponse[]> {
     return this.httpService.get(this.getAssetsDetailsUrl);
+  }
+
+  getAssetValues(id: number, dateTime?: Date): Observable<ValuesResponse[]> {
+    var complement = "";
+    if (dateTime) {
+      complement = "/?dateTime=" + dateTime.toJSON();
+    }
+    return this.httpService.get(this.getAssetValuesUrl.replace("{id}", id.toString()) + complement);
   }
 
   getTrendingAssets(): Observable<AssetResponse[]> {

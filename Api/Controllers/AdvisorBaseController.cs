@@ -64,16 +64,19 @@ namespace Api.Controllers
             if (GetUser() == null && !IsValidRecaptcha(beAdvisorRequest.Captcha))
                 return BadRequest(new { error = "Invalid Captcha." });
 
+            LoginResponse response;
             if (beAdvisorRequest.ChangedPicture && RequestHasFile())
             {
                 var fileExtension = GetValidPictureExtension();
                 using (var stream = Request.Form.Files[0].OpenReadStream())
-                    return Ok(await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description,
-                        beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, stream, fileExtension));
+                    response = await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description,
+                        beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, stream, fileExtension);
             }
             else
-                return Ok(await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description, 
-                    beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, null, null));
+                response = await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description, 
+                    beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, null, null);
+
+            return Ok(new { logged = !response.PendingConfirmation, jwt = GenerateToken(response.Email.ToLower().Trim()), data = response });
         }
 
         protected IActionResult GetRequestToBe()
