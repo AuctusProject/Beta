@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CONFIG } from '../../../services/config.service';
 import { AccountService } from '../../../services/account.service';
 import { EarlyAccessRequest } from '../../../model/account/earlyAccessRequest';
@@ -11,6 +12,7 @@ import { EarlyAccessRequest } from '../../../model/account/earlyAccessRequest';
 export class BeAnExpertComponent implements OnInit {
 
   earlyAccessRequest: EarlyAccessRequest = new EarlyAccessRequest();
+  promise: Subscription;
 
   constructor(private accountService: AccountService) { }
 
@@ -34,6 +36,8 @@ export class BeAnExpertComponent implements OnInit {
   }
 
   sendEarlyAccessRequest() {
-    this.accountService.postEarlyAccessRequest(this.earlyAccessRequest).subscribe(result => {});
+    this.promise = this.accountService.postEarlyAccessRequest(this.earlyAccessRequest).subscribe(result => {
+      this.earlyAccessRequest = new EarlyAccessRequest();
+    });
   }
 }

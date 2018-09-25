@@ -54,7 +54,7 @@
         <inheritance-input #Email [options]="getEmailInputOptions()" [value]="earlyAccessRequest.email" (onChange)="earlyAccessRequest.email = $event" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
         <inheritance-input #Twitter [options]="getTwitterInputOptions()" [value]="earlyAccessRequest.twitter" (onChange)="earlyAccessRequest.twitter = $event" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
         <div class="column" fxFlex.gt-sm="200px">
-          <div class="send-button" (click)="sendEarlyAccessRequest()">Send</div>
+          <div class="send-button" (click)="sendEarlyAccessRequest()" [promiseBtn]="promise">Send</div>
           <div class="send-button-description">Sign up now so you'll be the first to know of new bonuses and additions to the platform!</div>
         </div>
       </div>
