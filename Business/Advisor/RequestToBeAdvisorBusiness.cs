@@ -110,7 +110,7 @@ namespace Auctus.Business.Advisor
                 if (!string.IsNullOrWhiteSpace(password))
                     throw new BusinessException("Invalid password.");
 
-                user = UserBusiness.GetByEmail(LoggedEmail);
+                user = UserBusiness.GetForLoginByEmail(LoggedEmail);
                 if (user == null)
                     throw new NotFoundException("User not found.");
                 if (user.IsAdvisor)

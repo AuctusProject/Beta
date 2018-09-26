@@ -35,12 +35,14 @@ namespace Auctus.DataAccess.Account
                                                     WHERE 
                                                     u.Id = @Id";
 
-        private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, r.*
-                                                FROM 
-                                                [User] u WITH(NOLOCK)
-                                                LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
-                                                WHERE 
-                                                u.ConfirmationCode = @Code";
+        private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, a.*, r.*, w.* 
+                                                    FROM 
+                                                    [User] u WITH(NOLOCK)
+                                                    LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
+                                                    LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
+                                                    LEFT JOIN [Wallet] w WITH(NOLOCK) ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
+                                                    WHERE 
+                                                    u.ConfirmationCode = @Code";
 
         private const string SQL_FOR_NEW_WALLET = @"SELECT u.*, a.*, r.*
                                                 FROM 
@@ -142,12 +144,23 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Code", code, DbType.AnsiString);
-            return Query<User, RequestToBeAdvisor, User>(SQL_FOR_CONFIRMATION,
-                        (user, request) =>
+            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, Wallet, User>(SQL_FOR_CONFIRMATION,
+                        (user, advisor, request, wallet) =>
                         {
-                            user.RequestToBeAdvisor = request;
-                            return user;
-                        }, "Id", parameters).SingleOrDefault();
+                            if (advisor != null)
+                            {
+                                FillAdvisorWithUserData(ref advisor, user);
+                                advisor.Wallet = wallet;
+                                advisor.RequestToBeAdvisor = request;
+                                return advisor;
+                            }
+                            else
+                            {
+                                user.Wallet = wallet;
+                                user.RequestToBeAdvisor = request;
+                                return user;
+                            }
+                        }, "Id,Id,Id", parameters).SingleOrDefault();
         }
 
         public User GetForNewWallet(string email)

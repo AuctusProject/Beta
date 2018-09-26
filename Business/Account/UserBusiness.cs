@@ -44,7 +44,7 @@ namespace Auctus.Business.Account
             SocialUser socialUser = GetSocialUser(socialNetworkType, accessToken);
             ValidateSocialUser(socialUser, email);
 
-            var user = Data.GetForLogin(email);
+            var user = GetForLoginByEmail(email);
             if (user != null)
             {
                 return SocialLogin(user, socialNetworkType);
@@ -81,7 +81,7 @@ namespace Auctus.Business.Account
             bool hasInvestment = GetUserHasInvestment(user, out decimal? aucAmount);
             ActionBusiness.InsertNewLogin(user.Id, aucAmount, socialNetworkType);
 
-            return new Model.LoginResponse()
+            return new LoginResponse()
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -114,19 +114,24 @@ namespace Auctus.Business.Account
             return socialUser;
         }
 
+        public User GetForLoginByEmail(string email)
+        {
+            return Data.GetForLogin(email);
+        }
+
         public LoginResponse Login(string email, string password)
         {
             BaseEmailValidation(email);
             EmailValidation(email);
             BasePasswordValidation(password);
 
-            var user = Data.GetForLogin(email);
+            var user = GetForLoginByEmail(email);
             if (user == null || user.Password != GetHashedPassword(password, user.Email, user.CreationDate))
                 throw new BusinessException("Invalid credentials.");
 
             bool hasInvestment = GetUserHasInvestment(user, out decimal? aucAmount);
             ActionBusiness.InsertNewLogin(user.Id, aucAmount, null);
-            return new Model.LoginResponse()
+            return new LoginResponse()
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -139,11 +144,11 @@ namespace Auctus.Business.Account
 
         public LoginResponse GetLoginResponse()
         {
-            var user = Data.GetForLogin(LoggedEmail);
+            var user = GetForLoginByEmail(LoggedEmail);
             if (user == null)
                 throw new NotFoundException("User not found.");
             
-            return new Model.LoginResponse()
+            return new LoginResponse()
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -205,7 +210,7 @@ namespace Auctus.Business.Account
             BasePasswordValidation(password);
             PasswordValidation(password);
 
-            var user = Data.GetByEmail(email);
+            var user = GetByEmail(email);
             if (user != null)
                 throw new BusinessException("Email already registered.");
 
@@ -299,7 +304,7 @@ namespace Auctus.Business.Account
             BaseEmailValidation(email);
             EmailValidation(email);
 
-            var user = Data.GetByEmail(email);
+            var user = GetByEmail(email);
             if (user == null)
                 throw new NotFoundException("User cannot be found.");
             else if (user.ConfirmationDate.HasValue)
@@ -322,12 +327,12 @@ namespace Auctus.Business.Account
             user.ConfirmationDate = Data.GetDateTimeNow();
             Data.Update(user);
         
-            return new Model.LoginResponse()
+            return new LoginResponse()
             {
                 Email = user.Email,
-                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
                 PendingConfirmation = false,
-                IsAdvisor = false,
+                IsAdvisor = IsValidAdvisor(user),
+                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
         }
