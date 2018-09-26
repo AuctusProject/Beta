@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { CONFIG } from '../../../services/config.service';
 import { AccountService } from '../../../services/account.service';
 import { EarlyAccessRequest } from '../../../model/account/earlyAccessRequest';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'be-an-expert',
@@ -14,7 +15,8 @@ export class BeAnExpertComponent implements OnInit {
   earlyAccessRequest: EarlyAccessRequest = new EarlyAccessRequest();
   promise: Subscription;
 
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService,
+    private notificationService: NotificationsService) { }
 
   ngOnInit() {
   }
@@ -38,6 +40,7 @@ export class BeAnExpertComponent implements OnInit {
   sendEarlyAccessRequest() {
     this.promise = this.accountService.postEarlyAccessRequest(this.earlyAccessRequest).subscribe(result => {
       this.earlyAccessRequest = new EarlyAccessRequest();
+      this.notificationService.success(null, "You have been successfully subscribed!");
     });
   }
 }
