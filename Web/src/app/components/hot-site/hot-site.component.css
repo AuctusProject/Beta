@@ -15,7 +15,7 @@
 }
 
 
-
+.hot-site-referral-image,
 .hot-site-image {
     width: 100%;
     background-color: #b7b7b7;
@@ -134,6 +134,7 @@
 
 .referral-section{
     margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 @media(max-width: 959px){
@@ -145,11 +146,25 @@
         font-size: 24px;
     }
 
+    .hot-site-referral-img-div,
+    .hot-site-image-div{
+        width: 100%;
+        background-position: center;
+    }
+    .hot-site-image-div{
+        height: 270px;
+    }
+
+    .hot-site-referral-img-div{
+        height: 315px;
+    }
+
+    .hot-site-referral-img-div{
+        background-image: url('/assets/img/Img_Referral.png');
+    }
+
     .hot-site-image-div{
         background-image: url('/assets/img/Img_Banner.png');
-        width: 100%;
-        height: 270px;
-        background-position: center;
     }
 
     .hot-site-phone-image{
