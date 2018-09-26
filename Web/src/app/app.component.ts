@@ -217,7 +217,9 @@ export class AppComponent implements OnInit{
     maxStack: 1,
     preventDuplicates: true,
     preventLastDuplicates: "visible",
-    clickToClose: true
+    clickToClose: true,
+    timeOut: 5000,
+    pauseOnHover: true
   }
 
   public isHotSite(){

@@ -130,6 +130,10 @@
     cursor: pointer;
 }
 
+.referral-section{
+    margin-top: 40px;
+}
+
 @media(max-width: 959px){
     :host{
         margin-top: -33px;
