@@ -97,7 +97,7 @@ namespace Auctus.Test.Advisor
             expRecommendation[AdviceType.Buy.Value] = 7;
             expRecommendation[AdviceType.Sell.Value] = 2;
             expRecommendation[AdviceType.ClosePosition.Value] = 4;
-            AssertAdvisorData(advisor, -0.047146, 0.333333, 4, 2, true, false, 3.795110, 3, expRecommendation);
+            AssertAdvisorData(advisor, -0.047146, 0.333333, 4, 2, true, false, 3.743845, 3, expRecommendation);
         }
 
         internal static void AssertAdvisor2Data(AdvisorResponse advisor)
@@ -105,7 +105,7 @@ namespace Auctus.Test.Advisor
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.Buy.Value] = 5;
             expRecommendation[AdviceType.Sell.Value] = 7;
-            expRecommendation[AdviceType.ClosePosition.Value] = 2;
+            expRecommendation[AdviceType.ClosePosition.Value] = 4;
             AssertAdvisorData(advisor, -0.014205, 0.583333, 3, 4, false, false, 3.968860, 2, expRecommendation);
         }
 
@@ -114,7 +114,7 @@ namespace Auctus.Test.Advisor
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.Sell.Value] = 1;
             expRecommendation[AdviceType.ClosePosition.Value] = 1;
-            AssertAdvisorData(advisor, 0.070949, 1, 1, 1, false, true, 4.759841, 1, expRecommendation);
+            AssertAdvisorData(advisor, 0.070949, 1, 1, 1, false, true, 4.751651, 1, expRecommendation);
         }
 
         private static void AssertAdvisorData(AdvisorResponse advisor, double expReturn, double expSuccessRate, int expNumberFollowers,
@@ -165,7 +165,7 @@ namespace Auctus.Test.Advisor
                     AssertAssetAdvisorData(assetAdvisor, 0.021150, 0.8, 5, 1, 0);
                     break;
                 case 4:
-                    AssertAssetAdvisorData(assetAdvisor, -0.537053, 0, 2, 3, 2);
+                    AssertAssetAdvisorData(assetAdvisor, -0.537053, 0, 4, 1, 2);
                     break;
             }
         }
@@ -215,7 +215,7 @@ namespace Auctus.Test.Advisor
                     AssertAssetAdvisorAdvicesData(advices, 5, 0, 0);
                     break;
                 case 4:
-                    AssertAssetAdvisorAdvicesData(advices, 2, 1, 2);
+                    AssertAssetAdvisorAdvicesData(advices, 4, 2, 2);
                     break;
             }
         }
@@ -251,12 +251,10 @@ namespace Auctus.Test.Advisor
                     Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
                     break;
                 case 3:
-                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
-                    AdvisorBusiness.Advise(assetId, AdviceType.Buy);
+                    AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition);
                     Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Sell));
                     break;
                 case 4:
-                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
                     AdvisorBusiness.Advise(assetId, AdviceType.Buy);
                     break;
                 case 5:

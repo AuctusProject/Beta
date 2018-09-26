@@ -48,13 +48,11 @@ namespace Api.Controllers
             return Ok(AssetBusiness.GetAssetRecommendationInfo(id));
         }
         
-
         protected IActionResult FollowAsset(int id)
         {
             return Ok(UserBusiness.FollowUnfollowAsset(id, FollowActionType.Follow));
         }
 
-       
         protected IActionResult UnfollowAsset(int id)
         {
             return Ok(UserBusiness.FollowUnfollowAsset(id, FollowActionType.Unfollow));
