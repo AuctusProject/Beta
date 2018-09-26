@@ -50,8 +50,10 @@ namespace Auctus.DataAccessMock.Advisor
             advices.Add(GetAdvice(2, 3, new DateTime(2018, 6, 16, 19, 55, 0), AdviceType.Sell, 0.556373826));
             advices.Add(GetAdvice(2, 3, new DateTime(2018, 6, 27, 22, 55, 0), AdviceType.Sell, 0.698993864));
 
+            advices.Add(GetAdvice(2, 4, new DateTime(2018, 5, 14, 0, 20, 0), AdviceType.ClosePosition, 0.655118701));
             advices.Add(GetAdvice(2, 4, new DateTime(2018, 5, 15, 4, 15, 0), AdviceType.Buy, 0.70635167));
             advices.Add(GetAdvice(2, 4, new DateTime(2018, 6, 16, 17, 20, 0), AdviceType.ClosePosition, 0.327003675));
+            advices.Add(GetAdvice(2, 4, new DateTime(2018, 6, 28, 11, 40, 0), AdviceType.ClosePosition, 0.246135784));
             return advices.OrderBy(c => c.CreationDate).Select((c, i) =>
             {
                 c.Id = i + 1;

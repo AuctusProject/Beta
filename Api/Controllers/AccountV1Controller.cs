@@ -197,7 +197,6 @@ namespace Api.Controllers
             return base.Search(term);
         }
 
-
         [Route("dashboard")]
         [HttpGet]
         [Authorize("Bearer")]

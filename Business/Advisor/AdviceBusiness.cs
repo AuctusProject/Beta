@@ -33,9 +33,6 @@ namespace Auctus.Business.Advisor
             if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
                 throw new BusinessException("You need to wait before advising again for this asset.");
 
-            if (type == AdviceType.ClosePosition && (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition))
-                throw new BusinessException("You need to set a Buy or Sell recommendation before advising to Hold.");
-
             if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
                 throw new BusinessException("Sell recommendations are not available for this asset.");
 

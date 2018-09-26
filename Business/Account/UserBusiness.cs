@@ -588,7 +588,7 @@ namespace Auctus.Business.Account
 
         public SearchResponse Search(string searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
+            if (string.IsNullOrWhiteSpace(searchTerm) || searchTerm.Trim().Length < 2)
                 return new SearchResponse();
 
             IEnumerable<DomainObjects.Advisor.Advisor> advisors = null;

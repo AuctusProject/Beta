@@ -26,7 +26,7 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   onInputChanged(searchStr: string): void {
-    if (searchStr && searchStr.length >= 3) {
+    if (searchStr && searchStr.length > 1) {
       if (this.timer) {
         clearTimeout(this.timer);
       }

@@ -128,7 +128,7 @@ namespace Auctus.Test.Asset
 
         internal static void AssertBaseAsset4Data(AssetResponse asset, bool ignore24hVariationValues = true, bool ignoreLongVariationValues = true)
         {
-            AssertBaseAssetData(asset, 2, 1, 0.250155, -0.025706, -0.007870, -0.556870, ignore24hVariationValues, ignoreLongVariationValues);
+            AssertBaseAssetData(asset, 4, 1, 0.250155, -0.025706, -0.007870, -0.556870, ignore24hVariationValues, ignoreLongVariationValues);
         }
 
         internal static void AssertExtraAsset1Data(AssetResponse asset)
@@ -188,8 +188,8 @@ namespace Auctus.Test.Asset
         internal static void AssertAsset4AdvicesData(List<AssetResponse.AdviceResponse> advices)
         {
             var expAdvisorCount = new Dictionary<int, int>();
-            expAdvisorCount[2] = 2;
-            AssertAssetAdvicesData(advices, 2, 1, 2, expAdvisorCount);
+            expAdvisorCount[2] = 4;
+            AssertAssetAdvicesData(advices, 4, 2, 2, expAdvisorCount);
         }
 
         private static void AssertBaseAssetData(AssetResponse asset, int expTotalRatings, int expTotalAdvisors, double expLastValue, 

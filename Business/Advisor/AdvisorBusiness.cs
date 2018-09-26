@@ -452,8 +452,9 @@ namespace Auctus.Business.Advisor
             return new AdviceDetail()
             {
                 Advice = advice,
-                ModeType = previousAdvice == null || previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? AdviceModeType.Initiate : 
+                ModeType = previousAdvice == null ? AdviceModeType.Initiate : 
                             previousAdvice.Advice.Type == advice.Type ? AdviceModeType.Reiterate :
+                            previousAdvice.Advice.AdviceType == AdviceType.ClosePosition ? AdviceModeType.Initiate :
                             previousAdvice.Advice.AdviceType == AdviceType.Buy ? AdviceModeType.Downgrade : AdviceModeType.Upgrade
             };
         }
