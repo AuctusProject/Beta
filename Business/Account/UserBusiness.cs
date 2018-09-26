@@ -298,22 +298,28 @@ namespace Auctus.Business.Account
             return Security.Hash(password, $"{email}{(new DateTime(creationDate.Ticks - (creationDate.Ticks % TimeSpan.TicksPerSecond), DateTimeKind.Utc)).Ticks}{HashSecret}");
         }
 
-        public async Task ResendEmailConfirmationAsync()
+        public async Task<LoginResponse> ResendEmailConfirmationAsync()
         {
             var email = LoggedEmail;
             BaseEmailValidation(email);
             EmailValidation(email);
 
-            var user = GetByEmail(email);
+            var user = GetForLoginByEmail(email);
             if (user == null)
                 throw new NotFoundException("User cannot be found.");
-            else if (user.ConfirmationDate.HasValue)
-                throw new BusinessException("Email already confirmed.");
 
-            user.ConfirmationCode = Guid.NewGuid().ToString();
-            Data.Update(user);
-
-            await SendEmailConfirmationAsync(email, user.ConfirmationCode);
+            if (!user.ConfirmationDate.HasValue)
+                await SendEmailConfirmationAsync(email, user.ConfirmationCode);
+            
+            return new LoginResponse()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
+                IsAdvisor = IsValidAdvisor(user),
+                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
+                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+            };
         }
 
         public LoginResponse ConfirmEmail(string code)

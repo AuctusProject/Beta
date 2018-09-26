@@ -52,15 +52,15 @@ export class AccountService {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
   }
 
-  login(loginRequest: LoginRequest) : Observable<LoginResult>{
+  login(loginRequest: LoginRequest) : Observable<LoginResult> {
     return this.httpService.post(this.loginUrl, loginRequest);
   }
 
-  getUserData() : Observable<LoginResponse>{
+  getUserData() : Observable<LoginResponse> {
     return this.httpService.get(this.userDataUrl);
   }
 
-  socialLogin(socialLoginRequest: SocialLoginRequest) : Observable<LoginResult>{
+  socialLogin(socialLoginRequest: SocialLoginRequest) : Observable<LoginResult> {
     return this.httpService.post(this.socialLoginUrl, socialLoginRequest);
   }
 
@@ -85,42 +85,42 @@ export class AccountService {
     this.httpService.logout();
   }
 
-  isLoggedIn() : boolean{
+  isLoggedIn() : boolean {
     return this.httpService.isLoggedIn();
   }
 
-  resendEmailConfirmation() : Observable<void>{
-    return this.httpService.get(this.confirmationEmailUrl);
+  resendEmailConfirmation() : Observable<LoginResult> {
+    return this.httpService.put(this.confirmationEmailUrl, null);
   }
 
-  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginResult>{
+  confirmEmail(confirmEmailRequest: ConfirmEmailRequest) : Observable<LoginResult> {
     return this.httpService.post(this.confirmationEmailUrl, confirmEmailRequest);
   }
 
-  forgotPassword(forgotPasswordRequest: ForgotPasswordRequest) : Observable<void>{
+  forgotPassword(forgotPasswordRequest: ForgotPasswordRequest) : Observable<void> {
     return this.httpService.post(this.recoverPasswordUrl, forgotPasswordRequest);
   }
   
-  recoverPassword(recoverPasswordRequest: RecoverPasswordRequest) : Observable<LoginResult>{
+  recoverPassword(recoverPasswordRequest: RecoverPasswordRequest) : Observable<LoginResult> {
     return this.httpService.put(this.recoverPasswordUrl, recoverPasswordRequest);
   }
 
-  changePassword(changePasswordRequest: ChangePasswordRequest) : Observable<void>{
+  changePassword(changePasswordRequest: ChangePasswordRequest) : Observable<void> {
     return this.httpService.put(this.changePasswordUrl, changePasswordRequest);
   }
 
-  register(registerRequest: RegisterRequest) : Observable<RegisterResponse>{
+  register(registerRequest: RegisterRequest) : Observable<RegisterResponse> {
     return this.httpService.post(this.registerUrl, registerRequest)
   }
 
-  listFeed(top? : number, lastAdviceId? : number) : Observable<FeedResponse[]>{
+  listFeed(top? : number, lastAdviceId? : number) : Observable<FeedResponse[]> {
     var url = this.listFeedUrl + "?";
     if(!!top) url += "top="+top;
     if(!!lastAdviceId) url += "&lastAdviceId="+lastAdviceId;
     return this.httpService.get(url);
   }
 
-  getReferralProgramInfo() : Observable<ReferralProgramInfoResponse>{
+  getReferralProgramInfo() : Observable<ReferralProgramInfoResponse> {
     return this.httpService.get(this.meReferralsUrl);
   }
 
@@ -130,11 +130,11 @@ export class AccountService {
     return this.httpService.post(this.meReferralsUrl, request);
   }
 
-  getWalletLoginInfo() : Observable<WalletLoginInfoResponse>{
+  getWalletLoginInfo() : Observable<WalletLoginInfoResponse> {
     return this.httpService.get(this.meWalletLoginUrl);
   }
 
-  isValidReferralCode(referralCode: string) : Observable<ValidReferralCodeResponse>{
+  isValidReferralCode(referralCode: string) : Observable<ValidReferralCodeResponse> {
     return this.httpService.get(this.referralsUrl + "?referralCode=" + referralCode);
   }
 
@@ -146,11 +146,11 @@ export class AccountService {
     return this.httpService.get(this.configurationUrl);
   }
 
-  setConfiguration(configurationRequest: ConfigurationRequest) : Observable<void>{
+  setConfiguration(configurationRequest: ConfigurationRequest) : Observable<void> {
     return this.httpService.post(this.configurationUrl, configurationRequest);
   }
 
-  getDashboard() : Observable<DashboardResponse>{
+  getDashboard() : Observable<DashboardResponse> {
     return this.httpService.get(this.dashboardUrl);
   }
 

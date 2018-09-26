@@ -94,8 +94,8 @@ namespace Api.Controllers
 
         protected virtual async Task<IActionResult> ResendEmailConfirmationAsync()
         {
-            await UserBusiness.ResendEmailConfirmationAsync();
-            return Ok();
+            var loginResponse = await UserBusiness.ResendEmailConfirmationAsync();
+            return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(loginResponse.Email), data = loginResponse });
         }
 
         protected virtual IActionResult ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)

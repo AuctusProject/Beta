@@ -71,11 +71,16 @@ export class ConfirmEmailComponent implements ModalComponent, OnInit {
 
   resendEmailConfirmation() {
     this.promise = this.accountService.resendEmailConfirmation().subscribe(result => {
-      let modalData = new FullscreenModalComponentInput();
-      modalData.hiddenClose = true;
-      modalData.component = MessageFullscreenModalComponent;
-      modalData.componentInput = { message: "The confirmation email was resent. Please check your mail box and follow the instructions.", redirectUrl: "" };
-      this.setNewModal.emit(modalData);
+      this.accountService.setLoginData(result.data);
+      if (!result.data.pendingConfirmation) {
+        this.setConfirmedEmailAction(result.data);
+      } else {
+        let modalData = new FullscreenModalComponentInput();
+        modalData.hiddenClose = true;
+        modalData.component = MessageFullscreenModalComponent;
+        modalData.componentInput = { message: "The confirmation email was resent. Please check your mail box and follow the instructions.", redirectUrl: "" };
+        this.setNewModal.emit(modalData);
+      }
     });
   }
 }

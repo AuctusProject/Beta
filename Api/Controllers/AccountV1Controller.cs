@@ -99,7 +99,7 @@ namespace Api.Controllers
         }
 
         [Route("me/confirmations")]
-        [HttpGet]
+        [HttpPut]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async new Task<IActionResult> ResendEmailConfirmationAsync()
