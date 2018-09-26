@@ -171,6 +171,7 @@
     .separator{
         width: calc(100% - 40px);
         height: 1px;
+        border-left: 0px;
         border-bottom: solid 1px #70707070;
     }
 
