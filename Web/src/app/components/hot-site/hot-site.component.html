@@ -10,8 +10,8 @@
       <div class="early-access-description">Follow your favorite expert by tracking their performance and learn trading fundamentals, all while staying in control of your funds.</div>
       <div class="early-access-title">Sign up for early access</div>
       <div fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start start" fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap.gt-sm="20px" fxLayoutGap.lt-md="5px">
-        <inheritance-input #Referral [options]="getEmailInputOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
-        <div class="send-button">Send</div>
+        <inheritance-input #Referral [options]="getEmailInputOptions()" [value]="earlyAccessRequest.email" (onChange)="earlyAccessRequest.email = $event" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web" ></inheritance-input>
+        <div class="send-button" (click)="sendEarlyAccessRequest()" [promiseBtn]="promise">Send</div>
       </div>
     </div>
   </div>

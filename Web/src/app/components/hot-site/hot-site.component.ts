@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CONFIG } from '../../services/config.service';
+import { Subscription } from 'rxjs';
+import { AccountService } from '../../services/account.service';
+import { EarlyAccessRequest } from '../../model/account/earlyAccessRequest';
 
 @Component({
   selector: 'hot-site',
@@ -7,8 +10,10 @@ import { CONFIG } from '../../services/config.service';
   styleUrls: ['./hot-site.component.css']
 })
 export class HotSiteComponent implements OnInit {
+  earlyAccessRequest: EarlyAccessRequest = new EarlyAccessRequest();
+  promise: Subscription;
 
-  constructor() { }
+  constructor(private accountService: AccountService) { }
 
   ngOnInit() {
   }
@@ -19,6 +24,12 @@ export class HotSiteComponent implements OnInit {
 
   getEmailInputOptions() {
     return { textOptions: { outlineField: false, placeHolder: "Email", required: false, showHintSize: false }, darkLayout:true };
+  }
+
+  sendEarlyAccessRequest() {
+    this.promise = this.accountService.postEarlyAccessRequest(this.earlyAccessRequest).subscribe(result => {
+      this.earlyAccessRequest = new EarlyAccessRequest();
+    });
   }
 
 }

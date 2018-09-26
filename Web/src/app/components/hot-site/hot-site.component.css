@@ -126,7 +126,8 @@
     line-height: 48px;
     color: white;
     text-align: center;
-    margin-top: 13px;    
+    margin-top: 13px;
+    cursor: pointer;
 }
 
 @media(max-width: 959px){

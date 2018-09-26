@@ -22,9 +22,9 @@ namespace Auctus.Business.Account
 
             var previousRecord = Data.GetByEmail(email);
 
-            if (name.Length > 50)
+            if (!string.IsNullOrWhiteSpace(name) && name.Length > 50)
                 name = name.Substring(0, 50);
-            if (twitter.Length > 15)
+            if (!string.IsNullOrWhiteSpace(twitter) && twitter.Length > 15)
                 twitter = twitter.Substring(0, 15);
 
             if (previousRecord == null)
