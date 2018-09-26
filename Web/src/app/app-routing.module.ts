@@ -14,18 +14,18 @@ import { HotSiteComponent } from './components/hot-site/hot-site.component';
 import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent  },
-    { path: 'hotsite', component: HotSiteComponent  },
-    { path: 'beexpert', component: BeAnExpertComponent  },
-    { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
-    { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
-    { path: 'top-experts', component: TopExpertsComponent },
-    { path: 'expert-details/:id', component: ExpertDetailsComponent, canActivate:[AuthRedirect] },
-    { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
-    { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
-    { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
-    { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
-    { path: '**', redirectTo: ''  }
+    { path: '', redirectTo: 'hotsite' },
+    { path: 'hotsite', component: HotSiteComponent },
+    { path: 'beexpert', component: BeAnExpertComponent },
+    // { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
+    // { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
+    // { path: 'top-experts', component: TopExpertsComponent },
+    // { path: 'expert-details/:id', component: ExpertDetailsComponent, canActivate:[AuthRedirect] },
+    // { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
+    // { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
+    // { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
+    // { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
+    { path: '**', redirectTo: 'hotsite'  }
 ];
 
 @NgModule({
