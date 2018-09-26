@@ -101,8 +101,6 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
     return { required: true, outlineField: true, darkStyle: false };
   }
 
-
-
   setButtons() {
     this.showClose = false;
     this.showSell = false;

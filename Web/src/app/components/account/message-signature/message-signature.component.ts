@@ -106,10 +106,10 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   isMobile() {
-    return window.screen.width <= 600;
+    return window.screen.width < 960;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     if (this.timer) {
       clearTimeout(this.timer);
     }
@@ -170,7 +170,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   hasAuc() {
-    return this.aucAmount >= this.aucRequired && (this.aucAmount > 0 || this.aucRequired == 0);
+    return this.hasUnlockedAccount && this.aucAmount >= this.aucRequired && (this.aucAmount > 0 || this.aucRequired == 0);
   }
 
   signMessage() {
@@ -224,6 +224,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
       if (response.valid) {
         this.Referral.setForcedError("");
         this.setDiscountMessage(response.discount); 
+        this.setBancorWidget();
       } else if (!!value && value.length > 0) {
         this.setInvalidReferral("Invalid referral code");
       } else {

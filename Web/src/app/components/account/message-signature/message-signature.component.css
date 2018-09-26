@@ -69,6 +69,10 @@
     color: white !important;
 }
 
+::ng-deep .widget-bancor input {
+    color: white !important;
+}
+
 ::ng-deep .widget-bancor > div > div > div > div > div > div > div > span {
     display: none;
 }
@@ -77,17 +81,19 @@
     content: "BUY";
 }
 
+::ng-deep .widget-bancor > div > div > div > div > div > div:last-child > div > div {
+    display: none !important;
+}
+
 ::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div > span {
     display: none !important;
 }
 
-::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div 
-{
+::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div {
    background-color: unset !important;
 }
 
-::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div > div
-{
+::ng-deep .widget-bancor > div > div > div > div > div > div > div > div > div > div {
     position: absolute;
     left: 45px;
     top: -10px;
