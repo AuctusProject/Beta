@@ -1,11 +1,13 @@
 <hotsite-header></hotsite-header>
 <div ngClass.gt-sm="global-container">
   <div class="hotsite-title">An investment platform made for the digital age</div>
-  <img class="hot-site-image" src="./assets/img/Img_Banner.png">
+  <div class="hot-site-image-div">
+    <img fxHide.lt-md class="hot-site-image" src="./assets/img/Img_Banner.png">
+  </div>
 </div>
 <div class="early-access">
   <div class="global-container" fxLayout="row" fxLayoutGap="16px">
-    <img fxHide.lt-md="true" class="hot-site-phone-image" src="./assets/img/Img_Mobile.png">
+    <img class="hot-site-phone-image" src.gt-sm="./assets/img/Img_Mobile.png" src.lt-md="./assets/img/Img_Mobile2.png">
     <div fxLayout="column" class="early-access-content">
       <div class="early-access-description">Follow your favorite expert by tracking their performance and learn trading fundamentals, all while staying in control of your funds.</div>
       <div class="early-access-title">Sign up for early access</div>
@@ -18,9 +20,9 @@
 </div>
 <div>
   <div class="global-container" fxLayout="column" fxLayoutGap="16px">
-    <div class="early-access-content bottom-description">
-        <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore -->
-    </div> 
+    <!-- <div class="early-access-content bottom-description">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+    </div>  -->
     <div class="itens" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="50px" fxLayoutAlign.gt-sm="center start" fxLayout.lt-md="column" fxLayoutGap.lt-md="20px" fxLayoutAlign.lt-md="center center"  >
       <div fxLayout="column" fxLayoutAlign="center center">
         <div class="icon-wrapper" fxLayoutAlign="center center"><img src="./assets/img/Icon_Graph.png"></div>

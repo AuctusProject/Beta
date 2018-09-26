@@ -13,14 +13,16 @@
     max-width: 760px;
     width: calc(100% - 40px);
 }
-  
+
+
+
 .hot-site-image {
-    width: 100%; 
+    width: 100%;
     background-color: #b7b7b7;
 }
 
 .hot-site-phone-image{
-    margin-top: -130px;
+    margin-top: -170px;
     margin-left: 60px;
     position: absolute;
 }
@@ -139,6 +141,23 @@
         margin-top: -33px;
     }
 
+    .hotsite-title{
+        font-size: 24px;
+    }
+
+    .hot-site-image-div{
+        background-image: url('/assets/img/Img_Banner.png');
+        width: 100%;
+        height: 270px;
+        background-position: center;
+    }
+
+    .hot-site-phone-image{
+        margin-top: -200px;
+        margin-left: calc(50% - 100px);
+        position: absolute;
+    }
+
     .early-access{
         background-color: #1f1f1f;
         margin-top: -4px;
@@ -148,13 +167,13 @@
     .early-access-description{
         max-width: 516px;
         width: calc(100% - 40px);
-        font-size: 18px;
+        font-size: 14px;
         margin-left: auto;
         margin-right: auto;
     }
     
     .early-access-title{
-        font-size: 28px;
+        font-size: 20px;
     }
     
     .early-access-content{
@@ -162,6 +181,7 @@
         margin-right: auto;
         text-align: center;
         margin-bottom: 20px;
+        margin-top: 90px;
     }
 
     .itens{
@@ -181,11 +201,11 @@
     }
     
     .item-title{
-        font-size: 22px;
+        font-size: 20px;
     }
     
     .item-description{
-        font-size: 13px;
+        font-size: 16px;
     }
     
     .referral-title{
@@ -193,7 +213,7 @@
     }
     
     .referral-subtitle {
-        font-size: 14px;
+        font-size: 18px;
     }
     
     .referral-description{
