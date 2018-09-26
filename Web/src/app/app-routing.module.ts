@@ -14,7 +14,7 @@ import { HotSiteComponent } from './components/hot-site/hot-site.component';
 import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'hotsite' },
+    { path: '', redirectTo: 'hotsite', pathMatch: 'full' },
     { path: 'hotsite', component: HotSiteComponent },
     { path: 'beexpert', component: BeAnExpertComponent },
     // { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
