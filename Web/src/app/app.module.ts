@@ -92,6 +92,7 @@ import { HotSiteComponent } from './components/hot-site/hot-site.component';
 import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
 import { HotsiteHeaderComponent } from './components/hot-site/hotsite-header/hotsite-header.component';
 import { HotsiteFooterComponent } from './components/hot-site/hotsite-footer/hotsite-footer.component';
+import { HotsiteBlogSectionComponent } from './components/hot-site/hotsite-blog-section/hotsite-blog-section.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -168,7 +169,8 @@ export function getAuthServiceConfigs() {
     HotSiteComponent,
     BeAnExpertComponent,
     HotsiteHeaderComponent,
-    HotsiteFooterComponent
+    HotsiteFooterComponent,
+    HotsiteBlogSectionComponent
   ],
   imports: [
     BrowserModule,
