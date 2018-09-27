@@ -100,7 +100,7 @@ namespace Auctus.Business.Asset
                 if (asset != null)
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }
-            Data.InsertManyAsync(assetValues);
+            Task.Factory.StartNew(() => InsertManyAssetValuesAsync(assetValues));
             
             var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
             var currentValues = new List<AssetCurrentValue>();
@@ -110,7 +110,6 @@ namespace Auctus.Business.Asset
                 var filter = new List<AssetValueFilter>();
                 foreach(var asset in assetsWithAdvices)
                 {
-                    filter.Add(GetFilter(asset, currentDate));
                     filter.Add(GetFilter(asset, currentDate.AddDays(-1)));
                     filter.Add(GetFilter(asset, currentDate.AddDays(-7)));
                     filter.Add(GetFilter(asset, currentDate.AddDays(-30)));
@@ -146,6 +145,16 @@ namespace Auctus.Business.Asset
                     }
                 }
                 AssetCurrentValueBusiness.UpdateAssetCurrentValues(currentValues);
+            }
+        }
+
+        private async Task InsertManyAssetValuesAsync(List<AssetValue> values)
+        {
+            var timesToInsert = Math.Ceiling(values.Count / 100.0);
+            for (var i = 0; i < timesToInsert; ++i)
+            {
+                await Data.InsertManyAsync(values.Skip(i * 100).Take(100));
+                await Task.Delay(1001);
             }
         }
 
