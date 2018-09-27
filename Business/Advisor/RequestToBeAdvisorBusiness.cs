@@ -192,22 +192,22 @@ Email: {1}
 oldRequestToBeAdvisor?.Name ?? "N/A", newRequestToBeAdvisor.Name,
 oldRequestToBeAdvisor?.Description ?? "N/A", newRequestToBeAdvisor.Description,
 oldRequestToBeAdvisor?.PreviousExperience ?? "N/A", newRequestToBeAdvisor.PreviousExperience),
-string.Format("[{0}] Request to be adivosr - Auctus Beta", oldRequestToBeAdvisor == null ? "NEW" : "UPDATE"));
+string.Format("[{0}] Request to become Expert - Auctus Beta", oldRequestToBeAdvisor == null ? "NEW" : "UPDATE"));
         }
 
         private async Task SendRequestRejectedNotificationAsync(User user)
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
-                "Your request to become an expert was rejected - Auctus Experts",
-                "<p>We are sorry to inform you that at this moment your request to become an expert can not be accepted.</p>",
+                "Your request to become an Expert was rejected - Auctus Experts",
+                "<p>We are sorry to inform you that at this moment your request to become an Expert can not be accepted.</p>",
                 EmailTemplate.NotificationType.BecomeAdvisor);
         }
 
         private async Task SendRequestApprovedNotificationAsync(User user)
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
-                "Your request to become an expert was approved! - Auctus Experts",
-                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets now, <a href='{WebUrl}/expert-details/{user.Id}' target='_blank'>click here</a>.</p>",
+                "Your request to become an Expert was approved! - Auctus Experts",
+                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets, <a href='{WebUrl}/expert-details/{user.Id}' target='_blank'>click here</a>.</p>",
                 EmailTemplate.NotificationType.BecomeAdvisor);
         }
     }

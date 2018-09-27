@@ -78,7 +78,7 @@ namespace Auctus.Business.Advisor
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 $"New recommendation on Auctus Experts for {asset.Code}",
                 $@"
-            <p>The expert {advisor.Name} set a new recommendation.</p>
+            <p>Expert {advisor.Name} set a new recommendation.</p>
 			<a style=""text-decoration: none;color:#ffffff;"" href=""{WebUrl}/asset-details/{asset.Id}"">
 				<div style=""border: solid 1px #404040;text-align:center;padding: 25px;"">
 					<div style=""height:100px;width:100px;border-radius:50px;margin-right:27px;display:inline-block;vertical-align: top;"">
