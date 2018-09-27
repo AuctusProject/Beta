@@ -207,7 +207,7 @@ namespace Api.Controllers
 
             var token = new JwtSecurityToken(
                 issuer: Startup.Configuration.GetSection("Url:Api").Get<string>(),
-                audience: Configuration.GetSection("Url:Web").Get<List<string>>().First(),
+                audience: Startup.Configuration.GetSection("Url:Web").Get<List<string>>().First(),
                 claims: claims,
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.Configuration.GetSection("Auth:Secret").Get<string>())), SecurityAlgorithms.HmacSha256)
