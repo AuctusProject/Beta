@@ -18,6 +18,7 @@ export class AssetHistoryChartComponent implements OnChanges {
   advicesData: any = [];
   chartData: any = [];
   minAdviceDate?: Date = null;
+  mockData: any = [];
   
   constructor(private assetService: AssetService) { }
 
@@ -28,6 +29,7 @@ export class AssetHistoryChartComponent implements OnChanges {
   initialize() {
     this.advicesData = [];
     this.chartData = [];
+    this.mockData = this.getMockDataForLoading()
     this.minAdviceDate = null;
     if (this.assetChart) {
       this.assetChart.destroy();
@@ -37,6 +39,11 @@ export class AssetHistoryChartComponent implements OnChanges {
   }
 
   fillChartData(){
+    this.createChart();
+    this.assetChart.ref$.subscribe(result => {
+      this.assetChart.ref.showLoading("Loading data from server...");
+    });
+
     let queryDate;
     if (this.minAdviceDate) {
       queryDate = new Date(this.minAdviceDate);
@@ -52,7 +59,9 @@ export class AssetHistoryChartComponent implements OnChanges {
             ]
           );
         }
-        this.createChart();
+        this.assetChart.ref.series[0].setData(this.chartData);
+        this.assetChart.ref.series[1].setData(this.advicesData);
+        this.assetChart.ref.hideLoading();
       });
   }
 
@@ -104,12 +113,12 @@ export class AssetHistoryChartComponent implements OnChanges {
       series:[
         {
           name: 'Price', 
-          data: this.chartData,
+          data: this.mockData,
           id: 'dataseries',
         },
         {
           type: 'flags',
-          data: this.advicesData,
+          data: [],
           onSeries:'dataseries',
           
         }
@@ -122,5 +131,12 @@ export class AssetHistoryChartComponent implements OnChanges {
   refresh(){
     var self = this;
     setTimeout(() => {self.assetChart.ref.reflow()}, 100);
+  }
+
+  getMockDataForLoading() {
+    return [[Date.UTC(2018, 1, 14, 19, 59), 100], [Date.UTC(2018, 1, 15, 1, 59), 101.5],
+    [Date.UTC(2018, 2, 14, 15, 59), 198.6], [Date.UTC(2018, 2, 14, 19, 59), 200], [Date.UTC(2018, 2, 14, 23, 59), 202.1],
+    [Date.UTC(2018, 3, 14, 19, 59), 150], [Date.UTC(2018, 3, 15, 10, 59), 155],
+    [Date.UTC(2018, 4, 14, 19, 59), 175], [Date.UTC(2018, 4, 14, 21, 59), 176]];
   }
 }
