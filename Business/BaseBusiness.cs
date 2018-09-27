@@ -188,7 +188,7 @@ namespace Auctus.Business
             get
             {
                 if (_webUrl == null)
-                    _webUrl = Configuration.GetSection("Url:Web").Get<string>();
+                    _webUrl = Configuration.GetSection("Url:Web").Get<List<string>>().First();
                 return _webUrl;
             }
         }
