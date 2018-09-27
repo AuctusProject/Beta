@@ -40,5 +40,24 @@ namespace Auctus.DataAccess.Asset
             };
             return Collection.Find(filter, options).ToList();
         }
+
+        public List<AssetValue> Filter(IEnumerable<AssetValueFilter> filter)
+        {
+            var filterBuilder = Builders<AssetValue>.Filter;
+            FilterDefinition<AssetValue> query = null;
+            foreach (var pair in filter)
+            {
+                if (query == null)
+                    query = (filterBuilder.Eq(asset => asset.AssetId, pair.AssetId) & filterBuilder.Gte(asset => asset.Date, pair.StartDate) & filterBuilder.Lte(asset => asset.Date, pair.EndDate));
+                else
+                    query = query | (filterBuilder.Eq(asset => asset.AssetId, pair.AssetId) & filterBuilder.Gte(asset => asset.Date, pair.StartDate) & filterBuilder.Lte(asset => asset.Date, pair.EndDate));
+            }
+            var options = new FindOptions()
+            {
+                BatchSize = 99999999,
+                NoCursorTimeout = true
+            };
+            return Collection.Find(query, options).ToList();
+        }
     }
 }

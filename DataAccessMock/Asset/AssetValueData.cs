@@ -47,5 +47,10 @@ namespace Auctus.DataAccessMock.Asset
             values.AddRange(AssetValuesPartialData.GetAssetValues12());
             return values;
         }
+
+        public List<AssetValue> Filter(IEnumerable<AssetValueFilter> filter)
+        {
+            return AllValues().Where(c => filter.Any(a => a.AssetId == c.AssetId && a.StartDate >= c.Date && a.EndDate <= c.Date)).ToList();
+        }
     }
 }

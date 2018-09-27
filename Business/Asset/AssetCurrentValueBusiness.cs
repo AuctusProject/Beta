@@ -40,34 +40,50 @@ namespace Auctus.Business.Asset
         {
             var assetCurrentValues = ListAllAssets(assetIds);
 
-            var assetDateMapping = new Dictionary<int, DateTime>();
+            var assetDateMapping = new List<AssetValueFilter>();
             foreach (var asset in assetCurrentValues)
             {
                 if (asset.UpdateDate < Data.GetDateTimeNow().AddHours(-4))
                 {
                     if (mode == CalculationMode.AdvisorBase || mode == CalculationMode.Feed || mode == CalculationMode.AdvisorDetailed)
-                        assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddHours(-4));
+                        assetDateMapping.Add(GetFilterForCurrentValue(asset.Id));
                     else if (mode == CalculationMode.AssetDetailed)
                     {
                         if (selectAssetId.Value == asset.Id)
-                            assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-30).AddHours(-4));
+                        {
+                            assetDateMapping.Add(GetFilterForCurrentValue(asset.Id));
+                            assetDateMapping.Add(GetFilterFor24hValue(asset.Id));
+                            assetDateMapping.Add(GetFilterFor7dValue(asset.Id));
+                            assetDateMapping.Add(GetFilterFor30dValue(asset.Id));
+                        }
                         else
-                            assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddHours(-4));
+                            assetDateMapping.Add(GetFilterForCurrentValue(asset.Id));
                     }
                     else if (mode == CalculationMode.AssetBase)
-                        assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-1).AddHours(-4));
+                    {
+                        assetDateMapping.Add(GetFilterForCurrentValue(asset.Id));
+                        assetDateMapping.Add(GetFilterFor24hValue(asset.Id));
+                    }
                 }
                 else if (mode == CalculationMode.AssetDetailed && selectAssetId.Value == asset.Id && !asset.Variation24Hours.HasValue)
-                    assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-30).AddHours(-4));
+                {
+                    assetDateMapping.Add(GetFilterForCurrentValue(asset.Id));
+                    assetDateMapping.Add(GetFilterFor24hValue(asset.Id));
+                    assetDateMapping.Add(GetFilterFor7dValue(asset.Id));
+                    assetDateMapping.Add(GetFilterFor30dValue(asset.Id));
+                }
                 else if (mode == CalculationMode.AssetBase && !asset.Variation24Hours.HasValue)
-                    assetDateMapping.Add(asset.Id, Data.GetDateTimeNow().AddDays(-1).AddHours(-4));
+                {
+                    assetDateMapping.Add(GetFilterForCurrentValue(asset.Id));
+                    assetDateMapping.Add(GetFilterFor24hValue(asset.Id));
+                }
             }
 
-            var assetValues = AssetValueBusiness.FilterAssetValues(assetDateMapping);
+            var assetValues = AssetValueBusiness.Filter(assetDateMapping);
 
             foreach (var asset in assetCurrentValues)
             {
-                if (assetDateMapping.ContainsKey(asset.Id))
+                if (assetDateMapping.Any(c => c.AssetId == asset.Id))
                 {
                     asset.AssetValues = assetValues.Where(c => c.AssetId == asset.Id).OrderByDescending(c => c.Date);
                     if (asset.AssetValues.Any())
@@ -83,6 +99,46 @@ namespace Auctus.Business.Asset
                 }
             }
             return assetCurrentValues;
+        }
+
+        private AssetValueFilter GetFilterForCurrentValue(int assetId)
+        {
+            return new AssetValueFilter()
+            {
+                AssetId = assetId,
+                StartDate = Data.GetDateTimeNow().AddHours(-4),
+                EndDate = Data.GetDateTimeNow()
+            };
+        }
+
+        private AssetValueFilter GetFilterFor24hValue(int assetId)
+        {
+            return new AssetValueFilter()
+            {
+                AssetId = assetId,
+                StartDate = Data.GetDateTimeNow().AddDays(-1).AddHours(-4),
+                EndDate = Data.GetDateTimeNow().AddDays(-1)
+            };
+        }
+
+        private AssetValueFilter GetFilterFor7dValue(int assetId)
+        {
+            return new AssetValueFilter()
+            {
+                AssetId = assetId,
+                StartDate = Data.GetDateTimeNow().AddDays(-7).AddHours(-4),
+                EndDate = Data.GetDateTimeNow().AddDays(-7)
+            };
+        }
+
+        private AssetValueFilter GetFilterFor30dValue(int assetId)
+        {
+            return new AssetValueFilter()
+            {
+                AssetId = assetId,
+                StartDate = Data.GetDateTimeNow().AddDays(-30).AddHours(-4),
+                EndDate = Data.GetDateTimeNow().AddDays(-30)
+            };
         }
     }
 }

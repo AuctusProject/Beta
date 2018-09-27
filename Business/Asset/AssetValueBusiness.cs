@@ -33,6 +33,14 @@ namespace Auctus.Business.Asset
             return Data.FilterAssetValues(assetsMap);
         }
 
+        public List<AssetValue> Filter(IEnumerable<AssetValueFilter> filter)
+        {
+            if (filter?.Any() != true)
+                return new List<AssetValue>();
+
+            return Data.Filter(filter);
+        }
+
         public List<AssetResponse.ValuesResponse> ListAssetValues(int assetId, DateTime? dateTime)
         {
             var baseTime = Data.GetDateTimeNow().AddDays(-30).AddHours(-4);
@@ -94,18 +102,24 @@ namespace Auctus.Business.Asset
             }
             Data.InsertManyAsync(assetValues);
 
-            var baseDate = currentDate.AddDays(-30).AddHours(-4);
+            var startDate = currentDate.AddDays(-30).AddHours(-4);
+            var endDate = currentDate.AddDays(-30);
             var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
             var currentValues = new List<AssetCurrentValue>();
             if (assetsToUpdateLastValues.Any())
             {
-                var assetsWithAdvices = assetsToUpdateLastValues.Where(c => advices.Any(a => a.AssetId == c.Id)).ToDictionary(c => c.Id, c => baseDate);
-                var values = FilterAssetValues(assetsWithAdvices);
+                var assetsWithAdvices = assetsToUpdateLastValues.Where(c => advices.Any(a => a.AssetId == c.Id)).Select(c => new AssetValueFilter()
+                {
+                    AssetId = c.Id,
+                    StartDate = startDate,
+                    EndDate = endDate
+                });
+                var values = Filter(assetsWithAdvices);
                 foreach (var assetToUpdate in assetsToUpdateLastValues)
                 {
                     var lastAssetValue = assetValues.FirstOrDefault(c => c.AssetId == assetToUpdate.Id);
 
-                    if (assetsWithAdvices.ContainsKey(assetToUpdate.Id))
+                    if (assetsWithAdvices.Any(c => c.AssetId == assetToUpdate.Id))
                     {
                         VariantionCalculation(lastAssetValue.Value, currentDate, values.Where(c => c.AssetId == lastAssetValue.AssetId).OrderByDescending(c => c.Date),
                                 out double? variation24h, out double? variation7d, out double? variation30d);
