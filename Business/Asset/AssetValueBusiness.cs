@@ -100,7 +100,7 @@ namespace Auctus.Business.Asset
                 if (asset != null)
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }
-            Task.Factory.StartNew(() => InsertManyAssetValuesAsync(assetValues));
+            RunAsync(async () => await InsertManyAssetValuesAsync(assetValues));
             
             var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
             var currentValues = new List<AssetCurrentValue>();
