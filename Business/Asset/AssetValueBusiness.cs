@@ -110,10 +110,10 @@ namespace Auctus.Business.Asset
                 var filter = new List<AssetValueFilter>();
                 foreach(var asset in assetsWithAdvices)
                 {
-                    GetFilter(asset.Id, currentDate);
-                    GetFilter(asset.Id, currentDate.AddDays(-1));
-                    GetFilter(asset.Id, currentDate.AddDays(-7));
-                    GetFilter(asset.Id, currentDate.AddDays(-30));
+                    filter.Add(GetFilter(asset.Id, currentDate));
+                    filter.Add(GetFilter(asset.Id, currentDate.AddDays(-1)));
+                    filter.Add(GetFilter(asset.Id, currentDate.AddDays(-7)));
+                    filter.Add(GetFilter(asset.Id, currentDate.AddDays(-30)));
                 }
                 var values = Filter(filter);
                 foreach (var assetToUpdate in assetsToUpdateLastValues)
