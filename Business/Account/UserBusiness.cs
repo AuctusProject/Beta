@@ -468,8 +468,8 @@ namespace Auctus.Business.Account
 
         public async Task SendEmailConfirmationAsync(string email, string code)
         {
-            await EmailBusiness.SendUsingTemplateAsync(new string[] { email }, "Verify your email address - Auctus Beta",
-                string.Format(@"<p>To activate your Auctus Expert account please <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.</p>
+            await EmailBusiness.SendUsingTemplateAsync(new string[] { email }, "Verify your email address - Auctus Experts",
+                string.Format(@"<p>To activate your Auctus Experts account please <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.</p>
                         <p style=""font-size: 12px; font-style: italic;"">If you didn’t ask to verify this address, you can ignore this email.</p>", WebUrl, code),
                 EmailTemplate.NotificationType.ConfirmEmail);
         }
