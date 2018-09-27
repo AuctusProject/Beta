@@ -87,7 +87,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     } else if (this.isValidRequest()) {
       this.requestToBeAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
       this.requestToBeAdvisorRequest.file = this.FileUploadComponent.getFile();
-      this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(result => 
+      this.promise = this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(result => 
       {
         if (!!result && !result.error && result.data) {
           this.accountService.setLoginData(result.data);
