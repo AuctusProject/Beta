@@ -50,7 +50,8 @@ namespace Auctus.DataAccessMock.Asset
 
         public List<AssetValue> Filter(IEnumerable<AssetValueFilter> filter)
         {
-            return AllValues().Where(c => filter.Any(a => a.AssetId == c.AssetId && a.StartDate >= c.Date && a.EndDate <= c.Date)).ToList();
+            var values = AllValues();
+            return values.Where(c => filter.Any(a => a.AssetId == c.AssetId && a.StartDate <= c.Date && a.EndDate >= c.Date)).ToList();
         }
     }
 }
