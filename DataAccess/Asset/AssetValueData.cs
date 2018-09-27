@@ -36,7 +36,9 @@ namespace Auctus.DataAccess.Asset
             var options = new FindOptions()
             {
                 BatchSize = 99999999,
-                NoCursorTimeout = true
+                NoCursorTimeout = true,
+                MaxTime = TimeSpan.FromMinutes(4),
+                MaxAwaitTime = TimeSpan.FromMinutes(4)
             };
             return Collection.Find(filter, options).ToList();
         }
@@ -55,7 +57,9 @@ namespace Auctus.DataAccess.Asset
             var options = new FindOptions()
             {
                 BatchSize = 99999999,
-                NoCursorTimeout = true
+                NoCursorTimeout = true,
+                MaxTime = TimeSpan.FromMinutes(4),
+                MaxAwaitTime = TimeSpan.FromMinutes(4)
             };
             return Collection.Find(query, options).ToList();
         }
