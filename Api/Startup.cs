@@ -52,7 +52,7 @@ namespace Api
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = false,
-                    ValidAudience = urlConfiguration.GetValue<string>("Web"),
+                    ValidAudience = urlConfiguration.GetSection("Web").Get<List<string>>().First(),
                     ValidateIssuer = true,
                     ValidIssuer = urlConfiguration.GetValue<string>("Api"),
                     ValidateIssuerSigningKey = true,
