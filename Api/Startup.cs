@@ -76,7 +76,7 @@ namespace Api
             services.AddCors(options =>
             {
                 options.AddPolicy("Default", builder =>
-                    builder.WithOrigins(urlConfiguration.GetValue<string>("Web"))
+                    builder.WithOrigins(urlConfiguration.GetSection("Web").Get<List<string>>().ToArray())
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
