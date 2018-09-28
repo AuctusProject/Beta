@@ -31,7 +31,21 @@ namespace Auctus.Business.Asset
         {
             var assetCurrentValue = ListAllAssets(new int[] { assetId });
             if (assetCurrentValue == null || !assetCurrentValue.Any() || assetCurrentValue[0].UpdateDate < Data.GetDateTimeNow().AddHours(-4))
-                return AssetValueBusiness.LastAssetValue(assetId)?.Value;
+            {
+                var value = AssetValueBusiness.LastAssetValue(assetId)?.Value;
+                if (!value.HasValue)
+                {
+                    string assetCoinGeckoId;
+                    if (assetCurrentValue == null || !assetCurrentValue.Any())
+                        assetCoinGeckoId = AssetBusiness.GetById(assetId)?.CoinGeckoId;
+                    else
+                        assetCoinGeckoId = assetCurrentValue[0].CoinGeckoId;
+
+                    return CoinGeckoBusiness.GetCoinData(assetCoinGeckoId)?.MarketData?.CurrentPrice?.Value;
+                }
+                else
+                    return value;
+            }
             else
                 return assetCurrentValue[0].CurrentValue;
         }
@@ -85,13 +99,23 @@ namespace Auctus.Business.Asset
             {
                 if (assetDateMapping.Any(c => c.AssetId == asset.Id))
                 {
-                    asset.AssetValues = assetValues.Where(c => c.AssetId == asset.Id).OrderByDescending(c => c.Date);
-                    if (asset.AssetValues.Any())
+                    var values = assetValues.Where(c => c.AssetId == asset.Id).OrderByDescending(c => c.Date).ToList();
+                    if (!values.Any())
                     {
-                        var lastValue = asset.AssetValues.First();
+                        values = CoinGeckoBusiness.GetAssetValues(asset.CoinGeckoId, 31).Select(c => new AssetValue()
+                        {
+                            AssetId = asset.Id,
+                            Date = c.Date,
+                            Value = c.Value
+                        }).OrderByDescending(c => c.Date).ToList();
+                    }
+
+                    if (!values.Any())
+                    {
+                        var lastValue = values.First();
                         asset.CurrentValue = lastValue.Value;
                         asset.UpdateDate = lastValue.Date;
-                        AssetValueBusiness.VariantionCalculation(lastValue.Value, lastValue.Date, asset.AssetValues, out double? variation24h, out double? variation7d, out double? variation30d);
+                        AssetValueBusiness.VariantionCalculation(lastValue.Value, lastValue.Date, values, out double? variation24h, out double? variation7d, out double? variation30d);
                         asset.Variation24Hours = variation24h;
                         asset.Variation7Days = variation7d;
                         asset.Variation30Days = variation30d;

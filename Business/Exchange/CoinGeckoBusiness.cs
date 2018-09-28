@@ -17,6 +17,11 @@ namespace Auctus.Business.Exchange
             Api = (ICoinGeckoApi)serviceProvider.GetService(typeof(ICoinGeckoApi));
         }
 
+        public AssetDataResult GetCoinData(string assetId)
+        {
+            return Api.GetCoinData(assetId);
+        }
+
         public IEnumerable<AssetResult> GetAllCoinsData()
         {
             return Api.GetAllCoinsData();

@@ -51,15 +51,13 @@ namespace Auctus.Business.Asset
             var values = MemoryCache.Get<List<AssetResponse.ValuesResponse>>(cacheKey);
             if (values == null || values.Min(c => c.Date) > dateTime.Value.AddHours(2))
             {
-                values = SwingingDoorCompression.Compress(FilterValueResponse(assetId, dateTime).ToDictionary(c => c.Date, c => c.Value))
-                                        .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).OrderBy(c => c.Date).ToList();
+                values = FilterValueResponse(assetId, dateTime).OrderBy(c => c.Date).ToList();
 
                 if (values.Any())
-                    MemoryCache.Set<List<AssetResponse.ValuesResponse>>(cacheKey, values, 30);
+                    MemoryCache.Set<List<AssetResponse.ValuesResponse>>(cacheKey, values, 20);
             }
             return values;
         }
-
 
         public void UpdateCoinmarketcapAssetsValues()
         {
@@ -101,12 +99,14 @@ namespace Auctus.Business.Asset
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }
 
+            var assetValuesToInsert = assetValues.Where(c => consideredAssetsId.Contains(c.AssetId)).ToList();
             try
             {
                 var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
                 var currentValues = new List<AssetCurrentValue>();
                 if (assetsToUpdateLastValues.Any())
                 {
+                    var values = new List<AssetValue>();
                     var filter = new List<AssetValueFilter>();
                     foreach (var id in consideredAssetsId)
                     {
@@ -115,7 +115,14 @@ namespace Auctus.Business.Asset
                         {
                             if (!assetCurrentValue.Variation24Hours.HasValue && !assetCurrentValue.Variation7Days.HasValue)
                             {
-                                //TODO read 30 days of data from coingecko
+                                var oldValues = CoinGeckoBusiness.GetAssetValues(assetCurrentValue.CoinGeckoId, 31).Select(c => new AssetValue()
+                                {
+                                    AssetId = assetCurrentValue.Id,
+                                    Date = c.Date,
+                                    Value = c.Value
+                                });
+                                values.AddRange(oldValues);
+                                assetValuesToInsert.AddRange(oldValues);
                             }
                             else
                             {
@@ -125,7 +132,7 @@ namespace Auctus.Business.Asset
                             }
                         }
                     }
-                    var oldAssetsValues = Filter(filter);
+                    values.AddRange(Filter(filter));
 
                     foreach (var assetToUpdate in assetsToUpdateLastValues)
                     {
@@ -133,7 +140,7 @@ namespace Auctus.Business.Asset
 
                         if (consideredAssetsId.Contains(assetToUpdate.Id))
                         {
-                            VariantionCalculation(lastAssetValue.Value, currentDate, oldAssetsValues.Where(c => c.AssetId == lastAssetValue.AssetId).OrderByDescending(c => c.Date),
+                            VariantionCalculation(lastAssetValue.Value, currentDate, values.Where(c => c.AssetId == lastAssetValue.AssetId).OrderByDescending(c => c.Date),
                                     out double? variation24h, out double? variation7d, out double? variation30d);
 
                             currentValues.Add(new AssetCurrentValue()
@@ -161,7 +168,7 @@ namespace Auctus.Business.Asset
             }
             finally
             {
-                RunAsync(async () => await InsertManyAssetValuesAsync(assetValues.Where(c => consideredAssetsId.Contains(c.AssetId))));
+                RunAsync(async () => await InsertManyAssetValuesAsync(assetValuesToInsert));
             }
         }
 
