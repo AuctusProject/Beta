@@ -17,5 +17,10 @@ namespace Auctus.DataAccessMock.Exchange
         {
             throw new NotImplementedException();
         }
+
+        public AssetDataResult GetCoinData(string assetId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
