@@ -321,6 +321,7 @@ namespace Auctus.DataAccess.Account
             advisor.ReferralDiscount = user.ReferralDiscount;
             advisor.ReferredId = user.ReferredId;
             advisor.AllowNotifications = user.AllowNotifications;
+            advisor.DiscountProvided = user.DiscountProvided;
             advisor.IsAdvisor = true;
         }
     }
