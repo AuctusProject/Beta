@@ -4,6 +4,7 @@ using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Exchange;
 using Auctus.Model;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,10 +28,35 @@ namespace Auctus.Business.Asset
 
         public List<AssetResponse.ValuesResponse> FilterValueResponse(int assetId, DateTime? dateTime)
         {
+            dateTime = dateTime ?? Data.GetDateTimeNow().AddDays(-30);
             var asset = AssetBusiness.GetById(assetId);
-            var days = Math.Ceiling((DateTime.UtcNow - (dateTime ?? DateTime.UtcNow.AddDays(-30))).TotalDays);
+            var days = Math.Ceiling(Data.GetDateTimeNow().Subtract(dateTime.Value).TotalDays);
 
-            return CoinGeckoBusiness.GetAssetValues(asset.CoinGeckoId, (int)days);
+            var values = new List<AssetResponse.ValuesResponse>();
+            try
+            {
+                values = CoinGeckoBusiness.GetAssetValues(asset.CoinGeckoId, (int)days);
+            }
+            catch (ApiException ex)
+            {
+                var telemetry = new TelemetryClient();
+                telemetry.TrackEvent("CoinGeckoBusiness.GetAssetValues");
+                telemetry.TrackException(ex);
+
+                var filter = new List<AssetValueFilter>();
+                filter.Add(new AssetValueFilter()
+                {
+                    AssetId = assetId,
+                    EndDate = Data.GetDateTimeNow(),
+                    StartDate = dateTime.Value
+                });
+                values = SwingingDoorCompression.Compress(AssetValueBusiness.Filter(filter).ToDictionary(c => c.Date, c => c.Value)).Select(c => new AssetResponse.ValuesResponse()
+                {
+                    Date = c.Key,
+                    Value = c.Value
+                }).ToList();
+            }
+            return values;
         }
 
         public List<AssetValue> Filter(IEnumerable<AssetValueFilter> filter)
