@@ -25,12 +25,12 @@ namespace Auctus.Business.Asset
             return Filter(new AssetValueFilter[] { GetFilterForCurrentValue(assetId) }).OrderByDescending(c => c.Date).FirstOrDefault();
         }
 
-        public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
+        public List<AssetResponse.ValuesResponse> FilterValueResponse(int assetId, DateTime? dateTime)
         {
-            if (assetsMap?.Any() != true)
-                return new List<AssetValue>();
+            var asset = AssetBusiness.GetById(assetId);
+            var days = Math.Ceiling((DateTime.UtcNow - (dateTime ?? DateTime.UtcNow.AddDays(-30))).TotalDays);
 
-            return Data.FilterAssetValues(assetsMap);
+            return CoinGeckoBusiness.GetAssetValues(asset.CoinGeckoId, (int)days);
         }
 
         public List<AssetValue> Filter(IEnumerable<AssetValueFilter> filter)
@@ -51,9 +51,7 @@ namespace Auctus.Business.Asset
             var values = MemoryCache.Get<List<AssetResponse.ValuesResponse>>(cacheKey);
             if (values == null || values.Min(c => c.Date) > dateTime.Value.AddHours(2))
             {
-                var filter = new Dictionary<int, DateTime>();
-                filter[assetId] = dateTime.Value;
-                values = SwingingDoorCompression.Compress(FilterAssetValues(filter).ToDictionary(c => c.Date, c => c.Value))
+                values = SwingingDoorCompression.Compress(FilterValueResponse(assetId, dateTime).ToDictionary(c => c.Date, c => c.Value))
                                         .Select(c => new AssetResponse.ValuesResponse() { Date = c.Key, Value = c.Value }).OrderBy(c => c.Date).ToList();
 
                 if (values.Any())

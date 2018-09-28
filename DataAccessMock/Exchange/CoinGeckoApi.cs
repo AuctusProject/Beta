@@ -12,5 +12,10 @@ namespace Auctus.DataAccessMock.Exchange
         {
             throw new NotImplementedException();
         }
+
+        public AssetPricesResult GetAssetPrices(string assetId, int days)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Auctus.DataAccess.Exchange
         private const string FULLDATA_ROUTE = "api/v3/coins?order=gecko_desc&localization=false&per_page=100&page=";
         private const string LISTING_ROUTE = "api/v3/coins/list";
         private const string COINDATA_ROUTE = "api/v3/coins/markets?vs_currency=usd&order=gecko_desc";
+        private const string MARKETCHART_ROUTE = "api/v3/coins/{0}/market_chart?vs_currency=usd&days={1}";
 
         public CoinGeckoApi() : base("https://api.coingecko.com") { }
 
@@ -22,6 +23,12 @@ namespace Auctus.DataAccess.Exchange
         {
             var responseContent = GetWithRetry(COINDATA_ROUTE);
             return JsonConvert.DeserializeObject<AssetResult[]>(responseContent);
+        }
+
+        public AssetPricesResult GetAssetPrices(string assetId, int days)
+        {
+            var responseContent = GetWithRetry(String.Format(MARKETCHART_ROUTE, assetId, days));
+            return JsonConvert.DeserializeObject<AssetPricesResult>(responseContent);
         }
     }
 }
