@@ -216,7 +216,7 @@ namespace Auctus.Business.Advisor
             var assetsIds = allAdvices?.Select(a => a.AssetId);
             if (assetsIds?.Any() == true)
             {
-                assetsIds = assetsIds.Distinct();
+                assetsIds = assetsIds.Distinct().ToHashSet();
 
                 if (selectAssetId.HasValue && !assetsIds.Contains(selectAssetId.Value))
                 {
@@ -248,7 +248,7 @@ namespace Auctus.Business.Advisor
                         }   
                     }
 
-                    var assetAdvisorsId = assetAdvices.Select(c => c.AdvisorId).Distinct();
+                    var assetAdvisorsId = assetAdvices.Select(c => c.AdvisorId).Distinct().ToHashSet();
 
                     AssetResponse assetResultData = null;
                     if (mode != CalculationMode.AdvisorBase)

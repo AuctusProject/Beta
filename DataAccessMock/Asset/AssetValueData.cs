@@ -10,11 +10,6 @@ namespace Auctus.DataAccessMock.Asset
 {
     public class AssetValueData : BaseData<AssetValue>, IAssetValueData<AssetValue>
     {
-        public AssetValue GetLastValue(int assetId)
-        {
-            return AllValues().Where(c => c.AssetId == assetId).OrderByDescending(c => c.Date).FirstOrDefault(c => c.Date <= GetDateTimeNow());
-        }
-
         internal static AssetValue GetAssetValue(int assetId, double value, DateTime dateTime)
         {
             return new AssetValue()
@@ -23,11 +18,6 @@ namespace Auctus.DataAccessMock.Asset
                 Date = dateTime,
                 Value = value
             };
-        }
-        
-        public List<AssetValue> FilterAssetValues(Dictionary<int, DateTime> assetsMap)
-        {
-            return AllValues().Where(c => assetsMap.ContainsKey(c.AssetId) && assetsMap[c.AssetId] <= c.Date).ToList();
         }
 
         private List<AssetValue> AllValues()
