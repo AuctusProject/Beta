@@ -70,11 +70,22 @@
 .recommendation-table tr:last-child td{
     border-bottom: none;
 }
-
 .table-cell-title{
+    position: relative;
+}
+.table-cell-title > span{
     font-size: 14.5px;
     font-weight: 600;
     letter-spacing: 0.4px;
+    position: absolute;
+    left: 20px; 
+    top: -1px;
+}
+
+.table-cell-title > img {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
 }
 
 .expert-rating{
