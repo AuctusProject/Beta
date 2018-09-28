@@ -106,7 +106,7 @@ namespace Auctus.Business.Asset
             var currentValues = new List<AssetCurrentValue>();
             if (assetsToUpdateLastValues.Any())
             {
-                var assetsWithAdvices = assetsToUpdateLastValues.Where(c => advices.Any(a => a.AssetId == c.Id)).Select(c => c.Id).Distinct();
+                var assetsWithAdvices = assetsToUpdateLastValues.Where(c => advices.Any(a => a.AssetId == c.Id)).Select(c => c.Id).Distinct().ToHashSet();
                 var filter = new List<AssetValueFilter>();
                 foreach(var asset in assetsWithAdvices)
                 {
@@ -119,7 +119,7 @@ namespace Auctus.Business.Asset
                 {
                     var lastAssetValue = assetValues.FirstOrDefault(c => c.AssetId == assetToUpdate.Id);
 
-                    if (assetsWithAdvices.Any(c => c == assetToUpdate.Id))
+                    if (assetsWithAdvices.Contains(assetToUpdate.Id))
                     {
                         VariantionCalculation(lastAssetValue.Value, currentDate, values.Where(c => c.AssetId == lastAssetValue.AssetId).OrderByDescending(c => c.Date),
                                 out double? variation24h, out double? variation7d, out double? variation30d);
