@@ -19,25 +19,25 @@ namespace Api.Controllers
 
         protected virtual IActionResult UpdateAssetsValues(string api)
         {
-            RunAsync(() => HandleUpdateAssetsValues(api));
+            RunAsync(() => AssetValueBusiness.UpdateCoingeckoAssetsValues());
             return Ok();
         }
 
         protected virtual IActionResult UpdateAssetsMarketcap(string api)
         {
-            RunAsync(() => HandleUpdateAssetsMarketcap(api));
+            RunAsync(() => AssetBusiness.UpdateCoingeckoAssetsMarketcap());
             return Ok();
         }
 
         protected virtual IActionResult CreateAssets(string api)
         {
-            RunAsync(async () => await HandleCreateAssetsAsync(api));
+            RunAsync(async () => await AssetBusiness.CreateCoingeckoNotIncludedAssetsAsync());
             return Ok();
         }
 
         protected virtual IActionResult UpdateAssetsIcons(string api)
         {
-            RunAsync(async () => await HandleUpdateAssetsIconsAsync(api));
+            RunAsync(async () => await AssetBusiness.UpdateCoingeckoAssetsIconsAsync());
             return Ok();
         }
 
@@ -47,45 +47,13 @@ namespace Api.Controllers
             return Ok();
         }
 
-        private void HandleUpdateAssetsValues(string api)
-        {
-            if (api == "coingecko")
-                AssetValueBusiness.UpdateCoingeckoAssetsValues();
-            else
-                AssetValueBusiness.UpdateCoinmarketcapAssetsValues();
-        }
-
-        private void HandleUpdateAssetsMarketcap(string api)
-        {
-            if (api == "coingecko")
-                AssetBusiness.UpdateCoingeckoAssetsMarketcap();
-            else
-                AssetBusiness.UpdateCoinmarketcapAssetsMarketcap();
-        }
-
-        private async Task HandleCreateAssetsAsync(string api)
-        {
-            if (api == "coingecko")
-                await AssetBusiness.CreateCoingeckoNotIncludedAssetsAsync();
-            else
-                await AssetBusiness.CreateCoinmarketcapNotIncludedAssetsAsync();
-        }
-
-        private async Task HandleUpdateAssetsIconsAsync(string api)
-        {
-            if (api == "coingecko")
-                await AssetBusiness.UpdateCoingeckoAssetsIconsAsync();
-            else
-                await AssetBusiness.UpdateCoinmarketcapAssetsIconsAsync();
-        }
-
         [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
         protected class ValidApiAttribute : ActionFilterAttribute
         {
             public override void OnActionExecuting(ActionExecutingContext context)
             {
                 var api = context.RouteData?.Values.Any() == true ? context.RouteData.Values["api"]?.ToString() : null;
-                if (!string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coinmarketcap" || api.ToLower() == "coingecko"))
+                if (!string.IsNullOrWhiteSpace(api) && api.ToLower() == "coingecko")
                     base.OnActionExecuting(context);
                 else
                     context.Result = new BadRequestResult();

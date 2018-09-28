@@ -85,27 +85,12 @@ namespace Auctus.Business.Asset
             return values;
         }
 
-        public void UpdateCoinmarketcapAssetsValues()
-        {
-            UpdateAssetsValues(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
-        }
-
-        private bool IsCoinmarketcapAsset(DomainObjects.Asset.Asset asset, string key)
-        {
-            return asset.CoinMarketCapId == Convert.ToInt32(key);
-        }
-
         public void UpdateCoingeckoAssetsValues()
         {
-            UpdateAssetsValues(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
+            UpdateAssetsValues(CoinGeckoBusiness.GetAllCoinsData());
         }
 
-        private bool IsCoingeckoAsset(DomainObjects.Asset.Asset asset, string key)
-        {
-            return asset.CoinGeckoId == key;
-        }
-
-        private void UpdateAssetsValues(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
+        private void UpdateAssetsValues(IEnumerable<AssetResult> assetResults)
         {
             var currentDate = Data.GetDateTimeNow();
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
@@ -120,7 +105,7 @@ namespace Auctus.Business.Asset
             var assetValues = new List<AssetValue>();
             foreach (var assetValue in assetResults.Where(c => c.Price.HasValue))
             {
-                var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));
+                var asset = assets.FirstOrDefault(c => c.CoinGeckoId == assetValue.Id);
                 if (asset != null)
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }

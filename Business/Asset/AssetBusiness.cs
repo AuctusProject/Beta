@@ -103,52 +103,27 @@ namespace Auctus.Business.Asset
             return ListAssets().OrderByDescending(c => c.MarketCap ?? 0).ThenBy(c => c.Name).ToList();
         }
 
-        public Auctus.DomainObjects.Asset.Asset GetById(int id)
+        public DomainObjects.Asset.Asset GetById(int id)
         {
             return ListAssets(new int[] { id }).FirstOrDefault();
         }
 
-        public async Task UpdateCoinmarketcapAssetsIconsAsync()
-        {
-            await UpdateIconsAsync(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
-        }
-
         public async Task UpdateCoingeckoAssetsIconsAsync()
         {
-            await UpdateIconsAsync(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
-        }
-
-        public async Task CreateCoinmarketcapNotIncludedAssetsAsync()
-        {
-            await CreateNotIncludedAssetsAsync(CoinMarketcapBusiness.GetAllCoinsData(), CoinGeckoBusiness.GetAllCoinsData(), false);
+            await UpdateIconsAsync(CoinGeckoBusiness.GetAllCoinsData());
         }
 
         public async Task CreateCoingeckoNotIncludedAssetsAsync()
         {
-            await CreateNotIncludedAssetsAsync(CoinGeckoBusiness.GetAllCoinsData(), CoinMarketcapBusiness.GetAllCoinsData(), true);
-        }
-
-        private bool IsCoinmarketcapAsset(DomainObjects.Asset.Asset asset, string key)
-        {
-            return asset.CoinMarketCapId == Convert.ToInt32(key);
-        }
-
-        private bool IsCoingeckoAsset(DomainObjects.Asset.Asset asset, string key)
-        {
-            return asset.CoinGeckoId == key;
-        }
-
-        public void UpdateCoinmarketcapAssetsMarketcap()
-        {
-            UpdateAssetsMarketcap(CoinMarketcapBusiness.GetAllCoinsData(), IsCoinmarketcapAsset);
+            await CreateNotIncludedAssetsAsync(CoinGeckoBusiness.GetAllCoinsData());
         }
 
         public void UpdateCoingeckoAssetsMarketcap()
         {
-            UpdateAssetsMarketcap(CoinGeckoBusiness.GetAllCoinsData(), IsCoingeckoAsset);
+            UpdateAssetsMarketcap(CoinGeckoBusiness.GetAllCoinsData());
         }
 
-        private void UpdateAssetsMarketcap(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
+        private void UpdateAssetsMarketcap(IEnumerable<AssetResult> assetResults)
         {
             List<DomainObjects.Asset.Asset> assets = null;
             List<AssetCurrentValue> assetCurrentValues = null;
@@ -161,7 +136,7 @@ namespace Auctus.Business.Asset
             var currentValuesToInsert = new List<AssetCurrentValue>();
             foreach (var assetValue in resultList)
             {
-                var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetValue.Id));
+                var asset = assets.FirstOrDefault(c => c.CoinGeckoId == assetValue.Id);
                 if (asset != null)
                 {
                     if (assetValue.MarketCap.HasValue && assetValue.MarketCap > 0)
@@ -184,37 +159,26 @@ namespace Auctus.Business.Asset
             }
         }
 
-        private async Task CreateNotIncludedAssetsAsync(IEnumerable<AssetResult> assetResults, IEnumerable<AssetResult> assetExternalResults, bool isCoingecko)
+        private async Task CreateNotIncludedAssetsAsync(IEnumerable<AssetResult> assetResults)
         {
             var assets = AssetBusiness.ListAll();
             foreach (var asset in assetResults)
             {
-                if ((isCoingecko && assets.Any(c => c.CoinGeckoId == asset.Id))
-                    || (!isCoingecko && assets.Any(c => c.CoinMarketCapId == Convert.ToInt32(asset.Id))))
-                    continue;
-
                 if (!asset.Price.HasValue)
                     continue;
 
-                var assetsSameSymbol = assets.Where(c => c.Code.ToUpper() == asset.Symbol.ToUpper() && 
-                    ((isCoingecko && string.IsNullOrEmpty(c.CoinGeckoId) && c.CoinMarketCapId.HasValue)
-                    || (!isCoingecko && !string.IsNullOrEmpty(c.CoinGeckoId) && !c.CoinMarketCapId.HasValue)));
-
-                if (ValidateSameAsset(asset, assetsSameSymbol, assetExternalResults, isCoingecko))
+                if (assets.Any(c => c.CoinGeckoId == asset.Id))
                     continue;
 
                 var newAsset = new DomainObjects.Asset.Asset()
                 {
                     Code = asset.Symbol.ToUpper(),
                     Name = asset.Name,
-                    Type = DomainObjects.Asset.AssetType.Crypto.Value,
+                    Type = AssetType.Crypto.Value,
                     MarketCap = asset.MarketCap,
-                    ShortSellingEnabled = true
+                    ShortSellingEnabled = true,
+                    CoinGeckoId = asset.Id
                 };
-                if (isCoingecko)
-                    newAsset.CoinGeckoId = asset.Id;
-                else
-                    newAsset.CoinMarketCapId = Convert.ToInt32(asset.Id);
 
                 using (var transaction = TransactionalDapperCommand)
                 {
@@ -260,12 +224,12 @@ namespace Auctus.Business.Asset
                         || Util.Util.IsEqualWithTolerance(asset.MarketCap.Value, externalAsset.MarketCap.Value, 0.1)));
         }
 
-        private async Task UpdateIconsAsync(IEnumerable<AssetResult> assetResults, Func<DomainObjects.Asset.Asset, string, bool> selectAssetFunc)
+        private async Task UpdateIconsAsync(IEnumerable<AssetResult> assetResults)
         {
             var assets = AssetBusiness.ListAll();
             foreach (var assetData in assetResults)
             {
-                var asset = assets.FirstOrDefault(c => selectAssetFunc(c, assetData.Id));
+                var asset = assets.FirstOrDefault(c => c.CoinGeckoId == assetData.Id);
                 if (asset != null)
                     await UploadAssetIconAsync(asset.Id, assetData.ImageUrl);
             }
