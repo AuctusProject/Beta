@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { NavigationService } from '../../../services/navigation.service';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'recommendation-box',
@@ -16,7 +17,10 @@ export class RecommendationBoxComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  
+  getAssetImgUrl(assetId: number) {
+    return CONFIG.assetImgUrl.replace("{id}", assetId.toString());
+  }
   goToExpertDetails(expertId: number){
     this.navigationService.goToExpertDetails(expertId);
   }

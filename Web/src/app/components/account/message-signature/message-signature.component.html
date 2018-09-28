@@ -7,7 +7,7 @@
           <span *ngIf="!hasMetamask"><fa-icon icon="circle"class="circle-icon" fxLayoutAlign="center stretch"></fa-icon></span>
           <span *ngIf="hasMetamask"><fa-icon icon="check" class="check-icon" size="2x" fxLayoutAlign="center stretch"></fa-icon></span>
           <div fxHide.lt-md="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
-            <span *ngIf="hasMetamask" [style.color]="'#616161'">1 . Metamask is instaled.</span>
+            <span *ngIf="hasMetamask" [style.color]="'#616161'">1 . Metamask is installed.</span>
             <span *ngIf="!hasMetamask" [style.color]="'white'">1 . Please install Metamask.</span>
           </div>
           <div fxHide.gt-sm="true" fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="5px">
