@@ -75,11 +75,19 @@ export class AssetDetailsComponent implements OnInit {
   }
 
   onFollowAssetClick(){
-    this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
+    this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>
+      {
+        this.asset.following = true;
+        this.asset.numberOfFollowers = this.asset.numberOfFollowers + 1;
+      });
   }
 
   onUnfollowAssetClick(){
-    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
+    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>
+      {
+        this.asset.following = false;
+        this.asset.numberOfFollowers = this.asset.numberOfFollowers - 1;
+      });
   }
 
   onRowClick(row){

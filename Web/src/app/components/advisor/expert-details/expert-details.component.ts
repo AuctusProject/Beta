@@ -112,11 +112,19 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   onFollowClick(){
-    this.advisorService.followAdvisor(this.expert.userId).subscribe(result =>this.expert.following = true);
+    this.advisorService.followAdvisor(this.expert.userId).subscribe(result =>
+      {
+        this.expert.following = true;
+        this.expert.numberOfFollowers = this.expert.numberOfFollowers + 1;
+      });
   }
 
   onUnfollowClick(){
-    this.advisorService.unfollowAdvisor(this.expert.userId).subscribe(result =>this.expert.following = false);
+    this.advisorService.unfollowAdvisor(this.expert.userId).subscribe(result =>
+      {
+        this.expert.following = false;
+        this.expert.numberOfFollowers = this.expert.numberOfFollowers - 1;
+      });
   }
 
   onFollowAssetClick(event: Event, asset: AssetResponse){
