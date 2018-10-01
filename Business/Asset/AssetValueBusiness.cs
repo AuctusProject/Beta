@@ -110,7 +110,7 @@ namespace Auctus.Business.Asset
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }
 
-            var assetValuesToInsert = assetValues.Where(c => consideredAssetsId.Contains(c.AssetId)).ToList();
+            var assetValuesToInsert = assetValues.Where(c => !consideredAssetsId.Contains(c.AssetId)).ToList();
             try
             {
                 var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
