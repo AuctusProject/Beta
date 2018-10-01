@@ -91,7 +91,7 @@ namespace Auctus.Business.Account
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
             var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
-            var activities = Task.Factory.StartNew(() => Data.FilterActivity(cutDayForActivity, ActionType.NewAucVerification, ActionType.NewLogin, ActionType.NewWallet));
+            var activities = Task.Factory.StartNew(() => Data.FilterActivity(cutDayForActivity, ActionType.NewAucVerification, ActionType.NewLogin));
             Task.WaitAll(users, requestsToBeAdvisor, advices, advisorFollowers, assetFollowers, activities);
 
             var adminsId = users.Result.Where(c => Admins?.Any(a => a == c.Email) == true).Select(c => c.Id).ToHashSet();
@@ -110,8 +110,8 @@ namespace Auctus.Business.Account
             result.TotalUsersStartedRegistrationFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && !consideredAdvisors.Any(a => a.Id == c.Id)) - result.TotalUsersConfirmedFromReferral;
             result.TotalAdvisors = consideredAdvisors.Count();
             result.TotalRequestToBeAdvisor = consideredRequestsToBeAdvisor.Any() ? consideredRequestsToBeAdvisor.Select(c => c.UserId).Distinct().Count() : 0;
-            result.TotalActiveUsers = consideredActivities.Any() ? consideredActivities.Select(c => c.UserId).Distinct().Count(c => !consideredAdvisors.Any(a => a.Id == c)) : 0;
-            result.TotalActiveAdvisors = consideredActivities.Any() ? consideredActivities.Select(c => c.UserId).Distinct().Count(c => consideredAdvisors.Any(a => a.Id == c)) : 0;
+            result.TotalActiveUsers = consideredActivities.Any() ? consideredActivities.Select(c => c.UserId).Distinct().Count(c => !consideredAdvisors.Any(a => a.Id == c) && consideredUsers.Any(u => u.Id == c)) : 0;
+            result.TotalActiveAdvisors = consideredAdvices.Any() ? consideredAdvices.Where(c => c.CreationDate >= cutDayForActivity).Count() > 0 ? consideredAdvices.Where(c => c.CreationDate >= cutDayForActivity).Select(c => c.AdvisorId).Distinct().Count() : 0 : 0;
             result.TotalWalletsInProgress = consideredUsers.Count(c => c.ReferralStatusType == ReferralStatusType.InProgress);
             result.TotalAdvices = consideredAdvices.Count();
             result.TotalAssetsAdviced = consideredAdvices .Any() ? consideredAdvices.Select(c => c.AssetId).Distinct().Count() : 0;
