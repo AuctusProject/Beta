@@ -598,6 +598,7 @@ textarea:read-only {
   cursor: pointer;
   background: transparent;
   border: none;
+  outline: none;
 }
 
 .pagination-link.is-loading,
