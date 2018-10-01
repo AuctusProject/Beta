@@ -96,12 +96,12 @@ namespace Auctus.Business.Account
 
             var adminsId = users.Result.Where(c => Admins?.Any(a => a == c.Email) == true).Select(c => c.Id).ToHashSet();
             var consideredUsers = users.Result.Where(c => !adminsId.Contains(c.Id) && (!c.ReferredId.HasValue || !adminsId.Contains(c.ReferredId.Value))).ToList();
-            var consideredAdvisors = advisors.Where(c => !adminsId.Contains(c.Id)).ToList();
-            var consideredRequestsToBeAdvisor = requestsToBeAdvisor.Result.Where(c => !adminsId.Contains(c.UserId)).ToList();
-            var consideredAdvices = advices.Result.Where(c => !adminsId.Contains(c.AdvisorId)).ToList();
-            var consideredAdvisorFollowers = advisorFollowers.Result.Where(c => !adminsId.Contains(c.UserId)).ToList();
-            var consideredAssetFollowers = assetFollowers.Result.Where(c => !adminsId.Contains(c.UserId)).ToList();
-            var consideredActivities = activities.Result.Where(c => !adminsId.Contains(c.UserId)).ToList();
+            var consideredAdvisors = advisors.Where(c => !adminsId.Contains(c.Id) && (!c.ReferredId.HasValue || !adminsId.Contains(c.ReferredId.Value))).ToList();
+            var consideredRequestsToBeAdvisor = requestsToBeAdvisor.Result.Where(c => consideredAdvisors.Any(a => a.Id == c.UserId)).ToList();
+            var consideredAdvices = advices.Result.Where(c => consideredAdvisors.Any(a => a.Id == c.AdvisorId)).ToList();
+            var consideredAdvisorFollowers = advisorFollowers.Result.Where(c => consideredUsers.Any(u => u.Id == c.UserId)).ToList();
+            var consideredAssetFollowers = assetFollowers.Result.Where(c => consideredUsers.Any(u => u.Id == c.UserId)).ToList();
+            var consideredActivities = activities.Result.Where(c => consideredUsers.Any(u => u.Id == c.UserId)).ToList();
 
             var result = new DashboardResponse();
             result.TotalUsersConfirmed = consideredUsers.Count(c => c.Wallets.Any() && !consideredAdvisors.Any(a => a.Id == c.Id));
