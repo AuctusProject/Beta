@@ -104,10 +104,10 @@ namespace Auctus.Business.Account
             var consideredActivities = activities.Result.Where(c => consideredUsers.Any(u => u.Id == c.UserId)).ToList();
 
             var result = new DashboardResponse();
-            result.TotalUsersConfirmed = consideredUsers.Count(c => c.Wallets.Any() && !consideredAdvisors.Any(a => a.Id == c.Id));
-            result.TotalUsersConfirmedFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && c.Wallets.Any() && !consideredAdvisors.Any(a => a.Id == c.Id));
-            result.TotalUsersStartedRegistration = consideredUsers.Count(c => !consideredAdvisors.Any(a => a.Id == c.Id)) - result.TotalUsersConfirmed;
-            result.TotalUsersStartedRegistrationFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && !consideredAdvisors.Any(a => a.Id == c.Id)) - result.TotalUsersConfirmedFromReferral;
+            result.TotalUsersConfirmed = consideredUsers.Count(c => c.Wallets.Any());
+            result.TotalUsersConfirmedFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && c.Wallets.Any());
+            result.TotalUsersStartedRegistration = consideredUsers.Count(c => !consideredAdvisors.Any(a => a.Id == c.Id) && !c.Wallets.Any());
+            result.TotalUsersStartedRegistrationFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && !consideredAdvisors.Any(a => a.Id == c.Id) && !c.Wallets.Any());
             result.TotalAdvisors = consideredAdvisors.Count();
             result.TotalRequestToBeAdvisor = consideredRequestsToBeAdvisor.Any() ? consideredRequestsToBeAdvisor.Select(c => c.UserId).Distinct().Count() : 0;
             result.TotalActiveUsers = consideredActivities.Any() ? consideredActivities.Select(c => c.UserId).Distinct().Count(c => !consideredAdvisors.Any(a => a.Id == c) && consideredUsers.Any(u => u.Id == c && u.Wallets.Any())) : 0;
