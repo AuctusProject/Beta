@@ -110,7 +110,7 @@ namespace Auctus.Business.Asset
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
             }
 
-            var assetValuesToInsert = assetValues.Where(c => !consideredAssetsId.Contains(c.AssetId)).ToList();
+            var assetValuesToInsert = assetValues.Where(c => consideredAssetsId.Contains(c.AssetId)).ToList();
             try
             {
                 var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
@@ -143,7 +143,7 @@ namespace Auctus.Business.Asset
                             }
                         }
                     }
-                    values.AddRange(Filter(filter));
+                    values.AddRange(FilterAssetValues(filter));
 
                     foreach (var assetToUpdate in assetsToUpdateLastValues)
                     {
@@ -185,12 +185,25 @@ namespace Auctus.Business.Asset
 
         private async Task InsertManyAssetValuesAsync(IEnumerable<AssetValue> values)
         {
-            var timesToInsert = Math.Ceiling(values.Count() / 50.0);
+            var timesToInsert = Math.Ceiling(values.Count() / 90.0);
             for (var i = 0; i < timesToInsert; ++i)
             {
-                await Data.InsertManyAsync(values.Skip(i * 50).Take(50));
+                await Data.InsertManyAsync(values.Skip(i * 90).Take(90));
                 await Task.Delay(2000);
             }
+        }
+
+        private List<AssetValue> FilterAssetValues(List<AssetValueFilter> filter)
+        {
+            var result = new List<AssetValue>();
+            var timesToQuery = Math.Ceiling(filter.Count / 40.0);
+            for (var i = 0; i < timesToQuery; ++i)
+            {
+                result.AddRange(Filter(filter.Skip(i * 40).Take(40)));
+                Task.Delay(1000);
+            }
+
+            return result;
         }
 
         public void VariantionCalculation(double currentValue, DateTime currentDate, IEnumerable<AssetValue> values, 
