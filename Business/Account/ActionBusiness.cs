@@ -110,7 +110,7 @@ namespace Auctus.Business.Account
             result.TotalUsersStartedRegistrationFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && !consideredAdvisors.Any(a => a.Id == c.Id)) - result.TotalUsersConfirmedFromReferral;
             result.TotalAdvisors = consideredAdvisors.Count();
             result.TotalRequestToBeAdvisor = consideredRequestsToBeAdvisor.Any() ? consideredRequestsToBeAdvisor.Select(c => c.UserId).Distinct().Count() : 0;
-            result.TotalActiveUsers = consideredActivities.Any() ? consideredActivities.Select(c => c.UserId).Distinct().Count(c => !consideredAdvisors.Any(a => a.Id == c) && consideredUsers.Any(u => u.Id == c)) : 0;
+            result.TotalActiveUsers = consideredActivities.Any() ? consideredActivities.Select(c => c.UserId).Distinct().Count(c => !consideredAdvisors.Any(a => a.Id == c) && consideredUsers.Any(u => u.Id == c && u.Wallets.Any())) : 0;
             result.TotalActiveAdvisors = consideredAdvices.Any() ? consideredAdvices.Where(c => c.CreationDate >= cutDayForActivity).Count() > 0 ? consideredAdvices.Where(c => c.CreationDate >= cutDayForActivity).Select(c => c.AdvisorId).Distinct().Count() : 0 : 0;
             result.TotalWalletsInProgress = consideredUsers.Count(c => c.ReferralStatusType == ReferralStatusType.InProgress);
             result.TotalAdvices = consideredAdvices.Count();
