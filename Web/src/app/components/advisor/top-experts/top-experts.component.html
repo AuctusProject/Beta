@@ -16,10 +16,10 @@
     <div class="blue-button action-button" *ngIf="showAdvisorButton" (click)="onNewAdviceClick()">NEW RATING</div>
     <div class="white-button action-button" *ngIf="showAdvisorButton" (click)="onEditProfileClick()">EDIT PROFILE</div>
   </div>
-  <div class="advisors-list" fxHide.lt-md>
+  <div class="advisors-list" [fxHide.lt-md]="resultsLimit">
     <advisor-card *ngFor="let expert of experts" class="advisor-card" [advisor]="expert"></advisor-card>
   </div>
-  <div class="advisors-list" fxHide.gt-sm>
+  <div class="advisors-list" fxHide.gt-sm [fxHide.lt-md]="!resultsLimit">
     <owl-carousel *ngIf="experts && experts.length > 0"
       [options]="{items: 1, dots: true, navigation: false}"
       [carouselClasses]="['owl-theme', 'row', 'sliding']">
