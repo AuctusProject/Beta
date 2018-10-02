@@ -11,6 +11,7 @@ import { ChangePasswordComponent } from '../components/account/change-password/c
 import { ReferralDetailsComponent } from '../components/account/referral-details/referral-details.component';
 import { AdvisorEditComponent } from '../components/advisor/advisor-edit/advisor-edit.component';
 import { NewAdviceComponent } from '../components/advisor/new-advice/new-advice.component';
+import { InviteFriendComponent } from '../components/account/invite-friend/invite-friend.component';
 
 @Injectable()
 export class ModalService {
@@ -67,5 +68,9 @@ export class ModalService {
 
   public setNewAdvice(assetId?: number): MatDialogRef<FullscreenModalComponent, any> {
     return this.setModal(NewAdviceComponent, { assetId: assetId });
+  }
+
+  public setInviteFriend(): MatDialogRef<FullscreenModalComponent, any> {
+    return this.setModal(InviteFriendComponent);
   }
 }

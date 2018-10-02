@@ -4,4 +4,7 @@
 </ng-http-loader>
 <simple-notifications [options]="notificationOptions"></simple-notifications>
 <router-outlet></router-outlet>
+<button mat-fab color="primary" (click)="openSocialMediaModal()">
+    <mat-icon aria-label="Share with friends">share</mat-icon>
+</button>
 <footer *ngIf="!isHotSite()" class="global-container-min"></footer>

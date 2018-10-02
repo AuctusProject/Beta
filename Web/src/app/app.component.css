@@ -4,3 +4,16 @@
     background-color: unset !important;
     display: unset !important;
   }
+
+  .mat-fab {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  @media(min-width: 1024px) {
+     .mat-fab {
+      bottom: 1.5rem;
+      right: 1.5rem;
+    }
+  }
