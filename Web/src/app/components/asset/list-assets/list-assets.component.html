@@ -6,7 +6,7 @@
         <div class="section-subtitle">
             The most popular Cryptocurrencies. Follow your favorite coins and see what analysts are saying about them
         </div>
-        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center top" fxLayoutGap="16px">
+        <div fxLayout="row" fxLayout.xs="column" fxHide.lt-md fxLayoutAlign="center top" fxLayoutGap="16px">
             <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
             <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RATING</div>
         </div>
