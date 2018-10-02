@@ -20,7 +20,6 @@ namespace Auctus.Business.Advisor
     {
         public AdviceBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-
         public Advice GetLastAdviceForAssetByAdvisor(int advisorId, int assetId)
         {
             return Data.GetLastAdviceForAssetByAdvisor(assetId, advisorId);
@@ -122,89 +121,16 @@ namespace Auctus.Business.Advisor
             return advices;
         }
 
-        public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(int? top, int? lastAdviceId)
+        public IEnumerable<Advice> ListLastAdvicesForUserWithPagination(IEnumerable<int> assetsId, int? top, int? lastAdviceId)
         {
-            var followingAdvisorsIds = Task.Factory.StartNew(() => AdvisorBusiness.ListFollowingAdvisors().Select(c => c.Id));
-            var followingAssetsIds = Task.Factory.StartNew(() => AssetBusiness.ListFollowingAssets().Select(c => c.Id));
-            Task.WaitAll(followingAdvisorsIds, followingAssetsIds);
-            return Data.ListLastAdvicesWithPagination(followingAdvisorsIds.Result, followingAssetsIds.Result, top, lastAdviceId);
-        }
-
-        public IEnumerable<FeedResponse> ListFeed(int? top, int? lastAdviceId)
-        {
-            var advicesForFeed = Task.Factory.StartNew(() => ListLastAdvicesForUserWithPagination(top, lastAdviceId));
-            
-            return FillFeedListFromAdvicesAndUser(advicesForFeed, GetValidUser(), lastAdviceId);
-        }
-
-        private IEnumerable<FeedResponse> FillFeedListFromAdvicesAndUser(Task<IEnumerable<Advice>> listAdvicesTask, User loggedUser, int? lastAdviceId)
-        {
-            string advisorsCacheKey = "FeedAdvisorsResult" + LoggedEmail;
-            string assetsCacheKey = "FeedAssetsResult" + LoggedEmail;
-            var advisorsResult = MemoryCache.Get<List<AdvisorResponse>>(advisorsCacheKey);
-            var assetsResult = MemoryCache.Get<List<AssetResponse>>(assetsCacheKey);
-            if (advisorsResult == null || assetsResult == null || !lastAdviceId.HasValue)
-            {
-                var advisors = AdvisorBusiness.GetAdvisors();
-                Task<List<Advice>> advices = null;
-                Task<List<FollowAdvisor>> advisorFollowers = null;
-                if (advisors.Any())
-                {
-                    advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-                    advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
-                }
-                var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
-
-                if (advisors.Any())
-                    Task.WaitAll(advices, advisorFollowers, assetFollowers);
-                else
-                    Task.WaitAll(assetFollowers);
-
-                AdvisorBusiness.Calculation(CalculationMode.Feed, out advisorsResult, out assetsResult, loggedUser, advices?.Result, advisors, advisorFollowers?.Result, assetFollowers.Result);
-
-                MemoryCache.Set(advisorsCacheKey, advisorsResult, 10);
-                MemoryCache.Set(assetsCacheKey, assetsResult, 10);
-            }
-
-            Task.WaitAll(listAdvicesTask);
-            return ConvertToFeedResponse(listAdvicesTask.Result, advisorsResult, assetsResult);
-        }
-
-        private static List<FeedResponse> ConvertToFeedResponse(IEnumerable<Advice> advices, List<AdvisorResponse> advisorsResult, List<AssetResponse> assetResult)
-        {
-            var feedResult = new List<FeedResponse>();
-
-            foreach (var advice in advices)
-            {
-                var advisorResponse = advisorsResult.First(c => c.UserId == advice.AdvisorId);
-                var assetResponse = assetResult.First(c => c.AssetId == advice.AssetId);
-                feedResult.Add(new FeedResponse()
-                {
-                    AdviceId = advice.Id,
-                    AdviceType = advice.AdviceType.Value,
-                    AdvisorId = advice.AdvisorId,
-                    AssetId = advice.AssetId,
-                    AdviceDate = advice.CreationDate,
-                    AdvisorName = advisorResponse.Name,
-                    AdvisorUrlGuid = advisorResponse.UrlGuid.ToString(),
-                    AdvisorRanking = advisorResponse.Ranking,
-                    AdvisorRating = advisorResponse.Rating,
-                    FollowingAdvisor = advisorResponse.Following,
-                    AssetCode = assetResponse.Code,
-                    AssetName = assetResponse.Name,
-                    AssetMode = assetResponse.Mode,
-                    FollowingAsset = assetResponse.Following == true,
-                    AssetValueAtAdviceTime = advice.AssetValue
-                });
-            }
-            return feedResult.OrderByDescending(c => c.AdviceDate).ToList();
+            var followingAdvisorsIds = AdvisorBusiness.ListFollowingAdvisors().Select(c => c.Id).Distinct();
+            return Data.ListLastAdvicesWithPagination(followingAdvisorsIds, assetsId, top, lastAdviceId);
         }
 
         public IEnumerable<FeedResponse> ListLastAdvicesForAllTypes(int? numberOfAdvicesOfEachType)
         {
             var advicesForFeed = Task.Factory.StartNew(() => Data.ListLastAdvicesForAllTypes(numberOfAdvicesOfEachType));
-
-            return FillFeedListFromAdvicesAndUser(advicesForFeed, null, null);
+            return UserBusiness.FillFeedList(advicesForFeed, null, null, null, null);
         }
 
         public IEnumerable<int> ListTrendingAdvisedAssets(int top = 3)

@@ -8,5 +8,9 @@ namespace Auctus.DataAccessMock.Asset
 {
     public class AgencyData : BaseData<Agency>, IAgencyData<Agency>
     {
+        public List<Agency> ListAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

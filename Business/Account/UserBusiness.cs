@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using static Auctus.Business.Advisor.AdvisorBusiness;
 
 namespace Auctus.Business.Account
 {
@@ -642,6 +643,172 @@ namespace Auctus.Business.Account
         public void ClearUserCache(string email)
         {
             MemoryCache.Set<User>(GetUserCacheKey(email), null);
+        }
+
+        public IEnumerable<FeedResponse> ListFeed(int? top, int? lastAdviceId, int? lastReportId)
+        {
+            var followingAssetsIds = AssetBusiness.ListFollowingAssets().Select(c => c.Id).Distinct();
+            var advicesForFeed = Task.Factory.StartNew(() => AdviceBusiness.ListLastAdvicesForUserWithPagination(followingAssetsIds, top, lastAdviceId));
+            var reportForFeed = Task.Factory.StartNew(() => ReportBusiness.List(followingAssetsIds, top, lastReportId));
+            return FillFeedList(advicesForFeed, reportForFeed, GetValidUser(), lastAdviceId, lastReportId);
+        }
+
+        public IEnumerable<FeedResponse> FillFeedList(Task<IEnumerable<Advice>> listAdvicesTask, Task<List<Report>> listReportsTask,
+            User loggedUser, int? lastAdviceId, int? lastReportId)
+        {
+            string advisorsCacheKey = "FeedAdvisorsResult" + LoggedEmail;
+            string assetsCacheKey = "FeedAssetsResult" + LoggedEmail;
+            var advisorsResult = MemoryCache.Get<List<AdvisorResponse>>(advisorsCacheKey);
+            var assetsResult = MemoryCache.Get<List<AssetResponse>>(assetsCacheKey);
+            if (advisorsResult == null || assetsResult == null || !lastAdviceId.HasValue || !lastReportId.HasValue)
+            {
+                var advisors = AdvisorBusiness.GetAdvisors();
+                Task<List<Advice>> advices = null;
+                Task<List<FollowAdvisor>> advisorFollowers = null;
+                if (advisors.Any())
+                {
+                    advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
+                    advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
+                }
+                var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
+
+                if (advisors.Any())
+                    Task.WaitAll(advices, advisorFollowers, assetFollowers);
+                else
+                    Task.WaitAll(assetFollowers);
+
+                AdvisorBusiness.Calculation(CalculationMode.Feed, out advisorsResult, out assetsResult, loggedUser, advices?.Result, advisors, advisorFollowers?.Result, assetFollowers.Result);
+
+                MemoryCache.Set(advisorsCacheKey, advisorsResult, 10);
+                MemoryCache.Set(assetsCacheKey, assetsResult, 10);
+            }
+
+            IEnumerable<Advice> feedAdvices = null;
+            IEnumerable<Report> feedReport = null;
+            if (listAdvicesTask != null && listReportsTask != null)
+            {
+                Task.WaitAll(listAdvicesTask, listReportsTask);
+                feedAdvices = listAdvicesTask.Result;
+                feedReport = listReportsTask.Result;
+            }
+            else if (listAdvicesTask != null)
+            {
+                Task.WaitAll(listAdvicesTask);
+                feedAdvices = listAdvicesTask.Result;
+            }
+            else if (listReportsTask != null)
+            {
+                Task.WaitAll(listReportsTask);
+                feedReport = listReportsTask.Result;
+            }
+            return ConvertToFeedResponse(assetsResult, advisorsResult, feedAdvices, feedReport);
+        }
+
+        private List<FeedResponse> ConvertToFeedResponse(List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, 
+            IEnumerable<Advice> advices, IEnumerable<Report> reports)
+        {
+            var feedResult = new List<FeedResponse>();
+            feedResult.AddRange(ConvertAdviceToFeedResponse(assetResult, advisorsResult, advices));
+            feedResult.AddRange(ConvertReportToFeedResponse(assetResult, reports));
+            return feedResult.OrderByDescending(c => c.Date).ToList();
+        }
+
+        private List<FeedResponse> ConvertAdviceToFeedResponse(List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, IEnumerable<Advice> advices)
+        {
+            var feedResult = new List<FeedResponse>();
+            if (advices != null)
+            {
+                foreach (var advice in advices)
+                {
+                    var advisorResponse = advisorsResult.First(c => c.UserId == advice.AdvisorId);
+                    var assetResponse = assetResult.First(c => c.AssetId == advice.AssetId);
+                    feedResult.Add(new FeedResponse()
+                    {
+                        AssetId = assetResponse.AssetId,
+                        AssetCode = assetResponse.Code,
+                        AssetName = assetResponse.Name,
+                        AssetMode = assetResponse.Mode,
+                        FollowingAsset = assetResponse.Following == true,
+                        IsAdvice = true,
+                        Date = advice.CreationDate,
+                        Advice = new FeedResponse.AdviceResponse()
+                        {
+                            AdviceId = advice.Id,
+                            AdviceType = advice.Type,
+                            AssetValueAtAdviceTime = advice.AssetValue,
+                            AdvisorId = advisorResponse.UserId,
+                            AdvisorName = advisorResponse.Name,
+                            AdvisorUrlGuid = advisorResponse.UrlGuid,
+                            AdvisorRanking = advisorResponse.Ranking,
+                            AdvisorRating = advisorResponse.Rating,
+                            FollowingAdvisor = advisorResponse.Following
+                        }
+                    });
+                }
+            }
+            return feedResult;
+        }
+
+        private List<FeedResponse> ConvertReportToFeedResponse(List<AssetResponse> assetResult, IEnumerable<Report> reports)
+        {
+            var feedResult = new List<FeedResponse>();
+            if (reports != null)
+            {
+                foreach (var report in reports)
+                {
+                    string code, name;
+                    bool following = true;
+                    int mode = AssetModeType.Neutral.Value;
+
+                    var assetResponse = assetResult.FirstOrDefault(c => c.AssetId == report.AssetId);
+                    if (assetResponse == null)
+                    {
+                        var asset = AssetBusiness.GetById(report.AssetId);
+                        code = asset.Code;
+                        name = asset.Name;
+                    }
+                    else
+                    {
+                        code = assetResponse.Code;
+                        name = assetResponse.Name;
+                        mode = assetResponse.Mode;
+                        following = assetResponse.Following == true;
+                    }
+
+                    feedResult.Add(new FeedResponse()
+                    {
+                        AssetId = report.AssetId,
+                        AssetCode = code,
+                        AssetName = name,
+                        AssetMode = mode,
+                        FollowingAsset = following,
+                        IsAdvice = false,
+                        Date = report.ReportDate,
+                        Report = new ReportResponse()
+                        {
+                            ReportId = report.Id,
+                            ReportDate = report.ReportDate,
+                            AssetId = report.AssetId,
+                            AgencyId = report.AgencyId,
+                            AgencyName = report.Agency.Name,
+                            AgencyWebSite = report.Agency.WebSite,
+                            Rate = ConvertToFeedRate(report.AgencyRating),
+                            RateOptions = report.Agency.AgencyRating.Select(c => ConvertToFeedRate(c)).ToList()
+                        }
+                    });
+                }
+            }
+            return feedResult;
+        }
+
+        private ReportResponse.RatingDetail ConvertToFeedRate(AgencyRating agencyRating)
+        {
+            return new ReportResponse.RatingDetail()
+            {
+                Rate = agencyRating.Rate,
+                HexaColor = agencyRating.HexaColor,
+                Description = agencyRating.Description
+            };
         }
     }
 }

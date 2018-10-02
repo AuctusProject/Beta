@@ -20,5 +20,8 @@ namespace Auctus.DomainObjects.Asset
         public DateTime CreationDate { get; set; }
         [DapperType(System.Data.DbType.DateTime)]
         public DateTime ReportDate { get; set; }
+
+        public Agency Agency { get; set; }
+        public AgencyRating AgencyRating { get; set; }
     }
 }

@@ -16,5 +16,7 @@ namespace Auctus.DomainObjects.Asset
         public string Rate { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]
         public string Description { get; set; }
+        [DapperType(System.Data.DbType.AnsiStringFixedLength)]
+        public string HexaColor { get; set; }
     }
 }

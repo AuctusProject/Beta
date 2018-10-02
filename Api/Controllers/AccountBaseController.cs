@@ -104,9 +104,9 @@ namespace Api.Controllers
             return Ok(new { logged = true, jwt = GenerateToken(loginResponse.Email), data = loginResponse });
         }
 
-        protected virtual IActionResult ListAdvices(int? top, int? lastAdviceId)
+        protected virtual IActionResult ListFeed(int? top, int? lastAdviceId, int? lastReportId)
         {
-            return Ok(AdviceBusiness.ListFeed(top, lastAdviceId));
+            return Ok(UserBusiness.ListFeed(top, lastAdviceId, lastReportId));
         }
 
         protected virtual IActionResult SetReferralCode(SetReferralRequest setReferralRequest)

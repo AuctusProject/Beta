@@ -116,13 +116,13 @@ namespace Api.Controllers
             return base.ConfirmEmail(confirmEmailRequest);
         }
 
-        [Route("me/advices")]
+        [Route("me/feed")]
         [HttpGet]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListAdvices([FromQuery]int? top, [FromQuery]int? lastAdviceId)
+        public new IActionResult ListFeed([FromQuery]int? top, [FromQuery]int? lastAdviceId, [FromQuery]int? lastReportId)
         {
-            return base.ListAdvices(top, lastAdviceId);
+            return base.ListFeed(top, lastAdviceId, lastReportId);
         }
 
         [Route("me/referrals")]
