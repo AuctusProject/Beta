@@ -117,8 +117,6 @@ namespace Auctus.Business
                 user = UserBusiness.GetByEmail(LoggedEmail);
                 if (user == null)
                     throw new NotFoundException("User cannot be found.");
-                if (!user.ConfirmationDate.HasValue)
-                    throw new BusinessException("Email was not confirmed.");
 
                 if (!UserBusiness.IsValidAdvisor(user))
                 {

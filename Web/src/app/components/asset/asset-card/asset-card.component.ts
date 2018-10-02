@@ -31,12 +31,22 @@ export class AssetCardComponent implements OnInit {
   }
   
   onFollowClick(event: Event){
-    this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>this.asset.following = true);
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>
+        {
+          this.asset.following = true;
+          this.asset.numberOfFollowers = this.asset.numberOfFollowers + 1;
+        });
+    }
     event.stopPropagation();
   }
   
   onUnfollowClick(event: Event){
-    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>this.asset.following = false);
+    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>
+      {
+        this.asset.following = false;
+        this.asset.numberOfFollowers = this.asset.numberOfFollowers - 1;
+      });
     event.stopPropagation();
   }
 

@@ -161,4 +161,17 @@ export class AccountService {
   postEarlyAccessRequest(earlyAccessRequest: EarlyAccessRequest) : Observable<void> {
     return this.httpService.post(this.earlyAccessUrl, earlyAccessRequest)
   }
+
+  hasInvestmentToCallLoggedAction():boolean{
+    let loginData = this.getLoginData();
+    if(!loginData){
+      this.navigationService.goToLogin();
+      return false;
+    }
+    else if (!!loginData && (!loginData.hasInvestment && !loginData.isAdvisor)) {
+      this.navigationService.goToWalletLogin();
+      return false;
+    }
+    return true;
+  }
 }

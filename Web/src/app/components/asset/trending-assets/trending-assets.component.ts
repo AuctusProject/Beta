@@ -34,24 +34,14 @@ export class TrendingAssetsComponent implements OnInit {
     private assetService: AssetService, private modalService: ModalService) { }
 
   ngOnInit() {
-    if(this.canView()){
-      this.assetService.getTrendingAssets().subscribe(result => {
-        if(result!= null && result.length > 3){
-          this.assets = result.slice(0,3);
-        }
-        else{
-          this.assets = result;
-        }
-      });
-    }
-    else{
-      this.assets = this.dummyData;
-    }
-  }
-
-  canView() {
-    let loginData = this.accountService.getLoginData();
-    return !!loginData && loginData.hasInvestment;
+    this.assetService.getTrendingAssets().subscribe(result => {
+      if(result!= null && result.length > 3){
+        this.assets = result.slice(0,3);
+      }
+      else{
+        this.assets = result;
+      }
+    });
   }
 
   onActionClick() {

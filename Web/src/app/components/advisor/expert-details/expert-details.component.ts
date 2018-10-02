@@ -112,11 +112,13 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   onFollowClick(){
-    this.advisorService.followAdvisor(this.expert.userId).subscribe(result =>
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.advisorService.followAdvisor(this.expert.userId).subscribe(result =>
       {
         this.expert.following = true;
         this.expert.numberOfFollowers = this.expert.numberOfFollowers + 1;
       });
+    }
   }
 
   onUnfollowClick(){
@@ -128,12 +130,22 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   onFollowAssetClick(event: Event, asset: AssetResponse){
-    this.assetService.followAsset(asset.assetId).subscribe(result =>asset.following = true);
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.assetService.followAsset(asset.assetId).subscribe(result =>
+      {
+        asset.following = true;
+        asset.numberOfFollowers = asset.numberOfFollowers + 1;
+      });
+    }
     event.stopPropagation();
   }
 
   onUnfollowAssetClick(event: Event, asset: AssetResponse){
-    this.assetService.unfollowAsset(asset.assetId).subscribe(result =>asset.following = false);
+    this.assetService.unfollowAsset(asset.assetId).subscribe(result =>
+      {
+        asset.following = false;
+        asset.numberOfFollowers = asset.numberOfFollowers - 1;
+      });
     event.stopPropagation();
   }
 

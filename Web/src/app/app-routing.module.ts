@@ -20,9 +20,9 @@ const routes: Routes = [
     { path: 'feed', component: AdvicesComponent, canActivate: [AuthRedirect],  },
     { path: 'wallet-login', component: MessageSignatureComponent, canActivate: [AuthRedirect] },
     { path: 'top-experts', component: TopExpertsComponent },
-    { path: 'expert-details/:id', component: ExpertDetailsComponent, canActivate:[AuthRedirect] },
-    { path: 'top-assets', component: ListAssetsComponent, canActivate:[AuthRedirect] },
-    { path: 'asset-details/:id', component: AssetDetailsComponent, canActivate:[AuthRedirect] },
+    { path: 'expert-details/:id', component: ExpertDetailsComponent },
+    { path: 'top-assets', component: ListAssetsComponent },
+    { path: 'asset-details/:id', component: AssetDetailsComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
     { path: '**', redirectTo: ''  }
