@@ -784,31 +784,11 @@ namespace Auctus.Business.Account
                         FollowingAsset = following,
                         IsAdvice = false,
                         Date = report.ReportDate,
-                        Report = new ReportResponse()
-                        {
-                            ReportId = report.Id,
-                            ReportDate = report.ReportDate,
-                            AssetId = report.AssetId,
-                            AgencyId = report.AgencyId,
-                            AgencyName = report.Agency.Name,
-                            AgencyWebSite = report.Agency.WebSite,
-                            Rate = ConvertToFeedRate(report.AgencyRating),
-                            RateOptions = report.Agency.AgencyRating.Select(c => ConvertToFeedRate(c)).ToList()
-                        }
+                        Report = ReportBusiness.ConvertToReportResponse(report)
                     });
                 }
             }
             return feedResult;
-        }
-
-        private ReportResponse.RatingDetail ConvertToFeedRate(AgencyRating agencyRating)
-        {
-            return new ReportResponse.RatingDetail()
-            {
-                Rate = agencyRating.Rate,
-                HexaColor = agencyRating.HexaColor,
-                Description = agencyRating.Description
-            };
         }
     }
 }

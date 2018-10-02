@@ -10,7 +10,7 @@ namespace Auctus.DataAccessMock.Asset
     {
         public List<Report> ListWithPagination(IEnumerable<int> assetsId, int? top, int? lastReportId)
         {
-            throw new NotImplementedException();
+            return new List<Report>();
         }
     }
 }

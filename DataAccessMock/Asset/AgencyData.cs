@@ -10,7 +10,7 @@ namespace Auctus.DataAccessMock.Asset
     {
         public List<Agency> ListAll()
         {
-            throw new NotImplementedException();
+            return new List<Agency>();
         }
     }
 }
