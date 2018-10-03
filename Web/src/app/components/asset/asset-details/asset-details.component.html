@@ -26,7 +26,7 @@
             </div>
           </div>
           <div fxLayout="row" fxLayoutGap="36px">
-            <div class="asset-price">
+            <div fxHide.lt-sm class="asset-price">
               {{asset.lastValue | valueDisplay}}
             </div>
             <div fxLayout="column">
@@ -41,6 +41,9 @@
               <percentage-display [value]="asset.variation30d"></percentage-display>
               Last 30 days
             </div>
+          </div>
+          <div fxHide.gt-xs class="asset-price">
+            {{asset.lastValue | valueDisplay}}
           </div>
           <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowAssetClick()">
             Unfollow

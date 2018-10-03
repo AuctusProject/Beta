@@ -1,5 +1,5 @@
 <div class="global-container">
-    <table mat-table [dataSource]="reports" class="assets-table">
+    <table *ngIf="reports && reports.length > 0" mat-table [dataSource]="reports" class="assets-table">
       <ng-container matColumnDef="agencyName">
         <th mat-header-cell *matHeaderCellDef> Agency </th>
         <td mat-cell *matCellDef="let report"> 
@@ -8,18 +8,20 @@
       </ng-container>
     
       <ng-container matColumnDef="score">
-        <th mat-header-cell *matHeaderCellDef> Score </th>
+        <th mat-header-cell *matHeaderCellDef><span > Score </span></th>
         <td mat-cell *matCellDef="let report"> 
           <div class="expert-rating">
             <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="report.score" [title]="report.score | number: '1.2-2'"></bar-rating>
           </div>
+          <span fxHide.gt-xs>Rating: {{report.rate.rate}}</span>
+          <div fxHide.gt-xs [title]="report.reportDate | date: 'medium'">{{report.reportDate | timeAgo}}</div>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="rating">
-        <th mat-header-cell *matHeaderCellDef> Rating </th>
+        <th mat-header-cell *matHeaderCellDef><span fxHide.lt-sm> Rating </span> </th>
         <td mat-cell *matCellDef="let report">  
-          {{report.rate.rate}}
+          <span fxHide.lt-sm>{{report.rate.rate}}</span>
         </td>
       </ng-container>
 
@@ -40,6 +42,9 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" class="element-row"></tr>
     </table>
+    <div *ngIf="!reports || reports.length == 0">
+      There's no agency rating of this asset.
+    </div>
     <div *ngIf="hasMoreReports()" fxLayoutAlign="center center">
       <button class="pagination-link" (click)="loadMoreReports()">
         LOAD MORE
