@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./advice-card.component.css']
 })
 export class AdviceCardComponent implements OnInit {
-  @Input() advice : FeedResponse;
+  @Input() adviceFeed : FeedResponse;
   promise : Subscription;
   
   constructor(private assetService : AssetService,
@@ -22,36 +22,36 @@ export class AdviceCardComponent implements OnInit {
   }
   
   getAdvisorImgUrl(){
-    return CONFIG.profileImgUrl.replace("{id}", this.advice.advisorUrlGuid);
+    return CONFIG.profileImgUrl.replace("{id}", this.adviceFeed.advice.advisorUrlGuid);
   }
 
   getAssetImgUrl(){
-    return CONFIG.assetImgUrl.replace("{id}", this.advice.assetId.toString());
+    return CONFIG.assetImgUrl.replace("{id}", this.adviceFeed.assetId.toString());
   }
   
   onFollowClick(event: Event){
-    this.promise = this.assetService.followAsset(this.advice.assetId).subscribe(result =>this.advice.followingAsset = true);
+    this.promise = this.assetService.followAsset(this.adviceFeed.assetId).subscribe(result =>this.adviceFeed.followingAsset = true);
     event.stopPropagation();
   }
   
   onUnfollowClick(event: Event){
-    this.promise = this.assetService.unfollowAsset(this.advice.assetId).subscribe(result =>this.advice.followingAsset = false);
+    this.promise = this.assetService.unfollowAsset(this.adviceFeed.assetId).subscribe(result =>this.adviceFeed.followingAsset = false);
     event.stopPropagation();
   }
 
   getAdviceTypeDescription(){
-    return Util.GetRecommendationTypeDescription(this.advice.adviceType);
+    return Util.GetRecommendationTypeDescription(this.adviceFeed.advice.adviceType);
   }
 
   getAdviceTypeColor(){
-    return Util.GetRecommendationTypeColor(this.advice.adviceType);
+    return Util.GetRecommendationTypeColor(this.adviceFeed.advice.adviceType);
   }
 
   goToAssetDetails(){
-    this.navigationService.goToAssetDetails(this.advice.assetId);
+    this.navigationService.goToAssetDetails(this.adviceFeed.assetId);
   }
   
   goToExpertDetails(){
-    this.navigationService.goToExpertDetails(this.advice.advisorId);
+    this.navigationService.goToExpertDetails(this.adviceFeed.advice.advisorId);
   }
 }
