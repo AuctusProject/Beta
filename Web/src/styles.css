@@ -262,6 +262,8 @@ div.is-loading .btn-spinner {
 
 a {
   cursor: pointer;
+  color: unset;
+  text-decoration: none;
 }
 
 .pointer {

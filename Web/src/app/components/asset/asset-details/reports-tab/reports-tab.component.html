@@ -1,0 +1,48 @@
+<div class="global-container">
+    <table mat-table [dataSource]="reports" class="assets-table">
+      <ng-container matColumnDef="agencyName">
+        <th mat-header-cell *matHeaderCellDef> Agency </th>
+        <td mat-cell *matCellDef="let report"> 
+          <a [href]="report.agencyWebSite" target="_blank"><span class="truncate">{{report.agencyName}}</span></a>
+        </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="score">
+        <th mat-header-cell *matHeaderCellDef> Score </th>
+        <td mat-cell *matCellDef="let report"> 
+          <div class="expert-rating">
+            <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="" [title]="3.5 | number: '1.2-2'"></bar-rating>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef> Rating </th>
+        <td mat-cell *matCellDef="let report">  
+          {{report.rate.rate}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let report">
+          <div [title]="report.reportDate | date: 'medium'">{{report.reportDate | timeAgo}}</div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="download">
+        <th mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let report">
+          <a [href]="getReportUrl(report)" target="_blank"><fa-icon icon="download"></fa-icon>&nbsp;Download</a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" class="element-row"></tr>
+    </table>
+    <div *ngIf="hasMoreReports()" fxLayoutAlign="center center">
+      <button class="pagination-link" (click)="loadMoreReports()">
+        LOAD MORE
+      </button>
+    </div>
+  </div>

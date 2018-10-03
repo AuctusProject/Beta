@@ -32,15 +32,15 @@
     width: 267px;
 }
 
-.assets-table.mat-table{
+:host ::ng-deep .assets-table.mat-table{
     background: transparent;
 }
 
-.assets-table th{
+:host ::ng-deep .assets-table th{
     background:#252525;
 }
 
-.assets-table .mat-column-recommendation div{
+:host ::ng-deep .assets-table .mat-column-recommendation div{
     width: 99px;
     height: 26px;
     line-height: 26px;
@@ -50,11 +50,11 @@
     margin: auto;
 }
 
-.assets-table .mat-column-value div{
+:host ::ng-deep .assets-table .mat-column-value div{
     font-size: 16px;
 }
 
-.assets-table{
+:host ::ng-deep .assets-table{
     margin-top: 46px;
     margin-bottom: 76px;
 }
@@ -67,8 +67,8 @@
     cursor: pointer;
 }
 
-.assets-table .white-button,
-.assets-table .blue-button{
+:host ::ng-deep .assets-table .white-button,
+:host ::ng-deep .assets-table .blue-button{
     margin: auto;
 }
 
@@ -83,4 +83,50 @@
 
 .asset-price {
     font-size: 25px;
+}
+
+:host ::ng-deep .mat-tab-list{
+    max-width: 1168px;
+    width: 100%;
+    margin: auto;
+    flex-grow: unset;
+}
+
+:host ::ng-deep .mat-tab-label-container{
+    border-bottom: solid 1px #FFFFFF99;
+    overflow: unset;
+}
+
+:host ::ng-deep .mat-tab-label{
+    background: #262626;
+    color: white;
+    opacity: 1;
+    min-width: 160px !important;
+}
+
+:host ::ng-deep .mat-tab-label-active{
+    background: #151515;
+    border-top: solid 1px #ffffff99;
+    border-left: solid 1px #ffffff99;
+    border-right: solid 1px #ffffff99;
+}
+
+:host ::ng-deep .mat-ink-bar{
+    background-color: #151515 !important;
+    bottom:-1px;
+    border-left: 1px solid #ffffff99;
+    border-right: 1px solid #ffffff99;
+    width: 158px !important;
+}
+
+:host ::ng-deep .mat-tab-header{
+    border-bottom: unset;
+}
+
+:host ::ng-deep .mat-tab-body-content{
+    overflow-y: hidden;
+}
+
+mat-tab-group{
+    margin-top: 40px;
 }
