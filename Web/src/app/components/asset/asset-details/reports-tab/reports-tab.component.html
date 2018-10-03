@@ -11,7 +11,7 @@
         <th mat-header-cell *matHeaderCellDef> Score </th>
         <td mat-cell *matCellDef="let report"> 
           <div class="expert-rating">
-            <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="" [title]="3.5 | number: '1.2-2'"></bar-rating>
+            <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="report.score" [title]="report.score | number: '1.2-2'"></bar-rating>
           </div>
         </td>
       </ng-container>
@@ -24,9 +24,9 @@
       </ng-container>
 
       <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <th mat-header-cell *matHeaderCellDef><span fxHide.lt-sm> Date </span></th>
         <td mat-cell *matCellDef="let report">
-          <div [title]="report.reportDate | date: 'medium'">{{report.reportDate | timeAgo}}</div>
+          <div fxHide.lt-sm [title]="report.reportDate | date: 'medium'">{{report.reportDate | timeAgo}}</div>
         </td>
       </ng-container>
 
