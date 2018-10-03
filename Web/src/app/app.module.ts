@@ -5,6 +5,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
 import stock from 'highcharts/modules/stock.src';
 import more from 'highcharts/highcharts-more.src';
+import { ShareButtonModule } from '@ngx-share/button';
 
 export function highchartsModules() {
   // apply Highcharts Modules to this array
@@ -200,7 +201,8 @@ export function getAuthServiceConfigs() {
     SocialLoginModule,
     RecaptchaModule.forRoot(), 
     RecaptchaFormsModule,
-    OwlModule
+    OwlModule,
+    ShareButtonModule.forRoot()
   ],
   providers: [
     HttpService,
