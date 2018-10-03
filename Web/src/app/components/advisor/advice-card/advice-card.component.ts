@@ -5,6 +5,7 @@ import { AssetService } from '../../../services/asset.service';
 import { Util } from '../../../util/Util';
 import { NavigationService } from '../../../services/navigation.service';
 import { Subscription } from 'rxjs';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'advice-card',
@@ -16,7 +17,8 @@ export class AdviceCardComponent implements OnInit {
   promise : Subscription;
   
   constructor(private assetService : AssetService,
-    private navigationService: NavigationService) { }
+    private navigationService: NavigationService,
+    private accountService: AccountService) { }
 
   ngOnInit() {
   }
@@ -30,7 +32,11 @@ export class AdviceCardComponent implements OnInit {
   }
   
   onFollowClick(event: Event){
-    this.promise = this.assetService.followAsset(this.adviceFeed.assetId).subscribe(result =>this.adviceFeed.followingAsset = true);
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.promise = this.assetService.followAsset(this.adviceFeed.assetId).subscribe(result =>
+          this.adviceFeed.followingAsset = true
+      );
+    }
     event.stopPropagation();
   }
   

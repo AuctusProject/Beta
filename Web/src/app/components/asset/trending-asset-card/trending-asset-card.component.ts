@@ -5,6 +5,7 @@ import { NavigationService } from '../../../services/navigation.service';
 import { CONFIG} from "../../../services/config.service";
 import { AssetService } from '../../../services/asset.service';
 import { Subscription } from 'rxjs';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'trending-asset-card',
@@ -15,7 +16,9 @@ export class TrendingAssetCardComponent implements OnInit {
   @Input() asset : AssetResponse;
   promise: Subscription;
   
-  constructor(private navigationService: NavigationService, private assetService:AssetService) { }
+  constructor(private navigationService: NavigationService, 
+    private assetService:AssetService, 
+    private accountService:AccountService) { }
 
   ngOnInit() {
   }
@@ -44,10 +47,20 @@ export class TrendingAssetCardComponent implements OnInit {
   }
 
   onFollowClick(){
-    this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result => this.asset.following = true);
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result => 
+        {
+          this.asset.following = true;
+          this.asset.numberOfFollowers = this.asset.numberOfFollowers + 1;
+        });
+    }
   }
 
   onUnfollowClick(){
-    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result => this.asset.following = false);
+    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result => 
+      {
+        this.asset.following = false;
+        this.asset.numberOfFollowers = this.asset.numberOfFollowers - 1;
+      });
   }
 }

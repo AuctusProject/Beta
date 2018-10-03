@@ -24,14 +24,7 @@ export class AdvisorCardComponent implements OnInit {
   }
 
   onFollowClick(){
-    let loginData = this.accountService.getLoginData();
-    if (!!loginData && ((!loginData.hasInvestment && !loginData.isAdvisor) || loginData.pendingConfirmation)) {
-      if (!loginData.hasInvestment && !loginData.isAdvisor) {
-        this.navigationService.goToWalletLogin();
-      } else {
-        this.navigationService.goToConfirmEmail();
-      }
-    } else {
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
       this.promise = this.advisorServices.followAdvisor(this.advisor.userId).subscribe(result =>
         {
           this.advisor.following = true;
