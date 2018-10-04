@@ -3,6 +3,7 @@ import { TopLoadingComponent } from './components/util/top-loading/top-loading.c
 import { Highcharts } from 'angular-highcharts';
 import { Router } from '@angular/router';
 import { NavigationService } from './services/navigation.service';
+import { ModalService } from './services/modal.service';
 
 Highcharts.setOptions({
     global:{
@@ -207,7 +208,9 @@ Highcharts.setOptions({
 })
 export class AppComponent implements OnInit{
   public topLoading = TopLoadingComponent.prototype.constructor;
-  constructor(private router: Router, private navigationService : NavigationService){}
+  constructor(private router: Router, 
+    private navigationService : NavigationService,
+    private modalService: ModalService) { }
 
   ngOnInit(){
   }
@@ -225,5 +228,9 @@ export class AppComponent implements OnInit{
   public isHotSite(){
     return this.navigationService.isSameRoute("hotsite", this.router.url) ||
         this.navigationService.isSameRoute("beexpert", this.router.url);
+  }
+
+  openSocialMediaModal() {
+    this.modalService.setInviteFriend();
   }
 }

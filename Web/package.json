@@ -28,6 +28,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
     "@fortawesome/free-brands-svg-icons": "^5.3.1",
     "@fortawesome/free-solid-svg-icons": "^5.3.1",
+    "@ngx-share/button": "^6.0.1",
+    "@ngx-share/core": "^6.0.1",
     "@types/highcharts": "^5.0.27",
     "angular-feather": "^5.3.0",
     "angular-highcharts": "^6.2.6",

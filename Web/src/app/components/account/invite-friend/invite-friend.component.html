@@ -1,0 +1,18 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+  <p class="subtitle">
+      Invite your friends to Auctus and earn free AUC<br>
+      Get 1000 AUC every time you refer a friend to Auctus
+  </p>
+  <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="10px" fxLayoutAlign.gt-sm="center start" fxLayoutAlign.lt-md="center center">
+    <mat-form-field appearance="outline" class="input-modal">
+      <mat-label>Referral Link</mat-label>
+      <input matInput #Link placeholder="Referral Link" type="text" onClick="this.select();" [(ngModel)]="link" readonly />
+      <span matSuffix class="copy-link-button" (click)="copyClick()">Copy</span>
+      <mat-hint *ngIf="copied" align="start">Link copied</mat-hint>
+    </mat-form-field>
+    <share-button [theme]="'outline'" [button]="'twitter'" [showText]="true" [size]="4" 
+      [url]="link" [description]="description" [tags]="'AUC'" [autoSetMeta]="false"></share-button>
+    <share-button [theme]="'outline'" [button]="'facebook'" [showText]="true" [size]="4" 
+      [url]="link" [autoSetMeta]="false"></share-button>
+  </div>
+</div>

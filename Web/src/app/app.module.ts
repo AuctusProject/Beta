@@ -5,6 +5,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
 import stock from 'highcharts/modules/stock.src';
 import more from 'highcharts/highcharts-more.src';
+import { ShareButtonModule } from '@ngx-share/button';
 
 export function highchartsModules() {
   // apply Highcharts Modules to this array
@@ -96,6 +97,7 @@ import { HotsiteBlogSectionComponent } from './components/hot-site/hotsite-blog-
 import { ReportsTabComponent } from './components/asset/asset-details/reports-tab/reports-tab.component';
 import { ListReportsComponent } from './components/asset/list-reports/list-reports.component';
 import { ReportCardComponent } from './components/account/feed/report-card/report-card.component';
+import { InviteFriendComponent } from './components/account/invite-friend/invite-friend.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -176,7 +178,8 @@ export function getAuthServiceConfigs() {
     HotsiteBlogSectionComponent,
     ReportsTabComponent,
     ListReportsComponent,
-    ReportCardComponent
+    ReportCardComponent,
+    InviteFriendComponent
   ],
   imports: [
     BrowserModule,
@@ -204,7 +207,8 @@ export function getAuthServiceConfigs() {
     SocialLoginModule,
     RecaptchaModule.forRoot(), 
     RecaptchaFormsModule,
-    OwlModule
+    OwlModule,
+    ShareButtonModule.forRoot()
   ],
   providers: [
     HttpService,
@@ -239,7 +243,8 @@ export function getAuthServiceConfigs() {
     RegisterComponent,
     ReferralDetailsComponent,
     NewAdviceComponent,
-    EntryOptionComponent
+    EntryOptionComponent,
+    InviteFriendComponent
   ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]

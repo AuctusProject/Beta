@@ -1,0 +1,23 @@
+.copy-link-button {
+    font-size: 12px;
+    font-weight: 300;
+    background-color: #126efd;
+    color: white;
+    min-width: 50px;
+    cursor: pointer;
+    line-height: 20px;
+    display: table-caption;
+    text-align: center;    
+}
+
+.sb-button ::ng-deep button{
+    width: 140px;
+    margin-bottom: 10px;
+}
+
+@media(min-width:960px){
+    .sb-button{
+        margin-top: 12px;
+        margin-bottom: 0px;
+    }
+}
