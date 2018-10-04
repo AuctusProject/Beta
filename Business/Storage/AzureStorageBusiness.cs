@@ -43,7 +43,7 @@ namespace Auctus.Business.Storage
 
         public async Task<bool> UploadAssetReportFromByteAsync(string fileName, byte[] file)
         {
-            return await Resource.UploadFileFromBytesAsync(REPORT_CONTAINER_NAME, fileName, file);
+            return await Resource.UploadFileFromBytesAsync(REPORT_CONTAINER_NAME, fileName, file, "application/pdf");
         }
     }
 }

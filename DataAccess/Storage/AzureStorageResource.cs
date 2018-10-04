@@ -34,12 +34,19 @@ namespace Auctus.DataAccess.Storage
             }
         }
 
-        public async Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file)
+        public async Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file, string contentType = null)
         {
             var reference = await GetBlockBlobReferenceAsync(containerName, fileName);
             try
             {
                 await reference.UploadFromByteArrayAsync(file, 0, file.Length);
+
+                if (!string.IsNullOrEmpty(contentType))
+                {
+                    reference.Properties.ContentType = contentType;
+                    await reference.SetPropertiesAsync();
+                }
+
                 return true;
             }
             catch

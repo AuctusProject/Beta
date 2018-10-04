@@ -13,7 +13,7 @@ namespace Auctus.DataAccessMock.Storage
             throw new NotImplementedException();
         }
 
-        public Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file)
+        public Task<bool> UploadFileFromBytesAsync(string containerName, string fileName, byte[] file, string contentType = null)
         {
             throw new NotImplementedException();
         }
