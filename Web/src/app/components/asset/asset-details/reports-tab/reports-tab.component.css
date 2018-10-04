@@ -1,0 +1,20 @@
+.mat-column-download.mat-cell{
+    color: #07d0ff;
+}
+
+td.mat-column-agencyName,
+td.mat-column-agencyName span{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.report-date{
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.rate{
+    max-width: 85px;
+    padding: 5px;
+    margin:auto;
+}

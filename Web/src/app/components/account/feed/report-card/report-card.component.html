@@ -1,0 +1,54 @@
+<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
+    <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
+      <a [href]="reportFeed.report.agencyWebSite" target="_blank">
+        <div class="agency-picture">
+          <img [src]="getReportAgencyImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
+        </div>
+      </a>
+      <div fxLayout="column" class="agency-name-column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
+        <div fxLayout="row" class="tag">
+          <div class="tag-description">Agency</div>
+          <div class="after-triangle"></div>
+        </div>
+        <div class="agency-name truncate" title="{{reportFeed.report.agencyName}}">
+          <a [href]="reportFeed.report.agencyWebSite" target="_blank">{{reportFeed.report.agencyName}}</a>
+        </div>
+      </div>
+    </div>
+    <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
+      <div fxLayout="column" (click)="goToAssetDetails()" class="asset-column" fxLayoutGap="5px">
+        <div fxLayout="row" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" fxLayoutGap="10px">
+          <div fxHide.lt-sm class="asset-icon">
+            <img [src]="getAssetImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
+          </div>
+          <div class="asset-code-name" fxLayout="column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center">
+            <div class="table-asset-code">
+              {{reportFeed.assetCode}}
+            </div>
+            <span class="asset-name truncate">{{reportFeed.assetName}}</span>
+          </div>
+        </div>  
+        <div class="follow-btn white-button action-button-sm" *ngIf="reportFeed.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
+          Unfollow
+        </div>
+        <div class="follow-btn blue-button action-button-sm" *ngIf="!reportFeed.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
+          Follow
+        </div>
+      </div>
+      <div fxHide.lt-md class="advice-time" title="{{reportFeed.date | date: 'medium'}}">
+        {{reportFeed.date | timeAgo}}
+      </div>
+      <div fxLayout="column" class="download-column" fxLayoutAlign="center stretch" >
+        <div fxLayout="column" class="rate-column">
+          <div class="desc-label">RATING</div>
+          <div class="rate" [style.background-color]="getBackgroundColor()">
+            {{reportFeed.report.rate}}
+          </div>
+        </div>
+        <span fxLayoutAlign="center center" fxHide.gt-sm>{{reportFeed.date | timeAgo}}</span>
+        <div fxLayout="column" class="download-link" >
+            <a [href]="getReportUrl()" target="_blank"><fa-icon icon="download"></fa-icon>&nbsp;Download</a>
+        </div>
+      </div>
+    </div>
+  </div>

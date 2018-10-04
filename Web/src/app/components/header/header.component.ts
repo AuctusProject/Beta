@@ -56,6 +56,10 @@ export class HeaderComponent implements OnInit {
     this.navigationService.goToTopAssets();
   }
 
+  onReports() {
+    this.navigationService.goToReports();
+  }
+
   logout() {
     this.accountService.logout();
     this.isLogged();

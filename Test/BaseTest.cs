@@ -70,6 +70,9 @@ namespace Auctus.Test
             services.AddScoped<IFollowAssetData<FollowAsset>, FollowAssetData>();
             services.AddScoped<IFollowData<Follow>, FollowData>();
             services.AddScoped<IAssetCurrentValueData<AssetCurrentValue>, AssetCurrentValueData>();
+            services.AddScoped<IAgencyData<Agency>, AgencyData>();
+            services.AddScoped<IAgencyRatingData<AgencyRating>, AgencyRatingData>();
+            services.AddScoped<IReportData<Report>, ReportData>();
 
             ServiceProvider = services.BuildServiceProvider();
             ServiceScopeFactory = new ServiceScopeFactory(ServiceProvider);
@@ -97,6 +100,9 @@ namespace Auctus.Test
         private WalletBusiness _walletBusiness;
         private ActionBusiness _actionBusiness;
         private AssetCurrentValueBusiness _assetCurrentValueBusiness;
+        private AgencyBusiness _agencyBusiness;
+        private AgencyRatingBusiness _agencyRatingBusiness;
+        private ReportBusiness _reportBusiness;
 
         protected UserBusiness UserBusiness
         {
@@ -235,6 +241,36 @@ namespace Auctus.Test
                 if (_assetCurrentValueBusiness == null)
                     _assetCurrentValueBusiness = new AssetCurrentValueBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _assetCurrentValueBusiness;
+            }
+        }
+
+        protected AgencyBusiness AgencyBusiness
+        {
+            get
+            {
+                if (_agencyBusiness == null)
+                    _agencyBusiness = new AgencyBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _agencyBusiness;
+            }
+        }
+
+        protected AgencyRatingBusiness AgencyRatingBusiness
+        {
+            get
+            {
+                if (_agencyRatingBusiness == null)
+                    _agencyRatingBusiness = new AgencyRatingBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _agencyRatingBusiness;
+            }
+        }
+
+        protected ReportBusiness ReportBusiness
+        {
+            get
+            {
+                if (_reportBusiness == null)
+                    _reportBusiness = new ReportBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _reportBusiness;
             }
         }
     }

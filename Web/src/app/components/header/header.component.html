@@ -10,6 +10,8 @@
         <div fxShow="true" fxHide.lt-lg="true" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLink="/top-assets" routerLinkActive="active"><span>TOP ASSETS</span></a>
         <div fxShow="true" fxHide.lt-lg="true" class="separator"></div>
+        <a fxShow="true" fxHide.lt-lg="true" routerLink="/rating-reports" routerLinkActive="active"><span>REPORTS</span></a>
+        <div fxShow="true" fxHide.lt-lg="true" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a>
         <global-search fxShow="true" fxHide.lt-md="true" class="search"></global-search>
         <span class="header-blue-button" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
@@ -36,6 +38,7 @@
             <button class="sub-menu-item" *ngIf="!!loginData && loginData.isAdvisor" (click)="onMyProfile()" mat-menu-item>MY PROFILE</button>
             <button class="sub-menu-item" (click)="onTopExperts()" mat-menu-item>TOP EXPERTS</button>
             <button class="sub-menu-item" (click)="onTopAssets()" mat-menu-item>TOP ASSETS</button>
+            <button class="sub-menu-item" (click)="onReports()" mat-menu-item>REPORTS</button>
             <button class="sub-menu-item" *ngIf="!isLogged()" mat-menu-item>
                 <a class="about-mobile" routerLinkActive="active" href="https://auctus.org/" target="_blank">ABOUT US</a>
             </button>

@@ -26,7 +26,7 @@
             </div>
           </div>
           <div fxLayout="row" fxLayoutGap="36px">
-            <div class="asset-price">
+            <div fxHide.lt-sm class="asset-price">
               {{asset.lastValue | valueDisplay}}
             </div>
             <div fxLayout="column">
@@ -41,6 +41,9 @@
               <percentage-display [value]="asset.variation30d"></percentage-display>
               Last 30 days
             </div>
+          </div>
+          <div fxHide.gt-xs class="asset-price">
+            {{asset.lastValue | valueDisplay}}
           </div>
           <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowAssetClick()">
             Unfollow
@@ -69,87 +72,94 @@
       </div>
     </div>
   </div>
-  <div class="global-container">
-    <table mat-table [dataSource]="visibleAdvices" class="assets-table">
-        <ng-container matColumnDef="expertName">
-          <th mat-header-cell *matHeaderCellDef> Expert </th>
-          <td mat-cell *matCellDef="let assetAdvisor"> 
-            <span class="truncate">{{getAdvisor(assetAdvisor.userId).name}}</span>
-            <div fxHide.gt-sm class="expert-rating">
-              <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="getAdvisor(assetAdvisor.userId).rating" [title]="getAdvisor(assetAdvisor.userId).rating | number: '1.2-2'"></bar-rating>
-            </div>
-            <div fxHide.gt-xs class="white-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="getAdvisor(assetAdvisor.userId).following" (click)="onUnfollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
-              Unfollow
-            </div>
-            <div fxHide.gt-xs class="blue-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="!getAdvisor(assetAdvisor.userId).following" (click)="onFollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
-              Follow
-            </div>
-
-          </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="rankin">
-          <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Ranking </th>
-          <td fxHide.lt-md mat-cell *matCellDef="let assetAdvisor"> 
-            <div class="expert-rating">
-              <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="getAdvisor(assetAdvisor.userId).rating" [title]="getAdvisor(assetAdvisor.userId).rating | number: '1.2-2'"></bar-rating>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="value">
-          <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Value </th>
-          <td fxHide.lt-md mat-cell *matCellDef="let assetAdvisor">  
-            At price
-            <div>{{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="action">
-          <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> Action </th>
-          <td fxHide.lt-sm mat-cell *matCellDef="let assetAdvisor">
-            {{getRecomendationFromType(assetAdvisor.lastAdviceMode)}}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef> Rating </th>
-          <td mat-cell *matCellDef="let assetAdvisor">
-              <div [style.background-color]="getAdviceTypeColor(assetAdvisor.lastAdviceType)">
-                {{getRecommendationFromType(assetAdvisor.lastAdviceType)}}
-                <span fxHide.gt-sm><br/>At price {{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</span>
+  <mat-tab-group>
+    <mat-tab label="Expert Ratings"> 
+      <div class="global-container">
+        <table mat-table [dataSource]="visibleAdvices" class="assets-table">
+          <ng-container matColumnDef="expertName">
+            <th mat-header-cell *matHeaderCellDef> Expert </th>
+            <td mat-cell *matCellDef="let assetAdvisor"> 
+              <span class="truncate">{{getAdvisor(assetAdvisor.userId).name}}</span>
+              <div fxHide.gt-sm class="expert-rating">
+                <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="getAdvisor(assetAdvisor.userId).rating" [title]="getAdvisor(assetAdvisor.userId).rating | number: '1.2-2'"></bar-rating>
               </div>
-              <div fxHide.gt-xs [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="date">
-          <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> Date </th>
-          <td fxHide.lt-sm mat-cell *matCellDef="let assetAdvisor">
-            <div [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="followButton">
-          <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> </th>
-          <td fxHide.lt-sm mat-cell *matCellDef="let assetAdvisor">
-            <div class="white-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="getAdvisor(assetAdvisor.userId).following" (click)="onUnfollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
-              Unfollow
-            </div>
-            <div class="blue-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="!getAdvisor(assetAdvisor.userId).following" (click)="onFollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
-              Follow
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" class="element-row"></tr>
-      </table>
-      <div *ngIf="hasMoreAdvices()" fxLayoutAlign="center center">
-        <button class="pagination-link" (click)="loadMoreAdvices()">
-          LOAD MORE
-        </button>
+              <div fxHide.gt-xs class="white-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="getAdvisor(assetAdvisor.userId).following" (click)="onUnfollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
+                Unfollow
+              </div>
+              <div fxHide.gt-xs class="blue-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="!getAdvisor(assetAdvisor.userId).following" (click)="onFollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
+                Follow
+              </div>
+  
+            </td>
+          </ng-container>
+        
+          <ng-container matColumnDef="rankin">
+            <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Ranking </th>
+            <td fxHide.lt-md mat-cell *matCellDef="let assetAdvisor"> 
+              <div class="expert-rating">
+                <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="getAdvisor(assetAdvisor.userId).rating" [title]="getAdvisor(assetAdvisor.userId).rating | number: '1.2-2'"></bar-rating>
+              </div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="value">
+            <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Value </th>
+            <td fxHide.lt-md mat-cell *matCellDef="let assetAdvisor">  
+              At price
+              <div>{{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="action">
+            <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> Action </th>
+            <td fxHide.lt-sm mat-cell *matCellDef="let assetAdvisor">
+              {{getRecomendationFromType(assetAdvisor.lastAdviceMode)}}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> Rating </th>
+            <td mat-cell *matCellDef="let assetAdvisor">
+                <div [style.background-color]="getAdviceTypeColor(assetAdvisor.lastAdviceType)">
+                  {{getRecommendationFromType(assetAdvisor.lastAdviceType)}}
+                  <span fxHide.gt-sm><br/>At price {{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</span>
+                </div>
+                <div fxHide.gt-xs [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="date">
+            <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> Date </th>
+            <td fxHide.lt-sm mat-cell *matCellDef="let assetAdvisor">
+              <div [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="followButton">
+            <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> </th>
+            <td fxHide.lt-sm mat-cell *matCellDef="let assetAdvisor">
+              <div class="white-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="getAdvisor(assetAdvisor.userId).following" (click)="onUnfollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
+                Unfollow
+              </div>
+              <div class="blue-button action-button-sm" [promiseBtn]="promiseExpert" *ngIf="!getAdvisor(assetAdvisor.userId).following" (click)="onFollowExpertClick($event, getAdvisor(assetAdvisor.userId))">
+                Follow
+              </div>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" class="element-row"></tr>
+        </table>
+        <div *ngIf="hasMoreAdvices()" fxLayoutAlign="center center">
+          <button class="pagination-link" (click)="loadMoreAdvices()">
+            LOAD MORE
+          </button>
+        </div>
       </div>
-    </div>
+    </mat-tab>
+    <mat-tab label="Agency Ratings"> 
+      <reports-tab [reports]="asset.reports"></reports-tab>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 <trending-assets class="global-container-min inverted"></trending-assets>

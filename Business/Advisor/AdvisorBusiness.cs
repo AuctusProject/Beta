@@ -208,7 +208,7 @@ namespace Auctus.Business.Advisor
 
         public void Calculation(CalculationMode mode, out List<AdvisorResponse> advisorsResult, out List<AssetResponse> assetsResult, User loggedUser, 
             IEnumerable<Advice> allAdvices, IEnumerable<DomainObjects.Advisor.Advisor> allAdvisors, IEnumerable<FollowAdvisor> advisorFollowers,
-            IEnumerable<FollowAsset> assetFollowers = null, int? selectAssetId = null, int? selectAdvisorId = null)
+            IEnumerable<FollowAsset> assetFollowers = null, IEnumerable<int> selectAssetsId = null, int? selectAdvisorId = null)
         {
             advisorsResult = new List<AdvisorResponse>();
             assetsResult = new List<AssetResponse>();
@@ -218,9 +218,10 @@ namespace Auctus.Business.Advisor
             {
                 assetsIds = assetsIds.Distinct().ToHashSet();
 
+                var selectAssetId = selectAssetsId != null && selectAssetsId.Count() == 1 ? (int?)selectAssetsId.First() : null;
                 if (selectAssetId.HasValue && !assetsIds.Contains(selectAssetId.Value))
                 {
-                    FillNotAdvicedAsset(out assetsResult, mode, selectAssetId.Value, loggedUser, assetFollowers);
+                    FillNotAdvicedAsset(out assetsResult, mode, selectAssetsId, loggedUser, assetFollowers);
                     return;
                 }
 
@@ -297,15 +298,16 @@ namespace Auctus.Business.Advisor
                     SetAdvisorsRanking(ref advisorsResult, advisorsData);
                 }
             }
-            else if (selectAssetId.HasValue)
-                FillNotAdvicedAsset(out assetsResult, mode, selectAssetId.Value, loggedUser, assetFollowers);
+            else if (selectAssetsId?.Any() == true)
+                FillNotAdvicedAsset(out assetsResult, mode, selectAssetsId, loggedUser, assetFollowers);
         }
 
-        private void FillNotAdvicedAsset(out List<AssetResponse> assetsResult, CalculationMode mode, int selectAssetId, User loggedUser, IEnumerable<FollowAsset> assetFollowers)
+        private void FillNotAdvicedAsset(out List<AssetResponse> assetsResult, CalculationMode mode, IEnumerable<int> selectAssetsId, User loggedUser, IEnumerable<FollowAsset> assetFollowers)
         {
             assetsResult = new List<AssetResponse>();
-            var asset = AssetCurrentValueBusiness.ListAssetsValuesForCalculation(new int[] { selectAssetId }, mode, null, selectAssetId);
-            assetsResult.Add(GetAssetBaseResponse(loggedUser, asset.First(), assetFollowers, new Advice[] { }, new int[] { }, mode));
+            var assets = AssetCurrentValueBusiness.ListAssetsValuesForCalculation(selectAssetsId, mode, null, selectAssetsId.Count() == 1 ? (int?)selectAssetsId.First() : null);
+            foreach(var asset in assets)
+                assetsResult.Add(GetAssetBaseResponse(loggedUser, asset, assetFollowers, new Advice[] { }, new int[] { }, mode));
         }
 
         private Advice GetLastAdvice(DomainObjects.Asset.Asset asset, int advisorId, double lastValue)
