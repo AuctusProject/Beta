@@ -1,6 +1,6 @@
 <top-image *ngIf="canView()" [title]="getTopTitle()" [subtitle]="getTopText()" [urlImage]="getTopImage()"></top-image>
 <div class="global-container">
-    <top-experts *ngIf="canView() && (!advices || advices.length==0)" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'" [subtitle]="''"></top-experts>
+    <top-experts *ngIf="canView() && advices && advices.length==0" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'" [subtitle]="''"></top-experts>
     <div *ngIf="advices">
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="15px" class="global-container blocked-content" *ngIf="!canView()">
             <div class="lock-wrapper">
@@ -11,6 +11,7 @@
         <div [class.blur]="!canView()">
             <ng-container *ngFor="let advice of advices">
                 <advice-card *ngIf="advice.advice" [adviceFeed]="advice"></advice-card>
+                <report-card *ngIf="advice.report" [reportFeed]="advice"></report-card>
             </ng-container>
         </div>
     </div>

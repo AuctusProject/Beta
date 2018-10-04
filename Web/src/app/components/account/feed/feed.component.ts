@@ -5,11 +5,11 @@ import { Subscription } from 'rxjs';
 import { CONFIG } from '../../../services/config.service';
 
 @Component({
-  selector: 'advices',
-  templateUrl: './advices.component.html',
-  styleUrls: ['./advices.component.css']
+  selector: 'feed',
+  templateUrl: './feed.component.html',
+  styleUrls: ['./feed.component.css']
 })
-export class AdvicesComponent implements OnInit {
+export class FeedComponent implements OnInit {
   advices : FeedResponse[];
   hasMoreAdvices = false;
   pageSize = 10;
@@ -39,7 +39,7 @@ export class AdvicesComponent implements OnInit {
   }
 
   loadMore() {
-    this.promise = this.accountService.listFeed(this.pageSize, this.getLastAdviceId()).subscribe(result => 
+    this.promise = this.accountService.listFeed(this.pageSize, this.getLastAdviceId(), this.getLastReportId()).subscribe(result => 
       {
         if (this.advices == null)
           this.advices = [];
@@ -53,11 +53,25 @@ export class AdvicesComponent implements OnInit {
   }
 
   getLastAdviceId() {
-    if(this.advices != null && this.advices.length > 0) {
-      return this.advices[this.advices.length-1].advice.adviceId;
-    } else {
-      return null;
+    if(this.advices != null && this.advices.length > 0){
+      for(var i = this.advices.length - 1; i > 0; i--){
+        if(this.advices[i].advice) {
+          return this.advices[i].advice.adviceId;
+        }
+      }
     }
+    return null;
+  }
+
+  getLastReportId() {
+    if(this.advices != null && this.advices.length > 0){
+      for(var i = this.advices.length - 1; i > 0; i--){
+        if(this.advices[i].report) {
+          return this.advices[i].report.reportId;
+        }
+      }
+    }
+    return null;
   }
 
   getTopTitle() : string {

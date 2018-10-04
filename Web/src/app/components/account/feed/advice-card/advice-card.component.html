@@ -7,6 +7,10 @@
       </div>
     </div>
     <div fxLayout="column" class="expert-name-rating" (click)="goToExpertDetails()" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
+      <div fxLayout="row" class="tag blue">
+        <div class="tag-description">Expert</div>
+        <div class="after-triangle"></div>
+      </div>
       <div class="expert-name truncate" title="{{adviceFeed.advice.advisorName}}">
         {{adviceFeed.advice.advisorName}}
       </div>

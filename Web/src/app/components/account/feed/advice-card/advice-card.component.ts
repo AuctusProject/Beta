@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FeedResponse } from '../../../model/advisor/feedResponse';
-import { CONFIG } from '../../../services/config.service';
-import { AssetService } from '../../../services/asset.service';
-import { Util } from '../../../util/Util';
-import { NavigationService } from '../../../services/navigation.service';
+import { FeedResponse } from '../../../../model/advisor/feedResponse';
+import { CONFIG } from '../../../../services/config.service';
+import { AssetService } from '../../../../services/asset.service';
+import { Util } from '../../../../util/Util';
+import { NavigationService } from '../../../../services/navigation.service';
 import { Subscription } from 'rxjs';
-import { AccountService } from '../../../services/account.service';
+import { AccountService } from '../../../../services/account.service';
 
 @Component({
   selector: 'advice-card',

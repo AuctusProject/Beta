@@ -5,7 +5,8 @@ export class ReportResponse {
   agencyId: number;
   agencyName: number;
   agencyWebSite: number;
-  rate: RatingDetail;
+  rate: string;
+  rateDetails: RatingDetail;
   rateOptions: RatingDetail[];
   score: string;
 }
