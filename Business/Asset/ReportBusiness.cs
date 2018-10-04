@@ -28,7 +28,7 @@ namespace Auctus.Business.Asset
             reports.ForEach(c =>
             {
                 c.Agency = agencies.First(a => a.Id == c.AgencyId);
-                c.AgencyRating = c.Agency.AgencyRating.First(r => r.Id == c.AgencyRatingId);
+                c.AgencyRating = c.AgencyRatingId.HasValue ? c.Agency.AgencyRating.First(r => r.Id == c.AgencyRatingId) : null;
             });
             return reports;
         }
