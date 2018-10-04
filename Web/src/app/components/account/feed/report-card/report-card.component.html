@@ -1,15 +1,17 @@
 <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
     <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
-      <div class="agency-picture">
-        <img [src]="getReportAgencyImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
-      </div>
-      <div fxLayout="column" class="agency-name-column" (click)="goToExpertDetails()" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
+      <a [href]="reportFeed.report.agencyWebSite" target="_blank">
+        <div class="agency-picture">
+          <img [src]="getReportAgencyImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
+        </div>
+      </a>
+      <div fxLayout="column" class="agency-name-column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
         <div fxLayout="row" class="tag">
           <div class="tag-description">Agency</div>
           <div class="after-triangle"></div>
         </div>
         <div class="agency-name truncate" title="{{reportFeed.report.agencyName}}">
-          {{reportFeed.report.agencyName}}
+          <a [href]="reportFeed.report.agencyWebSite" target="_blank">{{reportFeed.report.agencyName}}</a>
         </div>
       </div>
     </div>
