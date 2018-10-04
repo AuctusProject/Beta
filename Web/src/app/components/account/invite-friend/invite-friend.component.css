@@ -9,3 +9,15 @@
     display: table-caption;
     text-align: center;    
 }
+
+.sb-button ::ng-deep button{
+    width: 140px;
+    margin-bottom: 10px;
+}
+
+@media(min-width:960px){
+    .sb-button{
+        margin-top: 12px;
+        margin-bottom: 0px;
+    }
+}

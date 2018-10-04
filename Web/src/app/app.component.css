@@ -9,6 +9,7 @@
     position: fixed;
     bottom: 1rem;
     right: 1rem;
+    background-color: #126efd;
   }
   
   @media(min-width: 1024px) {
