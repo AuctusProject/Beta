@@ -8,7 +8,13 @@ td.mat-column-agencyName span{
     padding-bottom: 5px;
 }
 
-td.mat-column-score,
-td.mat-column-score span{
-    padding-bottom: 8px;
+.report-date{
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.rate{
+    max-width: 85px;
+    padding: 5px;
+    margin:auto;
 }

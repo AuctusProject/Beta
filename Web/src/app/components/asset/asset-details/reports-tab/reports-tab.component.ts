@@ -47,4 +47,11 @@ export class ReportsTabComponent implements OnInit {
   getReportAgencyImgUrl(report: ReportResponse){
     return CONFIG.agencyImgUrl.replace("{id}", report.agencyId.toString());
   }
+
+  getBackgroundColor(report: ReportResponse){
+    if(report.rateDetails){
+      return report.rateDetails.hexaColor;
+    }
+    return null;
+  }
 }
