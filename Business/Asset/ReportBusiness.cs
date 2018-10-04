@@ -51,7 +51,7 @@ namespace Auctus.Business.Asset
                 AgencyWebSite = report.Agency.WebSite,
                 Score = report.Score,
                 Rate = report.Rate,
-                RateDetails = ConvertToRateResponse(report.AgencyRating),
+                RateDetails = report.AgencyRating != null ? ConvertToRateResponse(report.AgencyRating) : null,
                 RateOptions = report.Agency.AgencyRating.Select(c => ConvertToRateResponse(c)).ToList()
             };
         }
