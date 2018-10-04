@@ -41,7 +41,7 @@ namespace Api.Controllers
 
         [Route("{id}/details")]
         [HttpGet]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetAdvisorDetails(int id)
         {

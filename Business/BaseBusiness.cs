@@ -65,6 +65,9 @@ namespace Auctus.Business
         private FacebookBusiness _facebookBusiness;
         private GoogleBusiness _googleBusiness;
         private AssetCurrentValueBusiness _assetCurrentValueBusiness;
+        private AgencyBusiness _agencyBusiness;
+        private AgencyRatingBusiness _agencyRatingBusiness;
+        private ReportBusiness _reportBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -117,8 +120,6 @@ namespace Auctus.Business
                 user = UserBusiness.GetByEmail(LoggedEmail);
                 if (user == null)
                     throw new NotFoundException("User cannot be found.");
-                if (!user.ConfirmationDate.HasValue)
-                    throw new BusinessException("Email was not confirmed.");
 
                 if (!UserBusiness.IsValidAdvisor(user))
                 {
@@ -476,6 +477,36 @@ namespace Auctus.Business
                 if (_assetCurrentValueBusiness == null)
                     _assetCurrentValueBusiness = new AssetCurrentValueBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _assetCurrentValueBusiness;
+            }
+        }
+
+        protected AgencyBusiness AgencyBusiness
+        {
+            get
+            {
+                if (_agencyBusiness == null)
+                    _agencyBusiness = new AgencyBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _agencyBusiness;
+            }
+        }
+
+        protected AgencyRatingBusiness AgencyRatingBusiness
+        {
+            get
+            {
+                if (_agencyRatingBusiness == null)
+                    _agencyRatingBusiness = new AgencyRatingBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _agencyRatingBusiness;
+            }
+        }
+
+        protected ReportBusiness ReportBusiness
+        {
+            get
+            {
+                if (_reportBusiness == null)
+                    _reportBusiness = new ReportBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _reportBusiness;
             }
         }
     }

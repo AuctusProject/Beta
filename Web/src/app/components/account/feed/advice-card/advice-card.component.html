@@ -3,15 +3,19 @@
     <div class="expert-picture" (click)="goToExpertDetails()" >
       <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
       <div class="expert-ranking">
-        {{advice.advisorRanking}}
+        {{adviceFeed.advice.advisorRanking}}
       </div>
     </div>
     <div fxLayout="column" class="expert-name-rating" (click)="goToExpertDetails()" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
-      <div class="expert-name truncate" title="{{advice.advisorName}}">
-        {{advice.advisorName}}
+      <div fxLayout="row" class="tag blue">
+        <div class="tag-description">Expert</div>
+        <div class="after-triangle"></div>
+      </div>
+      <div class="expert-name truncate" title="{{adviceFeed.advice.advisorName}}">
+        {{adviceFeed.advice.advisorName}}
       </div>
       <div class="expert-rating">
-        <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
+        <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="adviceFeed.advice.advisorRating" [title]="adviceFeed.advice.advisorRating | number: '1.2-2'"></bar-rating>
       </div>
     </div>
   </div>
@@ -23,29 +27,29 @@
         </div>
         <div class="asset-code-name" fxLayout="column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center">
           <div class="table-asset-code">
-            {{advice.assetCode}}
+            {{adviceFeed.assetCode}}
           </div>
-          <span class="asset-name truncate">{{advice.assetName}}</span>
+          <span class="asset-name truncate">{{adviceFeed.assetName}}</span>
         </div>
       </div>  
-      <div class="follow-btn white-button action-button-sm" *ngIf="advice.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
+      <div class="follow-btn white-button action-button-sm" *ngIf="adviceFeed.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
         Unfollow
       </div>
-      <div class="follow-btn blue-button action-button-sm" *ngIf="!advice.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
+      <div class="follow-btn blue-button action-button-sm" *ngIf="!adviceFeed.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
         Follow
       </div>
     </div>
-    <div fxHide.lt-md class="advice-time" title="{{advice.adviceDate | date: 'medium'}}">
-      {{advice.adviceDate | timeAgo}}
+    <div fxHide.lt-md class="advice-time" title="{{adviceFeed.date | date: 'medium'}}">
+      {{adviceFeed.date | timeAgo}}
     </div>
     <div fxLayout="column">
       <div fxLayout="column" class="advice-mode-box" [style.background-color]="getAdviceTypeColor()" fxLayoutAlign="center center">
         <div class="advice-type">
           {{getAdviceTypeDescription()}}
         </div>
-        at price {{advice.assetValueAtAdviceTime | valueDisplay}}
+        at price {{adviceFeed.advice.assetValueAtAdviceTime | valueDisplay}}
       </div>
-      <span fxLayoutAlign="center center" fxHide.gt-sm>{{advice.adviceDate | timeAgo}}</span>
+      <span fxLayoutAlign="center center" fxHide.gt-sm>{{adviceFeed.date | timeAgo}}</span>
     </div>
   </div>
 </div>

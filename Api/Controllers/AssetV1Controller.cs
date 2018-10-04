@@ -21,7 +21,7 @@ namespace Api.Controllers
             base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
         [HttpGet]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAssets()
         {
@@ -30,16 +30,25 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("trending/{top?}")]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListTrendingAssets(int top = 3)
         {
             return base.ListTrendingAssets(top);
         }
 
+        [Route("reports")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListReports([FromQuery]int? top, [FromQuery]int? lastReportId)
+        {
+            return base.ListReports(top, lastReportId);
+        }
+
         [HttpGet]
         [Route("{id}/values")]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAssetValues([FromRoute] int id, [FromQuery] DateTime? dateTime)
         {
@@ -48,7 +57,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("details")]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult ListAssetsDetails()
         {
@@ -57,7 +66,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("{id}/details")]
-        [Authorize("Bearer")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new IActionResult GetAsset(int id)
         {

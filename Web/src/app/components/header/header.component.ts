@@ -56,6 +56,10 @@ export class HeaderComponent implements OnInit {
     this.navigationService.goToTopAssets();
   }
 
+  onReports() {
+    this.navigationService.goToReports();
+  }
+
   logout() {
     this.accountService.logout();
     this.isLogged();
@@ -92,5 +96,9 @@ export class HeaderComponent implements OnInit {
 
   register() {
     this.modalService.setRegister();
+  }
+
+  onNewAdviceClick() {
+    this.modalService.setNewAdvice();
   }
 }

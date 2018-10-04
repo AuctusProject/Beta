@@ -27,6 +27,11 @@ namespace Api.Controllers
             return Ok(assetResponse);
         }
 
+        protected IActionResult ListReports(int? top, int? lastReportId)
+        {
+            return Ok(ReportBusiness.ListReports(top, lastReportId));
+        }
+
         protected IActionResult ListAssetValues(int id, DateTime? dateTime)
         {
             return Ok(AssetValueBusiness.ListAssetValues(id, dateTime));

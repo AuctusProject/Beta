@@ -46,6 +46,9 @@ namespace Auctus.Business
             services.AddScoped<IFollowData<Follow>, FollowData>(c => new FollowData(configuration));
             services.AddScoped<IAssetCurrentValueData<AssetCurrentValue>, AssetCurrentValueData>(c => new AssetCurrentValueData(configuration));
             services.AddScoped<IEarlyAccessEmailData<EarlyAccessEmail>, EarlyAccessEmailData>(c => new EarlyAccessEmailData(configuration));
+            services.AddScoped<IAgencyData<Agency>, AgencyData>(c => new AgencyData(configuration));
+            services.AddScoped<IAgencyRatingData<AgencyRating>, AgencyRatingData>(c => new AgencyRatingData(configuration));
+            services.AddScoped<IReportData<Report>, ReportData>(c => new ReportData(configuration));
         }
     }
 }

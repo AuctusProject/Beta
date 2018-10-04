@@ -1,5 +1,6 @@
 import { RecommendationDistributionResponse } from "../recommendationDistributionResponse";
 import { AdvisorResponse } from "../advisor/advisorResponse";
+import { ReportResponse } from "./reportResponse";
 
 export class AssetResponse {
   assetId: number;
@@ -18,6 +19,7 @@ export class AssetResponse {
   assetAdvisor?: AssetAdvisorResponse[];
   advices?: AdviceResponse[];
   advisors?: AdvisorResponse[];
+  reports?: ReportResponse[];
 }
 
 export class AssetAdvisorResponse

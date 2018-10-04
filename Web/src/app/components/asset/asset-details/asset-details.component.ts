@@ -65,21 +65,31 @@ export class AssetDetailsComponent implements OnInit {
   }
   
   onFollowExpertClick(event: Event, expert: AdvisorResponse){
-    this.promiseExpert = this.advisorService.followAdvisor(expert.userId).subscribe(result =>expert.following = true);
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.promiseExpert = this.advisorService.followAdvisor(expert.userId).subscribe(result =>{
+        expert.following = true;
+        expert.numberOfFollowers = expert.numberOfFollowers + 1;
+      });
+    }
     event.stopPropagation();
   }
 
   onUnfollowExpertClick(event: Event, expert: AdvisorResponse){
-    this.promiseExpert = this.advisorService.unfollowAdvisor(expert.userId).subscribe(result =>expert.following = false);
+    this.promiseExpert = this.advisorService.unfollowAdvisor(expert.userId).subscribe(result =>{
+      expert.following = false;
+      expert.numberOfFollowers = expert.numberOfFollowers - 1;
+    });
     event.stopPropagation();
   }
 
   onFollowAssetClick(){
-    this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>
       {
         this.asset.following = true;
         this.asset.numberOfFollowers = this.asset.numberOfFollowers + 1;
       });
+    }
   }
 
   onUnfollowAssetClick(){
