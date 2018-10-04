@@ -654,35 +654,49 @@ namespace Auctus.Business.Account
         public IEnumerable<FeedResponse> FillFeedList(Task<IEnumerable<Advice>> listAdvicesTask, Task<List<Report>> listReportsTask,
             User loggedUser, int? top, int? lastAdviceId, int? lastReportId)
         {
+            IEnumerable<Advice> feedAdvices = null;
+            IEnumerable<Report> feedReport = null;
+
             string advisorsCacheKey = "FeedAdvisorsResult" + LoggedEmail;
             string assetsCacheKey = "FeedAssetsResult" + LoggedEmail;
             var advisorsResult = MemoryCache.Get<List<AdvisorResponse>>(advisorsCacheKey);
             var assetsResult = MemoryCache.Get<List<AssetResponse>>(assetsCacheKey);
             if (advisorsResult == null || assetsResult == null || !lastAdviceId.HasValue || !lastReportId.HasValue)
             {
-                var advisors = AdvisorBusiness.GetAdvisors();
+                List<DomainObjects.Advisor.Advisor> advisors = null;
+                if (listAdvicesTask != null)
+                    advisors = AdvisorBusiness.GetAdvisors();
+
                 Task<List<Advice>> advices = null;
                 Task<List<FollowAdvisor>> advisorFollowers = null;
-                if (advisors.Any())
+                if (advisors?.Any() == true)
                 {
                     advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
                     advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
                 }
                 var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
 
-                if (advisors.Any())
+                IEnumerable<int> selectAssetsIds = null;
+                if (advisors?.Any() == true)
                     Task.WaitAll(advices, advisorFollowers, assetFollowers);
                 else
-                    Task.WaitAll(assetFollowers);
+                {
+                    if (listReportsTask != null)
+                    {
+                        Task.WaitAll(assetFollowers, listReportsTask);
+                        feedReport = listReportsTask.Result;
+                        selectAssetsIds = feedReport.Select(c => c.AssetId).Distinct().ToHashSet();
+                    }
+                    else
+                        Task.WaitAll(assetFollowers);
+                }
 
-                AdvisorBusiness.Calculation(CalculationMode.Feed, out advisorsResult, out assetsResult, loggedUser, advices?.Result, advisors, advisorFollowers?.Result, assetFollowers.Result);
+                AdvisorBusiness.Calculation(CalculationMode.Feed, out advisorsResult, out assetsResult, loggedUser, advices?.Result, advisors, advisorFollowers?.Result, assetFollowers.Result, selectAssetsIds);
 
                 MemoryCache.Set(advisorsCacheKey, advisorsResult, 10);
                 MemoryCache.Set(assetsCacheKey, assetsResult, 10);
             }
 
-            IEnumerable<Advice> feedAdvices = null;
-            IEnumerable<Report> feedReport = null;
             if (listAdvicesTask != null && listReportsTask != null)
             {
                 Task.WaitAll(listAdvicesTask, listReportsTask);
@@ -694,7 +708,7 @@ namespace Auctus.Business.Account
                 Task.WaitAll(listAdvicesTask);
                 feedAdvices = listAdvicesTask.Result;
             }
-            else if (listReportsTask != null)
+            else if (listReportsTask != null && feedReport == null)
             {
                 Task.WaitAll(listReportsTask);
                 feedReport = listReportsTask.Result;

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Auctus.Business.Asset
 {
@@ -33,10 +34,11 @@ namespace Auctus.Business.Asset
             return reports;
         }
 
-        public List<ReportResponse> ListReports(int? top, int? lastReportId)
+        public IEnumerable<FeedResponse> ListReports(int? top, int? lastReportId)
         {
-            var reports = List(null, top, lastReportId);
-            return reports.Select(c => ConvertToReportResponse(c)).OrderByDescending(c => c.ReportDate).ToList();
+            var reports = Task.Factory.StartNew(() => List(null, top, lastReportId));
+            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            return UserBusiness.FillFeedList(null, reports, user, top, null, lastReportId);
         }
 
         public ReportResponse ConvertToReportResponse(Report report)

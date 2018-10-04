@@ -24,7 +24,7 @@ const routes: Routes = [
     { path: 'expert-details/:id', component: ExpertDetailsComponent },
     { path: 'top-assets', component: ListAssetsComponent },
     { path: 'asset-details/:id', component: AssetDetailsComponent },
-    { path: 'reports', component: ListReportsComponent },
+    { path: 'rating-reports', component: ListReportsComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
     { path: '**', redirectTo: ''  }

@@ -75,6 +75,6 @@ export class NavigationService {
   }
 
   public goToReports(){
-    this.goToUrl('reports');
+    this.goToUrl('rating-reports');
   }
 }

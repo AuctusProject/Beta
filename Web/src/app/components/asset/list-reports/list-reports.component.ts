@@ -4,8 +4,8 @@ import { AccountService } from '../../../services/account.service';
 import { ModalService } from '../../../services/modal.service';
 import { CoinSearchComponent } from '../../util/coin-search/coin-search.component';
 import { NavigationService } from '../../../services/navigation.service';
-import { ReportResponse } from '../../../model/asset/reportResponse';
 import { Subscription } from 'rxjs';
+import { FeedResponse } from '../../../model/advisor/feedResponse';
 
 @Component({
   selector: 'list-reports',
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 export class ListReportsComponent implements OnInit {
   @ViewChild("CoinSearch") CoinSearch: CoinSearchComponent;
   showNewAdviceButton: boolean = false;
-  reports: ReportResponse[] = [];
+  reports: FeedResponse[] = [];
   hasMoreReports = false;
   pageSize = 6;
   promise : Subscription;
@@ -50,7 +50,7 @@ export class ListReportsComponent implements OnInit {
 
   getLastReportId() {
     if(!!this.reports && this.reports.length > 0) {
-      return this.reports[this.reports.length - 1].reportId;
+      return this.reports[this.reports.length - 1].report.reportId;
     } else {
       return null;
     }
