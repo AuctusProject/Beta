@@ -40,7 +40,7 @@ import { ExpertDetailsComponent } from './components/advisor/expert-details/expe
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
 import { AssetCardComponent } from './components/asset/asset-card/asset-card.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
-import { AdvicesComponent } from './components/advisor/advices/advices.component';
+import { FeedComponent } from './components/account/feed/feed.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
 import { MatModule } from './mat.module';
@@ -84,7 +84,7 @@ import { CoinSearchComponent } from './components/util/coin-search/coin-search.c
 import { GeneralRecommendationTagComponent } from './components/util/general-recommendation-tag/general-recommendation-tag.component';
 import { EntryOptionComponent } from './components/account/entry-option/entry-option.component';
 import { ModalService } from './services/modal.service';
-import { AdviceCardComponent } from './components/advisor/advice-card/advice-card.component';
+import { AdviceCardComponent } from './components/account/feed/advice-card/advice-card.component';
 import { LocalCacheService } from './services/local-cache.service';
 import { TopImageComponent } from './components/util/top-image/top-image.component';
 import { ValueDisplayPipe } from './util/value-display.pipe';
@@ -94,6 +94,7 @@ import { HotsiteHeaderComponent } from './components/hot-site/hotsite-header/hot
 import { HotsiteFooterComponent } from './components/hot-site/hotsite-footer/hotsite-footer.component';
 import { HotsiteBlogSectionComponent } from './components/hot-site/hotsite-blog-section/hotsite-blog-section.component';
 import { ReportsTabComponent } from './components/asset/asset-details/reports-tab/reports-tab.component';
+import { ReportCardComponent } from './components/account/feed/report-card/report-card.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -134,7 +135,7 @@ export function getAuthServiceConfigs() {
     ListAssetsComponent,
     AssetCardComponent,
     AssetDetailsComponent,
-    AdvicesComponent,
+    FeedComponent,
     NewAdviceComponent,
     ConfirmAdviceDialogComponent,
     ReferralDetailsComponent,
@@ -172,7 +173,8 @@ export function getAuthServiceConfigs() {
     HotsiteHeaderComponent,
     HotsiteFooterComponent,
     HotsiteBlogSectionComponent,
-    ReportsTabComponent
+    ReportsTabComponent,
+    ReportCardComponent
   ],
   imports: [
     BrowserModule,
