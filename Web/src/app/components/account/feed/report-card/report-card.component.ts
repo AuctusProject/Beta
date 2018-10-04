@@ -34,7 +34,7 @@ export class ReportCardComponent implements OnInit {
 
   getBackgroundColor(){
     if(this.reportFeed.report.rateDetails){
-      return this.reportFeed.report.rateDetails.hexaColor
+      return this.reportFeed.report.rateDetails.hexaColor;
     }
     return null;
   }

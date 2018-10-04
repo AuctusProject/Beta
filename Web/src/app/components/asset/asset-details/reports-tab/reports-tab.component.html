@@ -13,15 +13,22 @@
           <div class="expert-rating">
             <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="report.score" [title]="report.score | number: '1.2-2'"></bar-rating>
           </div>
-          <span fxHide.gt-xs>Rating: {{report.rate}}</span>
-          <div fxHide.gt-xs [title]="report.reportDate | date: 'medium'">{{report.reportDate | timeAgo}}</div>
+          <span fxHide.gt-xs fxLayout="column" fxLayoutGap="5px">
+            <div>Rating: </div>
+            <div class="rate" [style.background-color]="getBackgroundColor(report)">
+              {{report.rate}}
+            </div>
+          </span>
+          <div class="report-date" fxHide.gt-xs [title]="report.reportDate | date: 'medium'">{{report.reportDate | timeAgo}}</div>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="rating">
         <th mat-header-cell *matHeaderCellDef><span fxHide.lt-sm> Rating </span> </th>
         <td mat-cell *matCellDef="let report">  
-          <span fxHide.lt-sm>{{report.rate}}</span>
+          <div fxHide.lt-sm class="rate" [style.background-color]="getBackgroundColor(report)">
+            {{report.rate}}
+          </div>
         </td>
       </ng-container>
 
