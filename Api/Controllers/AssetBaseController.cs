@@ -29,7 +29,7 @@ namespace Api.Controllers
 
         protected IActionResult ListReports(int? top, int? lastReportId)
         {
-            return Ok(ReportBusiness.List(null, top, lastReportId));
+            return Ok(ReportBusiness.ListReports(top, lastReportId));
         }
 
         protected IActionResult ListAssetValues(int id, DateTime? dateTime)

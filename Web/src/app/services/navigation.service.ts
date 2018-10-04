@@ -73,4 +73,8 @@ export class NavigationService {
   public goToTopAssets(){
     this.goToUrl('top-assets');
   }
+
+  public goToReports(){
+    this.goToUrl('reports');
+  }
 }
