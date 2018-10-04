@@ -15,7 +15,7 @@ namespace Auctus.DataAccess.Asset
     {
         public override string TableName => "Report";
 
-        private const string SQL_LIST = @"SELECT {0} r.* FROM [Report] r WITH(NOLOCK) {1} {2} ORDER BY r.ReportDate, r.Id DESC";
+        private const string SQL_LIST = @"SELECT {0} r.* FROM [Report] r WITH(NOLOCK) {1} {2} ORDER BY r.ReportDate DESC, r.Id DESC";
 
         public ReportData(IConfigurationRoot configuration) : base(configuration) { }
 
