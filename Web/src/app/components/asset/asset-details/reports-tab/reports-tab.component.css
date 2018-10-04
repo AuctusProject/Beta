@@ -18,3 +18,10 @@ td.mat-column-agencyName span{
     padding: 5px;
     margin:auto;
 }
+
+.no-agency-rating{
+    margin-top: 30px;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+}
