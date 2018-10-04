@@ -4,6 +4,7 @@ import { Highcharts } from 'angular-highcharts';
 import { Router } from '@angular/router';
 import { NavigationService } from './services/navigation.service';
 import { ModalService } from './services/modal.service';
+import { AccountService } from './services/account.service';
 
 Highcharts.setOptions({
     global:{
@@ -210,7 +211,8 @@ export class AppComponent implements OnInit{
   public topLoading = TopLoadingComponent.prototype.constructor;
   constructor(private router: Router, 
     private navigationService : NavigationService,
-    private modalService: ModalService) { }
+    private modalService: ModalService,
+    private accountService : AccountService) { }
 
   ngOnInit(){
   }
@@ -232,5 +234,10 @@ export class AppComponent implements OnInit{
 
   openSocialMediaModal() {
     this.modalService.setInviteFriend();
+  }
+
+  isLogged(): boolean {
+    this.loginData = this.accountService.getLoginData();
+    return !!this.loginData;
   }
 }
