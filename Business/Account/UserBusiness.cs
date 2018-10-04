@@ -650,11 +650,11 @@ namespace Auctus.Business.Account
             var followingAssetsIds = AssetBusiness.ListFollowingAssets().Select(c => c.Id).Distinct();
             var advicesForFeed = Task.Factory.StartNew(() => AdviceBusiness.ListLastAdvicesForUserWithPagination(followingAssetsIds, top, lastAdviceId));
             var reportForFeed = Task.Factory.StartNew(() => ReportBusiness.List(followingAssetsIds, top, lastReportId));
-            return FillFeedList(advicesForFeed, reportForFeed, GetValidUser(), lastAdviceId, lastReportId);
+            return FillFeedList(advicesForFeed, reportForFeed, GetValidUser(), top, lastAdviceId, lastReportId);
         }
 
         public IEnumerable<FeedResponse> FillFeedList(Task<IEnumerable<Advice>> listAdvicesTask, Task<List<Report>> listReportsTask,
-            User loggedUser, int? lastAdviceId, int? lastReportId)
+            User loggedUser, int? top, int? lastAdviceId, int? lastReportId)
         {
             string advisorsCacheKey = "FeedAdvisorsResult" + LoggedEmail;
             string assetsCacheKey = "FeedAssetsResult" + LoggedEmail;
@@ -701,16 +701,16 @@ namespace Auctus.Business.Account
                 Task.WaitAll(listReportsTask);
                 feedReport = listReportsTask.Result;
             }
-            return ConvertToFeedResponse(assetsResult, advisorsResult, feedAdvices, feedReport);
+            return ConvertToFeedResponse(top, assetsResult, advisorsResult, feedAdvices, feedReport);
         }
 
-        private List<FeedResponse> ConvertToFeedResponse(List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, 
+        private List<FeedResponse> ConvertToFeedResponse(int? top, List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, 
             IEnumerable<Advice> advices, IEnumerable<Report> reports)
         {
             var feedResult = new List<FeedResponse>();
             feedResult.AddRange(ConvertAdviceToFeedResponse(assetResult, advisorsResult, advices));
             feedResult.AddRange(ConvertReportToFeedResponse(assetResult, reports));
-            return feedResult.OrderByDescending(c => c.Date).ToList();
+            return top.HasValue ? feedResult.OrderByDescending(c => c.Date).Take(top.Value).ToList() : feedResult.OrderByDescending(c => c.Date).ToList();
         }
 
         private List<FeedResponse> ConvertAdviceToFeedResponse(List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, IEnumerable<Advice> advices)

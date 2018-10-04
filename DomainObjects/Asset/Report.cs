@@ -15,7 +15,11 @@ namespace Auctus.DomainObjects.Asset
         [DapperType(System.Data.DbType.Int32)]
         public int AgencyId { get; set; }
         [DapperType(System.Data.DbType.Int32)]
-        public int AgencyRatingId { get; set; }
+        public int? AgencyRatingId { get; set; }
+        [DapperType(System.Data.DbType.AnsiString)]
+        public string Rate { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double Score { get; set; }
         [DapperType(System.Data.DbType.DateTime)]
         public DateTime CreationDate { get; set; }
         [DapperType(System.Data.DbType.DateTime)]
