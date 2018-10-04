@@ -38,9 +38,9 @@ namespace Auctus.DataAccess.Asset
             {
                 where = " WHERE ";
                 if (!string.IsNullOrEmpty(complement))
-                    complement = " ( " + complement + " ) ";
+                    complement = " ( " + complement + " ) AND ";
 
-                complement += @" AND (r.ReportDate < (SELECT r2.ReportDate FROM [Report] r2 WITH(NOLOCK) WHERE r2.Id = @LastReportId) 
+                complement += @" (r.ReportDate < (SELECT r2.ReportDate FROM [Report] r2 WITH(NOLOCK) WHERE r2.Id = @LastReportId) 
                                 OR (r.ReportDate = (SELECT r2.ReportDate FROM [Report] r2 WITH(NOLOCK) WHERE r2.Id = @LastReportId) AND r.Id < @LastReportId) ) ";
                 parameters.Add("LastReportId", lastReportId.Value, DbType.Int32);
             }

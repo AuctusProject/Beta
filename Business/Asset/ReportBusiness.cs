@@ -33,6 +33,12 @@ namespace Auctus.Business.Asset
             return reports;
         }
 
+        public List<ReportResponse> ListReports(int? top, int? lastReportId)
+        {
+            var reports = List(null, top, lastReportId);
+            return reports.Select(c => ConvertToReportResponse(c)).OrderByDescending(c => c.ReportDate).ToList();
+        }
+
         public ReportResponse ConvertToReportResponse(Report report)
         {
             return new ReportResponse()

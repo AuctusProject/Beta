@@ -94,6 +94,7 @@ import { HotsiteHeaderComponent } from './components/hot-site/hotsite-header/hot
 import { HotsiteFooterComponent } from './components/hot-site/hotsite-footer/hotsite-footer.component';
 import { HotsiteBlogSectionComponent } from './components/hot-site/hotsite-blog-section/hotsite-blog-section.component';
 import { ReportsTabComponent } from './components/asset/asset-details/reports-tab/reports-tab.component';
+import { ListReportsComponent } from './components/asset/list-reports/list-reports.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -172,7 +173,8 @@ export function getAuthServiceConfigs() {
     HotsiteHeaderComponent,
     HotsiteFooterComponent,
     HotsiteBlogSectionComponent,
-    ReportsTabComponent
+    ReportsTabComponent,
+    ListReportsComponent
   ],
   imports: [
     BrowserModule,
