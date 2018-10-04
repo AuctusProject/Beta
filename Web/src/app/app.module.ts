@@ -93,6 +93,7 @@ import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-ex
 import { HotsiteHeaderComponent } from './components/hot-site/hotsite-header/hotsite-header.component';
 import { HotsiteFooterComponent } from './components/hot-site/hotsite-footer/hotsite-footer.component';
 import { HotsiteBlogSectionComponent } from './components/hot-site/hotsite-blog-section/hotsite-blog-section.component';
+import { ReportsTabComponent } from './components/asset/asset-details/reports-tab/reports-tab.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -170,7 +171,8 @@ export function getAuthServiceConfigs() {
     BeAnExpertComponent,
     HotsiteHeaderComponent,
     HotsiteFooterComponent,
-    HotsiteBlogSectionComponent
+    HotsiteBlogSectionComponent,
+    ReportsTabComponent
   ],
   imports: [
     BrowserModule,

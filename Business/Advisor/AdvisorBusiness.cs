@@ -156,7 +156,7 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            var user = GetValidUser();
+            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             CalculateForAdvisorsData(user, CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult, advisorId);
             var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();

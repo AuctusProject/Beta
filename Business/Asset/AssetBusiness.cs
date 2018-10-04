@@ -69,7 +69,7 @@ namespace Auctus.Business.Asset
 
         public AssetResponse GetAssetData(int assetId)
         {
-            var user = GetValidUser();
+            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));

@@ -36,7 +36,7 @@ export class AccountService {
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
   private registerUrl = this.httpService.apiUrl("v1/accounts");
-  private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/advices");
+  private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/feed");
   private meReferralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
   private meWalletLoginUrl = this.httpService.apiUrl("v1/accounts/me/wallet_login");
   private referralsUrl = this.httpService.apiUrl("v1/accounts/referrals");
@@ -160,5 +160,18 @@ export class AccountService {
   
   postEarlyAccessRequest(earlyAccessRequest: EarlyAccessRequest) : Observable<void> {
     return this.httpService.post(this.earlyAccessUrl, earlyAccessRequest)
+  }
+
+  hasInvestmentToCallLoggedAction():boolean{
+    let loginData = this.getLoginData();
+    if(!loginData){
+      this.navigationService.goToLogin();
+      return false;
+    }
+    else if (!!loginData && (!loginData.hasInvestment && !loginData.isAdvisor)) {
+      this.navigationService.goToWalletLogin();
+      return false;
+    }
+    return true;
   }
 }

@@ -452,14 +452,12 @@ namespace Auctus.Business.Account
         public new void Update(User user)
         {
             Data.Update(user);
-            if (user.ConfirmationDate.HasValue)
-            {
-                var cacheKey = GetUserCacheKey(user.Email);
-                if (UserBusiness.IsValidAdvisor(user))
-                    MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
-                else
-                    MemoryCache.Set<User>(cacheKey, user);
-            }
+            
+            var cacheKey = GetUserCacheKey(user.Email);
+            if (UserBusiness.IsValidAdvisor(user))
+                MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
+            else
+                MemoryCache.Set<User>(cacheKey, user);
         }
 
         public List<User> ListAllUsersData()

@@ -10,17 +10,17 @@
         <ng-container matColumnDef="adviceType">
           <th mat-header-cell *matHeaderCellDef> Rating </th>
           <td mat-cell *matCellDef="let advice"> <div class="table-cell-title">{{adviceType}}</div> 
-            At price {{advice.assetValueAtAdviceTime | valueDisplay}} 
+            At price {{advice.advice.assetValueAtAdviceTime | valueDisplay}} 
           </td>
         </ng-container>
       
         <ng-container matColumnDef="advisorName">
           <th mat-header-cell *matHeaderCellDef> Expert </th>
-          <td mat-cell *matCellDef="let advice" (click)="goToExpertDetails(advice.advisorId)" class="pointer">
+          <td mat-cell *matCellDef="let advice" (click)="goToExpertDetails(advice.advice.advisorId)" class="pointer">
               <div class="expert-rating">
-                <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advisorRating" [title]="advice.advisorRating | number: '1.2-2'"></bar-rating>
+                <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advice.advice.advisorRating" [title]="advice.advice.advisorRating | number: '1.2-2'"></bar-rating>
               </div>
-            <span class="truncate" title="{{advice.advisorName}}">{{advice.advisorName}}</span>
+            <span class="truncate" title="{{advice.advice.advisorName}}">{{advice.advice.advisorName}}</span>
           </td>
         </ng-container>
 

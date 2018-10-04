@@ -9,7 +9,9 @@
             <a style="color:white">Hold AUC</a>
         </div>
         <div [class.blur]="!canView()">
-            <advice-card *ngFor="let advice of advices" [advice]="advice"></advice-card>
+            <ng-container *ngFor="let advice of advices">
+                <advice-card *ngIf="advice.advice" [adviceFeed]="advice"></advice-card>
+            </ng-container>
         </div>
     </div>
     <div *ngIf="canView()" fxLayoutAlign="center center">

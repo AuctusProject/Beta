@@ -60,11 +60,10 @@ a span {
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
-    padding-left: 15px;
     padding-right: 15px;
 }
 
-.login {
+.header-blue-button {
     padding-bottom: 10px;
     padding-top: 10px;
     padding-left: 20px;
@@ -87,6 +86,7 @@ a span {
     text-align: center;
     color: #07d1ff;
     cursor: pointer;
+    margin-right: 15px;
 }
 
 ::ng-deep .sub-menu {

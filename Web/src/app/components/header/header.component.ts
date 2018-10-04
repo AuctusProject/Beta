@@ -93,4 +93,8 @@ export class HeaderComponent implements OnInit {
   register() {
     this.modalService.setRegister();
   }
+
+  onNewAdviceClick() {
+    this.modalService.setNewAdvice();
+  }
 }
