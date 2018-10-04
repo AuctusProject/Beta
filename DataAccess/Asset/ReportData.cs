@@ -21,11 +21,14 @@ namespace Auctus.DataAccess.Asset
 
         public List<Report> ListWithPagination(IEnumerable<int> assetsId, int? top, int? lastReportId)
         {
+            if (assetsId != null && !assetsId.Any())
+                return new List<Report>();
+
             DynamicParameters parameters = new DynamicParameters();
             string complement = "";
             string where = "";
 
-            if (assetsId?.Any() == true)
+            if (assetsId != null)
             {
                 where = " WHERE ";
                 complement = string.Join(" OR ", assetsId.Select((c, i) => $"r.AssetId = @AssetId{i}"));
