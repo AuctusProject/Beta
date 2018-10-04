@@ -15,23 +15,28 @@ namespace Auctus.DataAccess.Asset
     {
         public override string TableName => "Report";
 
-        private const string SQL_LIST = @"SELECT {0} r.* FROM [Report] r WITH(NOLOCK) WHERE {1} ORDER BY r.ReportDate, r.Id DESC";
+        private const string SQL_LIST = @"SELECT {0} r.* FROM [Report] r WITH(NOLOCK) {1} {2} ORDER BY r.ReportDate, r.Id DESC";
 
         public ReportData(IConfigurationRoot configuration) : base(configuration) { }
 
         public List<Report> ListWithPagination(IEnumerable<int> assetsId, int? top, int? lastReportId)
         {
-            if (!assetsId.Any())
-                throw new ArgumentNullException("assetsId");
-
-            var complement = string.Join(" OR ", assetsId.Select((c, i) => $"r.AssetId = @AssetId{i}"));
             DynamicParameters parameters = new DynamicParameters();
-            for (int i = 0; i < assetsId.Count(); ++i)
-                parameters.Add($"AssetId{i}", assetsId.ElementAt(i), DbType.Int32);
+            string complement = "";
+            string where = "";
+
+            if (assetsId?.Any() == true)
+            {
+                where = " WHERE ";
+                complement = string.Join(" OR ", assetsId.Select((c, i) => $"r.AssetId = @AssetId{i}"));
+                for (int i = 0; i < assetsId.Count(); ++i)
+                    parameters.Add($"AssetId{i}", assetsId.ElementAt(i), DbType.Int32);
+            }
 
             var topCondition = (top.HasValue ? "TOP " + top.Value : "");
             if (lastReportId.HasValue)
             {
+                where = " WHERE ";
                 if (!string.IsNullOrEmpty(complement))
                     complement = " ( " + complement + " ) ";
 
@@ -40,7 +45,7 @@ namespace Auctus.DataAccess.Asset
                 parameters.Add("LastReportId", lastReportId.Value, DbType.Int32);
             }
 
-            return Query<Report>(string.Format(SQL_LIST, topCondition, complement), parameters).ToList();
+            return Query<Report>(string.Format(SQL_LIST, topCondition, where, complement), parameters).ToList();
         }
     }
 }

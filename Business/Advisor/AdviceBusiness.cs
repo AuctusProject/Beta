@@ -130,7 +130,7 @@ namespace Auctus.Business.Advisor
         public IEnumerable<FeedResponse> ListLastAdvicesForAllTypes(int? numberOfAdvicesOfEachType)
         {
             var advicesForFeed = Task.Factory.StartNew(() => Data.ListLastAdvicesForAllTypes(numberOfAdvicesOfEachType));
-            return UserBusiness.FillFeedList(advicesForFeed, null, null, null, null);
+            return UserBusiness.FillFeedList(advicesForFeed, null, null, null, null, null);
         }
 
         public IEnumerable<int> ListTrendingAdvisedAssets(int top = 3)

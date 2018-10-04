@@ -12,7 +12,9 @@ namespace Auctus.Model
         public int AgencyId { get; set; }
         public string AgencyName { get; set; }
         public string AgencyWebSite { get; set; }
-        public RatingDetail Rate { get; set; }
+        public double Score { get; set; }
+        public string Rate { get; set; }
+        public RatingDetail RateDetails { get; set; }
         public List<RatingDetail> RateOptions { get; set; }
 
         public class RatingDetail

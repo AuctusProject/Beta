@@ -15,7 +15,7 @@ namespace Auctus.DataAccess.Asset
 
         private const string SQL_LIST = @"SELECT a.*, r.* FROM 
                                         [Agency] a WITH(NOLOCK)
-                                        INNER JOIN [AgencyRating] r WITH(NOLOCK) ON r.AgencyId = a.Id";
+                                        LEFT JOIN [AgencyRating] r WITH(NOLOCK) ON r.AgencyId = a.Id";
 
         public AgencyData(IConfigurationRoot configuration) : base(configuration) { }
 

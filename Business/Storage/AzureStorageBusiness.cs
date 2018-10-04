@@ -11,6 +11,8 @@ namespace Auctus.Business.Storage
     {
         private const string ASSET_ICON_CONTAINER_NAME = "assetsicons";
         private const string USER_PICTURE_CONTAINER_NAME = "userpicture";
+        private const string AGENCIES_CONTAINER_NAME = "agencieslogo";
+        private const string REPORT_CONTAINER_NAME = "assetsreport";
 
         private readonly IAzureStorageResource Resource;
 
@@ -32,6 +34,16 @@ namespace Auctus.Business.Storage
         public async Task<bool> DeleteUserPicture(string fileName)
         {
             return await Resource.DeleteFileAsync(USER_PICTURE_CONTAINER_NAME, fileName);
+        }
+
+        public async Task<bool> UploadAgenciesFromByteAsync(string fileName, byte[] file)
+        {
+            return await Resource.UploadFileFromBytesAsync(AGENCIES_CONTAINER_NAME, fileName, file);
+        }
+
+        public async Task<bool> UploadAssetReportFromByteAsync(string fileName, byte[] file)
+        {
+            return await Resource.UploadFileFromBytesAsync(REPORT_CONTAINER_NAME, fileName, file);
         }
     }
 }

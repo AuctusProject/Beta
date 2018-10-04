@@ -37,6 +37,15 @@ namespace Api.Controllers
             return base.ListTrendingAssets(top);
         }
 
+        [Route("reports")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListReports([FromQuery]int? top, [FromQuery]int? lastReportId)
+        {
+            return base.ListReports(top, lastReportId);
+        }
+
         [HttpGet]
         [Route("{id}/values")]
         [AllowAnonymous]
