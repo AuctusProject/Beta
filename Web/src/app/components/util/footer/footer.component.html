@@ -2,7 +2,7 @@
   <div class="separator"></div>
   <div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between start" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="space-between center" fxLayoutGap.lt-sm="20px">
     <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo">
-    <div fxLayout="row" fxLayoutGap="100px">
+    <div fxLayout="row" fxLayoutGap.gt-sm="100px" fxLayoutGap.lt-md="60px">
       <div fxLayout="column" fxHide.lt-md>
         <div class="footer-item-title">HOME</div>
         <div routerLink="/top-experts" class="footer-item"><a>Top Experts</a></div>

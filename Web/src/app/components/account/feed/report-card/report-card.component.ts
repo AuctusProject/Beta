@@ -31,4 +31,11 @@ export class ReportCardComponent implements OnInit {
   goToAssetDetails(){
     this.navigationService.goToAssetDetails(this.reportFeed.assetId);
   }
+
+  getBackgroundColor(){
+    if(this.reportFeed.report.rateDetails){
+      return this.reportFeed.report.rateDetails.hexaColor
+    }
+    return null;
+  }
 }

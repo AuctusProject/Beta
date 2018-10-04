@@ -39,8 +39,8 @@
       <div fxLayout="column" class="download-column" fxLayoutAlign="center stretch" >
         <div fxLayout="column" class="rate-column">
           <div class="desc-label">RATING</div>
-          <div class="rate" [style.background-color]="reportFeed.report.rate.hexaColor">
-            {{reportFeed.report.rate.rate}}
+          <div class="rate" [style.background-color]="getBackgroundColor()">
+            {{reportFeed.report.rate}}
           </div>
         </div>
         <span fxLayoutAlign="center center" fxHide.gt-sm>{{reportFeed.date | timeAgo}}</span>
