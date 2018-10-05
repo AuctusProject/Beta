@@ -1,11 +1,13 @@
 using Auctus.Business.Account;
 using Auctus.Business.Advisor;
 using Auctus.Business.Asset;
+using Auctus.DataAccess.Event;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DataAccessInterfaces.Blockchain;
 using Auctus.DataAccessInterfaces.Email;
+using Auctus.DataAccessInterfaces.Event;
 using Auctus.DataAccessInterfaces.Exchange;
 using Auctus.DataAccessInterfaces.Storage;
 using Auctus.DataAccessMock.Account;
@@ -56,6 +58,7 @@ namespace Auctus.Test
             services.AddSingleton<IAzureStorageResource, AzureStorageResource>();
             services.AddSingleton<ICoinMarketcapApi, CoinMarketcapApi>();
             services.AddSingleton<ICoinGeckoApi, CoinGeckoApi>();
+            services.AddSingleton<ICoinMarketCalApi, CoinMarketCalApi>();
             services.AddScoped<IActionData<DomainObjects.Account.Action>, ActionData>();
             services.AddScoped<IExchangeApiAccessData<ExchangeApiAccess>, ExchangeApiAccessData>();
             services.AddScoped<IPasswordRecoveryData<PasswordRecovery>, PasswordRecoveryData>();

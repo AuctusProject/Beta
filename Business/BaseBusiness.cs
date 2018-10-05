@@ -3,6 +3,7 @@ using Auctus.Business.Advisor;
 using Auctus.Business.Asset;
 using Auctus.Business.Blockchain;
 using Auctus.Business.Email;
+using Auctus.Business.Event;
 using Auctus.Business.Exchange;
 using Auctus.Business.Storage;
 using Auctus.DataAccess.Core;
@@ -68,6 +69,7 @@ namespace Auctus.Business
         private AgencyBusiness _agencyBusiness;
         private AgencyRatingBusiness _agencyRatingBusiness;
         private ReportBusiness _reportBusiness;
+        private CoinMarketCalBusiness _coinMarketCalBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -507,6 +509,16 @@ namespace Auctus.Business
                 if (_reportBusiness == null)
                     _reportBusiness = new ReportBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _reportBusiness;
+            }
+        }
+
+        protected CoinMarketCalBusiness CoinMarketCalBusiness
+        {
+            get
+            {
+                if (_coinMarketCalBusiness == null)
+                    _coinMarketCalBusiness = new CoinMarketCalBusiness(Configuration, ServiceProvider);
+                return _coinMarketCalBusiness;
             }
         }
     }
