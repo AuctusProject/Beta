@@ -99,6 +99,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
           "pairCurrencyId": "5937d635231e97001f744267",
           "primaryColor": "#126efd",
           "displayCurrency": "ETH",
+          "widgetContainerId": "bancor-wc",
           "hideVolume": true
         });
       }
