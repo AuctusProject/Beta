@@ -237,6 +237,10 @@ export class AppComponent implements OnInit{
   }
 
   isLogged(): boolean {
-    return this.accountService.isLoggedIn();
+    if (this.accountService.isLoggedIn()) {
+        let loginData = this.accountService.getLoginData();
+        return !!loginData && loginData.hasInvestment;
+    }
+    return false;
   }
 }
