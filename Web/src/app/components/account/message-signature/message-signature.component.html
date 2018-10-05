@@ -67,7 +67,7 @@
       </div>
       <div class="width100" *ngIf="!this.hasAuc() && hasMetamask && hasUnlockedAccount" class="text-center" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
         <span>
-            To enter the platform you need to hold 5000 AUC.<br>
+            To enter the platform you need to hold {{aucRequired}} AUC.<br>
             However...
         </span>
         <span class="access-free bold">ACCESS IS FREE</span>
@@ -78,13 +78,13 @@
           <a href="https://www.bitfinex.com" target="_blank"><img [src]="getImgSrc('bitfinex')"/></a>
           <a href="https://idex.market/eth/auc" target="_blank"><img [src]="getImgSrc('idex')"/></a>
           <a fxHide.gt-sm="true" href="https://www.bancor.network/communities/5ad9c1c5c7d1460001bc9bfa" target="_blank"><img img [src]="getImgSrc('bancor')"/></a>
-          <a href="https://hitbtc.com/AUC-to-ETH" target="_blank"><img img [src]="getImgSrc('hitbtc')"/></a>
+          <a href="https://www.coinbene.com/#/market?pairId=AUCBTC" target="_blank"><img img [src]="getImgSrc('coinbene')"/></a>
         </div>
         <div fxHide.lt-md="true" fxLayout="row" class="width100" fxLayoutAlign="space-evenly center">
           <div class="bancor-border" ></div>
           <img  [src]="getImgSrc('bancor')">
           <div class="bancor-border"></div>
-        </div>
+        </div> 
         <div fxHide.lt-md="true" class="width100" fxLayout="column" fxLayoutAlign="space-evenly center">
           <div class="widget-bancor" id="bancor-wc"></div>
         </div>

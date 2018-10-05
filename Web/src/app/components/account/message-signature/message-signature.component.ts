@@ -30,6 +30,7 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   standardAUCAmount: number;
   aucRequired: number;
   aucAmount: number = 0;
+  widgetBancorInitialized: boolean = false;
   @ViewChild("Referral") Referral: InheritanceInputComponent;
   promise: Subscription;
 
@@ -81,18 +82,16 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   }
 
   shouldShowBancorWidget() {
-    return window && window["BancorConvertWidget"] && window["BancorConvertWidget"].isInitialized;
+    return window && window["BancorConvertWidget"] && this.widgetBancorInitialized;
   }
 
   setBancorWidget() {
     if (window && window["BancorConvertWidget"]) {
-      if (this.isMobile() || this.hasAuc()) {
-        if (window["BancorConvertWidget"].isInitialized) {
-          window["BancorConvertWidget"].deinit();
-        }
-      } else if (!window["BancorConvertWidget"].isInitialized &&
-                  (!this.hasAuc() && this.hasMetamask && this.hasUnlockedAccount) ) {
-        window["BancorConvertWidget"].init({
+      if (this.isMobile() || this.hasAuc() || !this.hasMetamask || !this.hasUnlockedAccount) {
+        this.widgetBancorInitialized = false;
+      } else if (!this.widgetBancorInitialized && (!this.hasAuc() && this.hasMetamask && this.hasUnlockedAccount) ) {
+        this.widgetBancorInitialized = true;
+        window["BancorConvertWidget"].createInstance({
           "type": "2",
           "blockchainType": "ethereum",
           "baseCurrencyId": "5ad9c1d54c4998a2f940e933",
@@ -113,9 +112,6 @@ export class MessageSignatureComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.timer) {
       clearTimeout(this.timer);
-    }
-    if (window && window["BancorConvertWidget"] && window["BancorConvertWidget"].isInitialized) {
-      window["BancorConvertWidget"].deinit();
     }
   }
 
