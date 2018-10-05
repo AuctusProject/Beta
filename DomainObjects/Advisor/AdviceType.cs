@@ -39,7 +39,7 @@ namespace Auctus.DomainObjects.Advisor
                 case 1:
                     return "Buy";
                 case 2:
-                    return "Hold";
+                    return "Close";
                 default:
                     throw new BusinessException("Invalid type.");
             }

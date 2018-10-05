@@ -251,10 +251,12 @@ namespace Auctus.Test.Advisor
                     Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
                     break;
                 case 3:
-                    AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition);
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
+                    AdvisorBusiness.Advise(assetId, AdviceType.Buy);
                     Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Sell));
                     break;
                 case 4:
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
                     AdvisorBusiness.Advise(assetId, AdviceType.Buy);
                     break;
                 case 5:

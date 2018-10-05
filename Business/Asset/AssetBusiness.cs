@@ -53,7 +53,7 @@ namespace Auctus.Business.Asset
         {
             var user = GetValidUser();
             var asset = GetById(assetId);
-            //var lastAdvice = AdviceBusiness.GetLastAdviceForAssetByAdvisor(user.Id, assetId);
+            var lastAdvice = AdviceBusiness.GetLastAdviceForAssetByAdvisor(user.Id, assetId);
 
             var lastValue = AssetCurrentValueBusiness.GetCurrentValue(assetId);
             if (lastValue == null)
@@ -63,7 +63,7 @@ namespace Auctus.Business.Asset
             {
                 AssetId = assetId,
                 LastValue = lastValue.Value,
-                CloseRecommendationEnabled = true //lastAdvice != null && lastAdvice.AdviceType != AdviceType.ClosePosition                
+                CloseRecommendationEnabled = lastAdvice != null && lastAdvice.AdviceType != AdviceType.ClosePosition                
             };
         }
 

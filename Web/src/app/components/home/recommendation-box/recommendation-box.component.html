@@ -1,5 +1,5 @@
     <div class="recommendation-box" fxLayout="column">
-      <div class="box-title" [class.buy]="adviceType=='BUY'" [class.sell]="adviceType=='SELL'" [class.close]="adviceType=='HOLD'">{{adviceType}}</div>
+      <div class="box-title" [class.buy]="adviceType=='BUY'" [class.sell]="adviceType=='SELL'" [class.close]="adviceType=='CLOSE'">{{adviceType}}</div>
       <table mat-table [dataSource]="adviceList" class="recommendation-table">
         <ng-container matColumnDef="assetCode">
           <th mat-header-cell *matHeaderCellDef> Asset </th>

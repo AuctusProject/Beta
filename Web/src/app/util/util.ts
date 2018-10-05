@@ -42,7 +42,7 @@ export class Util {
             return "BUY";
           }
           else{
-            return "HOLD";
+            return "CLOSE";
           }
     }
 
