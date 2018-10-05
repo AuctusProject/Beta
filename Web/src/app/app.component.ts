@@ -237,7 +237,6 @@ export class AppComponent implements OnInit{
   }
 
   isLogged(): boolean {
-    var loginData = this.accountService.getLoginData();
-    return !!loginData;
+    return this.accountService.isLoggedIn();
   }
 }
