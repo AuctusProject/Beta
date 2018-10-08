@@ -1,0 +1,50 @@
+<div class="global-container">
+  <table *ngIf="events && events.length > 0" mat-table [dataSource]="visibleEvents" class="assets-table">
+    <ng-container matColumnDef="eventDate">
+      <th mat-header-cell *matHeaderCellDef> Event </th>
+      <td mat-cell *matCellDef="let event"> 
+        <div class="event-title">{{event.title}}</div>
+        <div class="event-date">{{event.eventDate | date : 'longDate'}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="categories">
+      <th mat-header-cell *matHeaderCellDef><span fxHide.lt-sm> Type </span> </th>
+      <td mat-cell *matCellDef="let event">  
+        {{getEventCategories(event)}}
+      </td>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Description </th>
+        <td mat-cell *matCellDef="let event">
+          {{event.description}}
+        </td>
+      </ng-container> -->
+
+    <ng-container matColumnDef="createdDate">
+      <th mat-header-cell *matHeaderCellDef><span fxHide.lt-sm> Created Date </span></th>
+      <td mat-cell *matCellDef="let event">
+        <div fxHide.lt-sm [title]="event.eventDate | date: 'medium'">{{event.eventDate | timeAgo}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="link">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let event">
+        <a [href]="getEventUrl(event)" target="_blank"><fa-icon icon="download"></fa-icon>&nbsp;Proof</a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" class="element-row"></tr>
+  </table>
+  <div class="no-event-rating" *ngIf="!events || events.length == 0">
+    There's no event of this asset.
+  </div>
+  <div *ngIf="hasMoreEvents()" fxLayoutAlign="center center">
+    <button class="pagination-link" (click)="loadMoreEvents()">
+      LOAD MORE
+    </button>
+  </div>
+</div>
