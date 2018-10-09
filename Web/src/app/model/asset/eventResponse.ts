@@ -1,9 +1,11 @@
 export class EventResponse {
-  id: number;
+  eventId: number;
   title: string;
   description: string;
   eventDate: Date;
-  createdDate: Date;
+  creationDate: Date;
+  canOccurBefore: boolean;
+  source: string;
   categories: EventCategory[];
 }
 

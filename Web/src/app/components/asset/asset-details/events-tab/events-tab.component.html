@@ -22,7 +22,7 @@
         </td>
       </ng-container> -->
 
-    <ng-container matColumnDef="createdDate">
+    <ng-container matColumnDef="creationDate">
       <th mat-header-cell *matHeaderCellDef><span fxHide.lt-sm> Created Date </span></th>
       <td mat-cell *matCellDef="let event">
         <div fxHide.lt-sm [title]="event.eventDate | date: 'medium'">{{event.eventDate | timeAgo}}</div>

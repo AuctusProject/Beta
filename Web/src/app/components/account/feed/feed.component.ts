@@ -30,12 +30,14 @@ export class FeedComponent implements OnInit {
   "advice": null,
   "report": null, 
   "event":{
-    id:1,
+    eventId:1,
     description:"A gathering of global blockchain leaders to showcase technology’s real-world implementation and forthcoming developments | 9-10th Oct, Bali.",
     categories:[{name:'Conference',id:5},{name:'Teste2',id:2}],
-    createdDate:new Date(), 
+    creationDate:new Date(), 
     eventDate: new Date(), 
-    title:'XBlockchain Summit'
+    title:'XBlockchain Summit',
+    canOccurBefore: false,
+    source: ""
   }
   }
   constructor(private accountService: AccountService) { }
@@ -54,10 +56,11 @@ export class FeedComponent implements OnInit {
   }
 
   loadMore() {
-    this.promise = this.accountService.listFeed(this.pageSize, this.getLastAdviceId(), this.getLastReportId()).subscribe(result => 
+    this.promise = this.accountService.listFeed(this.pageSize, this.getLastAdviceId(), this.getLastReportId(), this.getLastEventId()).subscribe(result => 
       {
-        if (this.advices == null)
+        if (this.advices == null) {
           this.advices = [];
+        }
         this.advices = this.advices.concat(result);
         this.hasMoreAdvices = true;
         if(!result || result.length == 0 || result.length < this.pageSize){
@@ -83,6 +86,17 @@ export class FeedComponent implements OnInit {
       for(var i = this.advices.length - 1; i > 0; i--){
         if(this.advices[i].report) {
           return this.advices[i].report.reportId;
+        }
+      }
+    }
+    return null;
+  }
+
+  getLastEventId() {
+    if(this.advices != null && this.advices.length > 0){
+      for(var i = this.advices.length - 1; i > 0; i--){
+        if(this.advices[i].event) {
+          return this.advices[i].event.eventId;
         }
       }
     }

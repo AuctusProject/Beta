@@ -8,6 +8,7 @@ export class Config
   readonly apiUrl: string;
   readonly webUrl: string;
   readonly reportUrl: string;
+  readonly eventUrl: string;
   readonly agencyImgUrl: string;
   readonly assetImgUrl: string;
   readonly profileImgUrl: string;

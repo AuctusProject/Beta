@@ -40,14 +40,21 @@ namespace Auctus.Business.Event
 
         public EventResponse ConvertToEventResponse(AssetEvent assetEvent)
         {
+            var categories = AssetEventCategoryBusiness.ListCategories().Where(c => assetEvent.LinkEventCategory.Any(a => a.AssetEventCategoryId == c.Id)).ToList();
             return new EventResponse()
             {
                 EventId = assetEvent.Id,
                 Title = assetEvent.Title,
                 Description = assetEvent.Description,
                 EventDate = assetEvent.EventDate,
+                CreationDate = assetEvent.ExternalCreationDate,
                 CanOccurBefore = assetEvent.CanOccurBefore,
-                Source = assetEvent.Source
+                Source = assetEvent.Source,
+                Categories = categories.Select(c => new EventResponse.EventCategoryResponse()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToList()
             };
         }
 

@@ -2,6 +2,7 @@
     "apiUrl": "http://localhost:50427/api/",
     "webUrl": "http://localhost:4200",
     "reportUrl": "https://auctusplatform.azureedge.net/assetsreport/{id}.pdf",
+    "eventUrl": "https://auctusplatform.azureedge.net/assetsevent/{id}.png",
     "agencyImgUrl": "https://auctusplatform.azureedge.net/agencieslogo/{id}.png",
     "assetImgUrl": "https://auctusplatform.azureedge.net/assetsicons/{id}.png",
     "profileImgUrl": "https://auctusplatform.azureedge.net/userpicture/{id}.png",

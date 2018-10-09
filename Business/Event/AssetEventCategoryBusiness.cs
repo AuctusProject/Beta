@@ -23,7 +23,7 @@ namespace Auctus.Business.Event
             {
                 categories = Data.SelectAll().ToList();
                 if (categories != null)
-                    MemoryCache.Set<List<AssetEventCategory>>(cacheKey, categories, 1440);
+                    MemoryCache.Set<List<AssetEventCategory>>(cacheKey, categories, 2880);
             }
             return categories;
         }
