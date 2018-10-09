@@ -30,12 +30,12 @@ namespace Auctus.DataAccess.Event
 
             DynamicParameters parameters = new DynamicParameters();
             var topCondition = top.HasValue ? "TOP " + top.Value : "";
-            var where = assetsId != null || lastAssetEventId.HasValue || startDate.HasValue ? " WHERE " : "";
+            var where = assetsId != null || lastAssetEventId.HasValue || startDate.HasValue || minimumReliablePercentage.HasValue || onlyFutureEvents.HasValue ? " WHERE " : "";
             var queryCondition = "";
             
             if (assetsId != null)
             {
-                queryCondition = $"({string.Join(" OR ", assetsId.Select((c, i) => $"r.AssetId = @AssetId{i}"))})";
+                queryCondition = $"({string.Join(" OR ", assetsId.Select((c, i) => $"a.AssetId = @AssetId{i}"))})";
                 for (int i = 0; i < assetsId.Count(); ++i)
                     parameters.Add($"AssetId{i}", assetsId.ElementAt(i), DbType.Int32);
             }

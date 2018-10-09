@@ -75,7 +75,8 @@ namespace Auctus.Business.Asset
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
             var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
             var reports = Task.Factory.StartNew(() => ReportBusiness.List(new int[] { assetId }));
-            Task.WaitAll(advices, advisorFollowers, assetFollowers, reports);
+            var events = Task.Factory.StartNew(() => AssetEventBusiness.List(new int[] { assetId }));
+            Task.WaitAll(advices, advisorFollowers, assetFollowers, reports, events);
 
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
@@ -84,6 +85,7 @@ namespace Auctus.Business.Asset
             result.Advisors = advisorsResult.Where(c => result.AssetAdvisor.Any(a => a.UserId == c.UserId)).ToList();
             result.AssetAdvisor = result.AssetAdvisor.OrderByDescending(a => a.LastAdviceDate).ToList();
             result.Reports = reports.Result.Select(c => ReportBusiness.ConvertToReportResponse(c)).OrderByDescending(c => c.ReportDate).ToList();
+            result.Events = events.Result.Select(c => AssetEventBusiness.ConvertToEventResponse(c)).OrderByDescending(c => c.EventDate).ToList();
             return result;
         }
 
