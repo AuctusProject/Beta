@@ -661,33 +661,3 @@ textarea:read-only {
   text-align: center;
 }
 
-.tag .tag-description{
-  font-size: 14px;
-  font-weight: 500;
-  width: 50px;
-  height: 23px;
-  line-height: 23px;
-  padding-left: 6px;
-  color: #126ffd;
-  background-color: white;
-}
-
-.tag .after-triangle {
-  width: 0;
-  height: 0;
-  border-top: 23px solid white;
-  border-right: 10px solid transparent;
-}
-
-.tag.blue .tag-description{
-  color: white;
-  background-color: #126ffd;
-}
-
-.tag.blue .after-triangle {
-  border-top: 23px solid #126ffd;
-}
-
-.tag{
-  margin-bottom: 5px;
-}
