@@ -17,7 +17,7 @@ export class EventCardComponent implements OnInit {
 
   
   getEventUrl(){
-    return CONFIG.reportUrl.replace("{id}", this.eventFeed.event.id.toString());
+    return CONFIG.reportUrl.replace("{id}", this.eventFeed.event.eventId.toString());
   }
 
   getEventImgUrl(){
