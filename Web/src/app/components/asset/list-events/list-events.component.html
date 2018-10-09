@@ -1,0 +1,20 @@
+<div class="events-container global-container-min">
+    <div class="global-container">
+        <div class="section-title">
+            Asset Events
+        </div>
+        <div class="section-subtitle">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum. Aliquam nonummy auctor massa.
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" fxHide.lt-md fxLayoutAlign="center top" fxLayoutGap="16px">
+            <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
+            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RATING</div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center">
+            <event-card *ngFor="let event of events" [eventFeed]="event"></event-card>
+            <button [promiseBtn]="promise" class="pagination-link" *ngIf="hasMoreEvents" (click)="loadMoreEvents()">
+                LOAD MORE
+            </button>
+        </div>
+    </div>
+</div>

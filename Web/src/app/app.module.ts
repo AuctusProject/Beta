@@ -101,6 +101,7 @@ import { InviteFriendComponent } from './components/account/invite-friend/invite
 import { EventsTabComponent } from './components/asset/asset-details/events-tab/events-tab.component';
 import { SummaryTabComponent } from './components/asset/asset-details/summary-tab/summary-tab.component';
 import { EventCardComponent } from './components/account/feed/event-card/event-card.component';
+import { ListEventsComponent } from './components/asset/list-events/list-events.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -185,7 +186,8 @@ export function getAuthServiceConfigs() {
     InviteFriendComponent,
     EventsTabComponent,
     SummaryTabComponent,
-    EventCardComponent
+    EventCardComponent,
+    ListEventsComponent
   ],
   imports: [
     BrowserModule,
