@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { ActivatedRoute } from '@angular/router';
 import { AdvisorService } from '../../../services/advisor.service';
@@ -42,7 +42,8 @@ export class ExpertDetailsComponent implements OnInit {
     private advisorService: AdvisorService,
     private navigationService: NavigationService,
     private assetService: AssetService,
-    private modalService: ModalService) { }
+    private modalService: ModalService,
+    private changeDetectorRefs: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
@@ -77,7 +78,9 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   fillDataSource(){
+    this.assets = [];
     this.expert.assets.forEach(element => this.assets.push(element, { detailRow: true, element }));
+    this.changeDetectorRefs.detectChanges();
   }
 
   getAssetImgUrl(asset: AssetResponse) {
