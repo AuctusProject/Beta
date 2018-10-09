@@ -13,6 +13,7 @@ import { TopExpertsComponent } from './components/advisor/top-experts/top-expert
 import { HotSiteComponent } from './components/hot-site/hot-site.component';
 import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
 import { ListReportsComponent } from './components/asset/list-reports/list-reports.component';
+import { ListEventsComponent } from './components/asset/list-events/list-events.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
     { path: 'top-assets', component: ListAssetsComponent },
     { path: 'asset-details/:id', component: AssetDetailsComponent },
     { path: 'rating-reports', component: ListReportsComponent },
+    { path: 'coin-events', component: ListEventsComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
     { path: '**', redirectTo: ''  }

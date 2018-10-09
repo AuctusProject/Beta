@@ -60,6 +60,10 @@ export class HeaderComponent implements OnInit {
     this.navigationService.goToReports();
   }
 
+  onCoinEvents() {
+    this.navigationService.goToCoinEvents();
+  }
+
   logout() {
     this.accountService.logout();
     this.isLogged();
