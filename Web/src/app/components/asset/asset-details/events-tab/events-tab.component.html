@@ -32,7 +32,11 @@
     <ng-container matColumnDef="link">
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let event">
-        <a [href]="getEventUrl(event)" target="_blank"><fa-icon icon="download"></fa-icon>&nbsp;Proof</a>
+        <a [href]="getEventUrl(event)" target="_blank">
+          <div fxHide.lt-sm class="blue-button action-button-sm">
+            View Proof
+          </div>
+        </a>
       </td>
     </ng-container>
 
