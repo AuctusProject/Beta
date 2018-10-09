@@ -1,17 +1,19 @@
 <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
     <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
-      <a [href]="reportFeed.report.agencyWebSite" target="_blank">
+      
         <div class="feed-picture">
-          <img [src]="getReportAgencyImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
+          <img [src]="getEventImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
         </div>
-      </a>
       <div fxLayout="column" class="feed-name-column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
-        <div fxLayout="row" class="tag">
-          <div class="tag-description">Agency</div>
+        <div fxLayout="row" class="tag yellow">
+          <div class="tag-description">Event</div>
           <div class="after-triangle"></div>
         </div>
-        <div class="feed-name truncate" title="{{reportFeed.report.agencyName}}">
-          <a [href]="reportFeed.report.agencyWebSite" target="_blank">{{reportFeed.report.agencyName}}</a>
+        <div class="feed-name truncate" [title]="eventFeed.event.title">
+          {{eventFeed.event.title}}
+        </div>
+        <div class="event-date">
+          {{eventFeed.event.eventDate | date : 'longDate'}}
         </div>
       </div>
     </div>
@@ -23,31 +25,25 @@
           </div>
           <div class="asset-code-name" fxLayout="column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center">
             <div class="table-asset-code">
-              {{reportFeed.assetCode}}
+              {{eventFeed.assetCode}}
             </div>
-            <span class="asset-name truncate">{{reportFeed.assetName}}</span>
+            <span class="asset-name truncate">{{eventFeed.assetName}}</span>
           </div>
         </div>  
-        <div class="follow-btn white-button action-button-sm" *ngIf="reportFeed.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
+        <div class="follow-btn white-button action-button-sm" *ngIf="eventFeed.followingAsset" [promiseBtn]="promise" (click)="onUnfollowClick($event)">
           Unfollow
         </div>
-        <div class="follow-btn blue-button action-button-sm" *ngIf="!reportFeed.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
+        <div class="follow-btn blue-button action-button-sm" *ngIf="!eventFeed.followingAsset" [promiseBtn]="promise" (click)="onFollowClick($event)">
           Follow
         </div>
       </div>
-      <div fxHide.lt-md class="feed-time" title="{{reportFeed.date | date: 'medium'}}">
-        {{reportFeed.date | timeAgo}}
+      <div fxHide.lt-md class="feed-time" title="{{eventFeed.date | date: 'medium'}}">
+        {{eventFeed.date | timeAgo}}
       </div>
       <div fxLayout="column" class="download-column" fxLayoutAlign="center stretch" >
-        <div fxLayout="column" class="rate-column">
-          <div class="desc-label">RATING</div>
-          <div class="rate" [style.background-color]="getBackgroundColor()">
-            {{reportFeed.report.rate}}
-          </div>
-        </div>
-        <span fxLayoutAlign="center center" fxHide.gt-sm>{{reportFeed.date | timeAgo}}</span>
+        <span fxLayoutAlign="center center" fxHide.gt-sm>{{eventFeed.date | timeAgo}}</span>
         <div fxLayout="column" class="download-link" >
-            <a [href]="getReportUrl()" target="_blank"><fa-icon icon="download"></fa-icon>&nbsp;Download</a>
+            <a [href]="getEventUrl()" target="_blank"><fa-icon icon="download"></fa-icon>&nbsp;Proof</a>
         </div>
       </div>
     </div>

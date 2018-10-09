@@ -36,7 +36,7 @@ export class EventsTabComponent implements OnInit {
     if(!this.events){
       this.events = 
       [{
-        eventId:1,
+        id:1,
         description:"A gathering of global blockchain leaders to showcase technology’s real-world implementation and forthcoming developments | 9-10th Oct, Bali.",
         categories:[{name:'Conference',id:5},{name:'Teste2',id:2}],
         createdDate:new Date(), 
@@ -51,7 +51,7 @@ export class EventsTabComponent implements OnInit {
   }
 
   getEventUrl(report: EventResponse){
-    return CONFIG.reportUrl.replace("{id}", report.eventId.toString());
+    return CONFIG.reportUrl.replace("{id}", report.id.toString());
   }
 
   getEventCategories(event: EventResponse){

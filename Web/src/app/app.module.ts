@@ -99,6 +99,8 @@ import { ListReportsComponent } from './components/asset/list-reports/list-repor
 import { ReportCardComponent } from './components/account/feed/report-card/report-card.component';
 import { InviteFriendComponent } from './components/account/invite-friend/invite-friend.component';
 import { EventsTabComponent } from './components/asset/asset-details/events-tab/events-tab.component';
+import { SummaryTabComponent } from './components/asset/asset-details/summary-tab/summary-tab.component';
+import { EventCardComponent } from './components/account/feed/event-card/event-card.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -181,7 +183,9 @@ export function getAuthServiceConfigs() {
     ListReportsComponent,
     ReportCardComponent,
     InviteFriendComponent,
-    EventsTabComponent
+    EventsTabComponent,
+    SummaryTabComponent,
+    EventCardComponent
   ],
   imports: [
     BrowserModule,

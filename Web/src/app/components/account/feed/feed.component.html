@@ -12,6 +12,7 @@
             <ng-container *ngFor="let advice of advices">
                 <advice-card *ngIf="advice.advice" [adviceFeed]="advice"></advice-card>
                 <report-card *ngIf="advice.report" [reportFeed]="advice"></report-card>
+                <event-card *ngIf="advice.event" [eventFeed]="advice"></event-card>
             </ng-container>
         </div>
     </div>
