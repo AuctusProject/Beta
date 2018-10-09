@@ -9,7 +9,7 @@ import { EventResponse } from '../../../../model/asset/eventResponse';
   styleUrls: ['./events-tab.component.css']
 })
 export class EventsTabComponent implements OnInit {
-  displayedColumns: string[] = ['eventDate', 'categories', 'createdDate', 'link'];
+  displayedColumns: string[] = ['eventDate', 'categories', 'creationDate', 'link'];
   @Input() events: EventResponse[] = [];
   visibleEvents: EventResponse[] = [];
   promise: Subscription;

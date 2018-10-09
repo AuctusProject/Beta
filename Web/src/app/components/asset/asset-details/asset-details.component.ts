@@ -17,14 +17,8 @@ import { NavigationService } from '../../../services/navigation.service';
   styleUrls: ['./asset-details.component.css']
 })
 export class AssetDetailsComponent implements OnInit {
-  displayedColumns: string[] = ['expertName', 'rankin', 'value', 'action', 'position', 'date', 'followButton'];
   asset: AssetResponse;
-  showNewAdviceButton: boolean = false;
-  visibleAdvices: AssetAdvisorResponse[];
   promise: Subscription;
-  promiseExpert: Subscription;
-  currentPage = 1;
-  pageSize = 10;
 
   constructor(private route: ActivatedRoute, 
     private assetService: AssetService,
@@ -34,52 +28,16 @@ export class AssetDetailsComponent implements OnInit {
     private navigationService:NavigationService) { }
 
   ngOnInit() {
-    this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.route.params.subscribe(params => 
       this.assetService.getAssetDetails(params['id']).subscribe(
         asset => {
           this.asset = asset;
-          this.setVisibleAdvices();
         })
     )
   }
 
-  onNewAdviceClick() {
-    this.modalService.setNewAdvice(this.asset.assetId);
-  }
-
   getAssetImgUrl(){
     return CONFIG.assetImgUrl.replace("{id}", this.asset.assetId.toString());
-  }
-
-  getRecommendationFromType(type: number){
-    return Util.GetRecommendationTypeDescription(type);
-  }
-
-  getRecomendationFromType(mode: number){
-    return Util.GetAdviceModeDescription(mode);
-  }
-  
-  getAdviceTypeColor(type: number){
-    return Util.GetRecommendationTypeColor(type);
-  }
-  
-  onFollowExpertClick(event: Event, expert: AdvisorResponse){
-    if(this.accountService.hasInvestmentToCallLoggedAction()){
-      this.promiseExpert = this.advisorService.followAdvisor(expert.userId).subscribe(result =>{
-        expert.following = true;
-        expert.numberOfFollowers = expert.numberOfFollowers + 1;
-      });
-    }
-    event.stopPropagation();
-  }
-
-  onUnfollowExpertClick(event: Event, expert: AdvisorResponse){
-    this.promiseExpert = this.advisorService.unfollowAdvisor(expert.userId).subscribe(result =>{
-      expert.following = false;
-      expert.numberOfFollowers = expert.numberOfFollowers - 1;
-    });
-    event.stopPropagation();
   }
 
   onFollowAssetClick(){
@@ -98,32 +56,6 @@ export class AssetDetailsComponent implements OnInit {
         this.asset.following = false;
         this.asset.numberOfFollowers = this.asset.numberOfFollowers - 1;
       });
-  }
-
-  onRowClick(row){
-    this.navigationService.goToExpertDetails(row.userId);
-  }
-
-  getAdvisor(userId : number) : AdvisorResponse{
-    for(var i = 0; i < this.asset.assetAdvisor.length; i++){
-      if(this.asset.advisors[i].userId == userId)
-        return this.asset.advisors[i];
-    }
-    return null;
-  }
-
-  loadMoreAdvices(){
-    this.currentPage++;
-    this.setVisibleAdvices();
-  }
-
-  hasMoreAdvices(){
-    return this.asset.assetAdvisor != null && this.visibleAdvices.length != this.asset.assetAdvisor.length;
-  }
-
-  setVisibleAdvices(){
-    var numberToShow = this.pageSize * this.currentPage;
-    this.visibleAdvices = this.asset.assetAdvisor.slice(0, numberToShow);
   }
 
   getTotalAdvisorsSentence(){
@@ -146,15 +78,5 @@ export class AssetDetailsComponent implements OnInit {
       sentence += "investors are following"
     }
     return sentence;
-  }
-
-  getOperationDisclaimer() {
-    let sentence = this.asset.totalAdvisors + " ";
-    if(this.asset.totalAdvisors == 1) {
-      sentence += "expert"
-    } else {
-      sentence += "experts"
-    }
-    return "Expert recommendation for " + this.asset.code + " (Based on: " + sentence + ", last 30 days)";
   }
 }
