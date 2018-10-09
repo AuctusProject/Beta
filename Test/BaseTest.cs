@@ -20,6 +20,7 @@ using Auctus.DataAccessMock.Storage;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Event;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -76,6 +77,10 @@ namespace Auctus.Test
             services.AddScoped<IAgencyData<Agency>, AgencyData>();
             services.AddScoped<IAgencyRatingData<AgencyRating>, AgencyRatingData>();
             services.AddScoped<IReportData<Report>, ReportData>();
+            services.AddScoped<IAssetEventCategoryData<AssetEventCategory>, AssetEventCategoryData>();
+            services.AddScoped<IAssetEventData<AssetEvent>, AssetEventData>();
+            services.AddScoped<ILinkEventAssetData<LinkEventAsset>, LinkEventAssetData>();
+            services.AddScoped<ILinkEventCategoryData<LinkEventCategory>, LinkEventCategoryData>();
 
             ServiceProvider = services.BuildServiceProvider();
             ServiceScopeFactory = new ServiceScopeFactory(ServiceProvider);

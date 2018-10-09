@@ -17,6 +17,7 @@ using Auctus.DataAccessInterfaces.Storage;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Event;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,6 +54,10 @@ namespace Auctus.Business
             services.AddScoped<IAgencyData<Agency>, AgencyData>(c => new AgencyData(configuration));
             services.AddScoped<IAgencyRatingData<AgencyRating>, AgencyRatingData>(c => new AgencyRatingData(configuration));
             services.AddScoped<IReportData<Report>, ReportData>(c => new ReportData(configuration));
+            services.AddScoped<IAssetEventCategoryData<AssetEventCategory>, AssetEventCategoryData>(c => new AssetEventCategoryData(configuration));
+            services.AddScoped<IAssetEventData<AssetEvent>, AssetEventData>(c => new AssetEventData(configuration));
+            services.AddScoped<ILinkEventAssetData<LinkEventAsset>, LinkEventAssetData>(c => new LinkEventAssetData(configuration));
+            services.AddScoped<ILinkEventCategoryData<LinkEventCategory>, LinkEventCategoryData>(c => new LinkEventCategoryData(configuration));
         }
     }
 }

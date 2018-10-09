@@ -70,6 +70,8 @@ namespace Auctus.Business
         private AgencyRatingBusiness _agencyRatingBusiness;
         private ReportBusiness _reportBusiness;
         private CoinMarketCalBusiness _coinMarketCalBusiness;
+        private AssetEventBusiness _assetEventBusiness;
+        private AssetEventCategoryBusiness _assetEventCategoryBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -519,6 +521,26 @@ namespace Auctus.Business
                 if (_coinMarketCalBusiness == null)
                     _coinMarketCalBusiness = new CoinMarketCalBusiness(Configuration, ServiceProvider);
                 return _coinMarketCalBusiness;
+            }
+        }
+
+        protected AssetEventCategoryBusiness AssetEventCategoryBusiness
+        {
+            get
+            {
+                if (_assetEventCategoryBusiness == null)
+                    _assetEventCategoryBusiness = new AssetEventCategoryBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _assetEventCategoryBusiness;
+            }
+        }
+
+        protected AssetEventBusiness AssetEventBusiness
+        {
+            get
+            {
+                if (_assetEventBusiness == null)
+                    _assetEventBusiness = new AssetEventBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _assetEventBusiness;
             }
         }
     }

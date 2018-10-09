@@ -192,32 +192,6 @@ namespace Auctus.Business.Asset
             }
         }
 
-        private bool ValidateSameAsset(AssetResult asset, IEnumerable<DomainObjects.Asset.Asset> assets, IEnumerable<AssetResult> assetExternalResults, bool isCoinGecko)
-        {
-            var isSame = false;
-            foreach (var same in assets)
-            {
-                var externalSymbolAsset = assetExternalResults.First(c => (isCoinGecko && Convert.ToInt32(c.Id) == same.CoinMarketCapId)
-                                                                || (!isCoinGecko && c.Id == same.CoinGeckoId));
-
-                if (!externalSymbolAsset.Price.HasValue)
-                    return true;
-
-                if (IsSameAsset(asset, externalSymbolAsset))
-                {
-                    if (isCoinGecko)
-                        same.CoinGeckoId = asset.Id;
-                    else
-                        same.CoinMarketCapId = Convert.ToInt32(asset.Id);
-
-                    Data.Update(same);
-                    isSame = true;
-                    break;
-                }
-            }
-            return isSame;
-        }
-
         private bool IsSameAsset(AssetResult asset, AssetResult externalAsset)
         {
             return asset.Name.ToLowerInvariant() == externalAsset.Name.ToLowerInvariant() ||
