@@ -38,7 +38,7 @@ namespace Auctus.Business.Asset
         {
             var reports = Task.Factory.StartNew(() => List(null, top, lastReportId));
             var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
-            return UserBusiness.FillFeedList(null, reports, user, top, null, lastReportId);
+            return UserBusiness.FillFeedList(null, reports, null, user, top, null, lastReportId, null);
         }
 
         public ReportResponse ConvertToReportResponse(Report report)

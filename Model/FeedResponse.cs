@@ -12,9 +12,9 @@ namespace Auctus.Model
         public string AssetCode { get; set; }
         public int AssetMode { get; set; }
         public bool FollowingAsset { get; set; }
-        public bool IsAdvice { get; set; }
         public ReportResponse Report { get; set; }
         public AdviceResponse Advice { get; set; }
+        public EventResponse Event { get; set; }
 
         public class AdviceResponse
         {

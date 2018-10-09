@@ -17,7 +17,11 @@ namespace Auctus.DomainObjects.Event
         [DapperType(System.Data.DbType.DateTime)]
         public DateTime EventDate { get; set; }
         [DapperType(System.Data.DbType.DateTime)]
-        public DateTime CreatedDate { get; set; }
+        public DateTime ExternalCreationDate { get; set; }
+        [DapperType(System.Data.DbType.DateTime)]
+        public DateTime CreationDate { get; set; }
+        [DapperType(System.Data.DbType.DateTime)]
+        public DateTime UpdateDate { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool CanOccurBefore { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]
@@ -28,5 +32,8 @@ namespace Auctus.DomainObjects.Event
         public double ReliablePercentage { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]
         public string ExternalId { get; set; }
+
+        public List<LinkEventAsset> LinkEventAsset { get; set; } = new List<LinkEventAsset>();
+        public List<LinkEventCategory> LinkEventCategory { get; set; } = new List<LinkEventCategory>();
     }
 }

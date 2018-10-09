@@ -17,6 +17,12 @@ namespace Api.Controllers
         protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : 
             base(loggerFactory, cache, serviceProvider, serviceScopeFactory)  { }
 
+        protected virtual IActionResult UpdateAssetsEvents()
+        {
+            RunAsync(() => AssetEventBusiness.UpdateAssetEventsAsync());
+            return Ok();
+        }
+
         protected virtual IActionResult UpdateAssetsValues(string api)
         {
             RunAsync(() => AssetValueBusiness.UpdateCoingeckoAssetsValues());

@@ -152,6 +152,34 @@ namespace Api.Controllers
             });
         }
 
+        protected void RunAsync(Func<Task> action)
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                using (var scope = ServiceScopeFactory.CreateScope())
+                {
+                    ServiceProvider = scope.ServiceProvider;
+                    TelemetryClient telemetry = new TelemetryClient();
+                    try
+                    {
+                        telemetry.TrackEvent(action.Method.Name);
+                        Logger.LogInformation($"Job {action.Method.Name} started.");
+                        await action();
+                        Logger.LogInformation($"Job {action.Method.Name} ended.");
+                    }
+                    catch (Exception e)
+                    {
+                        telemetry.TrackException(e);
+                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
+                    }
+                    finally
+                    {
+                        telemetry.Flush();
+                    }
+                }
+            });
+        }
+
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var user = GetUser();

@@ -2,6 +2,7 @@
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Event;
 using Auctus.Model;
 using Auctus.Util;
 using Auctus.Util.Exceptions;
@@ -643,25 +644,27 @@ namespace Auctus.Business.Account
             MemoryCache.Set<User>(GetUserCacheKey(email), null);
         }
 
-        public IEnumerable<FeedResponse> ListFeed(int? top, int? lastAdviceId, int? lastReportId)
+        public IEnumerable<FeedResponse> ListFeed(int? top, int? lastAdviceId, int? lastReportId, int? lastEventId)
         {
-            var followingAssetsIds = AssetBusiness.ListFollowingAssets().Select(c => c.Id).Distinct();
+            var followingAssetsIds = AssetBusiness.ListFollowingAssets().Select(c => c.Id).Distinct().ToHashSet();
             var advicesForFeed = Task.Factory.StartNew(() => AdviceBusiness.ListLastAdvicesForUserWithPagination(followingAssetsIds, top, lastAdviceId));
             var reportForFeed = Task.Factory.StartNew(() => ReportBusiness.List(followingAssetsIds, top, lastReportId));
-            return FillFeedList(advicesForFeed, reportForFeed, GetValidUser(), top, lastAdviceId, lastReportId);
+            var eventForFeed = Task.Factory.StartNew(() => AssetEventBusiness.List(followingAssetsIds, top, lastEventId));
+            return FillFeedList(advicesForFeed, reportForFeed, eventForFeed, GetValidUser(), top, lastAdviceId, lastReportId, lastEventId);
         }
 
-        public IEnumerable<FeedResponse> FillFeedList(Task<IEnumerable<Advice>> listAdvicesTask, Task<List<Report>> listReportsTask,
-            User loggedUser, int? top, int? lastAdviceId, int? lastReportId)
+        public IEnumerable<FeedResponse> FillFeedList(Task<IEnumerable<Advice>> listAdvicesTask, Task<List<Report>> listReportsTask, Task<List<AssetEvent>> listEventsTask,
+            User loggedUser, int? top, int? lastAdviceId, int? lastReportId, int? lastEventId)
         {
             IEnumerable<Advice> feedAdvices = null;
             IEnumerable<Report> feedReport = null;
+            IEnumerable<AssetEvent> feedEvent = null;
 
             string advisorsCacheKey = "FeedAdvisorsResult" + LoggedEmail;
             string assetsCacheKey = "FeedAssetsResult" + LoggedEmail;
             var advisorsResult = MemoryCache.Get<List<AdvisorResponse>>(advisorsCacheKey);
             var assetsResult = MemoryCache.Get<List<AssetResponse>>(assetsCacheKey);
-            if (advisorsResult == null || assetsResult == null || !lastAdviceId.HasValue || !lastReportId.HasValue)
+            if (advisorsResult == null || assetsResult == null || !lastAdviceId.HasValue || !lastReportId.HasValue || !lastEventId.HasValue)
             {
                 List<DomainObjects.Advisor.Advisor> advisors = null;
                 if (listAdvicesTask != null)
@@ -681,11 +684,24 @@ namespace Auctus.Business.Account
                     Task.WaitAll(advices, advisorFollowers, assetFollowers);
                 else
                 {
-                    if (listReportsTask != null)
+                    if (listReportsTask != null && listEventsTask != null)
+                    {
+                        Task.WaitAll(assetFollowers, listReportsTask, listEventsTask);
+                        feedReport = listReportsTask.Result;
+                        feedEvent = listEventsTask.Result;
+                        selectAssetsIds = feedReport.Select(c => c.AssetId).Concat(feedEvent.SelectMany(c => c.LinkEventAsset.Select(a => a.AssetId))).Distinct().ToHashSet();
+                    }
+                    else if (listReportsTask != null)
                     {
                         Task.WaitAll(assetFollowers, listReportsTask);
                         feedReport = listReportsTask.Result;
                         selectAssetsIds = feedReport.Select(c => c.AssetId).Distinct().ToHashSet();
+                    }
+                    else if (listEventsTask != null)
+                    {
+                        Task.WaitAll(assetFollowers, listEventsTask);
+                        feedEvent = listEventsTask.Result;
+                        selectAssetsIds = feedEvent.SelectMany(c => c.LinkEventAsset.Select(a => a.AssetId)).Distinct().ToHashSet();
                     }
                     else
                         Task.WaitAll(assetFollowers);
@@ -697,11 +713,12 @@ namespace Auctus.Business.Account
                 MemoryCache.Set(assetsCacheKey, assetsResult, 10);
             }
 
-            if (listAdvicesTask != null && listReportsTask != null)
+            if (listAdvicesTask != null && listReportsTask != null && listEventsTask != null)
             {
-                Task.WaitAll(listAdvicesTask, listReportsTask);
+                Task.WaitAll(listAdvicesTask, listReportsTask, listEventsTask);
                 feedAdvices = listAdvicesTask.Result;
                 feedReport = listReportsTask.Result;
+                feedEvent = listEventsTask.Result;
             }
             else if (listAdvicesTask != null)
             {
@@ -713,15 +730,21 @@ namespace Auctus.Business.Account
                 Task.WaitAll(listReportsTask);
                 feedReport = listReportsTask.Result;
             }
-            return ConvertToFeedResponse(top, assetsResult, advisorsResult, feedAdvices, feedReport);
+            else if (listEventsTask != null && feedEvent == null)
+            {
+                Task.WaitAll(listEventsTask);
+                feedEvent = listEventsTask.Result;
+            }
+            return ConvertToFeedResponse(top, assetsResult, advisorsResult, feedAdvices, feedReport, feedEvent);
         }
 
         private List<FeedResponse> ConvertToFeedResponse(int? top, List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, 
-            IEnumerable<Advice> advices, IEnumerable<Report> reports)
+            IEnumerable<Advice> advices, IEnumerable<Report> reports, IEnumerable<AssetEvent> events)
         {
             var feedResult = new List<FeedResponse>();
             feedResult.AddRange(ConvertAdviceToFeedResponse(assetResult, advisorsResult, advices));
             feedResult.AddRange(ConvertReportToFeedResponse(assetResult, reports));
+            feedResult.AddRange(ConvertEventToFeedResponse(assetResult, events));
             return top.HasValue ? feedResult.OrderByDescending(c => c.Date).Take(top.Value).ToList() : feedResult.OrderByDescending(c => c.Date).ToList();
         }
 
@@ -741,7 +764,6 @@ namespace Auctus.Business.Account
                         AssetName = assetResponse.Name,
                         AssetMode = assetResponse.Mode,
                         FollowingAsset = assetResponse.Following == true,
-                        IsAdvice = true,
                         Date = advice.CreationDate,
                         Advice = new FeedResponse.AdviceResponse()
                         {
@@ -794,9 +816,58 @@ namespace Auctus.Business.Account
                         AssetName = name,
                         AssetMode = mode,
                         FollowingAsset = following,
-                        IsAdvice = false,
                         Date = report.ReportDate,
                         Report = ReportBusiness.ConvertToReportResponse(report)
+                    });
+                }
+            }
+            return feedResult;
+        }
+
+        private List<FeedResponse> ConvertEventToFeedResponse(List<AssetResponse> assetResult, IEnumerable<AssetEvent> events)
+        {
+            var feedResult = new List<FeedResponse>();
+            if (events != null)
+            {
+                if (assetResult.Any())
+                    assetResult = assetResult.OrderByDescending(c => c.MarketCap).ToList();
+
+                foreach (var e in events)
+                {
+                    string code, name;
+                    int assetId;
+                    bool following = true;
+                    int mode = AssetModeType.Neutral.Value;
+
+                    var assetResponse = assetResult.FirstOrDefault(c => c.Following == true && e.LinkEventAsset.Any(a => a.AssetId == c.AssetId));
+                    if (assetResponse == null)
+                        assetResponse = assetResult.FirstOrDefault(c => e.LinkEventAsset.Any(a => a.AssetId == c.AssetId));
+
+                    if (assetResponse == null)
+                    {
+                        assetId = e.LinkEventAsset.First().AssetId;
+                        var asset = AssetBusiness.GetById(assetId);
+                        code = asset.Code;
+                        name = asset.Name;
+                    }
+                    else
+                    {
+                        assetId = assetResponse.AssetId;
+                        code = assetResponse.Code;
+                        name = assetResponse.Name;
+                        mode = assetResponse.Mode;
+                        following = assetResponse.Following == true;
+                    }
+
+                    feedResult.Add(new FeedResponse()
+                    {
+                        AssetId = assetId,
+                        AssetCode = code,
+                        AssetName = name,
+                        AssetMode = mode,
+                        FollowingAsset = following,
+                        Date = e.ExternalCreationDate,
+                        Event = AssetEventBusiness.ConvertToEventResponse(e)
                     });
                 }
             }

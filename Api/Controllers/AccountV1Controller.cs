@@ -120,9 +120,9 @@ namespace Api.Controllers
         [HttpGet]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListFeed([FromQuery]int? top, [FromQuery]int? lastAdviceId, [FromQuery]int? lastReportId)
+        public new IActionResult ListFeed([FromQuery]int? top, [FromQuery]int? lastAdviceId, [FromQuery]int? lastReportId, [FromQuery]int? lastEventId)
         {
-            return base.ListFeed(top, lastAdviceId, lastReportId);
+            return base.ListFeed(top, lastAdviceId, lastReportId, lastEventId);
         }
 
         [Route("me/referrals")]

@@ -46,6 +46,15 @@ namespace Api.Controllers
             return base.ListReports(top, lastReportId);
         }
 
+        [Route("events")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListEvents([FromQuery]int? top, [FromQuery]int? lastEventId, [FromQuery]int? assetId)
+        {
+            return base.ListEvents(top, lastEventId, assetId);
+        }
+
         [HttpGet]
         [Route("{id}/values")]
         [AllowAnonymous]

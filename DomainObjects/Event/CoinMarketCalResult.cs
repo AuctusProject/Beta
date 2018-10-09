@@ -48,6 +48,9 @@ namespace Auctus.DomainObjects.Event
             public List<Coin> Coins { get; set; } = new List<Coin>();
             [JsonProperty("categories")]
             public List<Category> Categories { get; set; } = new List<Category>();
+
+            public DateTime FormattedEventDate { get { return new DateTime(EventDate.Year, EventDate.Month, EventDate.Day, 0, 0, 0, 0, DateTimeKind.Utc); } }
+            public DateTime FormattedCreatedDate { get { return CreatedDate.ToUniversalTime(); } }
         }
 
         public class Coin
