@@ -123,3 +123,14 @@ mat-tab-group{
 :host ::ng-deep .mat-tab-body-wrapper{
     background-color: #151515;
 }
+
+@media(max-width:959px){
+    :host ::ng-deep .mat-tab-label{
+        min-width: 74px !important;
+        padding: 0px 6px !important;;
+    }
+
+    :host ::ng-deep .mat-ink-bar{
+        width: 72px !important;
+    }
+}

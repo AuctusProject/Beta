@@ -1,6 +1,5 @@
-<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
+<div class="feed-card" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
     <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
-      
         <div class="feed-picture">
           <img [src]="getEventImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
         </div>
@@ -13,7 +12,7 @@
           {{eventFeed.event.title}}
         </div>
         <div class="event-date">
-          {{eventFeed.event.eventDate | date : 'longDate'}}
+          {{eventFeed.event.eventDate | date : 'longDate'}}<span *ngIf="eventFeed.event.canOccurBefore">&nbsp;(or earlier)</span>
         </div>
       </div>
     </div>
@@ -43,7 +42,11 @@
       <div fxLayout="column" class="download-column" fxLayoutAlign="center stretch" >
         <span fxLayoutAlign="center center" fxHide.gt-sm>{{eventFeed.date | timeAgo}}</span>
         <div fxLayout="column" class="download-link" >
-            <a [href]="getEventUrl()" target="_blank"><fa-icon icon="download"></fa-icon>&nbsp;Proof</a>
+          <a [href]="getEventUrl(event)" target="_blank">
+            <div fxHide.lt-sm class="blue-button action-button-sm">
+              View Proof
+            </div>
+          </a>
         </div>
       </div>
     </div>

@@ -17,11 +17,11 @@ export class EventCardComponent implements OnInit {
 
   
   getEventUrl(){
-    return CONFIG.reportUrl.replace("{id}", this.eventFeed.event.eventId.toString());
+    return CONFIG.eventUrl.replace("{id}", this.eventFeed.event.eventId.toString());
   }
 
   getEventImgUrl(){
-    return CONFIG.platformImgUrl.replace("{id}", "coinMarketCal");
+    return CONFIG.platformImgUrl.replace("{id}", "coinmarketcal");
   }
 
   getAssetImgUrl(){
