@@ -44,7 +44,11 @@ export class ListReportsComponent implements OnInit {
   }
 
   loadMoreReports(clear?: boolean) {
-    this.promise = this.assetService.getAssetsReports(this.pageSize, this.getLastReportId(), this.selectedReportId).subscribe(result => 
+    let lastReportId = null; 
+    if (!clear) {
+      lastReportId = this.getLastReportId();
+    }
+    this.promise = this.assetService.getAssetsReports(this.pageSize, lastReportId, this.selectedReportId).subscribe(result => 
       {
         if (clear) {
           this.reports = result;

@@ -44,7 +44,11 @@ export class ListEventsComponent implements OnInit {
   }
 
   loadMoreEvents(clear?: boolean) {
-    this.promise = this.assetService.getAssetsEvents(this.pageSize, this.getLastEventId(), this.selectedAssetId).subscribe(result => 
+    let lastEventId = null; 
+    if (!clear) {
+      lastEventId = this.getLastEventId();
+    }
+    this.promise = this.assetService.getAssetsEvents(this.pageSize, lastEventId, this.selectedAssetId).subscribe(result => 
       {
         if (clear) {
           this.events = result;
