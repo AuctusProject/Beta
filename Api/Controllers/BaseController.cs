@@ -134,15 +134,13 @@ namespace Api.Controllers
                     TelemetryClient telemetry = new TelemetryClient();
                     try
                     {
-                        telemetry.TrackEvent(action.Method.Name);
-                        Logger.LogInformation($"Job {action.Method.Name} started.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
                         action();
-                        Logger.LogInformation($"Job {action.Method.Name} ended.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");
                     }
                     catch (Exception e)
                     {
                         telemetry.TrackException(e);
-                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
                     }
                     finally
                     {
@@ -162,15 +160,13 @@ namespace Api.Controllers
                     TelemetryClient telemetry = new TelemetryClient();
                     try
                     {
-                        telemetry.TrackEvent(action.Method.Name);
-                        Logger.LogInformation($"Job {action.Method.Name} started.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
                         action().Wait();
-                        Logger.LogInformation($"Job {action.Method.Name} ended.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");;
                     }
                     catch (Exception e)
                     {
                         telemetry.TrackException(e);
-                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
                     }
                     finally
                     {
