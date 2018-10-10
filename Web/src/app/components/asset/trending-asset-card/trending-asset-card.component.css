@@ -84,6 +84,10 @@
     cursor: pointer;
 }
 
+.follow-link:hover{
+    opacity:0.75;
+}
+
 .follow-link.unfollow{
     color:#5e5e5e
 }

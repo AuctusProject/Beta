@@ -16,7 +16,7 @@
         <div fxShow="true" fxHide.lt-lg="true" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a>
         <global-search fxShow="true" fxHide.lt-md="true" class="search"></global-search>
-        <span class="header-blue-button" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
+        <span class="blue-button header-blue-button" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
         <span class="signin" *ngIf="!isLogged()" (click)="register()">SIGN UP</span>
         <a *ngIf="isLogged()" fxShow="true" fxHide.lt-lg="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="profile">
             <span fxLayout="row" fxLayoutAlign="space-around center">
@@ -24,7 +24,7 @@
                 <mat-icon>{{menuOpen ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
             </span>
         </a>
-        <div class="header-blue-button" fxHide.gt-md="true" *ngIf="!!loginData && loginData.isAdvisor" (click)="onNewAdviceClick()">RATE</div>
+        <div class="blue-button header-blue-button" fxHide.gt-md="true" *ngIf="!!loginData && loginData.isAdvisor" (click)="onNewAdviceClick()">RATE</div>
         <span class="mobile-menu" fxShow="true" fxHide.gt-md="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="mobile"><mat-icon>{{menuOpen ? 'close' : 'reorder'}}</mat-icon></span>
         <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #profile="matMenu">
             <button class="sub-menu-item" fxShow="true" fxHide.gt-sm="true" *ngIf="!loginData || !loginData.isAdvisor" (click)="onBecomeExpert()" mat-menu-item>BECOME AN EXPERT</button>
