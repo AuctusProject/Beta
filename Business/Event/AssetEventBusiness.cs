@@ -71,6 +71,8 @@ namespace Auctus.Business.Event
                 () => assetEvents = Data.ListAssetEventsWithPagination(startDate, null, null, null, null, null),
                 () => events = CoinMarketCalBusiness.ListEvents(startDate));
 
+            events = events.OrderBy(c => c.FormattedCreatedDate).ThenBy(c => c.FormattedEventDate).ToList();
+
             foreach(var e in events)
             {
                 bool updateProofImage = false;
@@ -102,7 +104,6 @@ namespace Auctus.Business.Event
                     }
                     else
                     {
-                        updateProofImage = workingEvent.Proof != e.Proof;
                         linkCategoryToDelete = workingEvent.LinkEventCategory.Where(c => !eventCategories.Any(a => a.Id == c.AssetEventCategoryId)).ToList();
                         linkAssetToDelete = workingEvent.LinkEventAsset.Where(c => !eventAssets.Any(a => a.Id == c.AssetId)).ToList();
                         linkCategoryToInsert = eventCategories.Where(c => !workingEvent.LinkEventCategory.Any(a => a.AssetEventCategoryId == c.Id)).Select(c => new LinkEventCategory()
@@ -115,6 +116,14 @@ namespace Auctus.Business.Event
                             AssetId = c.Id,
                             AssetEventId = workingEvent.Id
                         }).ToList();
+
+                        if (workingEvent.Title == e.Title && workingEvent.Description == e.Description && workingEvent.EventDate == e.FormattedEventDate &&
+                            workingEvent.ExternalCreationDate == e.FormattedCreatedDate && workingEvent.CanOccurBefore == e.CanOccurBefore &&
+                            workingEvent.ReliablePercentage == e.Percentage && workingEvent.Source == e.Source && workingEvent.Proof == e.Proof &&
+                            linkCategoryToDelete.Count == 0 && linkAssetToDelete.Count == 0 && linkCategoryToInsert.Count == 0 && linkAssetToInsert.Count == 0)
+                            continue;
+
+                        updateProofImage = workingEvent.Proof != e.Proof;
                     }
 
                     UpdateAssetEventData(workingEvent, e);
