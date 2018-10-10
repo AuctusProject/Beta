@@ -42,7 +42,7 @@
       <div fxLayout="column" class="download-column" fxLayoutAlign="center stretch" >
         <span fxLayoutAlign="center center" fxHide.gt-sm>{{eventFeed.date | timeAgo}}</span>
         <div fxLayout="column" class="download-link" >
-          <a [href]="getEventUrl(event)" target="_blank">
+          <a [href]="getEventUrl()" target="_blank">
             <div fxHide.lt-sm class="blue-button action-button-sm">
               View Proof
             </div>
