@@ -28,7 +28,7 @@ namespace Api.Controllers
         public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
             base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
-        [Route("assets/events")]
+        [Route("events")]
         [HttpPost]
         public new IActionResult UpdateAssetsEvents()
         {

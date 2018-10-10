@@ -134,15 +134,13 @@ namespace Api.Controllers
                     TelemetryClient telemetry = new TelemetryClient();
                     try
                     {
-                        telemetry.TrackEvent(action.Method.Name);
-                        Logger.LogInformation($"Job {action.Method.Name} started.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
                         action();
-                        Logger.LogInformation($"Job {action.Method.Name} ended.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");
                     }
                     catch (Exception e)
                     {
                         telemetry.TrackException(e);
-                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
                     }
                     finally
                     {
@@ -154,7 +152,7 @@ namespace Api.Controllers
 
         protected void RunAsync(Func<Task> action)
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 using (var scope = ServiceScopeFactory.CreateScope())
                 {
@@ -162,15 +160,13 @@ namespace Api.Controllers
                     TelemetryClient telemetry = new TelemetryClient();
                     try
                     {
-                        telemetry.TrackEvent(action.Method.Name);
-                        Logger.LogInformation($"Job {action.Method.Name} started.");
-                        await action();
-                        Logger.LogInformation($"Job {action.Method.Name} ended.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
+                        action().Wait();
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");;
                     }
                     catch (Exception e)
                     {
                         telemetry.TrackException(e);
-                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
                     }
                     finally
                     {

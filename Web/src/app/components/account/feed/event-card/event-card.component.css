@@ -2,3 +2,12 @@
     font-size: 14px;
     font-style: italic;
 }
+
+.feed-picture,
+.feed-name-column{
+    cursor: default;
+}
+
+.download-link .blue-button{
+    margin: auto;
+}

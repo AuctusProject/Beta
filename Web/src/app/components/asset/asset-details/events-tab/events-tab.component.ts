@@ -33,18 +33,6 @@ export class EventsTabComponent implements OnInit {
 
   setVisibleEvents(){
     var numberToShow = this.pageSize * this.currentPage;
-    if(!this.events){
-      this.events = 
-      [{
-        eventId:1,
-        description:"A gathering of global blockchain leaders to showcase technology’s real-world implementation and forthcoming developments | 9-10th Oct, Bali.",
-        categories:[{name:'Conference',id:5},{name:'Teste2',id:2}],
-        creationDate:new Date(), 
-        eventDate: new Date(), 
-        title:'XBlockchain Summit',
-        canOccurBefore: false,
-        source: ""}];
-    }
     this.visibleEvents = this.events.slice(0, numberToShow);
   }
 
@@ -53,7 +41,7 @@ export class EventsTabComponent implements OnInit {
   }
 
   getEventUrl(report: EventResponse){
-    return CONFIG.reportUrl.replace("{id}", report.eventId.toString());
+    return CONFIG.eventUrl.replace("{id}", report.eventId.toString());
   }
 
   getEventCategories(event: EventResponse){
