@@ -15,9 +15,10 @@ export class ListEventsComponent implements OnInit {
   @ViewChild("CoinSearch") CoinSearch: CoinSearchComponent;
   showNewAdviceButton: boolean = false;
   events: FeedResponse[] = [];
-  hasMoreEvents = false;
-  pageSize = 10;
-  promise : Subscription;
+  hasMoreEvents: boolean = false;
+  firstLoaded: boolean = false;
+  pageSize: number = 10;
+  promise: Subscription;
   selectedAssetId?: number = null;
 
   constructor(private modalService: ModalService, 
@@ -30,12 +31,15 @@ export class ListEventsComponent implements OnInit {
 
     this.CoinSearch.onSelect.subscribe(newValue => 
       {
+        if ((!newValue && this.selectedAssetId) || (newValue && newValue.id != this.selectedAssetId))
+        {
           if (newValue) {
             this.selectedAssetId = newValue.id;
           } else {
             this.selectedAssetId = null;
           }
           this.loadMoreEvents(true);
+        }
       });
   }
 
@@ -51,6 +55,7 @@ export class ListEventsComponent implements OnInit {
         if(!result || result.length == 0 || result.length < this.pageSize) {
           this.hasMoreEvents = false;
         }
+        this.firstLoaded = true;
       });
   }
 

@@ -13,3 +13,14 @@
     margin-top: 22px;
     margin-bottom: 22px;
 }
+
+.no-event-message {
+    padding-top: 25px;
+    padding-bottom: 50px;
+    font-size: 25px;
+    color: white;
+}
+
+.coin-event-search {
+    max-width: 225px;
+}
