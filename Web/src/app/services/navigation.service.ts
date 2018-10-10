@@ -77,4 +77,8 @@ export class NavigationService {
   public goToReports(){
     this.goToUrl('rating-reports');
   }
+
+  public goToCoinEvents(){
+    this.goToUrl('coin-events');
+  }
 }

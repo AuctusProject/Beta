@@ -15,6 +15,7 @@ export class AssetService {
   private getAssetRecommendationInfoUrl = this.httpService.apiUrl("v1/assets/{id}/recommendation_info");
   private getAssetsUrl = this.httpService.apiUrl("v1/assets/");
   private getAssetsReportsUrl = this.httpService.apiUrl("v1/assets/reports");
+  private getAssetsEventsUrl = this.httpService.apiUrl("v1/assets/events");
   private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers");
   private getAssetValuesUrl = this.httpService.apiUrl("v1/assets/{id}/values");
   constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
@@ -31,6 +32,14 @@ export class AssetService {
     var url = this.getAssetsReportsUrl + "?";
     if(!!top) url += "top=" + top;
     if (!!lastReportId) url += "&lastReportId=" + lastReportId;
+    return this.httpService.get(url);
+  }
+
+  getAssetsEvents(top?: number, lastEventId?: number, assetId?: number): Observable<FeedResponse[]> {
+    var url = this.getAssetsEventsUrl + "?";
+    if(!!top) url += "top=" + top;
+    if (!!lastEventId) url += "&lastEventId=" + lastEventId;
+    if (!!assetId) url += "&assetId=" + assetId;
     return this.httpService.get(url);
   }
 

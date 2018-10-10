@@ -24,6 +24,7 @@ using Microsoft.ApplicationInsights;
 using System.Net;
 using Auctus.Util.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
+using Auctus.Business.Event;
 
 namespace Api.Controllers
 {
@@ -133,15 +134,39 @@ namespace Api.Controllers
                     TelemetryClient telemetry = new TelemetryClient();
                     try
                     {
-                        telemetry.TrackEvent(action.Method.Name);
-                        Logger.LogInformation($"Job {action.Method.Name} started.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
                         action();
-                        Logger.LogInformation($"Job {action.Method.Name} ended.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");
                     }
                     catch (Exception e)
                     {
                         telemetry.TrackException(e);
-                        Logger.LogCritical(e, $"Exception on {action.Method.Name} job");
+                    }
+                    finally
+                    {
+                        telemetry.Flush();
+                    }
+                }
+            });
+        }
+
+        protected void RunAsync(Func<Task> action)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                using (var scope = ServiceScopeFactory.CreateScope())
+                {
+                    ServiceProvider = scope.ServiceProvider;
+                    TelemetryClient telemetry = new TelemetryClient();
+                    try
+                    {
+                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
+                        action().Wait();
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");;
+                    }
+                    catch (Exception e)
+                    {
+                        telemetry.TrackException(e);
                     }
                     finally
                     {
@@ -249,6 +274,8 @@ namespace Api.Controllers
         protected AgencyBusiness AgencyBusiness { get { return new AgencyBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AgencyRatingBusiness AgencyRatingBusiness { get { return new AgencyRatingBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected ReportBusiness ReportBusiness { get { return new ReportBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AssetEventBusiness AssetEventBusiness { get { return new AssetEventBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AssetEventCategoryBusiness AssetEventCategoryBusiness { get { return new AssetEventCategoryBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
 
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
         protected class OnlyAdminAttribute : ActionFilterAttribute

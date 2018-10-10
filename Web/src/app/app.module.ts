@@ -98,6 +98,11 @@ import { ReportsTabComponent } from './components/asset/asset-details/reports-ta
 import { ListReportsComponent } from './components/asset/list-reports/list-reports.component';
 import { ReportCardComponent } from './components/account/feed/report-card/report-card.component';
 import { InviteFriendComponent } from './components/account/invite-friend/invite-friend.component';
+import { EventsTabComponent } from './components/asset/asset-details/events-tab/events-tab.component';
+import { SummaryTabComponent } from './components/asset/asset-details/summary-tab/summary-tab.component';
+import { EventCardComponent } from './components/account/feed/event-card/event-card.component';
+import { ListEventsComponent } from './components/asset/list-events/list-events.component';
+import { ExpertRatingsTabComponent } from './components/asset/asset-details/expert-ratings-tab/expert-ratings-tab.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -179,7 +184,12 @@ export function getAuthServiceConfigs() {
     ReportsTabComponent,
     ListReportsComponent,
     ReportCardComponent,
-    InviteFriendComponent
+    InviteFriendComponent,
+    EventsTabComponent,
+    SummaryTabComponent,
+    EventCardComponent,
+    ListEventsComponent,
+    ExpertRatingsTabComponent
   ],
   imports: [
     BrowserModule,

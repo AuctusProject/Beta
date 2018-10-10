@@ -6,6 +6,7 @@ using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DataAccessInterfaces.Blockchain;
 using Auctus.DataAccessInterfaces.Email;
+using Auctus.DataAccessInterfaces.Event;
 using Auctus.DataAccessInterfaces.Exchange;
 using Auctus.DataAccessInterfaces.Storage;
 using Auctus.DataAccessMock.Account;
@@ -15,9 +16,11 @@ using Auctus.DataAccessMock.Blockchain;
 using Auctus.DataAccessMock.Email;
 using Auctus.DataAccessMock.Exchange;
 using Auctus.DataAccessMock.Storage;
+using Auctus.DataAccessMock.Event;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Event;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,6 +59,7 @@ namespace Auctus.Test
             services.AddSingleton<IAzureStorageResource, AzureStorageResource>();
             services.AddSingleton<ICoinMarketcapApi, CoinMarketcapApi>();
             services.AddSingleton<ICoinGeckoApi, CoinGeckoApi>();
+            services.AddSingleton<ICoinMarketCalApi, CoinMarketCalApi>();
             services.AddScoped<IActionData<DomainObjects.Account.Action>, ActionData>();
             services.AddScoped<IExchangeApiAccessData<ExchangeApiAccess>, ExchangeApiAccessData>();
             services.AddScoped<IPasswordRecoveryData<PasswordRecovery>, PasswordRecoveryData>();
@@ -73,6 +77,10 @@ namespace Auctus.Test
             services.AddScoped<IAgencyData<Agency>, AgencyData>();
             services.AddScoped<IAgencyRatingData<AgencyRating>, AgencyRatingData>();
             services.AddScoped<IReportData<Report>, ReportData>();
+            services.AddScoped<IAssetEventCategoryData<AssetEventCategory>, AssetEventCategoryData>();
+            services.AddScoped<IAssetEventData<AssetEvent>, AssetEventData>();
+            services.AddScoped<ILinkEventAssetData<LinkEventAsset>, LinkEventAssetData>();
+            services.AddScoped<ILinkEventCategoryData<LinkEventCategory>, LinkEventCategoryData>();
 
             ServiceProvider = services.BuildServiceProvider();
             ServiceScopeFactory = new ServiceScopeFactory(ServiceProvider);

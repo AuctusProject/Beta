@@ -24,7 +24,6 @@ namespace Auctus.DataAccessMock.Asset
                         Type = asset.Type,
                         ShortSellingEnabled = asset.ShortSellingEnabled,
                         CoinGeckoId = asset.CoinGeckoId,
-                        CoinMarketCapId = asset.CoinMarketCapId,
                         MarketCap = asset.MarketCap
                     });
                 }

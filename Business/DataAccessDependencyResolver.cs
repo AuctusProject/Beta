@@ -3,6 +3,7 @@ using Auctus.DataAccess.Advisor;
 using Auctus.DataAccess.Asset;
 using Auctus.DataAccess.Blockchain;
 using Auctus.DataAccess.Email;
+using Auctus.DataAccess.Event;
 using Auctus.DataAccess.Exchange;
 using Auctus.DataAccess.Storage;
 using Auctus.DataAccessInterfaces.Account;
@@ -10,11 +11,14 @@ using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DataAccessInterfaces.Blockchain;
 using Auctus.DataAccessInterfaces.Email;
+using Auctus.DataAccessInterfaces.Event;
 using Auctus.DataAccessInterfaces.Exchange;
 using Auctus.DataAccessInterfaces.Storage;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Event;
+using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,6 +35,7 @@ namespace Auctus.Business
             services.AddSingleton<ICoinGeckoApi, CoinGeckoApi>(c => new CoinGeckoApi());
             services.AddSingleton<IGoogleApi, GoogleApi>(c => new GoogleApi(configuration));
             services.AddSingleton<IFacebookApi, FacebookApi>(c => new FacebookApi(configuration));
+            services.AddSingleton<ICoinMarketCalApi, CoinMarketCalApi>(c => new CoinMarketCalApi(configuration, services.BuildServiceProvider().GetRequiredService<Cache>()));
             services.AddScoped<IActionData<DomainObjects.Account.Action>, ActionData>(c => new ActionData(configuration));
             services.AddScoped<IExchangeApiAccessData<ExchangeApiAccess>, ExchangeApiAccessData>(c => new ExchangeApiAccessData(configuration));
             services.AddScoped<IPasswordRecoveryData<PasswordRecovery>, PasswordRecoveryData>(c => new PasswordRecoveryData(configuration));
@@ -49,6 +54,10 @@ namespace Auctus.Business
             services.AddScoped<IAgencyData<Agency>, AgencyData>(c => new AgencyData(configuration));
             services.AddScoped<IAgencyRatingData<AgencyRating>, AgencyRatingData>(c => new AgencyRatingData(configuration));
             services.AddScoped<IReportData<Report>, ReportData>(c => new ReportData(configuration));
+            services.AddScoped<IAssetEventCategoryData<AssetEventCategory>, AssetEventCategoryData>(c => new AssetEventCategoryData(configuration));
+            services.AddScoped<IAssetEventData<AssetEvent>, AssetEventData>(c => new AssetEventData(configuration));
+            services.AddScoped<ILinkEventAssetData<LinkEventAsset>, LinkEventAssetData>(c => new LinkEventAssetData(configuration));
+            services.AddScoped<ILinkEventCategoryData<LinkEventCategory>, LinkEventCategoryData>(c => new LinkEventCategoryData(configuration));
         }
     }
 }

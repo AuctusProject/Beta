@@ -2,6 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FeedResponse } from '../../../../model/advisor/feedResponse';
 import { CONFIG } from '../../../../services/config.service';
 import { NavigationService } from '../../../../services/navigation.service';
+import { AssetService } from '../../../../services/asset.service';
+import { AccountService } from '../../../../services/account.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'report-card',
@@ -10,7 +13,11 @@ import { NavigationService } from '../../../../services/navigation.service';
 })
 export class ReportCardComponent implements OnInit {
   @Input() reportFeed : FeedResponse;
-  constructor(private navigationService : NavigationService) { }
+  promise : Subscription;
+  
+  constructor(private assetService : AssetService,
+    private navigationService: NavigationService,
+    private accountService: AccountService) { }
 
   ngOnInit() {
   }
@@ -37,5 +44,19 @@ export class ReportCardComponent implements OnInit {
       return this.reportFeed.report.rateDetails.hexaColor;
     }
     return null;
+  }
+
+  onFollowClick(event: Event){
+    if(this.accountService.hasInvestmentToCallLoggedAction()){
+      this.promise = this.assetService.followAsset(this.reportFeed.assetId).subscribe(result =>
+          this.reportFeed.followingAsset = true
+      );
+    }
+    event.stopPropagation();
+  }
+  
+  onUnfollowClick(event: Event){
+    this.promise = this.assetService.unfollowAsset(this.reportFeed.assetId).subscribe(result =>this.reportFeed.followingAsset = false);
+    event.stopPropagation();
   }
 }

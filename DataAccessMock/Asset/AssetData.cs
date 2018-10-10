@@ -10,10 +10,10 @@ namespace Auctus.DataAccessMock.Asset
     {
         public static List<DomainObjects.Asset.Asset> AllAssets = new List<DomainObjects.Asset.Asset>()
         { 
-            new DomainObjects.Asset.Asset() { Id = 1, Code = "BTC", Name = "Bitcoin", Type = AssetType.Crypto.Value, CoinMarketCapId = 1, ShortSellingEnabled = true },
-            new DomainObjects.Asset.Asset() { Id = 2, Code = "ETH", Name = "Ethereum", Type = AssetType.Crypto.Value, CoinMarketCapId = 2, ShortSellingEnabled = true },
-            new DomainObjects.Asset.Asset() { Id = 3, Code = "XRP", Name = "Ripple", Type = AssetType.Crypto.Value, CoinMarketCapId = 3, ShortSellingEnabled = false },
-            new DomainObjects.Asset.Asset() { Id = 4, Code = "AUC", Name = "Auctus", Type = AssetType.Crypto.Value, CoinMarketCapId = 4, ShortSellingEnabled = false }
+            new DomainObjects.Asset.Asset() { Id = 1, Code = "BTC", Name = "Bitcoin", Type = AssetType.Crypto.Value, ShortSellingEnabled = true },
+            new DomainObjects.Asset.Asset() { Id = 2, Code = "ETH", Name = "Ethereum", Type = AssetType.Crypto.Value, ShortSellingEnabled = true },
+            new DomainObjects.Asset.Asset() { Id = 3, Code = "XRP", Name = "Ripple", Type = AssetType.Crypto.Value, ShortSellingEnabled = false },
+            new DomainObjects.Asset.Asset() { Id = 4, Code = "AUC", Name = "Auctus", Type = AssetType.Crypto.Value, ShortSellingEnabled = false }
         };
 
         public override IEnumerable<DomainObjects.Asset.Asset> SelectAll()

@@ -24,6 +24,7 @@ namespace Auctus.Model
         public List<AssetAdvisorResponse> AssetAdvisor { get; set; } = new List<AssetAdvisorResponse>();
         public List<AdviceResponse> Advices { get; set; } = new List<AdviceResponse>();
         public List<ReportResponse> Reports { get; set; } = new List<ReportResponse>();
+        public List<EventResponse> Events { get; set; } = new List<EventResponse>();
 
         public List<AdvisorResponse> Advisors { get; set; } = new List<AdvisorResponse>();
 

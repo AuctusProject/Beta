@@ -13,6 +13,7 @@ namespace Auctus.Business.Storage
         private const string USER_PICTURE_CONTAINER_NAME = "userpicture";
         private const string AGENCIES_CONTAINER_NAME = "agencieslogo";
         private const string REPORT_CONTAINER_NAME = "assetsreport";
+        private const string EVENT_CONTAINER_NAME = "assetsevent";
 
         private readonly IAzureStorageResource Resource;
 
@@ -44,6 +45,11 @@ namespace Auctus.Business.Storage
         public async Task<bool> UploadAssetReportFromByteAsync(string fileName, byte[] file)
         {
             return await Resource.UploadFileFromBytesAsync(REPORT_CONTAINER_NAME, fileName, file, "application/pdf");
+        }
+
+        public async Task<bool> UploadAssetEventFromByteAsync(string fileName, byte[] file, string contentType)
+        {
+            return await Resource.UploadFileFromBytesAsync(EVENT_CONTAINER_NAME, fileName, file, contentType);
         }
     }
 }

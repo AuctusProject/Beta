@@ -1,0 +1,19 @@
+<div class="global-container">
+  <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutAlign.gt-sm="space-between start" fxLayoutAlign.lt-md="center center">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="30px">
+      <div class="general-recommendation-box" fxLayout="column" fxLayoutAlign="center center">
+        <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
+        <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
+        <div class="disclaimer">
+          {{getOperationDisclaimer()}}
+        </div>
+      </div>
+      <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">
+        Rate It
+      </div>
+    </div>
+    <div style="width:100%">
+      <asset-history-chart [assetId]="asset.assetId"></asset-history-chart>
+    </div>
+  </div>
+</div> 

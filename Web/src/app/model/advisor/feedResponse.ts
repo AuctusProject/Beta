@@ -1,4 +1,5 @@
 import { ReportResponse } from "../asset/reportResponse";
+import { EventResponse } from "../asset/eventResponse";
 
 export class FeedResponse {
   assetId: number;
@@ -9,6 +10,7 @@ export class FeedResponse {
   date: Date;
   advice: AdviceResponse;
   report: ReportResponse;
+  event: EventResponse;
 }
 
 export class AdviceResponse{

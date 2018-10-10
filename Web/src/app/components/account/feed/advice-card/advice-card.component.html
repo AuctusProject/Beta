@@ -1,17 +1,17 @@
-<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
+<div class="feed-card" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
   <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
-    <div class="expert-picture" (click)="goToExpertDetails()" >
+    <div class="feed-picture" (click)="goToExpertDetails()" >
       <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
       <div class="expert-ranking">
         {{adviceFeed.advice.advisorRanking}}
       </div>
     </div>
-    <div fxLayout="column" class="expert-name-rating" (click)="goToExpertDetails()" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
+    <div fxLayout="column" class="feed-name-column" (click)="goToExpertDetails()" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
       <div fxLayout="row" class="tag blue">
         <div class="tag-description">Expert</div>
         <div class="after-triangle"></div>
       </div>
-      <div class="expert-name truncate" title="{{adviceFeed.advice.advisorName}}">
+      <div class="feed-name truncate" title="{{adviceFeed.advice.advisorName}}">
         {{adviceFeed.advice.advisorName}}
       </div>
       <div class="expert-rating">
@@ -39,7 +39,7 @@
         Follow
       </div>
     </div>
-    <div fxHide.lt-md class="advice-time" title="{{adviceFeed.date | date: 'medium'}}">
+    <div fxHide.lt-md class="feed-time" title="{{adviceFeed.date | date: 'medium'}}">
       {{adviceFeed.date | timeAgo}}
     </div>
     <div fxLayout="column">

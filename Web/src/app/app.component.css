@@ -10,6 +10,7 @@
     bottom: 1rem;
     right: 1rem;
     background-color: #126efd;
+    z-index: 1;
   }
   
   @media(min-width: 1024px) {

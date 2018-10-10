@@ -4,7 +4,6 @@
     color: white;
     font-size: 14px;
     font-weight: 300;
-    padding-bottom: 54px;
     padding-top: 34px;
     min-width: 100%;
 }
@@ -26,11 +25,6 @@
     color: #f3f3f3;
 }
 
-.general-recommendation-box{
-    background-color:#2c2c2d;
-    padding: 28px;
-    width: 267px;
-}
 
 :host ::ng-deep .assets-table.mat-table{
     background: transparent;
@@ -72,11 +66,6 @@
     margin: auto;
 }
 
-.mat-column-expertName{
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
 .section-title {
     margin-bottom: 36px;
 }
@@ -87,7 +76,6 @@
 
 :host ::ng-deep .mat-tab-list{
     max-width: 1168px;
-    width: 100%;
     margin: auto;
     flex-grow: unset;
 }
@@ -102,6 +90,7 @@
     color: white;
     opacity: 1;
     min-width: 160px !important;
+    margin: 0px 2px;
 }
 
 :host ::ng-deep .mat-tab-label-active{
@@ -129,4 +118,19 @@
 
 mat-tab-group{
     margin-top: 40px;
+}
+
+:host ::ng-deep .mat-tab-body-wrapper{
+    background-color: #151515;
+}
+
+@media(max-width:959px){
+    :host ::ng-deep .mat-tab-label{
+        min-width: 74px !important;
+        padding: 0px 6px !important;;
+    }
+
+    :host ::ng-deep .mat-ink-bar{
+        width: 72px !important;
+    }
 }

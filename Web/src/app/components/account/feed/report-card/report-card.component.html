@@ -1,16 +1,16 @@
-<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
+<div class="feed-card" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign="center center" fxLayoutGap.gt-sm="30px" fxLayoutGap.lt-md="10px">
     <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px">
       <a [href]="reportFeed.report.agencyWebSite" target="_blank">
-        <div class="agency-picture">
+        <div class="feed-picture">
           <img [src]="getReportAgencyImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'" />
         </div>
       </a>
-      <div fxLayout="column" class="agency-name-column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
+      <div fxLayout="column" class="feed-name-column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" >
         <div fxLayout="row" class="tag">
           <div class="tag-description">Agency</div>
           <div class="after-triangle"></div>
         </div>
-        <div class="agency-name truncate" title="{{reportFeed.report.agencyName}}">
+        <div class="feed-name truncate" title="{{reportFeed.report.agencyName}}">
           <a [href]="reportFeed.report.agencyWebSite" target="_blank">{{reportFeed.report.agencyName}}</a>
         </div>
       </div>
@@ -35,7 +35,7 @@
           Follow
         </div>
       </div>
-      <div fxHide.lt-md class="advice-time" title="{{reportFeed.date | date: 'medium'}}">
+      <div fxHide.lt-md class="feed-time" title="{{reportFeed.date | date: 'medium'}}">
         {{reportFeed.date | timeAgo}}
       </div>
       <div fxLayout="column" class="download-column" fxLayoutAlign="center stretch" >
