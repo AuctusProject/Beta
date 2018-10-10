@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../../../services/config.service';
 import { EventResponse } from '../../../../model/asset/eventResponse';
@@ -8,7 +8,7 @@ import { EventResponse } from '../../../../model/asset/eventResponse';
   templateUrl: './events-tab.component.html',
   styleUrls: ['./events-tab.component.css']
 })
-export class EventsTabComponent implements OnInit {
+export class EventsTabComponent implements OnInit, OnChanges {
   displayedColumns: string[] = ['eventDate', 'categories', 'creationDate', 'link'];
   @Input() events: EventResponse[] = [];
   visibleEvents: EventResponse[] = [];
@@ -19,6 +19,9 @@ export class EventsTabComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+  
+  ngOnChanges() {
     this.setVisibleEvents();
   }
 
