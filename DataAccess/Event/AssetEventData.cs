@@ -45,8 +45,8 @@ namespace Auctus.DataAccess.Event
                 if (!string.IsNullOrEmpty(queryCondition))
                     queryCondition += " AND ";
 
-                queryCondition += "e.ExternalCreationDate >= @ExternalCreationDate";
-                parameters.Add($"ExternalCreationDate", startDate.Value, DbType.DateTime);
+                queryCondition += "e.EventDate >= @StartDate";
+                parameters.Add($"StartDate", startDate.Value, DbType.DateTime);
             }
 
             if (lastAssetEventId.HasValue)

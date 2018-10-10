@@ -60,7 +60,7 @@ namespace Auctus.Business.Event
 
         public async Task UpdateAssetEventsAsync()
         {
-            var startDate = Data.GetDateTimeNow().AddDays(-1);
+            var startDate = Data.GetDateTimeNow().AddDays(-1).Date;
 
             List<DomainObjects.Asset.Asset> assets = null;
             List<AssetEventCategory> categories = null;
