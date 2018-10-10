@@ -17,7 +17,7 @@ namespace Auctus.Business.Storage
 
         private readonly IAzureStorageResource Resource;
 
-        internal AzureStorageBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider)
+        public AzureStorageBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider)
         {
             Resource = (IAzureStorageResource)serviceProvider.GetService(typeof(IAzureStorageResource));
         }
