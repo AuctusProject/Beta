@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { ReportResponse } from '../../../../model/asset/reportResponse';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../../../services/config.service';
@@ -8,7 +8,7 @@ import { CONFIG } from '../../../../services/config.service';
   templateUrl: './reports-tab.component.html',
   styleUrls: ['./reports-tab.component.css']
 })
-export class ReportsTabComponent implements OnInit {
+export class ReportsTabComponent implements OnInit, OnChanges {
   displayedColumns: string[] = ['agencyName', 'score', 'rating',  'date', 'download' ];
   @Input() reports: ReportResponse[] = [];
   visibleReports: ReportResponse[] = [];
@@ -18,7 +18,11 @@ export class ReportsTabComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(){
+
+  }
+  
+  ngOnChanges() {
     this.setVisibleReports();
   }
 
