@@ -49,7 +49,17 @@ namespace Auctus.DomainObjects.Event
             [JsonProperty("categories")]
             public List<Category> Categories { get; set; } = new List<Category>();
 
-            public DateTime FormattedEventDate { get { return new DateTime(EventDate.Year, EventDate.Month, EventDate.Day, 0, 0, 0, 0, DateTimeKind.Utc); } }
+            public DateTime FormattedEventDate
+            {
+                get
+                {
+                    var dateTime = EventDate.ToUniversalTime();
+                    if (dateTime.Hour >= 12)
+                        dateTime = dateTime.AddDays(1);
+                    
+                    return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, 0, DateTimeKind.Utc);
+                }
+            }
             public DateTime FormattedCreatedDate { get { return CreatedDate.ToUniversalTime(); } }
         }
 
