@@ -34,9 +34,13 @@ namespace Auctus.Business.Asset
             return reports;
         }
 
-        public IEnumerable<FeedResponse> ListReports(int? top, int? lastReportId)
+        public IEnumerable<FeedResponse> ListReports(int? top, int? lastReportId, int? assetId)
         {
-            var reports = Task.Factory.StartNew(() => List(null, top, lastReportId));
+            IEnumerable<int> assetsId = null;
+            if (assetId.HasValue)
+                assetsId = new int[] { assetId.Value };
+
+            var reports = Task.Factory.StartNew(() => List(assetsId, top, lastReportId));
             var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             return UserBusiness.FillFeedList(null, reports, null, user, top, null, lastReportId, null);
         }

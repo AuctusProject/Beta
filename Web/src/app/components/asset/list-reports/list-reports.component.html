@@ -7,11 +7,12 @@
             All crypto reports in one place, easily accessible and ready for download.
         </div>
         <div fxLayout="row" fxLayout.xs="column" fxHide.lt-md fxLayoutAlign="center top" fxLayoutGap="16px">
-            <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
+            <coin-search class="coin-report-search" #CoinSearch [options]="getSearchOptions()"></coin-search>
             <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RATING</div>
         </div>
         <div fxLayout="column" fxLayoutAlign="center center">
             <report-card *ngFor="let report of reports" [reportFeed]="report"></report-card>
+            <span class="no-report-message" *ngIf="firstLoaded && reports && reports.length == 0">There's no report of this asset.</span>
             <button [promiseBtn]="promise" class="pagination-link" *ngIf="hasMoreReports" (click)="loadMoreReports()">
                 LOAD MORE
             </button>

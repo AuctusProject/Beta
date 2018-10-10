@@ -41,9 +41,9 @@ namespace Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListReports([FromQuery]int? top, [FromQuery]int? lastReportId)
+        public new IActionResult ListReports([FromQuery]int? top, [FromQuery]int? lastReportId, [FromQuery]int? assetId)
         {
-            return base.ListReports(top, lastReportId);
+            return base.ListReports(top, lastReportId, assetId);
         }
 
         [Route("events")]

@@ -28,10 +28,11 @@ export class AssetService {
     return this.httpService.get(this.getAssetsDetailsUrl);
   }
 
-  getAssetsReports(top?: number, lastReportId?: number): Observable<FeedResponse[]> {
+  getAssetsReports(top?: number, lastReportId?: number, assetId?: number): Observable<FeedResponse[]> {
     var url = this.getAssetsReportsUrl + "?";
     if(!!top) url += "top=" + top;
     if (!!lastReportId) url += "&lastReportId=" + lastReportId;
+    if (!!assetId) url += "&assetId=" + assetId;
     return this.httpService.get(url);
   }
 
