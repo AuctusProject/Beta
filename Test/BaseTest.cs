@@ -1,7 +1,6 @@
 using Auctus.Business.Account;
 using Auctus.Business.Advisor;
 using Auctus.Business.Asset;
-using Auctus.DataAccess.Event;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
@@ -17,6 +16,7 @@ using Auctus.DataAccessMock.Blockchain;
 using Auctus.DataAccessMock.Email;
 using Auctus.DataAccessMock.Exchange;
 using Auctus.DataAccessMock.Storage;
+using Auctus.DataAccessMock.Event;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
