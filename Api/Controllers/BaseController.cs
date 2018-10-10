@@ -154,7 +154,7 @@ namespace Api.Controllers
 
         protected void RunAsync(Func<Task> action)
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 using (var scope = ServiceScopeFactory.CreateScope())
                 {
@@ -164,7 +164,7 @@ namespace Api.Controllers
                     {
                         telemetry.TrackEvent(action.Method.Name);
                         Logger.LogInformation($"Job {action.Method.Name} started.");
-                        await action();
+                        action().Wait();
                         Logger.LogInformation($"Job {action.Method.Name} ended.");
                     }
                     catch (Exception e)

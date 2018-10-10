@@ -19,7 +19,7 @@ namespace Api.Controllers
 
         protected virtual IActionResult UpdateAssetsEvents()
         {
-            RunAsync(async () => await AssetEventBusiness.UpdateAssetEventsAsync());
+            RunAsync(() => AssetEventBusiness.UpdateAssetEventsAsync());
             return Ok();
         }
 
