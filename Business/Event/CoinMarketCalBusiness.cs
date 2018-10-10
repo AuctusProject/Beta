@@ -42,7 +42,7 @@ namespace Auctus.Business.Event
                 if (response.MetaDataResult == null || page > response.MetaDataResult.PageCount)
                     break;
             }
-            return result.OrderByDescending(c => c.FormattedEventDate).ThenByDescending(c => c.FormattedCreatedDate).ToList();
+            return result;
         }
     }
 }
