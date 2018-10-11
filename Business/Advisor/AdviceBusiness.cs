@@ -25,7 +25,7 @@ namespace Auctus.Business.Advisor
             return Data.GetLastAdviceForAssetByAdvisor(assetId, advisorId);
         }
 
-        internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
+        internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type, double? stopLoss, double? targetPrice)
         {
             Advice lastAdvice = GetLastAdviceForAssetByAdvisor(advisor.Id, asset.Id);
 
@@ -42,23 +42,35 @@ namespace Auctus.Business.Advisor
             if (assetValue == null)
                 throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
 
+            if (type == AdviceType.ClosePosition && (stopLoss.HasValue || targetPrice.HasValue))
+                throw new BusinessException("Stop loss or target price cannot be defined to Close position recommendation.");
+
+            if (stopLoss.HasValue && ((type == AdviceType.Buy && assetValue.Value <= stopLoss.Value) || (type == AdviceType.Sell && assetValue.Value >= stopLoss.Value)))
+                throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(assetValue.Value)}.");
+
+            if (targetPrice.HasValue && ((type == AdviceType.Buy && assetValue.Value >= targetPrice.Value) || (type == AdviceType.Sell && assetValue.Value <= targetPrice.Value)))
+                throw new BusinessException($"Invalid target price value for current price {Util.Util.GetFormattedValue(assetValue.Value)}.");
+
             Insert(new Advice()
                     {
                         AdvisorId = advisor.Id,
                         AssetId = asset.Id,
                         Type = type.Value,
                         CreationDate = Data.GetDateTimeNow(),
-                        AssetValue = assetValue.Value
+                        AssetValue = assetValue.Value,
+                        OperationType = AdviceOperationType.Manual.Value,
+                        StopLoss = stopLoss,
+                        TargetPrice = targetPrice
                     });
 
-            RunAsync(async () => await SendAdviceNotificationForFollowersAsync(advisor, asset, type));
+            RunAsync(() => SendAdviceNotificationForFollowersAsync(advisor, asset, type));
         }
 
-        private async Task SendAdviceNotificationForFollowersAsync(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
+        private void SendAdviceNotificationForFollowersAsync(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
         {
             var usersFollowing = UserBusiness.ListValidUsersFollowingAdvisorOrAsset(advisor.Id, asset.Id);
             foreach (var user in usersFollowing)
-                await SendAdviceNotificationAsync(user, advisor, asset, type);
+                SendAdviceNotificationAsync(user, advisor, asset, type).Wait();
         }
 
         private async Task SendAdviceNotificationAsync(User user, DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type)
@@ -139,6 +151,11 @@ namespace Auctus.Business.Advisor
         public IEnumerable<int> ListTrendingAdvisedAssets(int top = 3)
         {
             return Data.ListTrendingAdvisedAssets(top);
+        }
+
+        public void InsertAutomatedClosePositionAdvices(List<Advice> automatedAdvices)
+        {
+            Data.InsertAdvices(automatedAdvices);
         }
     }
 }

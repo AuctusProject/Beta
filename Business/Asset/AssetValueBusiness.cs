@@ -69,13 +69,13 @@ namespace Auctus.Business.Asset
 
         public List<AssetResponse.ValuesResponse> ListAssetValues(int assetId, DateTime? dateTime)
         {
-            var baseTime = Data.GetDateTimeNow().AddDays(-30).AddHours(-4);
+            var baseTime = Data.GetDateTimeNow().AddDays(-30).AddHours(-1);
             if (!dateTime.HasValue || dateTime.Value > baseTime)
                 dateTime = baseTime;
 
             var cacheKey = $"assetValues_{assetId}";
             var values = MemoryCache.Get<List<AssetResponse.ValuesResponse>>(cacheKey);
-            if (values == null || values.Min(c => c.Date) > dateTime.Value.AddHours(2))
+            if (values == null || values.Min(c => c.Date) > dateTime.Value.AddHours(1))
             {
                 values = FilterValueResponse(assetId, dateTime).OrderBy(c => c.Date).ToList();
 
@@ -103,104 +103,158 @@ namespace Auctus.Business.Asset
 
             var consideredAssetsId = assets.Where(c => advices.Any(a => a.AssetId == c.Id)).Select(c => c.Id).Distinct().ToHashSet();
             var assetValues = new List<AssetValue>();
+            var currentValues = new Dictionary<int, double>();
             foreach (var assetValue in assetResults.Where(c => c.Price.HasValue))
             {
                 var asset = assets.FirstOrDefault(c => c.CoinGeckoId == assetValue.Id);
                 if (asset != null)
+                {
+                    currentValues[asset.Id] = assetValue.Price.Value;
                     assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
+                }
             }
 
-            var assetValuesToInsert = assetValues.Where(c => consideredAssetsId.Contains(c.AssetId)).ToList();
+            var assetsValuesToInsert = assetValues.Where(c => consideredAssetsId.Contains(c.AssetId)).ToList();
             try
             {
-                var assetsToUpdateLastValues = assetCurrentValues.Where(c => assetValues.Any(a => a.AssetId == c.Id));
-                var currentValues = new List<AssetCurrentValue>();
+                var assetsToUpdateLastValues = assetCurrentValues.Where(c => currentValues.ContainsKey(c.Id)).ToList();
                 if (assetsToUpdateLastValues.Any())
                 {
-                    var values = new List<AssetValue>();
-                    var filter = new List<AssetValueFilter>();
-                    foreach (var id in consideredAssetsId)
-                    {
-                        var assetCurrentValue = assetsToUpdateLastValues.FirstOrDefault(c => c.Id == id);
-                        if (assetCurrentValue != null)
-                        {
-                            if (!assetCurrentValue.Variation24Hours.HasValue && !assetCurrentValue.Variation7Days.HasValue)
-                            {
-                                var oldValues = CoinGeckoBusiness.GetAssetValues(assetCurrentValue.CoinGeckoId, 31).Select(c => new AssetValue()
-                                {
-                                    AssetId = assetCurrentValue.Id,
-                                    Date = c.Date,
-                                    Value = c.Value
-                                });
-                                values.AddRange(oldValues);
-                                assetValuesToInsert.AddRange(oldValues);
-                            }
-                            else
-                            {
-                                filter.Add(GetFilter(id, currentDate.AddDays(-1)));
-                                filter.Add(GetFilter(id, currentDate.AddDays(-7)));
-                                filter.Add(GetFilter(id, currentDate.AddDays(-30)));
-                            }
-                        }
-                    }
-                    values.AddRange(FilterAssetValues(filter));
-
-                    foreach (var assetToUpdate in assetsToUpdateLastValues)
-                    {
-                        var lastAssetValue = assetValues.FirstOrDefault(c => c.AssetId == assetToUpdate.Id);
-
-                        if (consideredAssetsId.Contains(assetToUpdate.Id))
-                        {
-                            VariantionCalculation(lastAssetValue.Value, currentDate, values.Where(c => c.AssetId == lastAssetValue.AssetId).OrderByDescending(c => c.Date),
-                                    out double? variation24h, out double? variation7d, out double? variation30d);
-
-                            currentValues.Add(new AssetCurrentValue()
-                            {
-                                Id = lastAssetValue.AssetId,
-                                UpdateDate = currentDate,
-                                CurrentValue = lastAssetValue.Value,
-                                Variation24Hours = variation24h,
-                                Variation7Days = variation7d,
-                                Variation30Days = variation30d
-                            });
-                        }
-                        else
-                        {
-                            currentValues.Add(new AssetCurrentValue()
-                            {
-                                Id = lastAssetValue.AssetId,
-                                UpdateDate = currentDate,
-                                CurrentValue = lastAssetValue.Value
-                            });
-                        }
-                    }
-                    AssetCurrentValueBusiness.UpdateAssetCurrentValues(currentValues);
+                    Parallel.Invoke(() => UpdateAssetCurrentValues(currentDate, currentValues, consideredAssetsId, assetsToUpdateLastValues, ref assetsValuesToInsert),
+                                    () => ClosePositionForStopLossAndTargetPriceReached(currentDate, advices, currentValues));
                 }
             }
             finally
             {
-                RunAsync(async () => await InsertManyAssetValuesAsync(assetValuesToInsert));
+                RunAsync(() => InsertManyAssetValuesAsync(assetsValuesToInsert));
             }
         }
 
-        private async Task InsertManyAssetValuesAsync(IEnumerable<AssetValue> values)
+        private void ClosePositionForStopLossAndTargetPriceReached(DateTime currentDate, List<Advice> advices, Dictionary<int, double> lastValues)
+        {
+            var newAutomatedAdvices = new List<Advice>();
+            var consideredAdvices = advices.Where(c => lastValues.ContainsKey(c.AssetId)).GroupBy(c => new { c.AssetId, c.AdvisorId }).
+                Select(c => new { c.Key.AssetId, c.Key.AdvisorId, CreationDate = c.Max(a => a.CreationDate) }).ToList();
+            foreach (var adviceKey in consideredAdvices)
+            {
+                var advice = advices.FirstOrDefault(c => c.AssetId == adviceKey.AssetId && c.AdvisorId == adviceKey.AdvisorId && c.CreationDate == adviceKey.CreationDate &&
+                    (c.StopLoss.HasValue || c.TargetPrice.HasValue));
+                if (advice != null)
+                {
+                    if (advice.StopLoss.HasValue)
+                    {
+                        if (advice.AdviceType == AdviceType.Buy && lastValues[advice.AssetId] <= advice.StopLoss.Value)
+                            newAutomatedAdvices.Add(CreateAutomatedAdvice(currentDate, advice.AssetId, advice.AdvisorId, lastValues[advice.AssetId], AdviceOperationType.StopLoss));
+                        else if (advice.AdviceType == AdviceType.Sell && lastValues[advice.AssetId] >= advice.StopLoss.Value)
+                            newAutomatedAdvices.Add(CreateAutomatedAdvice(currentDate, advice.AssetId, advice.AdvisorId, lastValues[advice.AssetId], AdviceOperationType.StopLoss));
+                    }
+                    else if (advice.TargetPrice.HasValue)
+                    {
+                        if (advice.AdviceType == AdviceType.Buy && lastValues[advice.AssetId] >= advice.TargetPrice.Value)
+                            newAutomatedAdvices.Add(CreateAutomatedAdvice(currentDate, advice.AssetId, advice.AdvisorId, lastValues[advice.AssetId], AdviceOperationType.TargetPrice));
+                        else if (advice.AdviceType == AdviceType.Sell && lastValues[advice.AssetId] <= advice.TargetPrice.Value)
+                            newAutomatedAdvices.Add(CreateAutomatedAdvice(currentDate, advice.AssetId, advice.AdvisorId, lastValues[advice.AssetId], AdviceOperationType.TargetPrice));
+                    }
+                }
+            }
+            AdviceBusiness.InsertAutomatedClosePositionAdvices(newAutomatedAdvices);
+        }
+
+        private Advice CreateAutomatedAdvice(DateTime currentDate, int assetId, int advisorId, double currentValue, AdviceOperationType operationType)
+        {
+            return new Advice()
+            {
+                AssetId = assetId,
+                AdvisorId = advisorId,
+                AssetValue = currentValue,
+                CreationDate = currentDate,
+                Type = AdviceType.ClosePosition.Value,
+                OperationType = operationType.Value
+            };
+        }
+
+        private void UpdateAssetCurrentValues(DateTime currentDate, Dictionary<int, double> lastValues, HashSet<int> consideredAssetsId, 
+            List<AssetCurrentValue> assetsToUpdateLastValues, ref List<AssetValue> assetsValuesToInsert)
+        {
+            var currentValues = new List<AssetCurrentValue>();
+            var values = new List<AssetValue>();
+            var filter = new List<AssetValueFilter>();
+            foreach (var id in consideredAssetsId)
+            {
+                var assetCurrentValue = assetsToUpdateLastValues.FirstOrDefault(c => c.Id == id);
+                if (assetCurrentValue != null)
+                {
+                    if (!assetCurrentValue.Variation24Hours.HasValue && !assetCurrentValue.Variation7Days.HasValue)
+                    {
+                        var oldValues = CoinGeckoBusiness.GetAssetValues(assetCurrentValue.CoinGeckoId, 31).Select(c => new AssetValue()
+                        {
+                            AssetId = assetCurrentValue.Id,
+                            Date = c.Date,
+                            Value = c.Value
+                        });
+                        values.AddRange(oldValues);
+                        assetsValuesToInsert.AddRange(oldValues);
+                    }
+                    else
+                    {
+                        filter.Add(GetFilter(id, currentDate.AddDays(-1)));
+                        filter.Add(GetFilter(id, currentDate.AddDays(-7)));
+                        filter.Add(GetFilter(id, currentDate.AddDays(-30)));
+                    }
+                }
+            }
+            values.AddRange(FilterAssetValues(filter));
+
+            foreach (var assetToUpdate in assetsToUpdateLastValues)
+            {
+                var lastAssetValue = lastValues[assetToUpdate.Id];
+
+                if (consideredAssetsId.Contains(assetToUpdate.Id))
+                {
+                    VariantionCalculation(lastAssetValue, currentDate, values.Where(c => c.AssetId == assetToUpdate.Id).OrderByDescending(c => c.Date),
+                            out double? variation24h, out double? variation7d, out double? variation30d);
+
+                    currentValues.Add(new AssetCurrentValue()
+                    {
+                        Id = assetToUpdate.Id,
+                        UpdateDate = currentDate,
+                        CurrentValue = lastAssetValue,
+                        Variation24Hours = variation24h,
+                        Variation7Days = variation7d,
+                        Variation30Days = variation30d
+                    });
+                }
+                else
+                {
+                    currentValues.Add(new AssetCurrentValue()
+                    {
+                        Id = assetToUpdate.Id,
+                        UpdateDate = currentDate,
+                        CurrentValue = lastAssetValue
+                    });
+                }
+            }
+            AssetCurrentValueBusiness.UpdateAssetCurrentValues(currentValues);
+        }
+
+        private void InsertManyAssetValuesAsync(IEnumerable<AssetValue> values)
         {
             var timesToInsert = Math.Ceiling(values.Count() / 90.0);
             for (var i = 0; i < timesToInsert; ++i)
             {
-                await Data.InsertManyAsync(values.Skip(i * 90).Take(90));
-                await Task.Delay(2000);
+                Data.InsertManyAsync(values.Skip(i * 90).Take(90)).Wait();
+                Task.Delay(2000).Wait();
             }
         }
 
         private List<AssetValue> FilterAssetValues(List<AssetValueFilter> filter)
         {
             var result = new List<AssetValue>();
-            var timesToQuery = Math.Ceiling(filter.Count / 40.0);
+            var timesToQuery = Math.Floor(filter.Count / 50.0);
             for (var i = 0; i < timesToQuery; ++i)
             {
-                result.AddRange(Filter(filter.Skip(i * 40).Take(40)));
-                Task.Delay(1000);
+                result.AddRange(Filter(filter.Skip(i * 50).Take(50)));
+                Task.Delay(200).Wait();
             }
 
             return result;
@@ -222,7 +276,7 @@ namespace Auctus.Business.Asset
             return new AssetValueFilter()
             {
                 AssetId = assetId,
-                StartDate = endDate.AddHours(-4),
+                StartDate = endDate.AddHours(-1),
                 EndDate = endDate
             };
         }

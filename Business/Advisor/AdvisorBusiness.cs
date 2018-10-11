@@ -487,7 +487,7 @@ namespace Auctus.Business.Advisor
             public AdviceModeType ModeType { get; set; }
         }
 
-        public void Advise(int assetId, AdviceType type)
+        public void Advise(int assetId, AdviceType type, double? stopLoss, double? targetPrice)
         {
             var user = GetValidUser();
             if (!UserBusiness.IsValidAdvisor(user))
@@ -497,7 +497,7 @@ namespace Auctus.Business.Advisor
             if (asset == null)
                 throw new NotFoundException("Asset not found.");
 
-            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type);
+            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type, stopLoss, targetPrice);
         }
 
         public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors()

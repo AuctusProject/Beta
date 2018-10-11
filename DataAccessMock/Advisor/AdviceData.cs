@@ -127,5 +127,10 @@ namespace Auctus.DataAccessMock.Advisor
         {
             return new int[] { 1, 2, 3 };
         }
+
+        public void InsertAdvices(List<Advice> newAdvices)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
