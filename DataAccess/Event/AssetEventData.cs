@@ -15,11 +15,11 @@ namespace Auctus.DataAccess.Event
     {
         public override string TableName => "AssetEvent";
 
-        private const string SQL_LIST = @"SELECT {0} e.*, a.*, c.* FROM 
+        private const string SQL_LIST = @"SELECT e.*, a.*, c.* FROM 
                                         [AssetEvent] e WITH(NOLOCK) 
                                         INNER JOIN [LinkEventAsset] a WITH(NOLOCK) ON a.AssetEventId = e.Id
                                         INNER JOIN [LinkEventCategory] c WITH(NOLOCK) ON c.AssetEventId = e.Id
-                                        {1} {2} ORDER BY e.ExternalCreationDate DESC";
+                                        {0} {1} ORDER BY e.ExternalCreationDate DESC";
 
         public AssetEventData(IConfigurationRoot configuration) : base(configuration) { }
 
@@ -29,7 +29,6 @@ namespace Auctus.DataAccess.Event
                 return new List<AssetEvent>();
 
             DynamicParameters parameters = new DynamicParameters();
-            var topCondition = top.HasValue ? "TOP " + top.Value : "";
             var where = assetsId != null || lastAssetEventId.HasValue || startDate.HasValue || minimumReliablePercentage.HasValue || onlyFutureEvents.HasValue ? " WHERE " : "";
             var queryCondition = "";
             
@@ -77,7 +76,7 @@ namespace Auctus.DataAccess.Event
             }
 
             Dictionary<int, AssetEvent> cache = new Dictionary<int, AssetEvent>();
-            Query<AssetEvent, LinkEventAsset, LinkEventCategory, AssetEvent>(string.Format(SQL_LIST, topCondition, where, queryCondition),
+            Query<AssetEvent, LinkEventAsset, LinkEventCategory, AssetEvent>(string.Format(SQL_LIST, where, queryCondition),
                 (assetEvent, linkEventAsset, linkEventCategory) =>
                 {
 
@@ -93,7 +92,10 @@ namespace Auctus.DataAccess.Event
                     return cachedParent;
                 }, "AssetEventId,AssetEventId", parameters);
 
-            return cache.Values.ToList();
+            if (top.HasValue)
+                return cache.Values.Take(top.Value).ToList();
+            else
+                return cache.Values.ToList();
         }
     }
 }
