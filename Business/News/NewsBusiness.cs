@@ -36,6 +36,9 @@ namespace Auctus.Business.News
 
         private IEnumerable<DomainObjects.News.News> GetNotIncludedNews(IEnumerable<DomainObjects.News.News> news)
         {
+            if (news?.Any() != true)
+                return Enumerable.Empty<DomainObjects.News.News>();
+
             var includedNews = Data.ListNews(news.Select(n => n.ExternalId), news.FirstOrDefault().SourceId);
             return news.Where(n => !includedNews.Any(i => i.ExternalId == n.ExternalId));
         }
@@ -52,7 +55,6 @@ namespace Auctus.Business.News
                     foreach (var newsCategory in news.NewsCategory)
                     {
                         newsCategory.NewsId = news.Id;
-                        newsCategory.Description = newsCategory.Description.Truncate(100);
                         transaction.Insert(newsCategory);
                     }
 

@@ -58,11 +58,11 @@ namespace Auctus.DataAccess.News
         {
             return new DomainObjects.News.News()
             {
-                Title = item.Title,
-                Description = item.Description,
+                Title = item.Title.Truncate(255),
+                Description = item.Description.Truncate(2000),
                 Link = item.Links.FirstOrDefault()?.Uri.AbsoluteUri,
                 ExternalCreationDate = item.Published.UtcDateTime,
-                NewsCategory = item.Categories.Select(c => new NewsCategory() { Description = c.Name }).ToList(),
+                NewsCategory = item.Categories.Select(c => new NewsCategory() { Description = c.Name.Truncate(100) }).ToList(),
                 ExternalId = item.Id,
                 SourceId = sourceId
             };
