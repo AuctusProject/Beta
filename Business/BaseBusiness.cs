@@ -5,6 +5,7 @@ using Auctus.Business.Blockchain;
 using Auctus.Business.Email;
 using Auctus.Business.Event;
 using Auctus.Business.Exchange;
+using Auctus.Business.News;
 using Auctus.Business.Storage;
 using Auctus.DataAccess.Core;
 using Auctus.DataAccessInterfaces;
@@ -72,6 +73,9 @@ namespace Auctus.Business
         private CoinMarketCalBusiness _coinMarketCalBusiness;
         private AssetEventBusiness _assetEventBusiness;
         private AssetEventCategoryBusiness _assetEventCategoryBusiness;
+        private NewsBusiness _newsBusiness;
+        private NewsSourceBusiness _newsSourceBusiness;
+        private NewsRssBusiness _newsRssBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -541,6 +545,36 @@ namespace Auctus.Business
                 if (_assetEventBusiness == null)
                     _assetEventBusiness = new AssetEventBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _assetEventBusiness;
+            }
+        }
+
+        protected NewsBusiness NewsBusiness
+        {
+            get
+            {
+                if (_newsBusiness == null)
+                    _newsBusiness = new NewsBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _newsBusiness;
+            }
+        }
+
+        protected NewsSourceBusiness NewsSourceBusiness
+        {
+            get
+            {
+                if (_newsSourceBusiness == null)
+                    _newsSourceBusiness = new NewsSourceBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _newsSourceBusiness;
+            }
+        }
+
+        protected NewsRssBusiness NewsRssBusiness
+        {
+            get
+            {
+                if (_newsRssBusiness == null)
+                    _newsRssBusiness = new NewsRssBusiness(Configuration, ServiceProvider);
+                return _newsRssBusiness;
             }
         }
     }
