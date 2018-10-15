@@ -3,7 +3,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'valueDisplay'})
 export class ValueDisplayPipe implements PipeTransform {
   transform(value: number): string {
-    if(!value){
+    if (value == 0) {
+      return '$' + value.toFixed(2);
+    } else if(!value){
       return null;
     }
     var decimals = 1;
@@ -12,7 +14,7 @@ export class ValueDisplayPipe implements PipeTransform {
         decimals++; 
         currentValue = value * Math.pow(10, decimals - 2);
     }
-    return '$'+value.toFixed(decimals);
+    return '$' + value.toFixed(decimals);
   }
 
 

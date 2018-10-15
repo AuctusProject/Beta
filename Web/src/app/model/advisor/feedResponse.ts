@@ -23,4 +23,7 @@ export class AdviceResponse{
   adviceId: number;
   adviceType: number;
   assetValueAtAdviceTime: number;
+  operationType: number;
+  targetPrice?: number;
+  stopLoss?: number;
 }

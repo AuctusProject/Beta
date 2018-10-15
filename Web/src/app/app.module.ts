@@ -103,6 +103,7 @@ import { SummaryTabComponent } from './components/asset/asset-details/summary-ta
 import { EventCardComponent } from './components/account/feed/event-card/event-card.component';
 import { ListEventsComponent } from './components/asset/list-events/list-events.component';
 import { ExpertRatingsTabComponent } from './components/asset/asset-details/expert-ratings-tab/expert-ratings-tab.component';
+import { AdviceParametersComponent } from './components/advisor/new-advice/advice-parameters/advice-parameters.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -189,7 +190,8 @@ export function getAuthServiceConfigs() {
     SummaryTabComponent,
     EventCardComponent,
     ListEventsComponent,
-    ExpertRatingsTabComponent
+    ExpertRatingsTabComponent,
+    AdviceParametersComponent
   ],
   imports: [
     BrowserModule,

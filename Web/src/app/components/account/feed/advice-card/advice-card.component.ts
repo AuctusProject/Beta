@@ -6,6 +6,7 @@ import { Util } from '../../../../util/Util';
 import { NavigationService } from '../../../../services/navigation.service';
 import { Subscription } from 'rxjs';
 import { AccountService } from '../../../../services/account.service';
+import { ValueDisplayPipe } from 'src/app/util/value-display.pipe';
 
 @Component({
   selector: 'advice-card',
@@ -47,6 +48,24 @@ export class AdviceCardComponent implements OnInit {
 
   getAdviceTypeDescription(){
     return Util.GetRecommendationTypeDescription(this.adviceFeed.advice.adviceType);
+  }
+
+  getAdviceParametersDescription() {
+    if (!this.adviceFeed.advice.targetPrice && !this.adviceFeed.advice.stopLoss && this.adviceFeed.advice.operationType == 0) {
+      return '';
+    } else {
+      if (this.adviceFeed.advice.targetPrice && this.adviceFeed.advice.stopLoss) {
+        return 'Target value: ' +  new ValueDisplayPipe().transform(this.adviceFeed.advice.targetPrice) + ' - Stop loss: ' + new ValueDisplayPipe().transform(this.adviceFeed.advice.stopLoss);
+      } else if (this.adviceFeed.advice.targetPrice) {
+        return 'Target value: ' +  new ValueDisplayPipe().transform(this.adviceFeed.advice.targetPrice);
+      } else if (this.adviceFeed.advice.stopLoss) {
+        return 'Stop loss: ' +  new ValueDisplayPipe().transform(this.adviceFeed.advice.stopLoss);
+      } else if (this.adviceFeed.advice.operationType != 0 && this.adviceFeed.advice.adviceType == 2) {
+        return 'Triggered by ' + Util.GetCloseReasonDescription(this.adviceFeed.advice.operationType);
+      } else {
+        return '';
+      }
+    }
   }
 
   getAdviceTypeColor(){

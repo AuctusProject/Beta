@@ -47,12 +47,16 @@
           <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Position </th>
             <td mat-cell *matCellDef="let asset"> 
-              <div [style.background-color]="getLastAdviceTypeColor(asset)">
-                {{getLastAdviceTypeDescription(asset)}}
-                <span fxHide.gt-sm>
-                  <br/>
-                  At price {{asset.assetAdvisor[0].lastAdviceAssetValue | valueDisplay}}
-                </span>
+              <div class="advice-data-div" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="3px">
+                <div [style.background-color]="getLastAdviceTypeColor(asset)">
+                  {{getLastAdviceTypeDescription(asset)}}
+                  <span fxHide.gt-sm>
+                    <br/>
+                    At price {{asset.assetAdvisor[0].lastAdviceAssetValue | valueDisplay}}
+                  </span>
+                </div>
+                <span class="advice-parameters" *ngIf="getFirstAdviceParametersDescription(asset).length > 0">{{getFirstAdviceParametersDescription(asset)}}</span>
+                <span class="advice-parameters" *ngIf="getSecondAdviceParametersDescription(asset).length > 0">{{getSecondAdviceParametersDescription(asset)}}</span>
               </div>
             </td>
           </ng-container>

@@ -38,6 +38,9 @@ namespace Auctus.Model
             public int? LastAdviceType { get; set; }
             public int? LastAdviceMode { get; set; }
             public double? LastAdviceAssetValue { get; set; }
+            public double? LastAdviceTargetPrice { get; set; }
+            public double? LastAdviceStopLoss { get; set; }
+            public int? LastAdviceOperationType { get; set; }
             public List<AdviceResponse> Advices { get; set; } = new List<AdviceResponse>();
         }
         public class ValuesResponse
@@ -51,6 +54,9 @@ namespace Auctus.Model
             public DateTime Date { get; set; }
             public int AdviceType { get; set; }
             public double AssetValue { get; set; }
+            public double? TargetPrice { get; set; }
+            public double? StopLoss { get; set; }
+            public int OperationType { get; set; }
         }
     }
 }

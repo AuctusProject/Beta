@@ -278,7 +278,10 @@ namespace Auctus.Business.Advisor
                                     UserId = c.Advice.AdvisorId,
                                     AdviceType = c.Advice.Type,
                                     Date = c.Advice.CreationDate,
-                                    AssetValue = c.Advice.AssetValue
+                                    AssetValue = c.Advice.AssetValue,
+                                    OperationType = c.Advice.OperationType,
+                                    TargetPrice = c.Advice.TargetPrice,
+                                    StopLoss = c.Advice.StopLoss
                                 }).OrderBy(c => c.Date).ToList();
                         }
                         assetsResult.Add(assetResultData);
@@ -356,13 +359,19 @@ namespace Auctus.Business.Advisor
                 LastAdviceMode = advisorDetailsValues.LastOrDefault()?.ModeType.Value,
                 LastAdviceType = advisorDetailsValues.LastOrDefault()?.Advice.Type,
                 LastAdviceAssetValue = advisorDetailsValues.LastOrDefault()?.Advice.AssetValue,
+                LastAdviceOperationType = advisorDetailsValues.LastOrDefault()?.Advice.OperationType,
+                LastAdviceTargetPrice = advisorDetailsValues.LastOrDefault()?.Advice.TargetPrice,
+                LastAdviceStopLoss = advisorDetailsValues.LastOrDefault()?.Advice.StopLoss,
                 Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c =>
                     new AssetResponse.AdviceResponse()
                     {
                         UserId = advisorId,
                         AdviceType = c.Advice.Type,
                         Date = c.Advice.CreationDate,
-                        AssetValue = c.Advice.AssetValue
+                        AssetValue = c.Advice.AssetValue,
+                        OperationType = c.Advice.OperationType,
+                        TargetPrice = c.Advice.TargetPrice,
+                        StopLoss = c.Advice.StopLoss
                     }).ToList() : null
             };
         }

@@ -2,6 +2,11 @@
 <div fxLayout="column" fxLayoutAlign="center center" class="modal-container">
   <mat-dialog-content class="modal-content">
     <p><b>{{getAdviceType()}}</b> rating to <b>{{data.assetName}}</b> at <b>{{data.lastValue | valueDisplay}}</b></p>
+    <div fxLayout="row" fxLayoutAlign="center center" class="advanced-settings">
+      <p *ngIf="data.targetPrice"><i>Target price: {{targetPrice | valueDisplay}}</i></p>
+      <p *ngIf="data.targetPrice && data.stopLoss"><i>&nbsp;-&nbsp;</i></p>
+      <p *ngIf="data.stopLoss"><i>Stop loss: {{stopLoss | valueDisplay}}</i></p>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions class="btn-actions" fxLayoutGap="20px">
     <button fxFlex mat-stroked-button [mat-dialog-close]="false" mat-dialog-close>Cancel</button>

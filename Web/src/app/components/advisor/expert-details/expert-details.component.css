@@ -153,3 +153,13 @@
     color: white;
     margin: 20px;
 }
+
+.advice-parameters {
+    font-size: 9px;
+    font-style: italic;
+    line-height: 10px;
+}
+
+.advice-data-div {
+    min-width: 115px;
+}

@@ -12,6 +12,7 @@ import { ViewChildren, QueryList } from '@angular/core';
 import { AssetHistoryChartComponent } from '../../asset/asset-history-chart/asset-history-chart.component';
 import { ModalService } from '../../../services/modal.service';
 import { NavigationService } from '../../../services/navigation.service';
+import { ValueDisplayPipe } from 'src/app/util/value-display.pipe';
 
 @Component({
   selector: 'expert-details',
@@ -104,6 +105,28 @@ export class ExpertDetailsComponent implements OnInit {
 
   getLastAdviceDate(asset: AssetResponse){
     return asset.assetAdvisor[0].lastAdviceDate;
+  }
+
+  getFirstAdviceParametersDescription(asset: AssetResponse) {
+    if (!asset.assetAdvisor[0].lastAdviceTargetPrice && asset.assetAdvisor[0].lastAdviceOperationType == 0) {
+      return '';
+    } else {
+      if (asset.assetAdvisor[0].lastAdviceTargetPrice) {
+        return 'Target value: ' +  new ValueDisplayPipe().transform(asset.assetAdvisor[0].lastAdviceTargetPrice);
+      } else if (asset.assetAdvisor[0].lastAdviceOperationType != 0 && asset.assetAdvisor[0].lastAdviceType == 2) {
+        return 'Triggered by ' + Util.GetCloseReasonDescription(asset.assetAdvisor[0].lastAdviceOperationType);
+      } else {
+        return '';
+      }
+    }
+  }
+
+  getSecondAdviceParametersDescription(asset: AssetResponse) {
+    if (!asset.assetAdvisor[0].lastAdviceStopLoss) {
+      return '';
+    } else {
+      return 'Stop loss: ' +  new ValueDisplayPipe().transform(asset.assetAdvisor[0].lastAdviceStopLoss);
+    }
   }
 
   getTotalRatings(asset:AssetResponse){
