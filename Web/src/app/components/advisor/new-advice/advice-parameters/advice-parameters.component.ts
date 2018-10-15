@@ -14,8 +14,8 @@ export class AdviceParametersComponent implements OnInit {
   @ViewChild("StopLoss") StopLoss: InheritanceInputComponent;
   targetPriceValue?: number;
   stopLossValue?: number;
-  private stopLossOptions: any = { inputType: InputType.Number, textOptions: { placeHolder: "Stop loss (USD)", required: false, showHintSize: false } };
-  private targetOptions: any = { inputType: InputType.Number, textOptions: { placeHolder: "Target price (USD)", required: false, showHintSize: false } };
+  stopLossOptions: any = { inputType: InputType.Number, textOptions: { placeHolder: "Stop loss (USD)", required: false, showHintSize: false } };
+  targetOptions: any = { inputType: InputType.Number, textOptions: { placeHolder: "Target price (USD)", required: false, showHintSize: false } };
 
   constructor() { }
   
