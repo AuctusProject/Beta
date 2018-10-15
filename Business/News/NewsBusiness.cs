@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccessInterfaces.News;
 using Auctus.Util;
 using Microsoft.ApplicationInsights;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,11 +13,15 @@ namespace Auctus.Business.News
 {
     public class NewsBusiness : BaseBusiness<DomainObjects.News.News, INewsData<DomainObjects.News.News>>
     {
-        public NewsBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
+        public NewsBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : 
+            base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) {
+        }
 
-        public void CreateNews()
+        public IEnumerable<DomainObjects.News.News> UpdateLastNews()
         {
             var newsSources = NewsSourceBusiness.ListAll();
+            var lastNews = new List<DomainObjects.News.News>();
+
             foreach (var newsSource in newsSources)
             {
                 try
@@ -24,6 +29,7 @@ namespace Auctus.Business.News
                     var news = NewsRssBusiness.List(newsSource.Url, newsSource.Id);
                     var notIncludeded = GetNotIncludedNews(news);
                     SaveNews(notIncludeded);
+                    lastNews.AddRange(notIncludeded);
                 }
                 catch (Exception ex)
                 {
@@ -32,6 +38,12 @@ namespace Auctus.Business.News
                     telemetry.TrackException(ex);
                 }
             }
+            return lastNews.OrderByDescending(n => n.Id);
+        }
+
+        public IEnumerable<DomainObjects.News.News> ListNews(int? top, int? lastNewsId)
+        {
+            return Data.ListNewsWithPagination(top, lastNewsId);
         }
 
         private IEnumerable<DomainObjects.News.News> GetNotIncludedNews(IEnumerable<DomainObjects.News.News> news)

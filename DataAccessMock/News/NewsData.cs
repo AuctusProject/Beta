@@ -14,5 +14,10 @@ namespace Auctus.DataAccessMock.Event
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<News> ListNewsWithPagination(int? top, int? lastNewsId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -7,18 +7,22 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Auctus.DomainObjects.Account;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using Api.Hubs;
 
 namespace Api.Controllers
 {
     public class NewsBaseController : BaseController
     {
-        protected NewsBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        protected readonly IHubContext<AuctusHub> HubContext;
+        protected NewsBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) {
+            HubContext = hubContext;
+        }
 
-        protected IActionResult ListNews()
+        protected IActionResult ListNews(int? top, int? lastNewsId)
         {
-            NewsBusiness.CreateNews();
-            return Ok();            
+            return Ok(NewsBusiness.ListNews(top, lastNewsId));
         }
     }
 }

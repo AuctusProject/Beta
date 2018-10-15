@@ -1,0 +1,12 @@
+<div class="search-results"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()">
+    <div *ngFor="let currentNews of news">
+      {{currentNews.id}}
+      <br>
+      <br><br><br><br><br><br><br><br><br><br>
+    </div>
+
+</div>

@@ -27,6 +27,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Auctus.Business.Event;
 using Auctus.Business.Storage;
 using Auctus.Business.News;
+using Microsoft.AspNet.SignalR;
+using Api.Hubs;
 
 namespace Api.Controllers
 {

@@ -6,6 +6,7 @@ import { NavigationService } from './services/navigation.service';
 import { ModalService } from './services/modal.service';
 import { AccountService } from './services/account.service';
 
+
 Highcharts.setOptions({
     global:{
         timezoneOffset: new Date().getTimezoneOffset()
@@ -202,6 +203,8 @@ Highcharts.setOptions({
     maskColor: 'rgba(255,255,255,0.3)'
 });
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -209,13 +212,17 @@ Highcharts.setOptions({
 })
 export class AppComponent implements OnInit{
   public topLoading = TopLoadingComponent.prototype.constructor;
+
   constructor(private router: Router, 
     private navigationService : NavigationService,
     private modalService: ModalService,
-    private accountService : AccountService) { }
+    private accountService : AccountService
+    ) { }
 
   ngOnInit(){
   }
+
+  
 
   public notificationOptions = {
     position: ["bottom", "left"],

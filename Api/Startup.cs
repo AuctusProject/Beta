@@ -18,6 +18,7 @@ using Auctus.Util;
 using Microsoft.Extensions.PlatformAbstractions;
 using Auctus.Business;
 using Swashbuckle.AspNetCore.Swagger;
+using Api.Hubs;
 
 namespace Api
 {
@@ -108,6 +109,8 @@ namespace Api
             }
 
             services.AddApplicationInsightsTelemetry(Configuration.GetSection("ApplicationInsights:InstrumentationKey").Get<string>());
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)
@@ -119,6 +122,12 @@ namespace Api
             app.UseAuthentication();
             app.UseCors("Default");
             app.UseMvcWithDefaultRoute();
+            
+            app.UseWebSockets();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<AuctusHub>("/api/auctusHub");
+            });
 
             if (env.IsDevelopment())
             {

@@ -82,8 +82,8 @@ namespace Auctus.Test
             services.AddScoped<IAssetEventData<AssetEvent>, AssetEventData>();
             services.AddScoped<ILinkEventAssetData<LinkEventAsset>, LinkEventAssetData>();
             services.AddScoped<ILinkEventCategoryData<LinkEventCategory>, LinkEventCategoryData>();
-            services.AddScoped<INewsData<DomainObjects.News.News>, NewsData>(c => new NewsData(configuration));
-            services.AddScoped<INewsSourceData<DomainObjects.News.NewsSource>, NewsSourceData>(c => new NewsSourceData(configuration));
+            services.AddScoped<INewsData<DomainObjects.News.News>, NewsData>(c => new NewsData());
+            services.AddScoped<INewsSourceData<DomainObjects.News.NewsSource>, NewsSourceData>(c => new NewsSourceData());
             services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
 
             ServiceProvider = services.BuildServiceProvider();
