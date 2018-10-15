@@ -75,10 +75,24 @@ export class AssetHistoryChartComponent implements OnChanges {
         this.advicesData.push({
           x: date.getTime(),
           title: Util.GetRecommendationTypeDescription(this.advices[i].adviceType),
-          text: Util.GetRecommendationTypeDescription(this.advices[i].adviceType) + ' at price ' + new ValueDisplayPipe().transform(this.advices[i].assetValue)
+          text: this.getAdviceFlagText(this.advices[i])
         });
       }
     }
+  }
+
+  getAdviceFlagText(advice: AdviceResponse) {
+    let text = Util.GetRecommendationTypeDescription(advice.adviceType) + ' at price ' + new ValueDisplayPipe().transform(advice.assetValue);
+    if (advice.targetPrice) {
+      text += '<br/>Target value: ' +  new ValueDisplayPipe().transform(advice.targetPrice);
+    }
+    if (advice.stopLoss) {
+      text += '<br/>Stop loss: ' + new ValueDisplayPipe().transform(advice.stopLoss);
+    }
+    if (advice.operationType != 0 && advice.adviceType == 2) {
+      text += '<br/>Triggered by ' + Util.GetCloseReasonDescription(advice.operationType);
+    } 
+    return text;
   }
 
   createChart(){

@@ -26,3 +26,7 @@ p {
     padding-bottom: 5px;
     text-align: center;
 }
+
+.advanced-settings {
+    font-size: 12px;
+}

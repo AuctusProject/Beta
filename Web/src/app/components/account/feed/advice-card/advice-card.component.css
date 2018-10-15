@@ -26,3 +26,10 @@
     color: #ffffff;
     
 }
+
+.advice-parameters {
+    font-size: 10px;
+    font-style: italic;
+    padding-top: 3px;
+    padding-bottom: 8px;
+}

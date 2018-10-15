@@ -33,6 +33,9 @@ export class AssetAdvisorResponse
   lastAdviceDate: Date;
   lastAdviceType: number;
   lastAdviceMode: number;
+  lastAdviceOperationType: number;
+  lastAdviceTargetPrice?: number;
+  lastAdviceStopLoss?: number;
   advices: AdviceResponse[];
 }
 
@@ -45,4 +48,7 @@ export class AdviceResponse{
   date: string;
   adviceType: number;
   assetValue : number;
+  operationType: number;
+  targetPrice?: number;
+  stopLoss?: number;
 }

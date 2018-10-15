@@ -27,6 +27,9 @@ namespace Auctus.Model
             public int AdviceId { get; set; }
             public int AdviceType { get; set; }
             public double AssetValueAtAdviceTime { get; set; }
+            public double? TargetPrice { get; set; }
+            public double? StopLoss { get; set; }
+            public int OperationType { get; set; }
         }
     }
 }

@@ -46,6 +46,18 @@ export class Util {
           }
     }
 
+    public static GetCloseReasonDescription(type: number){
+        if(type == this.AdvicOperationType.Manual){
+            return "MANUAL";
+          }
+          else if(type == this.AdvicOperationType.StopLoss){
+            return "STOP LOSS";
+          }
+          else{
+            return "TARGET PRICE";
+          }
+    }
+
     public static GetRecommendationTypeColor(type: number){
         if(type == this.SELL){
             return "#d13e3e";
@@ -109,5 +121,11 @@ export class Util {
         public static Reiterate = 1;
         public static Upgrade = 2;
         public static Downgrade = 3;
+    }
+
+    static AdvicOperationType = class{
+        public static Manual = 0;
+        public static StopLoss = 1;
+        public static TargetPrice = 2;
     }
 }

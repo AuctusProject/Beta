@@ -46,3 +46,12 @@
 .btn-close:hover {
     background-color: rgba(153, 153, 153, 0.6);  
 }
+
+.advice-parameters {
+    padding-top: 25px;
+    width: 100%;
+}
+
+.btn-not-selected {
+    opacity: 0.25;
+}

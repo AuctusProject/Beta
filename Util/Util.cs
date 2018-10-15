@@ -85,5 +85,25 @@ namespace Auctus.Util
             }
             return builder.ToString();
         }
+
+        public static string GetFormattedValue(double value)
+        {
+            if (value >= 100)
+                return value.ToString("#########0.0#", System.Globalization.CultureInfo.InvariantCulture);
+            else if (value >= 10)
+                return value.ToString("#########0.0##", System.Globalization.CultureInfo.InvariantCulture);
+            else if (value > 0)
+                return value.ToString("0.0###", System.Globalization.CultureInfo.InvariantCulture);
+            else if (value >= 0.01)
+                return value.ToString("0.0####", System.Globalization.CultureInfo.InvariantCulture);
+            else if (value >= 0.001)
+                return value.ToString("0.0#####", System.Globalization.CultureInfo.InvariantCulture);
+            else if (value >= 0.0001)
+                return value.ToString("0.0######", System.Globalization.CultureInfo.InvariantCulture);
+            else if (value >= 0.00001)
+                return value.ToString("0.0#######", System.Globalization.CultureInfo.InvariantCulture);
+            else 
+                return value.ToString("0.0########", System.Globalization.CultureInfo.InvariantCulture);
+        }
     }
 }

@@ -9,8 +9,8 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class InheritanceInputComponent implements OnInit {
   @Input() options: InheritanceInputOptions;
-  @Input() value: string;
-  @Output() onChange: EventEmitter<string> = new EventEmitter<string>();
+  @Input() value: any;
+  @Output() onChange: EventEmitter<any> = new EventEmitter<any>();
 
   public inputType: InputType = InputType.Text; 
   public required: boolean = true;
@@ -28,11 +28,13 @@ export class InheritanceInputComponent implements OnInit {
   public autosizeTextArea: boolean = true;
   public minRows: number = 2;
   public maxRows: number = 4;
+  public min: number = 0;
+  public max: number = 99999;
+  public step: number = 1;
 
   public formControl: FormControl; 
   public passwordHide: boolean = false;
   public forcedError: string;
-  public width
 
   constructor() { }
 
@@ -65,6 +67,11 @@ export class InheritanceInputComponent implements OnInit {
         this.minRows = this.setValue(this.minRows, this.options.textAreaOptions.minRows);
         this.maxRows = this.setValue(this.maxRows, this.options.textAreaOptions.maxRows);
       }
+      if (!!this.options.numberOptions) {
+        this.min = this.setValue(this.min, this.options.numberOptions.min);
+        this.max = this.setValue(this.max, this.options.numberOptions.max);
+        this.step = this.setValue(this.step, this.options.numberOptions.step);
+      }
     }
 
     let validators = [];
@@ -73,6 +80,10 @@ export class InheritanceInputComponent implements OnInit {
       if (this.inputType == InputType.Email) validators.push(Validators.email);
       if (this.required) validators.push(Validators.required);
       if (this.minlength > 0) validators.push(Validators.minLength(this.minlength));
+      if (this.inputType == InputType.Number) {
+        validators.push(Validators.min(this.min));
+        validators.push(Validators.max(this.max));
+      }
     }
     this.formControl = new FormControl('', validators);
   }
@@ -84,6 +95,8 @@ export class InheritanceInputComponent implements OnInit {
       return "search";
     } else if (this.inputType == InputType.Email) {
       return "email";
+    } else if (this.inputType == InputType.Number) {
+      return "number";
     } else {
       return "text";
     }
@@ -96,8 +109,11 @@ export class InheritanceInputComponent implements OnInit {
 
   public setForcedError(errorMessage: string) : void {
     this.forcedError = errorMessage;
-    if (this.getErrorMessage().length > 0) {
-      this.formControl.setErrors({'incorrect': true});
+    let errorType = this.getErrorType();
+    if (errorType) {
+      let error = {'incorrect': true};
+      error[errorType] = true;
+      this.formControl.setErrors(error);
     } else {
       this.formControl.setErrors(null);
     }
@@ -109,7 +125,7 @@ export class InheritanceInputComponent implements OnInit {
   }
 
   public showTextField() : boolean {
-    return this.inputType == InputType.Text || this.inputType == InputType.Email || this.inputType == InputType.Password;
+    return this.inputType == InputType.Text || this.inputType == InputType.Email || this.inputType == InputType.Password || this.inputType == InputType.Search || this.inputType == InputType.Number;
   }
 
   public setValue(defaultValue: any, optionValue?: any) : any {
@@ -122,17 +138,31 @@ export class InheritanceInputComponent implements OnInit {
   }
 
   public getErrorMessage() : string {
-    if (!!this.forcedError) return this.forcedError;
-    if (!this.showValidatorError) return '';
-    if (this.required && this.formControl.hasError('required')) return 'Field must be filled';
-    if (this.inputType == InputType.Email && this.formControl.hasError('email')) return 'It is not a valid email';
-    if (this.formControl.hasError('maxlength')) return ('Maximum field length is ' + this.maxlength);
-    if (this.minlength > 0 && this.formControl.hasError('minlength')) return ('Minimum field length is ' + this.minlength);
-    return '';
+    let getErrorType = this.getErrorType();
+    if (getErrorType == 'forced') return this.forcedError;
+    else if (getErrorType == 'required') return 'Field must be filled';
+    else if (getErrorType == 'email') return 'It is not a valid email';
+    else if (getErrorType == 'maxlength') return ('Maximum field length is ' + this.maxlength);
+    else if (getErrorType == 'minlength') return ('Minimum field length is ' + this.minlength);
+    else if (getErrorType == 'min') return ('The value cannot be lesser than ' + this.min);
+    else if (getErrorType == 'max') return ('The value cannot be greater than ' + this.max);
+    else return '';
+  }
+
+  private getErrorType() : string {
+    if (!!this.forcedError) return 'forced';
+    else if (!this.showValidatorError) return '';
+    else if (this.required && this.formControl.hasError('required')) return 'required';
+    else if (this.inputType == InputType.Email && this.formControl.hasError('email')) return 'email';
+    else if (this.formControl.hasError('maxlength')) return 'maxlength';
+    else if (this.minlength > 0 && this.formControl.hasError('minlength')) return 'minlength';
+    else if (this.inputType == InputType.Number && this.formControl.hasError('min')) return 'min';
+    else if (this.inputType == InputType.Number && this.formControl.hasError('max')) return 'max';
+    else return '';
   }
 
   public getLength() : number {
-    return (!!this.value) ? this.value.length : 0;
+    return (!!this.value) ? this.value.toString().length : 0;
   }
 
   public getHintText() : string {
