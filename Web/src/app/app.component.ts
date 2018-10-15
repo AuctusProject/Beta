@@ -234,9 +234,10 @@ export class AppComponent implements OnInit{
     pauseOnHover: true
   }
 
-  public isHotSite(){
+  public showEmptyPage() : boolean {
     return this.navigationService.isSameRoute("hotsite", this.router.url) ||
-        this.navigationService.isSameRoute("beexpert", this.router.url);
+        this.navigationService.isSameRoute("beexpert", this.router.url) ||
+        this.navigationService.isSameRoute("terminal", this.router.url);
   }
 
   openSocialMediaModal() {
