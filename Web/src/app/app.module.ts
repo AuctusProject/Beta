@@ -106,6 +106,7 @@ import { ExpertRatingsTabComponent } from './components/asset/asset-details/expe
 import { NewsListComponent } from './components/terminal/news-list/news-list.component';
 import { TerminalComponent } from './components/terminal/terminal.component';
 import { NewsService } from './services/news.service';
+import { CryptoChartComponent } from './components/terminal/crypto-chart/crypto-chart.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -195,7 +196,8 @@ export function getAuthServiceConfigs() {
     ListEventsComponent,
     ExpertRatingsTabComponent,
     NewsListComponent,
-    TerminalComponent
+    TerminalComponent,
+    CryptoChartComponent
   ],
   imports: [
     BrowserModule,
