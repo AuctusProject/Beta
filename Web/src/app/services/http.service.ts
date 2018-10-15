@@ -42,7 +42,10 @@ export class HttpService {
   }
 
   getUserEmail(): string {
-    return this.getLoginData().email;
+    if(this.getLoginData()){
+      return this.getLoginData().email;
+    }
+    return null;
   }
 
   logout(): void {

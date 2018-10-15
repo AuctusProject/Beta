@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using Api.Hubs;
 
 namespace Api.Controllers
 {
@@ -17,15 +19,15 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class NewsV1Controller : NewsBaseController
     {
-        public NewsV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        public NewsV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListNews()
+        public new IActionResult ListNews([FromQuery]int? top, [FromQuery]int? lastNewsId)
         {
-            return base.ListNews();
+            return base.ListNews(top, lastNewsId);
         }
     }
 }

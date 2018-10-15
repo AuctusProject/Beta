@@ -8,5 +8,7 @@ namespace Auctus.DataAccessInterfaces.News
     public interface INewsData<News> : IBaseData<News>
     {
         IEnumerable<News> ListNews(IEnumerable<string> externalIds, int sourceId);
+
+        IEnumerable<News> ListNewsWithPagination(int? top, int? lastNewsId);
     }
 }

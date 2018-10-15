@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Hubs;
 using Auctus.Util;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -14,12 +16,24 @@ namespace Api.Controllers
 {
     public class JobBaseController : BaseController
     {
-        protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) : 
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory)  { }
+        protected readonly IHubContext<AuctusHub> HubContext;
+        protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) : 
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory)  {
+            HubContext = hubContext;
+        }
 
         protected virtual IActionResult UpdateAssetsEvents()
         {
             RunAsync(() => AssetEventBusiness.UpdateAssetEventsAsync());
+            return Ok();
+        }
+
+        protected virtual IActionResult UpdateLastNews()
+        {
+            RunAsync(() => {
+                var news = NewsBusiness.UpdateLastNews();
+                HubContext.Clients.All.SendAsync("addLastNews", news);
+            });
             return Ok();
         }
 

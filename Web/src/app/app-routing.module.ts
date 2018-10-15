@@ -14,6 +14,7 @@ import { HotSiteComponent } from './components/hot-site/hot-site.component';
 import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
 import { ListReportsComponent } from './components/asset/list-reports/list-reports.component';
 import { ListEventsComponent } from './components/asset/list-events/list-events.component';
+import { TerminalComponent } from './components/terminal/terminal.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -29,6 +30,7 @@ const routes: Routes = [
     { path: 'coin-events', component: ListEventsComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
+    { path: 'terminal', component: TerminalComponent },
     { path: '**', redirectTo: ''  }
 ];
 
