@@ -7,11 +7,11 @@
     <div fxLayout="column" fxLayoutAlign="start start">
         <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
             <crypto-chart #CryptoChart fxFlex="50"></crypto-chart>
-            <ratings-list [assetId]="assetId" fxFlex="50"></ratings-list>
+            <ratings-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex="50"></ratings-list>
         </div>
         <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
             <news-list fxFlex="50"></news-list>  
-            <events-list [assetId]="assetId" fxFlex="50"></events-list>
+            <events-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex="50"></events-list>
         </div>
     </div>
 </div>
