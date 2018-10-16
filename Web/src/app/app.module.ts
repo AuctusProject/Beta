@@ -194,7 +194,7 @@ export function getAuthServiceConfigs() {
     AdviceParametersComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'Web' }),
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
