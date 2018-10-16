@@ -73,15 +73,15 @@ namespace Auctus.DataAccess.Advisor
             DynamicParameters parameters = new DynamicParameters();
             if (advisorIds?.Any() ?? false)
             {
-                complement = string.Join(" OR ", advisorIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
+                complement = $"({string.Join(" OR ", advisorIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"))})";
                 for (int i = 0; i < advisorIds.Count(); ++i)
                     parameters.Add($"AdvisorId{i}", advisorIds.ElementAt(i), DbType.Int32);
             }
             if (assetsIds?.Any() ?? false)
             {
                 if (advisorIds?.Any() ?? false)
-                    complement += " OR ";
-                complement += string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
+                    complement += " AND ";
+                complement += $"({string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"))})";
                 for (int i = 0; i < assetsIds.Count(); ++i)
                     parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
             }

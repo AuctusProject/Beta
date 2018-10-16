@@ -60,17 +60,61 @@ namespace Auctus.Business.Asset
             return trendingAssets;
         }
 
-        private IEnumerable<AssetResponse> ListAssetResult()
+        public AssetStatusResponse ListAssetStatus(int assetId)
         {
+            AssetStatusResponse result = null;
+            var asset = GetById(assetId);
+            var coinGeckoData = CoinGeckoBusiness.GetSimpleCoinData(asset.CoinGeckoId);
+            if (coinGeckoData != null)
+            {
+                result = new AssetStatusResponse()
+                {
+                    AssetId = asset.Id,
+                    Name = asset.Name,
+                    Code = asset.Code,
+                    AllTimeHigh = coinGeckoData.AllTimeHigh,
+                    AllTimeHighDate = coinGeckoData.AllTimeHighDate,
+                    AllTimeHighPercentage = coinGeckoData.AllTimeHighPercentage,
+                    CirculatingSupply = coinGeckoData.CirculatingSupply,
+                    High24h = coinGeckoData.High24h,
+                    Low24h = coinGeckoData.Low24h,
+                    MarketCap = coinGeckoData.MarketCap,
+                    MarketCapPercentage24h = coinGeckoData.MarketCapPercentage24h,
+                    MarketCapVariation24h = coinGeckoData.MarketCapVariation24h,
+                    MarketCapRank = coinGeckoData.MarketCapRank,
+                    Price = coinGeckoData.Price,
+                    TotalSupply = coinGeckoData.TotalSupply,
+                    TotalVolume = coinGeckoData.TotalVolume,
+                    Variation24h = coinGeckoData.Variation24h,
+                    VariationPercentage24h = coinGeckoData.VariationPercentage24h
+                };
+            }
+            return result;
+        }
+
+        public AssetResponse ListAssetBaseData(int assetId)
+        {
+            AssetResponse assetResponse = null;
+            List<Report> reports = null;
+            Parallel.Invoke(() => assetResponse = ListAssetResult(assetId).FirstOrDefault(),
+                            () => reports = ReportBusiness.List(new int[] { assetId }));
+
+            assetResponse.ReportRecommendationDistribution = ReportBusiness.GetReportRecommendationDistribution(reports);
+            return assetResponse;
+        }
+
+        private IEnumerable<AssetResponse> ListAssetResult(int? forcedAssetId = null)
+        {
+            var selectAssets = forcedAssetId.HasValue ? new int[] { forcedAssetId.Value } : null;
             var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             var advisors = AdvisorBusiness.GetAdvisors();
-            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
+            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct(), selectAssets));
+            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers(selectAssets));
             Task.WaitAll(advices, assetFollowers);
 
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetBase, out advisorsResult, out assetsResult, user, advices.Result, null, null, assetFollowers.Result);
+            AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetBase, out advisorsResult, out assetsResult, user, advices.Result, null, null, assetFollowers.Result, selectAssets);
             return assetsResult;
         }
         
@@ -110,6 +154,7 @@ namespace Auctus.Business.Asset
             result.Advisors = advisorsResult.Where(c => result.AssetAdvisor.Any(a => a.UserId == c.UserId)).ToList();
             result.AssetAdvisor = result.AssetAdvisor.OrderByDescending(a => a.LastAdviceDate).ToList();
             result.Reports = reports.Result.Select(c => ReportBusiness.ConvertToReportResponse(c)).OrderByDescending(c => c.ReportDate).ToList();
+            result.ReportRecommendationDistribution = ReportBusiness.GetReportRecommendationDistribution(reports.Result);
             result.Events = events.Result.Select(c => AssetEventBusiness.ConvertToEventResponse(c)).OrderByDescending(c => c.EventDate).ToList();
             return result;
         }

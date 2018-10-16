@@ -2,6 +2,9 @@
     <div class="no-header-logo"><img [src]="getLogoImgUrl()" routerLink="" class="landing-logo"/></div>
     <mat-tab-group class="global-container-min" (selectedTabChange)="onAssetChange($event)">
         <mat-tab *ngFor="let asset of assets" label="{{asset.code}}">
+            <ng-template matTabContent>
+                <asset-header [assetTerminal]="selectedAsset" fxFlex="100"></asset-header>
+            </ng-template>
         </mat-tab>
     </mat-tab-group>
     <div fxLayout="column" fxLayoutAlign="start start">

@@ -41,7 +41,7 @@ namespace Auctus.Business.Asset
                     else
                         assetCoinGeckoId = assetCurrentValue[0].CoinGeckoId;
 
-                    return CoinGeckoBusiness.GetCoinData(assetCoinGeckoId)?.MarketData?.CurrentPrice?.Value;
+                    return CoinGeckoBusiness.GetSimpleCoinData(assetCoinGeckoId)?.Price;
                 }
                 else
                     return value;

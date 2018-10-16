@@ -53,6 +53,16 @@ namespace Api.Controllers
             return Ok(AssetBusiness.ListAssetsForTerminal());
         }
 
+        protected IActionResult ListAssetBaseData(int id)
+        {
+            return Ok(AssetBusiness.ListAssetBaseData(id));
+        }
+
+        protected IActionResult ListAssetStatus(int id)
+        {
+            return Ok(AssetBusiness.ListAssetStatus(id));
+        }
+
         protected IActionResult GetAsset(int id)
         {
             return Ok(AssetBusiness.GetAssetData(id));

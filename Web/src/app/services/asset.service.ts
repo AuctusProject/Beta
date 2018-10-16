@@ -7,6 +7,7 @@ import { AssetRecommendationInfoResponse } from '../model/asset/assetRecommendat
 import { LocalCacheService } from './local-cache.service';
 import { FeedResponse } from '../model/advisor/feedResponse';
 import { TerminalAssetResponse } from '../model/asset/terminalAssetResponse';
+import { AssetStatusResponse } from '../model/asset/assetStatusResponse';
 
 @Injectable()
 export class AssetService {
@@ -20,6 +21,8 @@ export class AssetService {
   private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers");
   private getAssetValuesUrl = this.httpService.apiUrl("v1/assets/{id}/values");
   private getTerminalAssetsUrl = this.httpService.apiUrl("v1/assets/terminal");
+  private getAssetBaseDataUrl = this.httpService.apiUrl("v1/assets/{id}/basedata");
+  private getAssetStatusUrl = this.httpService.apiUrl("v1/assets/{id}/status");
   constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
 
   getAssetDetails(id: string): Observable<AssetResponse> {
@@ -32,6 +35,14 @@ export class AssetService {
 
   getTerminalAssets(): Observable<TerminalAssetResponse[]> {
     return this.httpService.get(this.getTerminalAssetsUrl);
+  }
+
+  getAssetBaseData(assetId: number): Observable<AssetResponse> {
+    return this.httpService.get(this.getAssetBaseDataUrl.replace("{id}", assetId.toString()));
+  }
+
+  getAssetStatus(assetId: number): Observable<AssetStatusResponse> {
+    return this.httpService.get(this.getAssetStatusUrl.replace("{id}", assetId.toString()));
   }
 
   getAssetsReports(top?: number, lastReportId?: number, assetId?: number): Observable<FeedResponse[]> {

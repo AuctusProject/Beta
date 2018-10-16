@@ -20,6 +20,7 @@ namespace Auctus.Model
         public bool? Following { get; set; }
         public int Mode { get; set; }
         public List<RecommendationDistributionResponse> RecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
+        public List<RecommendationDistributionResponse> ReportRecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
 
         public List<AssetAdvisorResponse> AssetAdvisor { get; set; } = new List<AssetAdvisorResponse>();
         public List<AdviceResponse> Advices { get; set; } = new List<AdviceResponse>();

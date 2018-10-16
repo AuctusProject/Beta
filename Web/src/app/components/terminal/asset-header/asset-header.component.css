@@ -1,0 +1,44 @@
+.partial-header {
+    border-bottom: solid 1px #FFFFFF99;
+    border-left: solid 1px #FFFFFF99;
+    min-height: 110px;
+    padding: 5px;
+    color: #FFFFFF;
+}
+
+.bull {
+    color: #3ed142;
+}
+
+.bear {
+    color: #d13e3e;
+}
+
+.neutral {
+    color: #999999;
+}
+
+.bg-bull {
+    background-color: #3ed142;
+}
+
+.bg-bear {
+    background-color: #d13e3e;
+}
+
+.bg-neutral {
+    background-color: #999999;
+}
+
+.arrow {
+    display: inline;
+}
+
+.asset-recommendation {
+    padding: 5px 20px;
+}
+
+.status-data {
+    color: #8c8c8c;
+    font-size: 12px;
+}

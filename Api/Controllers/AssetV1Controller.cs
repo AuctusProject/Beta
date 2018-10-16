@@ -59,7 +59,7 @@ namespace Api.Controllers
         [Route("{id}/values")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListAssetValues([FromRoute] int id, [FromQuery] DateTime? dateTime)
+        public new IActionResult ListAssetValues([FromRoute]int id, [FromQuery]DateTime? dateTime)
         {
             return base.ListAssetValues(id, dateTime);
         }
@@ -83,10 +83,28 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("{id}/basedata")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAssetBaseData([FromRoute]int id)
+        {
+            return base.ListAssetBaseData(id);
+        }
+
+        [HttpGet]
+        [Route("{id}/status")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAssetStatus([FromRoute]int id)
+        {
+            return base.ListAssetStatus(id);
+        }
+
+        [HttpGet]
         [Route("{id}/details")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult GetAsset(int id)
+        public new IActionResult GetAsset([FromRoute]int id)
         {
             return base.GetAsset(id);
         }
@@ -95,7 +113,7 @@ namespace Api.Controllers
         [Route("{id}/recommendation_info")]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult GetAssetRecommendationInfo(int id)
+        public new IActionResult GetAssetRecommendationInfo([FromRoute]int id)
         {
             return base.GetAssetRecommendationInfo(id);
         }

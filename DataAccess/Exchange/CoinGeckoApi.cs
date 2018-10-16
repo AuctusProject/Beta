@@ -35,13 +35,22 @@ namespace Auctus.DataAccess.Exchange
             return JsonConvert.DeserializeObject<AssetPricesResult>(responseContent);
         }
 
-        public AssetDataResult GetCoinData(string assetId)
+        public AssetDataResult GetFullCoinData(string assetId)
         {
             if (string.IsNullOrEmpty(assetId))
                 return null;
 
             var responseContent = GetWithRetry(String.Format(LASTDATA_ROUTE, assetId));
             return JsonConvert.DeserializeObject<AssetDataResult>(responseContent);
+        }
+
+        public AssetResult GetSimpleCoinData(string assetId)
+        {
+            if (string.IsNullOrEmpty(assetId))
+                return null;
+
+            var responseContent = GetWithRetry(COINDATA_ROUTE + $"&ids={assetId}");
+            return JsonConvert.DeserializeObject<AssetResult[]>(responseContent).FirstOrDefault();
         }
     }
 }

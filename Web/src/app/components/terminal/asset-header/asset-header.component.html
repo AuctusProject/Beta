@@ -1,0 +1,76 @@
+<div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="start center">  
+    <div fxFlex="34" class="partial-header" fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="space-around center" fxLayoutGap="10px">
+        <div fxLayout="row" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" *ngIf="assetTerminal"  fxLayoutGap="10px">
+            <div class="asset-icon">
+                <img [src]="getAssetImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
+            </div>
+            <div fxLayout="column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center">
+                <div><b>{{assetTerminal.code}}</b></div>
+                <span class="truncate">{{assetTerminal.name}}</span>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" *ngIf="assetData" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
+                <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+                    <span>USD</span>
+                    <span *ngIf="!assetStatus || !assetStatus.price">-</span>
+                    <span *ngIf="assetStatus && assetStatus.price">{{assetStatus.price | valueDisplay}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+                    <div *ngIf="assetStatus && assetStatus.variationPercentage24h" [class.bull]="assetStatus.variationPercentage24h > 0" [class.bear]="assetStatus.variationPercentage24h < 0">
+                        <div class="arrow" *ngIf="assetStatus.variationPercentage24h > 0">&uarr;&nbsp;</div><div class="arrow" *ngIf="assetStatus.variationPercentage24h < 0">&darr;&nbsp;</div>{{assetStatus.variationPercentage24h | number:'1.2-2'}}%
+                    </div>
+                    <span *ngIf="!assetStatus || !assetStatus.variationPercentage24h">-</span>
+                    <span>24h</span>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <div *ngIf="assetData" fxLayoutAlign="center center" class="asset-recommendation" 
+                    [class.bg-neutral]="assetData.mode == 0" 
+                    [class.bg-bull]="assetData.mode == 1 || assetData.mode == 2" 
+                    [class.bg-bear]="assetData.mode == 3 || assetData.mode == 4">
+                    {{getAssetGeneralRecommendation()}}
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div fxFlex="33" class="partial-header" fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="space-around center" fxLayoutGap="10px">
+        <div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <span class="status-data">Circulating Supply</span>
+                <span *ngIf="!assetStatus || !assetStatus.circulatingSupply">-</span>
+                <span *ngIf="assetStatus && assetStatus.circulatingSupply">{{assetStatus.circulatingSupply}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <span class="status-data">Total Supply</span>
+                <span *ngIf="!assetStatus || !assetStatus.totalSupply">-</span>
+                <span *ngIf="assetStatus && assetStatus.totalSupply">{{assetStatus.totalSupply}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <span class="status-data">Market Cap</span>
+                <span *ngIf="!assetStatus || !assetStatus.marketCap">-</span>
+                <span *ngIf="assetStatus && assetStatus.marketCap">#{{assetStatus.marketCapRank}}&nbsp;&nbsp;{{assetStatus.marketCap | valueDisplay}}</span>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <span class="status-data">Volume</span>
+                <span *ngIf="!assetStatus || !assetStatus.totalVolume">-</span>
+                <span *ngIf="assetStatus && assetStatus.totalVolume">{{assetStatus.totalVolume | valueDisplay}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <span class="status-data">High 24h</span>
+                <span *ngIf="!assetStatus || !assetStatus.high24h">-</span>
+                <span *ngIf="assetStatus && assetStatus.high24h">{{assetStatus.high24h | valueDisplay}}</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                <span class="status-data">Low 24h</span>
+                <span *ngIf="!assetStatus || !assetStatus.low24h">-</span>
+                <span *ngIf="assetStatus && assetStatus.low24h">{{assetStatus.low24h | valueDisplay}}</span>
+            </div>
+        </div>
+    </div>
+    <div fxFlex="33" class="partial-header" fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="space-around center" fxLayoutGap="10px">
+
+    </div>
+</div>

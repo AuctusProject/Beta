@@ -107,6 +107,7 @@ import { NewsListComponent } from './components/terminal/news-list/news-list.com
 import { TerminalComponent } from './components/terminal/terminal.component';
 import { NewsService } from './services/news.service';
 import { CryptoChartComponent } from './components/terminal/crypto-chart/crypto-chart.component';
+import { AssetHeaderComponent } from './components/terminal/asset-header/asset-header.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -197,7 +198,8 @@ export function getAuthServiceConfigs() {
     ExpertRatingsTabComponent,
     NewsListComponent,
     TerminalComponent,
-    CryptoChartComponent
+    CryptoChartComponent,
+    AssetHeaderComponent
   ],
   imports: [
     BrowserModule,
