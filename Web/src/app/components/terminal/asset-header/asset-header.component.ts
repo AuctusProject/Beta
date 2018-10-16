@@ -29,12 +29,32 @@ export class AssetHeaderComponent implements OnDestroy, OnChanges {
     }
   }
 
-  getAssetImgUrl(){
+  getAssetImgUrl() {
     return CONFIG.assetImgUrl.replace("{id}", this.assetTerminal.assetId.toString());
   }
 
-  getAssetGeneralRecommendation(){
+  getAssetGeneralRecommendation() {
     return Util.GetGeneralRecommendationDescription(this.assetData.mode);
+  }
+
+  getTotalExpertRecommendation() {
+    let total = 0;
+    if (this.assetData.recommendationDistribution) {
+      for(let i = 0; i < this.assetData.recommendationDistribution.length; ++i) {
+        total += this.assetData.recommendationDistribution[i].total;
+      }
+    }
+    return total;
+  }
+
+  getTotalReportRatings() {
+    let total = 0;
+    if (this.assetData.reportRecommendationDistribution) {
+      for(let i = 0; i < this.assetData.reportRecommendationDistribution.length; ++i) {
+        total += this.assetData.reportRecommendationDistribution[i].total;
+      }
+    }
+    return total;
   }
 
   setNewAsset() {
