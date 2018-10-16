@@ -10,5 +10,6 @@ namespace Auctus.DataAccessInterfaces.Advisor
         IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> followingAdvisors, IEnumerable<int> followingAssets, int? top, int? lastAdviceId);
         IEnumerable<Advice> ListLastAdvicesForAllTypes(int? top);
         IEnumerable<int> ListTrendingAdvisedAssets(int? top);
+        void InsertAdvices(List<Advice> newAdvices);
     }
 }

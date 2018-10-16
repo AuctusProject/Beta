@@ -9,5 +9,7 @@ namespace Api.Model.Advisor
     {
         public int AssetId { get; set; }
         public int AdviceType { get; set; }
+        public double? StopLoss { get; set; }
+        public double? TargetPrice { get; set; }
     }
 }

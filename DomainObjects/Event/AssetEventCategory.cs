@@ -7,6 +7,7 @@ namespace Auctus.DomainObjects.Event
 {
     public class AssetEventCategory
     {
+        [DapperKey]
         [DapperType(System.Data.DbType.Int32)]
         public int Id { get; set; }
         [DapperType(System.Data.DbType.AnsiString)]

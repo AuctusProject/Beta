@@ -12,6 +12,7 @@ import { CoinSearchComponent } from '../../util/coin-search/coin-search.componen
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
 import { Util } from '../../../util/Util';
 import { AssetService } from '../../../services/asset.service';
+import { AdviceParametersComponent } from './advice-parameters/advice-parameters.component';
 
 @Component({
   selector: 'new-advice',
@@ -25,6 +26,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
 
   @ViewChild("CoinSearch") CoinSearch: CoinSearchComponent;
+  @ViewChild("AdviceParameters") AdviceParameters: AdviceParametersComponent;
   advise: AdviseRequest = new AdviseRequest();
   showSell: boolean = false;
   showButtons: boolean = false;
@@ -39,6 +41,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
     private assetService: AssetService) { }
 
   ngOnInit() {
+    this.advise.adviceType = -1;
     let loginData = this.accountService.getLoginData();
     if (!loginData) {
       this.setClose.emit();
@@ -63,24 +66,38 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
   }
 
   buy() {
-    this.advise.adviceType = 1;
-    this.openConfirmation();
+    this.setAdviceType(1);
   }
 
   sell() {
-    this.advise.adviceType = 0;
-    this.openConfirmation();
+    this.setAdviceType(0);
   }
 
   close() {
-    this.advise.adviceType = 2;
-    this.openConfirmation();
+    this.setAdviceType(2);
+  }
+
+  setAdviceType(type: number) {
+    let initiate = this.advise.adviceType == -1;
+    this.advise.adviceType = type;
+    if (!initiate) {
+      this.AdviceParameters.ngOnInit();
+    }
   }
 
   openConfirmation() {
+    this.advise.stopLoss = this.AdviceParameters ? this.AdviceParameters.stopLossValue : null;
+    this.advise.targetPrice = this.AdviceParameters ? this.AdviceParameters.targetPriceValue : null;
     const dialogRef = this.dialog.open(ConfirmAdviceDialogComponent, 
       { width: '370px', height: '35%', hasBackdrop: true, disableClose: true, panelClass: 'fullscreen-modal', 
-        data: { adviceType: this.advise.adviceType, assetName: this.asset.code + ' - ' + this.asset.name, lastValue: this.lastValue} }); 
+        data: 
+        { 
+          adviceType: this.advise.adviceType, 
+          assetName: this.asset.code + ' - ' +  this.asset.name, 
+          lastValue: this.lastValue,
+          targetPrice: this.advise.targetPrice,
+          stopLoss: this.advise.stopLoss
+        }}); 
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
@@ -115,6 +132,22 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
           this.showButtons = true;
         })
     }
-    
   }  
+
+  getConfirmText() {
+    let text = "CONFIRM ";
+    if (this.advise.adviceType == 0) {
+      return text + "SELL";
+    }if (this.advise.adviceType == 1) {
+      return text + "BUY";
+    } else {
+      return text + "CLOSE";
+    }
+  }
+
+  onConfirmClick() {
+    if (!this.AdviceParameters || this.AdviceParameters.isValidParameters()) {
+      this.openConfirmation();
+    }
+  }
 }

@@ -3,6 +3,7 @@ export interface InheritanceInputOptions {
     darkLayout: boolean;
     textOptions?: InputTextTypeOptions;
     textAreaOptions?: InputTextAreaTypeOptions;
+    numberOptions?: InputNumberTypeOptions;
 }
 
 export enum InputType {
@@ -10,7 +11,8 @@ export enum InputType {
     Email = 1,
     Password = 2,
     TextArea = 3,
-    Search = 4
+    Search = 4,
+    Number = 5
 }
 
 interface InputTypeOptions {
@@ -18,10 +20,8 @@ interface InputTypeOptions {
     required?: boolean;
     disabled?: boolean;
     showValidatorError?: boolean;
-    setFocus?: boolean;
     specificHint?: string;
     outlineField?: boolean;
-    width: string;
 }
 
 interface InputTextTypeOptions extends InputTypeOptions {
@@ -38,3 +38,8 @@ interface InputTextAreaTypeOptions {
     maxRows?: number;
 }
 
+interface InputNumberTypeOptions {
+    min?: number;
+    max?: number;
+    step?: number;
+}

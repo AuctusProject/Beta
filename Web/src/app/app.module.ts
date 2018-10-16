@@ -109,6 +109,7 @@ import { NewsService } from './services/news.service';
 import { CryptoChartComponent } from './components/terminal/crypto-chart/crypto-chart.component';
 import { EventsListComponent } from './components/terminal/events-list/events-list.component';
 import { RatingsListComponent } from './components/terminal/ratings-list/ratings-list.component';
+import { AdviceParametersComponent } from './components/advisor/new-advice/advice-parameters/advice-parameters.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -197,6 +198,7 @@ export function getAuthServiceConfigs() {
     EventCardComponent,
     ListEventsComponent,
     ExpertRatingsTabComponent,
+    AdviceParametersComponent,
     NewsListComponent,
     TerminalComponent,
     CryptoChartComponent,

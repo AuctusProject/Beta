@@ -9,3 +9,17 @@
         display: flex !important;
     }
 } */
+
+.advice-parameters {
+    font-size: 9px;
+    font-style: italic;
+    line-height: 10px;
+}
+
+:host tr.mat-footer-row, tr.mat-row {
+    height: 60px;
+}
+
+.advice-data-div {
+    min-width: 115px;
+}

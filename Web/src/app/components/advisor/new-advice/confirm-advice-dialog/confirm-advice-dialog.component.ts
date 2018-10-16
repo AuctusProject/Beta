@@ -8,12 +8,17 @@ import { Util } from '../../../../util/Util';
   styleUrls: ['./confirm-advice-dialog.component.css']
 })
 export class ConfirmAdviceDialogComponent implements OnInit {
+  advancedSettings: string = null;
+  targetPrice: number;
+  stopLoss: number;
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmAdviceDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {
+    if (this.data.targetPrice) this.targetPrice = parseFloat(this.data.targetPrice);
+    if (this.data.stopLoss) this.stopLoss = parseFloat(this.data.stopLoss);
   }
 
   getAdviceType(){

@@ -28,6 +28,21 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> Rating </th>
+        <td mat-cell *matCellDef="let assetAdvisor">
+          <div class="advice-data-div" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="3px">
+            <div [style.background-color]="getAdviceTypeColor(assetAdvisor.lastAdviceType)">
+              {{getRecommendationFromType(assetAdvisor.lastAdviceType)}}
+              <span fxHide.gt-sm>At price {{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</span>
+            </div>
+            <span class="advice-parameters" *ngIf="getFirstAdviceParametersDescription(assetAdvisor).length > 0">{{getFirstAdviceParametersDescription(assetAdvisor)}}</span>
+            <span class="advice-parameters" *ngIf="getSecondAdviceParametersDescription(assetAdvisor).length > 0">{{getSecondAdviceParametersDescription(assetAdvisor)}}</span>            
+            <div fxHide.gt-xs [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
+          </div>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef><span fxHide.lt-md> Value </span></th>
         <td mat-cell *matCellDef="let assetAdvisor">  
@@ -43,17 +58,6 @@
           <div fxHide.lt-sm>
             {{getRecomendationFromType(assetAdvisor.lastAdviceMode)}}
           </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef> Rating </th>
-        <td mat-cell *matCellDef="let assetAdvisor">
-            <div [style.background-color]="getAdviceTypeColor(assetAdvisor.lastAdviceType)">
-              {{getRecommendationFromType(assetAdvisor.lastAdviceType)}}
-              <span fxHide.gt-sm>At price {{assetAdvisor.lastAdviceAssetValue | valueDisplay}}</span>
-            </div>
-            <div fxHide.gt-xs [title]="assetAdvisor.lastAdviceDate | date: 'medium'">{{assetAdvisor.lastAdviceDate | timeAgo}}</div>
         </td>
       </ng-container>
 
