@@ -14,7 +14,7 @@ export class ValueDisplayPipe implements PipeTransform {
         decimals++; 
         currentValue = value * Math.pow(10, decimals - 2);
     }
-    return '$' + value.toFixed(decimals);
+    return '$' + value.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   }
 
 

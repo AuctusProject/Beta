@@ -39,12 +39,12 @@
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                 <span class="status-data">Circulating Supply</span>
                 <span *ngIf="!assetStatus || !assetStatus.circulatingSupply">-</span>
-                <span *ngIf="assetStatus && assetStatus.circulatingSupply">{{assetStatus.circulatingSupply}}</span>
+                <span *ngIf="assetStatus && assetStatus.circulatingSupply">{{assetStatus.circulatingSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</span>
             </div>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                 <span class="status-data">Total Supply</span>
                 <span *ngIf="!assetStatus || !assetStatus.totalSupply">-</span>
-                <span *ngIf="assetStatus && assetStatus.totalSupply">{{assetStatus.totalSupply}}</span>
+                <span *ngIf="assetStatus && assetStatus.totalSupply">{{assetStatus.totalSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</span>
             </div>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                 <span class="status-data">Market Cap</span>
