@@ -70,7 +70,21 @@
             </div>
         </div>
     </div>
-    <div fxFlex="33" class="partial-header" fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="space-around center" fxLayoutGap="10px">
-
+    <div fxFlex="33" class="partial-header recomendations" fxLayout="column" fxLayoutAlign.gt-xs="center start" fxLayoutAlign.lt-sm="center center" fxLayoutGap="20px">
+        <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign.gt-xs="start center" fxLayoutGap="5px">
+                <div class="triangle-expert-recomendation"></div>
+                <span>Expert Recommendation</span>
+                <span *ngIf="assetData">({{getTotalExpertRecommendation()}})</span>
+            </div>
+        </div>
+        <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign.gt-xs="start center" fxLayoutGap="5px">
+                <div class="triangle-report-rating"></div>
+                <span>Reports Rating</span>
+                <span *ngIf="assetData">({{getTotalReportRatings()}})</span>
+            </div>
+            <span></span>
+        </div>
     </div>
 </div>

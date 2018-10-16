@@ -42,3 +42,17 @@
     color: #8c8c8c;
     font-size: 12px;
 }
+
+.triangle-expert-recomendation {
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid #126efd;
+}
+
+.triangle-report-rating {
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid #ffffff;
+}
+
+.recomendations {
+    font-size: 14px;
+}
