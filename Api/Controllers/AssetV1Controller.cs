@@ -83,6 +83,15 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("{id}/ratings")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAssetRatings(int id)
+        {
+            return base.GetAssetRatings(id);
+        }
+
+        [HttpGet]
         [Route("{id}/recommendation_info")]
         [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

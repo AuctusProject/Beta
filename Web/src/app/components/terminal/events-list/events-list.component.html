@@ -1,26 +1,27 @@
 <div class="box-header">
-  NEWS
+  EVENTS
   <div class="top-triangle"></div>
 </div>
 <div class="box-container" infiniteScroll
 [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false"
 (scrolled)="onScroll()">
-<table class="box-table" mat-table [dataSource]="news">
+<table class="box-table" mat-table [dataSource]="events">
   <ng-container matColumnDef="title">
     <th mat-header-cell *matHeaderCellDef> Title </th>
-    <td mat-cell *matCellDef="let element"> <a [href]="element.link" target="_blank">{{element.title}}</a> </td>
+    <td mat-cell *matCellDef="let element"> {{element.event.title}} </td>
   </ng-container>
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef> Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.creationDate | date : 'mediumDate'}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.event.eventDate | date : 'mediumDate'}} </td>
   </ng-container>
-  <ng-container matColumnDef="added">
-    <th mat-header-cell *matHeaderCellDef> Added </th>
-    <td mat-cell *matCellDef="let element"> {{element.externalCreationDate | timeAgo}} </td>
+  <ng-container matColumnDef="proof">
+    <th mat-header-cell *matHeaderCellDef> Proof </th>
+    <td mat-cell *matCellDef="let element"> <a [href]="getProofLink(element.event)" target="_blank">View Proof</a></td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<div class="box-message" *ngIf="hasMoreNews">Loading...</div>
+<div class="box-message" *ngIf="hasMore">Loading...</div>
+<div class="box-message" *ngIf="!hasMore && events.length == 0">There's no event of this asset.</div>
 </div>

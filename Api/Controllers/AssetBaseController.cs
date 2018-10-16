@@ -53,6 +53,11 @@ namespace Api.Controllers
             return Ok(AssetBusiness.GetAssetData(id));
         }
 
+        protected IActionResult GetAssetRatings(int id)
+        {
+            return Ok(AssetBusiness.GetAssetRatings(id));
+        }
+
         protected IActionResult GetAssetRecommendationInfo(int id)
         {
             return Ok(AssetBusiness.GetAssetRecommendationInfo(id));

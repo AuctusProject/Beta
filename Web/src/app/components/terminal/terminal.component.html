@@ -15,11 +15,11 @@
     <div fxLayout="column" fxLayoutAlign="start start">
         <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
             <crypto-chart #CryptoChart [assetId]="assetId" fxFlex="50"></crypto-chart>
-            <div fxFlex="50"></div>
+            <ratings-list [assetId]="assetId" fxFlex="50"></ratings-list>
         </div>
         <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <div fxFlex="50"></div>
-            <news-list fxFlex="50"></news-list>
+            <news-list fxFlex="50"></news-list>  
+            <events-list [assetId]="assetId" fxFlex="50"></events-list>
         </div>
     </div>
 </div>

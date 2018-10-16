@@ -11,7 +11,7 @@ import { CONFIG } from 'src/app/services/config.service';
 })
 export class NewsListComponent implements OnInit {
   hasMoreNews = false;
-  pageSize = 10;
+  pageSize = 20;
   news: News[] = [];
   displayedColumns: string[] = ['title', 'date', 'added'];
 
