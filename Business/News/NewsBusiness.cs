@@ -29,6 +29,30 @@ namespace Auctus.Business.News
                     var news = NewsRssBusiness.List(newsSource.Url, newsSource.Id);
                     var notIncludeded = GetNotIncludedNews(news);
                     SaveNews(notIncludeded);
+                    notIncludeded.ToList().ForEach(n => n.NewsSource = newsSource);
+                    lastNews.AddRange(notIncludeded);
+                }
+                catch (Exception ex)
+                {
+                    var telemetry = new TelemetryClient();
+                    telemetry.TrackEvent($"CreateNews.{newsSource?.Id}");
+                    telemetry.TrackException(ex);
+                }
+            }
+            return lastNews.OrderByDescending(n => n.Id);
+        }
+
+        public IEnumerable<DomainObjects.News.News> GetNotIncludedNews()
+        {
+            var newsSources = NewsSourceBusiness.ListAll();
+            var lastNews = new List<DomainObjects.News.News>();
+            foreach (var newsSource in newsSources)
+            {
+                try
+                {
+                    var news = NewsRssBusiness.List(newsSource.Url, newsSource.Id);
+                    var notIncludeded = GetNotIncludedNews(news);
+                    notIncludeded.ToList().ForEach(n => n.NewsSource = newsSource);
                     lastNews.AddRange(notIncludeded);
                 }
                 catch (Exception ex)

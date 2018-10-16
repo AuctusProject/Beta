@@ -142,6 +142,8 @@ namespace Auctus.Business.Asset
                 assetRatingsResponse.AdviceType = assetResponse.LastAdviceType;
                 assetRatingsResponse.AssetValue = assetResponse.LastAdviceAssetValue;
                 assetRatingsResponse.AdviceDate = assetResponse.LastAdviceDate;
+                assetRatingsResponse.StopLoss = assetResponse.LastAdviceStopLoss;
+                assetRatingsResponse.TargetPrice = assetResponse.LastAdviceTargetPrice;
                 assetRatingsResponse.ExpertId = assetResponse.UserId;
                 var expert = result.Advisors.First(a => a.UserId == assetResponse.UserId);
                 assetRatingsResponse.ExpertName = expert.Name;

@@ -22,6 +22,6 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<div class="box-message" *ngIf="hasMore">Loading...</div>
-<div class="box-message" *ngIf="!hasMore && events.length == 0">There's no event of this asset.</div>
+<div class="box-message" *ngIf="hasMore || events == null">Loading...</div>
+<div class="box-message" *ngIf="!hasMore && events != null && events.length == 0">There's no event of this asset.</div>
 </div>

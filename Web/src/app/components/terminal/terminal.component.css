@@ -69,6 +69,7 @@
 :host ::ng-deep .box-container{
     height: 328px;
     overflow: auto;
+    background-color: #1a1a1a;
 }
 
 :host ::ng-deep .top-triangle{

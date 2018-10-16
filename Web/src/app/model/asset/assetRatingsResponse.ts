@@ -6,4 +6,6 @@ export class AssetRatingsResponse {
   adviceDate?:Date;
   adviceType?:number;
   assetValue?:number;
+  stopLoss?:number;
+  targetPrice?:number;
 }

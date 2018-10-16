@@ -1,0 +1,11 @@
+.box-header{
+    color: #126efd;
+}
+
+.top-triangle{
+    border-right-color: #126efd;
+}
+
+td.mat-column-expert{
+    cursor: pointer;
+}

@@ -13,5 +13,7 @@ namespace Auctus.Model
         public DateTime? AdviceDate { get; set; }
         public int? AdviceType { get; set; }
         public double? AssetValue { get; set; }
+        public double? TargetPrice { get; set; }
+        public double? StopLoss { get; set; }
     }
 }

@@ -5,3 +5,7 @@
 .top-triangle{
     border-right-color: #e2a001;
 }
+
+td.mat-column-proof{
+    cursor: pointer;
+}

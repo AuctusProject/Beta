@@ -22,12 +22,16 @@ export class EventsListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.events = null;
     this.loadEvents();
   }
 
 
   loadEvents(){
     this.assetService.getAssetsEvents(this.pageSize, this.getLastEventId(), this.assetId).subscribe(result => {
+      if(this.events == null){
+        this.events = [];
+      }
       this.events = this.events.concat(result);
       this.hasMore = true;
       if(!result || result.length == 0 || result.length < this.pageSize){

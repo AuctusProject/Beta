@@ -12,8 +12,8 @@ import { CONFIG } from 'src/app/services/config.service';
 export class NewsListComponent implements OnInit {
   hasMoreNews = false;
   pageSize = 20;
-  news: News[] = [];
-  displayedColumns: string[] = ['title', 'date', 'added'];
+  news: News[];
+  displayedColumns: string[] = ['date', 'source', 'title'];
 
   constructor(private newsService: NewsService) { }
 
@@ -27,14 +27,39 @@ export class NewsListComponent implements OnInit {
       .then(() => console.log('Connection started!'))
       .catch(err => console.log('Error while establishing connection :('));
 
-    connection.on("addLastNews", data => {
-        console.log(data);
-        this.news = data.concat(this.news);
-    });
+    connection.on("addLastNews", this.onDataReceive);
+  }
+
+  onDataReceive(data:News[]){
+    for(var news of data){
+      news.signalR = true;
+    }
+    this.news = data.concat(this.news);
+    setTimeout(()=> {for(var news of data){
+      news.signalR = false;
+    }},30000);
+  }
+
+  addNews(){
+    var data : News[] = [
+      {
+        id:130,
+        title:"What is Bitcoin’s Liquid sidechain and why does it matter?",
+        externalCreationDate: new Date(),
+        creationDate: new Date(),
+        link:"https://cryptoinsider.com/myTest",
+        newsSource:{"id":5,"name":"Crypto Insider","url":"https://cryptoinsider.com/feed"},
+        signalR: false
+      }
+      ];
+      this.onDataReceive(data);
   }
 
   loadNews(){
     this.newsService.getNews(this.pageSize, this.getLastNewsId()).subscribe(result => {
+      if(this.news == null){
+        this.news = [];
+      }
       this.news = this.news.concat(result);
       this.hasMoreNews = true;
       if(!result || result.length == 0 || result.length < this.pageSize){
