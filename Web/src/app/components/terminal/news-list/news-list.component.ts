@@ -13,6 +13,8 @@ export class NewsListComponent implements OnInit {
   hasMoreNews = false;
   pageSize = 10;
   news: News[] = [];
+  displayedColumns: string[] = ['title', 'date', 'added'];
+
   constructor(private newsService: NewsService) { }
 
   ngOnInit() {
