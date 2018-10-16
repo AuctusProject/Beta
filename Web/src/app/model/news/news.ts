@@ -4,4 +4,12 @@ export class News {
     externalCreationDate:Date;
     creationDate: Date;
     link:string;
+    newsSource: NewsSource;
+    signalR:boolean;
   }
+
+export class NewsSource{
+  id:number;
+  name: string;
+  url: string;
+}

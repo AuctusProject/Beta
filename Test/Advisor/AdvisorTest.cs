@@ -244,23 +244,23 @@ namespace Auctus.Test.Advisor
             switch(assetId)
             {
                 case 1:
-                    AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition);
-                    AdvisorBusiness.Advise(assetId, AdviceType.Sell);
+                    AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition, null, null);
+                    AdvisorBusiness.Advise(assetId, AdviceType.Sell, null, null);
                     break;
                 case 2:
-                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy, null, null));
                     break;
                 case 3:
-                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
-                    AdvisorBusiness.Advise(assetId, AdviceType.Buy);
-                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Sell));
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition, null, null));
+                    AdvisorBusiness.Advise(assetId, AdviceType.Buy, null, null);
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Sell, null, null));
                     break;
                 case 4:
-                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition));
-                    AdvisorBusiness.Advise(assetId, AdviceType.Buy);
+                    Assert.Throws<BusinessException>(() => AdvisorBusiness.Advise(assetId, AdviceType.ClosePosition, null, null));
+                    AdvisorBusiness.Advise(assetId, AdviceType.Buy, null, null);
                     break;
                 case 5:
-                    Assert.Throws<NotFoundException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy));
+                    Assert.Throws<NotFoundException>(() => AdvisorBusiness.Advise(assetId, AdviceType.Buy, null, null));
                     break;
                 default: break;
             }

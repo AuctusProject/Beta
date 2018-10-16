@@ -20,7 +20,14 @@ namespace Auctus.DomainObjects.Advisor
         public int Type { get; set; }
         [DapperType(System.Data.DbType.Double)]
         public double AssetValue { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double? TargetPrice { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double? StopLoss { get; set; }
+        [DapperType(System.Data.DbType.Int32)]
+        public int OperationType { get; set; }
 
         public AdviceType AdviceType { get { return AdviceType.Get(Type); } }
+        public AdviceOperationType AdviceOperationType { get { return AdviceOperationType.Get(OperationType); } }
     }
 }

@@ -19,8 +19,9 @@ namespace Auctus.DataAccess.News
                                         WHERE {0}";
 
 
-        private const string SQL_LIST_WITH_PAGINATION = @"SELECT {0} n.Id, n.Title, n.ExternalCreationDate, n.CreationDate, n.Link, n.SourceId, n.ExternalId FROM 
+        private const string SQL_LIST_WITH_PAGINATION = @"SELECT {0} n.Id, n.Title, n.ExternalCreationDate, n.CreationDate, n.Link, n.SourceId, n.ExternalId, ns.* FROM 
                                         [News] n WITH(NOLOCK) 
+                                        INNER JOIN [NewsSource] ns ON n.SourceId = ns.Id 
                                         {1} ORDER BY n.Id DESC";
 
         public NewsData(IConfigurationRoot configuration) : base(configuration) { }
@@ -64,7 +65,12 @@ namespace Auctus.DataAccess.News
 
             var query = String.Format(SQL_LIST_WITH_PAGINATION, topCondition, complement);
 
-            return Query<DomainObjects.News.News>(query, parameters);
+            return Query<DomainObjects.News.News, DomainObjects.News.NewsSource, DomainObjects.News.News>(query, 
+                (news, newsSource) => {
+                    news.NewsSource = newsSource;
+                    return news;
+                },"Id",
+                parameters);
         }
     }
 }

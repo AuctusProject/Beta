@@ -159,6 +159,45 @@ namespace Auctus.Business.Asset
             return result;
         }
 
+        public List<AssetRatingsResponse> GetAssetRatings(int assetId)
+        {
+            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var advisors = AdvisorBusiness.GetAdvisors();
+            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
+            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
+            Task.WaitAll(advices, advisorFollowers);
+
+            List<AdvisorResponse> advisorsResult;
+            List<AssetResponse> assetsResult;
+            AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetRatings, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, null, new int[] { assetId });
+            var result = assetsResult.Single(c => c.AssetId == assetId);
+            result.Advisors = advisorsResult.Where(c => result.AssetAdvisor.Any(a => a.UserId == c.UserId)).ToList();
+            result.AssetAdvisor = result.AssetAdvisor.OrderByDescending(a => a.LastAdviceDate).ToList();
+            var response = ConvertToAssetRatingsResponse(result);
+            return response;
+        }
+
+        private List<AssetRatingsResponse> ConvertToAssetRatingsResponse(AssetResponse result)
+        {
+            var response = new List<AssetRatingsResponse>();
+            foreach(var assetResponse in result.AssetAdvisor)
+            {
+                var assetRatingsResponse = new AssetRatingsResponse();
+                assetRatingsResponse.AssetId = result.AssetId;
+                assetRatingsResponse.AdviceType = assetResponse.LastAdviceType;
+                assetRatingsResponse.AssetValue = assetResponse.LastAdviceAssetValue;
+                assetRatingsResponse.AdviceDate = assetResponse.LastAdviceDate;
+                assetRatingsResponse.StopLoss = assetResponse.LastAdviceStopLoss;
+                assetRatingsResponse.TargetPrice = assetResponse.LastAdviceTargetPrice;
+                assetRatingsResponse.ExpertId = assetResponse.UserId;
+                var expert = result.Advisors.First(a => a.UserId == assetResponse.UserId);
+                assetRatingsResponse.ExpertName = expert.Name;
+                assetRatingsResponse.ExpertRating = expert.Rating;
+                response.Add(assetRatingsResponse);
+            }
+            return response;
+        }
+
         public List<Auctus.DomainObjects.Asset.Asset> ListAssets(IEnumerable<int> ids = null)
         {
             string cacheKey = "Assets";

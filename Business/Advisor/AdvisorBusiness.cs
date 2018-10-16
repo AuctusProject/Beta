@@ -23,7 +23,7 @@ namespace Auctus.Business.Advisor
 {
     public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, IAdvisorData<DomainObjects.Advisor.Advisor>>
     {
-        public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4 }
+        public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4, AssetRatings = 5 }
         private const string ADVISORS_CACHE_KEY = "Advisors";
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
@@ -278,7 +278,10 @@ namespace Auctus.Business.Advisor
                                     UserId = c.Advice.AdvisorId,
                                     AdviceType = c.Advice.Type,
                                     Date = c.Advice.CreationDate,
-                                    AssetValue = c.Advice.AssetValue
+                                    AssetValue = c.Advice.AssetValue,
+                                    OperationType = c.Advice.OperationType,
+                                    TargetPrice = c.Advice.TargetPrice,
+                                    StopLoss = c.Advice.StopLoss
                                 }).OrderBy(c => c.Date).ToList();
                         }
                         assetsResult.Add(assetResultData);
@@ -356,13 +359,19 @@ namespace Auctus.Business.Advisor
                 LastAdviceMode = advisorDetailsValues.LastOrDefault()?.ModeType.Value,
                 LastAdviceType = advisorDetailsValues.LastOrDefault()?.Advice.Type,
                 LastAdviceAssetValue = advisorDetailsValues.LastOrDefault()?.Advice.AssetValue,
+                LastAdviceOperationType = advisorDetailsValues.LastOrDefault()?.Advice.OperationType,
+                LastAdviceTargetPrice = advisorDetailsValues.LastOrDefault()?.Advice.TargetPrice,
+                LastAdviceStopLoss = advisorDetailsValues.LastOrDefault()?.Advice.StopLoss,
                 Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c =>
                     new AssetResponse.AdviceResponse()
                     {
                         UserId = advisorId,
                         AdviceType = c.Advice.Type,
                         Date = c.Advice.CreationDate,
-                        AssetValue = c.Advice.AssetValue
+                        AssetValue = c.Advice.AssetValue,
+                        OperationType = c.Advice.OperationType,
+                        TargetPrice = c.Advice.TargetPrice,
+                        StopLoss = c.Advice.StopLoss
                     }).ToList() : null
             };
         }
@@ -487,7 +496,7 @@ namespace Auctus.Business.Advisor
             public AdviceModeType ModeType { get; set; }
         }
 
-        public void Advise(int assetId, AdviceType type)
+        public void Advise(int assetId, AdviceType type, double? stopLoss, double? targetPrice)
         {
             var user = GetValidUser();
             if (!UserBusiness.IsValidAdvisor(user))
@@ -497,7 +506,7 @@ namespace Auctus.Business.Advisor
             if (asset == null)
                 throw new NotFoundException("Asset not found.");
 
-            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type);
+            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type, stopLoss, targetPrice);
         }
 
         public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors()

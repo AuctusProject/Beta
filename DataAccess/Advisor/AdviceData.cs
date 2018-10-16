@@ -160,5 +160,20 @@ namespace Auctus.DataAccess.Advisor
             var query = string.Format(SQL_LIST_TRENDING_ADVISED_ASSETS, top);
             return Query<int>(query);
         }
+
+        public void InsertAdvices(List<Advice> newAdvices)
+        {
+            if (newAdvices == null || !newAdvices.Any())
+                return;
+
+            var insertSql = "";
+            foreach (var value in newAdvices)
+            {
+                insertSql += $"INSERT INTO [Advice] (AssetId, AdvisorId, CreationDate, Type, AssetValue, OperationType, TargetPrice, StopLoss) VALUES ({value.AssetId}, {value.AdvisorId}, " +
+                            $"{GetDateTimeSqlFormattedValue(value.CreationDate)}, {value.Type}, {GetDoubleSqlFormattedValue(value.AssetValue)}, {value.OperationType}, " +
+                            $"{GetDoubleSqlFormattedValue(value.TargetPrice)}, {GetDoubleSqlFormattedValue(value.StopLoss)});";
+            }
+            Execute(insertSql, null, 240);
+        }
     }
 }

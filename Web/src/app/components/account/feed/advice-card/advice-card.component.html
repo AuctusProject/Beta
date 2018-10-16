@@ -42,13 +42,14 @@
     <div fxHide.lt-md class="feed-time" title="{{adviceFeed.date | date: 'medium'}}">
       {{adviceFeed.date | timeAgo}}
     </div>
-    <div fxLayout="column">
+    <div fxLayout="column" fxLayoutAlign="center center">
       <div fxLayout="column" class="advice-mode-box" [style.background-color]="getAdviceTypeColor()" fxLayoutAlign="center center">
         <div class="advice-type">
           {{getAdviceTypeDescription()}}
         </div>
         at price {{adviceFeed.advice.assetValueAtAdviceTime | valueDisplay}}
       </div>
+      <span class="advice-parameters" *ngIf="getAdviceParametersDescription().length > 0">{{getAdviceParametersDescription()}}</span>
       <span fxLayoutAlign="center center" fxHide.gt-sm>{{adviceFeed.date | timeAgo}}</span>
     </div>
   </div>

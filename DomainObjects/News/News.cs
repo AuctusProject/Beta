@@ -25,6 +25,7 @@ namespace Auctus.DomainObjects.News
         [DapperType(System.Data.DbType.AnsiString)]
         public string ExternalId { get; set; }
 
-        public List<NewsCategory> NewsCategory { get; set; } = new List<NewsCategory>();
+        public NewsSource NewsSource { get; set; }
+        public List<NewsCategory> NewsCategory { get; set; } = new List<NewsCategory>();        
     }
 }

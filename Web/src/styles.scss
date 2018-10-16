@@ -851,3 +851,12 @@ advice-card{
 .feed-card  .tag.yellow .after-triangle {
     border-top: 23px solid #e2a001;
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}

@@ -1,0 +1,9 @@
+<div class="width100" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <label><i>Advanced settings (optional)</i></label>
+    <div class="width100" fxLayout.gt-xs="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap.gt-xs="10px" fxLayoutGap.xs="5px">
+        <inheritance-input *ngIf="targetOptions.numberOptions" #TargetPrice [options]="targetOptions" class="input-number" ngClass.gt-xs="input-number-web" ngClass.xs="width100"
+            [value]="targetPriceValue" (onChange)="onTargetPrice($event)"></inheritance-input>
+        <inheritance-input *ngIf="stopLossOptions.numberOptions" #StopLoss [options]="stopLossOptions" class="input-number" ngClass.gt-xs="input-number-web" ngClass.xs="width100" 
+            [value]="stopLossValue" (onChange)="onStopLoss($event)"></inheritance-input>
+    </div>
+</div>

@@ -1,85 +1,24 @@
-:host{
-    border: solid 3px #000000;
-    display: block;
-}
-
-.box-container{
-    height: 400px;
-    overflow: auto;
-}
-
-.top-triangle{
-    width: 0;
-    height: 0;
-    border-bottom: 20px solid transparent;
-    border-right: 20px solid white;
-    top: -3px;
-    position: absolute;
-    right: -3px;
-}
-
-table{
-    width: 100%;
-    background-color: #1a1a1a;
-    
-    font-style: normal;
-}
-
-table th{
-    font-size: 14px;
-    font-weight: 600;
-}
-
-table ::ng-deep .mat-cell{
-    color: #e6e6e6;
-    font-size: 12px;
-    font-weight: 300;
-}
-
-table ::ng-deep .mat-header-cell{
-    color: #e6e6e6;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-table ::ng-deep .mat-header-row{
-    height: 42px;
-}
-
-table ::ng-deep  tr.mat-row{
-    height: 38px;
-}
-
-.box-header{
-    background-color: #000000;
-    color: white;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 40px;
-    padding-left: 20px;
-    /* display: inline-flex;
-    width: 100%; */
-    position: relative;
-}
 
 
-/* width */
-:host ::ng-deep ::-webkit-scrollbar {
-    width: 10px;
+.mat-column-date{
+    width: 80px;
+    padding-right: 10px;
 }
 
-/* Track */
-:host ::ng-deep ::-webkit-scrollbar-track {
-    background: #292929; 
-}
- 
-/* Handle */
-:host ::ng-deep ::-webkit-scrollbar-thumb {
-    background: #424242; 
-    border-radius: 5px;
+.mat-column-source{
+    width: 85px;
+    padding-right: 10px;
 }
 
-/* Handle on hover */
-:host ::ng-deep ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
+a:visited {
+    color: #707070;
+}
+
+.signalR{
+    background-color: #404040;
+}
+
+::ng-deep .mat-row{
+    -webkit-transition: background-color 5s; /* Safari */
+    transition: background-color 5s;
 }

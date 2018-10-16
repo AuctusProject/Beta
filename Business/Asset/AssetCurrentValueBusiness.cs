@@ -30,7 +30,7 @@ namespace Auctus.Business.Asset
         public double? GetCurrentValue(int assetId)
         {
             var assetCurrentValue = ListAllAssets(new int[] { assetId });
-            if (assetCurrentValue == null || !assetCurrentValue.Any() || assetCurrentValue[0].UpdateDate < Data.GetDateTimeNow().AddHours(-4))
+            if (assetCurrentValue == null || !assetCurrentValue.Any() || assetCurrentValue[0].UpdateDate < Data.GetDateTimeNow().AddHours(-1))
             {
                 var value = AssetValueBusiness.LastAssetValue(assetId)?.Value;
                 if (!value.HasValue)
@@ -57,9 +57,9 @@ namespace Auctus.Business.Asset
             var assetDateMapping = new List<AssetValueFilter>();
             foreach (var asset in assetCurrentValues)
             {
-                if (asset.UpdateDate < Data.GetDateTimeNow().AddHours(-4))
+                if (asset.UpdateDate < Data.GetDateTimeNow().AddHours(-1))
                 {
-                    if (mode == CalculationMode.AdvisorBase || mode == CalculationMode.Feed || mode == CalculationMode.AdvisorDetailed)
+                    if (mode == CalculationMode.AdvisorBase || mode == CalculationMode.Feed || mode == CalculationMode.AdvisorDetailed || mode == CalculationMode.AssetRatings)
                         assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
                     else if (mode == CalculationMode.AssetDetailed)
                     {

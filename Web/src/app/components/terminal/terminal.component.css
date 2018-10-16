@@ -64,3 +64,97 @@
 :host ::ng-deep .mat-tab-body-wrapper {
     background-color: #262626;
 }
+
+
+:host ::ng-deep .box-container{
+    height: 328px;
+    overflow: auto;
+    background-color: #1a1a1a;
+}
+
+:host ::ng-deep .top-triangle{
+    width: 0;
+    height: 0;
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid white;
+    top: -3px;
+    position: absolute;
+    right: -3px;
+}
+
+:host ::ng-deep .box-table{
+    width: 100%;
+    background-color: #1a1a1a;
+    
+    font-style: normal;
+}
+
+:host ::ng-deep .box-table th{
+    font-size: 14px;
+    font-weight: 600;
+}
+
+:host ::ng-deep .box-table .mat-cell{
+    color: #e6e6e6;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+:host ::ng-deep .box-table .mat-header-cell{
+    color: #e6e6e6;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+:host ::ng-deep .box-table .mat-header-row{
+    height: 42px;
+}
+
+:host ::ng-deep .box-table tr.mat-row{
+    height: 38px;
+}
+
+:host ::ng-deep .box-header{
+    background-color: #000000;
+    color: white;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 40px;
+    padding-left: 20px;
+    position: relative;
+}
+
+:host ::ng-deep .box-table td.mat-cell,
+:host ::ng-deep .box-table th.mat-header-cell{
+    border-bottom-color: #505050;
+}
+
+:host ::ng-deep ::-webkit-scrollbar {
+    width: 10px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-track {
+    background: #292929; 
+}
+ 
+:host ::ng-deep ::-webkit-scrollbar-thumb {
+    background: #424242; 
+    border-radius: 5px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+news-list,
+ratings-list,
+events-list{
+    border: solid 3px #000000;
+    display: block;
+}
+
+:host ::ng-deep .box-message{
+    color: white;
+    text-align: center;
+    margin: 10px;
+}
