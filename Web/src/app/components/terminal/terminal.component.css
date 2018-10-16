@@ -1,8 +1,13 @@
 .painel-row {
     width: 100%;
     height: 100%;
-    padding-top: 10px;
     padding-left: 10px;
+    padding-right: 10px;
+}
+
+.boxes-container{
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .no-header-container {
@@ -148,7 +153,8 @@
 
 news-list,
 ratings-list,
-events-list{
+events-list,
+crypto-chart{
     border: solid 3px #000000;
     display: block;
 }

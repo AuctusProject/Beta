@@ -40,21 +40,6 @@ export class NewsListComponent implements OnInit {
     }},30000);
   }
 
-  addNews(){
-    var data : News[] = [
-      {
-        id:130,
-        title:"What is Bitcoin’s Liquid sidechain and why does it matter?",
-        externalCreationDate: new Date(),
-        creationDate: new Date(),
-        link:"https://cryptoinsider.com/myTest",
-        newsSource:{"id":5,"name":"Crypto Insider","url":"https://cryptoinsider.com/feed"},
-        signalR: false
-      }
-      ];
-      this.onDataReceive(data);
-  }
-
   loadNews(){
     this.newsService.getNews(this.pageSize, this.getLastNewsId()).subscribe(result => {
       if(this.news == null){

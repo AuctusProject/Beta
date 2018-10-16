@@ -7,14 +7,14 @@
             </ng-template>
         </mat-tab>
     </mat-tab-group>
-    <div fxLayout="column" fxLayoutAlign="start start">
-        <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <crypto-chart #CryptoChart fxFlex="50"></crypto-chart>
-            <ratings-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex="50"></ratings-list>
+    <div class="boxes-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
+        <div class="painel-row" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start center" fxLayoutGap="10px">
+            <crypto-chart #CryptoChart fxFlex.gt-sm="50" fxFlex.lt-md="100"></crypto-chart>
+            <ratings-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex.gt-sm="50" fxFlex.lt-md="100"></ratings-list>
         </div>
-        <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <news-list fxFlex="50"></news-list>  
-            <events-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex="50"></events-list>
+        <div class="painel-row" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start center" fxLayoutGap="10px">
+            <news-list fxFlex.gt-sm="50" fxFlex.lt-md="100"></news-list>  
+            <events-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex.gt-sm="50" fxFlex.lt-md="100"></events-list>
         </div>
     </div>
 </div>
