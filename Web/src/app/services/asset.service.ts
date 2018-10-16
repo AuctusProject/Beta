@@ -6,6 +6,7 @@ import { Asset } from '../model/asset/asset';
 import { AssetRecommendationInfoResponse } from '../model/asset/assetRecommendationInfoResponse';
 import { LocalCacheService } from './local-cache.service';
 import { FeedResponse } from '../model/advisor/feedResponse';
+import { TerminalAssetResponse } from '../model/asset/terminalAssetResponse';
 
 @Injectable()
 export class AssetService {
@@ -18,6 +19,7 @@ export class AssetService {
   private getAssetsEventsUrl = this.httpService.apiUrl("v1/assets/events");
   private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers");
   private getAssetValuesUrl = this.httpService.apiUrl("v1/assets/{id}/values");
+  private getTerminalAssetsUrl = this.httpService.apiUrl("v1/assets/terminal");
   constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
 
   getAssetDetails(id: string): Observable<AssetResponse> {
@@ -26,6 +28,10 @@ export class AssetService {
 
   getAssetsDetails(): Observable<AssetResponse[]> {
     return this.httpService.get(this.getAssetsDetailsUrl);
+  }
+
+  getTerminalAssets(): Observable<TerminalAssetResponse[]> {
+    return this.httpService.get(this.getTerminalAssetsUrl);
   }
 
   getAssetsReports(top?: number, lastReportId?: number, assetId?: number): Observable<FeedResponse[]> {

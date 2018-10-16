@@ -85,6 +85,14 @@ namespace Auctus.Business
         private string _hashSecret;
         private double? _discountPercentageOnAuc;
         private List<string> _admins;
+        private List<TerminalAssetConfig> _terminalAssets;
+
+        protected class TerminalAssetConfig
+        {
+            public int Id { get; set; }
+            public string ChartPair { get; set; }
+            public string ChartExchange { get; set; }
+        }
 
         protected BaseBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip)
         {
@@ -259,6 +267,16 @@ namespace Auctus.Business
                 if (_admins == null)
                     _admins = Configuration.GetSection("Admins").Get<List<string>>();
                 return _admins;
+            }
+        }
+
+        protected List<TerminalAssetConfig> TerminalAssets
+        {
+            get
+            {
+                if (_terminalAssets == null)
+                    _terminalAssets = Configuration.GetSection("TerminalAssets").Get<List<TerminalAssetConfig>>();
+                return _terminalAssets;
             }
         }
 
