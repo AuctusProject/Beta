@@ -74,6 +74,15 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("terminal")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAssetsForTerminal()
+        {
+            return base.ListAssetsForTerminal();
+        }
+
+        [HttpGet]
         [Route("{id}/details")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

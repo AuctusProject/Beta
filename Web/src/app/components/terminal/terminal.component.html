@@ -1,20 +1,12 @@
 <div class="no-header-container">
     <div class="no-header-logo"><img [src]="getLogoImgUrl()" routerLink="" class="landing-logo"/></div>
     <mat-tab-group class="global-container-min" (selectedTabChange)="onAssetChange($event)">
-        <mat-tab label="BTC">
-        </mat-tab>
-        <mat-tab label="ETH"> 
-        </mat-tab>
-        <mat-tab label="XRP"> 
-        </mat-tab>
-        <mat-tab label="EOS"> 
-        </mat-tab>
-        <mat-tab label="BCH"> 
+        <mat-tab *ngFor="let asset of assets" label="{{asset.code}}">
         </mat-tab>
     </mat-tab-group>
     <div fxLayout="column" fxLayoutAlign="start start">
         <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <crypto-chart #CryptoChart [assetId]="assetId" fxFlex="50"></crypto-chart>
+            <crypto-chart #CryptoChart fxFlex="50"></crypto-chart>
             <ratings-list [assetId]="assetId" fxFlex="50"></ratings-list>
         </div>
         <div class="painel-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">

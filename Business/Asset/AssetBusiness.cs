@@ -24,6 +24,31 @@ namespace Auctus.Business.Asset
             return ListAssetResult().OrderByDescending(c => c.MarketCap);
         }
 
+        public IEnumerable<TerminalAssetResponse> ListAssetsForTerminal()
+        {
+            string cacheKey = "AssetsForTerminal";
+            var terminalAssets = MemoryCache.Get<List<TerminalAssetResponse>>(cacheKey);
+            if (terminalAssets == null)
+            {
+                var ids = TerminalAssets.Select(c => c.Id).Distinct().ToList();
+                var assets = ListAssets(ids);
+                if (assets != null && assets.Any())
+                {
+                    assets = assets.OrderBy(c => ids.IndexOf(c.Id)).ToList();
+                    terminalAssets = assets.Select(c => new TerminalAssetResponse()
+                    {
+                        AssetId = c.Id,
+                        Code = c.Code,
+                        Name = c.Name,
+                        ChartPair = TerminalAssets.First(a => a.Id == c.Id).ChartPair,
+                        ChartExchange = TerminalAssets.First(a => a.Id == c.Id).ChartExchange
+                    }).ToList();
+                    MemoryCache.Set<List<TerminalAssetResponse>>(cacheKey, terminalAssets, 1440);
+                }
+            }
+            return terminalAssets;
+        }
+
         public IEnumerable<AssetResponse> ListTrendingAssets(int top = 3)
         {
             var trendingAssetsIds = AdviceBusiness.ListTrendingAdvisedAssets(top).ToList();

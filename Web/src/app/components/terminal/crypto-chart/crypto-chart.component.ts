@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { TerminalAssetResponse } from 'src/app/model/asset/terminalAssetResponse';
 
 @Component({
   selector: 'crypto-chart',
@@ -6,31 +7,16 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
   styleUrls: ['./crypto-chart.component.css']
 })
 export class CryptoChartComponent implements OnInit {
-  @Input() assetId: number;
   @ViewChild("ChartContainer") ChartContainer: any;  
 
   constructor() { }
 
   ngOnInit() {
-    this.refresh(this.assetId);
   }
 
-  refresh(id: number) {
-    this.assetId = id;
-    if(window && window["cryptowatch"]) {
-      let pair;
-      if (this.assetId == 1) {
-        pair = 'btcusd';
-      } else if (this.assetId == 2) {
-        pair = 'ethusd';
-      } else if (this.assetId == 3) {
-        pair = 'eosusd';
-      } else if (this.assetId == 4) {
-        pair = 'xrpusd';
-      } else if (this.assetId == 6) {
-        pair = 'bchusd';
-      }
-      let chart = new window["cryptowatch"].Embed('bitfinex', pair, {
+  refresh(asset: TerminalAssetResponse) {
+    if(asset && window && window["cryptowatch"]) {
+      let chart = new window["cryptowatch"].Embed(asset.chartExchange, asset.chartPair, {
         presetColorScheme: 'standard'
       });
       for (let i = 0; i < this.ChartContainer.nativeElement.childNodes.length; ++i) {
