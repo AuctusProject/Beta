@@ -267,3 +267,19 @@ events-list{
     background: #000000;
     border-top: 3px solid #000000;
 }
+
+
+
+@media(max-width:599px){
+    :host ::ng-deep .box-table td.mat-cell:first-child, 
+    :host ::ng-deep .box-table td.mat-footer-cell:first-child, 
+    :host ::ng-deep .box-table th.mat-header-cell:first-child {
+        padding-left: 10px;
+    }
+
+    :host ::ng-deep .box-table td.mat-cell:last-child, 
+    :host ::ng-deep .box-table td.mat-footer-cell:last-child, 
+    :host ::ng-deep .box-table th.mat-header-cell:last-child {
+        padding-right: 10px;
+    }
+}
