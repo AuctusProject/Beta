@@ -1,12 +1,24 @@
 <div class="no-header-container">
-    <div class="no-header-logo"><img [src]="getLogoImgUrl()" routerLink="" class="landing-logo"/></div>
-    <mat-tab-group class="global-container-min" (selectedTabChange)="onAssetChange($event)">
+    <div class="no-header-logo" ngClass.xs="no-header-logo-mobile"><img [src]="getLogoImgUrl()" routerLink="" class="landing-logo"/></div>
+    <mat-tab-group fxHide.xs="true" class="global-container-min" (selectedTabChange)="onAssetChange($event)">
         <mat-tab *ngFor="let asset of assets" label="{{asset.code}}">
             <ng-template matTabContent>
                 <asset-header [assetTerminal]="selectedAsset" fxFlex="100"></asset-header>
             </ng-template>
         </mat-tab>
     </mat-tab-group>
+    <div fxHide.gt-xs="true" fxLayout="column" fxLayoutAlign="center start">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-form-field class="form-select-coin">
+                <mat-select (selectionChange)="onSelectCoinChanged($event)" [(value)]="assetId">
+                    <mat-option class="select-coin" *ngFor="let asset of assets" [value]="asset.assetId">
+                    {{asset.code}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <asset-header class="asset-header-mobile" [assetTerminal]="selectedAsset" fxFlex="100"></asset-header>
+    </div>
     <div class="boxes-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
         <div class="painel-row" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start center" fxLayoutGap="10px">
             <crypto-chart #CryptoChart fxFlex.gt-sm="50" fxFlex.lt-md="100"></crypto-chart>
