@@ -5,6 +5,7 @@ import { ModalService } from '../../../services/modal.service';
 import { CoinSearchComponent } from '../../util/coin-search/coin-search.component';
 import { Subscription } from 'rxjs';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'list-reports',
@@ -23,9 +24,14 @@ export class ListReportsComponent implements OnInit {
 
   constructor(private modalService: ModalService, 
     public accountService: AccountService, 
-    private assetService: AssetService) { }
+    private assetService: AssetService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
+    if (this.route.snapshot.queryParams['coin']) { 
+      this.selectedReportId = parseInt(this.route.snapshot.queryParams['coin']);
+      this.CoinSearch.setForcedCoin(this.selectedReportId);
+    }
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.loadMoreReports();
 

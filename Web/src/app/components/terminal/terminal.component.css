@@ -20,7 +20,7 @@
     z-index: 4000;
     padding-right: 15px;
     padding-top: 10px;
-    position: fixed;
+    position: absolute;
 }
 
 :host ::ng-deep .assets-tabs .mat-tab-list {
