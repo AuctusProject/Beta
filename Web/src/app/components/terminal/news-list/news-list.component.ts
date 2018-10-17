@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { NewsService } from 'src/app/services/news.service';
 import { News } from 'src/app/model/news/news';
-import { HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { CONFIG } from 'src/app/services/config.service';
 
 @Component({
@@ -13,21 +13,30 @@ export class NewsListComponent implements OnInit {
   hasMoreNews = false;
   pageSize = 20;
   news: News[];
+  connection: HubConnection;
   displayedColumns: string[] = ['date', 'source', 'title'];
 
-  constructor(private newsService: NewsService) { }
+  constructor(private newsService: NewsService,
+    private zone : NgZone) { }
 
   ngOnInit() {
     this.loadNews();
-    let connection = new HubConnectionBuilder()
+    this.connection = new HubConnectionBuilder()
     .withUrl(CONFIG.apiUrl + "auctusHub")
     .build();
-    connection
-      .start()
-      .then(() => console.log('Connection started!'))
-      .catch(err => console.log('Error while establishing connection :('));
+    this.connection.onclose(() => this.startConnection(this));
+    this.connection.on("addLastNews", this.onDataReceive);
+    this.startConnection(this);
+  }
 
-    connection.on("addLastNews", this.onDataReceive);
+  startConnection(_this){
+    this.connection
+    .start()
+    .then(() => console.log('Connection started!'))
+    .catch(err => {
+      console.log('Error while establishing connection :('); 
+      setTimeout(() => _this.zone.run(() => _this.startConnection(_this), 5000));
+    });
   }
 
   onDataReceive(data:News[]){
