@@ -56,7 +56,7 @@
     <div fxHide.gt-xs="true" *ngIf="!expanded" (click)="expand()" fxLayout="row" class="collapse-div pointer width100" fxLayoutAlign="center center">
         <mat-icon>arrow_drop_down</mat-icon>
     </div>
-    <div fxLayout.gt-xs="row" *ngIf="expanded" class="width100" fxFlex.gt-sm="67" fxFlex.lt-lg="100" fxLayout.xs="column" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.xs="center start"> 
+    <div fxLayout.gt-xs="row" *ngIf="expanded || !isMobile()" class="width100" fxFlex.gt-sm="67" fxFlex.lt-lg="100" fxLayout.xs="column" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.xs="center start"> 
         <div fxLayout="row" class="width100" fxFlex.gt-sm="50" fxFlex.sm="34" fxFlex.xs="100" fxLayoutAlign="space-around center"> 
             <div fxHide.sm="true" fxFlex="50" class="partial-header force-border-left" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
