@@ -29,44 +29,5 @@ namespace Api.Controllers
         {
             return base.ListNews(top, lastNewsId);
         }
-
-        [Route("testSignalR")]
-        [HttpGet]
-        public IActionResult Test()
-        {
-            HubContext.Clients.All.SendAsync("addLastNews",
-                new List<Auctus.DomainObjects.News.News>() {
-                new Auctus.DomainObjects.News.News()
-                {
-                    CreationDate = DateTime.UtcNow,
-                    ExternalCreationDate = DateTime.UtcNow,
-                    ExternalId = "test",
-                    Id = 1000,
-                    Link = "https://auctus.org",
-                    NewsSource = new Auctus.DomainObjects.News.NewsSource()
-                    {
-                        Id = 1,
-                        Name = "Auctus"
-                    },
-                    Title = "Signal R Test"
-                },
-                new Auctus.DomainObjects.News.News()
-                {
-                    CreationDate = DateTime.UtcNow,
-                    ExternalCreationDate = DateTime.UtcNow,
-                    ExternalId = "test2",
-                    Id = 1000,
-                    Link = "https://auctus.org/2",
-                    NewsSource = new Auctus.DomainObjects.News.NewsSource()
-                    {
-                        Id = 1,
-                        Name = "Auctus"
-                    },
-                    Title = "Signal R Test 2"
-                }
-                }
-                );
-            return Ok();
-        }
     }
 }
