@@ -58,7 +58,7 @@ namespace Auctus.Business.News
                     telemetry.TrackException(ex);
                 }
             }
-            return lastNews.OrderByDescending(n => n.Id);
+            return lastNews.OrderBy(n => n.ExternalCreationDate);
         }
 
         public IEnumerable<DomainObjects.News.News> ListNews(int? top, int? lastNewsId)
