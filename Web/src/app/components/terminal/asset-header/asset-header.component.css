@@ -28,6 +28,11 @@
     padding-top: 10px;
 }
 
+.collapse-div {
+    color: #ffffff;
+    border-bottom: solid 1px #FFFFFF99;
+}
+
 .bull {
     color: #3ed142;
 }

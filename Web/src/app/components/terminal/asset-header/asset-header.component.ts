@@ -17,6 +17,7 @@ export class AssetHeaderComponent implements OnDestroy, OnChanges {
   assetData: AssetResponse;
   assetStatus: AssetStatusResponse;
   timer: any;
+  expanded: boolean = true;
 
   constructor(private assetService: AssetService) { }
 
@@ -28,6 +29,18 @@ export class AssetHeaderComponent implements OnDestroy, OnChanges {
     if (this.timer) {
       clearTimeout(this.timer);
     }
+  }
+
+  isMobile() {
+    return window.screen.width < 600;
+  }
+
+  expand() {
+    this.expanded = true;
+  }
+
+  collapse() {
+    this.expanded = false;
   }
 
   getAssetImgUrl() {
@@ -104,6 +117,7 @@ export class AssetHeaderComponent implements OnDestroy, OnChanges {
   }
 
   setNewAsset() {
+    this.expanded = !this.isMobile();
     if (this.assetTerminal) {
       this.assetService.getAssetBaseData(this.assetTerminal.assetId).subscribe(result =>
         {
