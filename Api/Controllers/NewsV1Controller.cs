@@ -29,5 +29,28 @@ namespace Api.Controllers
         {
             return base.ListNews(top, lastNewsId);
         }
+
+        [Route("news/testSignalR")]
+        [HttpGet]
+        public IActionResult Test()
+        {
+            HubContext.Clients.All.SendAsync("addLastNews",
+                new Auctus.DomainObjects.News.News()
+                {
+                    CreationDate = DateTime.UtcNow,
+                    ExternalCreationDate = DateTime.UtcNow,
+                    ExternalId = "test",
+                    Id = 1000,
+                    Link = "https://auctus.org",
+                    NewsSource = new Auctus.DomainObjects.News.NewsSource()
+                    {
+                        Id = 1,
+                        Name = "Auctus"
+                    },
+                    Title = "Signal R Test"
+                }
+                );
+            return Ok();
+        }
     }
 }
