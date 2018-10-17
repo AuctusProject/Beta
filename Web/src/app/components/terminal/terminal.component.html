@@ -1,6 +1,6 @@
 <div class="no-header-container">
     <div class="no-header-logo" ngClass.xs="no-header-logo-mobile"><img [src]="getLogoImgUrl()" routerLink="" class="landing-logo"/></div>
-    <mat-tab-group fxHide.xs="true" class="global-container-min" (selectedTabChange)="onAssetChange($event)">
+    <mat-tab-group fxHide.xs="true" class="assets-tabs" (selectedTabChange)="onAssetChange($event)">
         <mat-tab *ngFor="let asset of assets" label="{{asset.code}}">
             <ng-template matTabContent>
                 <asset-header [assetTerminal]="selectedAsset" fxFlex="100"></asset-header>
