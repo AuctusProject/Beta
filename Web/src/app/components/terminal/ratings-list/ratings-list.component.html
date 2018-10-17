@@ -1,4 +1,4 @@
-<div class="box-header">
+<div fxHide.lt-md class="box-header">
   EXPERTS
   <div class="top-triangle"></div>
 </div>
@@ -27,7 +27,7 @@
   <ng-container matColumnDef="rating">
     <th mat-header-cell *matHeaderCellDef> Rating </th>
     <td mat-cell *matCellDef="let element"> 
-      <div fxHide.lt-md class="expert-rating">
+      <div class="expert-rating">
         <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="element.expertRating" [title]="element.expertRating | number: '1.2-2'"></bar-rating>
       </div>
     </td>

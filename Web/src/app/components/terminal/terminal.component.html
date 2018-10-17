@@ -22,11 +22,45 @@
     <div class="boxes-container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
         <div class="painel-row" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start center" fxLayoutGap="10px">
             <crypto-chart #CryptoChart fxFlex.gt-sm="50" fxFlex.lt-md="100"></crypto-chart>
-            <ratings-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex.gt-sm="50" fxFlex.lt-md="100"></ratings-list>
+            <ratings-list fxHide.lt-md *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex.gt-sm="50" fxFlex.lt-md="100"></ratings-list>
         </div>
-        <div class="painel-row" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start center" fxLayoutGap="10px">
-            <news-list fxFlex.gt-sm="50" fxFlex.lt-md="100"></news-list>  
-            <events-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex.gt-sm="50" fxFlex.lt-md="100"></events-list>
+        <div class="painel-row" fxHide.gt-sm fxLayout="column">
+          <mat-tab-group class="boxes-tabs" mat-stretch-tabs fxFlex="100">
+              <mat-tab class="news-tab">
+                <ng-template mat-tab-label>
+                  <div class="news-tab-label" fxFlex>
+                    NEWS
+                    <div class="top-triangle"></div>
+                  </div>
+                  <div class="bottom-line"></div>
+                </ng-template>
+                <news-list ></news-list>
+              </mat-tab>
+              <mat-tab>
+                <ng-template class="experts-tab-label" mat-tab-label>
+                  <div class="experts-tab-label" fxFlex>
+                    EXPERTS
+                    <div class="top-triangle"></div>
+                  </div>
+                  <div class="bottom-line"></div>
+                </ng-template>
+                <ratings-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId"></ratings-list>
+              </mat-tab>
+              <mat-tab>
+                <ng-template class="events-tab-label" mat-tab-label>
+                  <div class="events-tab-label" fxFlex>
+                    EVENTS
+                    <div class="top-triangle"></div>
+                  </div>
+                  <div class="bottom-line"></div>
+                </ng-template>
+                <events-list  *ngIf="selectedAsset" [assetId]="selectedAsset.assetId"></events-list>
+              </mat-tab>
+          </mat-tab-group>
+        </div>
+        <div class="painel-row" fxHide.lt-md fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <news-list fxFlex="50"></news-list>  
+            <events-list *ngIf="selectedAsset" [assetId]="selectedAsset.assetId" fxFlex="50"></events-list>
         </div>
     </div>
 </div>

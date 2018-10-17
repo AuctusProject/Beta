@@ -27,39 +27,118 @@
     padding-top: 18px;
 }
 
-:host ::ng-deep .mat-tab-list {
+:host ::ng-deep .assets-tabs .mat-tab-list {
     max-width: 1168px;
     margin-left: 20px;
     margin-top: 20px;
     flex-grow: unset;
 }
 
-:host ::ng-deep .mat-tab-label-container {
+:host ::ng-deep .assets-tabs .mat-tab-label-container {
     border-bottom: solid 1px #FFFFFF99;
     overflow: unset;
 }
 
-:host ::ng-deep .mat-tab-label {
+:host ::ng-deep .boxes-tabs .mat-tab-label-container {
+    border-bottom: solid 1px white;
+    overflow: unset;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label {
+    background: #262626;
+    overflow: unset;
+}
+
+
+:host ::ng-deep .assets-tabs .mat-tab-label {
     background: #151515;
+}
+
+:host ::ng-deep .mat-tab-label {
     color: white;
     opacity: 1;
     min-width: 80px !important;
     margin: 0px 2px;
 }
 
-:host ::ng-deep .mat-tab-label-active {
+:host ::ng-deep .boxes-tabs .mat-tab-label {
+    color: #666666;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label:hover {
+    color: white;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .news-tab-label {
+    color: white;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .news-tab-label .top-triangle {
+    border-right-color: white;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .experts-tab-label {
+    color: #126efd;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .experts-tab-label .top-triangle {
+    border-right-color: #126efd;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .events-tab-label {
+    color: #e2a001;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .events-tab-label .top-triangle {
+    border-right-color: #e2a001;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label:first-of-type{
+    margin-left: 0px;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label:last-of-type{
+    margin-right: 0px;
+}
+
+.boxes-tabs ::ng-deep .mat-tab-header{
+    padding: 0 3px;
+}
+
+:host ::ng-deep .assets-tabs .mat-tab-label-active {
     background: #262626;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active {
+    background: #1A1A1A;
+}
+
+:host ::ng-deep .assets-tabs .mat-tab-label-active {
     border-top: solid 1px #ffffff99;
     border-left: solid 1px #ffffff99;
     border-right: solid 1px #ffffff99;
 }
 
-:host ::ng-deep .mat-ink-bar {
+:host ::ng-deep .boxes-tabs .mat-tab-label-active {
+    border-top: solid 1px white;
+    border-right: 1px solid white;
+    margin-right: 1px;
+    border-left: 1px solid white;
+    margin-left: 1px;
+}
+
+:host ::ng-deep .assets-tabs .mat-ink-bar {
     background-color: #262626 !important;
     bottom:-1px;
     border-left: 1px solid #ffffff99;
     border-right: 1px solid #ffffff99;
     width: 78px !important;
+}
+
+:host ::ng-deep .boxes-tabs .mat-ink-bar {
+    background-color: #1A1A1A !important;
+    bottom:-1px;
+    display: none;
 }
 
 :host ::ng-deep .mat-tab-header {
@@ -86,9 +165,22 @@
     height: 0;
     border-bottom: 20px solid transparent;
     border-right: 20px solid white;
-    top: -3px;
+    top: 0px;
     position: absolute;
     right: -3px;
+}
+:host ::ng-deep .mat-tab-label .top-triangle{
+    right: 0px;
+    border-right-color: #262626;
+}
+
+:host ::ng-deep .mat-tab-label-active .bottom-line{
+    width: 100%;
+    height: 1px;
+    background: #1a1a1a;
+    bottom: -1px;
+    position: absolute;
+    z-index: 2;
 }
 
 :host ::ng-deep .box-table{
@@ -163,6 +255,12 @@ crypto-chart{
     display: block;
 }
 
+news-list,
+ratings-list,
+events-list{
+    border-top: 0;
+}
+
 :host ::ng-deep .box-message{
     color: white;
     text-align: center;
@@ -194,4 +292,9 @@ crypto-chart{
 
 :host ::ng-deep .mat-form-field-underline {
     display: none;
+}
+
+.boxes-tabs {
+    background: #000000;
+    border-top: 3px solid #000000;
 }
