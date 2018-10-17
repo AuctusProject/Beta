@@ -19,27 +19,23 @@ namespace Auctus.Business.News
 
         public IEnumerable<DomainObjects.News.News> UpdateLastNews()
         {
-            var newsSources = NewsSourceBusiness.ListAll();
-            var lastNews = new List<DomainObjects.News.News>();
-
-            foreach (var newsSource in newsSources)
+            var notIncludedNews = GetNotIncludedNews();
+            var savedNews = new List<DomainObjects.News.News>();
+            foreach (var news in notIncludedNews)
             {
                 try
                 {
-                    var news = NewsRssBusiness.List(newsSource.Url, newsSource.Id);
-                    var notIncludeded = GetNotIncludedNews(news);
-                    SaveNews(notIncludeded);
-                    notIncludeded.ToList().ForEach(n => n.NewsSource = newsSource);
-                    lastNews.AddRange(notIncludeded);
+                    SaveNews(news);
+                    savedNews.Add(news);
                 }
                 catch (Exception ex)
                 {
                     var telemetry = new TelemetryClient();
-                    telemetry.TrackEvent($"CreateNews.{newsSource?.Id}");
+                    telemetry.TrackEvent($"CreateNews.{news?.ExternalId}");
                     telemetry.TrackException(ex);
                 }
             }
-            return lastNews.OrderByDescending(n => n.Id);
+            return savedNews.OrderByDescending(n => n.Id);
         }
 
         public IEnumerable<DomainObjects.News.News> GetNotIncludedNews()
@@ -81,21 +77,27 @@ namespace Auctus.Business.News
 
         private void SaveNews(IEnumerable<DomainObjects.News.News> newsToSave)
         {
-            foreach (var news in newsToSave) {
-                news.CreationDate = Data.GetDateTimeNow();
-                
-                using (var transaction = TransactionalDapperCommand)
+            foreach (var news in newsToSave)
+            {
+                SaveNews(news);
+            }
+        }
+
+        private void SaveNews(DomainObjects.News.News news)
+        {
+            news.CreationDate = Data.GetDateTimeNow();
+
+            using (var transaction = TransactionalDapperCommand)
+            {
+                transaction.Insert(news);
+
+                foreach (var newsCategory in news.NewsCategory)
                 {
-                    transaction.Insert(news);
-
-                    foreach (var newsCategory in news.NewsCategory)
-                    {
-                        newsCategory.NewsId = news.Id;
-                        transaction.Insert(newsCategory);
-                    }
-
-                    transaction.Commit();
+                    newsCategory.NewsId = news.Id;
+                    transaction.Insert(newsCategory);
                 }
+
+                transaction.Commit();
             }
         }
     }
