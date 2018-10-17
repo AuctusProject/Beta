@@ -19,8 +19,12 @@
     right: 0px;
     z-index: 4000;
     padding-right: 15px;
-    padding-top: 10px;
+    padding-top: 13px;
     position: absolute;
+}
+
+.no-header-logo-mobile {
+    padding-top: 18px;
 }
 
 :host ::ng-deep .assets-tabs .mat-tab-list {
@@ -263,7 +267,34 @@ events-list{
     margin: 10px;
 }
 
-.boxes-tabs{
+.form-select-coin {
+    padding-left: 30px;
+    max-width: 60px;
+    margin-bottom: -10px;
+}
+
+.asset-header-mobile {
+    width: 100%;
+    border-top: solid 1px #FFFFFF99;
+}
+
+:host ::ng-deep .mat-select-value {
+    color: #ffffff;
+}
+
+:host ::ng-deep .mat-select-value span {
+    font-weight: 600 !important;
+}
+
+:host ::ng-deep .mat-select-arrow {
+    color: #ffffff !important;
+}
+
+:host ::ng-deep .mat-form-field-underline {
+    display: none;
+}
+
+.boxes-tabs {
     background: #000000;
     border-top: 3px solid #000000;
 }

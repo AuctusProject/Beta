@@ -12,6 +12,7 @@ import { TerminalAssetResponse } from 'src/app/model/asset/terminalAssetResponse
 export class TerminalComponent implements OnInit {
   public assets: TerminalAssetResponse[];
   public selectedAsset: TerminalAssetResponse;
+  public assetId: number;
   @ViewChild("CryptoChart") CryptoChart: CryptoChartComponent;  
 
   constructor(private assetService: AssetService) { }
@@ -46,7 +47,17 @@ export class TerminalComponent implements OnInit {
     this.setSelectedAsset(this.assets[event.index]);
   }
 
+  onSelectCoinChanged(event: any) {
+    for (let i = 0; i < this.assets.length; ++i) {
+      if (this.assets[i].assetId == event.value) {
+        this.setSelectedAsset(this.assets[i]);
+        break;
+      }
+    }
+  }
+
   setSelectedAsset(asset: TerminalAssetResponse) {
+    this.assetId = asset.assetId;
     this.selectedAsset = asset;
     this.CryptoChart.refresh(this.selectedAsset);
   }
