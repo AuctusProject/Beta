@@ -17,6 +17,7 @@
 
 .recommendation-distribution {
     line-height: 20px;
+    padding-left: 10px;
 }
 
 .width100 {
@@ -25,10 +26,6 @@
 
 .force-padding-top {
     padding-top: 10px;
-}
-
-.force-padding-left {
-    padding-left: 10px;
 }
 
 .bull {
