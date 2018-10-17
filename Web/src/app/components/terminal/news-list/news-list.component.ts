@@ -25,7 +25,7 @@ export class NewsListComponent implements OnInit {
     .withUrl(CONFIG.apiUrl + "auctusHub")
     .build();
     this.connection.onclose(() => this.startConnection(this));
-    this.connection.on("addLastNews", this.onDataReceive);
+    this.connection.on("addLastNews", (data) => this.onDataReceive(data, this));
     this.startConnection(this);
   }
 
@@ -39,11 +39,11 @@ export class NewsListComponent implements OnInit {
     });
   }
 
-  onDataReceive(data:News[]){
+  onDataReceive(data:News[], _this){
     for(var news of data){
       news.signalR = true;
     }
-    this.news = data.concat(this.news);
+    _this.news = data.concat(_this.news);
     setTimeout(()=> {for(var news of data){
       news.signalR = false;
     }},30000);
