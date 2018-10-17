@@ -5,6 +5,7 @@ import { AssetService } from 'src/app/services/asset.service';
 import { AssetStatusResponse } from 'src/app/model/asset/assetStatusResponse';
 import { CONFIG } from 'src/app/services/config.service';
 import { Util } from 'src/app/util/Util';
+import { RecommendationDistributionResponse } from 'src/app/model/recommendationDistributionResponse';
 
 @Component({
   selector: 'asset-header',
@@ -37,24 +38,69 @@ export class AssetHeaderComponent implements OnDestroy, OnChanges {
     return Util.GetGeneralRecommendationDescription(this.assetData.mode);
   }
 
+  openReportPage() {
+    if (window) {
+      let url = 'rating-reports';
+      if (this.assetTerminal) {
+        url += "?coin=" + this.assetTerminal.assetId;
+      }
+      window.open(url);
+    }
+  }
+
   getTotalExpertRecommendation() {
+    return this.assetData ? this.getTotalDistributionAmount(this.assetData.recommendationDistribution) : 0;
+  }
+
+  getTotalReportRatings() {
+    return this.assetData ? this.getTotalDistributionAmount(this.assetData.reportRecommendationDistribution) : 0;
+  }
+
+  getTotalDistributionAmount(list: RecommendationDistributionResponse[]) : number {
     let total = 0;
-    if (this.assetData.recommendationDistribution) {
-      for(let i = 0; i < this.assetData.recommendationDistribution.length; ++i) {
-        total += this.assetData.recommendationDistribution[i].total;
+    if (list) {
+      for(let i = 0; i < list.length; ++i) {
+        total += list[i].total;
       }
     }
     return total;
   }
 
-  getTotalReportRatings() {
-    let total = 0;
-    if (this.assetData.reportRecommendationDistribution) {
-      for(let i = 0; i < this.assetData.reportRecommendationDistribution.length; ++i) {
-        total += this.assetData.reportRecommendationDistribution[i].total;
+  getExpertsBuyAmount() {
+    return this.assetData ? this.getDistributionAmount(this.assetData.recommendationDistribution, 1) : 0;
+  }
+
+  getExpertsSellAmount() {
+    return this.assetData ? this.getDistributionAmount(this.assetData.recommendationDistribution, 0) : 0;
+  }
+
+  getExpertsNeutralAmount() {
+    return this.assetData ? this.getDistributionAmount(this.assetData.recommendationDistribution, 2) : 0;
+  }
+
+  getReportsBuyAmount() {
+    return this.assetData ? this.getDistributionAmount(this.assetData.reportRecommendationDistribution, 1) : 0;
+  }
+
+  getReportsSellAmount() {
+    return this.assetData ? this.getDistributionAmount(this.assetData.reportRecommendationDistribution, 0) : 0;
+  }
+
+  getReportsNeutralAmount() {
+    return this.assetData ? this.getDistributionAmount(this.assetData.reportRecommendationDistribution, 2) : 0;
+  }
+
+  private getDistributionAmount(list: RecommendationDistributionResponse[], type: number) : number {
+    let amount = 0;
+    if (list) {
+      for(let i = 0; i < list.length; ++i) {
+        if (list[i].type == type) {
+          amount = list[i].total;
+          break;
+        }
       }
     }
-    return total;
+    return amount;
   }
 
   setNewAsset() {

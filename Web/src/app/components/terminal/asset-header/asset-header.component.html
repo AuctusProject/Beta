@@ -77,14 +77,41 @@
                 <span>Expert Recommendation</span>
                 <span *ngIf="assetData">({{getTotalExpertRecommendation()}})</span>
             </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                <div class="bull" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Buy</span>
+                    <span>{{getExpertsBuyAmount()}}</span>
+                </div>
+                <div class="bear" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Sell</span>
+                    <span>{{getExpertsSellAmount()}}</span>
+                </div>
+                <div class="neutral" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Neutral</span>
+                    <span>{{getExpertsNeutralAmount()}}</span>
+                </div>
+            </div>
         </div>
-        <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" fxLayoutGap="10px">
+        <div class="pointer" (click)="openReportPage()" fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.gt-xs="start center" fxLayoutAlign.lt-sm="center center" fxLayoutGap="10px">
             <div fxLayout="row" fxLayoutAlign.gt-xs="start center" fxLayoutGap="5px">
                 <div class="triangle-report-rating"></div>
                 <span>Reports Rating</span>
                 <span *ngIf="assetData">({{getTotalReportRatings()}})</span>
             </div>
-            <span></span>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                <div class="bull" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Buy</span>
+                    <span>{{getReportsBuyAmount()}}</span>
+                </div>
+                <div class="bear" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Sell</span>
+                    <span>{{getReportsSellAmount()}}</span>
+                </div>
+                <div class="neutral" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <span>Neutral</span>
+                    <span>{{getReportsNeutralAmount()}}</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

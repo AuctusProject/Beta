@@ -17,7 +17,7 @@ export class CryptoChartComponent implements OnInit {
   refresh(asset: TerminalAssetResponse) {
     if(asset && window && window["cryptowatch"]) {
       let chart = new window["cryptowatch"].Embed(asset.chartExchange, asset.chartPair, {
-        presetColorScheme: 'standard'
+        presetColorScheme: 'standard', timePeriod: '15m'
       });
       for (let i = 0; i < this.ChartContainer.nativeElement.childNodes.length; ++i) {
         this.ChartContainer.nativeElement.removeChild(this.ChartContainer.nativeElement.childNodes[i]);
