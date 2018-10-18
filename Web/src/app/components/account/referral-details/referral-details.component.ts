@@ -12,7 +12,7 @@ import { CONFIG } from '../../../services/config.service';
   styleUrls: ['./referral-details.component.css']
 })
 export class ReferralDetailsComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Rewards summary";
+  modalTitle: string = "Rewards Summary";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
