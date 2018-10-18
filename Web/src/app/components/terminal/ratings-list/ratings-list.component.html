@@ -1,5 +1,8 @@
 <div fxHide.lt-md class="box-header">
-  EXPERTS
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    EXPERTS
+    <div class="blue-button action-button-sm truncate" *ngIf="showRatingButton" (click)="onNewAdviceClick()">NEW RATING</div>
+  </div>
   <div class="top-triangle"></div>
 </div>
 <div class="box-container">
