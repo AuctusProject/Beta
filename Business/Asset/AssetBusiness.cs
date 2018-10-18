@@ -24,6 +24,31 @@ namespace Auctus.Business.Asset
             return ListAssetResult().OrderByDescending(c => c.MarketCap);
         }
 
+        public IEnumerable<TerminalAssetResponse> ListAssetsForTerminal()
+        {
+            string cacheKey = "AssetsForTerminal";
+            var terminalAssets = MemoryCache.Get<List<TerminalAssetResponse>>(cacheKey);
+            if (terminalAssets == null)
+            {
+                var ids = TerminalAssets.Select(c => c.Id).Distinct().ToList();
+                var assets = ListAssets(ids);
+                if (assets != null && assets.Any())
+                {
+                    assets = assets.OrderBy(c => ids.IndexOf(c.Id)).ToList();
+                    terminalAssets = assets.Select(c => new TerminalAssetResponse()
+                    {
+                        AssetId = c.Id,
+                        Code = c.Code,
+                        Name = c.Name,
+                        ChartPair = TerminalAssets.First(a => a.Id == c.Id).ChartPair,
+                        ChartExchange = TerminalAssets.First(a => a.Id == c.Id).ChartExchange
+                    }).ToList();
+                    MemoryCache.Set<List<TerminalAssetResponse>>(cacheKey, terminalAssets, 1440);
+                }
+            }
+            return terminalAssets;
+        }
+
         public IEnumerable<AssetResponse> ListTrendingAssets(int top = 3)
         {
             var trendingAssetsIds = AdviceBusiness.ListTrendingAdvisedAssets(top).ToList();
@@ -35,17 +60,61 @@ namespace Auctus.Business.Asset
             return trendingAssets;
         }
 
-        private IEnumerable<AssetResponse> ListAssetResult()
+        public AssetStatusResponse ListAssetStatus(int assetId)
         {
+            AssetStatusResponse result = null;
+            var asset = GetById(assetId);
+            var coinGeckoData = CoinGeckoBusiness.GetSimpleCoinData(asset.CoinGeckoId);
+            if (coinGeckoData != null)
+            {
+                result = new AssetStatusResponse()
+                {
+                    AssetId = asset.Id,
+                    Name = asset.Name,
+                    Code = asset.Code,
+                    AllTimeHigh = coinGeckoData.AllTimeHigh,
+                    AllTimeHighDate = coinGeckoData.AllTimeHighDate,
+                    AllTimeHighPercentage = coinGeckoData.AllTimeHighPercentage,
+                    CirculatingSupply = coinGeckoData.CirculatingSupply,
+                    High24h = coinGeckoData.High24h,
+                    Low24h = coinGeckoData.Low24h,
+                    MarketCap = coinGeckoData.MarketCap,
+                    MarketCapPercentage24h = coinGeckoData.MarketCapPercentage24h,
+                    MarketCapVariation24h = coinGeckoData.MarketCapVariation24h,
+                    MarketCapRank = coinGeckoData.MarketCapRank,
+                    Price = coinGeckoData.Price,
+                    TotalSupply = coinGeckoData.TotalSupply,
+                    TotalVolume = coinGeckoData.TotalVolume,
+                    Variation24h = coinGeckoData.Variation24h,
+                    VariationPercentage24h = coinGeckoData.VariationPercentage24h
+                };
+            }
+            return result;
+        }
+
+        public AssetResponse ListAssetBaseData(int assetId)
+        {
+            AssetResponse assetResponse = null;
+            List<Report> reports = null;
+            Parallel.Invoke(() => assetResponse = ListAssetResult(assetId).FirstOrDefault(),
+                            () => reports = ReportBusiness.List(new int[] { assetId }));
+
+            assetResponse.ReportRecommendationDistribution = ReportBusiness.GetReportRecommendationDistribution(reports);
+            return assetResponse;
+        }
+
+        private IEnumerable<AssetResponse> ListAssetResult(int? forcedAssetId = null)
+        {
+            var selectAssets = forcedAssetId.HasValue ? new int[] { forcedAssetId.Value } : null;
             var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
             var advisors = AdvisorBusiness.GetAdvisors();
-            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
+            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct(), selectAssets));
+            var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers(selectAssets));
             Task.WaitAll(advices, assetFollowers);
 
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetBase, out advisorsResult, out assetsResult, user, advices.Result, null, null, assetFollowers.Result);
+            AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetBase, out advisorsResult, out assetsResult, user, advices.Result, null, null, assetFollowers.Result, selectAssets);
             return assetsResult;
         }
         
@@ -85,8 +154,48 @@ namespace Auctus.Business.Asset
             result.Advisors = advisorsResult.Where(c => result.AssetAdvisor.Any(a => a.UserId == c.UserId)).ToList();
             result.AssetAdvisor = result.AssetAdvisor.OrderByDescending(a => a.LastAdviceDate).ToList();
             result.Reports = reports.Result.Select(c => ReportBusiness.ConvertToReportResponse(c)).OrderByDescending(c => c.ReportDate).ToList();
+            result.ReportRecommendationDistribution = ReportBusiness.GetReportRecommendationDistribution(reports.Result);
             result.Events = events.Result.Select(c => AssetEventBusiness.ConvertToEventResponse(c)).OrderByDescending(c => c.EventDate).ToList();
             return result;
+        }
+
+        public List<AssetRatingsResponse> GetAssetRatings(int assetId)
+        {
+            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var advisors = AdvisorBusiness.GetAdvisors();
+            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
+            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
+            Task.WaitAll(advices, advisorFollowers);
+
+            List<AdvisorResponse> advisorsResult;
+            List<AssetResponse> assetsResult;
+            AdvisorBusiness.Calculation(Advisor.AdvisorBusiness.CalculationMode.AssetRatings, out advisorsResult, out assetsResult, user, advices.Result, advisors, advisorFollowers.Result, null, new int[] { assetId });
+            var result = assetsResult.Single(c => c.AssetId == assetId);
+            result.Advisors = advisorsResult.Where(c => result.AssetAdvisor.Any(a => a.UserId == c.UserId)).ToList();
+            result.AssetAdvisor = result.AssetAdvisor.OrderByDescending(a => a.LastAdviceDate).ToList();
+            var response = ConvertToAssetRatingsResponse(result);
+            return response;
+        }
+
+        private List<AssetRatingsResponse> ConvertToAssetRatingsResponse(AssetResponse result)
+        {
+            var response = new List<AssetRatingsResponse>();
+            foreach(var assetResponse in result.AssetAdvisor)
+            {
+                var assetRatingsResponse = new AssetRatingsResponse();
+                assetRatingsResponse.AssetId = result.AssetId;
+                assetRatingsResponse.AdviceType = assetResponse.LastAdviceType;
+                assetRatingsResponse.AssetValue = assetResponse.LastAdviceAssetValue;
+                assetRatingsResponse.AdviceDate = assetResponse.LastAdviceDate;
+                assetRatingsResponse.StopLoss = assetResponse.LastAdviceStopLoss;
+                assetRatingsResponse.TargetPrice = assetResponse.LastAdviceTargetPrice;
+                assetRatingsResponse.ExpertId = assetResponse.UserId;
+                var expert = result.Advisors.First(a => a.UserId == assetResponse.UserId);
+                assetRatingsResponse.ExpertName = expert.Name;
+                assetRatingsResponse.ExpertRating = expert.Rating;
+                response.Add(assetRatingsResponse);
+            }
+            return response;
         }
 
         public List<Auctus.DomainObjects.Asset.Asset> ListAssets(IEnumerable<int> ids = null)

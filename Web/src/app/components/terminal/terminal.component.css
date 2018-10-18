@@ -1,0 +1,317 @@
+.painel-row {
+    width: 100%;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.boxes-container{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.no-header-container {
+    margin-top: -83px;
+}
+
+.no-header-logo {
+    top: 0px;
+    right: 0px;
+    z-index: 4000;
+    padding-right: 15px;
+    padding-top: 13px;
+    position: absolute;
+}
+
+.no-header-logo-mobile {
+    padding-top: 18px;
+}
+
+:host ::ng-deep .assets-tabs .mat-tab-list {
+    max-width: 1168px;
+    margin-left: 20px;
+    margin-top: 20px;
+    flex-grow: unset;
+}
+
+:host ::ng-deep .assets-tabs .mat-tab-label-container {
+    border-bottom: solid 1px #FFFFFF99;
+    overflow: unset;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-container {
+    border-bottom: solid 1px white;
+    overflow: unset;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label {
+    background: #262626;
+    overflow: unset;
+}
+
+
+:host ::ng-deep .assets-tabs .mat-tab-label {
+    background: #151515;
+}
+
+:host ::ng-deep .mat-tab-label {
+    color: white;
+    opacity: 1;
+    min-width: 80px !important;
+    margin: 0px 2px;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label {
+    color: #666666;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label:hover {
+    color: white;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .news-tab-label {
+    color: white;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .news-tab-label .top-triangle {
+    border-right-color: white;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .experts-tab-label {
+    color: #126efd;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .experts-tab-label .top-triangle {
+    border-right-color: #126efd;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .events-tab-label {
+    color: #e2a001;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active .events-tab-label .top-triangle {
+    border-right-color: #e2a001;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label:first-of-type{
+    margin-left: 0px;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label:last-of-type{
+    margin-right: 0px;
+}
+
+.boxes-tabs ::ng-deep .mat-tab-header{
+    padding: 0 3px;
+}
+
+:host ::ng-deep .assets-tabs .mat-tab-label-active {
+    background: #262626;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active {
+    background: #1A1A1A;
+}
+
+:host ::ng-deep .assets-tabs .mat-tab-label-active {
+    border-top: solid 1px #ffffff99;
+    border-left: solid 1px #ffffff99;
+    border-right: solid 1px #ffffff99;
+}
+
+:host ::ng-deep .boxes-tabs .mat-tab-label-active {
+    border-top: solid 1px white;
+    border-right: 1px solid white;
+    margin-right: 1px;
+    border-left: 1px solid white;
+    margin-left: 1px;
+}
+
+:host ::ng-deep .assets-tabs .mat-ink-bar {
+    background-color: #262626 !important;
+    bottom:-1px;
+    border-left: 1px solid #ffffff99;
+    border-right: 1px solid #ffffff99;
+    width: 78px !important;
+}
+
+:host ::ng-deep .boxes-tabs .mat-ink-bar {
+    background-color: #1A1A1A !important;
+    bottom:-1px;
+    display: none;
+}
+
+:host ::ng-deep .mat-tab-header {
+    border-bottom: unset;
+}
+
+:host ::ng-deep .mat-tab-body-content {
+    overflow-y: hidden;
+}
+
+:host ::ng-deep .mat-tab-body-wrapper {
+    background-color: #262626;
+}
+
+
+:host ::ng-deep .box-container{
+    height: 328px;
+    overflow: auto;
+    background-color: #1a1a1a;
+}
+
+:host ::ng-deep .top-triangle{
+    width: 0;
+    height: 0;
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid white;
+    top: 0px;
+    position: absolute;
+    right: -3px;
+}
+:host ::ng-deep .mat-tab-label .top-triangle{
+    right: 0px;
+    border-right-color: #262626;
+}
+
+:host ::ng-deep .mat-tab-label-active .bottom-line{
+    width: 100%;
+    height: 1px;
+    background: #1a1a1a;
+    bottom: -1px;
+    position: absolute;
+    z-index: 2;
+}
+
+:host ::ng-deep .box-table{
+    width: 100%;
+    background-color: #1a1a1a;
+    
+    font-style: normal;
+}
+
+:host ::ng-deep .box-table th{
+    font-size: 14px;
+    font-weight: 600;
+}
+
+:host ::ng-deep .box-table .mat-cell{
+    color: #e6e6e6;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+:host ::ng-deep .box-table .mat-header-cell{
+    color: #e6e6e6;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+:host ::ng-deep .box-table .mat-header-row{
+    height: 42px;
+}
+
+:host ::ng-deep .box-table tr.mat-row{
+    height: 38px;
+}
+
+:host ::ng-deep .box-header{
+    background-color: #000000;
+    color: white;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+}
+
+:host ::ng-deep .box-table td.mat-cell,
+:host ::ng-deep .box-table th.mat-header-cell{
+    border-bottom-color: #505050;
+}
+
+:host ::ng-deep ::-webkit-scrollbar {
+    width: 10px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-track {
+    background: #292929; 
+}
+ 
+:host ::ng-deep ::-webkit-scrollbar-thumb {
+    background: #424242; 
+    border-radius: 5px;
+}
+
+:host ::ng-deep ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+news-list,
+ratings-list,
+events-list,
+crypto-chart{
+    border: solid 3px #000000;
+    display: block;
+}
+
+news-list,
+ratings-list,
+events-list{
+    border-top: 0;
+}
+
+:host ::ng-deep .box-message{
+    color: white;
+    text-align: center;
+    margin: 10px;
+}
+
+.form-select-coin {
+    padding-left: 30px;
+    max-width: 60px;
+    margin-bottom: -10px;
+}
+
+.asset-header-mobile {
+    width: 100%;
+    border-top: solid 1px #FFFFFF99;
+}
+
+:host ::ng-deep .mat-select-value {
+    color: #ffffff;
+}
+
+:host ::ng-deep .mat-select-value span {
+    font-weight: 600 !important;
+}
+
+:host ::ng-deep .mat-select-arrow {
+    color: #ffffff !important;
+}
+
+:host ::ng-deep .mat-form-field-underline {
+    display: none;
+}
+
+.boxes-tabs {
+    background: #000000;
+    border-top: 3px solid #000000;
+}
+
+
+
+@media(max-width:599px){
+    :host ::ng-deep .box-table td.mat-cell:first-child, 
+    :host ::ng-deep .box-table td.mat-footer-cell:first-child, 
+    :host ::ng-deep .box-table th.mat-header-cell:first-child {
+        padding-left: 10px;
+    }
+
+    :host ::ng-deep .box-table td.mat-cell:last-child, 
+    :host ::ng-deep .box-table td.mat-footer-cell:last-child, 
+    :host ::ng-deep .box-table th.mat-header-cell:last-child {
+        padding-right: 10px;
+    }
+}

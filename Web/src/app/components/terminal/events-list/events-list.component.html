@@ -1,0 +1,27 @@
+<div fxHide.lt-md class="box-header">
+  EVENTS
+  <div class="top-triangle"></div>
+</div>
+<div class="box-container" infiniteScroll
+[infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" [scrollWindow]="false"
+(scrolled)="onScroll()">
+<table class="box-table" mat-table [dataSource]="events">
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef> Title </th>
+    <td mat-cell *matCellDef="let element"> {{element.event.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef> Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.event.eventDate | date : 'mediumDate'}} </td>
+  </ng-container>
+  <ng-container matColumnDef="proof">
+    <th mat-header-cell *matHeaderCellDef> Proof </th>
+    <td mat-cell *matCellDef="let element"> <a [href]="getProofLink(element.event)" target="_blank">View Proof</a></td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<div class="box-message" *ngIf="hasMore || events == null">Loading...</div>
+<div class="box-message" *ngIf="!hasMore && events != null && events.length == 0">There's no event of this asset.</div>
+</div>

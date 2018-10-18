@@ -16,7 +16,8 @@
         <div fxShow="true" fxHide.lt-lg="true" class="separator"></div>
         <a fxShow="true" fxHide.lt-lg="true" routerLinkActive="active" href="https://auctus.org/" target="_blank"><span>ABOUT US</span></a>
         <global-search fxShow="true" fxHide.lt-md="true" class="search"></global-search>
-        <span class="blue-button header-blue-button" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
+        <span class="blue-button header-blue-button" (click)="goToTerminal()">TERMINAL</span>
+        <span class="signin login" *ngIf="!isLogged()" (click)="login()">LOGIN</span>
         <span class="signin" *ngIf="!isLogged()" (click)="register()">SIGN UP</span>
         <a *ngIf="isLogged()" fxShow="true" fxHide.lt-lg="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="profile">
             <span fxLayout="row" fxLayoutAlign="space-around center">

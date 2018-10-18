@@ -105,4 +105,8 @@ export class HeaderComponent implements OnInit {
   onNewAdviceClick() {
     this.modalService.setNewAdvice();
   }
+
+  goToTerminal(){
+    this.navigationService.goToTerminal();
+  }
 }

@@ -41,7 +41,7 @@ namespace Auctus.Business.Asset
                     else
                         assetCoinGeckoId = assetCurrentValue[0].CoinGeckoId;
 
-                    return CoinGeckoBusiness.GetCoinData(assetCoinGeckoId)?.MarketData?.CurrentPrice?.Value;
+                    return CoinGeckoBusiness.GetSimpleCoinData(assetCoinGeckoId)?.Price;
                 }
                 else
                     return value;
@@ -59,7 +59,7 @@ namespace Auctus.Business.Asset
             {
                 if (asset.UpdateDate < Data.GetDateTimeNow().AddHours(-1))
                 {
-                    if (mode == CalculationMode.AdvisorBase || mode == CalculationMode.Feed || mode == CalculationMode.AdvisorDetailed)
+                    if (mode == CalculationMode.AdvisorBase || mode == CalculationMode.Feed || mode == CalculationMode.AdvisorDetailed || mode == CalculationMode.AssetRatings)
                         assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
                     else if (mode == CalculationMode.AssetDetailed)
                     {
