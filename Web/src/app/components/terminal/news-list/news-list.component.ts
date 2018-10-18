@@ -1,8 +1,10 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { NewsService } from 'src/app/services/news.service';
 import { News } from 'src/app/model/news/news';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { CONFIG } from 'src/app/services/config.service';
+import { DatePipe } from '@angular/common';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 @Component({
   selector: 'news-list',
@@ -17,7 +19,8 @@ export class NewsListComponent implements OnInit {
   displayedColumns: string[] = ['date', 'source', 'title'];
 
   constructor(private newsService: NewsService,
-    private zone : NgZone) { }
+    private zone : NgZone,
+    private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.loadNews();
@@ -71,5 +74,14 @@ export class NewsListComponent implements OnInit {
 
   onScroll() {
     this.loadNews();
+  }
+  ONE_DAY:number = 24 * 60 * 60 * 1000;
+  getNewsTime(date){
+    if((new Date().getTime()) - new Date(date).getTime() < this.ONE_DAY){
+      return new DatePipe("en-US").transform(date, "mediumTime");
+    }
+    else{
+      return new TimeAgoPipe(this.changeDetectorRef, this.zone).transform(date);
+    }
   }
 }
