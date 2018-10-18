@@ -1,7 +1,8 @@
 <div fxHide.lt-md class="box-header">
   <div fxLayout="row" fxLayoutAlign="space-between center">
     EXPERTS
-    <div class="blue-button action-button-sm truncate" *ngIf="showRatingButton" (click)="onNewAdviceClick()">NEW RATING</div>
+    <div class="blue-button action-button-sm recommendation-btn truncate" *ngIf="showRatingButton" (click)="onNewAdviceClick()">NEW RECOMMENDATION</div>
+    <div class="blue-button action-button-sm become-btn truncate" *ngIf="!showRatingButton" (click)="onBecomeExpertClick()">BECOME EXPERT</div>
   </div>
   <div class="top-triangle"></div>
 </div>

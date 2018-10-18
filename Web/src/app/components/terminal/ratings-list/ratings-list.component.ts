@@ -58,4 +58,8 @@ export class RatingsListComponent implements OnInit, OnChanges {
   onNewAdviceClick() {
     this.modalService.setNewAdvice(this.assetId);
   }
+
+  onBecomeExpertClick(){
+    this.modalService.setBecomeAdvisor();
+  }
 }
