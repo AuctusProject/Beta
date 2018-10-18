@@ -50,22 +50,11 @@ export class AdviceCardComponent implements OnInit {
     return Util.GetRecommendationTypeDescription(this.adviceFeed.advice.adviceType);
   }
 
-  getAdviceParametersDescription() {
-    if (!this.adviceFeed.advice.targetPrice && !this.adviceFeed.advice.stopLoss && this.adviceFeed.advice.operationType == 0) {
-      return '';
-    } else {
-      if (this.adviceFeed.advice.targetPrice && this.adviceFeed.advice.stopLoss) {
-        return 'Target value: ' +  new ValueDisplayPipe().transform(this.adviceFeed.advice.targetPrice) + ' - Stop loss: ' + new ValueDisplayPipe().transform(this.adviceFeed.advice.stopLoss);
-      } else if (this.adviceFeed.advice.targetPrice) {
-        return 'Target value: ' +  new ValueDisplayPipe().transform(this.adviceFeed.advice.targetPrice);
-      } else if (this.adviceFeed.advice.stopLoss) {
-        return 'Stop loss: ' +  new ValueDisplayPipe().transform(this.adviceFeed.advice.stopLoss);
-      } else if (this.adviceFeed.advice.operationType != 0 && this.adviceFeed.advice.adviceType == 2) {
-        return 'Triggered by ' + Util.GetCloseReasonDescription(this.adviceFeed.advice.operationType);
-      } else {
-        return '';
-      }
+  getCloseReasonDescription(){
+    if (this.adviceFeed.advice.operationType != 0 && this.adviceFeed.advice.adviceType == 2){
+    return Util.GetCloseReasonDescription(this.adviceFeed.advice.operationType);
     }
+    return null;
   }
 
   getAdviceTypeColor(){

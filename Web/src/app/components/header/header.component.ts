@@ -107,6 +107,10 @@ export class HeaderComponent implements OnInit {
   }
 
   goToTerminal(){
-    this.navigationService.goToTerminal();
+    if(window) {
+      window.open('terminal');
+    } else {
+      this.navigationService.goToTerminal();
+    }
   }
 }

@@ -8,7 +8,7 @@
 <table class="box-table" mat-table [dataSource]="news">
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef> Time </th>
-    <td mat-cell *matCellDef="let element" [title]="element.externalCreationDate | date:'medium'"> {{getNewsTime(element.externalCreationDate)}} </td>
+    <td mat-cell *matCellDef="let element" [title]="element.creationDate | date:'medium'"> {{getNewsTime(element.creationDate)}} </td>
   </ng-container>
   <ng-container matColumnDef="source">
     <th mat-header-cell *matHeaderCellDef> Source </th>
