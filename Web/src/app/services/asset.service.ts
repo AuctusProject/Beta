@@ -6,6 +6,9 @@ import { Asset } from '../model/asset/asset';
 import { AssetRecommendationInfoResponse } from '../model/asset/assetRecommendationInfoResponse';
 import { LocalCacheService } from './local-cache.service';
 import { FeedResponse } from '../model/advisor/feedResponse';
+import { TerminalAssetResponse } from '../model/asset/terminalAssetResponse';
+import { AssetStatusResponse } from '../model/asset/assetStatusResponse';
+import { AssetRatingsResponse } from '../model/asset/assetRatingsResponse';
 
 @Injectable()
 export class AssetService {
@@ -18,6 +21,10 @@ export class AssetService {
   private getAssetsEventsUrl = this.httpService.apiUrl("v1/assets/events");
   private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers");
   private getAssetValuesUrl = this.httpService.apiUrl("v1/assets/{id}/values");
+  private getTerminalAssetsUrl = this.httpService.apiUrl("v1/assets/terminal");
+  private getAssetRatingsUrl = this.httpService.apiUrl("v1/assets/{id}/ratings");
+  private getAssetBaseDataUrl = this.httpService.apiUrl("v1/assets/{id}/basedata");
+  private getAssetStatusUrl = this.httpService.apiUrl("v1/assets/{id}/status");
   constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
 
   getAssetDetails(id: string): Observable<AssetResponse> {
@@ -26,6 +33,18 @@ export class AssetService {
 
   getAssetsDetails(): Observable<AssetResponse[]> {
     return this.httpService.get(this.getAssetsDetailsUrl);
+  }
+
+  getTerminalAssets(): Observable<TerminalAssetResponse[]> {
+    return this.httpService.get(this.getTerminalAssetsUrl);
+  }
+
+  getAssetBaseData(assetId: number): Observable<AssetResponse> {
+    return this.httpService.get(this.getAssetBaseDataUrl.replace("{id}", assetId.toString()));
+  }
+
+  getAssetStatus(assetId: number): Observable<AssetStatusResponse> {
+    return this.httpService.get(this.getAssetStatusUrl.replace("{id}", assetId.toString()));
   }
 
   getAssetsReports(top?: number, lastReportId?: number, assetId?: number): Observable<FeedResponse[]> {
@@ -70,5 +89,9 @@ export class AssetService {
   
   getAssetRecommendationInfo(assetId: number): Observable<AssetRecommendationInfoResponse> {
     return this.httpService.get(this.getAssetRecommendationInfoUrl.replace("{id}", assetId.toString()));
+  }
+
+  getAssetRatings(assetId: number): Observable<AssetRatingsResponse[]> {
+    return this.httpService.get(this.getAssetRatingsUrl.replace("{id}", assetId.toString()));
   }
 }

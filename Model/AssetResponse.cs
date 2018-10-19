@@ -20,6 +20,7 @@ namespace Auctus.Model
         public bool? Following { get; set; }
         public int Mode { get; set; }
         public List<RecommendationDistributionResponse> RecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
+        public List<RecommendationDistributionResponse> ReportRecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
 
         public List<AssetAdvisorResponse> AssetAdvisor { get; set; } = new List<AssetAdvisorResponse>();
         public List<AdviceResponse> Advices { get; set; } = new List<AdviceResponse>();
@@ -33,6 +34,7 @@ namespace Auctus.Model
             public int UserId { get; set; }
             public double SuccessRate { get; set; }
             public double AverageReturn { get; set; }
+            public double CurrentReturn { get; set; }
             public int TotalRatings { get; set; }
             public DateTime? LastAdviceDate { get; set; }
             public int? LastAdviceType { get; set; }

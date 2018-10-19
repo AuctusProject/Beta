@@ -60,8 +60,13 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
         }
         this.setButtons();
       });
-    if (!!this.data && this.data.assetId) {
-      this.CoinSearch.setForcedCoin(this.data.assetId);
+    if (!!this.data) {
+      if (this.data.assetId) {
+        this.CoinSearch.setForcedCoin(this.data.assetId);
+      }
+      if (this.data.adviceType || this.data.adviceType === 0) {
+        this.setAdviceType(this.data.adviceType);
+      }
     }
   }
 

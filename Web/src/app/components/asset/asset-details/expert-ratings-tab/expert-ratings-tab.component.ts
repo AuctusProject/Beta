@@ -14,7 +14,7 @@ import { ValueDisplayPipe } from '../../../../util/value-display.pipe';
   styleUrls: ['./expert-ratings-tab.component.css']
 })
 export class ExpertRatingsTabComponent implements OnInit, OnChanges {
-  displayedColumns: string[] = ['expertName', 'rankin', 'position', 'value', 'action', 'date', 'followButton'];
+  displayedColumns: string[] = ['expertName', 'rankin', 'position', 'value', 'currentReturn', 'date', 'followButton'];
   @Input() asset: AssetResponse;
   visibleAdvices: AssetAdvisorResponse[];
   currentPage = 1;
@@ -85,8 +85,8 @@ export class ExpertRatingsTabComponent implements OnInit, OnChanges {
     event.stopPropagation();
   }
 
-  onRowClick(row){
-    this.navigationService.goToExpertDetails(row.userId);
+  onRowClick(userId){
+    this.navigationService.goToExpertDetails(userId);
   }
 
   getAdvisor(userId : number) : AdvisorResponse{

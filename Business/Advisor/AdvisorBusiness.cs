@@ -23,7 +23,7 @@ namespace Auctus.Business.Advisor
 {
     public class AdvisorBusiness : BaseBusiness<DomainObjects.Advisor.Advisor, IAdvisorData<DomainObjects.Advisor.Advisor>>
     {
-        public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4 }
+        public enum CalculationMode { AdvisorBase = 0, AdvisorDetailed = 1, AssetBase = 2, AssetDetailed = 3, Feed = 4, AssetRatings = 5 }
         private const string ADVISORS_CACHE_KEY = "Advisors";
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
@@ -161,6 +161,7 @@ namespace Auctus.Business.Advisor
             var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
             result.Assets.ForEach(a => a.AssetAdvisor = a.AssetAdvisor.Where(c => c.UserId == advisorId).ToList());
+            result.Assets = result.Assets.OrderByDescending(a => a.AssetAdvisor.FirstOrDefault().LastAdviceDate).ToList();
             return result;
         }
 
@@ -349,19 +350,21 @@ namespace Auctus.Business.Advisor
         private AssetResponse.AssetAdvisorResponse GetAssetAdvisorResponse(int advisorId, List<AdviceDetail> assetAdviceDetails, CalculationMode mode)
         {
             var advisorDetailsValues = assetAdviceDetails.Where(c => c.Advice.AdvisorId == advisorId).OrderBy(c => c.Advice.CreationDate);
+            var lastAdvice = advisorDetailsValues.LastOrDefault();
             return new AssetResponse.AssetAdvisorResponse()
             {
                 UserId = advisorId,
                 AverageReturn = advisorDetailsValues.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / advisorDetailsValues.Count(c => c.Return.HasValue),
                 SuccessRate = (double)advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
+                CurrentReturn = lastAdvice == null || lastAdvice.Advice.AdviceType == AdviceType.ClosePosition ? 0 : lastAdvice.Return ?? 0,
                 TotalRatings = advisorDetailsValues.Count(),
-                LastAdviceDate = advisorDetailsValues.LastOrDefault()?.Advice.CreationDate,
-                LastAdviceMode = advisorDetailsValues.LastOrDefault()?.ModeType.Value,
-                LastAdviceType = advisorDetailsValues.LastOrDefault()?.Advice.Type,
-                LastAdviceAssetValue = advisorDetailsValues.LastOrDefault()?.Advice.AssetValue,
-                LastAdviceOperationType = advisorDetailsValues.LastOrDefault()?.Advice.OperationType,
-                LastAdviceTargetPrice = advisorDetailsValues.LastOrDefault()?.Advice.TargetPrice,
-                LastAdviceStopLoss = advisorDetailsValues.LastOrDefault()?.Advice.StopLoss,
+                LastAdviceDate = lastAdvice?.Advice.CreationDate,
+                LastAdviceMode = lastAdvice?.ModeType.Value,
+                LastAdviceType = lastAdvice?.Advice.Type,
+                LastAdviceAssetValue = lastAdvice?.Advice.AssetValue,
+                LastAdviceOperationType = lastAdvice?.Advice.OperationType,
+                LastAdviceTargetPrice = lastAdvice?.Advice.TargetPrice,
+                LastAdviceStopLoss = lastAdvice?.Advice.StopLoss,
                 Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c =>
                     new AssetResponse.AdviceResponse()
                     {

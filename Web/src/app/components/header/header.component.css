@@ -5,7 +5,7 @@
     display: flex;
     position: fixed;
     top: 0;
-    z-index: 3;
+    z-index: 103;
 }
 
 :host > div {
@@ -18,8 +18,8 @@ a{
 }
 
 .menu > a {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
     cursor: pointer;
     height: calc(100% - 2px);
     display: inline-flex;
@@ -50,7 +50,7 @@ a span {
 }
 
 .search {
-    margin-left: 15px;
+    margin-left: 5px;
     margin-right: 15px;
 }
 
@@ -63,30 +63,19 @@ a span {
     padding-right: 15px;
 }
 
+.login{
+    color: #07d1ff;
+    text-decoration: none;
+    padding-left: 15px;
+}
+
 .header-blue-button {
     padding-bottom: 10px;
     padding-top: 10px;
     padding-left: 20px;
     padding-right: 20px;
-    /* border-style: solid;
-    border-width: 1px;
-    -webkit-border-image: 
-        -webkit-gradient(linear, 0 0, 0 100%, from(#07d1ff), to(#126efd)) 1 100%;
-        -webkit-border-image: 
-        -webkit-linear-gradient(#07d1ff, #126efd) 1 100%;
-        -moz-border-image:
-        -moz-linear-gradient(#07d1ff, #126efd) 1 100%;    
-        -o-border-image:
-        -o-linear-gradient(#07d1ff, #126efd) 1 100%;
-        border-image:
-        linear-gradient(to top, #07d1ff 1%, #126efd) 1 100%;
-    border-image-slice: 1; */
     font-size: 11px;
     font-weight: 500;
-    /* text-align: center;
-    color: #07d1ff;
-    cursor: pointer; */
-    margin-right: 15px;
 }
 
 ::ng-deep .sub-menu {
@@ -119,4 +108,23 @@ a span {
 
 .about-mobile {
     padding-left: 0px;
+}
+
+.expert-picture{
+    margin: auto;
+    /* margin-top: 21px; */
+    position: relative;    
+    background-color: white;
+}
+
+.expert-picture,
+.expert-picture img{
+    width: 36px;
+    height: 36px;
+    border-radius: 20px;
+    margin-right: 5px;
+}
+
+.profile-description{
+    max-width: 80px;
 }

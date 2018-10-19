@@ -1,10 +1,12 @@
-﻿using Api.Model.Account;
+﻿using Api.Hubs;
+using Api.Model.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -25,14 +27,21 @@ namespace Api.Controllers
     [OnlyAdmin]
     public class JobV1Controller : JobBaseController
     {
-        public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         [Route("events")]
         [HttpPost]
         public new IActionResult UpdateAssetsEvents()
         {
             return base.UpdateAssetsEvents();
+        }
+
+        [Route("news")]
+        [HttpPost]
+        public new IActionResult UpdateLastNews()
+        {
+            return base.UpdateLastNews();
         }
 
         [Route("assets/{api}/values")]

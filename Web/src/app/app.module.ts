@@ -38,7 +38,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
 import { MatModule } from './mat.module';
 import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
-import { ConfigService } from './services/config.service';
+import { ConfigService, CONFIG } from './services/config.service';
 import { ReferralDetailsComponent } from './components/account/referral-details/referral-details.component';
 import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { NavigationService } from './services/navigation.service';
@@ -95,14 +95,14 @@ import { SummaryTabComponent } from './components/asset/asset-details/summary-ta
 import { EventCardComponent } from './components/account/feed/event-card/event-card.component';
 import { ListEventsComponent } from './components/asset/list-events/list-events.component';
 import { ExpertRatingsTabComponent } from './components/asset/asset-details/expert-ratings-tab/expert-ratings-tab.component';
+import { NewsListComponent } from './components/terminal/news-list/news-list.component';
+import { TerminalComponent } from './components/terminal/terminal.component';
+import { NewsService } from './services/news.service';
+import { CryptoChartComponent } from './components/terminal/crypto-chart/crypto-chart.component';
+import { EventsListComponent } from './components/terminal/events-list/events-list.component';
+import { RatingsListComponent } from './components/terminal/ratings-list/ratings-list.component';
 import { AdviceParametersComponent } from './components/advisor/new-advice/advice-parameters/advice-parameters.component';
-// import * as highstock from 'highcharts/modules/stock.src';
-// import * as more from 'highcharts/highcharts-more.src';
-export function highchartsModules() {
-  // apply Highcharts Modules to this array
-  return [/*highstock, more*/];
-}
-
+import { AssetHeaderComponent } from './components/terminal/asset-header/asset-header.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -124,6 +124,7 @@ export function getAuthServiceConfigs() {
   );
   return config;
 }
+
 
 @NgModule({
   declarations: [
@@ -190,7 +191,13 @@ export function getAuthServiceConfigs() {
     EventCardComponent,
     ListEventsComponent,
     ExpertRatingsTabComponent,
-    AdviceParametersComponent
+    AdviceParametersComponent,
+    NewsListComponent,
+    TerminalComponent,
+    CryptoChartComponent,
+    EventsListComponent,
+    RatingsListComponent,
+    AssetHeaderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),
@@ -207,7 +214,6 @@ export function getAuthServiceConfigs() {
         btnLoadingClass: 'is-loading',
         handleCurrentBtnOnly: true,
     }),
-    // ChartModule,
     FormsModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
@@ -219,7 +225,8 @@ export function getAuthServiceConfigs() {
     RecaptchaModule.forRoot(), 
     RecaptchaFormsModule,
     OwlModule,
-    ShareButtonModule.forRoot()
+    ShareButtonModule.forRoot()//,
+    //SignalRModule.forRoot(createSignalRConfig)
   ],
   providers: [
     HttpService,
@@ -229,11 +236,11 @@ export function getAuthServiceConfigs() {
     AdvisorService,
     AssetService,
     AccountService,
+    NewsService,
     NavigationService,
     AuthRedirect,
     ConfigService,
     ModalService,
-    // { provide:HIGHCHARTS_MODULES, useFactory:highchartsModules },
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '95vw', height: '92%', hasBackdrop: true, disableClose: false, panelClass: 'fullscreen-modal'}}

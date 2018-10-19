@@ -81,4 +81,8 @@ export class NavigationService {
   public goToCoinEvents(){
     this.goToUrl('coin-events');
   }
+
+  public goToTerminal(){
+    this.goToUrl('terminal');
+  }
 }

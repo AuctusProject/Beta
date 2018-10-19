@@ -5,6 +5,7 @@ using Auctus.DataAccess.Blockchain;
 using Auctus.DataAccess.Email;
 using Auctus.DataAccess.Event;
 using Auctus.DataAccess.Exchange;
+using Auctus.DataAccess.News;
 using Auctus.DataAccess.Storage;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DataAccessInterfaces.Advisor;
@@ -13,6 +14,7 @@ using Auctus.DataAccessInterfaces.Blockchain;
 using Auctus.DataAccessInterfaces.Email;
 using Auctus.DataAccessInterfaces.Event;
 using Auctus.DataAccessInterfaces.Exchange;
+using Auctus.DataAccessInterfaces.News;
 using Auctus.DataAccessInterfaces.Storage;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
@@ -58,6 +60,9 @@ namespace Auctus.Business
             services.AddScoped<IAssetEventData<AssetEvent>, AssetEventData>(c => new AssetEventData(configuration));
             services.AddScoped<ILinkEventAssetData<LinkEventAsset>, LinkEventAssetData>(c => new LinkEventAssetData(configuration));
             services.AddScoped<ILinkEventCategoryData<LinkEventCategory>, LinkEventCategoryData>(c => new LinkEventCategoryData(configuration));
+            services.AddScoped<INewsData<DomainObjects.News.News>, NewsData>(c => new NewsData(configuration));
+            services.AddScoped<INewsSourceData<DomainObjects.News.NewsSource>, NewsSourceData>(c => new NewsSourceData(configuration));
+            services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
         }
     }
 }

@@ -69,10 +69,18 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="action">
-            <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Action </th>
+          <ng-container matColumnDef="currentReturn">
+            <th fxHide.lt-md mat-header-cell *matHeaderCellDef> Return </th>
             <td fxHide.lt-md mat-cell *matCellDef="let asset">
-              {{getAdviceMode(asset)}}
+              <percentage-display *ngIf="asset.assetAdvisor[0].lastAdviceType != 2" [value]="asset.assetAdvisor[0].currentReturn"></percentage-display>
+              <span *ngIf="asset.assetAdvisor[0].lastAdviceType == 2">-</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="close">
+            <th fxHide.lt-sm mat-header-cell *matHeaderCellDef></th>
+            <td fxHide.lt-sm mat-cell *matCellDef="let asset">
+              <a class="close-link" *ngIf="showOwnerButton && asset.assetAdvisor[0].lastAdviceType != 2" (click)="closePosition(asset)">Close</a>
             </td>
           </ng-container>
 
@@ -110,7 +118,7 @@
             </ng-container>
 
           <ng-container matColumnDef="expandedDetail">
-            <td colspan=7 mat-cell *matCellDef="let asset; let i = index;">
+            <td colspan=8 mat-cell *matCellDef="let asset; let i = index;">
               <asset-history-chart *ngIf="asset.element == expandedElement" #assetHistoryChart [assetId]="asset.element.assetId" [advices]="asset.element.assetAdvisor[0].advices" [chartTitle]="asset.element.name + ' price'"></asset-history-chart>
               <div class="rates" fxLayout="row" fxLayoutAlign="space-around center">
                 <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center" fxLayoutAlign.gt-xs="start center" fxLayoutGap.gt-xs="20px">

@@ -17,6 +17,7 @@ export class AssetResponse {
   following?:boolean;
   mode: number;
   recommendationDistribution: RecommendationDistributionResponse[];
+  reportRecommendationDistribution: RecommendationDistributionResponse[];
   assetAdvisor?: AssetAdvisorResponse[];
   advices?: AdviceResponse[];
   advisors?: AdvisorResponse[];
@@ -29,6 +30,7 @@ export class AssetAdvisorResponse
   userId: number;
   successRate: number;
   averageReturn: number;
+  currentReturn: number;
   totalRatings: number;
   lastAdviceDate: Date;
   lastAdviceType: number;

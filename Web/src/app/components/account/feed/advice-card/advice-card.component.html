@@ -49,7 +49,15 @@
         </div>
         at price {{adviceFeed.advice.assetValueAtAdviceTime | valueDisplay}}
       </div>
-      <span class="advice-parameters" *ngIf="getAdviceParametersDescription().length > 0">{{getAdviceParametersDescription()}}</span>
+      <span class="advice-parameters" *ngIf="adviceFeed.advice.targetPrice">
+        Target value: {{adviceFeed.advice.targetPrice | valueDisplay}}
+      </span>
+      <span class="advice-parameters" *ngIf="adviceFeed.advice.stopLoss">
+        Stop loss: {{adviceFeed.advice.stopLoss | valueDisplay}}
+      </span>
+      <span class="advice-parameters" *ngIf="getCloseReasonDescription()">
+        Triggered by: {{getCloseReasonDescription()}}
+      </span>
       <span fxLayoutAlign="center center" fxHide.gt-sm>{{adviceFeed.date | timeAgo}}</span>
     </div>
   </div>

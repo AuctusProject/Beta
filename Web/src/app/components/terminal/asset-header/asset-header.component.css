@@ -1,0 +1,83 @@
+.partial-header {
+    border-bottom: solid 1px #FFFFFF99;
+    min-height: 100px;
+    color: #FFFFFF;
+    letter-spacing: 0.3px;
+    font-size: 12px;
+    padding-left: 10px;
+}
+
+.force-border-left {
+    border-left: solid 1px #FFFFFF99;
+}
+
+.force-padding-left {
+    padding-left: 10px;
+}
+
+.recommendation-distribution {
+    line-height: 20px;
+    padding-left: 10px;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.force-padding-top {
+    padding-top: 10px;
+}
+
+.collapse-div {
+    color: #ffffff;
+    border-bottom: solid 1px #FFFFFF99;
+}
+
+.bull {
+    color: #3ed142;
+}
+
+.bear {
+    color: #d13e3e;
+}
+
+.neutral {
+    color: #999999;
+}
+
+.bg-bull {
+    background-color: #3ed142;
+}
+
+.bg-bear {
+    background-color: #d13e3e;
+}
+
+.bg-neutral {
+    background-color: #999999;
+}
+
+.arrow {
+    display: inline;
+}
+
+.asset-recommendation {
+    padding: 5px 20px;
+}
+
+.status-data {
+    color: #8c8c8c;
+    font-size: 10px;
+}
+
+.triangle-expert-recomendation {
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid #126efd;
+    margin-right: 10px !important;
+}
+
+.triangle-report-rating {
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid #ffffff;
+    margin-right: 10px !important;
+}

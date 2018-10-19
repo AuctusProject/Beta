@@ -9,6 +9,7 @@ namespace Auctus.DataAccessInterfaces.Exchange
     {
         IEnumerable<AssetResult> GetAllCoinsData();
         AssetPricesResult GetAssetPrices(string assetId, int days);
-        AssetDataResult GetCoinData(string assetId);
+        AssetDataResult GetFullCoinData(string assetId);
+        AssetResult GetSimpleCoinData(string assetId);
     }
 }

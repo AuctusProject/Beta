@@ -29,7 +29,7 @@ import { ValueDisplayPipe } from '../../../util/value-display.pipe';
 export class ExpertDetailsComponent implements OnInit {
   expert: AdvisorResponse;
   showOwnerButton: boolean = false;
-  displayedColumns: string[] = ['assetName', 'position', 'value', 'action', 'date', 'ratings', 'chevron'];
+  displayedColumns: string[] = ['assetName', 'position', 'value', 'currentReturn', 'close', 'date', 'ratings', 'chevron'];
   displayedMobileColumns: string[] = ['assetName', 'position', 'date', 'chevron'];
   assets = [];
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
@@ -153,6 +153,10 @@ export class ExpertDetailsComponent implements OnInit {
         this.expert.following = false;
         this.expert.numberOfFollowers = this.expert.numberOfFollowers - 1;
       });
+  }
+
+  closePosition(asset: AssetResponse) {
+    this.modalService.setNewAdvice(asset.assetId, 2);
   }
 
   onFollowAssetClick(event: Event, asset: AssetResponse){

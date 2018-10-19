@@ -1,4 +1,5 @@
 ﻿using Auctus.DataAccessInterfaces.Asset;
+using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.Model;
 using Auctus.Util;
@@ -32,6 +33,36 @@ namespace Auctus.Business.Asset
                 c.AgencyRating = c.AgencyRatingId.HasValue ? c.Agency.AgencyRating.First(r => r.Id == c.AgencyRatingId) : null;
             });
             return reports;
+        }
+
+        public List<RecommendationDistributionResponse> GetReportRecommendationDistribution(List<Report> reports)
+        {
+            var distribution = new Dictionary<int, int>();
+            distribution[AdviceType.Buy.Value] = 0;
+            distribution[AdviceType.Sell.Value] = 0;
+            distribution[AdviceType.ClosePosition.Value] = 0;
+            foreach (var report in reports)
+            {
+                if (report.AgencyRating != null)
+                {
+                    if (report.AgencyRating.HexaColor == "#3ED142")
+                        distribution[AdviceType.Buy.Value]++;
+                    else if (report.AgencyRating.HexaColor == "#D13E3E")
+                        distribution[AdviceType.Sell.Value]++;
+                    else
+                        distribution[AdviceType.ClosePosition.Value]++;
+                }
+                else
+                {
+                    if (report.Score >= 3.5)
+                        distribution[AdviceType.Buy.Value]++;
+                    else if (report.Score >= 2.5)
+                        distribution[AdviceType.ClosePosition.Value]++;
+                    else
+                        distribution[AdviceType.Sell.Value]++;
+                }
+            }
+            return distribution.Where(c => c.Value > 0).Select(c => new RecommendationDistributionResponse() { Type = c.Key, Total = c.Value }).ToList();
         }
 
         public IEnumerable<FeedResponse> ListReports(int? top, int? lastReportId, int? assetId)
