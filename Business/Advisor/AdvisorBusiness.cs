@@ -161,6 +161,7 @@ namespace Auctus.Business.Advisor
             var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();
             result.Assets.ForEach(a => a.AssetAdvisor = a.AssetAdvisor.Where(c => c.UserId == advisorId).ToList());
+            result.Assets = result.Assets.OrderByDescending(a => a.AssetAdvisor.FirstOrDefault().LastAdviceDate).ToList();
             return result;
         }
 
