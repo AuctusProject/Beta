@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { SimpleNotificationsModule } from 'angular2-notifications';
-//import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
 import { ShareButtonModule } from '@ngx-share/button';
 
 import { AppComponent } from './app.component';
@@ -225,8 +224,7 @@ export function getAuthServiceConfigs() {
     RecaptchaModule.forRoot(), 
     RecaptchaFormsModule,
     OwlModule,
-    ShareButtonModule.forRoot()//,
-    //SignalRModule.forRoot(createSignalRConfig)
+    ShareButtonModule.forRoot()
   ],
   providers: [
     HttpService,

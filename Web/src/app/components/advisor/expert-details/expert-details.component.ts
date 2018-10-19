@@ -74,7 +74,6 @@ export class ExpertDetailsComponent implements OnInit {
     }
     else{
       this.expandedElement = row;
-      this.assetHistoryCharts.toArray()[this.assets.indexOf(row)/2].refresh();
     }
   }
 
