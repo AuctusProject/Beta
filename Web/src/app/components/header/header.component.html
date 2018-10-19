@@ -21,7 +21,10 @@
         <span class="signin" *ngIf="!isLogged()" (click)="register()">SIGN UP</span>
         <a *ngIf="isLogged()" fxShow="true" fxHide.lt-lg="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="profile">
             <span fxLayout="row" fxLayoutAlign="space-around center">
-                <span>PROFILE</span>
+                <div *ngIf="isAdvisor()" class="expert-picture">
+                    <img [src]="getAdvisorImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
+                </div>
+                <span class="profile-description truncate" [title]="getProfileDescription()">{{getProfileDescription()}}</span>
                 <mat-icon>{{menuOpen ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
             </span>
         </a>

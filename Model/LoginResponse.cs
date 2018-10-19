@@ -12,5 +12,7 @@ namespace Auctus.Model
         public bool IsAdvisor { get; set; }
         public bool PendingConfirmation { get; set; }
         public bool RequestedToBeAdvisor { get; set; }
+        public string AdvisorName { get; set; }
+        public string ProfileUrlGuid { get; set; }
     }
 }

@@ -31,6 +31,23 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  getProfileDescription(){
+    if(this.isAdvisor() && this.loginData.advisorName){
+      return this.loginData.advisorName;
+    }
+    else{
+      return this.loginData.email;
+    }
+  }
+
+  getAdvisorImgUrl(){
+    return CONFIG.profileImgUrl.replace("{id}", this.loginData.profileUrlGuid);
+  }
+
+  isAdvisor(){
+    return this.loginData && this.loginData.isAdvisor;
+  }
+
   getLogoImgUrl() {
     return CONFIG.platformImgUrl.replace("{id}", "logo");
   }
