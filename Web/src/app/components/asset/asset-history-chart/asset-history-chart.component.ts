@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges } from '@angular/core';
-import { StockChart, Highcharts } from 'angular-highcharts';
+//import { StockChart, Highcharts } from 'angular-highcharts';
 import { ValuesResponse, AdviceResponse } from '../../../model/asset/assetResponse';
 import { Util } from '../../../util/Util';
 import { ValueDisplayPipe } from '../../../util/value-display.pipe';
@@ -14,7 +14,7 @@ export class AssetHistoryChartComponent implements OnChanges {
   @Input() assetId : number;
   @Input() advices : AdviceResponse[];
   @Input() chartTitle?: string;
-  assetChart: StockChart;  
+  //assetChart: StockChart;  
   advicesData: any = [];
   chartData: any = [];
   minAdviceDate?: Date = null;
@@ -31,18 +31,18 @@ export class AssetHistoryChartComponent implements OnChanges {
     this.chartData = [];
     this.mockData = this.getMockDataForLoading()
     this.minAdviceDate = null;
-    if (this.assetChart) {
-      this.assetChart.destroy();
-    }
+    // if (this.assetChart) {
+    //   this.assetChart.destroy();
+    // }
     this.fillAdvicesData();
     this.fillChartData();
   }
 
   fillChartData(){
     this.createChart();
-    this.assetChart.ref$.subscribe(result => {
-      this.assetChart.ref.showLoading("Loading data from server...");
-    });
+    // this.assetChart.ref$.subscribe(result => {
+    //   this.assetChart.ref.showLoading("Loading data from server...");
+    // });
 
     let queryDate;
     if (this.minAdviceDate) {
@@ -59,9 +59,9 @@ export class AssetHistoryChartComponent implements OnChanges {
             ]
           );
         }
-        this.assetChart.ref.series[0].setData(this.chartData);
-        this.assetChart.ref.series[1].setData(this.advicesData);
-        this.assetChart.ref.hideLoading();
+        // this.assetChart.ref.series[0].setData(this.chartData);
+        // this.assetChart.ref.series[1].setData(this.advicesData);
+        // this.assetChart.ref.hideLoading();
       });
   }
 
@@ -96,55 +96,55 @@ export class AssetHistoryChartComponent implements OnChanges {
   }
 
   createChart(){
-    this.assetChart = new StockChart({
-      chart:{
-        zoomType: 'x'
-      },
-      plotOptions:{
-        flags:{
-          color:'#252525',
-          fillColor: '#252525',
-          style: {
-            color: 'white'
-          },
-          states: {
-              hover: {
-                color:'#151515',
-                fillColor: '#151515'
-              }
-          }
-        }
-      },
-      rangeSelector: {
-        enabled:false,
-      },
-      title: {
-        text: this.chartTitle,
-      },
-      credits:{
-        enabled: false
-      },
-      series:[
-        {
-          name: 'Price', 
-          data: this.mockData,
-          id: 'dataseries',
-        },
-        {
-          type: 'flags',
-          data: [],
-          onSeries:'dataseries',
+    // this.assetChart = new StockChart({
+    //   chart:{
+    //     zoomType: 'x'
+    //   },
+    //   plotOptions:{
+    //     flags:{
+    //       color:'#252525',
+    //       fillColor: '#252525',
+    //       style: {
+    //         color: 'white'
+    //       },
+    //       states: {
+    //           hover: {
+    //             color:'#151515',
+    //             fillColor: '#151515'
+    //           }
+    //       }
+    //     }
+    //   },
+    //   rangeSelector: {
+    //     enabled:false,
+    //   },
+    //   title: {
+    //     text: this.chartTitle,
+    //   },
+    //   credits:{
+    //     enabled: false
+    //   },
+    //   series:[
+    //     {
+    //       name: 'Price', 
+    //       data: this.mockData,
+    //       id: 'dataseries',
+    //     },
+    //     {
+    //       type: 'flags',
+    //       data: [],
+    //       onSeries:'dataseries',
           
-        }
-      ],
-    });
+    //     }
+    //   ],
+    // });
 
     this.refresh();
   }
 
   refresh(){
-    var self = this;
-    setTimeout(() => {self.assetChart.ref.reflow()}, 100);
+    // var self = this;
+    // setTimeout(() => {self.assetChart.ref.reflow()}, 100);
   }
 
   getMockDataForLoading() {
