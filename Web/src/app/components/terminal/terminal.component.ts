@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CONFIG } from 'src/app/services/config.service';
+import { CONFIG } from '../../services/config.service';
 import { CryptoChartComponent } from './crypto-chart/crypto-chart.component';
-import { AssetService } from 'src/app/services/asset.service';
-import { TerminalAssetResponse } from 'src/app/model/asset/terminalAssetResponse';
+import { AssetService } from '../../services/asset.service';
+import { TerminalAssetResponse } from '../../model/asset/terminalAssetResponse';
 
 @Component({
   selector: 'terminal',
