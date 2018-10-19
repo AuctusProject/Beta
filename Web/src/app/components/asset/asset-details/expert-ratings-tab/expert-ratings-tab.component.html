@@ -52,12 +52,11 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef><span fxHide.lt-sm > Action </span></th>
-        <td mat-cell *matCellDef="let assetAdvisor">
-          <div fxHide.lt-sm>
-            {{getRecomendationFromType(assetAdvisor.lastAdviceMode)}}
-          </div>
+      <ng-container matColumnDef="currentReturn">
+        <th mat-header-cell *matHeaderCellDef><span fxHide.lt-md> Return </span></th>
+        <td mat-cell *matCellDef="let assetAdvisor">  
+          <percentage-display *ngIf="assetAdvisor.lastAdviceType != 2" [value]="assetAdvisor.currentReturn"></percentage-display>
+          <span *ngIf="assetAdvisor.lastAdviceType == 2">-</span>
         </td>
       </ng-container>
 

@@ -349,19 +349,21 @@ namespace Auctus.Business.Advisor
         private AssetResponse.AssetAdvisorResponse GetAssetAdvisorResponse(int advisorId, List<AdviceDetail> assetAdviceDetails, CalculationMode mode)
         {
             var advisorDetailsValues = assetAdviceDetails.Where(c => c.Advice.AdvisorId == advisorId).OrderBy(c => c.Advice.CreationDate);
+            var lastAdvice = advisorDetailsValues.LastOrDefault();
             return new AssetResponse.AssetAdvisorResponse()
             {
                 UserId = advisorId,
                 AverageReturn = advisorDetailsValues.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / advisorDetailsValues.Count(c => c.Return.HasValue),
                 SuccessRate = (double)advisorDetailsValues.Count(c => c.Success.HasValue && c.Success.Value) / advisorDetailsValues.Count(c => c.Success.HasValue),
+                CurrentReturn = lastAdvice == null || lastAdvice.Advice.AdviceType == AdviceType.ClosePosition ? 0 : lastAdvice.Return ?? 0,
                 TotalRatings = advisorDetailsValues.Count(),
-                LastAdviceDate = advisorDetailsValues.LastOrDefault()?.Advice.CreationDate,
-                LastAdviceMode = advisorDetailsValues.LastOrDefault()?.ModeType.Value,
-                LastAdviceType = advisorDetailsValues.LastOrDefault()?.Advice.Type,
-                LastAdviceAssetValue = advisorDetailsValues.LastOrDefault()?.Advice.AssetValue,
-                LastAdviceOperationType = advisorDetailsValues.LastOrDefault()?.Advice.OperationType,
-                LastAdviceTargetPrice = advisorDetailsValues.LastOrDefault()?.Advice.TargetPrice,
-                LastAdviceStopLoss = advisorDetailsValues.LastOrDefault()?.Advice.StopLoss,
+                LastAdviceDate = lastAdvice?.Advice.CreationDate,
+                LastAdviceMode = lastAdvice?.ModeType.Value,
+                LastAdviceType = lastAdvice?.Advice.Type,
+                LastAdviceAssetValue = lastAdvice?.Advice.AssetValue,
+                LastAdviceOperationType = lastAdvice?.Advice.OperationType,
+                LastAdviceTargetPrice = lastAdvice?.Advice.TargetPrice,
+                LastAdviceStopLoss = lastAdvice?.Advice.StopLoss,
                 Advices = mode == CalculationMode.AdvisorDetailed ? advisorDetailsValues.Select(c =>
                     new AssetResponse.AdviceResponse()
                     {

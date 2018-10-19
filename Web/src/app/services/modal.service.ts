@@ -66,8 +66,8 @@ export class ModalService {
     return this.setModal(AdvisorEditComponent, { id: advisorId });
   }
 
-  public setNewAdvice(assetId?: number): MatDialogRef<FullscreenModalComponent, any> {
-    return this.setModal(NewAdviceComponent, { assetId: assetId });
+  public setNewAdvice(assetId?: number, adviceType? :number): MatDialogRef<FullscreenModalComponent, any> {
+    return this.setModal(NewAdviceComponent, { assetId: assetId, adviceType: adviceType });
   }
 
   public setInviteFriend(): MatDialogRef<FullscreenModalComponent, any> {
