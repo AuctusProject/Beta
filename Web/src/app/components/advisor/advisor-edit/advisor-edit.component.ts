@@ -61,6 +61,7 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
       request.file = this.FileUploadComponent.getFile();
       this.promise = this.advisorService.editAdvisor(this.advisor.id, request).subscribe(result => 
         {
+          this.updateLocalStorageAdvisorInfo(request.name, result);
           let modalData = new FullscreenModalComponentInput();
           modalData.hiddenClose = true;
           modalData.component = MessageFullscreenModalComponent;
@@ -68,6 +69,13 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
           this.setNewModal.emit(modalData);
         });
     }
+  }
+
+  updateLocalStorageAdvisorInfo(advisorName, profileUrlGuid){
+    var loginData = this.accountService.getLoginData();
+    loginData.advisorName = advisorName;
+    loginData.profileUrlGuid = profileUrlGuid;
+    this.accountService.setLoginData(loginData);
   }
 
   isValidRequest() : boolean {

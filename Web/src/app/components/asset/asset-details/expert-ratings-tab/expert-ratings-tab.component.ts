@@ -85,8 +85,8 @@ export class ExpertRatingsTabComponent implements OnInit, OnChanges {
     event.stopPropagation();
   }
 
-  onRowClick(row){
-    this.navigationService.goToExpertDetails(row.userId);
+  onRowClick(userId){
+    this.navigationService.goToExpertDetails(userId);
   }
 
   getAdvisor(userId : number) : AdvisorResponse{

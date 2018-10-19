@@ -5,6 +5,8 @@ export class LoginResponse {
   isAdvisor : boolean;
   pendingConfirmation : boolean;
   requestedToBeAdvisor : boolean; 
+  advisorName: string;
+  profileUrlGuid: string;
 
   constructor(){
   }
