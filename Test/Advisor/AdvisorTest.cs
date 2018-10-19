@@ -142,10 +142,10 @@ namespace Auctus.Test.Advisor
             switch(assetId)
             {
                 case 1:
-                    AssertAssetAdvisorData(assetAdvisor, -0.060381, 0.333333, 8, 0, 0);
+                    AssertAssetAdvisorData(assetAdvisor, -0.060381, 0.333333, 8, 0, 0, 0.005996);
                     break;
                 case 2:
-                    AssertAssetAdvisorData(assetAdvisor, -0.020676, 0.333333, 5, 2, 2);
+                    AssertAssetAdvisorData(assetAdvisor, -0.020676, 0.333333, 5, 2, 2, 0);
                     break;
             }
         }
@@ -156,16 +156,16 @@ namespace Auctus.Test.Advisor
             switch (assetId)
             {
                 case 1:
-                    AssertAssetAdvisorData(assetAdvisor, 0.024781, 0.333333, 4, 2, 2);
+                    AssertAssetAdvisorData(assetAdvisor, 0.024781, 0.333333, 4, 2, 2, 0);
                     break;
                 case 2:
-                    AssertAssetAdvisorData(assetAdvisor, 0.062164, 0.666667, 3, 3, 0);
+                    AssertAssetAdvisorData(assetAdvisor, 0.062164, 0.666667, 3, 3, 0, 0.167553);
                     break;
                 case 3:
-                    AssertAssetAdvisorData(assetAdvisor, 0.021150, 0.8, 5, 1, 0);
+                    AssertAssetAdvisorData(assetAdvisor, 0.021150, 0.8, 5, 1, 0, 0.045660);
                     break;
                 case 4:
-                    AssertAssetAdvisorData(assetAdvisor, -0.537053, 0, 4, 1, 2);
+                    AssertAssetAdvisorData(assetAdvisor, -0.537053, 0, 4, 1, 2, 0);
                     break;
             }
         }
@@ -173,14 +173,15 @@ namespace Auctus.Test.Advisor
         internal static void AssertAssetAdvisor3Data(AssetResponse.AssetAdvisorResponse assetAdvisor, int assetId)
         {
             Assert.Equal(1, assetId);
-            AssertAssetAdvisorData(assetAdvisor, 0.070949, 1, 2, 2, 2);
+            AssertAssetAdvisorData(assetAdvisor, 0.070949, 1, 2, 2, 2, 0);
         }
 
         private static void AssertAssetAdvisorData(AssetResponse.AssetAdvisorResponse assetAdvisor, double expReturn, double expSuccessRate, int expRatings, 
-            int expLastMode, int expLastType)
+            int expLastMode, int expLastType, double expCurrentReturn)
         {
             Assert.Equal(expReturn, assetAdvisor.AverageReturn, 6);
             Assert.Equal(expSuccessRate, assetAdvisor.SuccessRate, 6);
+            Assert.Equal(expCurrentReturn, assetAdvisor.CurrentReturn, 6);
             Assert.Equal(expRatings, assetAdvisor.TotalRatings);
             Assert.Equal(expLastMode, assetAdvisor.LastAdviceMode);
             Assert.Equal(expLastType, assetAdvisor.LastAdviceType);

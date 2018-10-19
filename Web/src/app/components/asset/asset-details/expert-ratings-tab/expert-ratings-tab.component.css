@@ -23,3 +23,8 @@
 .advice-data-div {
     min-width: 115px;
 }
+
+.advisor-link{
+    cursor: pointer;
+}
+

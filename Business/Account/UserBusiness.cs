@@ -89,6 +89,8 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 IsAdvisor = IsValidAdvisor(user),
+                AdvisorName = UserBusiness.GetAdvisorName(user),
+                ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
                 HasInvestment = hasInvestment,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
@@ -139,6 +141,8 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 IsAdvisor = IsValidAdvisor(user),
+                AdvisorName = UserBusiness.GetAdvisorName(user),
+                ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
                 HasInvestment = hasInvestment,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
@@ -156,6 +160,8 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 IsAdvisor = IsValidAdvisor(user),
+                AdvisorName = UserBusiness.GetAdvisorName(user),
+                ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
                 HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
@@ -181,6 +187,16 @@ namespace Auctus.Business.Account
         public bool IsValidAdvisor(User user)
         {
             return user.IsAdvisor && ((DomainObjects.Advisor.Advisor)user).Enabled;
+        }
+
+        public string GetAdvisorName(User user)
+        {
+            return IsValidAdvisor(user) ? ((DomainObjects.Advisor.Advisor)user).Name : null;
+        }
+
+        public string GetProfileUrlGuid(User user)
+        {
+            return IsValidAdvisor(user) ? ((DomainObjects.Advisor.Advisor)user).UrlGuid.ToString() : null;
         }
 
         public decimal GetMinimumAucAmountForUser(User user)
@@ -319,6 +335,8 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 IsAdvisor = IsValidAdvisor(user),
+                AdvisorName = UserBusiness.GetAdvisorName(user),
+                ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
                 HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
@@ -340,6 +358,8 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 PendingConfirmation = false,
                 IsAdvisor = IsValidAdvisor(user),
+                AdvisorName = UserBusiness.GetAdvisorName(user),
+                ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
                 HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };
@@ -395,6 +415,8 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 HasInvestment = true,
                 IsAdvisor = IsValidAdvisor(user),
+                AdvisorName = UserBusiness.GetAdvisorName(user),
+                ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };

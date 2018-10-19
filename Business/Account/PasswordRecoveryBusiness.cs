@@ -70,6 +70,8 @@ namespace Auctus.Business.Account
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
                 IsAdvisor = UserBusiness.IsValidAdvisor(user),
+                AdvisorName = UserBusiness.GetAdvisorName(user),
+                ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
                 HasInvestment = hasInvestment,
                 RequestedToBeAdvisor = user.RequestToBeAdvisor != null
             };

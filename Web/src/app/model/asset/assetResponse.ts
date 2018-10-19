@@ -30,6 +30,7 @@ export class AssetAdvisorResponse
   userId: number;
   successRate: number;
   averageReturn: number;
+  currentReturn: number;
   totalRatings: number;
   lastAdviceDate: Date;
   lastAdviceType: number;
