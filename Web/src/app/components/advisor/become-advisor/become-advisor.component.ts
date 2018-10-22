@@ -21,7 +21,7 @@ import { AuthRedirect } from '../../../providers/authRedirect';
   styleUrls: ['./become-advisor.component.css']
 })
 export class BecomeAdvisorComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Become an expert";
+  modalTitle: string = "Registration";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -129,10 +129,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   getDescriptionOptions() {
-    return { textOptions: { placeHolder: "Short description", maxLength: 160 } };
-  }
-
-  getExperienceOptions() {
-    return { inputType: InputType.TextArea, textOptions: { placeHolder: "Describe your expertise" }, textAreaOptions: { maxRows: 20, minRows: 5 } };
+    return { textOptions: { placeHolder: "Short description", maxLength: 160, required: false } };
   }
 }

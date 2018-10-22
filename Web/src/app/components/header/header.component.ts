@@ -57,14 +57,6 @@ export class HeaderComponent implements OnInit {
     return !!this.loginData;
   }
 
-  onBecomeExpert() {
-    if (this.isLogged()) {
-      this.modalService.setBecomeAdvisorForm();
-    } else {
-      this.modalService.setBecomeAdvisor();
-    }
-  }
-
   onTopExperts() {
     this.navigationService.goToTopExperts();
   }

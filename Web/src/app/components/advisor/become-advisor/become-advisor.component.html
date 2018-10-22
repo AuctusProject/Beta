@@ -21,8 +21,6 @@
     <inheritance-input #Description [options]="getDescriptionOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
       [value]="requestToBeAdvisorRequest.description" (onChange)="requestToBeAdvisorRequest.description = $event"></inheritance-input>
   </div>
-  <inheritance-input #Experience [options]="getExperienceOptions()" class="input-experience"
-    [value]="requestToBeAdvisorRequest.previousExperience" (onChange)="requestToBeAdvisorRequest.previousExperience = $event"></inheritance-input>
 </div>
 <div class="last-div" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <recaptcha *ngIf="isNewUser()" #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>

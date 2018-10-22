@@ -3,18 +3,10 @@
     <div class="subtitle" *ngIf="headerSecondMessage.length > 0">{{headerSecondMessage}}</div>
 </div>
 <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="50px">
-    <div *ngIf="!isLogin() && !isBecomeExpert()" class="registration-description" fxLayout="column" fxFlex="250px" fxLayoutGap="12px" fxHide.lt-md>
+   
+    <div *ngIf="!isLogin()" class="registration-description" fxLayout="column" fxFlex="250px" fxLayoutGap="12px" fxHide.lt-md>
         <div>
-            To become an investor and unlock all features, you need to fulfill the following three requirements:
-        </div>
-        <ul>
-            <li>Have Metamask Plugin installed dowload here.</li>
-            <li>Hold AUC in your wallet.</li>
-        </ul>
-    </div>
-    <div *ngIf="!isLogin() && isBecomeExpert()" class="registration-description" fxLayout="column" fxFlex="250px" fxLayoutGap="12px" fxHide.lt-md>
-        <div>
-            By becoming an Expert you get the following advantages:
+            Lorem By becoming an user you get the following advantages:
         </div>
         <ul>
             <li>Get rewarded for good advice.</li>

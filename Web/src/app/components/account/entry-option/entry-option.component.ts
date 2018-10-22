@@ -35,27 +35,22 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
 
   ngOnInit() {
     if (this.accountService.isLoggedIn()) {
-      if (this.isBecomeExpert()) {
+      // if (this.isBecomeExpert()) {
         this.openBecomeAdvisorForm();
-      } else {
-        this.setClose.emit();
-        this.authRedirect.redirectAfterLoginAction();
-      }
+      // } else {
+      //   this.setClose.emit();
+      //   this.authRedirect.redirectAfterLoginAction();
+      // }
     } else {
       if (this.isLogin()) {
         this.modalTitle = "Sign In";
         this.emailButtonMessage = "Login with email";
         this.headerFirstMessage = "Login";
-      } else if(this.isBecomeExpert()) {
-        this.modalTitle = "Become an expert";
-        this.emailButtonMessage = "Sign up with email";
-        this.headerFirstMessage = "Become an expert";
-        this.headerSecondMessage = "As an experience user of cryptocurrencies you may have insight knowhow that you can share with the community.";
       } else {
-        this.modalTitle = "Investor registration";
+        this.modalTitle = "Registration";
         this.emailButtonMessage = "Sign up with email";
-        this.headerFirstMessage = "Investor registration";
-        this.headerSecondMessage = "By signing up as an investor, you will get exclusive market insights, as well as access to expert knowledge.";
+        this.headerFirstMessage = "Registration";
+        this.headerSecondMessage = "Sign up to get exclusive market insights, as well as access to expert knowledge.";
       }
     }
   }
@@ -63,11 +58,7 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
   isLogin() {
     return !!this.data && this.data.login;
   }
-
-  isBecomeExpert() {
-    return !!this.data && this.data.becomeExpert;
-  }
-  
+ 
   socialEntry(socialPlatform: string) {
     let socialPlatformProvider;
     var socialNetworkType;
@@ -93,12 +84,12 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
   socialEntryResponse(response: LoginResult){
     if (!!response && !response.error && response.data) {
       this.accountService.setLoginData(response.data);
-      if(this.isBecomeExpert()) {
+      // if(this.isBecomeExpert()) {
         this.openBecomeAdvisorForm();
-      } else {
-        this.setClose.emit();
-        this.authRedirect.redirectAfterLoginAction(response.data);
-      }
+      // } else {
+      //   this.setClose.emit();
+      //   this.authRedirect.redirectAfterLoginAction(response.data);
+      // }
     } else if (!!response && response.error) {
         this.notificationsService.info("Info", response.error);
     }
@@ -115,13 +106,15 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
       let modalData = new FullscreenModalComponentInput();
       modalData.component = LoginComponent;
       this.setNewModal.emit(modalData);
-    } else if(this.isBecomeExpert()) {
+     } else 
+    // if(this.isBecomeExpert()) 
+    {
       this.openBecomeAdvisorForm();
-    } else {
-      let modalData = new FullscreenModalComponentInput();
-      modalData.component = RegisterComponent;
-      this.setNewModal.emit(modalData);
-    }
+    // } else {
+    //   let modalData = new FullscreenModalComponentInput();
+    //   modalData.component = RegisterComponent;
+    //   this.setNewModal.emit(modalData);
+     }
   }
 
   onSignUpClick() {
