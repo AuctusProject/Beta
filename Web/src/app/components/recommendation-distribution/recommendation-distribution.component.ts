@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
-import * as Highchart from 'highcharts';
+import { Component, OnInit, Input, OnChanges, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { RecommendationDistributionResponse } from '../../model/recommendationDistributionResponse';
 import { Util } from '../../util/Util';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'recommendation-distribution',
@@ -18,7 +18,7 @@ export class RecommendationDistributionComponent implements OnInit, OnChanges {
   totalSell = 0;
   totalClose = 0;
   totalRecommendations = 0;
-  constructor() { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit() {
     this.fillPieData();
@@ -56,49 +56,51 @@ export class RecommendationDistributionComponent implements OnInit, OnChanges {
   }
 
   createPieChart(){
-    this.pieChart = Highchart.chart({
-        chart: {
-            renderTo: this.pieChartContainer.nativeElement,
-            backgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-      },
-      credits:{
-        enabled: false
-      },
-      legend:{enabled:false},
-      title: {
-        text: this.showTitle ? "<b>"+ this.totalRecommendations+"</b><br />Ratings" : null,
-        align: 'center',
-        verticalAlign: 'middle',
-        y: -4,
-        style: { "color": "#ffffff", "fontSize": "8px" }
-      },
-      tooltip: {
-          pointFormat: '<b>{point.percentage:.1f}%</b>'
-      },
-      plotOptions: {
-          pie: {
-              allowPointSelect: false,
-              cursor: 'pointer',
-              dataLabels: {
-                  enabled: false,
-                  format: '<b>{point.name}</b>: {point.percentage:.1f}%',
-                  style: {
-                      color: 'black'
-                  }
-              },
-              borderColor: null,
-              showInLegend: true,
-              center: ['50%', '50%']
-          }
-      },
-      series: [{
-          name: 'Recommendations',
-          innerSize: '80%',
-          data: this.pieData
-      }]
-      });
+    if(isPlatformBrowser(this.platformId) && window && (<any>window).Highcharts){
+        this.pieChart = (<any>window).Highcharts.chart({
+            chart: {
+                renderTo: this.pieChartContainer.nativeElement,
+                backgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+        },
+        credits:{
+            enabled: false
+        },
+        legend:{enabled:false},
+        title: {
+            text: this.showTitle ? "<b>"+ this.totalRecommendations+"</b><br />Ratings" : null,
+            align: 'center',
+            verticalAlign: 'middle',
+            y: -4,
+            style: { "color": "#ffffff", "fontSize": "8px" }
+        },
+        tooltip: {
+            pointFormat: '<b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: false,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f}%',
+                    style: {
+                        color: 'black'
+                    }
+                },
+                borderColor: null,
+                showInLegend: true,
+                center: ['50%', '50%']
+            }
+        },
+        series: [{
+            name: 'Recommendations',
+            innerSize: '80%',
+            data: this.pieData
+        }]
+        });
+    }
   }
 }
