@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RuntimeFrameworkVersion>2.1.5</RuntimeFrameworkVersion> 
     <ApplicationInsightsResourceId>/subscriptions/e9ec56be-9e25-4aee-b573-a75029f0b5a1/resourcegroups/AuctusPlatformApiDev/providers/microsoft.insights/components/AuctusPlatformApiDevInsights</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/e9ec56be-9e25-4aee-b573-a75029f0b5a1/resourcegroups/AuctusPlatformApiDev/providers/microsoft.insights/components/AuctusPlatformApiDevInsights</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
