@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using static Auctus.Business.Advisor.AdvisorBusiness;
 
 namespace Auctus.Business.Asset
@@ -22,7 +23,7 @@ namespace Auctus.Business.Asset
             return Data.ListAllAssets(ids);
         }
 
-        public void UpdateAssetCurrentValues(List<AssetCurrentValue> assetCurrentValues)
+        public void UpdateAssetCurrentValues(IEnumerable<AssetCurrentValue> assetCurrentValues)
         {
             Data.UpdateAssetValue(assetCurrentValues);
         }
@@ -32,19 +33,13 @@ namespace Auctus.Business.Asset
             var assetCurrentValue = ListAllAssets(new int[] { assetId });
             if (assetCurrentValue == null || !assetCurrentValue.Any() || assetCurrentValue[0].UpdateDate < Data.GetDateTimeNow().AddHours(-1))
             {
-                var value = AssetValueBusiness.LastAssetValue(assetId)?.Value;
-                if (!value.HasValue)
-                {
-                    string assetCoinGeckoId;
-                    if (assetCurrentValue == null || !assetCurrentValue.Any())
-                        assetCoinGeckoId = AssetBusiness.GetById(assetId)?.CoinGeckoId;
-                    else
-                        assetCoinGeckoId = assetCurrentValue[0].CoinGeckoId;
-
-                    return CoinGeckoBusiness.GetSimpleCoinData(assetCoinGeckoId)?.Price;
-                }
+                string assetCoinGeckoId;
+                if (assetCurrentValue == null || !assetCurrentValue.Any())
+                    assetCoinGeckoId = AssetBusiness.GetById(assetId)?.CoinGeckoId;
                 else
-                    return value;
+                    assetCoinGeckoId = assetCurrentValue[0].CoinGeckoId;
+
+                return CoinGeckoBusiness.GetSimpleCoinData(assetCoinGeckoId)?.Price;
             }
             else
                 return assetCurrentValue[0].CurrentValue;
@@ -54,74 +49,26 @@ namespace Auctus.Business.Asset
         {
             var assetCurrentValues = ListAllAssets(assetIds);
 
-            var assetDateMapping = new List<AssetValueFilter>();
-            foreach (var asset in assetCurrentValues)
+            var now = Data.GetDateTimeNow();
+            Parallel.ForEach(assetCurrentValues, new ParallelOptions() { MaxDegreeOfParallelism = 5 }, asset =>
             {
-                if (asset.UpdateDate < Data.GetDateTimeNow().AddHours(-1))
+                if (asset.UpdateDate < now.AddHours(-1))
                 {
-                    if (mode == CalculationMode.AdvisorBase || mode == CalculationMode.Feed || mode == CalculationMode.AdvisorDetailed || mode == CalculationMode.AssetRatings)
-                        assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
-                    else if (mode == CalculationMode.AssetDetailed)
+                    var assetData = CoinGeckoBusiness.GetFullCoinData(asset.CoinGeckoId);
+                    if (assetData != null && assetData.MarketData != null)
                     {
-                        if (selectAssetId.Value == asset.Id)
-                        {
-                            assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
-                            assetDateMapping.Add(AssetValueBusiness.GetFilterFor24hValue(asset.Id));
-                            assetDateMapping.Add(AssetValueBusiness.GetFilterFor7dValue(asset.Id));
-                            assetDateMapping.Add(AssetValueBusiness.GetFilterFor30dValue(asset.Id));
-                        }
-                        else
-                            assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
-                    }
-                    else if (mode == CalculationMode.AssetBase)
-                    {
-                        assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
-                        assetDateMapping.Add(AssetValueBusiness.GetFilterFor24hValue(asset.Id));
+                        asset.UpdateDate = now;
+                        if (assetData.MarketData.CurrentPrice != null && assetData.MarketData.CurrentPrice.Value.HasValue)
+                            asset.CurrentValue = assetData.MarketData.CurrentPrice.Value.Value;
+                        if (assetData.MarketData.PriceChangePercentage24h.HasValue)
+                            asset.Variation24Hours = assetData.MarketData.PriceChangePercentage24h.Value / 100.0;
+                        if (assetData.MarketData.PriceChangePercentage7d.HasValue)
+                            asset.Variation7Days = assetData.MarketData.PriceChangePercentage7d.Value / 100.0;
+                        if (assetData.MarketData.PriceChangePercentage30d.HasValue)
+                            asset.Variation30Days = assetData.MarketData.PriceChangePercentage30d.Value / 100.0;
                     }
                 }
-                else if (mode == CalculationMode.AssetDetailed && selectAssetId.Value == asset.Id && !asset.Variation24Hours.HasValue)
-                {
-                    assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
-                    assetDateMapping.Add(AssetValueBusiness.GetFilterFor24hValue(asset.Id));
-                    assetDateMapping.Add(AssetValueBusiness.GetFilterFor7dValue(asset.Id));
-                    assetDateMapping.Add(AssetValueBusiness.GetFilterFor30dValue(asset.Id));
-                }
-                else if (mode == CalculationMode.AssetBase && !asset.Variation24Hours.HasValue)
-                {
-                    assetDateMapping.Add(AssetValueBusiness.GetFilterForCurrentValue(asset.Id));
-                    assetDateMapping.Add(AssetValueBusiness.GetFilterFor24hValue(asset.Id));
-                }
-            }
-
-            var assetValues = AssetValueBusiness.Filter(assetDateMapping);
-
-            foreach (var asset in assetCurrentValues)
-            {
-                if (assetDateMapping.Any(c => c.AssetId == asset.Id))
-                {
-                    var values = assetValues.Where(c => c.AssetId == asset.Id).OrderByDescending(c => c.Date).ToList();
-                    if (!values.Any())
-                    {
-                        values = CoinGeckoBusiness.GetAssetValues(asset.CoinGeckoId, 31).Select(c => new AssetValue()
-                        {
-                            AssetId = asset.Id,
-                            Date = c.Date,
-                            Value = c.Value
-                        }).OrderByDescending(c => c.Date).ToList();
-                    }
-
-                    if (!values.Any())
-                    {
-                        var lastValue = values.First();
-                        asset.CurrentValue = lastValue.Value;
-                        asset.UpdateDate = lastValue.Date;
-                        AssetValueBusiness.VariantionCalculation(lastValue.Value, lastValue.Date, values, out double? variation24h, out double? variation7d, out double? variation30d);
-                        asset.Variation24Hours = variation24h;
-                        asset.Variation7Days = variation7d;
-                        asset.Variation30Days = variation30d;
-                    }
-                }
-            }
+            });
             return assetCurrentValues;
         }
     }
