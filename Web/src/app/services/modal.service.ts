@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { FullscreenModalComponent } from '../components/util/fullscreen-modal/fullscreen-modal.component';
 import { FullscreenModalComponentInput } from '../model/modal/fullscreenModalComponentInput';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -12,18 +12,24 @@ import { ReferralDetailsComponent } from '../components/account/referral-details
 import { AdvisorEditComponent } from '../components/advisor/advisor-edit/advisor-edit.component';
 import { NewAdviceComponent } from '../components/advisor/new-advice/new-advice.component';
 import { InviteFriendComponent } from '../components/account/invite-friend/invite-friend.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
 export class ModalService {
-  constructor(private dialog: MatDialog) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private dialog: MatDialog) {
   }
 
   private setModal(component: any, componentInputData?: any, hiddenClose: boolean = false): MatDialogRef<FullscreenModalComponent, any> {
-    let modalData = new FullscreenModalComponentInput();
-    modalData.component = component;
-    modalData.componentInput = componentInputData;
-    modalData.hiddenClose = hiddenClose;
-    return this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    if(isPlatformBrowser(this.platformId)){
+      let modalData = new FullscreenModalComponentInput();
+      modalData.component = component;
+      modalData.componentInput = componentInputData;
+      modalData.hiddenClose = hiddenClose;
+      return this.dialog.open(FullscreenModalComponent, { data: modalData }); 
+    }
+    return null;
   }
 
   public setConfirmEmail(): MatDialogRef<FullscreenModalComponent, any> {

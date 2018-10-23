@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isBrowser()">
+<ng-container [class.hide-content]="!isBrowser()">
     <header *ngIf="!showEmptyPage()"></header>
     <ng-http-loader *ngIf="!showEmptyPage()" [entryComponent]="topLoading"></ng-http-loader>
     <simple-notifications [options]="notificationOptions"></simple-notifications>
