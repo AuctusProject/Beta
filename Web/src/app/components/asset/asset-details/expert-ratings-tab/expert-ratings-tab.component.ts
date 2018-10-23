@@ -6,7 +6,7 @@ import { AdvisorService } from '../../../../services/advisor.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { Util } from '../../../../util/Util';
 import { AdvisorResponse } from '../../../../model/advisor/advisorResponse';
-import { ValueDisplayPipe } from 'src/app/util/value-display.pipe';
+import { ValueDisplayPipe } from '../../../../util/value-display.pipe';
 
 @Component({
   selector: 'expert-ratings-tab',

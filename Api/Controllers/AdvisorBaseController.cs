@@ -56,7 +56,7 @@ namespace Api.Controllers
             return Ok();
         }
 
-        protected async Task<IActionResult> RequestToBeAsync(BeAdvisorRequest beAdvisorRequest)
+        protected async Task<IActionResult> RegisterAsync(RegisterAdvisorRequest beAdvisorRequest)
         {
             if (beAdvisorRequest == null)
                 return BadRequest();
@@ -69,12 +69,12 @@ namespace Api.Controllers
             {
                 var fileExtension = GetValidPictureExtension();
                 using (var stream = Request.Form.Files[0].OpenReadStream())
-                    response = await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description,
-                        beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, stream, fileExtension);
+                    response = await AdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description,
+                        beAdvisorRequest.ChangedPicture, stream, fileExtension);
             }
             else
-                response = await RequestToBeAdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description, 
-                    beAdvisorRequest.PreviousExperience, beAdvisorRequest.ChangedPicture, null, null);
+                response = await AdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description, 
+                    beAdvisorRequest.ChangedPicture, null, null);
 
             return Ok(new { logged = !response.PendingConfirmation, jwt = GenerateToken(response.Email.ToLower().Trim()), data = response });
         }

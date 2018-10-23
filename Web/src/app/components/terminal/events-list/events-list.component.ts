@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { EventResponse } from 'src/app/model/asset/eventResponse';
-import { CONFIG } from 'src/app/services/config.service';
-import { AssetService } from 'src/app/services/asset.service';
-import { FeedResponse } from 'src/app/model/advisor/feedResponse';
+import { EventResponse } from '../../../model/asset/eventResponse';
+import { CONFIG } from '../../../services/config.service';
+import { AssetService } from '../../../services/asset.service';
+import { FeedResponse } from '../../../model/advisor/feedResponse';
 
 @Component({
   selector: 'events-list',

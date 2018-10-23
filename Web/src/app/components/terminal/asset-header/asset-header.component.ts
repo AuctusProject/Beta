@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
-import { TerminalAssetResponse } from 'src/app/model/asset/terminalAssetResponse';
-import { AssetResponse } from 'src/app/model/asset/assetResponse';
-import { AssetService } from 'src/app/services/asset.service';
-import { AssetStatusResponse } from 'src/app/model/asset/assetStatusResponse';
-import { CONFIG } from 'src/app/services/config.service';
-import { Util } from 'src/app/util/Util';
-import { RecommendationDistributionResponse } from 'src/app/model/recommendationDistributionResponse';
+import { TerminalAssetResponse } from '../../../model/asset/terminalAssetResponse';
+import { AssetResponse } from '../../../model/asset/assetResponse';
+import { AssetService } from '../../../services/asset.service';
+import { AssetStatusResponse } from '../../../model/asset/assetStatusResponse';
+import { CONFIG } from '../../../services/config.service';
+import { Util } from '../../../util/Util';
+import { RecommendationDistributionResponse } from '../../../model/recommendationDistributionResponse';
 
 @Component({
   selector: 'asset-header',

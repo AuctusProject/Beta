@@ -1,8 +1,8 @@
 import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
-import { NewsService } from 'src/app/services/news.service';
-import { News } from 'src/app/model/news/news';
+import { NewsService } from '../../../services/news.service';
+import { News } from '../../../model/news/news';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
-import { CONFIG } from 'src/app/services/config.service';
+import { CONFIG } from '../../../services/config.service';
 import { DatePipe } from '@angular/common';
 import { TimeAgoPipe } from 'time-ago-pipe';
 
