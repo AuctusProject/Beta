@@ -613,10 +613,7 @@ namespace Auctus.Business.Account
 
         public IEnumerable<User> ListValidUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
-            var advisors = AdvisorBusiness.GetAdvisors();
-            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId).Where(c => c.Id != advisorId && 
-                (advisors.Any(a => a.Id == c.Id) || (c.Wallet != null && c.Wallet.AUCBalance.HasValue && c.Wallet.AUCBalance.Value >= GetMinimumAucAmountForUser(c))
-                    || Admins.Contains(c.Email)));
+            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId).Where(c => c.Id != advisorId);
         }
 
         public SearchResponse Search(string searchTerm)
