@@ -16,7 +16,6 @@ export class AppComponent implements OnInit{
   public topLoading = TopLoadingComponent.prototype.constructor;
 
   constructor(private router: Router, 
-    private configService: ConfigService,
     private navigationService : NavigationService,
     private modalService: ModalService,
     private accountService : AccountService,
