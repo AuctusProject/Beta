@@ -1,4 +1,4 @@
-<ng-container [class.hide-content]="!isBrowser()">
+<div [class.hide-content]="!isBrowser()">
     <header *ngIf="!showEmptyPage()"></header>
     <ng-http-loader *ngIf="!showEmptyPage()" [entryComponent]="topLoading"></ng-http-loader>
     <simple-notifications [options]="notificationOptions"></simple-notifications>
@@ -7,4 +7,4 @@
         <mat-icon aria-label="Share with friends">share</mat-icon>
     </button>
     <footer *ngIf="!showEmptyPage()" class="global-container-min"></footer>
-</ng-container>
+</div>
