@@ -10,6 +10,8 @@ export class TopImageComponent implements OnInit {
   @Input() title: string;
   @Input() subtitle: string;
   @Input() subtitle2: string;
+  @Input() showLatestUpdates: boolean = false;
+  @Input() latestUpdates: string[];
 
   public constructor() { }
 

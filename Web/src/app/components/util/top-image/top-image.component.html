@@ -6,6 +6,18 @@
             <span>{{subtitle}}</span>
             <span>{{subtitle2}}</span>
         </div>
+        <div *ngIf="showLatestUpdates" fxLayout="row" fxLayoutAlign="center end" fxLayoutGap="100px">
+            <div class="text-left">
+                <p>Your latest updates</p>
+                <ul class="update-list">
+                    <li *ngFor="let update of latestUpdates">{{update}}</li>
+                </ul>
+            </div>
+            <div fxLayout="row" fxLayoutGap="40px">
+                <div class="blue-flat-button action-button">Make a quick call</div>
+                <div class="blue-button action-button">Check positions</div>
+            </div>
+        </div>
     </div>
     <div class="auctus-blue-bar"></div>
 </div>
