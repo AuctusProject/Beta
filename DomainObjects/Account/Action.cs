@@ -1,23 +1,33 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Auctus.Util.DapperAttributes;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Auctus.DomainObjects.Account
 {
-    public class Action : MongoDomainObject
+    public class Action //: MongoDomainObject
     {
-        [BsonElement("d")]
+        [DapperKey(true)]
+        [DapperType(System.Data.DbType.Int32)]
+        public int Id { get; set; }
+        //[BsonElement("d")]
+        [DapperType(System.Data.DbType.DateTime)]
         public DateTime CreationDate { get; set; }
-        [BsonElement("p")]
+        //[BsonElement("p")]
+        [DapperType(System.Data.DbType.AnsiString)]
         public string Ip { get; set; }
-        [BsonElement("u")]
+        //[BsonElement("u")]
+        [DapperType(System.Data.DbType.Int32)]
         public int UserId { get; set; }
-        [BsonElement("a")]
+        //[BsonElement("a")]
+        [DapperType(System.Data.DbType.Double)]
         public decimal? AucAmount { get; set; }
-        [BsonElement("t")]
+        //[BsonElement("t")]
+        [DapperType(System.Data.DbType.Int32)]
         public int Type { get; set; }
-        [BsonElement("m")]
+        //[BsonElement("m")]
+        [DapperType(System.Data.DbType.AnsiString)]
         public string Message { get; set; }
     }
 }

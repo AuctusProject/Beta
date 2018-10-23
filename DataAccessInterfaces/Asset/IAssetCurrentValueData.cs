@@ -9,6 +9,6 @@ namespace Auctus.DataAccessInterfaces.Asset
     public interface IAssetCurrentValueData<T> : IBaseData<T>
     {
         List<AssetCurrentValue> ListAllAssets(IEnumerable<int> ids);
-        void UpdateAssetValue(List<AssetCurrentValue> assetCurrentValues);
+        void UpdateAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues);
     }
 }
