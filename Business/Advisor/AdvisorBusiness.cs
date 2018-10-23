@@ -61,7 +61,6 @@ namespace Auctus.Business.Advisor
           
             using (var transaction = TransactionalDapperCommand)
             {
-                
                 transaction.Insert(user);
 
                 var advisor = new DomainObjects.Advisor.Advisor()
