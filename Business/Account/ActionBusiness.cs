@@ -21,7 +21,7 @@ namespace Auctus.Business.Account
 
         public void InsertNewWallet(DateTime dateTime, int userId, string message, decimal? aucAmount)
         {
-            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            InsertActionAsync(new DomainObjects.Account.Action()
             {
                 CreationDate = dateTime,
                 UserId = userId,
@@ -34,7 +34,7 @@ namespace Auctus.Business.Account
 
         public void InsertNewLogin(int userId, decimal? aucAmount, SocialNetworkType socialNetworkType)
         {
-            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            InsertActionAsync(new DomainObjects.Account.Action()
             {
                 CreationDate = Data.GetDateTimeNow(),
                 UserId = userId,
@@ -47,7 +47,7 @@ namespace Auctus.Business.Account
 
         public void InsertNewAucVerification(int userId, decimal aucAmount)
         {
-            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            InsertActionAsync(new DomainObjects.Account.Action()
             {
                 CreationDate = Data.GetDateTimeNow(),
                 UserId = userId,
@@ -59,7 +59,7 @@ namespace Auctus.Business.Account
 
         public void InsertJobAucVerification(int userId, decimal aucAmount)
         {
-            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            InsertActionAsync(new DomainObjects.Account.Action()
             {
                 CreationDate = Data.GetDateTimeNow(),
                 UserId = userId,
@@ -71,7 +71,7 @@ namespace Auctus.Business.Account
 
         public void InsertEditAdvisor(int userId, string message)
         {
-            Data.InsertOneAsync(new DomainObjects.Account.Action()
+            InsertActionAsync(new DomainObjects.Account.Action()
             {
                 CreationDate = Data.GetDateTimeNow(),
                 UserId = userId,
@@ -79,6 +79,11 @@ namespace Auctus.Business.Account
                 Message = message,
                 Ip = LoggedIp
             });
+        }
+
+        private void InsertActionAsync(DomainObjects.Account.Action action)
+        {
+            RunAsync(() => Insert(action));
         }
 
         public DashboardResponse GetDashboardData()

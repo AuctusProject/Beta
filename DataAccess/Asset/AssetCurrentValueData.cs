@@ -35,7 +35,7 @@ namespace Auctus.DataAccess.Asset
             return Query<AssetCurrentValue>(string.Format(SQL_LIST_ASSETS_VALUES, complement), parameters).ToList();
         }
 
-        public void UpdateAssetValue(List<AssetCurrentValue> assetCurrentValues)
+        public void UpdateAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues)
         {
             if (assetCurrentValues == null || !assetCurrentValues.Any())
                 return;

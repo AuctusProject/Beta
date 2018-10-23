@@ -47,7 +47,7 @@ namespace Auctus.DataAccessMock.Asset
                     }
                     else if (assetValue.Id == 3)
                     {
-                        assetValue.UpdateDate = GetDateTimeNow().AddHours(-5);
+                        assetValue.UpdateDate = GetDateTimeNow();
                         assetValue.CurrentValue = 0.667077627;
                         assetValue.Variation24Hours = 0.034764;
                         assetValue.Variation7Days = 0.070678;
@@ -71,7 +71,7 @@ namespace Auctus.DataAccessMock.Asset
             return ids == null || !ids.Any() ? AssetCurrentValues : AssetCurrentValues.Where(c => ids.Contains(c.Id)).ToList();
         }
 
-        public void UpdateAssetValue(List<AssetCurrentValue> assetCurrentValues)
+        public void UpdateAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues)
         {
             throw new NotImplementedException();
         }
