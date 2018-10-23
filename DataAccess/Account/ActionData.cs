@@ -32,7 +32,7 @@ namespace Auctus.DataAccess.Account
             {
                 complement = $" AND ({string.Join(" OR ", actionTypes.Select((c, i) => $"a.Type = @Type{i}"))})";
                 for(var i = 0; i < actionTypes.Length; ++i)
-                    parameters.Add($"Type{i}", actionTypes.ElementAt(i), DbType.Int32);
+                    parameters.Add($"Type{i}", actionTypes.ElementAt(i).Value, DbType.Int32);
             }
             return Query<DomainObjects.Account.Action>(string.Format(SQL_LIST, complement), parameters).ToList();
         }
