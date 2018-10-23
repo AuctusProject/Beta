@@ -23,7 +23,7 @@ export class AppComponent implements OnInit{
     ) { }
 
   ngOnInit(){
-    if(isPlatformBrowser(this.platformId) && window && (<any>window).Highcharts){
+    if(this.isBrowser() && window && (<any>window).Highcharts){
       (<any>window).Highcharts.setOptions({
         global:{
             timezoneOffset: new Date().getTimezoneOffset()
@@ -220,7 +220,11 @@ export class AppComponent implements OnInit{
         maskColor: 'rgba(255,255,255,0.3)'
       });
     }
-  }  
+  } 
+  
+  public isBrowser(){
+    return isPlatformBrowser(this.platformId);
+  }
 
   public notificationOptions = {
     position: ["bottom", "left"],
