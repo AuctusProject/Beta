@@ -249,7 +249,7 @@ namespace Auctus.Business.Account
             user.ReferralDiscount = referredUser != null ? referredUser.DiscountProvided : (double?)null;
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
-            user.DiscountProvided = DiscountPercentageOnAuc;
+            user.DiscountProvided = 0;// DiscountPercentageOnAuc;
             return user;
         }
 
@@ -433,7 +433,7 @@ namespace Auctus.Business.Account
 
         public void SetUsersAucSituation()
         {
-            var users = Data.ListForAucSituation();
+            var users = Data.ListForAucSituation(Admins.Where(c => !string.IsNullOrEmpty(c)));
             foreach (var user in users)
             {
                 var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
@@ -443,18 +443,15 @@ namespace Auctus.Business.Account
                 using (var transaction = TransactionalDapperCommand)
                 {
                     transaction.Update(currentWallet);
-                    if (user.ReferralStatusType == ReferralStatusType.InProgress)
+                    if (currentWallet.AUCBalance < GetMinimumAucAmountForUser(user))
                     {
-                        if (currentWallet.AUCBalance < GetMinimumAucAmountForUser(user))
-                        {
-                            user.ReferralStatus = ReferralStatusType.Interrupted.Value;
-                            transaction.Update(user);
-                        }
-                        else if (Data.GetDateTimeNow().Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
-                        {
-                            user.ReferralStatus = ReferralStatusType.Finished.Value;
-                            transaction.Update(user);
-                        }
+                        user.ReferralStatus = ReferralStatusType.Interrupted.Value;
+                        transaction.Update(user);
+                    }
+                    else if (Data.GetDateTimeNow().Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                    {
+                        user.ReferralStatus = ReferralStatusType.Finished.Value;
+                        transaction.Update(user);
                     }
                     transaction.Commit();
                 }

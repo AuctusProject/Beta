@@ -71,7 +71,7 @@ namespace Auctus.DataAccess.Account
                                                     [User] u WITH(NOLOCK)
                                                     INNER JOIN [Wallet] w WITH(NOLOCK) ON u.Id = w.UserId
                                                     WHERE 
-                                                    u.ReferralStatus = @ReferralStatus OR u.AllowNotifications = @AllowNotifications";
+                                                    u.ReferralStatus = @ReferralStatus {0}";
 
         private const string SQL_FOR_ALL_USER_DATA = @"SELECT u.*, w.*
                                                        FROM 
@@ -266,12 +266,18 @@ namespace Auctus.DataAccess.Account
                         }, "Id,Id,Id", parameters).SingleOrDefault();
         }
 
-        public List<User> ListForAucSituation()
+        public List<User> ListForAucSituation(IEnumerable<string> ignoredEmails)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("ReferralStatus", ReferralStatusType.InProgress.Value, DbType.Int32);
-            parameters.Add("AllowNotifications", true, DbType.Boolean);
-            return QueryParentChild<User, Wallet, int>(SQL_FOR_AUC_SITUATION, c => c.Id, c => c.Wallets, "Id", parameters).ToList();
+            var complement = "";
+            if (ignoredEmails?.Any() == true)
+            {
+                complement = $" AND {string.Join(" AND ", ignoredEmails.Select((c, i) => $"u.Email <> @Email{i}"))}";
+                for (int i = 0; i < ignoredEmails.Count(); ++i)
+                    parameters.Add($"Email{i}", ignoredEmails.ElementAt(i), DbType.AnsiString);
+            }
+            return QueryParentChild<User, Wallet, int>(string.Format(SQL_FOR_AUC_SITUATION, complement), c => c.Id, c => c.Wallets, "Id", parameters).ToList();
         }
 
         public User GetByReferralCode(string referralCode)

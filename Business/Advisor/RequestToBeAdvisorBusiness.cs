@@ -167,6 +167,7 @@ namespace Auctus.Business.Advisor
                 RequestedToBeAdvisor = true
             };
         }
+
         private async Task SendRequestToBeAdvisorEmailAsync(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
         {
             await EmailBusiness.SendErrorEmailAsync(string.Format(@"

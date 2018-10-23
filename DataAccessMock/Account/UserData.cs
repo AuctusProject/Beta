@@ -219,9 +219,9 @@ namespace Auctus.DataAccessMock.Account
             return GetByEmail(email);
         }
 
-        public List<User> ListForAucSituation()
+        public List<User> ListForAucSituation(IEnumerable<string> ignoredEmails)
         {
-            return users.Where(c => c.ReferralStatus == ReferralStatusType.InProgress.Value && c.AllowNotifications).ToList();
+            return users.Where(c => c.ReferralStatus == ReferralStatusType.InProgress.Value && (ignoredEmails == null || !ignoredEmails.Contains(c.Email))).ToList();
         }
 
         public User GetByReferralCode(string referralCode)
