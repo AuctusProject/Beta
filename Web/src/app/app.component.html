@@ -1,8 +1,10 @@
-<header *ngIf="!showEmptyPage()"></header>
-<ng-http-loader *ngIf="!showEmptyPage()" [entryComponent]="topLoading"></ng-http-loader>
-<simple-notifications [options]="notificationOptions"></simple-notifications>
-<router-outlet></router-outlet>
-<button class="share-button" *ngIf="isLogged() && !showEmptyPage()" mat-fab color="primary" (click)="openSocialMediaModal()">
-    <mat-icon aria-label="Share with friends">share</mat-icon>
-</button>
-<footer *ngIf="!showEmptyPage()" class="global-container-min"></footer>
+<ng-container *ngIf="!isBrowser()">
+    <header *ngIf="!showEmptyPage()"></header>
+    <ng-http-loader *ngIf="!showEmptyPage()" [entryComponent]="topLoading"></ng-http-loader>
+    <simple-notifications [options]="notificationOptions"></simple-notifications>
+    <router-outlet></router-outlet>
+    <button class="share-button" *ngIf="isLogged() && !showEmptyPage()" mat-fab color="primary" (click)="openSocialMediaModal()">
+        <mat-icon aria-label="Share with friends">share</mat-icon>
+    </button>
+    <footer *ngIf="!showEmptyPage()" class="global-container-min"></footer>
+</ng-container>
