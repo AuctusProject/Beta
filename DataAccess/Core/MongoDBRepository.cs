@@ -18,7 +18,7 @@ namespace Auctus.DataAccess.Core
         protected MongoDBRepository(IConfigurationRoot configuration)
         {
             Configuration = configuration;
-            MongoConnection.Initiate(configuration.GetSection("ConnectionString:Mongo").Get<string>());
+            //MongoConnection.Initiate(configuration.GetSection("ConnectionString:Mongo").Get<string>());
         }
 
         protected IMongoDatabase GetDataBase()
