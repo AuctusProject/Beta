@@ -18,11 +18,12 @@ export class ModalService {
   constructor(private dialog: MatDialog) {
   }
 
-  private setModal(component: any, componentInputData?: any, hiddenClose: boolean = false): MatDialogRef<FullscreenModalComponent, any> {
+  private setModal(component: any, componentInputData?: any, hiddenClose: boolean = false, forcedTitle: string = undefined): MatDialogRef<FullscreenModalComponent, any> {
     let modalData = new FullscreenModalComponentInput();
     modalData.component = component;
     modalData.componentInput = componentInputData;
     modalData.hiddenClose = hiddenClose;
+    modalData.forcedTitle = forcedTitle;
     return this.dialog.open(FullscreenModalComponent, { data: modalData }); 
   }
 

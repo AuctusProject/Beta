@@ -39,7 +39,7 @@ export class FullscreenModalComponent implements OnInit, OnDestroy {
     }
     let componentRef = viewContainerRef.createComponent(componentFactory);
     this.modalComponent = (<ModalComponent>componentRef.instance);
-    this.title = this.modalComponent.modalTitle;
+    this.title = inputData.forcedTitle ? inputData.forcedTitle : this.modalComponent.modalTitle;
     this.modalComponent.data = inputData.componentInput;
     this.modalComponent.setClose.subscribe(() => this.dialogRef.close());
     this.modalComponent.setNewModal.subscribe(newModalInput => 
