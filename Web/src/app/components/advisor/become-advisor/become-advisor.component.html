@@ -1,7 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
-  <p *ngIf="!requestDenied && alreadySent" class="subtitle already-sent">Your request was already submitted and it still is been evaluated by Auctus team.<br/>You can edit your information.</p>
-  <p *ngIf="requestDenied" class="subtitle request-denied">Your request was already submitted and was denied by Auctus team.<br/>You can edit your information and submit again.</p>
-  <p class="subtitle">Lorem All our experts go through an approval process to guarantee the highest degree of professionalism and ethic standards</p>
+  <p class="subtitle">{{getSubtitleText()}}</p>
   <div class="file-container" ngClass.xs="file-container-mobile" ngClass.sm="file-container-tablet" ngClass.gt-sm="file-container-web"> 
     <div class="file-uploader">
       <file-uploader #FileUploadComponent></file-uploader>

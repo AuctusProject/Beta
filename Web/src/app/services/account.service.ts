@@ -171,7 +171,7 @@ export class AccountService {
       return false;
     }
     else if (!!loginData && (!loginData.hasInvestment && !loginData.isAdvisor)) {
-      this.navigationService.goToWalletLogin();
+      this.navigationService.goToCompleteRegistration();
       return false;
     }
     return true;

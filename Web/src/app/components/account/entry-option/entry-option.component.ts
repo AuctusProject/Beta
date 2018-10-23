@@ -98,6 +98,10 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
   openBecomeAdvisorForm(){
     let modalData = new FullscreenModalComponentInput();
     modalData.component = BecomeAdvisorComponent;
+    if (this.data && this.data.completeregistration) {
+      modalData.componentInput = { completeregistration: true };
+      modalData.forcedTitle = "Complete your details"
+    }
     this.setNewModal.emit(modalData);
   }
 

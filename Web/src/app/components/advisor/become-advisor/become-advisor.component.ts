@@ -35,8 +35,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @ViewChild("Password") Password: InheritanceInputComponent;
   @ViewChild("Description") Description: InheritanceInputComponent;
   
-  alreadySent: boolean = false;
-  requestDenied: boolean = false;
+  completeRegistration: boolean = false;
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
@@ -48,26 +47,9 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       this.setClose.emit();
       this.authRedirect.redirectAfterLoginAction();
     } else {
-      this.advisorService.getRequestToBeAdvisor().subscribe(result => 
-        {
-          this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
-          this.requestToBeAdvisorRequest.password = "";
-          let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
-          if(!!currentRequestToBeAdvisor){
-            if (currentRequestToBeAdvisor.approved == true) {
-              this.setClose.emit();
-              this.authRedirect.redirectAfterLoginAction();
-            } else {
-              this.requestDenied = currentRequestToBeAdvisor.approved == false;
-              this.alreadySent = true;
-              this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
-              this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
-              if (!!currentRequestToBeAdvisor.urlGuid) {
-                this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
-              }
-            }
-          }
-        });
+      this.completeRegistration = this.data && this.data.completeregistration;
+      this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
+      this.requestToBeAdvisorRequest.password = "";
     }
   }
 
@@ -77,6 +59,10 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
 
   public onCaptchaResponse(captchaResponse: string) {
     this.requestToBeAdvisorRequest.captcha = captchaResponse;
+  }
+
+  getSubtitleText() : string {
+    return this.completeRegistration ? "Please fill your data and become an Expert." : "Sign up to get exclusive market insights, as well as access to expert knowledge.";
   }
 
   onSubmit() {
@@ -91,7 +77,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
           this.accountService.setLoginData(result.data);
           let modalData = new FullscreenModalComponentInput();
           modalData.component = MessageFullscreenModalComponent;
-          modalData.componentInput = { message: "Thank you for submitting your details. An Auctus representative will be in touch shortly.", redirectUrl: "" };
+          modalData.componentInput = { message: (this.completeRegistration ? "Thank you for submitting your details." : "Thank you for your registration."), redirectUrl: "" };
           this.setNewModal.emit(modalData);
         } else if (!!result && result.error) {
           this.notificationsService.info("Info", result.error);

@@ -37,7 +37,7 @@ export class ChangePasswordComponent implements ModalComponent, OnInit {
       this.navigationService.goToLogin();
     } else if (!loginData.isAdvisor && !loginData.hasInvestment) {
       this.setClose.emit();
-      this.navigationService.goToWalletLogin();
+      this.navigationService.goToCompleteRegistration();
     }
   }
 
