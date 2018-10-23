@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
 import { AdvisorResponse } from "../model/advisor/advisorResponse";
 import { RequestToBeAdvisor } from '../model/advisor/requestToBeAdvisor';
-import { RequestToBeAdvisorRequest } from '../model/advisor/requestToBeAdvisorRequest';
+import { RegisterAdvisorRequest } from '../model/advisor/registerAdvisorRequest';
 import { AdviseRequest } from '../model/advisor/adviseRequest';
 import { AdvisorRequest } from '../model/advisor/advisorRequest';
 import { Advisor } from '../model/advisor/advisor';
@@ -61,17 +61,16 @@ export class AdvisorService {
     return this.httpService.post(this.rejectRequestToBeAdvisorUrl.replace("{id}", requestId.toString()));
   }
 
-  postRequestToBeAdvisor(requestToBeAdvisorRequest: RequestToBeAdvisorRequest): Observable<LoginResult> {
+  postRegisterAdvisor(requestAdvisorRequest: RegisterAdvisorRequest): Observable<LoginResult> {
     let formData: FormData = new FormData();
-    formData.append('formFile', requestToBeAdvisorRequest.file);
-    formData.append('name', requestToBeAdvisorRequest.name);
-    formData.append('description', requestToBeAdvisorRequest.description);
-    formData.append('previousExperience', requestToBeAdvisorRequest.previousExperience);
-    formData.append('changedPicture', requestToBeAdvisorRequest.changedPicture + '');
-    formData.append('captcha', requestToBeAdvisorRequest.captcha);
-    formData.append('email', requestToBeAdvisorRequest.email);
-    formData.append('password', requestToBeAdvisorRequest.password);
-    return this.httpService.postWithoutContentType(this.requestToBeAdvisorsUrl, formData);
+    formData.append('formFile', requestAdvisorRequest.file);
+    formData.append('name', requestAdvisorRequest.name);
+    formData.append('description', requestAdvisorRequest.description);
+    formData.append('changedPicture', requestAdvisorRequest.changedPicture + '');
+    formData.append('captcha', requestAdvisorRequest.captcha);
+    formData.append('email', requestAdvisorRequest.email);
+    formData.append('password', requestAdvisorRequest.password);
+    return this.httpService.postWithoutContentType(this.advisorsUrl, formData);
   }
 
   followAdvisor(advisorId:number):Observable<void>{

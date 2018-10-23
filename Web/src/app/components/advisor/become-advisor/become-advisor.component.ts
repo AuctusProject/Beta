@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 import { AdvisorService } from '../../../services/advisor.service';
-import { RequestToBeAdvisorRequest } from '../../../model/advisor/requestToBeAdvisorRequest';
+import { RegisterAdvisorRequest } from '../../../model/advisor/registerAdvisorRequest';
 import { NotificationsService } from 'angular2-notifications';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
@@ -26,7 +26,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
   
-  requestToBeAdvisorRequest: RequestToBeAdvisorRequest = new RequestToBeAdvisorRequest();
+  registerAdvisorRequest: RegisterAdvisorRequest = new RegisterAdvisorRequest();
   promise: Subscription;
   @ViewChild("RecaptchaComponent") RecaptchaComponent: RecaptchaComponent;
   @ViewChild("FileUploadComponent") FileUploadComponent: FileUploaderComponent;
@@ -48,8 +48,8 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       this.authRedirect.redirectAfterLoginAction();
     } else {
       this.completeRegistration = this.data && this.data.completeregistration;
-      this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
-      this.requestToBeAdvisorRequest.password = "";
+      this.registerAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
+      this.registerAdvisorRequest.password = "";
     }
   }
 
@@ -58,7 +58,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   public onCaptchaResponse(captchaResponse: string) {
-    this.requestToBeAdvisorRequest.captcha = captchaResponse;
+    this.registerAdvisorRequest.captcha = captchaResponse;
   }
 
   getSubtitleText() : string {
@@ -66,12 +66,12 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   onSubmit() {
-    if (this.isNewUser() && !this.requestToBeAdvisorRequest.captcha) {
+    if (this.isNewUser() && !this.registerAdvisorRequest.captcha) {
       this.notificationsService.error(null, "You must fill the captcha.");
     } else if (this.isValidRequest()) {
-      this.requestToBeAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
-      this.requestToBeAdvisorRequest.file = this.FileUploadComponent.getFile();
-      this.promise = this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(result => 
+      this.registerAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
+      this.registerAdvisorRequest.file = this.FileUploadComponent.getFile();
+      this.promise = this.advisorService.postRegisterAdvisor(this.registerAdvisorRequest).subscribe(result => 
       {
         if (!!result && !result.error && result.data) {
           this.accountService.setLoginData(result.data);

@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { AssetAdvisorResponse } from 'src/app/model/asset/assetResponse';
-import { AssetService } from 'src/app/services/asset.service';
-import { AssetRatingsResponse } from 'src/app/model/asset/assetRatingsResponse';
-import { Util } from 'src/app/util/Util';
-import { ValueDisplayPipe } from 'src/app/util/value-display.pipe';
-import { NavigationService } from 'src/app/services/navigation.service';
-import { AccountService } from 'src/app/services/account.service';
-import { ModalService } from 'src/app/services/modal.service';
+import { AssetAdvisorResponse } from '../../../model/asset/assetResponse';
+import { AssetService } from '../../../services/asset.service';
+import { AssetRatingsResponse } from '../../../model/asset/assetRatingsResponse';
+import { Util } from '../../../util/Util';
+import { ValueDisplayPipe } from '../../../util/value-display.pipe';
+import { NavigationService } from '../../../services/navigation.service';
+import { AccountService } from '../../../services/account.service';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'ratings-list',

@@ -9,15 +9,15 @@
 <div class="form-div" fxLayout="column" fxLayoutAlign="center center">
   <div class="form-row" fxLayout.lt-sm="column" fxLayout.gt-xs="row" fxLayoutGap.gt-xs="20px" fxLayoutAlign="center center" >
     <inheritance-input #Email [options]="getEmailOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.email" (onChange)="requestToBeAdvisorRequest.email = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.email" (onChange)="registerAdvisorRequest.email = $event"></inheritance-input>
     <inheritance-input *ngIf="isNewUser()"  #Password [options]="getPasswordOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.password" (onChange)="requestToBeAdvisorRequest.password = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.password" (onChange)="registerAdvisorRequest.password = $event"></inheritance-input>
   </div>
   <div class="form-row" fxLayout.lt-sm="column" fxLayout.gt-xs="row" fxLayoutGap.gt-xs="20px" fxLayoutAlign="center center" >
     <inheritance-input #Name [options]="getNameOptions()" class="input-modal"  ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.name" (onChange)="requestToBeAdvisorRequest.name = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.name" (onChange)="registerAdvisorRequest.name = $event"></inheritance-input>
     <inheritance-input #Description [options]="getDescriptionOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.description" (onChange)="requestToBeAdvisorRequest.description = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.description" (onChange)="registerAdvisorRequest.description = $event"></inheritance-input>
   </div>
 </div>
 <div class="last-div" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
