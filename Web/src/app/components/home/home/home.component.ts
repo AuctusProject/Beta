@@ -29,6 +29,8 @@ export class HomeComponent implements OnInit {
       this.modalService.setRegister();
     } else if (!!this.route.snapshot.queryParams['becomeadvisor']) {
       this.modalService.setBecomeAdvisor();
+    } else if (!!this.route.snapshot.queryParams['completeregistration']) {
+      this.modalService.setBecomeAdvisor();
     } else if (!!this.route.snapshot.queryParams['login']) {
       this.modalService.setLogin();
     } else if(this.isLoggedIn()) {
