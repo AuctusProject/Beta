@@ -66,13 +66,13 @@ namespace Api.Controllers
             return base.Advise(adviseRequest);
         }
 
-        [Route("me/requests")]
+       
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> RequestToBeAsync([FromForm]BeAdvisorRequest beAdvisorRequest)
+        public new async Task<IActionResult> RegisterAsync([FromForm]RegisterAdvisorRequest beAdvisorRequest)
         {
-            return await base.RequestToBeAsync(beAdvisorRequest);
+            return await base.RegisterAsync(beAdvisorRequest);
         }
 
         [Route("me/requests")]

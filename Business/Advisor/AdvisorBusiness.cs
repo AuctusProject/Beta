@@ -28,6 +28,72 @@ namespace Auctus.Business.Advisor
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
+        public async Task<LoginResponse> CreateAsync(string email, string password, string name, string description,
+            bool changePicture, Stream pictureStream, string pictureExtension)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new BusinessException("Name must be filled.");
+            if (name.Length > 50)
+                throw new BusinessException("Name cannot have more than 50 characters.");
+            if (!string.IsNullOrWhiteSpace(description) && description.Length > 160)
+                throw new BusinessException("Short description cannot have more than 160 characters.");
+
+            byte[] picture = null;
+            if (changePicture && pictureStream != null)
+                picture = AdvisorBusiness.GetPictureBytes(pictureStream, pictureExtension);
+
+            User user = null;
+            if (LoggedEmail != null)
+            {
+                if (!string.IsNullOrWhiteSpace(email) && email != LoggedEmail)
+                    throw new BusinessException("Invalid email.");
+                if (!string.IsNullOrWhiteSpace(password))
+                    throw new BusinessException("Invalid password.");
+
+                user = UserBusiness.GetForLoginByEmail(LoggedEmail);
+            }
+            else
+                user = UserBusiness.GetValidUserToRegister(email, password, null);
+
+            Guid? urlGuid = null;
+            urlGuid = Guid.NewGuid();
+            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
+          
+            using (var transaction = TransactionalDapperCommand)
+            {
+                
+                transaction.Insert(user);
+
+                var advisor = new DomainObjects.Advisor.Advisor()
+                {
+                    Id = user.Id,
+                    Name = name,
+                    Description = description,
+                    BecameAdvisorDate = Data.GetDateTimeNow(),
+                    Enabled = true,
+                    UrlGuid = urlGuid.Value
+                };
+                transaction.Insert(advisor);
+                transaction.Commit();
+            }
+
+            await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
+
+ 
+
+            bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
+
+            return new LoginResponse()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
+                HasInvestment = hasInvestment,
+                IsAdvisor = false,
+                RequestedToBeAdvisor = true
+            };
+        }
+
         public async Task<Guid> EditAdvisorAsync(int id, string name, string description, bool changePicture, Stream pictureStream, string pictureExtension)
         {
             if (string.IsNullOrWhiteSpace(name))

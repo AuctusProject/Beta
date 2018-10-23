@@ -34,7 +34,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @ViewChild("Email") Email: InheritanceInputComponent;
   @ViewChild("Password") Password: InheritanceInputComponent;
   @ViewChild("Description") Description: InheritanceInputComponent;
-  @ViewChild("Experience") Experience: InheritanceInputComponent;
   
   alreadySent: boolean = false;
   requestDenied: boolean = false;
@@ -63,7 +62,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
               this.alreadySent = true;
               this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
               this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
-              this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
               if (!!currentRequestToBeAdvisor.urlGuid) {
                 this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
               }
@@ -108,7 +106,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   isValidRequest() : boolean {
     let isValid = this.Name.isValid();
     isValid = this.Description.isValid() && isValid;
-    isValid = this.Experience.isValid() && isValid;
     if (this.isNewUser()) {
       isValid = this.Email.isValid() && isValid;
       isValid = this.Password.isValid() && isValid;
