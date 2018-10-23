@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
     } else if (!!this.route.snapshot.queryParams['becomeadvisor']) {
       this.modalService.setBecomeAdvisor();
     } else if (!!this.route.snapshot.queryParams['completeregistration']) {
-      this.modalService.setBecomeAdvisor();
+      this.modalService.setCompleteRegistration();
     } else if (!!this.route.snapshot.queryParams['login']) {
       this.modalService.setLogin();
     } else if(this.isLoggedIn()) {

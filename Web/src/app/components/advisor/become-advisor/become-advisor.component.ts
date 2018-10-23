@@ -38,6 +38,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   
   alreadySent: boolean = false;
   requestDenied: boolean = false;
+  completeRegistration: boolean = false;
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
@@ -49,6 +50,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       this.setClose.emit();
       this.authRedirect.redirectAfterLoginAction();
     } else {
+      this.completeRegistration = this.data && this.data.completeregistration;
       this.advisorService.getRequestToBeAdvisor().subscribe(result => 
         {
           this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
