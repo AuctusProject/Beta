@@ -43,7 +43,7 @@ export class ConfigService
     }
     else{
       return new Promise((resolve, reject) => {
-        this.http.get('browser/assets/config/config.json').pipe(
+        this.http.get('assets/config/config.json').pipe(
           catchError((error: any): any => {
           reject(true);
           return Observable.throw('Server error');
