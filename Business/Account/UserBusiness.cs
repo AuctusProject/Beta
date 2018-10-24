@@ -65,6 +65,7 @@ namespace Auctus.Business.Account
             ActionBusiness.InsertNewLogin(user.Id, null, socialNetworkType);
             return new LoginResponse()
             {
+                Id = user.Id,
                 Email = user.Email,
                 HasInvestment = false,
                 PendingConfirmation = false,
@@ -213,6 +214,7 @@ namespace Auctus.Business.Account
 
             return new LoginResponse()
             {
+                Id = user.Id,
                 Email = user.Email,
                 HasInvestment = false,
                 PendingConfirmation = true,
@@ -362,6 +364,7 @@ namespace Auctus.Business.Account
         
             return new LoginResponse()
             {
+                Id = user.Id,
                 Email = user.Email,
                 PendingConfirmation = false,
                 IsAdvisor = IsValidAdvisor(user),
@@ -419,6 +422,7 @@ namespace Auctus.Business.Account
 
             return new LoginResponse()
             {
+                Id = user.Id,
                 Email = user.Email,
                 HasInvestment = true,
                 IsAdvisor = IsValidAdvisor(user),

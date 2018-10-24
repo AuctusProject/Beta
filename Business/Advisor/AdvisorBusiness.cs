@@ -51,17 +51,19 @@ namespace Auctus.Business.Advisor
                     throw new BusinessException("Invalid password.");
 
                 user = UserBusiness.GetForLoginByEmail(LoggedEmail);
+                if (UserBusiness.IsValidAdvisor(user))
+                    throw new BusinessException("User already registered.");
             }
             else
                 user = UserBusiness.GetValidUserToRegister(email, password, null);
 
-            Guid? urlGuid = null;
-            urlGuid = Guid.NewGuid();
+            Guid urlGuid = Guid.NewGuid();
             await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
           
             using (var transaction = TransactionalDapperCommand)
             {
-                transaction.Insert(user);
+                if (LoggedEmail == null)
+                    transaction.Insert(user);
 
                 var advisor = new DomainObjects.Advisor.Advisor()
                 {
@@ -70,7 +72,7 @@ namespace Auctus.Business.Advisor
                     Description = description,
                     BecameAdvisorDate = Data.GetDateTimeNow(),
                     Enabled = true,
-                    UrlGuid = urlGuid.Value
+                    UrlGuid = urlGuid
                 };
                 transaction.Insert(advisor);
                 transaction.Commit();
@@ -78,18 +80,16 @@ namespace Auctus.Business.Advisor
 
             await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
 
- 
-
-            bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
-
             return new LoginResponse()
             {
                 Id = user.Id,
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
-                HasInvestment = hasInvestment,
-                IsAdvisor = false,
-                RequestedToBeAdvisor = true
+                AdvisorName = name,
+                ProfileUrlGuid = urlGuid.ToString(),
+                HasInvestment = true,
+                IsAdvisor = true,
+                RequestedToBeAdvisor = false
             };
         }
 
