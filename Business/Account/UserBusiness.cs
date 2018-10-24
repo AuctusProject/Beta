@@ -201,7 +201,7 @@ namespace Auctus.Business.Account
 
         public decimal GetMinimumAucAmountForUser(User user)
         {
-            return Convert.ToDecimal(MinimumAucLogin * (1.0 - (user.ReferredId.HasValue ? user.ReferralDiscount.Value / 100 : 0)));
+            return Convert.ToDecimal(user.ReferredId.HasValue && user.BonusToReferred.HasValue ? user.BonusToReferred.Value: 0);
         }
 
         public async Task<LoginResponse> RegisterAsync(string email, string password, string referralCode)
@@ -246,7 +246,7 @@ namespace Auctus.Business.Account
             user.Password = String.IsNullOrWhiteSpace(password) ? null : GetHashedPassword(password, user.Email, user.CreationDate);
             user.ReferralCode = GenerateReferralCode();
             user.ReferredId = referredUser?.Id;
-            user.ReferralDiscount = referredUser != null ? referredUser.DiscountProvided : (double?)null;
+            user.BonusToReferred = GetBonusToReferredUser(referredUser);
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
             user.DiscountProvided = DiscountPercentageOnAuc;
@@ -267,22 +267,29 @@ namespace Auctus.Business.Account
             if (referredUser == null)
             {
                 user.ReferredId = null;
-                user.ReferralDiscount = null;
+                user.BonusToReferred = null;
                 Data.Update(user);
                 response.Valid = false;
                 response.AUCRequired = MinimumAucLogin;
                 response.Discount = 0;
             }
+            else if (referredUser.Id == user.Id)
+                throw new BusinessException("User cannot referral yourself.");
             else
             {
                 user.ReferredId = referredUser.Id;
-                user.ReferralDiscount = referredUser.DiscountProvided;
+                user.BonusToReferred = GetBonusToReferredUser(referredUser);
                 Data.Update(user);
                 response.Valid = true;
                 response.Discount = referredUser.DiscountProvided;
                 response.AUCRequired = GetMinimumAucAmountForUser(user);
             }
             return response;
+        }
+
+        private double? GetBonusToReferredUser(User referredUser)
+        {
+            return referredUser != null ? (MinimumAucLogin * referredUser.DiscountProvided / 100.0) : (double?)null;
         }
 
         private string GenerateReferralCode()
@@ -433,7 +440,7 @@ namespace Auctus.Business.Account
 
         public void SetUsersAucSituation()
         {
-            var users = Data.ListForAucSituation();
+            var users = Data.ListForAucSituation(Admins.Where(c => !string.IsNullOrEmpty(c)));
             foreach (var user in users)
             {
                 var start = user.Wallets.OrderBy(c => c.CreationDate).First().CreationDate;
@@ -443,18 +450,15 @@ namespace Auctus.Business.Account
                 using (var transaction = TransactionalDapperCommand)
                 {
                     transaction.Update(currentWallet);
-                    if (user.ReferralStatusType == ReferralStatusType.InProgress)
+                    if (currentWallet.AUCBalance < GetMinimumAucAmountForUser(user))
                     {
-                        if (currentWallet.AUCBalance < GetMinimumAucAmountForUser(user))
-                        {
-                            user.ReferralStatus = ReferralStatusType.Interrupted.Value;
-                            transaction.Update(user);
-                        }
-                        else if (Data.GetDateTimeNow().Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
-                        {
-                            user.ReferralStatus = ReferralStatusType.Finished.Value;
-                            transaction.Update(user);
-                        }
+                        user.ReferralStatus = ReferralStatusType.Interrupted.Value;
+                        transaction.Update(user);
+                    }
+                    else if (Data.GetDateTimeNow().Subtract(start).TotalDays >= MinimumDaysToKeepAuc)
+                    {
+                        user.ReferralStatus = ReferralStatusType.Finished.Value;
+                        transaction.Update(user);
                     }
                     transaction.Commit();
                 }
@@ -542,6 +546,7 @@ namespace Auctus.Business.Account
             var referredUsers = Data.ListReferredUsers(user.Id);
             ReferralProgramInfoResponse response = ConvertReferredUsersToReferralProgramInfo(referredUsers);
             response.ReferralCode = user.ReferralCode;
+            response.BonusToReferred = MinimumAucLogin * user.DiscountProvided / 100.0;
             return response;
         }
 
@@ -555,7 +560,7 @@ namespace Auctus.Business.Account
             {
                 ReferralCode = user.ReferredUser?.ReferralCode,
                 StandardAUCAmount = MinimumAucLogin,
-                Discount = user.ReferralDiscount ?? 0,
+                Discount = (user.BonusToReferred ?? 0) / MinimumAucLogin * 100.0,
                 RegisteredWallet = user.Wallet?.Address,
                 AUCRequired = GetMinimumAucAmountForUser(user)
             };
@@ -563,11 +568,14 @@ namespace Auctus.Business.Account
 
         public ValidateReferralCodeResponse IsValidReferralCode(string referralCode)
         {
+            var loggedUser = GetLoggedUser(); 
             var user = Data.GetByReferralCode(referralCode);
+            var valid = user != null && (loggedUser == null || loggedUser.Id != user.Id);
             return new ValidateReferralCodeResponse()
             {
-                Valid = user != null,
-                Discount = user != null ? user.DiscountProvided : 0
+                Valid = valid,
+                Discount = valid ? user.DiscountProvided : 0,
+                BonusAmount = valid ? MinimumAucLogin * user.DiscountProvided / 100.0 : 0
             };
         }
 
@@ -608,15 +616,12 @@ namespace Auctus.Business.Account
 
         private double GetReferralStatusValue(IEnumerable<User> groupedData)
         {
-            return Math.Floor(groupedData.Sum(c => c.ReferralDiscount.Value * MinimumAucLogin / 100.0));
+            return Math.Floor(groupedData.Where(c => c.BonusToReferred.HasValue).Sum(c => c.BonusToReferred.Value));
         }
 
         public IEnumerable<User> ListValidUsersFollowingAdvisorOrAsset(int advisorId, int assetId)
         {
-            var advisors = AdvisorBusiness.GetAdvisors();
-            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId).Where(c => c.Id != advisorId && 
-                (advisors.Any(a => a.Id == c.Id) || (c.Wallet != null && c.Wallet.AUCBalance.HasValue && c.Wallet.AUCBalance.Value >= GetMinimumAucAmountForUser(c))
-                    || Admins.Contains(c.Email)));
+            return Data.ListUsersFollowingAdvisorOrAsset(advisorId, assetId).Where(c => c.Id != advisorId);
         }
 
         public SearchResponse Search(string searchTerm)

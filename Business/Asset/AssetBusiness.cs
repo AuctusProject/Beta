@@ -106,7 +106,7 @@ namespace Auctus.Business.Asset
         private IEnumerable<AssetResponse> ListAssetResult(int? forcedAssetId = null)
         {
             var selectAssets = forcedAssetId.HasValue ? new int[] { forcedAssetId.Value } : null;
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct(), selectAssets));
             var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers(selectAssets));
@@ -138,7 +138,7 @@ namespace Auctus.Business.Asset
 
         public AssetResponse GetAssetData(int assetId)
         {
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
@@ -161,7 +161,7 @@ namespace Auctus.Business.Asset
 
         public List<AssetRatingsResponse> GetAssetRatings(int assetId)
         {
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));

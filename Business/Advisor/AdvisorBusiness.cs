@@ -210,7 +210,7 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             CalculateForAdvisorsData(user, CalculationMode.AdvisorBase, out advisorsResult, out assetsResult);
             return advisorsResult;
         }
@@ -219,7 +219,7 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             CalculateForAdvisorsData(user, CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult, advisorId);
             var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();

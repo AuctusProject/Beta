@@ -72,7 +72,7 @@ namespace Auctus.Business.Asset
                 assetsId = new int[] { assetId.Value };
 
             var reports = Task.Factory.StartNew(() => List(assetsId, top, lastReportId));
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             return UserBusiness.FillFeedList(null, reports, null, user, top, null, lastReportId, null);
         }
 

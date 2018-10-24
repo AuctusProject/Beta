@@ -79,7 +79,7 @@ namespace Auctus.DataAccessMock.Account
                 UrlGuid = Guid.NewGuid(),
                 ReferralCode = "0000003",
                 ReferredId = 1,
-                ReferralDiscount = 20,
+                BonusToReferred = 1000,
                 ReferralStatus = ReferralStatusType.Finished.Value,
                 Wallet = new Wallet()
                 {
@@ -110,7 +110,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000004",
                 ReferredId = 1,
-                ReferralDiscount = 20,
+                BonusToReferred = 1000,
                 ReferralStatus = ReferralStatusType.InProgress.Value,
                 Wallet = new Wallet()
                 {
@@ -132,7 +132,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000005",
                 ReferredId = 1,
-                ReferralDiscount = 20,
+                BonusToReferred = 1000,
                 ReferralStatus = ReferralStatusType.Interrupted.Value,
                 Wallet = new Wallet()
                 {
@@ -154,7 +154,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000006",
                 ReferredId = 1,
-                ReferralDiscount = 20,
+                BonusToReferred = 1000,
                 ReferralStatus = ReferralStatusType.Paid.Value,
                 Wallet = new Wallet()
                 {
@@ -176,7 +176,7 @@ namespace Auctus.DataAccessMock.Account
                 IsAdvisor = false,
                 ReferralCode = "0000007",
                 ReferredId = 1,
-                ReferralDiscount = 20,
+                BonusToReferred = 1000,
                 ReferralStatus = ReferralStatusType.Finished.Value,
                 Wallet = new Wallet()
                 {
@@ -219,9 +219,9 @@ namespace Auctus.DataAccessMock.Account
             return GetByEmail(email);
         }
 
-        public List<User> ListForAucSituation()
+        public List<User> ListForAucSituation(IEnumerable<string> ignoredEmails)
         {
-            return users.Where(c => c.ReferralStatus == ReferralStatusType.InProgress.Value && c.AllowNotifications).ToList();
+            return users.Where(c => c.ReferralStatus == ReferralStatusType.InProgress.Value && (ignoredEmails == null || !ignoredEmails.Contains(c.Email))).ToList();
         }
 
         public User GetByReferralCode(string referralCode)

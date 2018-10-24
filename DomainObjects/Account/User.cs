@@ -27,12 +27,12 @@ namespace Auctus.DomainObjects.Account
         public int? ReferredId { get; set; }
         [DapperType(System.Data.DbType.Int32)]
         public int? ReferralStatus { get; set; }
-        [DapperType(System.Data.DbType.Double)]
-        public double? ReferralDiscount { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool AllowNotifications { get; set; }
         [DapperType(System.Data.DbType.Double)]
         public double DiscountProvided { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double? BonusToReferred { get; set; }
 
         public bool IsAdvisor { get; set; }
         public Wallet Wallet { get; set; }
