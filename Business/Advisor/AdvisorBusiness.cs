@@ -70,12 +70,12 @@ namespace Auctus.Business.Advisor
                     Enabled = true,
                     UrlGuid = urlGuid.Value
                 };
+
                 transaction.Insert(advisor);
-                await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
                 transaction.Commit();               
             }
-                        
-          
+
+            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
             await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
 
             bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
