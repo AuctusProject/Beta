@@ -126,6 +126,23 @@ namespace Auctus.Business
             Data.Delete(obj);
         }
 
+        public User GetLoggedUser()
+        {
+            if (string.IsNullOrEmpty(LoggedEmail))
+                return null;
+
+            var cacheKey = GetUserCacheKey(LoggedEmail);
+            var user = MemoryCache.Get<User>(cacheKey);
+            if (user == null)
+            {
+                UserBusiness.EmailValidation(LoggedEmail);
+                user = UserBusiness.GetByEmail(LoggedEmail);
+            }
+            else if (UserBusiness.IsValidAdvisor(user))
+                user = MemoryCache.Get<DomainObjects.Advisor.Advisor>(cacheKey);
+            return user;
+        }
+
         public User GetValidUser()
         {
             var cacheKey = GetUserCacheKey(LoggedEmail);

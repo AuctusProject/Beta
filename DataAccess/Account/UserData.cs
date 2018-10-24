@@ -324,7 +324,7 @@ namespace Auctus.DataAccess.Account
             advisor.ConfirmationDate = user.ConfirmationDate;
             advisor.ReferralCode = user.ReferralCode;
             advisor.ReferralStatus = user.ReferralStatus;
-            advisor.ReferralDiscount = user.ReferralDiscount;
+            advisor.BonusToReferred = user.BonusToReferred;
             advisor.ReferredId = user.ReferredId;
             advisor.AllowNotifications = user.AllowNotifications;
             advisor.DiscountProvided = user.DiscountProvided;
