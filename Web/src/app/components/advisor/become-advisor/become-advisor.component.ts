@@ -93,6 +93,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       {
         if (!!result && !result.error && result.data) {
           this.accountService.setLoginData(result.data);
+          this.localStorageService.setLocalStorage("referralCode", "");
           this.setClose.emit();
           this.authRedirect.redirectAfterLoginAction(result.data);
         } else if (!!result && result.error) {
