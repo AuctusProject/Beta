@@ -55,10 +55,8 @@ namespace Auctus.Business.Advisor
             else
                 user = UserBusiness.GetValidUserToRegister(email, password, null);
 
-            Guid? urlGuid = null;
-            urlGuid = Guid.NewGuid();
-            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
-          
+            Guid? urlGuid = Guid.NewGuid();
+
             using (var transaction = TransactionalDapperCommand)
             {
                 transaction.Insert(user);
@@ -73,12 +71,12 @@ namespace Auctus.Business.Advisor
                     UrlGuid = urlGuid.Value
                 };
                 transaction.Insert(advisor);
-                transaction.Commit();
+                await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
+                transaction.Commit();               
             }
-
+                        
+          
             await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
-
- 
 
             bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
 
