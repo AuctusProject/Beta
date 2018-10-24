@@ -57,7 +57,7 @@ namespace Auctus.Business.Advisor
             else
                 user = UserBusiness.GetValidUserToRegister(email, password, null);
 
-            Guid? urlGuid = Guid.NewGuid();
+            Guid urlGuid = Guid.NewGuid();
 
             using (var transaction = TransactionalDapperCommand)
             {
