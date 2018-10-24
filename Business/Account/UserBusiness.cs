@@ -249,6 +249,7 @@ namespace Auctus.Business.Account
             user.ReferralCode = GenerateReferralCode();
             user.ReferredId = referredUser?.Id;
             user.BonusToReferred = GetBonusToReferredUser(referredUser);
+            user.ReferralStatus = referredUser != null ? ReferralStatusType.InProgress.Value : (int?)null;
             user.AllowNotifications = true;
             user.ConfirmationDate = emailConfirmed ? user.CreationDate : (DateTime?)null;
             user.DiscountProvided = DiscountPercentageOnAuc;
