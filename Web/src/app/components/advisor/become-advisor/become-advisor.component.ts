@@ -75,10 +75,8 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       {
         if (!!result && !result.error && result.data) {
           this.accountService.setLoginData(result.data);
-          let modalData = new FullscreenModalComponentInput();
-          modalData.component = MessageFullscreenModalComponent;
-          modalData.componentInput = { message: (this.completeRegistration ? "Thank you for submitting your details." : "Thank you for your registration."), redirectUrl: "" };
-          this.setNewModal.emit(modalData);
+          this.setClose.emit();
+          this.authRedirect.redirectAfterLoginAction(result.data);
         } else if (!!result && result.error) {
           this.notificationsService.info("Info", result.error);
         }
