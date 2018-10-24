@@ -50,12 +50,13 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     private localStorageService: LocalStorageService) { }
 
   ngOnInit() {
-    if (this.accountService.getLoginData().isAdvisor) {
+    let loginData = this.accountService.getLoginData();
+    if (loginData && loginData.isAdvisor) {
       this.setClose.emit();
       this.authRedirect.redirectAfterLoginAction();
     } else {
       this.completeRegistration = this.data && this.data.completeregistration;
-      this.registerAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
+      this.registerAdvisorRequest.email = this.isNewUser() || !loginData ? "" : loginData.email;
       this.showReferralInput = this.isNewUser() || !this.completeRegistration;
       this.registerAdvisorRequest.password = "";
       this.registerAdvisorRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
