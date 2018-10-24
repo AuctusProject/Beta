@@ -90,7 +90,7 @@ namespace Auctus.Business.Advisor
             }
 
             await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
-            if (LoggedEmail == null)
+            if (LoggedEmail == null || !user.ConfirmationDate.HasValue)
                 await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
 
             UserBusiness.ClearUserCache(user.Email);
