@@ -106,6 +106,8 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       isValid = this.Email.isValid() && isValid;
       isValid = this.Referral.isValid() && isValid;
       isValid = this.Password.isValid() && isValid;
+    } else if (!this.completeRegistration) {
+      isValid = this.Referral.isValid() && isValid;
     }
     return isValid;
   }
