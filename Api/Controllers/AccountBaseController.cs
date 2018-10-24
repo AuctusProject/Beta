@@ -81,16 +81,16 @@ namespace Api.Controllers
             return Ok();
         }
 
-        protected virtual async Task<IActionResult> RegisterAsync(RegisterRequest registerRequest)
-        {
-            if (registerRequest == null)
-                return BadRequest();
-            if (!IsValidRecaptcha(registerRequest.Captcha))
-                return BadRequest(new { error = "Invalid Captcha." });
+        //protected virtual async Task<IActionResult> RegisterAsync(RegisterRequest registerRequest)
+        //{
+        //    if (registerRequest == null)
+        //        return BadRequest();
+        //    if (!IsValidRecaptcha(registerRequest.Captcha))
+        //        return BadRequest(new { error = "Invalid Captcha." });
 
-            var loginResponse = await UserBusiness.RegisterAsync(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode);
-            return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
-        }
+        //    var loginResponse = await UserBusiness.RegisterAsync(registerRequest.Email, registerRequest.Password, registerRequest.ReferralCode);
+        //    return Ok(new { logged = !loginResponse.PendingConfirmation, jwt = GenerateToken(registerRequest.Email.ToLower().Trim()), data = loginResponse });
+        //}
 
         protected virtual async Task<IActionResult> ResendEmailConfirmationAsync()
         {

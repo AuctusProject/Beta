@@ -289,7 +289,7 @@ namespace Auctus.Business.Account
             return response;
         }
 
-        private double? GetBonusToReferredUser(User referredUser)
+        public double? GetBonusToReferredUser(User referredUser)
         {
             return referredUser != null ? (MinimumAucLogin * referredUser.DiscountProvided / 100.0) : (double?)null;
         }
@@ -307,7 +307,7 @@ namespace Auctus.Business.Account
             return referralCode;
         }
 
-        private User GetReferredUser(string referralCode, bool throwException = true)
+        public User GetReferredUser(string referralCode, bool throwException = true)
         {
             if (!string.IsNullOrWhiteSpace(referralCode) && referralCode.Length == 7)
             {

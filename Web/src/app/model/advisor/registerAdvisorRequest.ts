@@ -6,7 +6,8 @@ export class RegisterAdvisorRequest {
   changedPicture: boolean;
   captcha: string;
   file: File;
-  
+  referralCode: string;
+
   constructor(){
   }
 }

@@ -13,5 +13,6 @@ namespace Api.Model.Advisor
         public string Description { get; set; }
         public string Captcha { get; set; }
         public bool ChangedPicture { get; set; }
+        public string ReferralCode { get; set; }
     }
 }

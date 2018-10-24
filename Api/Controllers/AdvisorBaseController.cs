@@ -70,11 +70,11 @@ namespace Api.Controllers
                 var fileExtension = GetValidPictureExtension();
                 using (var stream = Request.Form.Files[0].OpenReadStream())
                     response = await AdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description,
-                        beAdvisorRequest.ChangedPicture, stream, fileExtension);
+                        beAdvisorRequest.ReferralCode, beAdvisorRequest.ChangedPicture, stream, fileExtension);
             }
             else
-                response = await AdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description, 
-                    beAdvisorRequest.ChangedPicture, null, null);
+                response = await AdvisorBusiness.CreateAsync(beAdvisorRequest.Email, beAdvisorRequest.Password, beAdvisorRequest.Name, beAdvisorRequest.Description,
+                    beAdvisorRequest.ReferralCode, beAdvisorRequest.ChangedPicture, null, null);
 
             return Ok(new { logged = !response.PendingConfirmation, jwt = GenerateToken(response.Email.ToLower().Trim()), data = response });
         }

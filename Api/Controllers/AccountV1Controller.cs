@@ -27,13 +27,13 @@ namespace Api.Controllers
         public AccountV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
             base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async new Task<IActionResult> RegisterAsync([FromBody]RegisterRequest registerRequest)
-        {
-            return await base.RegisterAsync(registerRequest);
-        }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async new Task<IActionResult> RegisterAsync([FromBody]RegisterRequest registerRequest)
+        //{
+        //    return await base.RegisterAsync(registerRequest);
+        //}
 
         [HttpPost]
         [Route("social_login")]

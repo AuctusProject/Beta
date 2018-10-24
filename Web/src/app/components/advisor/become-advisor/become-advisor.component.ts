@@ -14,6 +14,8 @@ import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-m
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InheritanceInputOptions, InputType } from '../../../model/inheritanceInputOptions';
 import { AuthRedirect } from '../../../providers/authRedirect';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'become-advisor',
@@ -34,13 +36,16 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @ViewChild("Email") Email: InheritanceInputComponent;
   @ViewChild("Password") Password: InheritanceInputComponent;
   @ViewChild("Description") Description: InheritanceInputComponent;
+  @ViewChild("Referral") Referral: InheritanceInputComponent;
   
   completeRegistration: boolean = false;
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
     private notificationsService: NotificationsService,
-    private authRedirect: AuthRedirect) { }
+    private authRedirect: AuthRedirect,
+    private activatedRoute: ActivatedRoute,
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit() {
     if (this.accountService.getLoginData().isAdvisor) {
@@ -50,6 +55,13 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       this.completeRegistration = this.data && this.data.completeregistration;
       this.registerAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
       this.registerAdvisorRequest.password = "";
+      this.registerAdvisorRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
+      if (!this.registerAdvisorRequest.referralCode) {
+        this.registerAdvisorRequest.referralCode = this.localStorageService.getLocalStorage("referralCode");
+      } 
+      if (!!this.registerAdvisorRequest.referralCode) {
+        this.validateReferralCode(this.registerAdvisorRequest.referralCode);
+      }
     }
   }
 
@@ -92,9 +104,37 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     isValid = this.Description.isValid() && isValid;
     if (this.isNewUser()) {
       isValid = this.Email.isValid() && isValid;
+      isValid = this.Referral.isValid() && isValid;
       isValid = this.Password.isValid() && isValid;
     }
     return isValid;
+  }
+
+  onChangeReferralCode(value: string) {
+    this.registerAdvisorRequest.referralCode = value;
+    this.validateReferralCode(value);
+  }
+
+  validateReferralCode(value: string) {
+    if (!value || value.length == 0) {
+      this.setInvalidReferral("");
+    } else if (!!value && value.length == 7) {
+      this.accountService.isValidReferralCode(value).subscribe(response => {
+        if (!!response && response.valid) {
+          this.Referral.setForcedError("");
+          this.localStorageService.setLocalStorage("referralCode", value);
+        } else {
+          this.setInvalidReferral("Invalid referral code");
+        }
+      });
+    } else {
+      this.setInvalidReferral("Invalid referral code");
+    }
+  }
+
+  setInvalidReferral(message: string) {
+    this.Referral.setForcedError(message);
+    this.localStorageService.setLocalStorage("referralCode", "");
   }
 
   getNameOptions() {
@@ -111,5 +151,9 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
 
   getDescriptionOptions() {
     return { textOptions: { placeHolder: "Short description", maxLength: 160, required: false } };
+  }
+
+  getReferralOptions() {
+    return { textOptions: { outlineField: false, placeHolder: "Referral code (optional)", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
   }
 }

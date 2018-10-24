@@ -70,6 +70,7 @@ export class AdvisorService {
     formData.append('captcha', requestAdvisorRequest.captcha);
     formData.append('email', requestAdvisorRequest.email);
     formData.append('password', requestAdvisorRequest.password);
+    formData.append('referralCode', requestAdvisorRequest.referralCode);
     return this.httpService.postWithoutContentType(this.advisorsUrl, formData);
   }
 

@@ -28,7 +28,7 @@ namespace Auctus.Business.Advisor
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-        public async Task<LoginResponse> CreateAsync(string email, string password, string name, string description,
+        public async Task<LoginResponse> CreateAsync(string email, string password, string name, string description, string referralCode,
             bool changePicture, Stream pictureStream, string pictureExtension)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -43,6 +43,7 @@ namespace Auctus.Business.Advisor
                 picture = AdvisorBusiness.GetPictureBytes(pictureStream, pictureExtension);
 
             User user = null;
+            var updateUser = false;
             if (LoggedEmail != null)
             {
                 if (!string.IsNullOrWhiteSpace(email) && email != LoggedEmail)
@@ -53,9 +54,17 @@ namespace Auctus.Business.Advisor
                 user = UserBusiness.GetForLoginByEmail(LoggedEmail);
                 if (UserBusiness.IsValidAdvisor(user))
                     throw new BusinessException("User already registered.");
+
+                var referredUser = UserBusiness.GetReferredUser(referralCode);
+                if (referredUser?.Id != user.ReferredId || UserBusiness.GetBonusToReferredUser(referredUser) != user.BonusToReferred)
+                {
+                    updateUser = true;
+                    user.ReferredId = referredUser?.Id;
+                    user.BonusToReferred = UserBusiness.GetBonusToReferredUser(referredUser);
+                }
             }
             else
-                user = UserBusiness.GetValidUserToRegister(email, password, null);
+                user = UserBusiness.GetValidUserToRegister(email, password, referralCode);
 
             Guid urlGuid = Guid.NewGuid();
 
@@ -63,6 +72,8 @@ namespace Auctus.Business.Advisor
             {
                 if (LoggedEmail == null)
                     transaction.Insert(user);
+                else if (updateUser)
+                    transaction.Update(user);
 
                 var advisor = new DomainObjects.Advisor.Advisor()
                 {
