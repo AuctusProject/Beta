@@ -20,10 +20,13 @@
       [value]="registerAdvisorRequest.description" (onChange)="registerAdvisorRequest.description = $event"></inheritance-input>
   </div>
 </div>
-<div *ngIf="isNewUser() || !completeRegistration" fxLayout="column" fxLayoutAlign="center center">
-    <inheritance-input #Referral [options]="getReferralOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.sm="input-modal-tablet" ngClass.gt-sm="input-modal-web"
-      [value]="registerAdvisorRequest.referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
-</div>
+<div *ngIf="showReferralInput" fxLayout="column" fxLayoutAlign="center center">
+    <div class="referral-container">
+      <inheritance-input #Referral [options]="getReferralOptions()" class="input-modal" 
+        [value]="registerAdvisorRequest.referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
+      <span class="valid-referral-check" *ngIf="validReferral"><fa-icon icon="check" class="check-icon" size="1x" fxLayoutAlign="center stretch"></fa-icon></span>
+    </div>
+  </div>
 <div class="last-div" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <recaptcha *ngIf="isNewUser()" #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
   <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" 

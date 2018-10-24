@@ -39,6 +39,8 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @ViewChild("Referral") Referral: InheritanceInputComponent;
   
   completeRegistration: boolean = false;
+  showReferralInput: boolean = true;
+  validReferral: boolean = false;
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
@@ -54,10 +56,14 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     } else {
       this.completeRegistration = this.data && this.data.completeregistration;
       this.registerAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
+      this.showReferralInput = this.isNewUser() || !this.completeRegistration;
       this.registerAdvisorRequest.password = "";
       this.registerAdvisorRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
       if (!this.registerAdvisorRequest.referralCode) {
         this.registerAdvisorRequest.referralCode = this.localStorageService.getLocalStorage("referralCode");
+        if (this.registerAdvisorRequest.referralCode) {
+          this.showReferralInput = true;
+        }
       } 
       if (!!this.registerAdvisorRequest.referralCode) {
         this.validateReferralCode(this.registerAdvisorRequest.referralCode);
@@ -123,6 +129,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
     } else if (!!value && value.length == 7) {
       this.accountService.isValidReferralCode(value).subscribe(response => {
         if (!!response && response.valid) {
+          this.validReferral = true;
           this.Referral.setForcedError("");
           this.localStorageService.setLocalStorage("referralCode", value);
         } else {
@@ -135,6 +142,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   setInvalidReferral(message: string) {
+    this.validReferral = false;
     this.Referral.setForcedError(message);
     this.localStorageService.setLocalStorage("referralCode", "");
   }
