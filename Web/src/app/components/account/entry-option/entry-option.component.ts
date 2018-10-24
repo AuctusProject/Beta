@@ -12,6 +12,7 @@ import { ForgotPasswordComponent } from '../forgot-password/forgot-password.comp
 import { RegisterComponent } from '../register/register.component';
 import { ModalService } from '../../../services/modal.service';
 import { BecomeAdvisorComponent } from '../../advisor/become-advisor/become-advisor.component';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'entry-option',
@@ -30,7 +31,7 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
 
   constructor(private notificationsService: NotificationsService,
     private accountService: AccountService,
-    private authRedirect : AuthRedirect,
+    private localStorageService: LocalStorageService,
     private socialAuthService: AuthService) { }
 
   ngOnInit() {
@@ -84,6 +85,10 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
   socialEntryResponse(response: LoginResult){
     if (!!response && !response.error && response.data) {
       this.accountService.setLoginData(response.data);
+      if (!this.isLogin()) {
+        this.localStorageService.setLocalStorage("socialRegister", true);
+      }
+
       // if(this.isBecomeExpert()) {
         this.openBecomeAdvisorForm();
       // } else {
