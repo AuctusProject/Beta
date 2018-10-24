@@ -12,7 +12,7 @@ import { ViewChildren, QueryList } from '@angular/core';
 import { AssetHistoryChartComponent } from '../../asset/asset-history-chart/asset-history-chart.component';
 import { ModalService } from '../../../services/modal.service';
 import { NavigationService } from '../../../services/navigation.service';
-import { ValueDisplayPipe } from 'src/app/util/value-display.pipe';
+import { ValueDisplayPipe } from '../../../util/value-display.pipe';
 
 @Component({
   selector: 'expert-details',
@@ -74,7 +74,6 @@ export class ExpertDetailsComponent implements OnInit {
     }
     else{
       this.expandedElement = row;
-      this.assetHistoryCharts.toArray()[this.assets.indexOf(row)/2].refresh();
     }
   }
 

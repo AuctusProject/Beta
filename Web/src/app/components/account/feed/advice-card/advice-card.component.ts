@@ -6,7 +6,7 @@ import { Util } from '../../../../util/Util';
 import { NavigationService } from '../../../../services/navigation.service';
 import { Subscription } from 'rxjs';
 import { AccountService } from '../../../../services/account.service';
-import { ValueDisplayPipe } from 'src/app/util/value-display.pipe';
+import { ValueDisplayPipe } from '../../../../util/value-display.pipe';
 
 @Component({
   selector: 'advice-card',

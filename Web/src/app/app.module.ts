@@ -2,15 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { SimpleNotificationsModule } from 'angular2-notifications';
-import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
-import stock from 'highcharts/modules/stock.src';
-import more from 'highcharts/highcharts-more.src';
 import { ShareButtonModule } from '@ngx-share/button';
-
-export function highchartsModules() {
-  // apply Highcharts Modules to this array
-  return [stock, more];
-}
 
 import { AppComponent } from './app.component';
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -28,7 +20,6 @@ import { AssetService } from './services/asset.service';
 import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { AccountService } from './services/account.service';
 import { LoginComponent } from './components/account/login/login.component';
-// import { MatModule } from './mat.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
@@ -208,7 +199,7 @@ export function getAuthServiceConfigs() {
     AssetHeaderComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'Web' }),
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
@@ -222,7 +213,6 @@ export function getAuthServiceConfigs() {
         btnLoadingClass: 'is-loading',
         handleCurrentBtnOnly: true,
     }),
-    ChartModule,
     FormsModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
@@ -234,8 +224,7 @@ export function getAuthServiceConfigs() {
     RecaptchaModule.forRoot(), 
     RecaptchaFormsModule,
     OwlModule,
-    ShareButtonModule.forRoot()//,
-    //SignalRModule.forRoot(createSignalRConfig)
+    ShareButtonModule.forRoot()
   ],
   providers: [
     HttpService,
@@ -250,7 +239,6 @@ export function getAuthServiceConfigs() {
     AuthRedirect,
     ConfigService,
     ModalService,
-    { provide:HIGHCHARTS_MODULES, useFactory:highchartsModules },
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '95vw', height: '92%', hasBackdrop: true, disableClose: false, panelClass: 'fullscreen-modal'}}

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TerminalAssetResponse } from 'src/app/model/asset/terminalAssetResponse';
+import { TerminalAssetResponse } from '../../../model/asset/terminalAssetResponse';
 
 @Component({
   selector: 'crypto-chart',

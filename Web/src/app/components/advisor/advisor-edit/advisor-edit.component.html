@@ -12,6 +12,6 @@
         [value]="advisor.description" (onChange)="advisor.description = $event"></inheritance-input>
 </div>
 <div class="div-padding-bottom" fxLayout="column" fxLayoutAlign="space-evenly center">
-    <button class="btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" 
+    <button class="btn-modal mat-primary" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" 
         mat-flat-button (click)="save()" [promiseBtn]="promise">Save</button>
 </div>
