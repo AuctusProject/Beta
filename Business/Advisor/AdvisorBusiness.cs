@@ -51,6 +51,8 @@ namespace Auctus.Business.Advisor
                     throw new BusinessException("Invalid password.");
 
                 user = UserBusiness.GetForLoginByEmail(LoggedEmail);
+                if (UserBusiness.IsValidAdvisor(user))
+                    throw new BusinessException("User already registered.");
             }
             else
                 user = UserBusiness.GetValidUserToRegister(email, password, null);
@@ -59,7 +61,8 @@ namespace Auctus.Business.Advisor
 
             using (var transaction = TransactionalDapperCommand)
             {
-                transaction.Insert(user);
+                if (LoggedEmail == null)
+                    transaction.Insert(user);
 
                 var advisor = new DomainObjects.Advisor.Advisor()
                 {
@@ -68,7 +71,7 @@ namespace Auctus.Business.Advisor
                     Description = description,
                     BecameAdvisorDate = Data.GetDateTimeNow(),
                     Enabled = true,
-                    UrlGuid = urlGuid.Value
+                    UrlGuid = urlGuid
                 };
 
                 transaction.Insert(advisor);
@@ -78,16 +81,16 @@ namespace Auctus.Business.Advisor
             await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
             await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
 
-            bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
-
             return new LoginResponse()
             {
                 Id = user.Id,
                 Email = user.Email,
                 PendingConfirmation = !user.ConfirmationDate.HasValue,
-                HasInvestment = hasInvestment,
-                IsAdvisor = false,
-                RequestedToBeAdvisor = true
+                AdvisorName = name,
+                ProfileUrlGuid = urlGuid.ToString(),
+                HasInvestment = true,
+                IsAdvisor = true,
+                RequestedToBeAdvisor = false
             };
         }
 
