@@ -124,14 +124,7 @@ export class FeedComponent implements OnInit {
     return null; //"Recommendations from experts and cryptocurrencies that you are following";
   }
 
-  getLatestUpdates() : string[] {
-    let updates: string[] = [];
-
-    updates.push("You have rofit 25% since you last visit");
-    updates.push("Your best call was buy ETH");
-    updates.push("You moved 5 positions up on experts ranking");
-    updates.push("You have rofit 25% since you last visit");
-
-    return updates;
+  showLatestUpdates() : boolean {
+    return this.loginData && this.loginData.isAdvisor;
   }
 }
