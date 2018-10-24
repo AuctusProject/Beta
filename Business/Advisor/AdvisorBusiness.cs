@@ -59,6 +59,7 @@ namespace Auctus.Business.Advisor
                 if (referredUser?.Id != user.ReferredId || UserBusiness.GetBonusToReferredUser(referredUser) != user.BonusToReferred)
                 {
                     updateUser = true;
+                    user.ReferralStatus = referredUser != null ? ReferralStatusType.InProgress.Value : (int?)null;
                     user.ReferredId = referredUser?.Id;
                     user.BonusToReferred = UserBusiness.GetBonusToReferredUser(referredUser);
                 }
