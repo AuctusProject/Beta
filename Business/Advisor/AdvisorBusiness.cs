@@ -55,14 +55,19 @@ namespace Auctus.Business.Advisor
                 if (UserBusiness.IsValidAdvisor(user))
                     throw new BusinessException("User already registered.");
 
-                var referredUser = UserBusiness.GetReferredUser(referralCode);
-                if (referredUser?.Id != user.ReferredId || UserBusiness.GetBonusToReferredUser(referredUser) != user.BonusToReferred)
+                if (!user.ReferredId.HasValue)
                 {
-                    updateUser = true;
-                    user.ReferralStatus = referredUser != null ? ReferralStatusType.InProgress.Value : (int?)null;
-                    user.ReferredId = referredUser?.Id;
-                    user.BonusToReferred = UserBusiness.GetBonusToReferredUser(referredUser);
+                    var referredUser = UserBusiness.GetReferredUser(referralCode);
+                    if (referredUser != null)
+                    {
+                        updateUser = true;
+                        user.ReferralStatus = ReferralStatusType.InProgress.Value;
+                        user.ReferredId = referredUser.Id;
+                        user.BonusToReferred = UserBusiness.GetBonusToReferredUser(referredUser);
+                    }
                 }
+                else if (!string.IsNullOrEmpty(referralCode))
+                    throw new BusinessException("User already has a referral code defined.");
             }
             else
                 user = UserBusiness.GetValidUserToRegister(email, password, referralCode);

@@ -109,13 +109,13 @@ namespace Api.Controllers
             return Ok(UserBusiness.ListFeed(top, lastAdviceId, lastReportId, lastEventId));
         }
 
-        protected virtual IActionResult SetReferralCode(SetReferralRequest setReferralRequest)
-        {
-            if(setReferralRequest == null)
-                return BadRequest();
+        //protected virtual IActionResult SetReferralCode(SetReferralRequest setReferralRequest)
+        //{
+        //    if(setReferralRequest == null)
+        //        return BadRequest();
 
-            return Ok(UserBusiness.SetReferralCode(setReferralRequest.ReferralCode));
-        }
+        //    return Ok(UserBusiness.SetReferralCode(setReferralRequest.ReferralCode));
+        //}
 
         protected virtual IActionResult GetReferralProgramInfo()
         {
