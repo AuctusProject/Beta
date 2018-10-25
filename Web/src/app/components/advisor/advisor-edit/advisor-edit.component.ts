@@ -59,7 +59,7 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
     if (this.isValidRequest()) {
       var request = new AdvisorRequest();
       request.name = this.advisor.name;
-      request.description = this.advisor.description;
+      request.description = !this.advisor.description ? "" : this.advisor.description;
       request.changedPicture = this.FileUploadComponent.fileWasChanged();
       request.file = this.FileUploadComponent.getFile();
       this.promise = this.advisorService.editAdvisor(this.advisor.id, request).subscribe(result => 
@@ -91,6 +91,6 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
   }
 
   getDescriptionOptions() {
-    return { inputType: InputType.TextArea, textOptions: { placeHolder: "Short description", maxLength: 160 } };
+    return { inputType: InputType.TextArea, textOptions: { required: false, placeHolder: "Short description", maxLength: 160 } };
   }
 }

@@ -121,9 +121,7 @@ namespace Auctus.Business.Advisor
                 throw new BusinessException("Name must be filled.");
             if (name.Length > 50)
                 throw new BusinessException("Name cannot have more than 50 characters.");
-            if (string.IsNullOrWhiteSpace(description))
-                throw new BusinessException("Description must be filled.");
-            if (description.Length > 160)
+            if (!string.IsNullOrEmpty(description) && description.Length > 160)
                 throw new BusinessException("Description cannot have more than 160 characters.");
 
             byte[] picture = null;
