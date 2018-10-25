@@ -125,14 +125,14 @@ namespace Api.Controllers
             return base.ListFeed(top, lastAdviceId, lastReportId, lastEventId);
         }
 
-        [Route("me/referrals")]
-        [HttpPost]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult SetReferralCode([FromBody]SetReferralRequest setReferralRequest)
-        {
-            return base.SetReferralCode(setReferralRequest);
-        }
+        //[Route("me/referrals")]
+        //[HttpPost]
+        //[Authorize("Bearer")]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public new IActionResult SetReferralCode([FromBody]SetReferralRequest setReferralRequest)
+        //{
+        //    return base.SetReferralCode(setReferralRequest);
+        //}
 
         [Route("me/referrals")]
         [HttpGet]
