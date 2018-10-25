@@ -3,6 +3,7 @@ import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { AccountService } from '../../../services/account.service';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../../services/config.service';
+import { LoginResponse } from '../../../model/account/loginResponse';
 
 @Component({
   selector: 'feed',
@@ -14,6 +15,7 @@ export class FeedComponent implements OnInit {
   hasMoreAdvices = false;
   pageSize = 10;
   promise : Subscription;
+  loginData: LoginResponse;
 
   dummyData = [
   { "assetId": 1, "assetName": "Bitcoin", "assetCode": "BTC", "assetMode": 1, "followingAsset": false,"date": new Date((new Date()).getTime() - 25*60000),  "advice": { "adviceId": 1, "advisorId": 1, "advisorName": "BTC Expert", "advisorUrlGuid": "f5f0bbb9-e57e-43ab-8a76-ce36e5916805", "advisorRanking": 1, "advisorRating": 4.5, "followingAdvisor": false, "adviceType": 1, "assetValueAtAdviceTime": 6501, "operationType": 0 },"report":null, "event":null},
@@ -43,6 +45,7 @@ export class FeedComponent implements OnInit {
   constructor(private accountService: AccountService) { }
 
   ngOnInit() {
+    this.loginData = this.accountService.getLoginData();
     if (this.canView()) {
       this.loadMore();
     } else {
@@ -104,7 +107,13 @@ export class FeedComponent implements OnInit {
   }
 
   getTopTitle() : string {
-    return "HELLO";
+    let title = "HELLO";
+
+    if (this.loginData && this.loginData.advisorName) {
+      title += ", " + this.loginData.advisorName.toUpperCase();
+    }
+
+    return title;
   }
 
   getTopImage() : string {
@@ -112,6 +121,10 @@ export class FeedComponent implements OnInit {
   }
 
   getTopText() : string {
-    return "Recommendations from experts and cryptocurrencies that you are following";
+    return null; //"Recommendations from experts and cryptocurrencies that you are following";
+  }
+
+  showLatestUpdates() : boolean {
+    return this.loginData && this.loginData.isAdvisor;
   }
 }

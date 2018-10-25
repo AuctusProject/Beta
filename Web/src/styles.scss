@@ -428,7 +428,7 @@ textarea:read-only {
   font-weight: 500;
 }
 
-.white-button{
+.white-button, .blue-flat-button {
   color: white;
 }
 
@@ -436,8 +436,12 @@ textarea:read-only {
   color: #07d1ff;
 }
 
+.blue-flat-button {
+  background-color: #126efd;
+}
+
 .white-button,
-.blue-button{  
+.blue-button, .blue-flat-button{  
   text-align: center;
   cursor: pointer;
   position: relative;
@@ -449,7 +453,8 @@ textarea:read-only {
 }
 
 .white-button::before, .white-button::after,
-.blue-button::before, .blue-button::after {
+.blue-button::before, .blue-button::after, 
+.blue-flat-button::before, .blue-flat-button::after {
   content: '';
   position: absolute;
   transition: all 0.3s;
@@ -498,13 +503,15 @@ textarea:read-only {
 }
 
 .white-button:hover::before,
-.blue-button:hover::before {
+.blue-button:hover::before,
+.blue-flat-button:hover::before {
   opacity: 1;
   transform: scale(1, 1);
 }
 
 .white-button:hover::after,
-.blue-button:hover::after {
+.blue-button:hover::after,
+.blue-flat-button:hover::after {
   transform: scale(1, .1);
   opacity: 0;
 }
