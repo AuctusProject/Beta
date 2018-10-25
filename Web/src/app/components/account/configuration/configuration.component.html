@@ -7,5 +7,5 @@
     <mat-checkbox required [(ngModel)]="configurationRequest.allowNotifications">Allow notifications</mat-checkbox>
 </div>
 <div fxLayout="column" fxLayoutAlign="space-evenly center">
-    <button class="btn-save btn-modal" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="save()" [promiseBtn]="promise">Save</button>
+    <button class="btn-save btn-modal mat-primary" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" mat-flat-button (click)="save()" [promiseBtn]="promise">Save</button>
 </div>

@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { NotificationsService } from "angular2-notifications";
-import { CONFIG} from "./config.service";
+import { CONFIG, ConfigService} from "./config.service";
 import { LocalStorageService } from "./local-storage.service";
 import { LoginResponse } from '../model/account/loginResponse';
 import { NavigationService } from './navigation.service';
@@ -11,7 +11,9 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpService {
-  constructor(private http: HttpClient, 
+  constructor(
+    private configService:ConfigService,
+    private http: HttpClient, 
     private notificationService: NotificationsService,
     private localStorageService: LocalStorageService,
     private navigationService: NavigationService,

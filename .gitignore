@@ -87,6 +87,8 @@ orleans.codegen.cs
 !**/node_modules/@types/*
 !**/node_modules/@types/highcharts/*
 !**/node_modules/@types/highcharts/**/*
+!**/node_modules/angular-highcharts/*
+!**/node_modules/angular-highcharts/**/*
 
 /Web/wwwroot
 Node/.env
