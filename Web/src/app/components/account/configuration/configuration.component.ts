@@ -33,9 +33,9 @@ export class ConfigurationComponent implements ModalComponent, OnInit {
     if (!loginData) {
       this.setClose.emit();
       this.navigationService.goToLogin();
-    } else if (!loginData.isAdvisor && !loginData.hasInvestment) {
+    } else if (!loginData.isAdvisor) {
       this.setClose.emit();
-      this.navigationService.goToWalletLogin();
+      this.navigationService.goToCompleteRegistration();
     } else {
       this.accountService.getConfiguration().subscribe(result =>
         {
@@ -55,10 +55,10 @@ export class ConfigurationComponent implements ModalComponent, OnInit {
     );
   }
 
-  setNewWallet() {
-    this.setClose.emit();
-    this.navigationService.goToWalletLogin();
-  }
+  // setNewWallet() {
+  //   this.setClose.emit();
+  //   this.navigationService.goToWalletLogin();
+  // }
 
   getWalletOptions() {
     return { textOptions: { placeHolder: "Registered wallet", showValidatorError: false, showHintSize: false, required: false, disabled: true } };

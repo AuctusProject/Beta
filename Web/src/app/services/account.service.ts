@@ -170,8 +170,8 @@ export class AccountService {
       this.navigationService.goToLogin();
       return false;
     }
-    else if (!!loginData && (!loginData.hasInvestment && !loginData.isAdvisor)) {
-      this.navigationService.goToWalletLogin();
+    else if (!!loginData && !loginData.isAdvisor) {
+      this.navigationService.goToCompleteRegistration();
       return false;
     }
     return true;

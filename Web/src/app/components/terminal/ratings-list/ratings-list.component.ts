@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { AssetAdvisorResponse } from '../../../model/asset/assetResponse';
 import { AssetService } from '../../../services/asset.service';
 import { AssetRatingsResponse } from '../../../model/asset/assetRatingsResponse';
 import { Util } from '../../../util/Util';

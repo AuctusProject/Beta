@@ -30,7 +30,7 @@ namespace Auctus.Business.Advisor
             Advice lastAdvice = GetLastAdviceForAssetByAdvisor(advisor.Id, asset.Id);
 
             if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
-                throw new BusinessException("You need to wait before advising again for this asset.");
+                throw new BusinessException(string.Format("You need to wait {0} seconds before advising again for this asset.", MinimumTimeInSecondsBetweenAdvices - Math.Round(Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds)));
 
             if (type == AdviceType.ClosePosition && (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition))
                 throw new BusinessException("You need to set a Buy or Sell recommendation before advising to Close.");

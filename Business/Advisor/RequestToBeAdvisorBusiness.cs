@@ -27,10 +27,7 @@ namespace Auctus.Business.Advisor
 
         public RequestToBeAdvisor GetByLoggedEmail()
         {
-            if (string.IsNullOrWhiteSpace(LoggedEmail))
-                return null;
-
-            var user = UserBusiness.GetByEmail(LoggedEmail);
+            var user = GetLoggedUser();
             if(user == null)
                 throw new NotFoundException("Invalid email.");
             return Data.GetByUser(user.Id);
@@ -167,6 +164,7 @@ namespace Auctus.Business.Advisor
                 RequestedToBeAdvisor = true
             };
         }
+
         private async Task SendRequestToBeAdvisorEmailAsync(User user, RequestToBeAdvisor newRequestToBeAdvisor, RequestToBeAdvisor oldRequestToBeAdvisor)
         {
             await EmailBusiness.SendErrorEmailAsync(string.Format(@"

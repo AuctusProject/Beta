@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { RequestToBeAdvisor } from '../../../model/advisor/requestToBeAdvisor';
 import { AdvisorService } from '../../../services/advisor.service';
-import { RequestToBeAdvisorRequest } from '../../../model/advisor/requestToBeAdvisorRequest';
+import { RegisterAdvisorRequest } from '../../../model/advisor/registerAdvisorRequest';
 import { NotificationsService } from 'angular2-notifications';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
@@ -14,6 +14,8 @@ import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-m
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InheritanceInputOptions, InputType } from '../../../model/inheritanceInputOptions';
 import { AuthRedirect } from '../../../providers/authRedirect';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'become-advisor',
@@ -21,12 +23,12 @@ import { AuthRedirect } from '../../../providers/authRedirect';
   styleUrls: ['./become-advisor.component.css']
 })
 export class BecomeAdvisorComponent implements ModalComponent, OnInit {
-  modalTitle: string = "Become an expert";
+  modalTitle: string = "Registration";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
   
-  requestToBeAdvisorRequest: RequestToBeAdvisorRequest = new RequestToBeAdvisorRequest();
+  registerAdvisorRequest: RegisterAdvisorRequest = new RegisterAdvisorRequest();
   promise: Subscription;
   @ViewChild("RecaptchaComponent") RecaptchaComponent: RecaptchaComponent;
   @ViewChild("FileUploadComponent") FileUploadComponent: FileUploaderComponent;
@@ -34,42 +36,42 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   @ViewChild("Email") Email: InheritanceInputComponent;
   @ViewChild("Password") Password: InheritanceInputComponent;
   @ViewChild("Description") Description: InheritanceInputComponent;
-  @ViewChild("Experience") Experience: InheritanceInputComponent;
+  @ViewChild("Referral") Referral: InheritanceInputComponent;
   
-  alreadySent: boolean = false;
-  requestDenied: boolean = false;
+  completeRegistration: boolean = false;
+  showReferralInput: boolean = true;
+  validReferral: boolean = false;
 
   constructor(private advisorService: AdvisorService, 
     private accountService: AccountService,
     private notificationsService: NotificationsService,
-    private authRedirect: AuthRedirect) { }
+    private authRedirect: AuthRedirect,
+    private activatedRoute: ActivatedRoute,
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit() {
-    if (this.accountService.getLoginData().isAdvisor) {
+    let loginData = this.accountService.getLoginData();
+    if (loginData && loginData.isAdvisor) {
       this.setClose.emit();
       this.authRedirect.redirectAfterLoginAction();
     } else {
-      this.advisorService.getRequestToBeAdvisor().subscribe(result => 
-        {
-          this.requestToBeAdvisorRequest.email = this.isNewUser() ? "" : this.accountService.getLoginData().email;
-          this.requestToBeAdvisorRequest.password = "";
-          let currentRequestToBeAdvisor: RequestToBeAdvisor = result;
-          if(!!currentRequestToBeAdvisor){
-            if (currentRequestToBeAdvisor.approved == true) {
-              this.setClose.emit();
-              this.authRedirect.redirectAfterLoginAction();
-            } else {
-              this.requestDenied = currentRequestToBeAdvisor.approved == false;
-              this.alreadySent = true;
-              this.requestToBeAdvisorRequest.name = currentRequestToBeAdvisor.name;
-              this.requestToBeAdvisorRequest.description = currentRequestToBeAdvisor.description;
-              this.requestToBeAdvisorRequest.previousExperience = currentRequestToBeAdvisor.previousExperience;
-              if (!!currentRequestToBeAdvisor.urlGuid) {
-                this.FileUploadComponent.forceImageUrl(CONFIG.profileImgUrl.replace("{id}", currentRequestToBeAdvisor.urlGuid));
-              }
-            }
-          }
-        });
+      this.completeRegistration = this.data && this.data.completeregistration;
+      this.registerAdvisorRequest.email = this.isNewUser() || !loginData ? "" : loginData.email;
+      this.showReferralInput = this.isNewUser() || !this.completeRegistration || this.localStorageService.getLocalStorage("socialRegister");
+      this.registerAdvisorRequest.password = "";
+      this.registerAdvisorRequest.description = "";
+      this.registerAdvisorRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
+      if (!this.registerAdvisorRequest.referralCode) {
+        this.registerAdvisorRequest.referralCode = this.localStorageService.getLocalStorage("referralCode");
+        if (this.registerAdvisorRequest.referralCode) {
+          this.showReferralInput = true;
+        }
+      } 
+      if (!!this.registerAdvisorRequest.referralCode) {
+        this.validateReferralCode(this.registerAdvisorRequest.referralCode);
+      } else {
+        this.registerAdvisorRequest.referralCode = "";
+      }
     }
   }
 
@@ -78,23 +80,27 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   public onCaptchaResponse(captchaResponse: string) {
-    this.requestToBeAdvisorRequest.captcha = captchaResponse;
+    this.registerAdvisorRequest.captcha = captchaResponse;
+  }
+
+  getSubtitleText() : string {
+    return this.completeRegistration ? "Please fill your data and become an Expert." : "Sign up to get exclusive market insights, as well as access to expert knowledge.";
   }
 
   onSubmit() {
-    if (this.isNewUser() && !this.requestToBeAdvisorRequest.captcha) {
+    if (this.isNewUser() && !this.registerAdvisorRequest.captcha) {
       this.notificationsService.error(null, "You must fill the captcha.");
     } else if (this.isValidRequest()) {
-      this.requestToBeAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
-      this.requestToBeAdvisorRequest.file = this.FileUploadComponent.getFile();
-      this.promise = this.advisorService.postRequestToBeAdvisor(this.requestToBeAdvisorRequest).subscribe(result => 
+      this.registerAdvisorRequest.changedPicture = this.FileUploadComponent.fileWasChanged();
+      this.registerAdvisorRequest.file = this.FileUploadComponent.getFile();
+      this.promise = this.advisorService.postRegisterAdvisor(this.registerAdvisorRequest).subscribe(result => 
       {
         if (!!result && !result.error && result.data) {
           this.accountService.setLoginData(result.data);
-          let modalData = new FullscreenModalComponentInput();
-          modalData.component = MessageFullscreenModalComponent;
-          modalData.componentInput = { message: "Thank you for submitting your details. An Auctus representative will be in touch shortly.", redirectUrl: "" };
-          this.setNewModal.emit(modalData);
+          this.localStorageService.setLocalStorage("referralCode", "");
+          this.localStorageService.setLocalStorage("socialRegister", "");
+          this.setClose.emit();
+          this.authRedirect.redirectAfterLoginAction(result.data);
         } else if (!!result && result.error) {
           this.notificationsService.info("Info", result.error);
         }
@@ -108,12 +114,43 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   isValidRequest() : boolean {
     let isValid = this.Name.isValid();
     isValid = this.Description.isValid() && isValid;
-    isValid = this.Experience.isValid() && isValid;
     if (this.isNewUser()) {
       isValid = this.Email.isValid() && isValid;
+      isValid = this.Referral.isValid() && isValid;
       isValid = this.Password.isValid() && isValid;
+    } else if (!this.completeRegistration) {
+      isValid = this.Referral.isValid() && isValid;
     }
     return isValid;
+  }
+
+  onChangeReferralCode(value: string) {
+    this.registerAdvisorRequest.referralCode = value;
+    this.validateReferralCode(value);
+  }
+
+  validateReferralCode(value: string) {
+    if (!value || value.length == 0) {
+      this.setInvalidReferral("");
+    } else if (!!value && value.length == 7) {
+      this.accountService.isValidReferralCode(value).subscribe(response => {
+        if (!!response && response.valid) {
+          this.validReferral = true;
+          this.Referral.setForcedError("");
+          this.localStorageService.setLocalStorage("referralCode", value);
+        } else {
+          this.setInvalidReferral("Invalid referral code");
+        }
+      });
+    } else {
+      this.setInvalidReferral("Invalid referral code");
+    }
+  }
+
+  setInvalidReferral(message: string) {
+    this.validReferral = false;
+    this.Referral.setForcedError(message);
+    this.localStorageService.setLocalStorage("referralCode", "");
   }
 
   getNameOptions() {
@@ -129,10 +166,10 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   getDescriptionOptions() {
-    return { textOptions: { placeHolder: "Short description", maxLength: 160 } };
+    return { textOptions: { placeHolder: "Short description", maxLength: 160, required: false } };
   }
 
-  getExperienceOptions() {
-    return { inputType: InputType.TextArea, textOptions: { placeHolder: "Describe your expertise" }, textAreaOptions: { maxRows: 20, minRows: 5 } };
+  getReferralOptions() {
+    return { textOptions: { outlineField: false, placeHolder: "Referral code (optional)", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
   }
 }

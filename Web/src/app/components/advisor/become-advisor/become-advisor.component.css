@@ -52,3 +52,15 @@
 .subtitle{
     max-width: 550px;
 }
+
+.valid-referral-check {
+    position: absolute;
+    right: 10px;
+    bottom: 40px;
+}
+
+.referral-container{
+    padding-bottom: 10px;
+    width: 200px;
+    position: relative;
+}

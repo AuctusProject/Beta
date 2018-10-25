@@ -24,6 +24,7 @@ export class ReferralDetailsComponent implements ModalComponent, OnInit {
   available: string = '';
   cashedOut: string = '';
   canceled: string = '';
+  bonusAmount: string = '';
   @ViewChild("Link") Link: ElementRef;
 
   constructor(private accountService: AccountService,
@@ -34,9 +35,9 @@ export class ReferralDetailsComponent implements ModalComponent, OnInit {
     if (!loginData) {
       this.setClose.emit();
       this.navigationService.goToLogin();
-    } else if (!loginData.isAdvisor && !loginData.hasInvestment) {
+    } else if (!loginData.isAdvisor) {
       this.setClose.emit();
-      this.navigationService.goToWalletLogin();
+      this.navigationService.goToCompleteRegistration();
     } else {
       this.accountService.getReferralProgramInfo().subscribe(result => 
         {
@@ -47,6 +48,7 @@ export class ReferralDetailsComponent implements ModalComponent, OnInit {
             this.pending = this.getStringValue(result.pending);
             this.cashedOut = this.getStringValue(result.cashedOut) ;
             this.canceled = this.getStringValue(result.canceled);
+            this.bonusAmount = this.getStringValue(result.bonusToReferred);
           }
         });
     }

@@ -25,7 +25,6 @@
 .top-platform-text {
     color: white;
     letter-spacing: 0.5px;
-    max-width: 650px;
     width: 100%;
     flex-direction: column;
     box-sizing: border-box;
@@ -51,4 +50,9 @@
     top: 100%;
     position: absolute;
     background-image: linear-gradient(to left, #07d1ff, #126efd);
+}
+
+.update-list {
+    padding-inline-start: 15px;
+    font-size: 14px;
 }

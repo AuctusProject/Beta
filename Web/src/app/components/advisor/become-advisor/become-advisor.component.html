@@ -1,7 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="25px">
-  <p *ngIf="!requestDenied && alreadySent" class="subtitle already-sent">Your request was already submitted and it still is been evaluated by Auctus team.<br/>You can edit your information.</p>
-  <p *ngIf="requestDenied" class="subtitle request-denied">Your request was already submitted and was denied by Auctus team.<br/>You can edit your information and submit again.</p>
-  <p class="subtitle">All our experts are go through an approval process to guarantee the highest degree of professionalism and ethic standards</p>
+  <p class="subtitle">{{getSubtitleText()}}</p>
   <div class="file-container" ngClass.xs="file-container-mobile" ngClass.sm="file-container-tablet" ngClass.gt-sm="file-container-web"> 
     <div class="file-uploader">
       <file-uploader #FileUploadComponent></file-uploader>
@@ -11,19 +9,24 @@
 <div class="form-div" fxLayout="column" fxLayoutAlign="center center">
   <div class="form-row" fxLayout.lt-sm="column" fxLayout.gt-xs="row" fxLayoutGap.gt-xs="20px" fxLayoutAlign="center center" >
     <inheritance-input #Email [options]="getEmailOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.email" (onChange)="requestToBeAdvisorRequest.email = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.email" (onChange)="registerAdvisorRequest.email = $event"></inheritance-input>
     <inheritance-input *ngIf="isNewUser()"  #Password [options]="getPasswordOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.password" (onChange)="requestToBeAdvisorRequest.password = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.password" (onChange)="registerAdvisorRequest.password = $event"></inheritance-input>
   </div>
   <div class="form-row" fxLayout.lt-sm="column" fxLayout.gt-xs="row" fxLayoutGap.gt-xs="20px" fxLayoutAlign="center center" >
     <inheritance-input #Name [options]="getNameOptions()" class="input-modal"  ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.name" (onChange)="requestToBeAdvisorRequest.name = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.name" (onChange)="registerAdvisorRequest.name = $event"></inheritance-input>
     <inheritance-input #Description [options]="getDescriptionOptions()" class="input-modal" ngClass.xs="input-modal-mobile" ngClass.gt-xs="input-modal-web"
-      [value]="requestToBeAdvisorRequest.description" (onChange)="requestToBeAdvisorRequest.description = $event"></inheritance-input>
+      [value]="registerAdvisorRequest.description" (onChange)="registerAdvisorRequest.description = $event"></inheritance-input>
   </div>
-  <inheritance-input #Experience [options]="getExperienceOptions()" class="input-experience"
-    [value]="requestToBeAdvisorRequest.previousExperience" (onChange)="requestToBeAdvisorRequest.previousExperience = $event"></inheritance-input>
 </div>
+<div *ngIf="showReferralInput" fxLayout="column" fxLayoutAlign="center center">
+    <div class="referral-container">
+      <inheritance-input #Referral [options]="getReferralOptions()" class="input-modal" 
+        [value]="registerAdvisorRequest.referralCode" (onChange)="onChangeReferralCode($event)"></inheritance-input>
+      <span class="valid-referral-check" *ngIf="validReferral"><fa-icon icon="check" class="check-icon" size="1x" fxLayoutAlign="center stretch"></fa-icon></span>
+    </div>
+  </div>
 <div class="last-div" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
   <recaptcha *ngIf="isNewUser()" #RecaptchaComponent (onCaptchaResponse)="onCaptchaResponse($event)"></recaptcha>
   <button class="btn-modal mat-primary" ngClass.xs="btn-modal-mobile" ngClass.sm="btn-modal-tablet" ngClass.gt-sm="btn-modal-web" 

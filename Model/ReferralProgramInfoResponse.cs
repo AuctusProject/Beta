@@ -11,5 +11,6 @@ namespace Auctus.Model
         public double Canceled { get; set; }
         public double CashedOut { get; set; }
         public double Available { get; set; }
+        public double BonusToReferred { get; set; }
     }
 }

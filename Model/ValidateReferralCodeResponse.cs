@@ -8,5 +8,6 @@ namespace Auctus.Model
     {
         public bool Valid { get; set; }
         public double Discount { get; set; }
+        public double BonusAmount { get; set; }
     }
 }

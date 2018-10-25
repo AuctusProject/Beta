@@ -17,6 +17,7 @@ export class InviteFriendComponent implements OnInit, ModalComponent {
   link: string = '';
   description: string = 'Sign up for Auctus Experts today and follow trading recommendations from transparently tracked and ranked crypto experts. Use this referral link for a 20% discount!';
   copied: boolean = false;
+  bonusAmount: number;
   @ViewChild("Link") Link: ElementRef;
 
   constructor(private accountService: AccountService) { }
@@ -25,6 +26,7 @@ export class InviteFriendComponent implements OnInit, ModalComponent {
     this.accountService.getReferralProgramInfo().subscribe(result => 
       {
         if (!!result) {
+          this.bonusAmount = result.bonusToReferred;
           this.link = CONFIG.webUrl + '?register=true&ref=' + result.referralCode;
         }
       });

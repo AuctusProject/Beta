@@ -34,7 +34,7 @@ namespace Auctus.Business.Event
                 assets = new int[] { assetId.Value };
 
             var events = Task.Factory.StartNew(() => List(assets, top, lastEventId));
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             return UserBusiness.FillFeedList(null, null, events, user, top, null, null, lastEventId);
         }
 

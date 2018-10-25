@@ -21,12 +21,13 @@ export class ModalService {
     private dialog: MatDialog) {
   }
 
-  private setModal(component: any, componentInputData?: any, hiddenClose: boolean = false): MatDialogRef<FullscreenModalComponent, any> {
+  private setModal(component: any, componentInputData?: any, hiddenClose: boolean = false, forcedTitle: string = undefined): MatDialogRef<FullscreenModalComponent, any> {
     if(isPlatformBrowser(this.platformId)){
       let modalData = new FullscreenModalComponentInput();
       modalData.component = component;
       modalData.componentInput = componentInputData;
       modalData.hiddenClose = hiddenClose;
+      modalData.forcedTitle = forcedTitle;
       return this.dialog.open(FullscreenModalComponent, { data: modalData }); 
     }
     return null;
@@ -50,6 +51,10 @@ export class ModalService {
 
   public setBecomeAdvisor(): MatDialogRef<FullscreenModalComponent, any> {
     return this.setModal(EntryOptionComponent, { becomeExpert: true });
+  }
+
+  public setCompleteRegistration(): MatDialogRef<FullscreenModalComponent, any> {
+    return this.setModal(EntryOptionComponent, { completeregistration: true });
   }
 
   public setBecomeAdvisorForm(): MatDialogRef<FullscreenModalComponent, any> {

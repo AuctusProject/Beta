@@ -50,6 +50,10 @@ export class NavigationService {
     this.goToUrl('feed');
   }
 
+  public goToCompleteRegistration(){
+    this.goToUrl('', { completeregistration: true });
+  }
+
   public goToConfirmEmail(){
     this.goToUrl('', { confirmemail: true });
   }

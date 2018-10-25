@@ -46,7 +46,7 @@ import { GlobalSearchComponent } from './components/util/global-search/global-se
 import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { NgHttpLoaderModule } from 'ng-http-loader'; 
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
-import {Angular2PromiseButtonModule} from 'angular2-promise-buttons/dist';
+import {Angular2PromiseButtonModule} from 'angular2-promise-buttons';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
 import { RecommendationBoxComponent } from './components/home/recommendation-box/recommendation-box.component';
 import { HomeComponent } from './components/home/home/home.component';

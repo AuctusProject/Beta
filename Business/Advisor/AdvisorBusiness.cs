@@ -28,15 +28,100 @@ namespace Auctus.Business.Advisor
 
         public AdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
+        public async Task<LoginResponse> CreateAsync(string email, string password, string name, string description, string referralCode,
+            bool changePicture, Stream pictureStream, string pictureExtension)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new BusinessException("Name must be filled.");
+            if (name.Length > 50)
+                throw new BusinessException("Name cannot have more than 50 characters.");
+            if (!string.IsNullOrWhiteSpace(description) && description.Length > 160)
+                throw new BusinessException("Short description cannot have more than 160 characters.");
+
+            byte[] picture = null;
+            if (changePicture && pictureStream != null)
+                picture = AdvisorBusiness.GetPictureBytes(pictureStream, pictureExtension);
+
+            User user = null;
+            var updateUser = false;
+            if (LoggedEmail != null)
+            {
+                if (!string.IsNullOrWhiteSpace(email) && email != LoggedEmail)
+                    throw new BusinessException("Invalid email.");
+                if (!string.IsNullOrWhiteSpace(password))
+                    throw new BusinessException("Invalid password.");
+
+                user = UserBusiness.GetForLoginByEmail(LoggedEmail);
+                if (UserBusiness.IsValidAdvisor(user))
+                    throw new BusinessException("User already registered.");
+
+                if (!user.ReferredId.HasValue)
+                {
+                    var referredUser = UserBusiness.GetReferredUser(referralCode);
+                    if (referredUser != null)
+                    {
+                        updateUser = true;
+                        user.ReferralStatus = ReferralStatusType.InProgress.Value;
+                        user.ReferredId = referredUser.Id;
+                        user.BonusToReferred = UserBusiness.GetBonusToReferredUser(referredUser);
+                    }
+                }
+                else if (!string.IsNullOrEmpty(referralCode))
+                    throw new BusinessException("User already has a referral code defined.");
+            }
+            else
+                user = UserBusiness.GetValidUserToRegister(email, password, referralCode);
+
+            Guid urlGuid = Guid.NewGuid();
+
+            using (var transaction = TransactionalDapperCommand)
+            {
+                if (LoggedEmail == null)
+                    transaction.Insert(user);
+                else if (updateUser)
+                    transaction.Update(user);
+
+                var advisor = new DomainObjects.Advisor.Advisor()
+                {
+                    Id = user.Id,
+                    Name = name,
+                    Description = description,
+                    BecameAdvisorDate = Data.GetDateTimeNow(),
+                    Enabled = true,
+                    UrlGuid = urlGuid
+                };
+
+                transaction.Insert(advisor);
+                transaction.Commit();               
+            }
+
+            await AzureStorageBusiness.UploadUserPictureFromBytesAsync($"{urlGuid}.png", picture ?? AdvisorBusiness.GetNoUploadedImageForAdvisor(user));
+            if (LoggedEmail == null || !user.ConfirmationDate.HasValue)
+                await UserBusiness.SendEmailConfirmationAsync(user.Email, user.ConfirmationCode);
+
+            UserBusiness.ClearUserCache(user.Email);
+            AdvisorBusiness.UpdateAdvisorsCacheAsync();
+
+            return new LoginResponse()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PendingConfirmation = !user.ConfirmationDate.HasValue,
+                AdvisorName = name,
+                ProfileUrlGuid = urlGuid.ToString(),
+                HasInvestment = true,
+                IsAdvisor = true,
+                RequestedToBeAdvisor = false
+            };
+        }
+
         public async Task<Guid> EditAdvisorAsync(int id, string name, string description, bool changePicture, Stream pictureStream, string pictureExtension)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessException("Name must be filled.");
             if (name.Length > 50)
                 throw new BusinessException("Name cannot have more than 50 characters.");
-            if (string.IsNullOrWhiteSpace(description))
-                throw new BusinessException("Description must be filled.");
-            if (description.Length > 160)
+            if (!string.IsNullOrEmpty(description) && description.Length > 160)
                 throw new BusinessException("Description cannot have more than 160 characters.");
 
             byte[] picture = null;
@@ -147,7 +232,7 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             CalculateForAdvisorsData(user, CalculationMode.AdvisorBase, out advisorsResult, out assetsResult);
             return advisorsResult;
         }
@@ -156,7 +241,7 @@ namespace Auctus.Business.Advisor
         {
             List<AdvisorResponse> advisorsResult;
             List<AssetResponse> assetsResult;
-            var user = LoggedEmail != null ? UserBusiness.GetByEmail(LoggedEmail) : null;
+            var user = GetLoggedUser();
             CalculateForAdvisorsData(user, CalculationMode.AdvisorDetailed, out advisorsResult, out assetsResult, advisorId);
             var result = advisorsResult.Single(c => c.UserId == advisorId);
             result.Assets = assetsResult.Where(c => c.AssetAdvisor.Any(a => a.UserId == advisorId)).ToList();

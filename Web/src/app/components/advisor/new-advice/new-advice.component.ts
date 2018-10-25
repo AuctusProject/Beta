@@ -48,7 +48,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
       this.navigationService.goToLogin();
     } else if (!loginData.isAdvisor) {
       this.setClose.emit();
-      this.navigationService.goToBecomeAdvisor();
+      this.navigationService.goToCompleteRegistration();
     } 
     this.CoinSearch.onSelect.subscribe(newValue => 
       {
