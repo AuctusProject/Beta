@@ -59,6 +59,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       this.registerAdvisorRequest.email = this.isNewUser() || !loginData ? "" : loginData.email;
       this.showReferralInput = this.isNewUser() || !this.completeRegistration || this.localStorageService.getLocalStorage("socialRegister");
       this.registerAdvisorRequest.password = "";
+      this.registerAdvisorRequest.description = "";
       this.registerAdvisorRequest.referralCode = this.activatedRoute.snapshot.queryParams['ref'];
       if (!this.registerAdvisorRequest.referralCode) {
         this.registerAdvisorRequest.referralCode = this.localStorageService.getLocalStorage("referralCode");
@@ -68,6 +69,8 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
       } 
       if (!!this.registerAdvisorRequest.referralCode) {
         this.validateReferralCode(this.registerAdvisorRequest.referralCode);
+      } else {
+        this.registerAdvisorRequest.referralCode = "";
       }
     }
   }
@@ -146,6 +149,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
 
   setInvalidReferral(message: string) {
     this.validReferral = false;
+    this.registerAdvisorRequest.referralCode = "";
     this.Referral.setForcedError(message);
     this.localStorageService.setLocalStorage("referralCode", "");
   }
