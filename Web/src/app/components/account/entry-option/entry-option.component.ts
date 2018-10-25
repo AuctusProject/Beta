@@ -12,7 +12,7 @@ import { ForgotPasswordComponent } from '../forgot-password/forgot-password.comp
 import { RegisterComponent } from '../register/register.component';
 import { ModalService } from '../../../services/modal.service';
 import { BecomeAdvisorComponent } from '../../advisor/become-advisor/become-advisor.component';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { LocalStorageService } from '../../../services/local-storage.service';
 
 @Component({
   selector: 'entry-option',

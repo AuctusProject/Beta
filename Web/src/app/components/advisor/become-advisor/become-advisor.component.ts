@@ -14,8 +14,8 @@ import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-m
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InheritanceInputOptions, InputType } from '../../../model/inheritanceInputOptions';
 import { AuthRedirect } from '../../../providers/authRedirect';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { ActivatedRoute } from '@angular/router';
+import { LocalStorageService } from '../../../services/local-storage.service';
 
 @Component({
   selector: 'become-advisor',
