@@ -149,7 +149,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
 
   setInvalidReferral(message: string) {
     this.validReferral = false;
-    this.registerAdvisorRequest.referralCode = "";
     this.Referral.setForcedError(message);
     this.localStorageService.setLocalStorage("referralCode", "");
   }
