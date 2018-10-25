@@ -35,7 +35,7 @@ export class ReferralDetailsComponent implements ModalComponent, OnInit {
     if (!loginData) {
       this.setClose.emit();
       this.navigationService.goToLogin();
-    } else if (!loginData.isAdvisor && !loginData.hasInvestment) {
+    } else if (!loginData.isAdvisor) {
       this.setClose.emit();
       this.navigationService.goToCompleteRegistration();
     } else {

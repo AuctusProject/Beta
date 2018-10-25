@@ -35,7 +35,10 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
     private accountService: AccountService, private navigationService: NavigationService) { }
 
   ngOnInit() {
-    if (this.accountService.getLoginData().isAdvisor && !!this.data && !!this.data.id) {
+    if (!this.accountService.getLoginData().isAdvisor) {
+      this.setClose.emit();
+      this.navigationService.goToCompleteRegistration();
+    } else if (!!this.data && !!this.data.id) {
       if (this.accountService.getLoginData().id == this.data.id){
         this.advisorService.getAdvisor(this.data.id).subscribe(advisor => 
           {
