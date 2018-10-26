@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { AssetService } from '../../../services/asset.service';
 import { AccountService } from '../../../services/account.service';
 import { ModalService } from '../../../services/modal.service';
@@ -25,9 +26,13 @@ export class ListReportsComponent implements OnInit {
   constructor(private modalService: ModalService, 
     public accountService: AccountService, 
     private assetService: AssetService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Auctus Experts - Agency Rating Reports");
+    this.metaTagService.updateTag({name: 'description', content: "All crypto reports in one place, easily accessible and ready for download"});
     if (this.route.snapshot.queryParams['coin']) { 
       this.selectedReportId = parseInt(this.route.snapshot.queryParams['coin']);
       this.CoinSearch.setForcedCoin(this.selectedReportId);

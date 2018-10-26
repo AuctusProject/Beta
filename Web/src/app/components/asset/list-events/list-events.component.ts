@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { AssetService } from '../../../services/asset.service';
 import { AccountService } from '../../../services/account.service';
 import { ModalService } from '../../../services/modal.service';
@@ -23,9 +24,13 @@ export class ListEventsComponent implements OnInit {
 
   constructor(private modalService: ModalService, 
     public accountService: AccountService, 
-    private assetService: AssetService) { }
+    private assetService: AssetService,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Auctus Experts - Upcoming Events");
+    this.metaTagService.updateTag({name: 'description', content: "Cryptocurrency calendar events from CoinMarketCal"});
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.loadMoreEvents();
 
