@@ -28,8 +28,8 @@ export class ListReportsComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    if (this.route.snapshot.queryParams['coin']) { 
-      this.selectedReportId = parseInt(this.route.snapshot.queryParams['coin']);
+    if (this.route.snapshot.queryParams['asset']) { 
+      this.selectedReportId = parseInt(this.route.snapshot.queryParams['asset']);
       this.CoinSearch.setForcedCoin(this.selectedReportId);
     }
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;

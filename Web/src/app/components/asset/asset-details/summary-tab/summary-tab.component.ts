@@ -35,6 +35,6 @@ export class SummaryTabComponent implements OnInit {
     } else {
       sentence += "experts"
     }
-    return "Expert recommendation for " + this.asset.code + " (Based on: " + sentence + ", last 30 days)";
+    return "Expert signal for " + this.asset.code + " (Based on: " + sentence + ", last 30 days)";
   }
 }

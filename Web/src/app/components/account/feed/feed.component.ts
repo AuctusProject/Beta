@@ -121,7 +121,7 @@ export class FeedComponent implements OnInit {
   }
 
   getTopText() : string {
-    return null; //"Recommendations from experts and cryptocurrencies that you are following";
+    return null; //"Signals from experts and cryptocurrencies that you are following";
   }
 
   showLatestUpdates() : boolean {

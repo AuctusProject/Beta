@@ -20,7 +20,7 @@ import { AdviceParametersComponent } from './advice-parameters/advice-parameters
   styleUrls: ['./new-advice.component.css']
 })
 export class NewAdviceComponent implements ModalComponent, OnInit {
-  modalTitle: string;//Set new rating";
+  modalTitle: string;//Set new signal";
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
@@ -112,7 +112,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
             let modalData = new FullscreenModalComponentInput();
             modalData.hiddenClose = true;
             modalData.component = MessageFullscreenModalComponent;
-            modalData.componentInput = { message: "New " + recommendation + " rating was successfully created to " + this.asset.code + " - " + this.asset.name };
+            modalData.componentInput = { message: "New " + recommendation + " signal was successfully created to " + this.asset.code + " - " + this.asset.name };
             this.setNewModal.emit(modalData);
           });
       }

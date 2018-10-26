@@ -30,26 +30,26 @@ namespace Auctus.Business.Advisor
             Advice lastAdvice = GetLastAdviceForAssetByAdvisor(advisor.Id, asset.Id);
 
             if (lastAdvice != null && Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds < MinimumTimeInSecondsBetweenAdvices)
-                throw new BusinessException(string.Format("You need to wait {0} seconds before advising again for this asset.", MinimumTimeInSecondsBetweenAdvices - Math.Round(Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds)));
+                throw new BusinessException(string.Format("You need to wait {0} seconds before emit a new signal for this asset.", MinimumTimeInSecondsBetweenAdvices - Math.Round(Data.GetDateTimeNow().Subtract(lastAdvice.CreationDate).TotalSeconds)));
 
             if (type == AdviceType.ClosePosition && (lastAdvice == null || lastAdvice.AdviceType == AdviceType.ClosePosition))
-                throw new BusinessException("You need to set a Buy or Sell recommendation before advising to Close.");
+                throw new BusinessException("You need to set a Buy or Sell signal before emit a Close signal.");
 
             if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
-                throw new BusinessException("Sell recommendations are not available for this asset.");
+                throw new BusinessException("Sell signals are not available for this asset.");
 
             var assetValue = AssetCurrentValueBusiness.GetCurrentValue(asset.Id);
             if (assetValue == null)
                 throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
 
             if (type == AdviceType.ClosePosition && (stopLoss.HasValue || targetPrice.HasValue))
-                throw new BusinessException("Stop loss or target price cannot be defined to Close position recommendation.");
+                throw new BusinessException("Stop loss or take profit cannot be defined to a Close signal.");
 
             if (stopLoss.HasValue && ((type == AdviceType.Buy && assetValue.Value <= stopLoss.Value) || (type == AdviceType.Sell && assetValue.Value >= stopLoss.Value)))
                 throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(assetValue.Value)}.");
 
             if (targetPrice.HasValue && ((type == AdviceType.Buy && assetValue.Value >= targetPrice.Value) || (type == AdviceType.Sell && assetValue.Value <= targetPrice.Value)))
-                throw new BusinessException($"Invalid target price value for current price {Util.Util.GetFormattedValue(assetValue.Value)}.");
+                throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(assetValue.Value)}.");
 
             Insert(new Advice()
                     {
@@ -90,9 +90,9 @@ namespace Auctus.Business.Advisor
                     break;
             }
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
-                $"New recommendation on Auctus Experts for {asset.Code}",
+                $"New signal on Auctus Experts for {asset.Code}",
                 $@"
-            <p>Expert {advisor.Name} set a new recommendation.</p>
+            <p>Expert {advisor.Name} set a new signal.</p>
 			<a style=""text-decoration: none;color:#ffffff;"" href=""{WebUrl}/asset-details/{asset.Id}"">
 				<div style=""border: solid 1px #404040;text-align:center;padding: 25px;"">
 					<div style=""height:100px;width:100px;border-radius:50px;margin-right:27px;display:inline-block;vertical-align: top;"">
@@ -108,7 +108,7 @@ namespace Auctus.Business.Advisor
 					</div>
 				</div>
 			</a>
-			<p style=""font-size:12px;font-style:italic;"">If you do not want to receive these recommendations for experts/assets that you are following, <a href='{WebUrl}?configuration=true' target='_blank'>click here</a>.</p>", 
+			<p style=""font-size:12px;font-style:italic;"">If you do not want to receive these signals for experts/assets that you are following, <a href='{WebUrl}?configuration=true' target='_blank'>click here</a>.</p>", 
                 EmailTemplate.NotificationType.NewRecommendation);
         }
 

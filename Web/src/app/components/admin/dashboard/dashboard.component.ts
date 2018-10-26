@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
       this.dashboardData = ret;
       this.initiateRegistrationChart();
       this.createDonutChart(this.dashboardData.referralStatus, this.referralData, 'TOTAL REFERRALS<br><b>' + this.dashboardData.totalUsersConfirmedFromReferral + '</b>', 'Referral status', this.referralChart);
-      this.createDonutChart(this.dashboardData.advices, this.advicesData, 'TOTAL ADVICES<br><b>' + this.dashboardData.totalAdvices + '</b>', 'Advices', this.advicesChart);
+      this.createDonutChart(this.dashboardData.advices, this.advicesData, 'TOTAL SIGNALS<br><b>' + this.dashboardData.totalAdvices + '</b>', 'Signals', this.advicesChart);
       this.createDonutChart(this.dashboardData.following, this.followingData, 'TOTAL FOLLOWERS<br><b>' + this.dashboardData.totalFollowing + '</b>', 'Followers', this.followingChart);
     });
   }

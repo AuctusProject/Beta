@@ -53,7 +53,7 @@ export class TopImageComponent implements OnInit {
       
       let bestCall = this.getBestCall();
       if (bestCall && bestCall.replace(/\s/g, '').length >= 1) {
-        this.latestUpdates.push("Your best call was to " + this.getBestCall());
+        this.latestUpdates.push("Your best signal was to " + this.getBestCall());
       }
     }
   }

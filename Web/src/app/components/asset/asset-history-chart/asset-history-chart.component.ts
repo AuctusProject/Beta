@@ -85,7 +85,7 @@ export class AssetHistoryChartComponent implements OnChanges {
   getAdviceFlagText(advice: AdviceResponse) {
     let text = Util.GetRecommendationTypeDescription(advice.adviceType) + ' at price ' + new ValueDisplayPipe().transform(advice.assetValue);
     if (advice.targetPrice) {
-      text += '<br/>Target value: ' +  new ValueDisplayPipe().transform(advice.targetPrice);
+      text += '<br/>Take profit: ' +  new ValueDisplayPipe().transform(advice.targetPrice);
     }
     if (advice.stopLoss) {
       text += '<br/>Stop loss: ' + new ValueDisplayPipe().transform(advice.stopLoss);

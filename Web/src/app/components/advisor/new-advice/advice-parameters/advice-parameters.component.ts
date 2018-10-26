@@ -15,7 +15,7 @@ export class AdviceParametersComponent implements OnInit {
   targetPriceValue?: number;
   stopLossValue?: number;
   stopLossOptions: any = { inputType: InputType.Number, textOptions: { placeHolder: "Stop loss (USD)", required: false, showHintSize: false } };
-  targetOptions: any = { inputType: InputType.Number, textOptions: { placeHolder: "Target price (USD)", required: false, showHintSize: false } };
+  targetOptions: any = { inputType: InputType.Number, textOptions: { placeHolder: "Take profit (USD)", required: false, showHintSize: false } };
 
   constructor() { }
   
@@ -54,7 +54,7 @@ export class AdviceParametersComponent implements OnInit {
     this.targetPriceValue = newValue;
     if (this.targetPriceValue && ((this.adviceType == 1 && this.targetPriceValue <= this.currentPrice) ||
         (this.adviceType == 0 && this.targetPriceValue >= this.currentPrice))) {
-      this.TargetPrice.setForcedError("Invalid target price for current value");
+      this.TargetPrice.setForcedError("Invalid take profit for current value");
     } else {
       this.TargetPrice.setForcedError(null);
     }
