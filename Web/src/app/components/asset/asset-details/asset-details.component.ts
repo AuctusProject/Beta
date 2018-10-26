@@ -36,6 +36,13 @@ export class AssetDetailsComponent implements OnInit {
     )
   }
 
+  refreshDataSource(){
+    this.assetService.getAssetDetails(this.asset.assetId.toString()).subscribe(
+      asset => {
+        this.asset = asset;
+      })
+  }
+  
   getAssetImgUrl(){
     return CONFIG.assetImgUrl.replace("{id}", this.asset.assetId.toString());
   }

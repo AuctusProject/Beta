@@ -112,7 +112,7 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
             let modalData = new FullscreenModalComponentInput();
             modalData.hiddenClose = true;
             modalData.component = MessageFullscreenModalComponent;
-            modalData.componentInput = { message: "New " + recommendation + " rating was successfully created to " + this.asset.code + " - " + this.asset.name, reload: true };
+            modalData.componentInput = { message: "New " + recommendation + " rating was successfully created to " + this.asset.code + " - " + this.asset.name };
             this.setNewModal.emit(modalData);
           });
       }

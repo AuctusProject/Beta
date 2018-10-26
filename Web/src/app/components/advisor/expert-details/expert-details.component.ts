@@ -61,7 +61,7 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    this.modalService.setNewAdvice();
+    this.modalService.setNewAdvice().afterClosed().subscribe( () => this.refreshDataSource()) ;
   }
 
   onEditProfileClick() {
@@ -75,6 +75,14 @@ export class ExpertDetailsComponent implements OnInit {
     else{
       this.expandedElement = row;
     }
+  }
+
+  refreshDataSource(){
+    this.advisorService.getExpertDetails(this.accountService.getLoginData().id.toString()).subscribe(expert => 
+      {
+        this.expert = expert;
+        this.fillDataSource();
+      });
   }
 
   fillDataSource(){
@@ -155,7 +163,7 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   closePosition(asset: AssetResponse) {
-    this.modalService.setNewAdvice(asset.assetId, 2);
+    this.modalService.setNewAdvice(asset.assetId, 2).afterClosed().subscribe( () => this.refreshDataSource());
   }
 
   onFollowAssetClick(event: Event, asset: AssetResponse){

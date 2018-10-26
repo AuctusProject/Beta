@@ -44,7 +44,15 @@ export class ListAssetsComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    this.modalService.setNewAdvice();
+    this.modalService.setNewAdvice().afterClosed().subscribe(() => this.refreshDataSource() );
+  }
+
+  refreshDataSource(){
+    this.assetService.getAssetsDetails().subscribe(result => 
+      {
+        this.allAssets = result;
+        this.setVisibleAssets();
+      });
   }
   
   loadMoreAssets(){

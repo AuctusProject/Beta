@@ -56,7 +56,7 @@
     </div>
     <mat-tab-group class="global-container-min">
       <mat-tab label="Summary">
-        <summary-tab [asset]="asset"></summary-tab>
+        <summary-tab [asset]="asset" (onAdviceCreated)='refreshDataSource()'></summary-tab>
       </mat-tab>
       <mat-tab label="Ratings"> 
         <expert-ratings-tab [asset]="asset"></expert-ratings-tab>
