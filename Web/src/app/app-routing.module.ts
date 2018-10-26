@@ -26,7 +26,7 @@ const routes: Routes = [
     { path: 'top-assets', component: ListAssetsComponent },
     { path: 'asset-details/:id', component: AssetDetailsComponent },
     { path: 'rating-reports', component: ListReportsComponent },
-    { path: 'coin-events', component: ListEventsComponent },
+    { path: 'asset-events', component: ListEventsComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate:[AuthRedirect] },
     { path: 'advisors-requests', component: AdvisorsRequestsComponent, canActivate:[AuthRedirect] },
     { path: 'terminal', component: TerminalComponent },

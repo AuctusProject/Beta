@@ -3,7 +3,7 @@
     <div fxLayout="column" fxLayoutAlign.lt-md="center center">   
       <advisor-card [advisor]="expert"></advisor-card>
       <div class="distribution-box">
-        <div class="distribution-box-title">Currency Ratings Distribution</div>
+        <div class="distribution-box-title">Currency Signals Distribution</div>
         <recommendation-distribution [data]="expert.recommendationDistribution" [showTitle]="'true'"></recommendation-distribution>
       </div>
     </div>
@@ -15,7 +15,7 @@
           <div class="expert-followers">Followed by {{expert.numberOfFollowers}} {{getInvestorsWordPluralOrSingular()}}</div>
         </div>
         <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="end end" fxLayoutAlign.lt-md="center center"  fxLayoutGap="10px">
-          <div class="blue-button action-button truncate" *ngIf="showOwnerButton && !noRecommendationsYet()" (click)="onNewAdviceClick()">NEW RATING</div>   
+          <div class="blue-button action-button truncate" *ngIf="showOwnerButton && !noRecommendationsYet()" (click)="onNewAdviceClick()">NEW SIGNAL</div>   
           <div class="blue-button action-button truncate" *ngIf="showOwnerButton" (click)="onEditProfileClick()">EDIT PROFILE</div>     
           <div fxHide.lt-md class="white-button action-button truncate" *ngIf="!showOwnerButton && expert.following" (click)="onUnfollowClick()">
             UNFOLLOW
@@ -92,7 +92,7 @@
           </ng-container>
 
           <ng-container matColumnDef="ratings">
-            <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> No. of Ratings </th>
+            <th fxHide.lt-sm mat-header-cell *matHeaderCellDef> No. of Signals </th>
             <td fxHide.lt-sm mat-cell *matCellDef="let asset">
               {{getTotalRatings(asset)}}
             </td>
@@ -158,7 +158,7 @@
         </table>
         <div *ngIf="noRecommendationsYet()" fxLayout="column" fxLayoutAlign="center center">
           <div class="no-advices-yet-message" [innerHTML]="getNoRecommendationMessage()" ></div>
-          <div class="blue-button action-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW RATING</div>
+          <div class="blue-button action-button" *ngIf="showOwnerButton" (click)="onNewAdviceClick()">NEW SIGNAL</div>
         </div>
       </div>
     </div>

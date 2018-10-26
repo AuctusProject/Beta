@@ -1,5 +1,5 @@
 <div class="div-data" fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-  <div class="text-center">Chose a coin, select one position and hit confirm. The update on your list will be automatic.</div>
+  <div class="text-center">Choose an asset, select one position and hit confirm. The update on your list will be automatic.</div>
   <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
   <button *ngIf="showButtons" class="btn-buy btn-option" [ngClass]="advise.adviceType == 0 || advise.adviceType == 2 ? 'btn-not-selected' : ''" mat-flat-button (click)="showButtons && buy()">BUY<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>
   <button *ngIf="(showButtons && showSell)" class="btn-sell btn-option" [ngClass]="advise.adviceType == 1 || advise.adviceType == 2 ? 'btn-not-selected' : ''" mat-flat-button (click)="showButtons && showSell && sell()">SELL<ng-container *ngIf="lastValue"> at {{lastValue | valueDisplay}}</ng-container></button>

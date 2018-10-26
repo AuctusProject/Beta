@@ -8,7 +8,7 @@
         </div>
         <div fxLayout="row" fxLayout.xs="column" fxHide.lt-md fxLayoutAlign="center top" fxLayoutGap="16px">
             <coin-search class="coin-event-search" #CoinSearch [options]="getSearchOptions()"></coin-search>
-            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RATING</div>
+            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW SIGNAL</div>
         </div>
         <div fxLayout="column" fxLayoutAlign="center center">
             <event-card *ngFor="let event of events" [eventFeed]="event"></event-card>

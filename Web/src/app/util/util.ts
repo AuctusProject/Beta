@@ -54,7 +54,7 @@ export class Util {
             return "STOP LOSS";
           }
           else{
-            return "TARGET PRICE";
+            return "TAKE PROFIT";
           }
     }
 

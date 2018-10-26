@@ -205,7 +205,7 @@ string.Format("[{0}] Request to become Expert - Auctus Beta", oldRequestToBeAdvi
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { user.Email },
                 "Your request to become an Expert was approved! - Auctus Experts",
-                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start recommending assets, <a href='{WebUrl}/expert-details/{user.Id}' target='_blank'>click here</a>.</p>",
+                $@"<p>We are happy to inform you that your request to become an Expert on Auctus Platform was approved. To start emitting signals to assets, <a href='{WebUrl}/expert-details/{user.Id}' target='_blank'>click here</a>.</p>",
                 EmailTemplate.NotificationType.BecomeAdvisor);
         }
     }

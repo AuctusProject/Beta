@@ -19,7 +19,7 @@ export class CoinSearchComponent implements OnInit {
   @Output() onSelect: EventEmitter<Asset> = new EventEmitter<Asset>();
 
   public required: boolean = false;
-  public placeholder: string = "Select a Coin *";
+  public placeholder: string = "Select an Asset *";
   public outlineField: boolean = true;
   public darkStyle: boolean = true;
 
@@ -39,7 +39,7 @@ export class CoinSearchComponent implements OnInit {
   ngOnInit() {
     if (!!this.options) {
         this.required = this.setValue(this.required, this.options.required);
-        this.placeholder = "Select a Coin" + (this.required ? ' *' : '');
+        this.placeholder = "Select an Asset" + (this.required ? ' *' : '');
         this.outlineField = this.setValue(this.outlineField, this.options.outlineField);
         this.darkStyle = this.setValue(this.darkStyle, this.options.darkStyle);
     }
@@ -135,7 +135,7 @@ export class CoinSearchComponent implements OnInit {
         if (this.inputText) {
             this.coinControl.setErrors({'incorrect': true});
         }
-        return 'Coin must be selected';
+        return 'Asset must be selected';
     }
     return '';
   }

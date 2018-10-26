@@ -61,10 +61,10 @@ export class AssetDetailsComponent implements OnInit {
   getTotalAdvisorsSentence(){
     var sentence = this.asset.totalAdvisors+" ";
     if(this.asset.totalAdvisors == 1){
-      sentence += "expert recommend"
+      sentence += "expert signaled"
     }
     else{
-      sentence += "experts recommend"
+      sentence += "experts signaled"
     }
     return sentence;
   }
