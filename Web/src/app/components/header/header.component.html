@@ -26,7 +26,7 @@
                 <mat-icon>{{menuOpen ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
             </span>
         </a>
-        <div class="blue-button header-blue-button" fxHide.gt-md="true" *ngIf="!!loginData && loginData.isAdvisor" (click)="onNewAdviceClick()">NEW SIGNAL</div>
+        <div class="blue-button header-blue-button signal-btn" fxHide.gt-md="true" *ngIf="!!loginData && loginData.isAdvisor" (click)="onNewAdviceClick()">SIGNAL</div>
         <span class="mobile-menu" fxShow="true" fxHide.gt-md="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="mobile"><mat-icon>{{menuOpen ? 'close' : 'reorder'}}</mat-icon></span>
         <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #profile="matMenu">
             <button class="sub-menu-item" fxShow="true" fxHide.gt-sm="true" *ngIf="!!loginData && loginData.isAdvisor" (click)="onMyProfile()" mat-menu-item>MY PROFILE</button>

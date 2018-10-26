@@ -128,3 +128,7 @@ a span {
 .profile-description{
     max-width: 80px;
 }
+
+.signal-btn {
+    margin: 0px 5px;
+}
