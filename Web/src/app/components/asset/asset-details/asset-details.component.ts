@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { AssetResponse, AssetAdvisorResponse } from '../../../model/asset/assetResponse';
 import { ActivatedRoute } from '@angular/router';
 import { AssetService } from '../../../services/asset.service';
@@ -25,13 +26,17 @@ export class AssetDetailsComponent implements OnInit {
     private accountService: AccountService,
     private modalService: ModalService,
     private advisorService: AdvisorService,
-    private navigationService:NavigationService) { }
+    private navigationService:NavigationService,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
       this.assetService.getAssetDetails(params['id']).subscribe(
         asset => {
           this.asset = asset;
+          this.titleService.setTitle("Auctus Experts - " + asset.name);
+          this.metaTagService.updateTag({name: 'description', content: "Expert ratings on " + asset.name + " (" + asset.code + ")" });
         })
     )
   }

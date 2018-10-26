@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { ActivatedRoute } from '@angular/router';
 import { AdvisorService } from '../../../services/advisor.service';
@@ -44,7 +45,9 @@ export class ExpertDetailsComponent implements OnInit {
     private navigationService: NavigationService,
     private assetService: AssetService,
     private modalService: ModalService,
-    private changeDetectorRefs: ChangeDetectorRef) { }
+    private changeDetectorRefs: ChangeDetectorRef,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
@@ -55,6 +58,8 @@ export class ExpertDetailsComponent implements OnInit {
           {
             this.expert = expert;
             this.fillDataSource();
+            this.titleService.setTitle("Auctus Experts - " + expert.name);
+            this.metaTagService.updateTag({name: 'description', content: expert.name + " - " + expert.description});
           });
       }
     );
