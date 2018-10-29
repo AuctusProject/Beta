@@ -53,14 +53,21 @@ export class FeedComponent implements OnInit {
     }
   }
 
+  refreshDataSource(){
+    this.loadMore(true);
+  }
+
   canView() {
     let loginData = this.accountService.getLoginData();
     return !!loginData && loginData.hasInvestment;
   }
 
-  loadMore() {
+  loadMore(clear : boolean = false) {
     this.promise = this.accountService.listFeed(this.pageSize, this.getLastAdviceId(), this.getLastReportId(), this.getLastEventId()).subscribe(result => 
       {
+        if (clear){
+          this.advices = null;
+        }
         if (this.advices == null) {
           this.advices = [];
         }
