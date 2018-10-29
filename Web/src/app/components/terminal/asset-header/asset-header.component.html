@@ -116,10 +116,6 @@
                         <span>Sell</span>
                         <span>{{getExpertsSellAmount()}}</span>
                     </div>
-                    <div class="neutral" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                        <span>Neutral</span>
-                        <span>{{getExpertsNeutralAmount()}}</span>
-                    </div>
                 </div>
                 <div fxLayout="row" class="pointer" (click)="openReportPage()" fxLayoutAlign="start center" fxLayoutGap="10px">
                     <div class="bull" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -151,11 +147,7 @@
                 <div class="bear" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span>Sell</span>
                     <span>{{getExpertsSellAmount()}}</span>
-                </div>
-                <div class="neutral" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>Neutral</span>
-                    <span>{{getExpertsNeutralAmount()}}</span>
-                </div>                
+                </div>              
             </div>
             <div fxHide.gt-xs="true" class="force-padding-top force-padding-left" fxLayout="column" fxLayoutAlign="start start">
                 <div class="triangle-report-rating"></div>

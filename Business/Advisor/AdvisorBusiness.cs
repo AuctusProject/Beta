@@ -354,7 +354,8 @@ namespace Auctus.Business.Advisor
                     {
                         if (mode != CalculationMode.AdvisorDetailed && mode != CalculationMode.Feed)
                         {
-                            assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.Where(c => c.LastAdviceType.HasValue).GroupBy(c => c.LastAdviceType.Value)
+                            assetResultData.RecommendationDistribution = assetResultData.AssetAdvisor.Where(c => c.LastAdviceType.HasValue 
+                                && c.LastAdviceType.Value != AdviceType.ClosePosition.Value).GroupBy(c => c.LastAdviceType.Value)
                                 .Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
                             assetResultData.Mode = GetAssetModeType(assetResultData);
                             assetResultData.Advices = mode == CalculationMode.AssetBase ? null : assetAdviceDetails
@@ -481,9 +482,28 @@ namespace Auctus.Business.Advisor
                 Following = loggedUser != null && advFollowers?.Any(c => c.UserId == loggedUser.Id) == true,
                 AverageReturn = details.Any(c => c.Return.HasValue) ? details.Where(c => c.Return.HasValue).Sum(c => c.Return.Value) / details.Count(c => c.Return.HasValue) : 0,
                 SuccessRate = details.Any(c => c.Success.HasValue) ? (double)details.Count(c => c.Success.HasValue && c.Success.Value) / details.Count(c => c.Success.HasValue) : 0,
-                RecommendationDistribution = !details.Any() ? new List<RecommendationDistributionResponse>() :
-                    details.GroupBy(c => c.Advice.Type).Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList()
+                RecommendationDistribution = GetAdvisorRecommendationDistribution(details)
             };
+        }
+
+        private List<RecommendationDistributionResponse> GetAdvisorRecommendationDistribution(IEnumerable<AdviceDetail> details)
+        {
+            if (!details.Any())
+                return new List<RecommendationDistributionResponse>();
+
+            var keyPairs = details.GroupBy(c => c.Advice.AssetId).Select(c => new { AssetId = c.Key, Date = c.Max(a => a.Advice.CreationDate) }).ToList();
+            var consideredAdvices = new List<AdviceDetail>();
+            foreach (var pair in keyPairs)
+            {
+                var advice = details.FirstOrDefault(c => c.Advice.AssetId == pair.AssetId && c.Advice.CreationDate == pair.Date);
+                if (advice != null && advice.Advice.AdviceType != AdviceType.ClosePosition)
+                    consideredAdvices.Add(advice);
+            }
+
+            if (!consideredAdvices.Any())
+                return new List<RecommendationDistributionResponse>();
+
+            return consideredAdvices.GroupBy(c => c.Advice.Type).Select(g => new RecommendationDistributionResponse() { Type = g.Key, Total = g.Count() }).ToList();
         }
 
         private void SetAdvisorsRanking(ref List<AdvisorResponse> advisorsResult, Dictionary<int, IEnumerable<AdviceDetail>> advisorsData)

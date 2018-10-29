@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { FeedResponse } from '../../../model/advisor/feedResponse';
 import { AccountService } from '../../../services/account.service';
 import { Subscription } from 'rxjs';
@@ -42,9 +43,13 @@ export class FeedComponent implements OnInit {
     source: ""
   }
   }
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Auctus Experts");
+    this.metaTagService.updateTag({name: 'description', content: "An investment platform made for the digital age. Follow your favourite expert, recognize trends early, stay in control."});
     this.loginData = this.accountService.getLoginData();
     if (this.canView()) {
       this.loadMore();

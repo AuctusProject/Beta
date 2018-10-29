@@ -135,16 +135,14 @@ namespace Auctus.Test.Asset
         {
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.Sell.Value] = 1;
-            expRecommendation[AdviceType.ClosePosition.Value] = 2;
-            AssertExtraAssetData(asset, 5, true, 0, expRecommendation);
+            AssertExtraAssetData(asset, 5, true, 3, expRecommendation);
         }
 
         internal static void AssertExtraAsset2Data(AssetResponse asset)
         {
             var expRecommendation = new Dictionary<int, double>();
             expRecommendation[AdviceType.Sell.Value] = 1;
-            expRecommendation[AdviceType.ClosePosition.Value] = 1;
-            AssertExtraAssetData(asset, 1, true, 0, expRecommendation);
+            AssertExtraAssetData(asset, 1, true, 3, expRecommendation);
         }
 
         internal static void AssertExtraAsset3Data(AssetResponse asset)
@@ -157,7 +155,6 @@ namespace Auctus.Test.Asset
         internal static void AssertExtraAsset4Data(AssetResponse asset)
         {
             var expRecommendation = new Dictionary<int, double>();
-            expRecommendation[AdviceType.ClosePosition.Value] = 1;
             AssertExtraAssetData(asset, 0, false, 0, expRecommendation);
         }
 
