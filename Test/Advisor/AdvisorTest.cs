@@ -94,23 +94,20 @@ namespace Auctus.Test.Advisor
         internal static void AssertAdvisor1Data(AdvisorResponse advisor)
         {
             var expRecommendation = new Dictionary<int, double>();
-            expRecommendation[AdviceType.Buy.Value] = 7;
-            expRecommendation[AdviceType.Sell.Value] = 2;
+            expRecommendation[AdviceType.Sell.Value] = 1;
             AssertAdvisorData(advisor, -0.047146, 0.333333, 4, 2, true, false, 3.743845, 3, expRecommendation);
         }
 
         internal static void AssertAdvisor2Data(AdvisorResponse advisor)
         {
             var expRecommendation = new Dictionary<int, double>();
-            expRecommendation[AdviceType.Buy.Value] = 5;
-            expRecommendation[AdviceType.Sell.Value] = 7;
+            expRecommendation[AdviceType.Sell.Value] = 2;
             AssertAdvisorData(advisor, -0.014205, 0.583333, 3, 4, false, false, 3.968860, 2, expRecommendation);
         }
 
         internal static void AssertAdvisor3Data(AdvisorResponse advisor)
         {
             var expRecommendation = new Dictionary<int, double>();
-            expRecommendation[AdviceType.Sell.Value] = 1;
             AssertAdvisorData(advisor, 0.070949, 1, 1, 1, false, true, 4.751651, 1, expRecommendation);
         }
 
