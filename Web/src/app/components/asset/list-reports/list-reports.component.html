@@ -8,7 +8,7 @@
         </div>
         <div fxLayout="row" fxLayout.xs="column" fxHide.lt-md fxLayoutAlign="center top" fxLayoutGap="16px">
             <coin-search class="coin-report-search" #CoinSearch [options]="getSearchOptions()"></coin-search>
-            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW RATING</div>
+            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW SIGNAL</div>
         </div>
         <div fxLayout="column" fxLayoutAlign="center center">
             <report-card *ngFor="let report of reports" [reportFeed]="report"></report-card>

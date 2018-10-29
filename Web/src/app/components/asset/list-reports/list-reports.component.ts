@@ -33,8 +33,9 @@ export class ListReportsComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle("Auctus Experts - Agency Rating Reports");
     this.metaTagService.updateTag({name: 'description', content: "All crypto reports in one place, easily accessible and ready for download"});
-    if (this.route.snapshot.queryParams['coin']) { 
-      this.selectedReportId = parseInt(this.route.snapshot.queryParams['coin']);
+    
+    if (this.route.snapshot.queryParams['asset']) { 
+      this.selectedReportId = parseInt(this.route.snapshot.queryParams['asset']);
       this.CoinSearch.setForcedCoin(this.selectedReportId);
     }
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;

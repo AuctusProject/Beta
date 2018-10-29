@@ -83,7 +83,7 @@ export class NavigationService {
   }
 
   public goToCoinEvents(){
-    this.goToUrl('coin-events');
+    this.goToUrl('asset-events');
   }
 
   public goToTerminal(){

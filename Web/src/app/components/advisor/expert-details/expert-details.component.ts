@@ -116,7 +116,7 @@ export class ExpertDetailsComponent implements OnInit {
       return '';
     } else {
       if (asset.assetAdvisor[0].lastAdviceTargetPrice) {
-        return 'Target value: ' +  new ValueDisplayPipe().transform(asset.assetAdvisor[0].lastAdviceTargetPrice);
+        return 'Take profit: ' +  new ValueDisplayPipe().transform(asset.assetAdvisor[0].lastAdviceTargetPrice);
       } else if (asset.assetAdvisor[0].lastAdviceOperationType != 0 && asset.assetAdvisor[0].lastAdviceType == 2) {
         return 'Triggered by ' + Util.GetCloseReasonDescription(asset.assetAdvisor[0].lastAdviceOperationType);
       } else {
@@ -196,8 +196,8 @@ export class ExpertDetailsComponent implements OnInit {
 
   getNoRecommendationMessage() {
     if(this.showOwnerButton)
-      return "You haven't rated any asset yet.<br>Start now!";
+      return "You haven't emit any signal yet.<br>Start now!";
     else
-      return "This expert hasn't made any recommendation yet.";
+      return "This expert hasn't emit any signal yet.";
   }
 }

@@ -50,7 +50,7 @@ export class ExpertRatingsTabComponent implements OnInit, OnChanges {
       return '';
     } else {
       if (assetAdvisor.lastAdviceTargetPrice) {
-        return 'Target value: ' +  new ValueDisplayPipe().transform(assetAdvisor.lastAdviceTargetPrice);
+        return 'Take profit: ' +  new ValueDisplayPipe().transform(assetAdvisor.lastAdviceTargetPrice);
       } else if (assetAdvisor.lastAdviceOperationType != 0 && assetAdvisor.lastAdviceType == 2) {
         return 'Triggered by ' + Util.GetCloseReasonDescription(assetAdvisor.lastAdviceOperationType);
       } else {

@@ -55,8 +55,8 @@ export class AssetCardComponent implements OnInit {
   }
 
   getRatingLabel(){
-    if(this.asset.totalRatings == 1.0) return 'Rating';
-    return 'Ratings';
+    if(this.asset.totalRatings == 1.0) return 'Signal';
+    return 'Signals';
   }
 
   findRecommendationPercentageByType(type: number) {

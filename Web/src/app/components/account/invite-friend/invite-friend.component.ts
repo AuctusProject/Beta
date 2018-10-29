@@ -15,7 +15,7 @@ export class InviteFriendComponent implements OnInit, ModalComponent {
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
   link: string = '';
-  description: string = 'Sign up for Auctus Experts today and follow trading recommendations from transparently tracked and ranked crypto experts. Use this referral link for a 20% discount!';
+  description: string = 'Sign up for Auctus Experts today and follow trading signals from transparently tracked and ranked crypto experts.';
   copied: boolean = false;
   bonusAmount: number;
   @ViewChild("Link") Link: ElementRef;

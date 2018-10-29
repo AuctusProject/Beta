@@ -50,7 +50,7 @@
         at price {{adviceFeed.advice.assetValueAtAdviceTime | valueDisplay}}
       </div>
       <span class="advice-parameters" *ngIf="adviceFeed.advice.targetPrice">
-        Target value: {{adviceFeed.advice.targetPrice | valueDisplay}}
+        Take profit: {{adviceFeed.advice.targetPrice | valueDisplay}}
       </span>
       <span class="advice-parameters" *ngIf="adviceFeed.advice.stopLoss">
         Stop loss: {{adviceFeed.advice.stopLoss | valueDisplay}}
