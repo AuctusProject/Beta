@@ -29,6 +29,7 @@ using Auctus.Business.Storage;
 using Auctus.Business.News;
 using Microsoft.AspNet.SignalR;
 using Api.Hubs;
+using Auctus.Business.Exchange;
 
 namespace Api.Controllers
 {
@@ -282,6 +283,8 @@ namespace Api.Controllers
         protected AssetEventCategoryBusiness AssetEventCategoryBusiness { get { return new AssetEventCategoryBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AzureStorageBusiness AzureStorageBusiness { get { return new AzureStorageBusiness(Startup.Configuration, ServiceProvider); } }
         protected NewsBusiness NewsBusiness { get { return new NewsBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected ExchangeBusiness ExchangeBusiness { get { return new ExchangeBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected PairBusiness PairBusiness { get { return new PairBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
 
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
         protected class OnlyAdminAttribute : ActionFilterAttribute
