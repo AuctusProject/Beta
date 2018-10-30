@@ -102,6 +102,7 @@ import { EventsListComponent } from './components/terminal/events-list/events-li
 import { RatingsListComponent } from './components/terminal/ratings-list/ratings-list.component';
 import { AdviceParametersComponent } from './components/advisor/new-advice/advice-parameters/advice-parameters.component';
 import { AssetHeaderComponent } from './components/terminal/asset-header/asset-header.component';
+import { TickerService } from './services/ticker.service';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -239,6 +240,7 @@ export function getAuthServiceConfigs() {
     AuthRedirect,
     ConfigService,
     ModalService,
+    TickerService,
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '95vw', height: '92%', hasBackdrop: true, disableClose: false, panelClass: 'fullscreen-modal'}}
