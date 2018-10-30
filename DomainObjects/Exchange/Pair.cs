@@ -20,5 +20,7 @@ namespace Auctus.DomainObjects.Exchange
         public string Symbol { get; set; }
         [DapperType(System.Data.DbType.Boolean)]
         public bool Enabled { get; set; }
+
+        public Exchange Exchange { get; set; }
     }
 }
