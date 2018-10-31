@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { ActivatedRoute } from '@angular/router';
 import { AdvisorService } from '../../../services/advisor.service';
@@ -44,7 +45,9 @@ export class ExpertDetailsComponent implements OnInit {
     private navigationService: NavigationService,
     private assetService: AssetService,
     private modalService: ModalService,
-    private changeDetectorRefs: ChangeDetectorRef) { }
+    private changeDetectorRefs: ChangeDetectorRef,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => 
@@ -55,13 +58,15 @@ export class ExpertDetailsComponent implements OnInit {
           {
             this.expert = expert;
             this.fillDataSource();
+            this.titleService.setTitle("Auctus Experts - " + expert.name);
+            this.metaTagService.updateTag({name: 'description', content: expert.name + " - " + expert.description});
           });
       }
     );
   }
 
   onNewAdviceClick() {
-    this.modalService.setNewAdvice();
+    this.modalService.setNewAdvice().afterClosed().subscribe( () => this.refreshDataSource()) ;
   }
 
   onEditProfileClick() {
@@ -75,6 +80,14 @@ export class ExpertDetailsComponent implements OnInit {
     else{
       this.expandedElement = row;
     }
+  }
+
+  refreshDataSource(){
+    this.advisorService.getExpertDetails(this.accountService.getLoginData().id.toString()).subscribe(expert => 
+      {
+        this.expert = expert;
+        this.fillDataSource();
+      });
   }
 
   fillDataSource(){
@@ -111,7 +124,7 @@ export class ExpertDetailsComponent implements OnInit {
       return '';
     } else {
       if (asset.assetAdvisor[0].lastAdviceTargetPrice) {
-        return 'Target value: ' +  new ValueDisplayPipe().transform(asset.assetAdvisor[0].lastAdviceTargetPrice);
+        return 'Take profit: ' +  new ValueDisplayPipe().transform(asset.assetAdvisor[0].lastAdviceTargetPrice);
       } else if (asset.assetAdvisor[0].lastAdviceOperationType != 0 && asset.assetAdvisor[0].lastAdviceType == 2) {
         return 'Triggered by ' + Util.GetCloseReasonDescription(asset.assetAdvisor[0].lastAdviceOperationType);
       } else {
@@ -155,7 +168,7 @@ export class ExpertDetailsComponent implements OnInit {
   }
 
   closePosition(asset: AssetResponse) {
-    this.modalService.setNewAdvice(asset.assetId, 2);
+    this.modalService.setNewAdvice(asset.assetId, 2).afterClosed().subscribe( () => this.refreshDataSource());
   }
 
   onFollowAssetClick(event: Event, asset: AssetResponse){
@@ -191,8 +204,8 @@ export class ExpertDetailsComponent implements OnInit {
 
   getNoRecommendationMessage() {
     if(this.showOwnerButton)
-      return "You haven't rated any asset yet.<br>Start now!";
+      return "You haven't emit any signal yet.<br>Start now!";
     else
-      return "This expert hasn't made any recommendation yet.";
+      return "This expert hasn't emit any signal yet.";
   }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { AdvisorService } from '../../../services/advisor.service';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 import { NavigationService } from '../../../services/navigation.service';
@@ -15,7 +16,7 @@ export class TopExpertsComponent implements OnInit {
   @Input() resultsLimit?: number;
   @Input() hideFilters?: boolean;
   @Input() title: string = "TOP EXPERTS";
-  @Input() subtitle: string = "Find the best performing Crypto Analysts. Follow them to get a real-time feed of their recommendations";
+  @Input() subtitle: string = "Find the best performing Crypto Analysts. Follow them to get a real-time feed of their signals";
   experts : AdvisorResponse[] = [];
   expertsResponse : AdvisorResponse[];
   showAdvisorButton: boolean = false;
@@ -35,9 +36,13 @@ export class TopExpertsComponent implements OnInit {
   constructor(private advisorService: AdvisorService, 
     public accountService: AccountService,
     private navigationService: NavigationService,
-    private modalService: ModalService) { }
+    private modalService: ModalService,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Auctus - Top Cryptocurrency Experts");
+    this.metaTagService.updateTag({name: 'description', content: "Find the best performing Crypto Analysts. Follow them to get a real-time feed of their recommendations"});
     this.showAdvisorButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.advisorService.getAdvisors().subscribe(result => {
       this.expertsResponse = result;

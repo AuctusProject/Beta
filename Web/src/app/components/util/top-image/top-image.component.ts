@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { LoginResponse } from '../../../model/account/loginResponse';
@@ -18,6 +18,8 @@ export class TopImageComponent implements OnInit {
   @Input() subtitle2: string;
   @Input() showLatestUpdates: boolean = false;
   @Input() loginData: LoginResponse;
+  @Output() onAdviceCreated:EventEmitter<void> = new EventEmitter<void>();
+
 
   expert: AdvisorResponse;
   latestUpdates: string[] = [];
@@ -37,7 +39,7 @@ export class TopImageComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    this.modalService.setNewAdvice();
+    this.modalService.setNewAdvice().afterClosed().subscribe(() => this.onAdviceCreated.emit());
   }
 
   viewProfile() {
@@ -53,7 +55,7 @@ export class TopImageComponent implements OnInit {
       
       let bestCall = this.getBestCall();
       if (bestCall && bestCall.replace(/\s/g, '').length >= 1) {
-        this.latestUpdates.push("Your best call was to " + this.getBestCall());
+        this.latestUpdates.push("Your best signal was to " + this.getBestCall());
       }
     }
   }

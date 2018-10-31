@@ -97,7 +97,7 @@
             <div fxHide.xs="true" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <div class="triangle-expert-recomendation"></div>
-                    <span>Experts Recommendation</span>
+                    <span>Experts Signal</span>
                     <span *ngIf="assetData">({{getTotalExpertRecommendation()}})</span>
                 </div>
                 <div class="pointer" (click)="openReportPage()" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -115,10 +115,6 @@
                     <div class="bear" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                         <span>Sell</span>
                         <span>{{getExpertsSellAmount()}}</span>
-                    </div>
-                    <div class="neutral" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                        <span>Neutral</span>
-                        <span>{{getExpertsNeutralAmount()}}</span>
                     </div>
                 </div>
                 <div fxLayout="row" class="pointer" (click)="openReportPage()" fxLayoutAlign="start center" fxLayoutGap="10px">
@@ -141,7 +137,7 @@
             </div>
             <div fxHide.gt-xs="true" class="force-padding-top" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>Experts Recommendation</span>
+                    <span>Experts Signal</span>
                     <span *ngIf="assetData">({{getTotalExpertRecommendation()}})</span>
                 </div>
                 <div class="bull" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -151,11 +147,7 @@
                 <div class="bear" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span>Sell</span>
                     <span>{{getExpertsSellAmount()}}</span>
-                </div>
-                <div class="neutral" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-                    <span>Neutral</span>
-                    <span>{{getExpertsNeutralAmount()}}</span>
-                </div>                
+                </div>              
             </div>
             <div fxHide.gt-xs="true" class="force-padding-top force-padding-left" fxLayout="column" fxLayoutAlign="start start">
                 <div class="triangle-report-rating"></div>

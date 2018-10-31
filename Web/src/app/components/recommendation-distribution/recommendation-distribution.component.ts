@@ -70,7 +70,7 @@ export class RecommendationDistributionComponent implements OnInit, OnChanges {
         },
         legend:{enabled:false},
         title: {
-            text: this.showTitle ? "<b>"+ this.totalRecommendations+"</b><br />Ratings" : null,
+            text: this.showTitle ? "<b>"+ this.totalRecommendations+"</b><br />Signals" : null,
             align: 'center',
             verticalAlign: 'middle',
             y: -4,
@@ -96,7 +96,7 @@ export class RecommendationDistributionComponent implements OnInit, OnChanges {
             }
         },
         series: [{
-            name: 'Recommendations',
+          name: 'Recommendations',
             innerSize: '80%',
             data: this.pieData
         }]

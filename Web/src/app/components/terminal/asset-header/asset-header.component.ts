@@ -55,7 +55,7 @@ export class AssetHeaderComponent implements OnDestroy, OnChanges {
     if (window) {
       let url = 'rating-reports';
       if (this.assetTerminal) {
-        url += "?coin=" + this.assetTerminal.assetId;
+        url += "?asset=" + this.assetTerminal.assetId;
       }
       window.open(url);
     }

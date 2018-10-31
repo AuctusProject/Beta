@@ -1,4 +1,4 @@
-<top-image *ngIf="canView()" [title]="getTopTitle()" [subtitle]="getTopText()" [urlImage]="getTopImage()" [showLatestUpdates]="showLatestUpdates()" [loginData]="loginData"></top-image>
+<top-image *ngIf="canView()" [title]="getTopTitle()" [subtitle]="getTopText()" [urlImage]="getTopImage()" [showLatestUpdates]="showLatestUpdates()" [loginData]="loginData" (onAdviceCreated)="refreshDataSource()"></top-image>
 <div class="global-container">
     <top-experts *ngIf="canView() && advices && advices.length==0" [resultsLimit]=4 [hideFilters]=true [title]="'START FOLLOWING EXPERTS'" [subtitle]="''"></top-experts>
     <div *ngIf="advices">

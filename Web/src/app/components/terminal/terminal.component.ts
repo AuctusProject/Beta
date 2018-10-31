@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { CONFIG } from '../../services/config.service';
 import { CryptoChartComponent } from './crypto-chart/crypto-chart.component';
 import { AssetService } from '../../services/asset.service';
@@ -15,9 +16,13 @@ export class TerminalComponent implements OnInit {
   public assetId: number;
   @ViewChild("CryptoChart") CryptoChart: CryptoChartComponent;  
 
-  constructor(private assetService: AssetService) { }
+  constructor(private assetService: AssetService,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Auctus Experts - Terminal");
+    this.metaTagService.updateTag({name: 'description', content: "Cryptocurrency charts, news, events and expert ratings."});
     this.loadScript();
     this.assetService.getTerminalAssets().subscribe(result =>
       {

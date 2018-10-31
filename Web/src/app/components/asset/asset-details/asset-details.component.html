@@ -2,7 +2,7 @@
   <div class="expert-details-header global-container-min">
     <div class="global-container">
       <div class="section-title">
-        EXPERT RATINGS ON {{asset.name}}
+        EXPERT SIGNALS ON {{asset.name}}
       </div>
       <div fxLayout="column" fxLayoutGap="60px">
         <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="36px" fxLayoutGap.lt-md="24px" fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center center">
@@ -56,9 +56,9 @@
     </div>
     <mat-tab-group class="global-container-min">
       <mat-tab label="Summary">
-        <summary-tab [asset]="asset"></summary-tab>
+        <summary-tab [asset]="asset" (onAdviceCreated)='refreshDataSource()'></summary-tab>
       </mat-tab>
-      <mat-tab label="Ratings"> 
+      <mat-tab label="Signals"> 
         <expert-ratings-tab [asset]="asset"></expert-ratings-tab>
       </mat-tab>
       <mat-tab label="Reports"> 

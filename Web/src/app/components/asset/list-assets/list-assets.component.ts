@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { AssetService } from '../../../services/asset.service';
 import { AssetResponse } from '../../../model/asset/assetResponse';
 import { AccountService } from '../../../services/account.service';
@@ -21,12 +22,16 @@ export class ListAssetsComponent implements OnInit {
   constructor(private modalService: ModalService, 
     public accountService: AccountService, 
     private assetService: AssetService,
-    private navigationService: NavigationService) { }
+    private navigationService: NavigationService,
+    private titleService: Title,
+    private metaTagService: Meta) { }
 
   currentPage = 1;
   pageSize = 6;
 
   ngOnInit() {
+    this.titleService.setTitle("Auctus Experts - Top Assets");
+    this.metaTagService.updateTag({name: 'description', content: "The most popular Cryptocurrencies. Follow your favorite coins and see what analysts are saying about them"});
     this.showNewAdviceButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
     this.assetService.getAssetsDetails().subscribe(result => 
       {
@@ -44,7 +49,15 @@ export class ListAssetsComponent implements OnInit {
   }
 
   onNewAdviceClick() {
-    this.modalService.setNewAdvice();
+    this.modalService.setNewAdvice().afterClosed().subscribe(() => this.refreshDataSource() );
+  }
+
+  refreshDataSource(){
+    this.assetService.getAssetsDetails().subscribe(result => 
+      {
+        this.allAssets = result;
+        this.setVisibleAssets();
+      });
   }
   
   loadMoreAssets(){
