@@ -20,6 +20,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Event;
+using Auctus.DomainObjects.Exchange;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,8 @@ namespace Auctus.Business
             services.AddScoped<INewsData<DomainObjects.News.News>, NewsData>(c => new NewsData(configuration));
             services.AddScoped<INewsSourceData<DomainObjects.News.NewsSource>, NewsSourceData>(c => new NewsSourceData(configuration));
             services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
+            services.AddScoped<IExchangeData<DomainObjects.Exchange.Exchange>, ExchangeData>();
+            services.AddScoped<IPairData<Pair>, PairData>();
         }
     }
 }

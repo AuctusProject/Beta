@@ -29,6 +29,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Auctus.DataAccessInterfaces.News;
+using Auctus.DomainObjects.Exchange;
 
 namespace Auctus.Test
 {
@@ -85,6 +86,8 @@ namespace Auctus.Test
             services.AddScoped<INewsData<DomainObjects.News.News>, NewsData>(c => new NewsData());
             services.AddScoped<INewsSourceData<DomainObjects.News.NewsSource>, NewsSourceData>(c => new NewsSourceData());
             services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
+            services.AddScoped<IExchangeData<DomainObjects.Exchange.Exchange>, ExchangeData>();
+            services.AddScoped<IPairData<Pair>, PairData>();
 
             ServiceProvider = services.BuildServiceProvider();
             ServiceScopeFactory = new ServiceScopeFactory(ServiceProvider);

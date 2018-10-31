@@ -76,6 +76,8 @@ namespace Auctus.Business
         private NewsBusiness _newsBusiness;
         private NewsSourceBusiness _newsSourceBusiness;
         private NewsRssBusiness _newsRssBusiness;
+        private ExchangeBusiness _exchangeBusiness;
+        private PairBusiness _pairBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -605,6 +607,26 @@ namespace Auctus.Business
                 if (_newsRssBusiness == null)
                     _newsRssBusiness = new NewsRssBusiness(Configuration, ServiceProvider);
                 return _newsRssBusiness;
+            }
+        }
+
+        protected ExchangeBusiness ExchangeBusiness
+        {
+            get
+            {
+                if (_exchangeBusiness == null)
+                    _exchangeBusiness = new ExchangeBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _exchangeBusiness;
+            }
+        }
+
+        protected PairBusiness PairBusiness
+        {
+            get
+            {
+                if (_pairBusiness == null)
+                    _pairBusiness = new PairBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _pairBusiness;
             }
         }
     }

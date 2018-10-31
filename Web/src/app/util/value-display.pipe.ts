@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({name: 'valueDisplay'})
 export class ValueDisplayPipe implements PipeTransform {
-  transform(value: number): string {
+  transform(value: number, currencyPrefix: string = '$'): string {
     if (value == 0) {
-      return '$' + value.toFixed(2);
+      return currencyPrefix + value.toFixed(2);
     } else if(!value){
       return null;
     }
@@ -14,7 +14,7 @@ export class ValueDisplayPipe implements PipeTransform {
         decimals++; 
         currentValue = value * Math.pow(10, decimals - 2);
     }
-    return '$' + value.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    return currencyPrefix + value.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   }
 
 

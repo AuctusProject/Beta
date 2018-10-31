@@ -103,6 +103,9 @@ import { RatingsListComponent } from './components/terminal/ratings-list/ratings
 import { AdviceParametersComponent } from './components/advisor/new-advice/advice-parameters/advice-parameters.component';
 import { AssetHeaderComponent } from './components/terminal/asset-header/asset-header.component';
 import { TickerService } from './services/ticker.service';
+import { HighlightFieldComponent } from './components/util/highlight-field/highlight-field.component';
+import { TickerFieldComponent } from './components/util/ticker-field/ticker-field.component';
+import { TickerPercentageFieldComponent } from './components/util/ticker-percentage-field/ticker-percentage-field.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -197,7 +200,10 @@ export function getAuthServiceConfigs() {
     CryptoChartComponent,
     EventsListComponent,
     RatingsListComponent,
-    AssetHeaderComponent
+    AssetHeaderComponent,
+    HighlightFieldComponent,
+    TickerFieldComponent,
+    TickerPercentageFieldComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),
