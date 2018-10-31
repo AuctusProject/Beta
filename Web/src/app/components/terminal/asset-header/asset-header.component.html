@@ -14,14 +14,12 @@
                 <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
                     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
                         <span>USD</span>
-                        <span *ngIf="!assetStatus || !assetStatus.price">-</span>
-                        <span *ngIf="assetStatus && assetStatus.price">{{assetStatus.price | valueDisplay}}</span>
+                        <ticker-field *ngIf="assetData && assetStatus && assetStatus.price" [startValue]="assetStatus.price" [pair]="assetData.pair"></ticker-field>
+                        <span *ngIf="!assetData || !assetStatus || !assetStatus.price">-</span>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
-                        <div *ngIf="assetStatus && assetStatus.variationPercentage24h" [class.bull]="assetStatus.variationPercentage24h > 0" [class.bear]="assetStatus.variationPercentage24h < 0">
-                            <div class="arrow" *ngIf="assetStatus.variationPercentage24h > 0">&uarr;&nbsp;</div><div class="arrow" *ngIf="assetStatus.variationPercentage24h < 0">&darr;&nbsp;</div>{{assetStatus.variationPercentage24h | number:'1.2-2'}}%
-                        </div>
-                        <span *ngIf="!assetStatus || !assetStatus.variationPercentage24h">-</span>
+                        <ticker-percentage-field *ngIf="assetData && assetStatus && assetStatus.variationPercentage24h" [startValue]="assetStatus.variationPercentage24h" [pair]="assetData.pair"></ticker-percentage-field>
+                        <span *ngIf="!assetData || !assetStatus || !assetStatus.variationPercentage24h">-</span>
                         <span>24h</span>
                     </div>
                 </div>
@@ -78,18 +76,18 @@
             <div fxFlex.gt-sm="50" fxFlex.sm="100" fxFlex.xs="50" class="partial-header" fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span class="status-data">Volume</span>
-                    <span *ngIf="!assetStatus || !assetStatus.totalVolume">-</span>
-                    <span *ngIf="assetStatus && assetStatus.totalVolume">{{assetStatus.totalVolume | valueDisplay}}</span>
+                    <span *ngIf="!assetData || !assetStatus || !assetStatus.totalVolume">-</span>
+                    <ticker-field *ngIf="assetData && assetStatus && assetStatus.totalVolume" [startValue]="assetStatus.totalVolume" tickerProperty="totalVolumeQuoteAsset" [pair]="assetData.pair"></ticker-field>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span class="status-data">High 24h</span>
-                    <span *ngIf="!assetStatus || !assetStatus.high24h">-</span>
-                    <span *ngIf="assetStatus && assetStatus.high24h">{{assetStatus.high24h | valueDisplay}}</span>
+                    <span *ngIf="!assetData || !assetStatus || !assetStatus.high24h">-</span>
+                    <ticker-field *ngIf="assetData && assetStatus && assetStatus.high24h" [startValue]="assetStatus.high24h" tickerProperty="highPrice" [pair]="assetData.pair"></ticker-field>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
                     <span class="status-data">Low 24h</span>
-                    <span *ngIf="!assetStatus || !assetStatus.low24h">-</span>
-                    <span *ngIf="assetStatus && assetStatus.low24h">{{assetStatus.low24h | valueDisplay}}</span>
+                    <span *ngIf="!assetData || !assetStatus || !assetStatus.low24h">-</span>
+                    <ticker-field *ngIf="assetData && assetStatus && assetStatus.low24h" [startValue]="assetStatus.low24h" tickerProperty="lowPrice" [pair]="assetData.pair"></ticker-field>
                 </div>
             </div>
         </div>

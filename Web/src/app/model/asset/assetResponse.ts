@@ -16,6 +16,7 @@ export class AssetResponse {
   numberOfFollowers?: number;
   following?:boolean;
   mode: number;
+  pair: PairResponse;
   recommendationDistribution: RecommendationDistributionResponse[];
   reportRecommendationDistribution: RecommendationDistributionResponse[];
   assetAdvisor?: AssetAdvisorResponse[];
@@ -53,4 +54,11 @@ export class AdviceResponse{
   operationType: number;
   targetPrice?: number;
   stopLoss?: number;
+}
+
+export class PairResponse{
+  symbol: string;
+  multipliedSymbol: string;
+  preffix: string;
+  suffix: string;
 }

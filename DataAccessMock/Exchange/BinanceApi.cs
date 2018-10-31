@@ -12,5 +12,10 @@ namespace Auctus.DataAccessMock.Exchange
         {
             throw new NotImplementedException();
         }
+
+        public BinanceTicker GetTicker24h(string symbol)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

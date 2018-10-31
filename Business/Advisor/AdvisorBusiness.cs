@@ -429,7 +429,8 @@ namespace Auctus.Business.Advisor
                 MarketCap = assetCurrentValue.MarketCap,
                 Variation24h = assetCurrentValue.Variation24Hours,
                 Variation7d = assetCurrentValue.Variation7Days,
-                Variation30d = assetCurrentValue.Variation30Days
+                Variation30d = assetCurrentValue.Variation30Days,
+                Pair = PairBusiness.GetBaseQuotePair(assetCurrentValue.Id)
             };
         }
 
@@ -604,7 +605,7 @@ namespace Auctus.Business.Advisor
             public AdviceModeType ModeType { get; set; }
         }
 
-        public void Advise(int assetId, AdviceType type, double? stopLoss, double? targetPrice)
+        public void Advise(int assetId, AdviceType type, double? stopLoss, double? targetPrice, double? price)
         {
             var user = GetValidUser();
             if (!UserBusiness.IsValidAdvisor(user))
@@ -614,7 +615,7 @@ namespace Auctus.Business.Advisor
             if (asset == null)
                 throw new NotFoundException("Asset not found.");
 
-            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type, stopLoss, targetPrice);
+            AdviceBusiness.ValidateAndCreate((DomainObjects.Advisor.Advisor)user, asset, type, stopLoss, targetPrice, price);
         }
 
         public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors()

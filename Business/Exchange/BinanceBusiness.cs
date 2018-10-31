@@ -22,6 +22,11 @@ namespace Auctus.Business.Exchange
         public BinanceTicker[] GetTicker24h()
         {
             return Api.GetTicker24h();
-        } 
+        }
+
+        public BinanceTicker GetTicker24h(string symbol)
+        {
+            return Api.GetTicker24h(symbol);
+        }
     }
 }

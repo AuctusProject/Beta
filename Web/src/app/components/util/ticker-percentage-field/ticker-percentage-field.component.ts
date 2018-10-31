@@ -1,17 +1,18 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { TickerService } from 'src/app/services/ticker.service';
 import { Subscription } from 'rxjs';
 import { BinanceTickerPayload } from 'src/app/model/binanceTickerPayload';
+import { PairResponse } from 'src/app/model/asset/assetResponse';
 
 @Component({
   selector: 'ticker-percentage-field',
   templateUrl: './ticker-percentage-field.component.html',
   styleUrls: ['./ticker-percentage-field.component.css']
 })
-export class TickerPercentageFieldComponent implements OnInit, OnDestroy {
-  @Input() pair: string;
-  @Input() pairToMultiplier: string;
+export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() pair: PairResponse;
   @Input() referenceValue?: any = null;
+  @Input() startValue?: number = null;
   value: number;
   mainTickerSubscription: Subscription;
   multiplierTickerSubscription: Subscription;
@@ -19,26 +20,40 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy {
   baseVariation?: number = null;
   quoteValue?: number = null;
   baseValue?: number = null;
+  initialized: boolean = false;
 
   constructor(private tickerService: TickerService) { }
+
+  ngOnChanges() {
+    if (this.initialized) {
+      this.ngOnDestroy();
+      this.ngOnInit();
+    }
+  }
   
   ngOnInit() {
+    if (this.startValue) {
+      this.value = this.startValue;
+    }
     if (this.pair) {
-      this.mainTickerSubscription = this.tickerService.binanceTicker(this.pair).subscribe(ret =>
+      if (this.pair.symbol) {
+      this.mainTickerSubscription = this.tickerService.binanceTicker(this.pair.symbol).subscribe(ret =>
         {
           this.setValue(ret, true);
         });
+      }
+      if (this.pair.multipliedSymbol) {
+        this.multiplierTickerSubscription = this.tickerService.binanceTicker(this.pair.multipliedSymbol).subscribe(ret =>
+          {
+            this.setValue(ret, false);
+          });
+      }
     }
-    if (this.pairToMultiplier) {
-      this.multiplierTickerSubscription = this.tickerService.binanceTicker(this.pairToMultiplier).subscribe(ret =>
-        {
-          this.setValue(ret, false);
-        });
-    }
+    this.initialized = true;
   }
 
   setValue(ticker: BinanceTickerPayload, isMainPair: boolean) {
-    if (!this.pairToMultiplier) {
+    if (!this.pair.multipliedSymbol) {
       if (this.referenceValue) {
         this.value = Math.round(((ticker.currentClosePrice / parseFloat(this.referenceValue)) - 1) * 10000) / 100;
       } else {
@@ -66,6 +81,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.initialized = false;
     if (this.mainTickerSubscription) {
       this.mainTickerSubscription.unsubscribe();
     }

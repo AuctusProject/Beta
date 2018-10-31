@@ -22,6 +22,9 @@ export class AssetHeaderComponent implements OnDestroy, OnChanges {
   constructor(private assetService: AssetService) { }
 
   ngOnChanges() {
+    this.assetData = null;
+    this.assetStatus = null;
+    this.ngOnDestroy();
     this.setNewAsset();
   }
 

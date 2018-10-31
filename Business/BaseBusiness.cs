@@ -87,14 +87,19 @@ namespace Auctus.Business
         private int? _minimumTimeInSecondsBetweenAdvices;
         private string _hashSecret;
         private double? _discountPercentageOnAuc;
+        private int? _assetUSDId;
+        private int? _assetBTCId;
+        private int? _assetETHId;
         private List<string> _admins;
         private List<TerminalAssetConfig> _terminalAssets;
 
         protected class TerminalAssetConfig
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
             public string ChartPair { get; set; }
             public string ChartExchange { get; set; }
+
+            public int AssetId { get { return !string.IsNullOrEmpty(Id) ? int.Parse(Id) : 0;  } }
         }
 
         protected BaseBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip)
@@ -272,6 +277,36 @@ namespace Auctus.Business
                 if (_discountPercentageOnAuc == null)
                     _discountPercentageOnAuc = Configuration.GetSection("DiscountPercentageOnAuc").Get<double>();
                 return _discountPercentageOnAuc.Value;
+            }
+        }
+
+        protected int AssetUSDId
+        {
+            get
+            {
+                if (_assetUSDId == null)
+                    _assetUSDId = Configuration.GetSection("AssetUSDId").Get<int>();
+                return _assetUSDId.Value;
+            }
+        }
+
+        protected int AssetBTCId
+        {
+            get
+            {
+                if (_assetBTCId == null)
+                    _assetBTCId = Configuration.GetSection("AssetBTCId").Get<int>();
+                return _assetBTCId.Value;
+            }
+        }
+
+        protected int AssetETHId
+        {
+            get
+            {
+                if (_assetETHId == null)
+                    _assetETHId = Configuration.GetSection("AssetETHId").Get<int>();
+                return _assetETHId.Value;
             }
         }
 

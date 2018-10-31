@@ -16,11 +16,16 @@ namespace Auctus.DataAccess.Exchange
 
         public BinanceApi() : base("https://api.binance.com") { }
 
-        
         public BinanceTicker[] GetTicker24h()
         {
             var responseContent = GetWithRetry(TICKER_24H);
             return JsonConvert.DeserializeObject<BinanceTicker[]>(responseContent);
+        }
+
+        public BinanceTicker GetTicker24h(string symbol)
+        {
+            var responseContent = GetWithRetry(TICKER_24H + $"?symbol={symbol.ToUpper()}");
+            return JsonConvert.DeserializeObject<BinanceTicker>(responseContent);
         }
     }
 }

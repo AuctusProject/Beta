@@ -26,11 +26,9 @@
             </div>
           </div>
           <div fxLayout="row" fxLayoutGap="36px">
-            <div fxHide.lt-sm class="asset-price">
-              {{asset.lastValue | valueDisplay}}
-            </div>
+            <ticker-field fxHide.lt-sm class="asset-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
             <div fxLayout="column">
-              <percentage-display [value]="asset.variation24h"></percentage-display>
+              <ticker-percentage-field [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
               Last 24 hours
             </div>
             <div fxLayout="column">
@@ -42,9 +40,7 @@
               Last 30 days
             </div>
           </div>
-          <div fxHide.gt-xs class="asset-price">
-            {{asset.lastValue | valueDisplay}}
-          </div>
+          <ticker-field fxHide.gt-xs class="asset-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
           <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowAssetClick()">
             Unfollow
           </div>

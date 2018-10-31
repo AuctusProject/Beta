@@ -27,10 +27,21 @@ export class HighlightFieldComponent implements OnChanges {
   getValue(): string {
     if (this.value == undefined || this.value == null) {
       return "";
-    } else if (this.decimalsQty || this.decimalsQty == 0) {
-      return this.prefix + this.value.toLocaleString(undefined, { minimumFractionDigits: this.decimalsQty, maximumFractionDigits: this.decimalsQty }) + this.suffix;
-    } else {
-      return new ValueDisplayPipe().transform(this.value, this.prefix) + this.suffix;
+    } else 
+    {
+      let preffixText = this.prefix;
+      let suffixText = this.suffix;
+      if (!preffixText) {
+        preffixText = '';
+      }
+      if (!suffixText) {
+        suffixText = '';
+      }
+      if (this.decimalsQty || this.decimalsQty == 0) {
+        return preffixText + this.value.toLocaleString(undefined, { minimumFractionDigits: this.decimalsQty, maximumFractionDigits: this.decimalsQty }) + suffixText;
+      } else {
+        return new ValueDisplayPipe().transform(this.value, preffixText) + suffixText;
+      }
     }
   }
 

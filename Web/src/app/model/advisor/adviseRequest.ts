@@ -3,4 +3,5 @@ export class AdviseRequest {
   adviceType: number;
   targetPrice?: number;
   stopLoss?: number;
+  currentValue?: number;
 }

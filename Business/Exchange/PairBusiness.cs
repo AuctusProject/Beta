@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Auctus.Model.AssetResponse;
 
 namespace Auctus.Business.Exchange
 {
@@ -34,6 +35,54 @@ namespace Auctus.Business.Exchange
             return baseAssetIds == null && baseQuoteIds == null ? pairs : baseAssetIds != null && baseQuoteIds != null ? 
                 pairs.Where(c => baseAssetIds.Contains(c.BaseAssetId) && baseQuoteIds.Contains(c.QuoteAssetId)).ToList() : baseAssetIds != null ?
                 pairs.Where(c => baseAssetIds.Contains(c.BaseAssetId)).ToList() : pairs.Where(c => baseQuoteIds.Contains(c.QuoteAssetId)).ToList();
+        }
+
+        public PairResponse GetBaseQuotePair(int assetId)
+        {
+            var pairs = ListPairs(new int[] { assetId });
+            if (!pairs.Any())
+                return null;
+
+            var preffix = "$";
+            var usdQuote = pairs.FirstOrDefault(c => c.QuoteAssetId == AssetUSDId);
+            if (usdQuote != null)
+            {
+                return new PairResponse()
+                {
+                    Symbol = usdQuote.Symbol,
+                    Preffix = preffix
+                };
+            }
+            else
+            {
+                var btcQuote = pairs.FirstOrDefault(c => c.QuoteAssetId == AssetBTCId);
+                if (btcQuote != null)
+                {
+                    var btcUSD = ListPairs(new int[] { AssetBTCId }, new int[] { AssetUSDId }).First();
+                    return new PairResponse()
+                    {
+                        Symbol = btcQuote.Symbol,
+                        MultipliedSymbol = btcUSD.Symbol,
+                        Preffix = preffix
+                    };
+                }
+                else
+                {
+                    var ethQuote = pairs.FirstOrDefault(c => c.QuoteAssetId == AssetETHId);
+                    if (ethQuote != null)
+                    {
+                        var ethUSD = ListPairs(new int[] { AssetETHId }, new int[] { AssetUSDId }).First();
+                        return new PairResponse()
+                        {
+                            Symbol = ethQuote.Symbol,
+                            MultipliedSymbol = ethUSD.Symbol,
+                            Preffix = preffix
+                        };
+                    }
+                    else
+                        return null;
+                }
+            }
         }
     }
 }
