@@ -1,9 +1,9 @@
-import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { NewsService } from '../../../services/news.service';
 import { News } from '../../../model/news/news';
 import { HubConnectionBuilder, HubConnection } from '@aspnet/signalr';
 import { CONFIG } from '../../../services/config.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { TimeAgoPipe } from 'time-ago-pipe';
 
 @Component({
@@ -11,7 +11,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
   templateUrl: './news-list.component.html',
   styleUrls: ['./news-list.component.css']
 })
-export class NewsListComponent implements OnInit {
+export class NewsListComponent implements OnInit, OnDestroy {
   hasMoreNews = false;
   pageSize = 20;
   news: News[];
@@ -20,16 +20,26 @@ export class NewsListComponent implements OnInit {
 
   constructor(private newsService: NewsService,
     private zone : NgZone,
-    private changeDetectorRef: ChangeDetectorRef) { }
+    private changeDetectorRef: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit() {
     this.loadNews();
-    this.connection = new HubConnectionBuilder()
-    .withUrl(CONFIG.apiUrl + "auctusHub")
-    .build();
-    this.connection.onclose(() => this.startConnection(this));
-    this.connection.on("addLastNews", (data) => this.onDataReceive(data, this));
-    this.startConnection(this);
+    if(isPlatformBrowser(this.platformId)){
+      this.connection = new HubConnectionBuilder()
+      .withUrl(CONFIG.apiUrl + "auctusHub")
+      .build();
+      this.connection.onclose(() => this.startConnection(this));
+      this.connection.on("addLastNews", (data) => this.onDataReceive(data, this));
+      this.startConnection(this);
+    }
+  }
+
+  ngOnDestroy(){
+    if(isPlatformBrowser(this.platformId)){
+      this.connection.off("close");
+      this.connection.stop();
+    }
   }
 
   startConnection(_this){
