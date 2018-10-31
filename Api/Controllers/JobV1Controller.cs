@@ -22,9 +22,9 @@ namespace Api.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/jobs/")]
-    //[Authorize("Bearer")]
+    [Authorize("Bearer")]
     [EnableCors("Default")]
-    //[OnlyAdmin]
+    [OnlyAdmin]
     public class JobV1Controller : JobBaseController
     {
         public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
@@ -45,7 +45,7 @@ namespace Api.Controllers
         }
 
         [Route("assets/{api}/values")]
-        [HttpGet]//Post]
+        [HttpPost]
         [ValidApi]
         public new IActionResult UpdateAssetsValues([FromRoute]string api)
         {
