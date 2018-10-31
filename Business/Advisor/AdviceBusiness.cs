@@ -41,11 +41,7 @@ namespace Auctus.Business.Advisor
             if (type == AdviceType.ClosePosition && (stopLoss.HasValue || targetPrice.HasValue))
                 throw new BusinessException("Stop loss or take profit cannot be defined to a Close signal.");
 
-            double? currentValue = null;
-            if (!price.HasValue)
-                currentValue = AssetCurrentValueBusiness.GetCurrentValue(asset.Id);
-            else
-                currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(asset.Id);
+            double? currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(asset.Id);
 
             if (!currentValue.HasValue)
                 throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
@@ -62,7 +58,7 @@ namespace Auctus.Business.Advisor
                         AssetId = asset.Id,
                         Type = type.Value,
                         CreationDate = Data.GetDateTimeNow(),
-                        AssetValue = price ?? currentValue.Value,
+                        AssetValue = currentValue.Value,
                         OperationType = AdviceOperationType.Manual.Value,
                         StopLoss = stopLoss,
                         TargetPrice = targetPrice
