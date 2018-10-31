@@ -46,6 +46,15 @@ namespace Api.Controllers
             return Ok();
         }
 
+        protected virtual IActionResult UpdateAssetsValues7dAnd30d(string api)
+        {
+            RunAsync(() =>
+            {
+                AssetValueBusiness.UpdateBinanceAssetsValues7dAnd30d();
+            });
+            return Ok();
+        }
+
         protected virtual IActionResult UpdateAssetsMarketcap(string api)
         {
             RunAsync(() => AssetBusiness.UpdateCoingeckoAssetsMarketcap());

@@ -52,6 +52,14 @@ namespace Api.Controllers
             return base.UpdateAssetsValues(api);
         }
 
+        [Route("assets/{api}/values/7dAnd30d")]
+        [HttpPost]
+        [ValidApi]
+        public new IActionResult UpdateAssetsValues7dAnd30d([FromRoute]string api)
+        {
+            return base.UpdateAssetsValues7dAnd30d(api);
+        }
+
         [Route("assets/{api}")]
         [HttpPost]
         [ValidApi]

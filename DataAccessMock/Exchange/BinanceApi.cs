@@ -17,5 +17,15 @@ namespace Auctus.DataAccessMock.Exchange
         {
             throw new NotImplementedException();
         }
+
+        public BinanceKline GetKline30d(string symbol)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BinanceKline GetKline7d(string symbol)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

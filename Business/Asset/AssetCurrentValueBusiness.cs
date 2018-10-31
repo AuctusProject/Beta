@@ -28,6 +28,11 @@ namespace Auctus.Business.Asset
             Data.UpdateAssetValue(assetCurrentValues);
         }
 
+        public void UpdateAssetValue7And30Days(IEnumerable<AssetCurrentValue> assetCurrentValues)
+        {
+            Data.UpdateAssetValue7And30Days(assetCurrentValues);
+        }
+
         public double? GetCurrentValue(int assetId)
         {
             var assetCurrentValue = ListAllAssets(new int[] { assetId });
