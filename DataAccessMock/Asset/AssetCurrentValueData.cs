@@ -75,5 +75,10 @@ namespace Auctus.DataAccessMock.Asset
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateAssetValue7And30Days(IEnumerable<AssetCurrentValue> assetCurrentValues)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

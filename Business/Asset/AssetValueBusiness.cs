@@ -74,7 +74,7 @@ namespace Auctus.Business.Asset
             UpdateAssetsValues(currentValues);
         }
 
-        private Dictionary<int, Tuple<double,double>> GetAssetsCurrentValuesAndVariationFromBinanceTicker()
+        private Dictionary<int, Tuple<double, double>> GetAssetsCurrentValuesAndVariationFromBinanceTicker()
         {
             var ticker = BinanceBusiness.GetTicker24h();
             var pairs = PairBusiness.ListPairs();
@@ -86,7 +86,7 @@ namespace Auctus.Business.Asset
             foreach (var usdtPair in usdtPairs)
             {
                 var currentTicker = ticker.First(t => t.Symbol == usdtPair.Symbol);
-                currentValues.Add(usdtPair.BaseAssetId, new Tuple<double,double>(currentTicker.LastPrice, currentTicker.PriceChangePercent));
+                currentValues.Add(usdtPair.BaseAssetId, new Tuple<double, double>(currentTicker.LastPrice, currentTicker.PriceChangePercent));
             }
 
             foreach (var btcPair in btcPairs)
@@ -99,16 +99,72 @@ namespace Auctus.Business.Asset
             return currentValues;
         }
 
+        public void UpdateBinanceAssetsValues7dAnd30d()
+        {
+            ConcurrentDictionary<int, Tuple<double?, double?>> currentValues = GetAssets7dAnd30dVariationFromBinanceTicker();
+            UpdateAsset7dAnd30dValues(currentValues);
+        }
+
+        private ConcurrentDictionary<int, Tuple<double?, double?>> GetAssets7dAnd30dVariationFromBinanceTicker()
+        {
+            var pairs = PairBusiness.ListPairs();
+            var usdtPairs = pairs.Where(p => p.QuoteAsset.Code == "USDT");
+            var btcPairs = pairs.Where(p => !usdtPairs.Any(usdtPair => usdtPair.BaseAssetId == p.BaseAssetId) && p.QuoteAsset.Code == "BTC");
+
+            var currentValues = new ConcurrentDictionary<int, Tuple<double?, double?>>();
+
+            Parallel.ForEach(usdtPairs,
+                new ParallelOptions() { MaxDegreeOfParallelism = 5 },
+                (usdtPair) =>
+                {
+                    var variation = Get7dAnd30dVariation(usdtPair.Symbol);
+                    currentValues.TryAdd(usdtPair.BaseAssetId, variation);
+                });
+
+            Parallel.ForEach(btcPairs,
+                new ParallelOptions() { MaxDegreeOfParallelism = 5 },
+                (btcPair) =>
+                {
+                    var variation = Get7dAnd30dVariation(btcPair.Symbol);
+                    var totalVariation7d = GetVariationWithMultiplierQuote(variation.Item1 , currentValues[btcPair.QuoteAssetId].Item2);
+                    var totalVariation30d = GetVariationWithMultiplierQuote(variation.Item2, currentValues[btcPair.QuoteAssetId].Item2);
+                    currentValues.TryAdd(btcPair.BaseAssetId, new Tuple<double?, double?>(totalVariation7d, totalVariation30d));
+                });
+
+            return currentValues;
+        }
+
+        private static double? GetVariationWithMultiplierQuote(double? variationBase, double? variationQuote)
+        {
+            return ((1 * (variationBase / 100.0 + 1) * (1 + variationQuote / 100.0)) - 1) * 100;
+        }
+
+        private Tuple<double?, double?> Get7dAnd30dVariation(string symbol)
+        {
+            var kline7d = BinanceBusiness.GetKline7d(symbol);
+            var kline30d = BinanceBusiness.GetKline30d(symbol);
+            var variation7d = GetVariationFromKline(kline7d);
+            var variation30d = GetVariationFromKline(kline30d);
+            return new Tuple<double?, double?>(variation7d, variation30d);
+        }
+
+        private static double? GetVariationFromKline(BinanceKline kline)
+        {
+            if (kline == null)
+                return null;
+            return (kline.Close - kline.Open) * 100.0 / kline.Open;
+        }
+
         private void UpdateAssetsValues(Dictionary<int, Tuple<double, double>> currentValues)
         {
             var advisors = AdvisorBusiness.GetAdvisors();
             var advices = AdviceBusiness.List(advisors.Select(c => c.Id));
             var currentDate = Data.GetDateTimeNow();
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
-            
+
             Parallel.Invoke(() => UpdateAssetCurrentValues(currentDate, currentValues),
                             () => ClosePositionForStopLossAndTargetPriceReached(currentDate, advices, currentValues));
-            
+
         }
 
         private void ClosePositionForStopLossAndTargetPriceReached(DateTime currentDate, List<Advice> advices, Dictionary<int, Tuple<double, double>> lastValues)
@@ -169,6 +225,21 @@ namespace Auctus.Business.Asset
                 });
             });
             AssetCurrentValueBusiness.UpdateAssetCurrentValues(currentValues);
+        }
+
+        private void UpdateAsset7dAnd30dValues(ConcurrentDictionary<int, Tuple<double?, double?>> values)
+        {
+            var currentValues = new ConcurrentBag<AssetCurrentValue>();
+            Parallel.ForEach(values, new ParallelOptions() { MaxDegreeOfParallelism = 7 }, assetToUpdate =>
+            {
+                currentValues.Add(new AssetCurrentValue()
+                {
+                    Id = assetToUpdate.Key,
+                    Variation7Days = assetToUpdate.Value.Item1,
+                    Variation30Days = assetToUpdate.Value.Item2
+                });
+            });
+            AssetCurrentValueBusiness.UpdateAssetValue7And30Days(currentValues);
         }
     }
 }
