@@ -62,41 +62,52 @@ namespace Auctus.Business.Asset
             return values;
         }
 
-        public void UpdateCoingeckoAssetsValues()
+        public void UpdateBinanceAssetsValues()
         {
-            UpdateAssetsValues(CoinGeckoBusiness.GetAllCoinsData());
+            Dictionary<int, double> currentValues = null;
+            List<DomainObjects.Asset.Asset> assets = null;
+            Parallel.Invoke(
+                () => currentValues = GetAssetsCurrentValuesFromBinanceTicker(),
+                () => assets = AssetBusiness.ListAssets()
+            );
+
+            UpdateAssetsValues(currentValues);
         }
 
-        private void UpdateAssetsValues(IEnumerable<AssetResult> assetResults)
+        private Dictionary<int, double> GetAssetsCurrentValuesFromBinanceTicker()
         {
+            var ticker = BinanceBusiness.GetTicker24h();
+            var pairs = PairBusiness.ListPairs();
+            var usdtPairs = pairs.Where(p => p.QuoteAsset.Code == "USDT");
+            var btcPairs = pairs.Where(p => !usdtPairs.Any(usdtPair => usdtPair.BaseAssetId == p.BaseAssetId) && p.QuoteAsset.Code == "BTC");
+
+            var currentValues = new Dictionary<int, double>();
+
+            foreach (var usdtPair in usdtPairs)
+            {
+                var currentTicker = ticker.First(t => t.Symbol == usdtPair.Symbol);
+                currentValues.Add(usdtPair.BaseAssetId, currentTicker.LastPrice);
+            }
+
+            foreach (var btcPair in btcPairs)
+            {
+                var currentTicker = ticker.First(t => t.Symbol == btcPair.Symbol);
+                currentValues.Add(btcPair.BaseAssetId, currentTicker.LastPrice * currentValues[btcPair.QuoteAssetId]);
+            }
+
+            return currentValues;
+        }
+
+        private void UpdateAssetsValues(Dictionary<int, double> currentValues)
+        {
+            var advisors = AdvisorBusiness.GetAdvisors();
+            var advices = AdviceBusiness.List(advisors.Select(c => c.Id));
             var currentDate = Data.GetDateTimeNow();
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
-
-            List<DomainObjects.Asset.Asset> assets = null;
-            List<Advice> advices = null;
-            List<AssetCurrentValue> assetCurrentValues = null;
-            var advisors = AdvisorBusiness.GetAdvisors();
-            Parallel.Invoke(() => assets = AssetBusiness.ListAssets(), () => advices = AdviceBusiness.List(advisors.Select(c => c.Id)), () => assetCurrentValues = AssetCurrentValueBusiness.ListAllAssets());
-
-            var consideredAssetsId = assets.Where(c => advices.Any(a => a.AssetId == c.Id)).Select(c => c.Id).Distinct().ToHashSet();
-            var assetValues = new List<AssetValue>();
-            var currentValues = new Dictionary<int, double>();
-            foreach (var assetValue in assetResults.Where(c => c.Price.HasValue))
-            {
-                var asset = assets.FirstOrDefault(c => c.CoinGeckoId == assetValue.Id);
-                if (asset != null)
-                {
-                    currentValues[asset.Id] = assetValue.Price.Value;
-                    assetValues.Add(new AssetValue() { AssetId = asset.Id, Date = currentDate, Value = assetValue.Price.Value, MarketCap = assetValue.MarketCap });
-                }
-            }
-
-            var assetsToUpdateLastValues = assetCurrentValues.Where(c => currentValues.ContainsKey(c.Id)).ToList();
-            if (assetsToUpdateLastValues.Any())
-            {
-                Parallel.Invoke(() => UpdateAssetCurrentValues(currentDate, currentValues, consideredAssetsId, assetsToUpdateLastValues),
-                                () => ClosePositionForStopLossAndTargetPriceReached(currentDate, advices, currentValues));
-            }
+            
+            Parallel.Invoke(() => UpdateAssetCurrentValues(currentDate, currentValues),
+                            () => ClosePositionForStopLossAndTargetPriceReached(currentDate, advices, currentValues));
+            
         }
 
         private void ClosePositionForStopLossAndTargetPriceReached(DateTime currentDate, List<Advice> advices, Dictionary<int, double> lastValues)
@@ -142,114 +153,19 @@ namespace Auctus.Business.Asset
             };
         }
 
-        private void UpdateAssetCurrentValues(DateTime currentDate, Dictionary<int, double> lastValues, HashSet<int> consideredAssetsId, 
-            List<AssetCurrentValue> assetsToUpdateLastValues)
+        private void UpdateAssetCurrentValues(DateTime currentDate, Dictionary<int, double> lastValues)
         {
             var currentValues = new ConcurrentBag<AssetCurrentValue>();
-            Parallel.ForEach(assetsToUpdateLastValues, new ParallelOptions() { MaxDegreeOfParallelism = 7 }, assetToUpdate =>
+            Parallel.ForEach(lastValues, new ParallelOptions() { MaxDegreeOfParallelism = 7 }, assetToUpdate =>
             {
-                var lastAssetValue = lastValues[assetToUpdate.Id];
-
-                if (consideredAssetsId.Contains(assetToUpdate.Id))
+                currentValues.Add(new AssetCurrentValue()
                 {
-                    var assetData = CoinGeckoBusiness.GetFullCoinData(assetToUpdate.CoinGeckoId);
-                    if (assetData != null && assetData.MarketData != null)
-                    {
-                        currentValues.Add(new AssetCurrentValue()
-                        {
-                            Id = assetToUpdate.Id,
-                            UpdateDate = currentDate,
-                            CurrentValue = lastAssetValue,
-                            Variation24Hours = assetData.MarketData.PriceChangePercentage24h.HasValue ? assetData.MarketData.PriceChangePercentage24h.Value / 100.0 : (double?)null,
-                            Variation7Days = assetData.MarketData.PriceChangePercentage7d.HasValue ? assetData.MarketData.PriceChangePercentage7d.Value / 100.0 : (double?)null,
-                            Variation30Days = assetData.MarketData.PriceChangePercentage30d.HasValue ? assetData.MarketData.PriceChangePercentage30d.Value / 100.0 : (double?)null
-                        });
-                    }
-                    else
-                    {
-                        currentValues.Add(new AssetCurrentValue()
-                        {
-                            Id = assetToUpdate.Id,
-                            UpdateDate = currentDate,
-                            CurrentValue = lastAssetValue
-                        });
-                    }
-                }
-                else
-                {
-                    currentValues.Add(new AssetCurrentValue()
-                    {
-                        Id = assetToUpdate.Id,
-                        UpdateDate = currentDate,
-                        CurrentValue = lastAssetValue
-                    });
-                }
+                    Id = assetToUpdate.Key,
+                    UpdateDate = currentDate,
+                    CurrentValue = assetToUpdate.Value
+                });
             });
             AssetCurrentValueBusiness.UpdateAssetCurrentValues(currentValues);
         }
-
-        //private void InsertManyAssetValuesAsync(IEnumerable<AssetValue> values)
-        //{
-        //    var timesToInsert = Math.Ceiling(values.Count() / 90.0);
-        //    for (var i = 0; i < timesToInsert; ++i)
-        //    {
-        //        Data.InsertManyAsync(values.Skip(i * 90).Take(90)).Wait();
-        //        Task.Delay(2000).Wait();
-        //    }
-        //}
-
-        //private List<AssetValue> FilterAssetValues(List<AssetValueFilter> filter)
-        //{
-        //    var result = new List<AssetValue>();
-        //    var timesToQuery = Math.Floor(filter.Count / 50.0);
-        //    for (var i = 0; i < timesToQuery; ++i)
-        //    {
-        //        result.AddRange(Filter(filter.Skip(i * 50).Take(50)));
-        //        Task.Delay(200).Wait();
-        //    }
-
-        //    return result;
-        //}
-
-        //public void VariantionCalculation(double currentValue, DateTime currentDate, IEnumerable<AssetValue> values, 
-        //    out double? variation24h, out double? variation7d, out double? variation30d)
-        //{
-        //    var vl30d = values.Where(c => c.Date <= currentDate.AddDays(-30) && c.Date > currentDate.AddDays(-31));
-        //    var vl7d = values.Where(c => c.Date <= currentDate.AddDays(-7) && c.Date > currentDate.AddDays(-8));
-        //    var vl24h = values.Where(c => c.Date <= currentDate.AddDays(-1) && c.Date > currentDate.AddDays(-2));
-        //    variation24h = vl24h.Any() ? (currentValue / vl24h.First().Value) - 1 : (double?)null;
-        //    variation7d = vl7d.Any() ? (currentValue / vl7d.First().Value) - 1 : (double?)null;
-        //    variation30d = vl30d.Any() ? (currentValue / vl30d.First().Value) - 1 : (double?)null;
-        //}
-
-        //public AssetValueFilter GetFilter(int assetId, DateTime endDate)
-        //{
-        //    return new AssetValueFilter()
-        //    {
-        //        AssetId = assetId,
-        //        StartDate = endDate.AddHours(-1),
-        //        EndDate = endDate
-        //    };
-        //}
-
-        //public AssetValueFilter GetFilterForCurrentValue(int assetId)
-        //{
-        //    return GetFilter(assetId, Data.GetDateTimeNow());
-        //}
-
-        //public AssetValueFilter GetFilterFor24hValue(int assetId)
-        //{
-        //    return GetFilter(assetId, Data.GetDateTimeNow().AddDays(-1));
-        //}
-
-        //public AssetValueFilter GetFilterFor7dValue(int assetId)
-        //{
-        //    return GetFilter(assetId, Data.GetDateTimeNow().AddDays(-7));
-        //}
-
-        //public AssetValueFilter GetFilterFor30dValue(int assetId)
-        //{
-        //    return GetFilter(assetId, Data.GetDateTimeNow().AddDays(-30));
-        //}
     }
 }

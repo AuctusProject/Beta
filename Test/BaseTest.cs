@@ -61,6 +61,7 @@ namespace Auctus.Test
             services.AddSingleton<IAzureStorageResource, AzureStorageResource>();
             services.AddSingleton<ICoinMarketcapApi, CoinMarketcapApi>();
             services.AddSingleton<ICoinGeckoApi, CoinGeckoApi>();
+            services.AddSingleton<IBinanceApi, BinanceApi>();
             services.AddSingleton<ICoinMarketCalApi, CoinMarketCalApi>();
             services.AddScoped<IActionData<DomainObjects.Account.Action>, ActionData>();
             services.AddScoped<IExchangeApiAccessData<ExchangeApiAccess>, ExchangeApiAccessData>();

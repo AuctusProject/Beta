@@ -7,5 +7,6 @@ namespace Auctus.DataAccessInterfaces.Exchange
 {
     public interface IBinanceApi
     {
+        BinanceTicker[] GetTicker24h();
     }
 }

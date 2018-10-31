@@ -78,6 +78,7 @@ namespace Auctus.Business
         private NewsRssBusiness _newsRssBusiness;
         private ExchangeBusiness _exchangeBusiness;
         private PairBusiness _pairBusiness;
+        private BinanceBusiness _binanceBusiness;
 
         private string _apiUrl;
         private string _webUrl;
@@ -627,6 +628,16 @@ namespace Auctus.Business
                 if (_pairBusiness == null)
                     _pairBusiness = new PairBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _pairBusiness;
+            }
+        }
+
+        protected BinanceBusiness BinanceBusiness
+        {
+            get
+            {
+                if (_binanceBusiness == null)
+                    _binanceBusiness = new BinanceBusiness(Configuration, ServiceProvider);
+                return _binanceBusiness;
             }
         }
     }

@@ -39,7 +39,10 @@ namespace Api.Controllers
 
         protected virtual IActionResult UpdateAssetsValues(string api)
         {
-            RunAsync(() => AssetValueBusiness.UpdateCoingeckoAssetsValues());
+            RunAsync(() =>
+            {
+                AssetValueBusiness.UpdateBinanceAssetsValues();
+            });
             return Ok();
         }
 
@@ -73,7 +76,7 @@ namespace Api.Controllers
             public override void OnActionExecuting(ActionExecutingContext context)
             {
                 var api = context.RouteData?.Values.Any() == true ? context.RouteData.Values["api"]?.ToString() : null;
-                if (!string.IsNullOrWhiteSpace(api) && api.ToLower() == "coingecko")
+                if (!string.IsNullOrWhiteSpace(api) && (api.ToLower() == "coingecko" || api.ToLower() == "binance"))
                     base.OnActionExecuting(context);
                 else
                     context.Result = new BadRequestResult();

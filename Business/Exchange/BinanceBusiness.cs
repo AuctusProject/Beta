@@ -19,9 +19,9 @@ namespace Auctus.Business.Exchange
             Api = (IBinanceApi)serviceProvider.GetService(typeof(IBinanceApi));
         }
 
-        public BinanceApi.ExchangeInfo GetExchangeInfo()
+        public BinanceTicker[] GetTicker24h()
         {
-            return null;// Api.GetExchangeInfo();
-        }
+            return Api.GetTicker24h();
+        } 
     }
 }
