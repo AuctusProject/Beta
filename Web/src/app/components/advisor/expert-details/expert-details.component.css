@@ -69,6 +69,10 @@
     border-bottom-color: #959595;
 }
 
+.assets-table .mat-column-currentReturn{
+    min-width: 85px;
+}
+
 .assets-table .element-row.expanded {
     border-bottom-color: transparent;
 }

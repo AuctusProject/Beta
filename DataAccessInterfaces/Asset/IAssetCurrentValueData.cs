@@ -10,5 +10,7 @@ namespace Auctus.DataAccessInterfaces.Asset
     {
         List<AssetCurrentValue> ListAllAssets(IEnumerable<int> ids);
         void UpdateAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues);
+        void UpdateFullAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues);
+        void UpdateAssetValue7And30Days(IEnumerable<AssetCurrentValue> assetCurrentValues);
     }
 }

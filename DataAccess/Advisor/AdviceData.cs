@@ -97,29 +97,29 @@ namespace Auctus.DataAccess.Advisor
             return Query<Advice>(SQL_GET_LAST_FOR_ASSET_BY_ADVISOR, parameters).SingleOrDefault();
         }
 
-        public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> advisorsIds, IEnumerable<int> assetsIds, int? top, int? lastAdviceId)
+        public IEnumerable<Advice> ListLastAdvicesWithPagination(IEnumerable<int> followingAdvisors, IEnumerable<int> followingAssets, int? top, int? lastAdviceId)
         {
-            if (!advisorsIds.Any() && !assetsIds.Any())
+            if (!followingAdvisors.Any() && !followingAssets.Any())
                 return Enumerable.Empty<Advice>();
 
             var complement = "";
             var parameters = new DynamicParameters();
-            if (advisorsIds.Any())
+            if (followingAdvisors.Any())
             {
-                complement += string.Join(" OR ", advisorsIds.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
-                for (int i = 0; i < advisorsIds.Count(); ++i)
-                    parameters.Add($"AdvisorId{i}", advisorsIds.ElementAt(i), DbType.Int32);
+                complement += string.Join(" OR ", followingAdvisors.Select((c, i) => $"a.AdvisorId = @AdvisorId{i}"));
+                for (int i = 0; i < followingAdvisors.Count(); ++i)
+                    parameters.Add($"AdvisorId{i}", followingAdvisors.ElementAt(i), DbType.Int32);
             }
-            if (assetsIds.Any())
+            if (followingAssets.Any())
             {
                 if (!String.IsNullOrWhiteSpace(complement))
                 {
                     complement += " OR ";
                 }
 
-                complement += string.Join(" OR ", assetsIds.Select((c, i) => $"a.AssetId = @AssetId{i}"));
-                for (int i = 0; i < assetsIds.Count(); ++i)
-                    parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
+                complement += string.Join(" OR ", followingAssets.Select((c, i) => $"a.AssetId = @AssetId{i}"));
+                for (int i = 0; i < followingAssets.Count(); ++i)
+                    parameters.Add($"AssetId{i}", followingAssets.ElementAt(i), DbType.Int32);
             }
 
             var topCondition = (top.HasValue ? "TOP " + top.Value : String.Empty);

@@ -55,9 +55,16 @@
     letter-spacing: 0.3px;
     text-align: right;
     color: #ffffff;
-    width: 70px;
+    min-width: 75px;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.percentage {
+    font-size: 14px;
+    line-height: 1.07;
+    letter-spacing: 0.3px;
+    min-width: 75px;
 }
 
 percentage-display {

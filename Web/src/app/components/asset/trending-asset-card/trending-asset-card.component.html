@@ -15,10 +15,8 @@
         </div>
       </div>
       <div fxLayout="column">
-        <div class="asset-price">
-          {{asset.lastValue | valueDisplay}}
-        </div>
-        <percentage-display [value]="asset.variation24h"></percentage-display>
+        <ticker-field class="asset-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
+        <ticker-percentage-field [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
       </div>
     </div>
     <div class="separator"></div>

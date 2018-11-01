@@ -28,3 +28,7 @@
     cursor: pointer;
 }
 
+.assets-table .mat-column-currentReturn{
+    min-width: 85px;
+}
+

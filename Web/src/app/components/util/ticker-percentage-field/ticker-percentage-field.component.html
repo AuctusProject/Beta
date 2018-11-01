@@ -1,0 +1,5 @@
+<div [class.bull]="value > 0" [class.bear]="value < 0">
+    <div class="arrow" *ngIf="value > 0">&uarr;&nbsp;</div>
+    <div class="arrow" *ngIf="value < 0">&darr;&nbsp;</div>
+    {{value | number:'1.2-2'}}%
+</div>

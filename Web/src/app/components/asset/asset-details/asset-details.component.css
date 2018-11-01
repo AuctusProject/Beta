@@ -72,6 +72,7 @@
 
 .asset-price {
     font-size: 25px;
+    min-width: 110px; 
 }
 
 :host ::ng-deep .mat-tab-list{

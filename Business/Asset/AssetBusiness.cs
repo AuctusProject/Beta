@@ -30,7 +30,8 @@ namespace Auctus.Business.Asset
             var terminalAssets = MemoryCache.Get<List<TerminalAssetResponse>>(cacheKey);
             if (terminalAssets == null)
             {
-                var ids = TerminalAssets.Select(c => c.Id).Distinct().ToList();
+                var consideredAssets = TerminalAssets;
+                var ids = consideredAssets.Select(c => c.AssetId).Distinct().ToList();
                 var assets = ListAssets(ids);
                 if (assets != null && assets.Any())
                 {
@@ -40,8 +41,8 @@ namespace Auctus.Business.Asset
                         AssetId = c.Id,
                         Code = c.Code,
                         Name = c.Name,
-                        ChartPair = TerminalAssets.First(a => a.Id == c.Id).ChartPair,
-                        ChartExchange = TerminalAssets.First(a => a.Id == c.Id).ChartExchange
+                        ChartPair = consideredAssets.First(a => a.AssetId == c.Id).ChartPair,
+                        ChartExchange = consideredAssets.First(a => a.AssetId == c.Id).ChartExchange
                     }).ToList();
                     MemoryCache.Set<List<TerminalAssetResponse>>(cacheKey, terminalAssets, 1440);
                 }
@@ -211,9 +212,18 @@ namespace Auctus.Business.Asset
             return ids == null ? assets : assets.Where(c => ids.Contains(c.Id)).ToList();
         }
 
-        public List<Auctus.DomainObjects.Asset.Asset> ListAssetsOrderedByMarketCap(IEnumerable<int> ids = null)
+        public List<SimpleAssetResponse> ListAssetsOrderedByMarketCap()
         {
-            return ListAssets().OrderByDescending(c => c.MarketCap ?? 0).ThenBy(c => c.Name).ToList();
+            return ListAssets().Select(c => new SimpleAssetResponse()
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Type = c.Type,
+                Code = c.Code,
+                MarketCap = c.MarketCap,
+                ShortSellingEnabled = c.ShortSellingEnabled,
+                Pair = PairBusiness.GetBaseQuotePair(c.Id)
+            }).OrderByDescending(c => c.MarketCap ?? 0).ThenBy(c => c.Name).ToList();
         }
 
         public DomainObjects.Asset.Asset GetById(int id)

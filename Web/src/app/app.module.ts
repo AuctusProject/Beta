@@ -102,6 +102,10 @@ import { EventsListComponent } from './components/terminal/events-list/events-li
 import { RatingsListComponent } from './components/terminal/ratings-list/ratings-list.component';
 import { AdviceParametersComponent } from './components/advisor/new-advice/advice-parameters/advice-parameters.component';
 import { AssetHeaderComponent } from './components/terminal/asset-header/asset-header.component';
+import { TickerService } from './services/ticker.service';
+import { HighlightFieldComponent } from './components/util/highlight-field/highlight-field.component';
+import { TickerFieldComponent } from './components/util/ticker-field/ticker-field.component';
+import { TickerPercentageFieldComponent } from './components/util/ticker-percentage-field/ticker-percentage-field.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -196,7 +200,10 @@ export function getAuthServiceConfigs() {
     CryptoChartComponent,
     EventsListComponent,
     RatingsListComponent,
-    AssetHeaderComponent
+    AssetHeaderComponent,
+    HighlightFieldComponent,
+    TickerFieldComponent,
+    TickerPercentageFieldComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),
@@ -239,6 +246,7 @@ export function getAuthServiceConfigs() {
     AuthRedirect,
     ConfigService,
     ModalService,
+    TickerService,
     { provide: APP_INITIALIZER, useFactory: loadConfigService , deps: [ConfigService], multi: true },
     { provide: AuthServiceConfig, useFactory: getAuthServiceConfigs },
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '95vw', height: '92%', hasBackdrop: true, disableClose: false, panelClass: 'fullscreen-modal'}}

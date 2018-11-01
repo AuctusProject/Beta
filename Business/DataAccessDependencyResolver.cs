@@ -20,6 +20,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Event;
+using Auctus.DomainObjects.Exchange;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,7 @@ namespace Auctus.Business
             services.AddSingleton<IAzureStorageResource, AzureStorageResource>(c => new AzureStorageResource(configuration));
             services.AddSingleton<ICoinMarketcapApi, CoinMarketCapApi>(c => new CoinMarketCapApi());
             services.AddSingleton<ICoinGeckoApi, CoinGeckoApi>(c => new CoinGeckoApi());
+            services.AddSingleton<IBinanceApi, BinanceApi>(c => new BinanceApi());
             services.AddSingleton<IGoogleApi, GoogleApi>(c => new GoogleApi(configuration));
             services.AddSingleton<IFacebookApi, FacebookApi>(c => new FacebookApi(configuration));
             services.AddSingleton<ICoinMarketCalApi, CoinMarketCalApi>(c => new CoinMarketCalApi(configuration, services.BuildServiceProvider().GetRequiredService<Cache>()));
@@ -63,6 +65,8 @@ namespace Auctus.Business
             services.AddScoped<INewsData<DomainObjects.News.News>, NewsData>(c => new NewsData(configuration));
             services.AddScoped<INewsSourceData<DomainObjects.News.NewsSource>, NewsSourceData>(c => new NewsSourceData(configuration));
             services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
+            services.AddScoped<IExchangeData<DomainObjects.Exchange.Exchange>, ExchangeData>(c => new ExchangeData(configuration));
+            services.AddScoped<IPairData<Pair>, PairData>(c => new PairData(configuration));
         }
     }
 }

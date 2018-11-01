@@ -101,11 +101,13 @@ export class NewAdviceComponent implements ModalComponent, OnInit {
           assetName: this.asset.code + ' - ' +  this.asset.name, 
           lastValue: this.lastValue,
           targetPrice: this.advise.targetPrice,
-          stopLoss: this.advise.stopLoss
+          stopLoss: this.advise.stopLoss,
+          pair: this.asset.pair
         }}); 
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      if(result && result.confirm) {
+        this.advise.currentValue = result.value;
         this.advisorService.advise(this.advise).subscribe(ret => 
           {
             let recommendation = Util.GetRecommendationTypeDescription(this.advise.adviceType);

@@ -19,6 +19,7 @@ namespace Auctus.Model
         public int? NumberOfFollowers { get; set; }
         public bool? Following { get; set; }
         public int Mode { get; set; }
+        public PairResponse Pair { get; set; }
         public List<RecommendationDistributionResponse> RecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
         public List<RecommendationDistributionResponse> ReportRecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
 
@@ -59,6 +60,13 @@ namespace Auctus.Model
             public double? TargetPrice { get; set; }
             public double? StopLoss { get; set; }
             public int OperationType { get; set; }
+        }
+        public class PairResponse
+        {
+            public string Symbol { get; set; }
+            public string MultipliedSymbol { get; set; }
+            public string Preffix { get; set; }
+            public string Suffix { get; set; }
         }
     }
 }

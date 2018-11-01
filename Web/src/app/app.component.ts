@@ -6,6 +6,7 @@ import { ModalService } from './services/modal.service';
 import { AccountService } from './services/account.service';
 import { ConfigService } from './services/config.service';
 import { isPlatformBrowser } from '@angular/common';
+import { TickerService } from './services/ticker.service';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +19,12 @@ export class AppComponent implements OnInit{
   constructor(private router: Router, 
     private navigationService : NavigationService,
     private modalService: ModalService,
-    private accountService : AccountService,
+    private accountService: AccountService,
+    private tickerService: TickerService,
     @Inject(PLATFORM_ID) private platformId: Object
-    ) { }
+    ) { 
+        this.tickerService.initialize();
+    }
 
   ngOnInit(){
     if(this.isBrowser() && window && (<any>window).Highcharts){

@@ -55,7 +55,7 @@
       <ng-container matColumnDef="currentReturn">
         <th mat-header-cell *matHeaderCellDef><span fxHide.lt-md> Return </span></th>
         <td mat-cell *matCellDef="let assetAdvisor">  
-          <percentage-display *ngIf="assetAdvisor.lastAdviceType != 2" [value]="assetAdvisor.currentReturn"></percentage-display>
+          <ticker-percentage-field *ngIf="assetAdvisor.lastAdviceType != 2" [startValue]="assetAdvisor.currentReturn" [referenceValue]="assetAdvisor.lastAdviceAssetValue" [pair]="asset.pair"></ticker-percentage-field>
           <span *ngIf="assetAdvisor.lastAdviceType == 2">-</span>
         </td>
       </ng-container>

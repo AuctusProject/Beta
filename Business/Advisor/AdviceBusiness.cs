@@ -25,7 +25,7 @@ namespace Auctus.Business.Advisor
             return Data.GetLastAdviceForAssetByAdvisor(assetId, advisorId);
         }
 
-        internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type, double? stopLoss, double? targetPrice)
+        internal void ValidateAndCreate(DomainObjects.Advisor.Advisor advisor, DomainObjects.Asset.Asset asset, AdviceType type, double? stopLoss, double? targetPrice, double? price)
         {
             Advice lastAdvice = GetLastAdviceForAssetByAdvisor(advisor.Id, asset.Id);
 
@@ -38,18 +38,19 @@ namespace Auctus.Business.Advisor
             if (type == AdviceType.Sell && !asset.ShortSellingEnabled)
                 throw new BusinessException("Sell signals are not available for this asset.");
 
-            var assetValue = AssetCurrentValueBusiness.GetCurrentValue(asset.Id);
-            if (assetValue == null)
-                throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
-
             if (type == AdviceType.ClosePosition && (stopLoss.HasValue || targetPrice.HasValue))
                 throw new BusinessException("Stop loss or take profit cannot be defined to a Close signal.");
 
-            if (stopLoss.HasValue && ((type == AdviceType.Buy && assetValue.Value <= stopLoss.Value) || (type == AdviceType.Sell && assetValue.Value >= stopLoss.Value)))
-                throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(assetValue.Value)}.");
+            double? currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(asset.Id);
 
-            if (targetPrice.HasValue && ((type == AdviceType.Buy && assetValue.Value >= targetPrice.Value) || (type == AdviceType.Sell && assetValue.Value <= targetPrice.Value)))
-                throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(assetValue.Value)}.");
+            if (!currentValue.HasValue)
+                throw new InvalidOperationException($"Asset {asset.Name} ({asset.Id}) does not have value defined.");
+
+            if (stopLoss.HasValue && ((type == AdviceType.Buy && currentValue.Value <= stopLoss.Value) || (type == AdviceType.Sell && currentValue.Value >= stopLoss.Value)))
+                throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(currentValue.Value)}.");
+
+            if (targetPrice.HasValue && ((type == AdviceType.Buy && currentValue.Value >= targetPrice.Value) || (type == AdviceType.Sell && currentValue.Value <= targetPrice.Value)))
+                throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(currentValue.Value)}.");
 
             Insert(new Advice()
                     {
@@ -57,7 +58,7 @@ namespace Auctus.Business.Advisor
                         AssetId = asset.Id,
                         Type = type.Value,
                         CreationDate = Data.GetDateTimeNow(),
-                        AssetValue = assetValue.Value,
+                        AssetValue = currentValue.Value,
                         OperationType = AdviceOperationType.Manual.Value,
                         StopLoss = stopLoss,
                         TargetPrice = targetPrice

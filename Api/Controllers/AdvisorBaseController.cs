@@ -52,7 +52,7 @@ namespace Api.Controllers
             if (adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
                 return BadRequest();
 
-            AdvisorBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType), adviseRequest.StopLoss, adviseRequest.TargetPrice);
+            AdvisorBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType), adviseRequest.StopLoss, adviseRequest.TargetPrice, adviseRequest.CurrentValue);
             return Ok();
         }
 

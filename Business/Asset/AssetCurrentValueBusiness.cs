@@ -28,6 +28,16 @@ namespace Auctus.Business.Asset
             Data.UpdateAssetValue(assetCurrentValues);
         }
 
+        public void UpdateFullAssetCurrentValues(IEnumerable<AssetCurrentValue> assetCurrentValues)
+        {
+            Data.UpdateFullAssetValue(assetCurrentValues);
+        }
+
+        public void UpdateAssetValue7And30Days(IEnumerable<AssetCurrentValue> assetCurrentValues)
+        {
+            Data.UpdateAssetValue7And30Days(assetCurrentValues);
+        }
+
         public double? GetCurrentValue(int assetId)
         {
             var assetCurrentValue = ListAllAssets(new int[] { assetId });
@@ -43,6 +53,49 @@ namespace Auctus.Business.Asset
             }
             else
                 return assetCurrentValue[0].CurrentValue;
+        }
+
+        public double? GetRealCurrentValue(int assetId)
+        {
+            double? currentValue = null;
+            var pairs = PairBusiness.ListPairs(new int[] { assetId });
+            if (pairs.Any())
+            {
+                var usdQuote = pairs.FirstOrDefault(c => c.QuoteAssetId == AssetUSDId);
+                if (usdQuote != null)
+                    currentValue = BinanceBusiness.GetTicker24h(usdQuote.Symbol)?.LastPrice;
+                else
+                {
+                    var btcQuote = pairs.FirstOrDefault(c => c.QuoteAssetId == AssetBTCId);
+                    if (btcQuote != null)
+                    {
+                        var btcPair = PairBusiness.ListPairs(new int[] { AssetBTCId }, new int[] { AssetUSDId }).FirstOrDefault();
+                        if (btcPair != null)
+                        {
+                            var btcValue = BinanceBusiness.GetTicker24h(btcQuote.Symbol)?.LastPrice;
+                            var btcPrice = BinanceBusiness.GetTicker24h(btcPair.Symbol)?.LastPrice;
+                            if (btcPrice.HasValue && btcValue.HasValue)
+                                currentValue = btcPrice.Value * btcValue.Value;
+                        }
+                    }
+                    else
+                    {
+                        var ethQuote = pairs.FirstOrDefault(c => c.QuoteAssetId == AssetETHId);
+                        if (ethQuote != null)
+                        {
+                            var ethPair = PairBusiness.ListPairs(new int[] { AssetETHId }, new int[] { AssetUSDId }).FirstOrDefault();
+                            if (ethPair != null)
+                            {
+                                var ethValue = BinanceBusiness.GetTicker24h(ethQuote.Symbol)?.LastPrice;
+                                var ethPrice = BinanceBusiness.GetTicker24h(ethPair.Symbol)?.LastPrice;
+                                if (ethPrice.HasValue && ethValue.HasValue)
+                                    currentValue = ethPrice.Value * ethValue.Value;
+                            }
+                        }
+                    }
+                }
+            }
+            return currentValue ?? AssetCurrentValueBusiness.GetCurrentValue(assetId);
         }
 
         public List<AssetCurrentValue> ListAssetsValuesForCalculation(IEnumerable<int> assetIds, CalculationMode mode, IEnumerable<Advice> allAdvices, int? selectAssetId = null, int? selectAdvisorId = null)
