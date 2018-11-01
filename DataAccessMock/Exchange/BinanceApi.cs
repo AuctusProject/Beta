@@ -15,7 +15,7 @@ namespace Auctus.DataAccessMock.Exchange
 
         public BinanceTicker GetTicker24h(string symbol)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public BinanceKline GetKline30d(string symbol)

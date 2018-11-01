@@ -10,7 +10,33 @@ namespace Auctus.DataAccessMock.Exchange
     {
         public IEnumerable<Pair> ListEnabled()
         {
-            throw new NotImplementedException();
+            return new List<Pair>()
+            {
+                new Pair()
+                {
+                    BaseAssetId = 1,
+                    QuoteAssetId = 241,
+                    Enabled = true
+                },
+                new Pair()
+                {
+                    BaseAssetId = 2,
+                    QuoteAssetId = 241,
+                    Enabled = true
+                },
+                new Pair()
+                {
+                    BaseAssetId = 3,
+                    QuoteAssetId = 241,
+                    Enabled = true
+                },
+                new Pair()
+                {
+                    BaseAssetId = 4,
+                    QuoteAssetId = 241,
+                    Enabled = true
+                }
+            };
         }
     }
 }
