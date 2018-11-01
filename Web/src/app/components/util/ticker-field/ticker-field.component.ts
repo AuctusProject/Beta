@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
-import { TickerService } from 'src/app/services/ticker.service';
+import { TickerService } from '../../../services/ticker.service';
 import { Subscription } from 'rxjs';
-import { PairResponse } from 'src/app/model/asset/assetResponse';
+import { PairResponse } from '../../../model/asset/assetResponse';
 
 @Component({
   selector: 'ticker-field',

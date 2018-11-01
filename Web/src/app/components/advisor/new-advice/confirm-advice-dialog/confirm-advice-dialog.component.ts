@@ -1,7 +1,7 @@
 import { Component, OnInit,Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { Util } from '../../../../util/Util';
-import { TickerFieldComponent } from 'src/app/components/util/ticker-field/ticker-field.component';
+import { TickerFieldComponent } from '../../../util/ticker-field/ticker-field.component';
 
 @Component({
   selector: 'confirm-advice-dialog',

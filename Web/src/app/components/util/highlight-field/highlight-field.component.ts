@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ValueDisplayPipe } from 'src/app/util/value-display.pipe';
+import { ValueDisplayPipe } from '../../../util/value-display.pipe';
 
 @Component({
   selector: 'highlight-field',

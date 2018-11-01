@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
-import { TickerService } from 'src/app/services/ticker.service';
+import { TickerService } from '../../../services/ticker.service';
 import { Subscription } from 'rxjs';
-import { BinanceTickerPayload } from 'src/app/model/binanceTickerPayload';
-import { PairResponse } from 'src/app/model/asset/assetResponse';
+import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
+import { PairResponse } from '../../../model/asset/assetResponse';
 
 @Component({
   selector: 'ticker-percentage-field',
