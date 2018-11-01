@@ -33,7 +33,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   
   ngOnInit() {
     if (this.startValue) {
-      this.value = this.startValue;
+      this.value = Math.round(this.startValue * 10000) / 100;
     }
     if (this.pair) {
       if (this.pair.symbol) {

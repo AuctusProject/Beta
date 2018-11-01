@@ -80,5 +80,10 @@ namespace Auctus.DataAccessMock.Asset
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateFullAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -41,7 +41,10 @@ namespace Api.Controllers
         {
             RunAsync(() =>
             {
-                AssetValueBusiness.UpdateBinanceAssetsValues();
+                if (api == "coingecko")
+                    AssetValueBusiness.UpdateCoingeckoAssetsValues();
+                else
+                    AssetValueBusiness.UpdateBinanceAssetsValues();
             });
             return Ok();
         }

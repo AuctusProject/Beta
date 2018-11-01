@@ -49,6 +49,21 @@ namespace Auctus.DataAccess.Asset
             Execute(updateSql, null, 240);
         }
 
+        public void UpdateFullAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues)
+        {
+            if (assetCurrentValues == null || !assetCurrentValues.Any())
+                return;
+
+            var updateSql = "";
+            foreach (var value in assetCurrentValues)
+            {
+                updateSql += $"UPDATE [AssetCurrentValue] SET UpdateDate = {GetDateTimeSqlFormattedValue(value.UpdateDate)}, CurrentValue = {GetDoubleSqlFormattedValue(value.CurrentValue)}, " +
+                            $"Variation24Hours = {GetDoubleSqlFormattedValue(value.Variation24Hours)}, Variation7Days = {GetDoubleSqlFormattedValue(value.Variation7Days)}, " +
+                            $"Variation30Days = {GetDoubleSqlFormattedValue(value.Variation30Days)} WHERE Id = {value.Id};";
+            }
+            Execute(updateSql, null, 240);
+        }
+
         public void UpdateAssetValue7And30Days(IEnumerable<AssetCurrentValue> assetCurrentValues)
         {
             if (assetCurrentValues == null || !assetCurrentValues.Any())
