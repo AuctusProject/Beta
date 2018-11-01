@@ -22,7 +22,5 @@ namespace Auctus.DomainObjects.Exchange
         public bool Enabled { get; set; }
 
         public Exchange Exchange { get; set; }
-        public DomainObjects.Asset.Asset BaseAsset { get; set; }
-        public DomainObjects.Asset.Asset QuoteAsset { get; set; }
     }
 }

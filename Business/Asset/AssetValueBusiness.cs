@@ -78,8 +78,8 @@ namespace Auctus.Business.Asset
         {
             var ticker = BinanceBusiness.GetTicker24h();
             var pairs = PairBusiness.ListPairs();
-            var usdtPairs = pairs.Where(p => p.QuoteAsset.Code == "USDT");
-            var btcPairs = pairs.Where(p => !usdtPairs.Any(usdtPair => usdtPair.BaseAssetId == p.BaseAssetId) && p.QuoteAsset.Code == "BTC");
+            var usdtPairs = pairs.Where(p => p.QuoteAssetId == AssetUSDId);
+            var btcPairs = pairs.Where(p => !usdtPairs.Any(usdtPair => usdtPair.BaseAssetId == p.BaseAssetId) && p.QuoteAssetId == AssetBTCId);
 
             var currentValues = new Dictionary<int, Tuple<double, double>>();
 
@@ -108,8 +108,8 @@ namespace Auctus.Business.Asset
         private ConcurrentDictionary<int, Tuple<double?, double?>> GetAssets7dAnd30dVariationFromBinanceTicker()
         {
             var pairs = PairBusiness.ListPairs();
-            var usdtPairs = pairs.Where(p => p.QuoteAsset.Code == "USDT");
-            var btcPairs = pairs.Where(p => !usdtPairs.Any(usdtPair => usdtPair.BaseAssetId == p.BaseAssetId) && p.QuoteAsset.Code == "BTC");
+            var usdtPairs = pairs.Where(p => p.QuoteAssetId == AssetUSDId);
+            var btcPairs = pairs.Where(p => !usdtPairs.Any(usdtPair => usdtPair.BaseAssetId == p.BaseAssetId) && p.QuoteAssetId == AssetBTCId);
 
             var currentValues = new ConcurrentDictionary<int, Tuple<double?, double?>>();
 

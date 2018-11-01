@@ -23,12 +23,7 @@ namespace Auctus.Business.Exchange
             if (pairs == null)
             {
                 pairs = Data.ListEnabled().ToList();
-                pairs.ForEach(c => 
-                {
-                    c.Exchange = ExchangeBusiness.GetById(c.ExchangeId);
-                    c.BaseAsset = AssetBusiness.GetById(c.BaseAssetId);
-                    c.QuoteAsset = AssetBusiness.GetById(c.QuoteAssetId);
-                });
+                pairs.ForEach(c => c.Exchange = ExchangeBusiness.GetById(c.ExchangeId));
                 if (pairs.Any())
                     MemoryCache.Set<List<Pair>>(cacheKey, pairs, 720);
             }
