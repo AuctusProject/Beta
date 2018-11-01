@@ -81,3 +81,12 @@
     border-right: 20px solid #ffffff;
     margin-right: 10px !important;
 }
+
+.current-price {
+    min-width: 68px;
+}
+
+.variation-percentage {
+    min-width: 65px;
+    text-align: right;
+}

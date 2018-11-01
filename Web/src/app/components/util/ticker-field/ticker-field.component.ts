@@ -13,6 +13,7 @@ export class TickerFieldComponent implements OnInit, OnDestroy, OnChanges {
   @Input() tickerProperty: string = "currentClosePrice";
   @Input() tickerToMultiplierProperty: string = "currentClosePrice";
   @Input() startValue?: number = null;
+  @Input() blinkGray: boolean = false;
   value: number;
   mainTickerSubscription: Subscription;
   multiplierTickerSubscription: Subscription;

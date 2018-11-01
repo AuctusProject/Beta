@@ -14,11 +14,11 @@
                 <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="20px">
                     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
                         <span>USD</span>
-                        <ticker-field *ngIf="assetData && assetStatus && assetStatus.price" [startValue]="assetStatus.price" [pair]="assetData.pair"></ticker-field>
+                        <ticker-field class="current-price" *ngIf="assetData && assetStatus && assetStatus.price" [startValue]="assetStatus.price" [pair]="assetData.pair"></ticker-field>
                         <span *ngIf="!assetData || !assetStatus || !assetStatus.price">-</span>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
-                        <ticker-percentage-field *ngIf="assetData && assetStatus && assetStatus.variationPercentage24h" [startValue]="assetStatus.variationPercentage24h" [pair]="assetData.pair"></ticker-percentage-field>
+                        <ticker-percentage-field class="variation-percentage" *ngIf="assetData && assetStatus && assetStatus.variationPercentage24h" [startValue]="assetStatus.variationPercentage24h" [pair]="assetData.pair"></ticker-percentage-field>
                         <span *ngIf="!assetData || !assetStatus || !assetStatus.variationPercentage24h">-</span>
                         <span>24h</span>
                     </div>

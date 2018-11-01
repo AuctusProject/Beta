@@ -18,7 +18,7 @@
     <general-recommendation-tag [value]="asset.mode"></general-recommendation-tag>
     <div fxLayout="row" fxLayoutGap.gt-sm="40px" fxLayoutGap.lt-md="5px" fxLayoutAlign="left center">
       <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
-      <ticker-percentage-field [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
+      <ticker-percentage-field class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
     </div>
   </div>
   <div class="blue-button" ngClass.gt-sm="action-button" ngClass.lt-sm="action-button-sm" fxHide.lt-md *ngIf="showButtonForExpert" (click)="onGiveRecommendationClick($event)">

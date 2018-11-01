@@ -11,12 +11,16 @@ export class HighlightFieldComponent implements OnChanges {
   @Input() decimalsQty?: number = null;
   @Input() suffix: string = '';
   @Input() prefix: string = '';
+  @Input() blinkGray: boolean = false;
   bear: boolean = false;
   bull: boolean = false;
+  dark: boolean = false;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes && !changes.value.isFirstChange()) {
-      if (changes.value.previousValue > changes.value.currentValue) {
+      if (this.blinkGray) {
+        this.setDarkColor();
+      } else if (changes.value.previousValue > changes.value.currentValue) {
         this.setBearColor();
       } else if (changes.value.previousValue < changes.value.currentValue) {
         this.setBullColor();
@@ -43,6 +47,11 @@ export class HighlightFieldComponent implements OnChanges {
         return new ValueDisplayPipe().transform(this.value, preffixText) + suffixText;
       }
     }
+  }
+
+  setDarkColor() {
+    this.dark = true;
+    setTimeout(() => { this.dark = false; }, 500);
   }
 
   setBearColor() {
