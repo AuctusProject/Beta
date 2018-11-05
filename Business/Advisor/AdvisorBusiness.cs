@@ -509,36 +509,50 @@ namespace Auctus.Business.Advisor
 
         private void SetAdvisorsRanking(ref List<AdvisorResponse> advisorsResult, Dictionary<int, IEnumerable<AdviceDetail>> advisorsData)
         {
-            var advisorsConsidered = advisorsResult.Where(c => c.CreationDate < Data.GetDateTimeNow().AddDays(-3));
-            if (!advisorsConsidered.Any())
-                advisorsConsidered = advisorsResult;
+            var now = Data.GetDateTimeNow();
+            var totalWeight = 0.0;
+            var totalAvgSum = 0.0;
+            var advisorAvg = new Dictionary<int, double>();
+            var adviceCount = new Dictionary<int, double>();
+            foreach (var data in advisorsData)
+            {
+                var advisorWeight = 0.0;
+                var advisorReturnSum = 0.0;
+                adviceCount[data.Key] = 0.0;
+                foreach (var advice in data.Value.Where(v => v.Return.HasValue))
+                {
+                    var days = now.Subtract(advice.Advice.CreationDate).TotalDays;
+                    var weight = (days <= 7 ? 1.0 : ((Math.Log(days) / -3.94413802064) + 1.49336766079));
+                    advisorWeight += weight;
+                    advisorReturnSum += advice.Return.Value * weight;
+                    ++adviceCount[data.Key];
+                }
+                advisorAvg[data.Key] = advisorWeight != 0 ? advisorReturnSum / advisorWeight : 0;
+                totalWeight += advisorWeight;
+                totalAvgSum += advisorAvg[data.Key];
+            }
 
-            var newAdvisors = advisorsResult.Where(c => !advisorsConsidered.Any(a => a.UserId == c.UserId));
-            var details = advisorsData.Where(c => advisorsConsidered.Any(a => a.UserId == c.Key));
+            var generalAvg = totalWeight != 0 ? totalAvgSum / totalWeight : 0;
+            var standartDeviation = Math.Sqrt(advisorAvg.Where(c => adviceCount[c.Key] > 0).Average(c => Math.Pow(c.Value - generalAvg, 2)));
 
-            var maxAvg = advisorsConsidered.Max(c => c.AverageReturn);
-            var maxSucRate = advisorsConsidered.Max(c => c.SuccessRate);
-            var maxAssets = advisorsConsidered.Max(c => c.TotalAssetsAdvised);
-            var lastActivity = details.Any(c => c.Value.Any()) ? details.Where(c => c.Value.Any()).Max(c => c.Value.Max(a => a.Advice.CreationDate)) : DateTime.MinValue;
-
-            var advDays = advisorsResult.Select(c => new { Id = c.UserId, Days = Data.GetDateTimeNow().Subtract(c.CreationDate).TotalDays }).ToDictionary(c => c.Id, c => c.Days);
-            var maxAdvices = details.Any(c => c.Value.Any()) ? details.Max(c => (double)c.Value.Count() / advDays[c.Key]) : 0;
-            var maxFollowers = advisorsConsidered.Max(c => (double)c.NumberOfFollowers / advDays[c.UserId]);
-
-            var generalNormalization = 1.2;
+            var z = new Dictionary<int, double>();
+            foreach (var avg in advisorAvg)
+            {
+                if (adviceCount[avg.Key] > 0)
+                    z[avg.Key] = (avg.Value - generalAvg) / (standartDeviation / Math.Sqrt(adviceCount[avg.Key]));
+                else
+                    z[avg.Key] = 0;
+            }
+            var minZ = z.Min(c => c.Value);
+            var normalizationDivisor = z.Max(c => c.Value) - minZ;
             advisorsResult.ForEach(c =>
             {
-                var maximumValue = newAdvisors.Any(a => a.UserId == c.UserId) ? 0.7 : 1.0;
-                var rating = Math.Min(5.0, generalNormalization * (
-                      (0.35 * 5.0 * Math.Min(maximumValue, maxAvg <= 0 || c.AverageReturn <= 0 ? 0 : c.AverageReturn / maxAvg))
-                    + (0.30 * 5.0 * Math.Min(maximumValue, maxSucRate == 0 ? 0 : c.SuccessRate / maxSucRate))
-                    + (0.01 * 5.0 * Math.Min(maximumValue, maxAssets == 0 ? 0 : (double)c.TotalAssetsAdvised / maxAssets))
-                    + (0.15 * 5.0 * Math.Min(maximumValue, maxAdvices == 0 ? 0 : ((double)advisorsData[c.UserId].Count() / advDays[c.UserId]) / maxAdvices))
-                    + (0.15 * 5.0 * Math.Min(maximumValue, maxFollowers == 0 ? 0 : ((double)c.NumberOfFollowers / advDays[c.UserId]) / maxFollowers))
-                    + (0.04 * 5.0 * Math.Min(maximumValue, lastActivity.Ticks == 0 ? 0 : (double)c.CreationDate.Ticks / lastActivity.Ticks))));
-                c.Rating = 2.5 + (2.5 * rating / 5.0);
+                if (adviceCount[c.UserId] == 0)
+                    c.Rating = 2.5;
+                else
+                    c.Rating = 2.501 + (2.499 * ((z[c.UserId] - minZ) / normalizationDivisor));
             });
-            advisorsResult = advisorsResult.OrderByDescending(c => c.Rating).ToList();
+            advisorsResult = advisorsResult.OrderByDescending(c => c.Rating).ThenByDescending(c => c.UserId).ToList();
             for (int i = 0; i < advisorsResult.Count; ++i)
             {
                 advisorsResult[i].Ranking = i + 1;
