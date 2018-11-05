@@ -529,7 +529,7 @@ namespace Auctus.Business.Advisor
                 }
                 advisorAvg[data.Key] = advisorWeight != 0 ? advisorReturnSum / advisorWeight : 0;
                 totalWeight += advisorWeight;
-                totalAvgSum += advisorAvg[data.Key];
+                totalAvgSum += advisorReturnSum;
             }
 
             var generalAvg = totalWeight != 0 ? totalAvgSum / totalWeight : 0;
