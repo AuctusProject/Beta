@@ -510,36 +510,40 @@ namespace Auctus.Business.Advisor
         private void SetAdvisorsRanking(ref List<AdvisorResponse> advisorsResult, Dictionary<int, IEnumerable<AdviceDetail>> advisorsData)
         {
             var now = Data.GetDateTimeNow();
+            var totalCount = 0.0;
             var totalWeight = 0.0;
             var totalAvgSum = 0.0;
             var advisorAvg = new Dictionary<int, double>();
             var adviceCount = new Dictionary<int, double>();
+            var advisorWeight = new Dictionary<int, double>();
             foreach (var data in advisorsData)
             {
-                var advisorWeight = 0.0;
                 var advisorReturnSum = 0.0;
                 adviceCount[data.Key] = 0.0;
+                advisorWeight[data.Key] = 0.0;
                 foreach (var advice in data.Value.Where(v => v.Return.HasValue))
                 {
                     var days = now.Subtract(advice.Advice.CreationDate).TotalDays;
                     var weight = (days <= 7 ? 1.0 : ((Math.Log(days) / -3.94413802064) + 1.49336766079));
-                    advisorWeight += weight;
+                    advisorWeight[data.Key] += weight;
                     advisorReturnSum += advice.Return.Value * weight;
                     ++adviceCount[data.Key];
                 }
-                advisorAvg[data.Key] = advisorWeight != 0 ? advisorReturnSum / advisorWeight : 0;
-                totalWeight += advisorWeight;
+                advisorAvg[data.Key] = advisorWeight[data.Key] != 0 ? advisorReturnSum / advisorWeight[data.Key] : 0;
+                totalCount += adviceCount[data.Key];
+                totalWeight += advisorWeight[data.Key];
                 totalAvgSum += advisorReturnSum;
             }
 
             var generalAvg = totalWeight != 0 ? totalAvgSum / totalWeight : 0;
-            var standartDeviation = Math.Sqrt(advisorAvg.Where(c => adviceCount[c.Key] > 0).Average(c => Math.Pow(c.Value - generalAvg, 2)));
+            var weightedStdDivisor = totalWeight * (totalCount - 1) / totalCount;
+            var weightedStd = Math.Sqrt(advisorAvg.Where(c => adviceCount[c.Key] > 0).Sum(c => (Math.Pow(c.Value - generalAvg, 2) * advisorWeight[c.Key]) / weightedStdDivisor));
 
             var z = new Dictionary<int, double>();
             foreach (var avg in advisorAvg)
             {
                 if (adviceCount[avg.Key] > 0)
-                    z[avg.Key] = (avg.Value - generalAvg) / (standartDeviation / Math.Sqrt(adviceCount[avg.Key]));
+                    z[avg.Key] = (avg.Value - generalAvg) / (weightedStd / Math.Sqrt(adviceCount[avg.Key]));
                 else
                     z[avg.Key] = 0;
             }
