@@ -12,6 +12,7 @@ import { PairResponse } from '../../../model/asset/assetResponse';
 export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChanges {
   @Input() pair: PairResponse;
   @Input() referenceValue?: any = null;
+  @Input() adviceType?: number = null;
   @Input() startValue?: number = null;
   value: number;
   mainTickerSubscription: Subscription;
@@ -55,7 +56,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   setValue(ticker: BinanceTickerPayload, isMainPair: boolean) {
     if (!this.pair.multipliedSymbol) {
       if (this.referenceValue) {
-        this.value = Math.round(((ticker.currentClosePrice / parseFloat(this.referenceValue)) - 1) * 10000) / 100;
+        this.value = this.getReferenceValueMultiplier() * Math.round(((ticker.currentClosePrice / parseFloat(this.referenceValue)) - 1) * 10000) / 100;
       } else {
         this.value = ticker.priceChangePercentage;
       }
@@ -69,7 +70,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
       }
       if (this.referenceValue) {
         if (this.baseValue && this.quoteValue) {
-          this.value = Math.round((((this.baseValue * this.quoteValue) / parseFloat(this.referenceValue)) - 1) * 10000) / 100;
+          this.value = this.getReferenceValueMultiplier() * Math.round((((this.baseValue * this.quoteValue) / parseFloat(this.referenceValue)) - 1) * 10000) / 100;
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {
@@ -78,6 +79,10 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
           this.value = Math.round((((this.baseValue * this.quoteValue) / (previousBase * previousQuote)) - 1) * 10000) / 100;
       }
     }
+  }
+
+  getReferenceValueMultiplier() : number {
+    return this.adviceType === 0 ? -1.0 : 1.0;
   }
 
   ngOnDestroy() {
