@@ -74,8 +74,8 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {
-          let previousBase = this.baseValue * (1 + (this.baseVariation / 100));
-          let previousQuote = this.quoteValue * (1 + (this.quoteVariation / 100));
+          let previousBase = this.baseValue / (1 + (this.baseVariation / 100));
+          let previousQuote = this.quoteValue / (1 + (this.quoteVariation / 100));
           this.value = Math.round((((this.baseValue * this.quoteValue) / (previousBase * previousQuote)) - 1) * 10000) / 100;
       }
     }
