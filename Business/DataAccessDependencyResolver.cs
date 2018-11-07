@@ -67,6 +67,7 @@ namespace Auctus.Business
             services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
             services.AddScoped<IExchangeData<DomainObjects.Exchange.Exchange>, ExchangeData>(c => new ExchangeData(configuration));
             services.AddScoped<IPairData<Pair>, PairData>(c => new PairData(configuration));
+            services.AddSingleton<ISendGridApi, SendGridApi>(c => new SendGridApi(configuration));
         }
     }
 }

@@ -215,5 +215,14 @@ namespace Api.Controllers
         {
             return base.RequestEarlyAccess(earlyAccessRequest);
         }
+
+        [Route("website/emails")]
+        [HttpPost]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new async Task<IActionResult> IncludeSubscribedEmailFromWebsite([FromBody]EarlyAccessRequest emailRequest)
+        {
+            return await base.IncludeSubscribedEmailFromWebsite(emailRequest);
+        }
     }
 }
