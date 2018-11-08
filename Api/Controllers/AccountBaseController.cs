@@ -172,11 +172,5 @@ namespace Api.Controllers
             EarlyAccessEmailBusiness.Create(earlyAccessRequest.Name, earlyAccessRequest.Email, earlyAccessRequest.Twitter);
             return Ok();
         }
-
-        protected virtual async Task<IActionResult> IncludeSubscribedEmailFromWebsite(EarlyAccessRequest emailRequest)
-        {
-            await EmailBusiness.IncludeSubscribedEmailFromWebsite(emailRequest.Email, emailRequest.Name);
-            return Ok();
-        }
     }
 }
