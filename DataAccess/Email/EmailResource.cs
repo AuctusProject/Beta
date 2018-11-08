@@ -1,5 +1,6 @@
 ﻿using Auctus.DataAccessInterfaces.Email;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -13,12 +14,14 @@ namespace Auctus.DataAccess.Email
     public class EmailResource : IEmailResource
     {
         private readonly string SendGridKey;
+        private readonly string WebSiteNewsLetterSendGridKey;
         private readonly string ForcedEmail;
         private readonly bool IsDevelopment;
 
         public EmailResource(IConfigurationRoot configuration, bool isDevelopment)
         {
-            SendGridKey = configuration.GetSection("Email:SendGridKey").Get<string>(); 
+            SendGridKey = configuration.GetSection("Email:SendGridKey").Get<string>();
+            WebSiteNewsLetterSendGridKey = configuration.GetSection("Email:WebSiteNewsLetterSendGridKey").Get<string>();
             ForcedEmail = configuration.GetSection("Email:ForcedEmail").Get<string>();
             IsDevelopment = isDevelopment;
         }
@@ -66,6 +69,22 @@ namespace Auctus.DataAccess.Email
 
             SendGridClient client = new SendGridClient(SendGridKey);
             await client.SendEmailAsync(mailMessage);
+        }
+        public async Task IncludeSubscribedEmailFromWebsite(string email, string firstName, string lastName)
+        {
+            var apiKey = WebSiteNewsLetterSendGridKey;
+            var client = new SendGridClient(apiKey);
+
+            var body = @"
+            [{
+                'email': '{email}',
+                'first_name': '{firstName}',
+                'last_name': '{lastName}' 
+            }]".Replace("{email}", email).Replace("{firstName}", firstName).Replace("{lastName}", lastName);
+
+            var json = JsonConvert.DeserializeObject<Object>(body);
+
+            var response = await client.RequestAsync(SendGridClient.Method.POST, json.ToString(), null, "contactdb/recipients");
         }
     }
 }

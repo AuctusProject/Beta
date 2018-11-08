@@ -15,13 +15,11 @@ namespace Auctus.Business.Email
     {
         private readonly IEmailResource Resource;
         private readonly List<String> EmailErrorList;
-        private readonly ISendGridApi SendGridApi;
 
         public EmailBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider)
         {
             Resource = (IEmailResource)serviceProvider.GetService(typeof(IEmailResource));
             EmailErrorList = configuration.GetSection("Email:Error").Get<List<string>>();
-            SendGridApi = (ISendGridApi)serviceProvider.GetService(typeof(ISendGridApi));
         }
 
         public bool IsValidEmail(string strIn)
@@ -90,7 +88,7 @@ namespace Auctus.Business.Email
                 {
                     firstName = name;
                 }
-                await SendGridApi.IncludeEmail(email, firstName, lastName);
+                await Resource.IncludeSubscribedEmailFromWebsite(email, firstName, lastName);
             }
             else
                 throw new BusinessException("Email informed is invalid.");
