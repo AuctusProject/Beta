@@ -1,5 +1,6 @@
 ﻿using Auctus.DataAccessInterfaces.Email;
 using Auctus.Util;
+using Auctus.Util.Exceptions;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Auctus.Business.Email
 {
-    public class EmailBusiness 
+    public class EmailBusiness
     {
         private readonly IEmailResource Resource;
         private readonly List<String> EmailErrorList;
 
-        internal EmailBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider)
+        public EmailBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider)
         {
             Resource = (IEmailResource)serviceProvider.GetService(typeof(IEmailResource));
             EmailErrorList = configuration.GetSection("Email:Error").Get<List<string>>();
@@ -71,6 +72,26 @@ namespace Auctus.Business.Email
             var body = EmailTemplate.EMAIL_TEMPLATE.Replace("@subject", subject).Replace("@content", content).Replace("@backImage", type);
 
             await SendAsync(to, subject, body);
+        }
+
+        public async Task IncludeSubscribedEmailFromWebsite(string email, string name)
+        {
+            if (IsValidEmail(email))
+            {
+                string firstName, lastName = null;
+                if (!string.IsNullOrWhiteSpace(name) && name.Contains(" "))
+                {
+                    firstName = name.Split(' ', 2)[0];
+                    lastName = name.Split(' ', 2)[1];
+                }
+                else
+                {
+                    firstName = name;
+                }
+                await Resource.IncludeSubscribedEmailFromWebsite(email, firstName, lastName);
+            }
+            else
+                throw new BusinessException("Email informed is invalid.");
         }
     }
 }
