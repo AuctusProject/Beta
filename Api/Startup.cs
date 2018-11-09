@@ -120,7 +120,7 @@ namespace Api
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseCors("Default");
+            app.UseCors();
             app.UseMvcWithDefaultRoute();
             
             app.UseWebSockets();
