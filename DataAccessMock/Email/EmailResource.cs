@@ -13,5 +13,10 @@ namespace Auctus.DataAccessMock.Email
         {
             return Task.FromResult(0);
         }
+
+        Task IEmailResource.IncludeSubscribedEmailFromWebsite(string email, string firstName, string lastName)
+        {
+            return Task.FromResult(0);
+        }
     }
 }
