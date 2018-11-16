@@ -86,15 +86,19 @@ namespace Auctus.Business.Asset
 
             foreach (var usdtPair in usdtPairs)
             {
-                var currentTicker = ticker.First(t => t.Symbol == usdtPair.Symbol);
-                currentValues.Add(usdtPair.BaseAssetId, new Tuple<double, double>(currentTicker.LastPrice, currentTicker.PriceChangePercent / 100.0));
+                var currentTicker = ticker.FirstOrDefault(t => t.Symbol == usdtPair.Symbol);
+                if (currentTicker != null)
+                    currentValues.Add(usdtPair.BaseAssetId, new Tuple<double, double>(currentTicker.LastPrice, currentTicker.PriceChangePercent / 100.0));
             }
 
             foreach (var btcPair in btcPairs)
             {
-                var currentTicker = ticker.First(t => t.Symbol == btcPair.Symbol);
-                var variation24h = (1 * (currentTicker.PriceChangePercent / 100.0 + 1) * (1 + currentValues[btcPair.QuoteAssetId].Item2)) - 1;
-                currentValues.Add(btcPair.BaseAssetId, new Tuple<double, double>(currentTicker.LastPrice * currentValues[btcPair.QuoteAssetId].Item1, variation24h));
+                var currentTicker = ticker.FirstOrDefault(t => t.Symbol == btcPair.Symbol);
+                if (currentTicker != null && currentValues.ContainsKey(btcPair.QuoteAssetId))
+                {
+                    var variation24h = (1 * (currentTicker.PriceChangePercent / 100.0 + 1) * (1 + currentValues[btcPair.QuoteAssetId].Item2)) - 1;
+                    currentValues.Add(btcPair.BaseAssetId, new Tuple<double, double>(currentTicker.LastPrice * currentValues[btcPair.QuoteAssetId].Item1, variation24h));
+                }
             }
 
             return currentValues;
