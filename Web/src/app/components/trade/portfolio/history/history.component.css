@@ -10,12 +10,7 @@
 
 
 .boxes {
-    border-right: 1px solid #161616;
-    
-}
-
-.boxes ::ng-deep .variation{
-    margin-bottom: -30px;
+    border-right: 1px solid #161616;  
 }
 
 .returns{
