@@ -12,7 +12,7 @@
       <div fxHide.gt-sm="true" class="top-separator"></div>
       <router-outlet *ngIf="!showEmptyPage()"></router-outlet>
     </mat-sidenav-content>
-    <!-- <mat-sidenav class="mini-view" opened mode="side" position="end">Mini View</mat-sidenav> -->
+    <mat-sidenav *ngIf="miniViewQuery.matches" opened class="mini-view" mode="side" position="end">Mini View</mat-sidenav>
   </mat-sidenav-container>
 </div>
 <simple-notifications [options]="notificationOptions"></simple-notifications>

@@ -32,7 +32,7 @@
 }
 
 :host ::ng-deep .mat-tab-label-container .mat-tab-label {
-    min-width: 131px;
+    min-width: 90px;
 }
 
 .trade-tab-group {
