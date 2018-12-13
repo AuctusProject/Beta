@@ -40,10 +40,14 @@
       <ng-container matColumnDef="asset">
         <th  mat-header-cell *matHeaderCellDef mat-sort-header="assetCode"> ACTIONS({{dataSource.data.length}}) </th>
         <td mat-cell *matCellDef="let order" (click)="onAssetClick(order.assetId)" class="pointer">
-          <div fxLayout="row" fxLayoutAlign.gt-sm="start center" fxLayoutAlign.lt-sm="center">
+          <div fxLayout="row" fxLayoutAlign="start center">
             <div><img class="asset-image" [src]="getAssetImgUrl(order.assetId)" onerror="this.style.display='none'" onload="this.style.display='unset'" /></div>
-            <div class="asset">
-              <span [class]="order.type == 1 ? 'red-label' : 'green-label'">{{getOrderDescription(order)}}</span><span ngClass.lt-sm="hidden"> - </span><br ngClass.gt-sm="hidden"/>{{order.assetCode}}
+            <div fxLayout="column" fxLayoutGap.gt-sm="6px">
+              <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start start" class="asset">
+                  <span [class]="order.type == 1 ? 'red-label' : 'green-label'">{{getOrderDescription(order)}}</span>
+                  <span fxHide.lt-sm> - </span>{{order.assetCode}}
+              </div>
+              <span *ngIf="order.actionType" class="action-type">triggered by {{utilProxy.GetCloseReasonDescription(order.actionType)}}</span>
             </div>
           </div>
         </td>
