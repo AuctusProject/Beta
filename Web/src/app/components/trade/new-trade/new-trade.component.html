@@ -1,4 +1,4 @@
-<mat-tab-group class="trade-tab-group" *ngIf="logged">
+<mat-tab-group class="trade-tab-group border-tabs" *ngIf="logged">
     <mat-tab> 
         <ng-template mat-tab-label>LIMIT</ng-template>
         <set-trade #Limit *ngIf="!!asset" [limit]="true" [assetId]="asset.assetId" [assetCode]="asset.code" [assetPair]="asset.pair" [shortSellingEnabled]="asset.shortSellingEnabled" (orderCreated)="onOrderCreated()"></set-trade> 
@@ -8,3 +8,4 @@
         <set-trade #Market *ngIf="!!asset" [limit]="false" [assetId]="asset.assetId" [assetCode]="asset.code" [assetPair]="asset.pair" [shortSellingEnabled]="asset.shortSellingEnabled" (orderCreated)="onOrderCreated()"></set-trade> 
     </mat-tab>
 </mat-tab-group>
+

@@ -46,7 +46,17 @@ table, th{
     margin: inherit;
 }
 
+.action-type {
+    font-size: 10px; 
+    font-style: italic; 
+    margin-left: 5px !important;
+    text-align: start;
+}
+
 @media(max-width:599px){
+    .action-type {
+        font-size: 9px;
+    }
     .header{
         height: 110px;
     }
