@@ -8,12 +8,13 @@
 }
 
 .top-tab-group{
-    height: calc(100vh - 320px);
+    height: 386px;
     margin-bottom: 5px;
 }
 
 .bottom-tab-group{
-    height: 240px;
+    height: calc(100vh - 463px);
+    min-height: 230px;
 }
 
 .border-tabs ::ng-deep .mat-tab-label-container .mat-tab-label {
