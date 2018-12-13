@@ -295,6 +295,7 @@ namespace Api.Controllers
         protected AdvisorProfitHistoryBusiness AdvisorProfitHistoryBusiness { get { return new AdvisorProfitHistoryBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AdvisorMonthlyRankingBusiness AdvisorMonthlyRankingBusiness { get { return new AdvisorMonthlyRankingBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
 
+
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
         protected class OnlyAdminAttribute : ActionFilterAttribute
         {
