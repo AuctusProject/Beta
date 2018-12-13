@@ -1,137 +1,117 @@
-.expert-details-header{
-    background-color: #1c1c1c;
-    display: inline-block;
-    color: white;
-    font-size: 14px;
-    font-weight: 300;
-    padding-top: 34px;
-    min-width: 100%;
+.asset-header {
+    min-height: 55px;
+    padding: 0 12px;
 }
 
-.symbol{
-    font-size:26px;
+.asset-header-mobile {
+    background-color: #1f1f1f;
 }
 
-.recommendations{
-    font-size: 19.5px;
+.header-separator {
+    width: 100%;
+    height:1px;
+    box-shadow: 0px 1px 4px 0 rgba(255, 255, 255, 0.15), inset 0px 2px 3px 0 #000000;
+    background-color: #808080;
+}
+
+.asset-code {
+    font-size: 20px;
     font-weight: 500;
-    color: #126efd;
+    letter-spacing: 0.5px;
 }
 
-.followers{
-    font-size: 16.5px;
+.asset-name {
+    font-size: 10px;
     font-weight: 100;
-    font-style: italic;
-    color: #f3f3f3;
+    letter-spacing: 0.5px;
 }
 
-
-:host ::ng-deep .assets-table.mat-table{
-    background: transparent;
+.asset-header-label {
+    font-size: 11px;
+    color: #bfbfbf;
+    font-weight: 100;
+    letter-spacing: 0.3px;
 }
 
-:host ::ng-deep .assets-table th{
-    background:#252525;
+.mobile-asset-header-label {
+    font-size: 10px;
+    color: #bfbfbf;
+    font-weight: 100;
+    letter-spacing: 0.3px;
 }
 
-:host ::ng-deep .assets-table .mat-column-recommendation div{
-    width: 99px;
-    height: 26px;
-    line-height: 26px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #ffffff;
-    margin: auto;
+.price {
+    font-size: 22px;
+    letter-spacing: 0.6px;
+    min-width: 108px;
 }
 
-:host ::ng-deep .assets-table .mat-column-value div{
+.mobile-price {
     font-size: 16px;
+    letter-spacing: 0.6px;
+    min-width: 108px;
 }
 
-:host ::ng-deep .assets-table{
-    margin-top: 46px;
-    margin-bottom: 76px;
+.mobile-value {
+    font-size: 11px;
 }
 
-.pagination-link{
-    margin-bottom: 76px;
+.market-cap {
+    min-width: 138px;
 }
 
-.element-row{
+.high-low {
+    min-width: 144px;
+}
+
+.percentage {
+    min-width: 78px;
+}
+
+.asset-chart {
+    height: 445px;
+    padding: 5px;
+}
+
+.bottom-tab {
+    min-height: 400px;
+}
+
+.asset-details {
+    height:100%;
+}
+
+.asset-content {
+    min-height: 180px;
+    overflow: auto;
+}
+
+.asset-content-web {
+    height: calc(100% - 63px);
+}
+
+.asset-content-mobile {
+    height: calc(100% - 138px);
+}
+
+.cancel-close-action {
+    background-color: #999999;
+    border: 0;
+    height: 23px;
+    padding: 0 15px;
+    letter-spacing: 1.8px;
+    font-size: 9px;
+    font-weight: 100;
+    border-radius: 4px;
+    outline: none;
+    text-transform: uppercase;
     cursor: pointer;
 }
 
-:host ::ng-deep .assets-table .white-button,
-:host ::ng-deep .assets-table .blue-button{
-    margin: auto;
+.header-mobile-row {
+    padding: 6px 10px;
 }
 
-.section-title {
-    margin-bottom: 36px;
-}
-
-.asset-price {
-    font-size: 25px;
-    min-width: 110px; 
-}
-
-:host ::ng-deep .mat-tab-list{
-    max-width: 1168px;
-    margin: auto;
-    flex-grow: unset;
-}
-
-:host ::ng-deep .mat-tab-label-container{
-    border-bottom: solid 1px #FFFFFF99;
-    overflow: unset;
-}
-
-:host ::ng-deep .mat-tab-label{
-    background: #262626;
-    color: white;
-    opacity: 1;
-    min-width: 160px !important;
-    margin: 0px 2px;
-}
-
-:host ::ng-deep .mat-tab-label-active{
-    background: #151515;
-    border-top: solid 1px #ffffff99;
-    border-left: solid 1px #ffffff99;
-    border-right: solid 1px #ffffff99;
-}
-
-:host ::ng-deep .mat-ink-bar{
-    background-color: #151515 !important;
-    bottom:-1px;
-    border-left: 1px solid #ffffff99;
-    border-right: 1px solid #ffffff99;
-    width: 158px !important;
-}
-
-:host ::ng-deep .mat-tab-header{
-    border-bottom: unset;
-}
-
-:host ::ng-deep .mat-tab-body-content{
-    overflow-y: hidden;
-}
-
-mat-tab-group{
-    margin-top: 40px;
-}
-
-:host ::ng-deep .mat-tab-body-wrapper{
-    background-color: #151515;
-}
-
-@media(max-width:959px){
-    :host ::ng-deep .mat-tab-label{
-        min-width: 74px !important;
-        padding: 0px 6px !important;;
-    }
-
-    :host ::ng-deep .mat-ink-bar{
-        width: 72px !important;
-    }
+.recommendation-distribution-mobile {
+    margin: -10px auto;
 }

@@ -1,0 +1,189 @@
+:host{
+    display: block;
+    padding-top: 60px;
+    background: #1f1f1f;
+}
+
+.advantages-title{
+    height: 52px;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 1.1px;
+    text-align: center;
+    color: #f2f2f2;
+}
+
+.blue-separator{
+    width: 45px;
+    height: 5px;
+    background-color: #55cffe;
+}
+
+.advantage-item{
+    font-size: 13px;
+    font-weight: 100;
+    letter-spacing: 0.3px;
+    color: #979797;
+    text-align: center;
+}
+
+.advantage-itens{
+    width: 260px;
+}
+
+section.advantages{
+    max-width: 1186px;
+    width: 100%;  
+    margin: auto;
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.img-wrapper{
+    height: 88px;
+}
+
+section.contest{
+    background-color: #e6e6e6;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    color: #353535;
+}
+
+.contest-title{
+    font-size: 34px;
+    font-weight: 500;
+    letter-spacing: 1.7px;
+    text-align: left;
+    margin-bottom: 26px;
+}
+
+countdown{
+    width: 300px;
+    margin: 60px auto 0px;
+    max-width: calc(100% - 40px);
+}
+
+.countdown-column{
+    max-width: 100%;
+}
+
+.countdown-black-title,
+.countdown-blue-title{
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+.countdown-blue-title{
+    color: #4562fc;
+}
+
+.contest-details{
+    width: calc(100% - 80px);
+    max-width: 1168px;
+    margin: auto;
+}
+
+@media(min-width: 960px){
+    .contest-details{
+        padding-left: 40px;
+    }    
+}
+
+.footer-content{
+    height: 60px;
+    max-width: 1168px;
+    width: 100%;
+    margin: auto;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: #f2f2f2;
+    padding-left:20px;
+    padding-right:20px
+}
+
+.footer-content div,
+.footer-content a{
+    width: 220px;
+    text-align: center;
+}
+
+section.traders{
+    padding-top: 80px;
+    padding-bottom: 80px;
+    background-image: url('/assets/img/Img_Bg2.png');
+    background-size: cover;
+    position: relative;
+}
+
+.laptop-img{
+    width: 100%;
+    max-width: 632px;
+}
+
+.traders .table-button{
+    margin: auto;
+}
+
+.traders-title{
+    font-size: 36px;
+    font-weight: 500;
+    letter-spacing: 1.8px;
+    color: #e6e6e6;
+    max-width: 340px;
+    margin-bottom: 26px;
+}
+
+.traders-content{
+    width: calc(100% - 80px);
+    max-width: 1168px;
+    margin: auto;
+}
+
+.traders-descriptions{
+    max-width: 340px;
+}
+
+.traders-description{
+    font-size: 13px;
+    font-weight: 100;
+    letter-spacing: 0.3px;
+    text-align: left;
+    color: #979797;
+}
+
+.traders li{
+    font-size: 18px;
+    font-weight: 100;
+    letter-spacing: 0.5px;
+    color: #e6e6e6;
+    margin-top:10px;
+}
+
+.traders ul{
+    margin-bottom: 30px;
+}
+
+.table-button{
+    height: 28px;
+    line-height: 28px;
+    font-size: 14px;
+    width: 140px;
+}
+
+.black-panel{
+    height: 25px;
+    position: absolute;
+    width: 50%;
+    top: 0;
+    left: 50%;
+    background: #1f1f1f;
+}
+
+.prizes-container{
+    width: 100%;
+}

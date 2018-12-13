@@ -1,0 +1,9 @@
+<a *ngIf="expert" routerLink="/top-traders/{{expert.userId}}">
+  <div fxLayout="row" fxLayoutGap="9px" [fxLayoutAlign]="layoutAlign">
+    <expert-picture size="sm" [urlGuid]="expert.urlGuid" [ranking]="expert.ranking"></expert-picture>
+    <div fxLayout="column" fxLayoutGap="4px" fxLayoutAlign="center stretch" >
+      <div class="expert-name truncate">{{expert.name}}</div>
+      <div class="small-text expert-description truncate">{{expert.description}}</div>
+    </div>
+  </div>
+</a>

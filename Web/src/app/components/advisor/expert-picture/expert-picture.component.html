@@ -1,0 +1,6 @@
+<div class="expert-picture {{size}}">
+  <img *ngIf="urlGuid" [src]="getAdvisorImgUrl()" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
+  <div *ngIf="ranking" class="ranking">
+    {{ranking}}
+  </div>
+</div>

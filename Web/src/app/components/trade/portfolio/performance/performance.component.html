@@ -1,0 +1,8 @@
+<div class="performance-tab-container" fxLayout="column">
+  <div fxLayout.gt-xs="row" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+    <daily-performance-chart fxFlexOrder.gt-xs="1" fxFlexOrder.lt-sm="2" class="daily-performance-chart" *ngIf="advisorPerformance" [dailyPerformance]="advisorPerformance.dailyPerformance"></daily-performance-chart>
+    <trade-summary #Trade fxFlexOrder.gt-xs="2" fxFlexOrder.lt-sm="1" [advisor]="advisor" [closedPosition]="closedPosition" [openPosition]="openPosition"></trade-summary>
+  </div>
+  <perfomance-open-positions #Open></perfomance-open-positions>
+  <perfomance-closed-positions #Closed></perfomance-closed-positions>
+</div>

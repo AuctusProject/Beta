@@ -1,0 +1,21 @@
+:host {
+    background-color: #2e2e2e;
+    display: block;
+    overflow: auto;
+}
+
+.circular-chart{
+    width: 38px;
+}
+
+.circular-chart .percentage {
+    fill: #0ec812;
+    text-anchor: middle;
+    font-size: 11px;
+    font-weight: 100;
+    color: #0ec812;
+}
+
+.circle {
+    stroke-width: 3px;
+  }

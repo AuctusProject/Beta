@@ -1,8 +1,8 @@
-<mat-form-field floatLabel="never">
-  <mat-label class="search-label">Search for Expert or Asset</mat-label>
-  <input autocomplete="off" [formControl]="searchControl" class="search-input" type="search" matInput [(ngModel)]="inputText" placeholder="Search for Expert or Asset" (input)="onInputChanged($event.target.value)" [matAutocomplete]="auto">
+<mat-form-field appearance="outline" class="dark-border" >
+  <mat-label class="search-label">Search for Trader or Market</mat-label>
+  <input #SearchInput autocomplete="off" [formControl]="searchControl" class="search-input" type="search" matInput [(ngModel)]="inputText" (input)="onInputChanged($event.target.value)" [matAutocomplete]="auto">
   <mat-autocomplete class="search-autocomplete" #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)">
-    <mat-optgroup class="search-autocomplete-header" label="Assets" *ngIf="showAssets">
+    <mat-optgroup class="search-autocomplete-header" label="Markets" *ngIf="showAssets">
       <mat-option class="search-autocomplete-option" *ngFor="let asset of searchResults.assets" [value]="asset">
         <div class="search-autocomplete-option-div-img">
           <span class="search-autocomplete-option-div-img-wrapper">
@@ -13,7 +13,7 @@
         <div class="search-autocomplete-option-separation"></div>
       </mat-option>
     </mat-optgroup>
-    <mat-optgroup class="search-autocomplete-header" label="Experts" *ngIf="showExperts">
+    <mat-optgroup class="search-autocomplete-header" label="Traders" *ngIf="showExperts">
       <mat-option class="search-autocomplete-option" *ngFor="let expert of searchResults.advisors" [value]="expert">
         <div class="search-autocomplete-option-div-img">
           <span class="search-autocomplete-option-div-img-wrapper">

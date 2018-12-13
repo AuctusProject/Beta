@@ -1,0 +1,16 @@
+<h2 class="page-title">Trading Contest</h2>
+<div class="contest-details" fxLayout="row" fxLayoutAlign="space-evenly stretch">
+  <div fxHide.lt-md fxLayout="column" fxFlex="50" fxLayoutAlign="center center">
+    <div class="countdown-title">Top traders with the highest P/L(%) wins!</div>
+    <countdown theme="light"></countdown>
+  </div>
+  <div fxLayout="row" fxFlex.gt-sm="50" fxFlex.lt-md="100" fxLayoutAlign.gt-sm="start center" fxLayoutAlign.lt-md="center center" fxLayoutGap.gt-sm="15px" fxLayoutGap.lt-md="8px">
+    <prize-box rank="1"></prize-box>
+    <div class="separator"></div>
+    <prize-box rank="2"></prize-box>
+    <div class="separator"></div>
+    <prize-box rank="3"></prize-box>
+  </div>
+</div>
+<experts-table class="experts experts-web" [experts]="experts" [type]="monthlyContestType"></experts-table>
+<hall-of-fame fxHide.lt-md></hall-of-fame>

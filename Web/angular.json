@@ -26,9 +26,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js",
-              "node_modules/owl.carousel/dist/owl.carousel.js"              
+            "scripts": [   
+              "node_modules/chart.js/src/chart.js"
             ]
           },
           "configurations": {

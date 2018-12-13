@@ -9,5 +9,7 @@ namespace Auctus.DataAccessInterfaces.Advisor
     {
         List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds);
         FollowAdvisor GetLastByUserForAdvisor(int userId, int advisorId);
+        List<FollowAdvisor> ListAdvisorsFollowed(int userId);
+        int CountAdvisorFollowers(int advisorId);
     }
 }

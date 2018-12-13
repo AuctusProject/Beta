@@ -8,7 +8,8 @@ namespace Auctus.DataAccessInterfaces.Asset
 {
     public interface IAssetCurrentValueData<T> : IBaseData<T>
     {
-        List<AssetCurrentValue> ListAllAssets(IEnumerable<int> ids);
+        List<AssetCurrentValue> ListAllAssets(bool enabled, IEnumerable<int> ids);
+        List<AssetCurrentValue> ListAssetsFollowedByUser(int userId);
         void UpdateAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues);
         void UpdateFullAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues);
         void UpdateAssetValue7And30Days(IEnumerable<AssetCurrentValue> assetCurrentValues);

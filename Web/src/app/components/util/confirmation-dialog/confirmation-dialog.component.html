@@ -1,0 +1,13 @@
+<div class="text-right">
+  <button class="modal-close" [mat-dialog-close]="false" mat-dialog-close>&times;</button>
+</div>
+<div fxLayout="column" fxLayoutAlign="start center"  class="modal-container">
+  <mat-dialog-content class="modal-content">
+    <h2>{{title}}</h2>
+    <p>{{message}}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions class="btn-actions" fxLayoutGap="20px">
+    <button class="table-button link" [mat-dialog-close]="false" mat-dialog-close>{{closeLabel}}</button>
+    <button class="table-button blue" (click)="onConfirm()">{{confirmLabel}}</button>
+  </mat-dialog-actions>
+</div>

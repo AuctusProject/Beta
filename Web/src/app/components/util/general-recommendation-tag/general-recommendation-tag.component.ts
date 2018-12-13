@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Util } from '../../../util/Util';
+import { Util } from '../../../util/util';
 
 @Component({
   selector: 'general-recommendation-tag',

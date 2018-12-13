@@ -17,38 +17,34 @@ namespace Auctus.DataAccess.Account
         public override string TableName => "User";
         public UserData(IConfigurationRoot configuration) : base(configuration) { }
 
-        private const string SQL_FOR_LOGIN = @"SELECT u.*, a.*, r.*, w.* 
+        private const string SQL_FOR_LOGIN = @"SELECT u.*, a.*, w.* 
                                                 FROM 
                                                 [User] u WITH(NOLOCK)
                                                 LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
-                                                LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
                                                 LEFT JOIN [Wallet] w WITH(NOLOCK) ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                 WHERE 
                                                 u.Email = @Email";
 
-        private const string SQL_FOR_LOGIN_BY_ID = @"SELECT u.*, a.*, r.*, w.* 
+        private const string SQL_FOR_LOGIN_BY_ID = @"SELECT u.*, a.*, w.* 
                                                     FROM 
                                                     [User] u WITH(NOLOCK)
                                                     LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
-                                                    LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
                                                     LEFT JOIN [Wallet] w WITH(NOLOCK) ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                     WHERE 
                                                     u.Id = @Id";
 
-        private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, a.*, r.*, w.* 
+        private const string SQL_FOR_CONFIRMATION = @"SELECT u.*, a.*, w.* 
                                                     FROM 
                                                     [User] u WITH(NOLOCK)
                                                     LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
-                                                    LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
                                                     LEFT JOIN [Wallet] w WITH(NOLOCK) ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                     WHERE 
                                                     u.ConfirmationCode = @Code";
 
-        private const string SQL_FOR_NEW_WALLET = @"SELECT u.*, a.*, r.*
+        private const string SQL_FOR_NEW_WALLET = @"SELECT u.*, a.*
                                                 FROM 
                                                 [User] u WITH(NOLOCK)
                                                 LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
-                                                LEFT JOIN [RequestToBeAdvisor] r WITH(NOLOCK) ON r.UserId = u.Id AND r.CreationDate = (SELECT MAX(r2.CreationDate) FROM [RequestToBeAdvisor] r2 WITH(NOLOCK) WHERE r2.UserId = u.Id)
                                                 WHERE 
                                                 u.Email = @Email";
 
@@ -121,20 +117,18 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Email", email.ToLower().Trim(), DbType.AnsiString);
-            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, Wallet, User>(SQL_FOR_LOGIN,
-                        (user, advisor, request, wallet) =>
+            return Query<User, DomainObjects.Advisor.Advisor, Wallet, User>(SQL_FOR_LOGIN,
+                        (user, advisor, wallet) =>
                         {
                             if (advisor != null)
                             {
                                 FillAdvisorWithUserData(ref advisor, user);
                                 advisor.Wallet = wallet;
-                                advisor.RequestToBeAdvisor = request;
                                 return advisor;
                             }
                             else
                             {
                                 user.Wallet = wallet;
-                                user.RequestToBeAdvisor = request;
                                 return user;
                             }
                         }, "Id,Id,Id", parameters).SingleOrDefault();
@@ -144,20 +138,18 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Code", code, DbType.AnsiString);
-            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, Wallet, User>(SQL_FOR_CONFIRMATION,
-                        (user, advisor, request, wallet) =>
+            return Query<User, DomainObjects.Advisor.Advisor, Wallet, User>(SQL_FOR_CONFIRMATION,
+                        (user, advisor, wallet) =>
                         {
                             if (advisor != null)
                             {
                                 FillAdvisorWithUserData(ref advisor, user);
                                 advisor.Wallet = wallet;
-                                advisor.RequestToBeAdvisor = request;
                                 return advisor;
                             }
                             else
                             {
                                 user.Wallet = wallet;
-                                user.RequestToBeAdvisor = request;
                                 return user;
                             }
                         }, "Id,Id,Id", parameters).SingleOrDefault();
@@ -167,18 +159,16 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Email", email.ToLower().Trim(), DbType.AnsiString);
-            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, User>(SQL_FOR_NEW_WALLET,
-                        (user, advisor, request) =>
+            return Query<User, DomainObjects.Advisor.Advisor, User>(SQL_FOR_NEW_WALLET,
+                        (user, advisor) =>
                         {
                             if (advisor != null)
                             {
                                 FillAdvisorWithUserData(ref advisor, user);
-                                advisor.RequestToBeAdvisor = request;
                                 return advisor;
                             }
                             else
                             {
-                                user.RequestToBeAdvisor = request;
                                 return user;
                             }
                         }, "Id,Id", parameters).SingleOrDefault();
@@ -247,20 +237,18 @@ namespace Auctus.DataAccess.Account
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32);
-            return Query<User, DomainObjects.Advisor.Advisor, RequestToBeAdvisor, Wallet, User>(SQL_FOR_LOGIN_BY_ID,
-                        (user, advisor, request, wallet) =>
+            return Query<User, DomainObjects.Advisor.Advisor, Wallet, User>(SQL_FOR_LOGIN_BY_ID,
+                        (user, advisor, wallet) =>
                         {
                             if (advisor != null)
                             {
                                 FillAdvisorWithUserData(ref advisor, user);
                                 advisor.Wallet = wallet;
-                                advisor.RequestToBeAdvisor = request;
                                 return advisor;
                             }
                             else
                             {
                                 user.Wallet = wallet;
-                                user.RequestToBeAdvisor = request;
                                 return user;
                             }
                         }, "Id,Id,Id", parameters).SingleOrDefault();

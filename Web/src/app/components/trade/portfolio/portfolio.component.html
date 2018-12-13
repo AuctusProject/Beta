@@ -1,0 +1,53 @@
+<div *ngIf="isOwner" fxLayout="row" fxLayoutAlign="space-between center" class="page-title">
+    <h2>Portfolio</h2>
+    <button fxHide.gt-xs *ngIf="showCancelOrdersButton" matRipple (click)="cancelAllOpenOrders()" class="cancel">CANCEL ALL OPEN ORDERS</button>
+</div>
+<div class="expert-header" *ngIf ="(!isOwner && advisor)" fxLayout="row"  fxLayoutAlign="space-between center">
+    <div fxLayout="row">
+        <expert-picture [urlGuid]="advisor.urlGuid" [ranking]="advisor.ranking"></expert-picture>
+        <div fxLayout="column" fxLayoutAlign="center start" >
+            <div class="user-name" title=" {{advisor.name}}">
+                {{advisor.name}}
+            </div>
+            <div class="expert-rating">
+            <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="advisor.rating" [title]="advisor.rating | number: '1.2-2'"></bar-rating>
+            </div>
+        </div>
+    </div>
+    <div class="percentages"  fxLayout.lt-sm="column"  fxLayout.gt-xs="row"  >
+        <div fxLayout.lt-sm="row" fxLayout.gt-xs="column" fxLayoutAlign.lt-sm="space-between center" ><percentage-display [value]="advisor.totalProfitPercentage"></percentage-display>
+            <span>All Time Return</span>
+        </div>
+        <div  fxLayout.lt-sm="row" fxLayout.gt-xs="column" fxLayoutAlign.lt-sm="space-between center" ><percentage-display [value]="getProfit24hPercentage()"></percentage-display>
+            <span>Last Trading Day</span>
+        </div>
+    </div>
+    <div>
+        <follow-unfollow [following]="advisor.following" [numberOfFollowers]="advisor.numberOfFollowers" [type]="1" [id]="advisor.userId" [showOnlyStar]="false"></follow-unfollow> 
+    </div> 
+</div>
+<mat-tab-group (selectedTabChange)="onTabChanged($event)" #PortfolioTabs [selectedIndex]="isOwner ? '1' : '0'">
+    <mat-tab> 
+        <ng-template mat-tab-label>
+            <fa-icon icon="chart-line" ></fa-icon>PERFORMANCE
+        </ng-template>
+        <performance #Performance [advisor]="advisor" [closedPosition]="closedPosition" [openPosition]="openPosition"></performance>
+    </mat-tab>
+    <mat-tab> 
+        <ng-template mat-tab-label>
+            <fa-icon icon="layer-group" ></fa-icon>{{isOwner ? 'MANAGE POSITIONS' : 'OPEN POSITIONS'}}</ng-template>
+        <open-positions #Position [userId]="userId" (updated)="refreshAll()"></open-positions>
+    </mat-tab>
+    <mat-tab> 
+        <ng-template mat-tab-label>
+            <fa-icon [icon]="['far','list-alt']" ></fa-icon> ORDERS
+        </ng-template>
+    <orders #Orders [userId]="userId" [isOwner]="isOwner"></orders> 
+  </mat-tab>
+  <mat-tab >  
+      <ng-template mat-tab-label>
+          <fa-icon icon="book" ></fa-icon>HISTORY
+        </ng-template>
+    <history #History [userId]="userId"></history> 
+    </mat-tab>
+</mat-tab-group>

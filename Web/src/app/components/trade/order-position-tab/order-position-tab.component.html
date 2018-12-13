@@ -1,0 +1,10 @@
+<mat-tab-group class="open-position-tab-group" #OrdersTabs *ngIf="!!loginData">
+    <mat-tab> 
+        <ng-template mat-tab-label>OPEN POSITIONS</ng-template>
+        <open-positions *ngIf="!!asset" #Position [userId]="loginData.id" [assetId]="asset.assetId" (updated)="refresh()"></open-positions>
+    </mat-tab>
+    <mat-tab>  
+        <ng-template mat-tab-label>OPEN ORDERS</ng-template>
+        <orders *ngIf="!!asset" #Order [userId]="loginData.id" [assetId]="asset.assetId" [assetCode]="asset.code" [isOwner]="true"></orders>
+    </mat-tab>
+</mat-tab-group>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Hubs;
 using Api.Model.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Web3;
@@ -9,6 +10,7 @@ using Auctus.Model;
 using Auctus.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -16,8 +18,8 @@ namespace Api.Controllers
 {
     public class AccountBaseController : BaseController
     {
-        protected AccountBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        protected AccountBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         protected virtual IActionResult ValidateSignature(ValidateSignatureRequest signatureRequest)
         {
@@ -104,19 +106,6 @@ namespace Api.Controllers
             return Ok(new { logged = true, jwt = GenerateToken(loginResponse.Email), data = loginResponse });
         }
 
-        protected virtual IActionResult ListFeed(int? top, int? lastAdviceId, int? lastReportId, int? lastEventId)
-        {
-            return Ok(UserBusiness.ListFeed(top, lastAdviceId, lastReportId, lastEventId));
-        }
-
-        //protected virtual IActionResult SetReferralCode(SetReferralRequest setReferralRequest)
-        //{
-        //    if(setReferralRequest == null)
-        //        return BadRequest();
-
-        //    return Ok(UserBusiness.SetReferralCode(setReferralRequest.ReferralCode));
-        //}
-
         protected virtual IActionResult GetReferralProgramInfo()
         {
             return Ok(UserBusiness.GetReferralProgramInfo());
@@ -167,10 +156,14 @@ namespace Api.Controllers
             return Ok(ActionBusiness.GetDashboardData());
         }
 
-        protected virtual IActionResult RequestEarlyAccess(EarlyAccessRequest earlyAccessRequest)
+        protected virtual IActionResult ListAssetsFollowedByUser(int id)
         {
-            EarlyAccessEmailBusiness.Create(earlyAccessRequest.Name, earlyAccessRequest.Email, earlyAccessRequest.Twitter);
-            return Ok();
+            return Ok(AssetBusiness.ListAssetsFollowedByUser(id));
+        }
+
+        protected virtual IActionResult ListAdvisorsFollowedByUser(int id)
+        {
+            return Ok(AdvisorBusiness.ListAdvisorsFollowedByUser(id));
         }
     }
 }

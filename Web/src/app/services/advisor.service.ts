@@ -7,25 +7,30 @@ import { RegisterAdvisorRequest } from '../model/advisor/registerAdvisorRequest'
 import { AdviseRequest } from '../model/advisor/adviseRequest';
 import { AdvisorRequest } from '../model/advisor/advisorRequest';
 import { Advisor } from '../model/advisor/advisor';
-import { FeedResponse } from '../model/advisor/feedResponse';
+import { HallOfFameResponse } from '../model/advisor/hallOfFameResponse';
 import { LoginResult } from '../model/account/loginResult';
+import { OrderResponse } from '../model/trade/orderResponse';
+import { AdvisorPerformanceResponse } from '../model/advisor/advisorPerformanceResponse';
 
 @Injectable()
 export class AdvisorService {
   private advisorsUrl = this.httpService.apiUrl("v1/advisors");
+  private loggedAdvisorUrl = this.httpService.apiUrl("v1/advisors/me");
   private advisorsDetailsUrl = this.httpService.apiUrl("v1/advisors/{id}/details");
-  private requestToBeAdvisorsUrl = this.httpService.apiUrl("v1/advisors/me/requests");
-  private listPendingRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests");
-  private approveRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests/{id}/approve");
-  private rejectRequestToBeAdvisorUrl = this.httpService.apiUrl("v1/advisors/requests/{id}/reject");
+  private advisorsPerformanceUrl = this.httpService.apiUrl("v1/advisors/{id}/performance");
+  private advisorsOrdersUrl = this.httpService.apiUrl("v1/advisors/{id}/orders");
   private followAdvisorsUrl = this.httpService.apiUrl("v1/advisors/{id}/followers");
-  private adviseUrl = this.httpService.apiUrl("v1/advisors/advices");
-  private listLatestAdvicesForEachTypeUrl = this.httpService.apiUrl("v1/advisors/advices/latest_by_type");
+  private advisorMonthlyRanking = this.httpService.apiUrl("v1/advisors/ranking");
+  private advisorHallOfFame = this.httpService.apiUrl("v1/advisors/hall_of_fame");
 
   constructor(private httpService : HttpService) { }
 
   getAdvisor(id: string): Observable<Advisor> {
     return this.httpService.get(this.advisorsUrl + "/" + id);
+  }
+
+  getAdvisorPerfomance(id: number): Observable<AdvisorPerformanceResponse> {
+    return this.httpService.get(this.advisorsPerformanceUrl.replace("{id}", id.toString()));
   }
 
   editAdvisor(id: number, advisorRequest: AdvisorRequest): Observable<string> {
@@ -37,28 +42,49 @@ export class AdvisorService {
     return this.httpService.postWithoutContentType(this.advisorsUrl + "/" + id, formData);
   }
 
-  getExpertDetails(id: string): Observable<AdvisorResponse> {
-    return this.httpService.get(this.advisorsDetailsUrl.replace("{id}", id));
+  getExpertDetails(id: number): Observable<AdvisorResponse> {
+    return this.httpService.get(this.advisorsDetailsUrl.replace("{id}", id.toString()));
+  }
+
+  getAdvisorOrders(userId:number, orderStatusTypes:number[] = [], assetId:number = null,  orderType:number = null): Observable<OrderResponse[]>{
+    return this.httpService.get(this.buildAdvisorsOrdersUrl(userId, assetId, orderStatusTypes,orderType));
+  }
+
+  private buildAdvisorsOrdersUrl(userId:number, assetId:number, orderStatusTypes:number[], orderType:number){
+    let result = this.advisorsOrdersUrl + "?";
+    result = result.replace("{id}", userId.toString());
+
+    if (assetId)
+      result = result + "assetId=" + assetId.toString() + "&";
+    if (orderStatusTypes)
+    orderStatusTypes.forEach(e => result = result + "status=" + e.toString() + "&" )
+    if (orderType)
+      result = result + "type=" + orderType.toString() + "&";
+    return result.substr(0, result.length-1);
+  }
+
+
+  getHallOfFame(): Observable<HallOfFameResponse[]> {
+    return this.httpService.get(this.advisorHallOfFame);
+  }
+
+  getExpertsMonthlyRanking(year?: number, month?: number): Observable<AdvisorResponse[]> {
+    let url = this.advisorMonthlyRanking;
+    if (year) {
+      url += "/" + year.toString();
+    }
+    if (month) {
+      url += "/" + month.toString();
+    }
+    return this.httpService.get(url);
+  }
+
+  getLoggedExpertDetails(): Observable<AdvisorResponse> {
+    return this.httpService.get(this.loggedAdvisorUrl);
   }
 
   getAdvisors(): Observable<AdvisorResponse[]> {
     return this.httpService.get(this.advisorsUrl);
-  }
-
-  getRequestToBeAdvisor(): Observable<RequestToBeAdvisor> {
-    return this.httpService.get(this.requestToBeAdvisorsUrl);
-  }
-
-  listPendingRequestToBeAdvisor(): Observable<RequestToBeAdvisor[]> {
-    return this.httpService.get(this.listPendingRequestToBeAdvisorUrl);
-  }
-
-  approveAdvisor(requestId:number):Observable<void>{
-    return this.httpService.post(this.approveRequestToBeAdvisorUrl.replace("{id}", requestId.toString()));
-  }
-
-  rejectAdvisor(requestId:number):Observable<void>{
-    return this.httpService.post(this.rejectRequestToBeAdvisorUrl.replace("{id}", requestId.toString()));
   }
 
   postRegisterAdvisor(requestAdvisorRequest: RegisterAdvisorRequest): Observable<LoginResult> {
@@ -81,13 +107,4 @@ export class AdvisorService {
   unfollowAdvisor(advisorId:number):Observable<void>{
     return this.httpService.delete(this.followAdvisorsUrl.replace("{id}", advisorId.toString()));
   }
-
-  advise(adviseRequest:AdviseRequest):Observable<void>{
-    return this.httpService.post(this.adviseUrl, adviseRequest);
-  }
-
-  listLatestAdvicesForEachType(numberOfAdvicesOfEachType:number):Observable<FeedResponse>{
-    return this.httpService.get(this.listLatestAdvicesForEachTypeUrl + "?numberOfAdvicesOfEachType=" + numberOfAdvicesOfEachType);
-  }
-
 }

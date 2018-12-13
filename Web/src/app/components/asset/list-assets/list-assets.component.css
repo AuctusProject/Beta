@@ -1,28 +1,4 @@
-.top-assets-container{
-    background-color: #252525;
-    display: flex;
-}
-
-.blue-button.action-button {
-    margin-top: 4px;
-    height: 58px;
-    line-height: 58px;
-}
-
-.filter-title {
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 0.82;
-    letter-spacing: 0.3px;
-    text-align: center;
-    color: #606060;
-}
-
-.filter-form {
-    margin-bottom: 22px;
-}
-
-.pagination-link {
-    margin-top: 22px;
-    margin-bottom: 22px;
+assets-table {
+    height: calc(100% - 47px);
+    min-height: 180px;
 }

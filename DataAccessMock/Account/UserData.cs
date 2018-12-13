@@ -32,16 +32,6 @@ namespace Auctus.DataAccessMock.Account
                     UserId = 1,
                     Address = "0x0000000000000000000000000000000000000000",
                     CreationDate = new DateTime(2018, 5, 3, 0, 0, 0)
-                },
-                RequestToBeAdvisor = new DomainObjects.Advisor.RequestToBeAdvisor()
-                {
-                    Id = 1,
-                    UserId = 1,
-                    Approved = true,
-                    CreationDate = new DateTime(2018, 5, 4, 0, 0, 0),
-                    Description = "Test Advisor description",
-                    Name = "Tester Advisor",
-                    PreviousExperience = ""
                 }
             },
             new DomainObjects.Account.User()
@@ -87,16 +77,6 @@ namespace Auctus.DataAccessMock.Account
                     UserId = 3,
                     Address = "0x0000000000000000000000000000000000000000",
                     CreationDate = new DateTime(2018, 5, 3, 0, 0, 0)
-                },
-                RequestToBeAdvisor = new DomainObjects.Advisor.RequestToBeAdvisor()
-                {
-                    Id = 2,
-                    UserId = 3,
-                    Approved = true,
-                    CreationDate = new DateTime(2018, 5, 4, 0, 0, 0),
-                    Description = "Test Advisor description",
-                    Name = "Tester Advisor",
-                    PreviousExperience = ""
                 }
             },
             new DomainObjects.Account.User()

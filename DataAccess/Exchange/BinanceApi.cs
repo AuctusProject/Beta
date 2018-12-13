@@ -32,13 +32,13 @@ namespace Auctus.DataAccess.Exchange
 
         public BinanceKline GetKline30d(string symbol)
         {
-            var responseContent = GetWithRetry(String.Format(KLINE_7D, symbol));
+            var responseContent = GetWithRetry(String.Format(KLINE_30D, symbol));
             return ConvertResponseToBinanceKline(responseContent);
         }
 
         public BinanceKline GetKline7d(string symbol)
         {
-            var responseContent = GetWithRetry(String.Format(KLINE_30D, symbol));
+            var responseContent = GetWithRetry(String.Format(KLINE_7D, symbol));
             return ConvertResponseToBinanceKline(responseContent);
         }
 

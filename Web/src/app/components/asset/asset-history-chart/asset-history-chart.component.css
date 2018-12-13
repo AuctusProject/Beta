@@ -1,8 +1,0 @@
-.asset-chart{
-    width: 100%;
-}
-
-::ng-deep .highcharts-loading-inner {
-    color: black;
-    font-size: 20px;
-}

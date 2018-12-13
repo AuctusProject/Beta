@@ -16,16 +16,15 @@ export class ReferralDetailsComponent implements ModalComponent, OnInit {
   @Input() data: any;
   @Output() setClose = new EventEmitter<void>();
   @Output() setNewModal = new EventEmitter<FullscreenModalComponentInput>();
-  
+  description: string = 'Play virtual crypto market trading to learn, compete, and share investing ideas. It’s free and you can win real prizes!';
   link: string = '';
-  copied: boolean = false;
   code: string = '';
   pending: string = '';
   available: string = '';
   cashedOut: string = '';
   canceled: string = '';
   bonusAmount: string = '';
-  @ViewChild("Link") Link: ElementRef;
+  
 
   constructor(private accountService: AccountService,
     private navigationService : NavigationService) { }
@@ -58,14 +57,11 @@ export class ReferralDetailsComponent implements ModalComponent, OnInit {
     return value.toString(10) + " AUC";
   }
 
-  copyClick() {
-    this.copied = true;
-    this.Link.nativeElement.select();
-    document.execCommand('copy');
-    this.Link.nativeElement.setSelectionRange(0, 0);
+  getReferralCodeOptions() {
+    return { textOptions: { placeHolder: "Invitation Code", showValidatorError: false, showHintSize: false, required: false, disabled: true } };
   }
 
-  getReferralCodeOptions() {
-    return { textOptions: { placeHolder: "Referral code", showValidatorError: false, showHintSize: false, required: false, disabled: true } };
+  getReferralLinkOptions() {
+    return { textOptions: { placeHolder: "Referral Link", showValidatorError: false, showHintSize: false, required: false, disabled: true, enableCopy: true } };
   }
 }

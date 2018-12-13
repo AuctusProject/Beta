@@ -1,3 +1,15 @@
+:host{
+    font-size:10px;
+}
+
+:host ::ng-deep .mat-form-field{
+    width:100%;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+}
+
 .search-label {
     color: #959595;
     font-size: 12px;
@@ -14,10 +26,12 @@ input::placeholder {
 
 .search-icon {
     color: white;
+    font-size:18px;
 }
 
 .search-input {
     color: white;
+    font-size: 12px;
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
@@ -102,4 +116,12 @@ input::placeholder {
     border-radius:50%;
     -moz-border-radius:50%;
     -webkit-border-radius:50%;
+}
+
+::ng-deep .dark-border .mat-form-field-outline{
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+::ng-deep .dark-border .mat-form-field-outline-thick {
+    color: rgba(255,255,255,1) !important;
 }

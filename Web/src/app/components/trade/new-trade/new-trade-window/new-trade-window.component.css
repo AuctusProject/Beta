@@ -1,0 +1,52 @@
+:host{
+    position: relative;
+    display: block;
+}
+
+::ng-deep .confirm-dialog .mat-dialog-container {
+    border-radius: 0px;
+    background-color: unset;
+    box-shadow: unset;
+    border: 1px solid #4c4c4c;
+    padding: 0px;
+}
+
+.mat-dialog-content {
+    margin: unset;
+    padding:unset;
+    max-height: 80vh;
+}
+
+.mat-dialog-actions{
+    min-height: unset;
+}
+
+.modal-close{
+    color: #4d4d4d;
+    font-size: 40px;
+    line-height: 20px;
+    margin: 0;
+    padding: 0;
+    background-color: unset;
+    float: right;
+    cursor: pointer;
+    border-width: 0px;
+    font-weight: 200;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+}
+
+.modal-container{
+    height: 100%;
+}
+
+h2{
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: #b3b3b3;
+    font-weight: 200;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

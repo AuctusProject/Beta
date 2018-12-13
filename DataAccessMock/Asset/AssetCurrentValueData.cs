@@ -66,9 +66,14 @@ namespace Auctus.DataAccessMock.Asset
             }
         }
 
-        public List<AssetCurrentValue> ListAllAssets(IEnumerable<int> ids)
+        public List<AssetCurrentValue> ListAllAssets(bool enabled, IEnumerable<int> ids)
         {
             return ids == null || !ids.Any() ? AssetCurrentValues : AssetCurrentValues.Where(c => ids.Contains(c.Id)).ToList();
+        }
+
+        public List<AssetCurrentValue> ListAssetsFollowedByUser(int userId)
+        {
+            return AssetCurrentValues;
         }
 
         public void UpdateAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues)

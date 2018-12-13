@@ -1,0 +1,43 @@
+.experts {
+    min-height: 180px;
+}
+
+@media(min-width:960px){
+    .experts-web {
+        height: calc(60% - 100px);
+    }
+}
+
+@media(max-width:959px){
+    :host ::ng-deep .mat-sort-header-button{
+        margin-left: 0px !important;
+    }
+}
+
+hall-of-fame{
+    height: calc(40% - 84px);
+    min-height: 100px;
+    margin-top: 10px;
+}
+
+.contest-details{
+    background-color: #262626;
+    padding: 10px 25px;
+}
+
+.separator{
+    background-color: #2e2e2e;
+    width: 1px;
+}
+
+.countdown-title{
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+    margin-bottom: 25px;
+}
+
+:host ::ng-deep table th {
+    background-color: #2e2e2e !important;
+}

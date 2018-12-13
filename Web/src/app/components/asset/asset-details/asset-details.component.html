@@ -1,69 +1,80 @@
-<div *ngIf="asset">
-  <div class="expert-details-header global-container-min">
-    <div class="global-container">
-      <div class="section-title">
-        EXPERT SIGNALS ON {{asset.name}}
-      </div>
-      <div fxLayout="column" fxLayoutGap="60px">
-        <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap.gt-sm="36px" fxLayoutGap.lt-md="24px" fxLayoutAlign.gt-sm="center center" fxLayoutAlign.lt-md="center center">
-          <div fxLayout="row" fxLayoutGap="36px">
-            <div fxLayout="row" fxLayoutGap="10px">
-              <div class="asset-icon">
-                <img [src]="getAssetImgUrl()" onload="this.style.display='unset'" onerror="this.style.display='none'" onload="this.style.display='unset'"/>
-              </div>
-              <div fxLayout="column">
-                <div class="symbol">{{asset.code}}</div>
-                <div class="asset-name">{{asset.name}}</div>
-              </div>
-            </div>
-            <div fxLayout="column">
-              <div class="recommendations">
-                {{getTotalAdvisorsSentence()}}
-              </div>
-              <div class="followers">
-                {{getFollowersSentence()}}
-              </div>
-            </div>
-          </div>
-          <div fxLayout="row" fxLayoutGap="36px">
-            <ticker-field fxHide.lt-sm class="asset-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
-            <div fxLayout="column">
-              <ticker-percentage-field [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
-              Last 24 hours
-            </div>
-            <div fxLayout="column">
-              <percentage-display [value]="asset.variation7d"></percentage-display>
-              Last 7 days
-            </div>
-            <div fxLayout="column">
-              <percentage-display [value]="asset.variation30d"></percentage-display>
-              Last 30 days
-            </div>
-          </div>
-          <ticker-field fxHide.gt-xs class="asset-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
-          <div class="white-button action-button-sm" [promiseBtn]="promise" *ngIf="asset.following" (click)="onUnfollowAssetClick()">
-            Unfollow
-          </div>
-          <div class="blue-button action-button-sm" [promiseBtn]="promise" *ngIf="!asset.following" (click)="onFollowAssetClick()">
-            Follow
-          </div>
-        </div>
+<div *ngIf="!!asset" class="asset-details">
+  <div class="asset-header" fxHide.lt-md fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <img class="asset-image asset-img" [src]="getAssetImgUrl(asset.assetId)" onerror="this.style.display='none'" onload="this.style.display='unset'" />
+      <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
+        <div class="asset-code">{{asset.code}}</div>
+        <div class="asset-name">{{asset.name}}</div>
       </div>
     </div>
-    <mat-tab-group class="global-container-min">
-      <mat-tab label="Summary">
-        <summary-tab [asset]="asset" (onAdviceCreated)='refreshDataSource()'></summary-tab>
-      </mat-tab>
-      <mat-tab label="Signals"> 
-        <expert-ratings-tab [asset]="asset"></expert-ratings-tab>
-      </mat-tab>
-      <mat-tab label="Reports"> 
-        <reports-tab [reports]="asset.reports"></reports-tab>
-      </mat-tab>
-      <mat-tab label="Events"> 
-        <events-tab [events]="asset.events"></events-tab>
-      </mat-tab>
-    </mat-tab-group>
+    <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
+    <ticker-percentage-field class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
+    <div class="market-cap" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
+      <label class="asset-header-label">Market Cap</label>
+      <span *ngIf="!asset.circulatingSupply">-</span>
+      <ticker-field *ngIf="asset.circulatingSupply" [valueMultiplier]="asset.circulatingSupply" [startValue]="asset.lastValue * asset.circulatingSupply" [pair]="asset.pair"></ticker-field>
+    </div>
+    <div class="high-low" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
+        <label class="asset-header-label">24h High / Low</label>
+        <div fxLayout="row" fxLayoutGap="3px">
+          <ticker-field tickerProperty="highPrice" [pair]="asset.pair"></ticker-field>
+          <span>/</span>
+          <ticker-field tickerProperty="lowPrice" [pair]="asset.pair"></ticker-field>
+        </div>
+    </div>          
+    <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
+    <follow-unfollow [(following)]="asset.following" [numberOfFollowers]="asset.numberOfFollowers" [(id)]="asset.assetId" [type]="assetFollowUnfollowType"></follow-unfollow>
+  </div>
+  <div fxHide.gt-sm class="asset-header-mobile" fxLayout="column" fxLayoutAlign="start start">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="width100 header-mobile-row">
+      <div fxLayout="row" fxLayoutGap="10px">
+        <img class="asset-image asset-img" [src]="getAssetImgUrl(asset.assetId)" onerror="this.style.display='none'" onload="this.style.display='unset'" />
+        <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
+          <div class="asset-code">{{asset.code}}</div>
+          <div class="asset-name">{{asset.name}}</div>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="3px">
+        <ticker-field class="mobile-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
+        <ticker-percentage-field class="percentage mobile-value" [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
+      </div>
+      <follow-unfollow [(following)]="asset.following" [numberOfFollowers]="asset.numberOfFollowers" [(id)]="asset.assetId" [type]="assetFollowUnfollowType"></follow-unfollow>
+    </div>
+    <div class="header-separator"></div>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="width100 header-mobile-row">
+      <div class="market-cap" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
+        <label class="mobile-asset-header-label">Market Cap</label>
+        <span *ngIf="!asset.circulatingSupply">-</span>
+        <ticker-field *ngIf="asset.circulatingSupply" [valueMultiplier]="asset.circulatingSupply" [startValue]="asset.lastValue * asset.circulatingSupply" [pair]="asset.pair" class="mobile-value"></ticker-field>
+      </div>
+      <div class="high-low" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
+          <label class="mobile-asset-header-label">24h High / Low</label>
+          <div fxLayout="row" fxLayoutGap="3px">
+            <ticker-field tickerProperty="highPrice" [pair]="asset.pair" class="mobile-value"></ticker-field>
+            <span class="mobile-value">/</span>
+            <ticker-field tickerProperty="lowPrice" [pair]="asset.pair" class="mobile-value"></ticker-field>
+          </div>
+      </div>        
+      <recommendation-distribution [showRight]="false" [data]="asset.recommendationDistribution" class="recommendation-distribution-mobile"></recommendation-distribution>
+    </div>
+    <div class="header-separator"></div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="header-mobile-row" fxLayoutGap="10px" *ngIf="logged" fxHide.gt-sm>
+    <div matRipple class="table-button blue" (click)="onNewTrade(asset)">TRADE</div>
+    <button matRipple *ngIf="showCancelOpenOrders()" (click)="cancelAllOpenOrders()" class="cancel-close-action">CANCEL ALL {{asset.code}} OPEN ORDERS</button>   
+    <button matRipple *ngIf="showCloseOpenPositions()" (click)="closeAllOpenPositions(asset.assetId, asset.code)" class="cancel-close-action">CLOSE ALL {{asset.code}} POSITIONS</button>
+  </div>
+  <div class="asset-content" ngClass.gt-sm="asset-content-web" ngClass.lt-md="asset-content-mobile">
+    <div class="asset-chart">
+      <trading-view-chart [pair]="asset.pair"></trading-view-chart>
+    </div>
+    <div fxLayout="row" fxLayoutGap="10px">
+      <div class="bottom-tab" fxHide.lt-md>
+        <new-trade class="width100" [asset]="asset"></new-trade>
+      </div>
+      <div class="bottom-tab width100">
+        <order-position-tab #OrderTab class="width100" [asset]="asset"></order-position-tab>
+      </div>
+    </div>
   </div>
 </div>
-<trending-assets class="global-container-min inverted"></trending-assets>

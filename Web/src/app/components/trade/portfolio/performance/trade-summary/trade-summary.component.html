@@ -1,0 +1,45 @@
+<div fxLayout="column" class="trade-summary-box" fxLayoutAlign="space-around center" fxLayoutGap="12px">
+    <div class="box-header" fxLayout="row" fxLayoutAlign="center center" *ngIf="closedPosition">TRADES ({{closedPosition.orderCount}})</div>
+    <div fxLayout="row" fxLayoutGap="21px">
+        <div class="summary-column" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <div>Total Profit</div>
+            <div class="trade-data">
+                <percentage-display *ngIf="advisor" [value]="advisor.totalProfitPercentage"></percentage-display>
+            </div>
+            <div class="gap"></div>
+            <div>Open positions P/L</div>
+            <div class="trade-data" *ngIf="openPosition">
+                <percentage-display [value]="openPosition.averageReturn"></percentage-display>
+            </div>
+        </div>
+        <div class="summary-column" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <div>Winning Trades</div>
+            <div class="trade-data" *ngIf="closedPosition">{{closedPosition.successRate | percentageDisplay: 1}}</div>
+            <div class="gap"></div>
+            <div>Avg. Return</div>
+            <div class="trade-data"><percentage-display *ngIf="advisor" [value]="advisor.averageReturn"></percentage-display></div>
+        </div>
+    </div>
+    <div class="line-separator"></div>
+    <div fxLayout="row" fxLayoutGap="21px">
+        <div class="summary-column" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <div>Daily Drawdown</div>
+            <div class="trade-data" *ngIf="advisorPerformance">{{advisorPerformance.dailyDrawdown | percentageDisplay}}</div>
+            <div class="gap"></div>
+            <div>Avg. Trade Time</div>
+            <div class="trade-data" *ngIf="closedPosition && closedPosition.averageTradeMinutes">{{getAvgTradeMinutes() | amTimeAgo:'true'}}</div>
+            <div class="trade-data" *ngIf="!closedPosition || !closedPosition.averageTradeMinutes">-</div>
+        </div>
+        <div class="summary-column" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+            <div class="best-worst-trade" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
+                <div>Best Trade</div>
+                <div class="best-worst-info" *ngIf="advisorPerformance">{{advisorPerformance.bestTrade | percentageDisplay}}</div>
+            </div>
+            <div class="gap"></div>
+            <div class="best-worst-trade" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
+                <div>Worst Trade</div>
+                <div class="best-worst-info" *ngIf="advisorPerformance">{{advisorPerformance.worstTrade | percentageDisplay}}</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+.countdown-subtitle{
+    font-size: 12px;
+    font-weight: 100;
+    letter-spacing: 0.3px;
+    color: #bfbfbf;
+}
+
+.countdown-subtitle.dark{
+    color: #353535;
+}
+
+
+.day-value{
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.6px;
+    color: #ffffff;
+    width:25px;
+}
+
+.day-label{
+    font-size: 12px;
+    font-weight: 100;
+    letter-spacing: 0.3px;
+    color: #bfbfbf;
+    margin-left: 4px;
+    margin-bottom:4px;
+}
+
+.dark .day-value,
+.dark .day-label{
+    color: #353535;
+}
+
+.countdown-border {
+    border-top: gray 1px solid;
+    width:30%;
+    height: 11px;
+}
+
+.countdown-border:first-child {
+    border-left: gray 1px solid;
+}
+
+.countdown-border:last-child {
+    border-right: gray 1px solid;
+}
+
+.countdown-subtitle .countdown-border{
+    border-color: #4d4d4d;
+}
+
+.countdown-subtitle span{
+    width: 240px;
+    text-align: center;
+    margin-top: -6px;
+}
+
+.countdown{
+    margin-top: 11px;
+}

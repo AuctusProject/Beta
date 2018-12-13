@@ -4,6 +4,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Auctus.DataAccessMock.Advisor
@@ -49,6 +50,16 @@ namespace Auctus.DataAccessMock.Advisor
                 ActionType = FollowActionType.Follow.Value,
                 CreationDate = DateTime.UtcNow
             };
+        }
+
+        public List<FollowAdvisor> ListAdvisorsFollowed(int userId)
+        {
+            return FollowAdvisorList.Where(c => c.UserId == userId).ToList();
+        }
+
+        public int CountAdvisorFollowers(int advisorId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

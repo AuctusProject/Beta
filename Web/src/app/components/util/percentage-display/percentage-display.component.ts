@@ -6,11 +6,13 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
   styleUrls: ['./percentage-display.component.css']
 })
 export class PercentageDisplayComponent implements OnChanges {
+  Math = Math;
   @Input() value: number;
   constructor() { }
 
   ngOnChanges() {
-    this.value = Math.round(this.value * 10000) / 100;
+    if (this.value == undefined || this.value == null) {
+      this.value = 0;
+    }
   }
-
 }

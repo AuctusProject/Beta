@@ -37,18 +37,6 @@ export class NavigationService {
   public goToLogin(){
     this.goToUrl('', { login: true });
   }
-  
-  public goToBecomeAdvisor(){
-    this.goToUrl('', { becomeadvisor: true });
-  }
-
-  public goToWalletLogin(){
-    this.goToUrl('wallet-login');
-  }
-
-  public goToFeed(){
-    this.goToUrl('feed');
-  }
 
   public goToCompleteRegistration(){
     this.goToUrl('', { completeregistration: true });
@@ -59,11 +47,11 @@ export class NavigationService {
   }
 
   public goToExpertDetails(advisorId:number){
-    this.goToUrl('expert-details/'+advisorId);
+    this.goToUrl('top-traders/'+advisorId);
   }
 
   public goToAssetDetails(assetId:number){
-    this.goToUrl('asset-details/'+assetId);
+    this.goToUrl('trade-markets/'+assetId);
   }
 
   public goToHome(){
@@ -71,22 +59,14 @@ export class NavigationService {
   }
 
   public goToTopExperts(){
-    this.goToUrl('top-experts');
+    this.goToUrl('top-traders');
   }
 
-  public goToTopAssets(){
-    this.goToUrl('top-assets');
+  public goToTradeMarkets(){
+    this.goToUrl('trade-markets');
   }
 
-  public goToReports(){
-    this.goToUrl('rating-reports');
-  }
-
-  public goToCoinEvents(){
-    this.goToUrl('asset-events');
-  }
-
-  public goToTerminal(){
-    this.goToUrl('terminal');
+  public goToPortfolio(){
+    this.goToUrl('portfolio');
   }
 }

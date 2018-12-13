@@ -46,7 +46,7 @@ namespace Auctus.Business.Account
         private async Task SendForgottenPasswordAsync(string email, string code)
         {
             await EmailBusiness.SendUsingTemplateAsync(new string[] { email },
-                "Reset your password - Auctus Experts",
+                "Reset your password - Auctus Trading",
                 string.Format(@"<p>You told us you forgot your password. If you really did, <a href='{0}?resetpassword=true&c={1}' target='_blank'>click here</a> to choose a new one.</p>
                     <p style=""font-size: 12px; font-style: italic;"">If you didn't mean to reset your password, then you can just ignore this email. Your password will not change.</p>", 
                     WebUrl, code), EmailTemplate.NotificationType.ResetPassword);
@@ -63,7 +63,7 @@ namespace Auctus.Business.Account
             var user = UserBusiness.GetForLoginById(recovery.UserId);
             UserBusiness.UpdatePassword(user, password);
 
-            bool hasInvestment = UserBusiness.GetUserHasInvestment(user, out decimal? aucAmount);
+            bool hasInvestment = UserBusiness.GetUserHasInvestment(user);
             return new LoginResponse()
             {
                 Id = user.Id,
@@ -72,8 +72,7 @@ namespace Auctus.Business.Account
                 IsAdvisor = UserBusiness.IsValidAdvisor(user),
                 AdvisorName = UserBusiness.GetAdvisorName(user),
                 ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
-                HasInvestment = hasInvestment,
-                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+                HasInvestment = hasInvestment
             };
         }
     }

@@ -1,0 +1,168 @@
+.expert-header{
+    background-color:#262626;
+    padding-right: 40px;
+    border-bottom: 1px solid black;
+}
+
+expert-picture{
+    margin: 10px 14px ;
+    zoom: 0.65;
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-align: left;
+    color: #ffffff;
+    margin-top:5px;
+}
+
+.expert-rating{
+    justify-content: start;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+@media(max-width:340px) {
+    .page-title {
+        padding: 14px 12px 10px 12px;
+    }
+
+    button {
+        padding: 0 10px;
+    }
+}
+
+@media(max-width: 959px) {
+    .page-title {
+        width: 100%;
+    }
+}
+
+
+.percentages{
+    margin-left: -100px;
+}
+
+.percentages > div{
+    width: 120px;
+    text-align: center;
+}
+
+.percentages > div:first-child{
+    border-right: 1px solid #4d4d4d;
+}
+
+.percentages percentage-display{
+    font-size: 18px;
+}
+
+.percentages span{
+    font-size: 10px;
+    font-weight: 100;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: #cbcbcb;
+}
+
+mat-tab-group{
+    height: calc(100% - 57px);
+}
+
+:host ::ng-deep .mat-tab-body-wrapper{
+    height: calc(100% - 45px);
+    overflow: auto;
+    display: block;
+}
+
+:host ::ng-deep .mat-cell{
+    padding: 0 5px;
+}
+
+
+:host ::ng-deep .table-container{
+    max-width: 100%;
+    overflow: auto
+}
+
+:host ::ng-deep .boxes > div{
+    background: #2f2f2f;
+    padding: 3px;
+    margin-right: 7px;
+    width: 88px;
+    border-radius: 4px;
+    place-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 40px;
+}
+
+@media(max-width:600px){
+    :host ::ng-deep .mat-tab-label-container fa-icon{
+        display: none;
+    }
+    :host ::ng-deep .mat-tab-label{
+        padding: 0 5px;
+    }
+
+    :host ::ng-deep .boxes > div{
+        font-size: 12px;
+    }
+    .expert-header{
+        padding-right: 10px;
+    }
+
+    :host ::ng-deep .expert-picture, 
+    :host ::ng-deep .expert-picture img{
+        height:40px !important;
+        width: 40px !important;
+        border-radius: 40px !important;
+    }
+
+    :host ::ng-deep .ranking{
+        left:30px !important;
+        bottom: 0 !important;
+    }
+
+    .user-name{
+        font-size: 11px;
+        max-width: 75px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-weight: 400;
+    }
+
+    bar-rating{
+        font-size: 13px;
+    }
+    .percentages{
+        margin-left: 0;
+    }
+
+    .percentages > div{
+        width: 120px;
+        text-align: center;
+        direction: rtl;
+    }
+    
+    .percentages span{
+        font-size: 9px;
+        text-align: left;
+    }
+
+    .percentages > div + div{
+        margin-top: 5px;
+    }
+
+    .percentages > div:first-child{
+        border-right: none;
+    }
+    .percentages percentage-display{
+        font-size: 11px;
+    }
+}
+
+

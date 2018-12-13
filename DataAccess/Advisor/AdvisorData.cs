@@ -32,6 +32,11 @@ namespace Auctus.DataAccess.Advisor
             INNER JOIN [User] u WITH(NOLOCK) ON a.Id = u.Id 
             WHERE u.Id = @Id";
 
+        private const string SQL_LIST_ENABLED = @"SELECT * FROM 
+            [Advisor] a WITH(NOLOCK) 
+            INNER JOIN [User] u WITH(NOLOCK) ON a.Id = u.Id 
+            WHERE a.Enabled = @Enabled";
+
         public override string TableName => "Advisor";
         public AdvisorData(IConfigurationRoot configuration) : base(configuration) { }
 
@@ -39,7 +44,7 @@ namespace Auctus.DataAccess.Advisor
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("Enabled", true, DbType.Boolean);
-            return SelectByParameters<DomainObjects.Advisor.Advisor>(parameters).ToList();
+            return Query<DomainObjects.Advisor.Advisor>(SQL_LIST_ENABLED, parameters).ToList();
         }
 
         public IEnumerable<DomainObjects.Advisor.Advisor> ListFollowingAdvisors(int userId)

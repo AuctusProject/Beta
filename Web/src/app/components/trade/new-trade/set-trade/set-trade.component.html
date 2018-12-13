@@ -1,0 +1,14 @@
+<div fxLayout="column" class="set-trade-container">
+    <inheritance-input *ngIf="priceOptions" #Price [options]="priceOptions" class="width100"
+        [value]="priceValue" (onChange)="onPrice($event)" darkLayout=true></inheritance-input>
+    <inheritance-input *ngIf="amountOptions" #Amount [options]="amountOptions" class="width100" 
+        [value]="amountValue" (onChange)="onAmount($event)" darkLayout=true></inheritance-input>
+    <inheritance-input #StopLoss [options]="stopLossOptions" class="width100" 
+        [value]="stopLossValue" (onChange)="onStopLoss($event)" darkLayout=true></inheritance-input>
+    <inheritance-input #TakeProfit [options]="takeProfitOptions" class="width100"
+        [value]="takeProfitValue" (onChange)="onTakeProfit($event)" darkLayout=true></inheritance-input>
+    <div *ngIf="!edition" fxLayout="row" fxLayoutAlign="space-between center">
+        <div matRipple class="trade-btn buy gap-margin" [fxFlex]="50" (click)="onBuy()" [promiseBtn]="promise">BUY</div>
+        <div matRipple class="trade-btn sell" [class.disabled]="!shortSellingEnabled" [title]="!shortSellingEnabled ? 'This coin cannot be shorted.' : ''" fxFlex="50" (click)="onSell()" [promiseBtn]="promise">SELL</div>
+    </div>    
+</div>

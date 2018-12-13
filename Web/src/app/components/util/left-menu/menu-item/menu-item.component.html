@@ -1,0 +1,23 @@
+<a *ngIf="!externalLink && !disabled" class="menu-item" [routerLink]="link" routerLinkActive="active" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+  <ng-container 
+    *ngTemplateOutlet="itemTemplate">
+  </ng-container>
+</a>
+<a *ngIf="!externalLink && disabled" class="menu-item disabled" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+  <ng-container 
+    *ngTemplateOutlet="itemTemplate">
+  </ng-container>
+</a>
+<a *ngIf="externalLink" [href]="externalLink" target="_blank" class="menu-item" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+  <ng-container 
+    *ngTemplateOutlet="itemTemplate">
+  </ng-container>
+</a>
+
+<ng-template #itemTemplate>
+  <div class="active-indicator">
+    <div class="triangle"></div>
+  </div>
+  <fa-icon [icon]="icon"></fa-icon>
+  <div>{{name}}</div>
+</ng-template>

@@ -12,13 +12,15 @@ using Microsoft.Extensions.Logging;
 using Auctus.DomainObjects.Account;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using Microsoft.AspNetCore.SignalR;
+using Api.Hubs;
 
 namespace Api.Controllers
 {
     public class AdvisorBaseController : BaseController
     {
-        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        protected AdvisorBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         protected IActionResult GetAdvisor(int id)
         {
@@ -28,6 +30,31 @@ namespace Api.Controllers
         protected IActionResult GetAdvisorDetails(int id)
         {
             return Ok(AdvisorBusiness.GetAdvisorData(id));
+        }
+
+        protected IActionResult GetAdvisorPeformance(int id)
+        {
+            return Ok(AdvisorBusiness.GetAdvisorPeformance(id));
+        }
+
+        protected IActionResult GetLoggedAdvisor()
+        {
+            return Ok(AdvisorBusiness.GetLoggedAdvisor());
+        }
+
+        protected IActionResult ListAdvisorsRanking(int? year, int? month)
+        {
+            return Ok(AdvisorBusiness.ListAdvisorsMonthlyRanking(year, month));
+        }
+
+        protected IActionResult ListHallOfFame()
+        {
+            return Ok(AdvisorMonthlyRankingBusiness.ListHallOfFame());
+        }
+
+        protected IActionResult GetAdvisorOrders(int id, int? assetId, int[] status, int? type)
+        {
+            return Ok(OrderBusiness.ListAdvisorOrders(id, assetId, status, type));
         }
 
         protected async Task<IActionResult> EditAdvisorAsync(int id, AdvisorRequest advisorRequest)
@@ -45,15 +72,6 @@ namespace Api.Controllers
         protected IActionResult ListAdvisors()
         {
             return Ok(AdvisorBusiness.ListAdvisorsData());
-        }
-
-        protected IActionResult Advise(AdviseRequest adviseRequest)
-        {
-            if (adviseRequest == null || adviseRequest.AssetId == 0 || AdviceType.Get(adviseRequest.AdviceType)==null)
-                return BadRequest();
-
-            AdvisorBusiness.Advise(adviseRequest.AssetId, AdviceType.Get(adviseRequest.AdviceType), adviseRequest.StopLoss, adviseRequest.TargetPrice, adviseRequest.CurrentValue);
-            return Ok();
         }
 
         protected async Task<IActionResult> RegisterAsync(RegisterAdvisorRequest beAdvisorRequest)
@@ -79,28 +97,6 @@ namespace Api.Controllers
             return Ok(new { logged = !response.PendingConfirmation, jwt = GenerateToken(response.Email.ToLower().Trim()), data = response });
         }
 
-        protected IActionResult GetRequestToBe()
-        {
-            return Ok(RequestToBeAdvisorBusiness.GetByLoggedEmail());
-        }
-
-        protected IActionResult ListRequestToBe()
-        {
-            return Ok(RequestToBeAdvisorBusiness.ListPending());
-        }
-
-        protected async Task<IActionResult> ApproveRequestToBeAsync(int id)
-        {
-            await RequestToBeAdvisorBusiness.ApproveAsync(id);
-            return Ok();
-        }
-
-        protected async Task<IActionResult> RejectRequestToBeAsync(int id)
-        {
-            await RequestToBeAdvisorBusiness.RejectAsync(id);
-            return Ok();
-        }
-
         protected virtual IActionResult FollowAdvisor(int id)
         {
             return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Follow));
@@ -109,11 +105,6 @@ namespace Api.Controllers
         protected virtual IActionResult UnfollowAdvisor(int id)
         {
             return Ok(UserBusiness.FollowUnfollowAdvisor(id, FollowActionType.Unfollow));
-        }
-
-        protected virtual IActionResult ListLastAdvicesForAllTypes(int numberOfAdvicesOfEachType)
-        {
-            return Ok(AdviceBusiness.ListLastAdvicesForAllTypes(numberOfAdvicesOfEachType));
         }
     }
 }

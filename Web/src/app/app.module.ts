@@ -3,52 +3,39 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ShareButtonModule } from '@ngx-share/button';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { Web3Service } from './services/web3.service';
 import { LocalStorageService } from './services/local-storage.service';
 import { HttpService } from './services/http.service';
-import { AssetHistoryChartComponent } from './components/asset/asset-history-chart/asset-history-chart.component';
 import { RecommendationDistributionComponent } from './components/recommendation-distribution/recommendation-distribution.component';
-import { AdvisorCardComponent } from './components/advisor/advisor-card/advisor-card.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AdvisorService } from './services/advisor.service';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { AssetService } from './services/asset.service';
-import { MessageSignatureComponent } from './components/account/message-signature/message-signature.component';
 import { AccountService } from './services/account.service';
 import { LoginComponent } from './components/account/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthRedirect } from './providers/authRedirect';
 import { ConfirmEmailComponent } from './components/account/confirm-email/confirm-email.component';
-import { RegisterComponent } from './components/account/register/register.component';
 import { BecomeAdvisorComponent } from './components/advisor/become-advisor/become-advisor.component';
 import { ForgotPasswordComponent } from './components/account/forgot-password/forgot-password.component';
 import { ForgotPasswordResetComponent } from './components/account/forgot-password-reset/forgot-password-reset.component';
 import { ChangePasswordComponent } from './components/account/change-password/change-password.component';
-import { ExpertDetailsComponent } from './components/advisor/expert-details/expert-details.component';
 import { ListAssetsComponent } from './components/asset/list-assets/list-assets.component';
-import { AssetCardComponent } from './components/asset/asset-card/asset-card.component';
 import { AssetDetailsComponent } from './components/asset/asset-details/asset-details.component';
-import { FeedComponent } from './components/account/feed/feed.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { NewAdviceComponent } from './components/advisor/new-advice/new-advice.component';
 import { MatModule } from './mat.module';
-import { ConfirmAdviceDialogComponent } from './components/advisor/new-advice/confirm-advice-dialog/confirm-advice-dialog.component';
 import { ConfigService, CONFIG } from './services/config.service';
 import { ReferralDetailsComponent } from './components/account/referral-details/referral-details.component';
-import { ConfigurationComponent } from './components/account/configuration/configuration.component';
 import { NavigationService } from './services/navigation.service';
-import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { GlobalSearchComponent } from './components/util/global-search/global-search.component';
-import { AdvisorsRequestsComponent } from './components/admin/advisors-requests/advisors-requests.component';
 import { NgHttpLoaderModule } from 'ng-http-loader'; 
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
-import {Angular2PromiseButtonModule} from 'angular2-promise-buttons';
+import { Angular2PromiseButtonModule } from 'angular2-promise-buttons';
 import { AdvisorEditComponent } from './components/advisor/advisor-edit/advisor-edit.component';
-import { RecommendationBoxComponent } from './components/home/recommendation-box/recommendation-box.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { TopExpertsComponent } from './components/advisor/top-experts/top-experts.component';
 import { FileUploaderComponent } from './components/util/file-uploader/file-uploader.component';
@@ -57,55 +44,66 @@ import { RecaptchaComponent }  from './components/util/recaptcha/recaptcha.compo
 import { RecaptchaModule } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from "angular5-social-login";
-import { HeaderComponent } from './components/header/header.component';
+import { HeaderComponent } from './components/util/header/header.component';
 import { FullscreenModalComponent } from './components/util/fullscreen-modal/fullscreen-modal.component';
 import { ModalDirective } from './directives/modal.directive';
-import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatPaginatorModule, MatTableModule } from '@angular/material';
 import { MessageFullscreenModalComponent } from './components/util/message-fullscreen-modal/message-fullscreen-modal.component';
-import { RecommendationBoxListComponent } from './components/home/recommendation-box-list/recommendation-box-list.component';
-import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
-import { TrendingAssetCardComponent } from './components/asset/trending-asset-card/trending-asset-card.component';
 import { PercentageDisplayComponent } from './components/util/percentage-display/percentage-display.component';
 import { IconsModule } from './icons.module';
 import { InheritanceInputComponent } from './components/util/inheritance-input/inheritance-input.component';
-import { TimeAgoPipe } from 'time-ago-pipe';
 import { NewsletterComponent } from './components/util/newsletter/newsletter.component';
-import { FooterComponent } from './components/util/footer/footer.component';
-import { OwlModule } from 'ngx-owl-carousel';
 import { CoinSearchComponent } from './components/util/coin-search/coin-search.component';
 import { GeneralRecommendationTagComponent } from './components/util/general-recommendation-tag/general-recommendation-tag.component';
 import { EntryOptionComponent } from './components/account/entry-option/entry-option.component';
 import { ModalService } from './services/modal.service';
-import { AdviceCardComponent } from './components/account/feed/advice-card/advice-card.component';
 import { LocalCacheService } from './services/local-cache.service';
-import { TopImageComponent } from './components/util/top-image/top-image.component';
 import { ValueDisplayPipe } from './util/value-display.pipe';
-import { HotSiteComponent } from './components/hot-site/hot-site.component';
-import { BeAnExpertComponent } from './components/hot-site/be-an-expert/be-an-expert.component';
-import { HotsiteHeaderComponent } from './components/hot-site/hotsite-header/hotsite-header.component';
-import { HotsiteFooterComponent } from './components/hot-site/hotsite-footer/hotsite-footer.component';
-import { HotsiteBlogSectionComponent } from './components/hot-site/hotsite-blog-section/hotsite-blog-section.component';
-import { ReportsTabComponent } from './components/asset/asset-details/reports-tab/reports-tab.component';
-import { ListReportsComponent } from './components/asset/list-reports/list-reports.component';
-import { ReportCardComponent } from './components/account/feed/report-card/report-card.component';
-import { InviteFriendComponent } from './components/account/invite-friend/invite-friend.component';
-import { EventsTabComponent } from './components/asset/asset-details/events-tab/events-tab.component';
-import { SummaryTabComponent } from './components/asset/asset-details/summary-tab/summary-tab.component';
-import { EventCardComponent } from './components/account/feed/event-card/event-card.component';
-import { ListEventsComponent } from './components/asset/list-events/list-events.component';
-import { ExpertRatingsTabComponent } from './components/asset/asset-details/expert-ratings-tab/expert-ratings-tab.component';
-import { NewsListComponent } from './components/terminal/news-list/news-list.component';
-import { TerminalComponent } from './components/terminal/terminal.component';
 import { NewsService } from './services/news.service';
-import { CryptoChartComponent } from './components/terminal/crypto-chart/crypto-chart.component';
-import { EventsListComponent } from './components/terminal/events-list/events-list.component';
-import { RatingsListComponent } from './components/terminal/ratings-list/ratings-list.component';
-import { AdviceParametersComponent } from './components/advisor/new-advice/advice-parameters/advice-parameters.component';
-import { AssetHeaderComponent } from './components/terminal/asset-header/asset-header.component';
 import { TickerService } from './services/ticker.service';
 import { HighlightFieldComponent } from './components/util/highlight-field/highlight-field.component';
 import { TickerFieldComponent } from './components/util/ticker-field/ticker-field.component';
 import { TickerPercentageFieldComponent } from './components/util/ticker-percentage-field/ticker-percentage-field.component';
+import { TradeService } from './services/trade.service';
+import { PortfolioComponent } from './components/trade/portfolio/portfolio.component';
+import { HistoryComponent } from './components/trade/portfolio/history/history.component';
+import { OpenPositionsComponent } from './components/trade/portfolio/open-positions/open-positions.component';
+import { OrdersComponent } from './components/trade/portfolio/orders/orders.component';
+import { BalanceInfoComponent } from './components/account/balance-info/balance-info.component';
+import { LeftMenuComponent } from './components/util/left-menu/left-menu.component';
+import { UserInfoComponent } from './components/account/user-info/user-info.component';
+import { EventsServiceModule } from 'angular-event-service/dist';
+import { ExpertPictureComponent } from './components/advisor/expert-picture/expert-picture.component';
+import { FollowUnfollowComponent } from './components/util/follow-unfollow/follow-unfollow.component';
+import { ExpertsTableComponent } from './components/advisor/experts-table/experts-table.component';
+import { WatchlistComponent } from './components/account/watchlist/watchlist.component';
+import { AssetsTableComponent } from './components/asset/assets-table/assets-table.component';
+import { TradingContestComponent } from './components/advisor/trading-contest/trading-contest.component';
+import { OrdersTableComponent } from './components/trade/portfolio/open-positions/orders-table/orders-table.component';
+import { PrizeBoxComponent } from './components/advisor/trading-contest/prize-box/prize-box.component';
+import { TickerProfitFieldComponent } from './components/util/ticker-profit-field/ticker-profit-field.component';
+import { TradingViewChartComponent } from './components/util/trading-view-chart/trading-view-chart.component';
+import { NewTradeComponent } from './components/trade/new-trade/new-trade.component';
+import { SetTradeComponent } from './components/trade/new-trade/set-trade/set-trade.component';
+import { HallOfFameComponent } from './components/advisor/trading-contest/hall-of-fame/hall-of-fame.component';
+import { ExpertMiniCardComponent } from './components/advisor/expert-mini-card/expert-mini-card.component';
+import { MomentModule } from 'ngx-moment';
+import { AssetSummaryComponent } from './components/asset/asset-summary/asset-summary.component';
+import { OrderPositionTabComponent } from './components/trade/order-position-tab/order-position-tab.component';
+import { ConfirmationDialogComponent } from './components/util/confirmation-dialog/confirmation-dialog.component';
+import { EditOrderComponent } from './components/trade/edit-order/edit-order.component';
+import { PerformanceComponent } from './components/trade/portfolio/performance/performance.component';
+import { PerformanceClosedPositionsComponent } from './components/trade/portfolio/performance/perfomance-closed-positions/perfomance-closed-positions.component';
+import { TradeSummaryComponent } from './components/trade/portfolio/performance/trade-summary/trade-summary.component';
+import { EditTradeValueComponent } from './components/trade/edit-trade-value/edit-trade-value.component';
+import { MenuItemComponent } from './components/util/left-menu/menu-item/menu-item.component';
+import { HomeHeaderComponent } from './components/home/home-header/home-header.component';
+import { TopImageComponent } from './components/home/top-image/top-image.component';
+import { CountdownComponent } from './components/util/countdown/countdown.component';
+import { PercentageDisplayPipe } from './util/percentage-display.pipe';
+import { DailyPerformanceChartComponent } from './components/trade/portfolio/performance/daily-performance-chart/daily-performance-chart.component';
+import { NewTradeWindowComponent } from './components/trade/new-trade/new-trade-window/new-trade-window.component';
+import { PerfomanceOpenPositionsComponent } from './components/trade/portfolio/performance/perfomance-open-positions/perfomance-open-positions.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -132,32 +130,19 @@ export function getAuthServiceConfigs() {
 @NgModule({
   declarations: [
     AppComponent,
-    AssetHistoryChartComponent,
     RecommendationDistributionComponent,
-    AdvisorCardComponent,
-    MessageSignatureComponent,
     LoginComponent,
-    RegisterComponent,
     ConfirmEmailComponent,
     BecomeAdvisorComponent,
     ForgotPasswordComponent,
     ForgotPasswordResetComponent,
     ChangePasswordComponent,
-    ExpertDetailsComponent,
     ListAssetsComponent,
-    AssetCardComponent,
     AssetDetailsComponent,
-    FeedComponent,
-    NewAdviceComponent,
-    ConfirmAdviceDialogComponent,
     ReferralDetailsComponent,
-    ConfigurationComponent, 
-    DashboardComponent,
     GlobalSearchComponent,
-    AdvisorsRequestsComponent,
     TopLoadingComponent,
     AdvisorEditComponent,
-    RecommendationBoxComponent,
     HomeComponent,
     TopExpertsComponent,
     FileUploaderComponent,
@@ -166,44 +151,53 @@ export function getAuthServiceConfigs() {
     FullscreenModalComponent,
     ModalDirective,
     MessageFullscreenModalComponent,
-    RecommendationBoxListComponent,
-    TrendingAssetsComponent,
-    TrendingAssetCardComponent,
     PercentageDisplayComponent,
     InheritanceInputComponent,
-    TimeAgoPipe,
     NewsletterComponent,
-    FooterComponent,
     CoinSearchComponent,
     EntryOptionComponent,
     GeneralRecommendationTagComponent,
-    AdviceCardComponent,
-    TopImageComponent,
     ValueDisplayPipe,
-    HotSiteComponent,
-    BeAnExpertComponent,
-    HotsiteHeaderComponent,
-    HotsiteFooterComponent,
-    HotsiteBlogSectionComponent,
-    ReportsTabComponent,
-    ListReportsComponent,
-    ReportCardComponent,
-    InviteFriendComponent,
-    EventsTabComponent,
-    SummaryTabComponent,
-    EventCardComponent,
-    ListEventsComponent,
-    ExpertRatingsTabComponent,
-    AdviceParametersComponent,
-    NewsListComponent,
-    TerminalComponent,
-    CryptoChartComponent,
-    EventsListComponent,
-    RatingsListComponent,
-    AssetHeaderComponent,
     HighlightFieldComponent,
     TickerFieldComponent,
-    TickerPercentageFieldComponent
+    TickerPercentageFieldComponent,
+    PortfolioComponent,
+    HistoryComponent,
+    OpenPositionsComponent,
+    OrdersComponent,
+    BalanceInfoComponent,
+    LeftMenuComponent,
+    UserInfoComponent,
+    ExpertPictureComponent,
+    FollowUnfollowComponent,
+    ExpertsTableComponent,
+    WatchlistComponent,
+    AssetsTableComponent,
+    OrdersTableComponent,
+    TradingContestComponent,
+    PrizeBoxComponent,
+    TickerProfitFieldComponent,
+    TradingViewChartComponent,
+    NewTradeComponent,
+    SetTradeComponent,
+    HallOfFameComponent,
+    ExpertMiniCardComponent,
+    AssetSummaryComponent,
+    OrderPositionTabComponent,
+    ConfirmationDialogComponent,
+    PerformanceComponent,
+    PerformanceClosedPositionsComponent,
+    TradeSummaryComponent,
+    EditOrderComponent,
+    EditTradeValueComponent,
+    MenuItemComponent,
+    HomeHeaderComponent,
+    TopImageComponent,
+    PercentageDisplayPipe,
+    CountdownComponent,
+    DailyPerformanceChartComponent,
+    NewTradeWindowComponent,
+    PerfomanceOpenPositionsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),
@@ -230,17 +224,21 @@ export function getAuthServiceConfigs() {
     SocialLoginModule,
     RecaptchaModule.forRoot(), 
     RecaptchaFormsModule,
-    OwlModule,
-    ShareButtonModule.forRoot()
+    MomentModule,
+    ShareButtonModule.forRoot(),
+    EventsServiceModule.forRoot(),
+    MatTableModule,
+    MatPaginatorModule,
+    ChartsModule
   ],
   providers: [
     HttpService,
     LocalStorageService,
     LocalCacheService,
-    Web3Service,
     AdvisorService,
     AssetService,
     AccountService,
+    TradeService,
     NewsService,
     NavigationService,
     AuthRedirect,
@@ -253,7 +251,6 @@ export function getAuthServiceConfigs() {
   ],
   entryComponents:[
     FullscreenModalComponent, 
-    ConfirmAdviceDialogComponent, 
     TopLoadingComponent, 
     LoginComponent, 
     ForgotPasswordComponent, 
@@ -261,14 +258,14 @@ export function getAuthServiceConfigs() {
     BecomeAdvisorComponent,
     ConfirmEmailComponent,
     AdvisorEditComponent,
-    ConfigurationComponent,
     ForgotPasswordResetComponent,
     ChangePasswordComponent,
-    RegisterComponent,
     ReferralDetailsComponent,
-    NewAdviceComponent,
     EntryOptionComponent,
-    InviteFriendComponent
+    ConfirmationDialogComponent,
+    EditOrderComponent,
+    EditTradeValueComponent,
+    NewTradeWindowComponent
   ],
   exports: [TopLoadingComponent],
   bootstrap: [AppComponent]

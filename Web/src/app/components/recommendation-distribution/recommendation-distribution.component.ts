@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { RecommendationDistributionResponse } from '../../model/recommendationDistributionResponse';
-import { Util } from '../../util/Util';
+import { Util } from '../../util/util';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -9,41 +9,36 @@ import { isPlatformBrowser } from '@angular/common';
   styleUrls: ['./recommendation-distribution.component.css']
 })
 export class RecommendationDistributionComponent implements OnInit, OnChanges {
-  pieChart: any;
-  @ViewChild("PieChartContainer") pieChartContainer: any; 
+chartLabels:string[] = ['buy', 'sell', 'close'];
+chartColors:Array<any> = [{backgroundColor: ['#3ed142','#d13e3e','#383838']}];
+chartData:number[] = [0,0,1];
+chartType:string = 'doughnut';
+chartOptions:any = this.getChartOptions();
+
+mouseHovered:boolean = false;
+
   @Input() data : RecommendationDistributionResponse[];
-  @Input() showTitle : boolean;
-  pieData: any;
+  @Input() showRight: boolean = true;
   totalBuy = 0;
   totalSell = 0;
   totalClose = 0;
-  totalRecommendations = 0;
+  enableTooltip = true;
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit() {
     this.fillPieData();
-    this.createPieChart();
   }
 
   ngOnChanges() {
     this.fillPieData();
-    this.createPieChart();
   }
 
   fillPieData(){
-    this.pieData = [];
     this.totalBuy = 0;
     this.totalSell = 0;
     this.totalClose = 0;
-    this.totalRecommendations = 0;
-    if (this.data) {
+    if (this.data && this.data.length) {
         for(var i = 0; i < this.data.length; i++){
-            this.pieData.push({
-                name: Util.GetRecommendationTypeDescription(this.data[i].type),
-                y: this.data[i].total,
-                color: Util.GetRecommendationTypeColor(this.data[i].type)
-            });
-
             if(this.data[i].type == Util.BUY)
                 this.totalBuy = this.data[i].total;
             if(this.data[i].type == Util.SELL)
@@ -51,56 +46,27 @@ export class RecommendationDistributionComponent implements OnInit, OnChanges {
             if(this.data[i].type == Util.CLOSE)
                 this.totalClose = this.data[i].total;
         }
-        this.totalRecommendations = this.totalBuy + this.totalSell + this.totalClose;
+
+        this.chartData = [ this.totalBuy, this.totalSell, this.totalClose];
+    }
+    else {
+        this.chartData = [0,0,1];
     }
   }
 
-  createPieChart(){
-    if(isPlatformBrowser(this.platformId) && window && (<any>window).Highcharts){
-        this.pieChart = (<any>window).Highcharts.chart({
-            chart: {
-                renderTo: this.pieChartContainer.nativeElement,
-                backgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-        },
-        credits:{
-            enabled: false
-        },
-        legend:{enabled:false},
-        title: {
-            text: this.showTitle ? "<b>"+ this.totalRecommendations+"</b><br />Signals" : null,
-            align: 'center',
-            verticalAlign: 'middle',
-            y: -4,
-            style: { "color": "#ffffff", "fontSize": "8px" }
-        },
-        tooltip: {
-            pointFormat: '<b>{point.percentage:.1f}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: false,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f}%',
-                    style: {
-                        color: 'black'
-                    }
-                },
-                borderColor: null,
-                showInLegend: true,
-                center: ['50%', '50%']
+  getChartOptions(){
+      return {
+        legend:{display:false},
+        cutoutPercentage: 75,
+        animation:false, 
+        elements: {
+            arc: {
+                borderWidth: 0
             }
         },
-        series: [{
-          name: 'Recommendations',
-            innerSize: '80%',
-            data: this.pieData
-        }]
-        });
-    }
+        tooltips: {
+            enabled: false
+        }
+    };
   }
 }

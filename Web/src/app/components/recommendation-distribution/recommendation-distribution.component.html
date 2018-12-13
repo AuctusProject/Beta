@@ -1,11 +1,19 @@
-<div fxLayout="row">
-    <div #PieChartContainer class="pie-chart"></div>
-    <div class="distribution-descripton" fxLayout="column" fxLayoutAlign="center start">
-        <div class="buy">
-            Buy: {{totalBuy}}
-        </div>
-        <div class="sell">
-            Sell: {{totalSell}}
-        </div>
-    </div>
-</div>
+
+    <div (mouseover)="mouseHovered=true" (mouseout)="mouseHovered=false" class="outter">
+        <canvas baseChart height="40px" width="40px"
+            [options]="chartOptions"
+            [data]="chartData"
+            [colors]="chartColors"
+            [labels]="chartLabels"
+            [chartType]="chartType">
+        </canvas> 
+        <div class="tooltip" [class.show-right]="showRight" [class.show-left]="!showRight" [class.hidden]="totalBuy + totalSell + totalClose == 0"
+        [class.show]="mouseHovered" >
+            <div class="inner-tooltip">
+                <div class="buy" [class.hidden]="totalBuy == 0">BUY: <span>{{totalBuy}}</span></div>
+                <div class="sell" [class.hidden]="totalSell == 0">SELL: <span>{{totalSell}}</span></div>
+                <div class="close" [class.hidden]="totalClose == 0">CLOSE: <span>{{totalClose}}</span></div>
+            </div>
+         </div>
+    </div> 
+ 

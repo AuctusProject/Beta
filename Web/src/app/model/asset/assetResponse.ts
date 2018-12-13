@@ -7,14 +7,17 @@ export class AssetResponse {
   assetId: number;
   name: string;
   code: string;
+  shortSellingEnabled: boolean;
   totalRatings?: number;
   totalAdvisors?: number;
+  marketCap?: number;
+  circulatingSupply?: number;
   lastValue?: number;
   variation24h?: number;
   variation7d?: number;
   variation30d?: number;
   numberOfFollowers?: number;
-  following?:boolean;
+  following?: boolean;
   mode: number;
   pair: PairResponse;
   recommendationDistribution: RecommendationDistributionResponse[];

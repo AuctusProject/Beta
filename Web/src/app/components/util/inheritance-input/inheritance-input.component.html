@@ -1,12 +1,11 @@
-<mat-form-field appearance="{{outlineField ? 'outline' : 'standard'}}" class="container-field" hideRequiredMarker>
-  <mat-label [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')">{{placeholder}}</mat-label>
+<mat-form-field appearance="{{outlineField ? 'outline' : 'standard'}}" [class]="formClass" hideRequiredMarker>
+  <mat-label [class]="labelClass">{{placeholder}}</mat-label>
 
-  <input matInput *ngIf="showTextField()"
+  <input matInput #Input *ngIf="showTextField()"
+    [class]="inputClass"
     [type]="getInputType()"
     [(ngModel)]="value" 
     [formControl]="formControl" 
-    [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')"
-    placeholder="{{placeholder}}" 
     required="{{required}}" 
     readonly="{{disabled}}"
     minlength="{{minlength}}" 
@@ -15,13 +14,13 @@
     max="{{max}}" 
     step="{{step}}"
     autocomplete="{{autocomplete}}"
-    (change)="onChangeInput()"/>
+    (change)="onChangeInput()"
+    (click)="onInputClick()"/>
 
   <textarea matInput *ngIf="showTextAreaField() && autosizeTextArea"
+    [class]="inputClass"
     [(ngModel)]="value" 
     [formControl]="formControl" 
-    [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')"
-    placeholder="{{placeholder}}" 
     required="{{required}}" 
     readonly="{{disabled}}"
     minlength="{{minlength}}" 
@@ -33,10 +32,9 @@
     cdkAutosizeMaxRows="{{maxRows}}"></textarea>
 
   <textarea matInput *ngIf="showTextAreaField() && !autosizeTextArea"
+    [class]="inputClass"
     [(ngModel)]="value" 
     [formControl]="formControl" 
-    [style.color]="disabled ? '' : (darkLayout ? 'white' : '#101010')"
-    placeholder="{{placeholder}}" 
     required="{{required}}" 
     readonly="{{disabled}}"
     minlength="{{minlength}}" 
@@ -46,5 +44,8 @@
   
   <mat-icon matSuffix *ngIf="inputType == 2 && showPasswordVisibility" (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility' : 'visibility_off'}}</mat-icon>
   <mat-hint *ngIf="getErrorMessage().length == 0 && (showHintSize || !!specificHint)" align="end">{{getHintText()}}</mat-hint>
+  <mat-hint *ngIf="copied" align="start">Link copied</mat-hint>
   <mat-error *ngIf="getErrorMessage().length > 0">{{getErrorMessage()}}</mat-error>
+  <span *ngIf="suffixText" matSuffix [class]="suffixClass">{{suffixText}}</span>
+  <span *ngIf="enableCopy" matSuffix class="copy-link-button" (click)="copyClick()">Copy</span>
 </mat-form-field>

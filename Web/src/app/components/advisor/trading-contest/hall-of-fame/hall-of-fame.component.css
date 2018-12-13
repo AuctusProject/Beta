@@ -1,0 +1,20 @@
+:host{
+    display: block;
+    overflow: auto;
+}
+
+.mat-header-cell {
+    color: white;
+}
+
+.mat-column-month{
+    width: 130px;
+}
+
+th.mat-header-cell.mat-column-month {
+    font-size: 22px;
+}
+
+td.mat-column-month {
+    font-size: 14px;
+}

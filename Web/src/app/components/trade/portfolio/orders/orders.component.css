@@ -1,0 +1,75 @@
+.asset{
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.header span{
+    font-weight: 100;
+    font-size: 11px;
+    letter-spacing: 0.28px;
+    color: #bfbfbf;
+}
+
+.boxes > div {
+    width: 128px;
+}
+
+@media(max-width:400px) {
+    td {
+        min-width: 26px;
+    }
+}
+
+@media(max-width:600px) {
+
+    .mat-header-cell {
+        font-size: 10px;
+    }
+    
+    .asset{
+        font-size: 12px;
+        padding-left: 8px;
+    }
+
+    .cdk-column-asset{
+        padding-left: 8px;
+    }
+}
+
+@media(min-width:600px) {
+    .cdk-column-image{
+        width: 40px;
+    }
+
+    .cdk-column-asset{
+        width: 19%;
+    }
+
+    .cdk-column-units{
+        width: 13%;
+    }
+
+    .cdk-column-executeAt{
+        width: 13%;
+    }
+
+    .cdk-column-value{
+        width: 13%;
+    }
+
+    .cdk-column-SL{
+        width: 13%;
+    }
+
+    .cdk-column-TP{
+        width: 13%;
+    }
+
+    .cdk-column-edit{
+        width: 5%;
+    }
+
+    .cdk-column-cancel{
+        width: 5%;
+    }
+}

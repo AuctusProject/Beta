@@ -1,0 +1,145 @@
+.header{
+    text-align: center;
+}
+.header span{
+    font-weight: 100;
+    font-size: 11px;
+    letter-spacing: 0.28px;
+    color: #bfbfbf;
+}
+
+
+.boxes {
+    border-right: 1px solid #161616;
+    
+}
+
+.boxes ::ng-deep .variation{
+    margin-bottom: -30px;
+}
+
+.returns{
+    padding: 3px;
+    padding-left: 7px;
+    border-left: solid 1px #252525;
+}
+
+.trades > div{
+    padding: 10px 15px;
+    font-size: 12px;
+    color: #737373;
+    letter-spacing: 0.6px;
+    font-weight: 500;
+}
+
+.trades > div+div{
+    border-left: 1px solid #2f2f2f;
+}
+
+table, th{
+    text-align: center !important ;
+}
+
+.asset{
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    margin: 0 5px 2px 5px;
+}
+
+.asset-wrapper{
+    margin: inherit;
+}
+
+@media(max-width:599px){
+    .header{
+        height: 110px;
+    }
+    .header span{
+        font-size: 9px;
+    }
+    .returns{
+        font-size: 12px;
+        padding-top: 7px;
+    }
+    .boxes-wrapper{
+        padding-top: 4px;
+    }
+    :host ::ng-deep .boxes > div{
+        width: 64px
+    }
+    .mat-cell{
+        font-size: 11px !important;
+    }
+
+    .trades > div{
+        width: 30%;
+        width: 75px;
+        margin-bottom: 10px;
+        padding: 5px 15px;
+    }
+    th.mat-header-cell:first-of-type{
+        padding-left: 4px !important;
+    }
+    th.mat-header-cell:last-of-type{
+        padding-right: 4px !important;
+    }
+}
+
+
+
+
+.cdk-column-units{
+    width: 11%;
+}
+
+.cdk-column-open{
+    width: 11%;
+}
+
+.cdk-column-openTime{
+    width: 11%;
+}
+
+.cdk-column-close{
+    width: 11%;
+}
+
+.cdk-column-closeTime{
+    width: 11%;
+}
+
+.cdk-column-PLValue{
+    width: 11%;
+}
+
+.cdk-column-PLPercentage{
+    width: 11%;
+}
+
+.cdk-column-openTime span, 
+.cdk-column-closeTime span{
+    font-size: 10px;
+    letter-spacing: 0.8px;
+}
+
+@media(max-width:599px){
+    
+   
+
+    .cdk-column-asset{
+        width: 25% !important;
+    }
+
+    .cdk-column-units{
+        width: 25% !important;
+    }
+
+    .cdk-column-PLValue{
+        width: 25% !important;
+    }
+
+    .cdk-column-PLPercentage{
+        width: 25%;
+    }
+}

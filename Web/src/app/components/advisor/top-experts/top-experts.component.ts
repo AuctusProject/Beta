@@ -1,11 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { AdvisorService } from '../../../services/advisor.service';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
-import { NavigationService } from '../../../services/navigation.service';
-import { Util } from '../../../util/Util';
 import { AccountService } from '../../../services/account.service';
-import { ModalService } from '../../../services/modal.service';
+import { FollowUnfollowType } from '../../util/follow-unfollow/follow-unfollow.component';
+import { ExpertsTableType } from '../experts-table/experts-table.component';
 
 @Component({
   selector: 'top-experts',
@@ -13,106 +12,17 @@ import { ModalService } from '../../../services/modal.service';
   styleUrls: ['./top-experts.component.css']
 })
 export class TopExpertsComponent implements OnInit {
-  @Input() resultsLimit?: number;
-  @Input() hideFilters?: boolean;
-  @Input() title: string = "TOP EXPERTS";
-  @Input() subtitle: string = "Find the best performing Crypto Analysts. Follow them to get a real-time feed of their signals";
-  experts : AdvisorResponse[] = [];
-  expertsResponse : AdvisorResponse[];
-  showAdvisorButton: boolean = false;
-  
-  pageSize = 12;
-  currentPage = 1;
-  
-  selectedSortOption: number = 1;
-  sortOptions = [
-    {value:1, name:"Ranking"},
-    {value:2, name:"Return Rate"},
-    {value:3, name:"Success Rate"},
-    {value:4, name:"Total Followers"},
-    {value:5, name:"Name"},
-  ];
+  experts: AdvisorResponse[];
 
-  constructor(private advisorService: AdvisorService, 
-    public accountService: AccountService,
-    private navigationService: NavigationService,
-    private modalService: ModalService,
+  constructor(private advisorService: AdvisorService,
     private titleService: Title,
     private metaTagService: Meta) { }
 
   ngOnInit() {
-    this.titleService.setTitle("Auctus - Top Cryptocurrency Experts");
-    this.metaTagService.updateTag({name: 'description', content: "Find the best performing Crypto Analysts. Follow them to get a real-time feed of their recommendations"});
-    this.showAdvisorButton = this.accountService.isLoggedIn() && this.accountService.getLoginData().isAdvisor;
+    this.titleService.setTitle("Auctus - Top Cryptocurrency Traders");
+    this.metaTagService.updateTag({name: 'description', content: "Find the best performing Crypto Analysts."});
     this.advisorService.getAdvisors().subscribe(result => {
-      this.expertsResponse = result;
-      if(this.resultsLimit != null && result != null){
-        this.experts = result.slice(0,this.resultsLimit);
-      }
-      else{
-        this.setVisibleExperts();
-      }
+      this.experts = result;
     });
-  }
-
-  onNewAdviceClick() {
-    this.modalService.setNewAdvice();
-  }
-
-  onEditProfileClick() {
-    this.modalService.setEditAdvisor(this.accountService.getLoginData().id);
-  }
-
-  loadMoreExperts(){
-    this.currentPage++;
-    this.setVisibleExperts();
-  }
-
-  hasMoreExperts(){
-    return this.expertsResponse != null && this.experts.length != this.expertsResponse.length;
-  }
-
-  setVisibleExperts(){
-    var numberOfExpertsToShow = this.pageSize * this.currentPage;
-    this.experts = this.expertsResponse.slice(0, numberOfExpertsToShow);
-  }
-
-  goToTopExperts(){
-    this.navigationService.goToTopExperts();
-  }
-
-  onSortOptionChanged(){
-    if(this.selectedSortOption == 1){
-      this.sortByRanking();
-    }
-    else if(this.selectedSortOption == 2){
-      this.sortByReturnRate();
-    }
-    else if(this.selectedSortOption == 3){
-      this.sortBySuccessRate();
-    }
-    else if(this.selectedSortOption == 4){
-      this.sortByFollowers();
-    }
-    else if(this.selectedSortOption == 5){
-      this.sortByName();
-    }
-    this.setVisibleExperts();
-  }
-
-  sortByName(){
-    Util.Sort<AdvisorResponse>(this.expertsResponse, a => a.name);
-  }
-  sortByRanking(){
-    Util.Sort<AdvisorResponse>(this.expertsResponse, a => a.ranking);
-  }
-  sortByFollowers(){
-    Util.Sort<AdvisorResponse>(this.expertsResponse, a => a.numberOfFollowers, "DESC");
-  }
-  sortByReturnRate(){
-    Util.Sort<AdvisorResponse>(this.expertsResponse, a => a.averageReturn, "DESC");
-  }
-  sortBySuccessRate(){
-    Util.Sort<AdvisorResponse>(this.expertsResponse, a => a.successRate, "DESC");
   }
 }

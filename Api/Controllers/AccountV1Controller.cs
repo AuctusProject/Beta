@@ -1,4 +1,5 @@
-﻿using Api.Model.Account;
+﻿using Api.Hubs;
+using Api.Model.Account;
 using Auctus.DomainObjects.Account;
 using Auctus.Model;
 using Auctus.Util;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -24,16 +26,8 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class AccountV1Controller : AccountBaseController
     {
-        public AccountV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async new Task<IActionResult> RegisterAsync([FromBody]RegisterRequest registerRequest)
-        //{
-        //    return await base.RegisterAsync(registerRequest);
-        //}
+        public AccountV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         [HttpPost]
         [Route("social_login")]
@@ -116,24 +110,6 @@ namespace Api.Controllers
             return base.ConfirmEmail(confirmEmailRequest);
         }
 
-        [Route("me/feed")]
-        [HttpGet]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListFeed([FromQuery]int? top, [FromQuery]int? lastAdviceId, [FromQuery]int? lastReportId, [FromQuery]int? lastEventId)
-        {
-            return base.ListFeed(top, lastAdviceId, lastReportId, lastEventId);
-        }
-
-        //[Route("me/referrals")]
-        //[HttpPost]
-        //[Authorize("Bearer")]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public new IActionResult SetReferralCode([FromBody]SetReferralRequest setReferralRequest)
-        //{
-        //    return base.SetReferralCode(setReferralRequest);
-        //}
-
         [Route("me/referrals")]
         [HttpGet]
         [Authorize("Bearer")]
@@ -207,13 +183,22 @@ namespace Api.Controllers
             return base.GetDashboard();
         }
 
-        [Route("early-access-emails")]
-        [HttpPost]
-        [AllowAnonymous]
+        [Route("{id}/assets/following")]
+        [HttpGet]
+        [Authorize("Bearer")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult RequestEarlyAccess([FromBody]EarlyAccessRequest earlyAccessRequest)
+        public new IActionResult ListAssetsFollowedByUser([FromRoute]int id)
         {
-            return base.RequestEarlyAccess(earlyAccessRequest);
+            return base.ListAssetsFollowedByUser(id);
+        }
+
+        [Route("{id}/advisors/following")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAdvisorsFollowedByUser([FromRoute]int id)
+        {
+            return base.ListAdvisorsFollowedByUser(id);
         }
     }
 }

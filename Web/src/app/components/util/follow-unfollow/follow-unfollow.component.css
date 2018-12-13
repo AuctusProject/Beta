@@ -1,0 +1,22 @@
+:host{
+    color: #bfbfbf;
+    text-align: center;
+    font-weight: 100;
+}
+
+fa-icon{
+    color:#4c8ffc;
+    font-size: 14px;
+}
+
+.follow-link{
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+}
+
+.followers {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}

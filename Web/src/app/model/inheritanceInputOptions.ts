@@ -1,6 +1,11 @@
 export interface InheritanceInputOptions {
     inputType: InputType;
     darkLayout: boolean;
+    suffixText: string;
+    formClass: string;
+    labelClass: string;
+    inputClass: string;
+    suffixClass: string;
     textOptions?: InputTextTypeOptions;
     textAreaOptions?: InputTextAreaTypeOptions;
     numberOptions?: InputNumberTypeOptions;
@@ -30,6 +35,7 @@ interface InputTextTypeOptions extends InputTypeOptions {
     showHintSize?: boolean;
     browserAutocomplete?: string;
     showPasswordVisibility?: boolean;
+    enableCopy?: boolean;
 }
 
 interface InputTextAreaTypeOptions {

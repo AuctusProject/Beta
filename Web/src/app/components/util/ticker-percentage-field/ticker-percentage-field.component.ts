@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges, EventEmitter, Output } from '@angular/core';
 import { TickerService } from '../../../services/ticker.service';
 import { Subscription } from 'rxjs';
 import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
@@ -10,9 +10,10 @@ import { PairResponse } from '../../../model/asset/assetResponse';
   styleUrls: ['./ticker-percentage-field.component.css']
 })
 export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChanges {
+  Math = Math;
   @Input() pair: PairResponse;
   @Input() referenceValue?: any = null;
-  @Input() adviceType?: number = null;
+  @Input() orderType?: number = null;
   @Input() startValue?: number = null;
   value: number;
   mainTickerSubscription: Subscription;
@@ -22,6 +23,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   quoteValue?: number = null;
   baseValue?: number = null;
   initialized: boolean = false;
+  @Output() onNewValue = new EventEmitter<number>();
 
   constructor(private tickerService: TickerService) { }
 
@@ -33,8 +35,8 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   }
   
   ngOnInit() {
-    if (this.startValue) {
-      this.value = Math.round(this.startValue * 10000) / 100;
+    if (this.startValue != undefined) {
+      this.value = this.startValue;
     }
     if (this.pair) {
       if (this.pair.symbol) {
@@ -56,9 +58,9 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   setValue(ticker: BinanceTickerPayload, isMainPair: boolean) {
     if (!this.pair.multipliedSymbol) {
       if (this.referenceValue) {
-        this.value = this.getReferenceValueMultiplier() * Math.round(((ticker.currentClosePrice / parseFloat(this.referenceValue)) - 1) * 10000) / 100;
+        this.value = this.getReferenceValueMultiplier() * ((ticker.currentClosePrice / parseFloat(this.referenceValue)) - 1);
       } else {
-        this.value = ticker.priceChangePercentage;
+        this.value = ticker.priceChangePercentage / 100;
       }
     } else {
       if (isMainPair) {
@@ -70,19 +72,22 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
       }
       if (this.referenceValue) {
         if (this.baseValue && this.quoteValue) {
-          this.value = this.getReferenceValueMultiplier() * Math.round((((this.baseValue * this.quoteValue) / parseFloat(this.referenceValue)) - 1) * 10000) / 100;
+          this.value = this.getReferenceValueMultiplier() * ((this.baseValue * this.quoteValue) / parseFloat(this.referenceValue) - 1);
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {
-          let previousBase = this.baseValue / (1 + (this.baseVariation / 100));
-          let previousQuote = this.quoteValue / (1 + (this.quoteVariation / 100));
-          this.value = Math.round((((this.baseValue * this.quoteValue) / (previousBase * previousQuote)) - 1) * 10000) / 100;
+          let previousBase = this.baseValue * (1 + (-1 * this.baseVariation / 100));
+          let previousQuote = this.quoteValue * (1 + (-1 * this.quoteVariation / 100));
+          this.value = ((this.baseValue * this.quoteValue) / (previousBase * previousQuote)) - 1;
       }
+    }
+    if(this.onNewValue) {
+      this.onNewValue.emit(this.value);
     }
   }
 
   getReferenceValueMultiplier() : number {
-    return this.adviceType === 0 ? -1.0 : 1.0;
+    return this.orderType === 0 ? -1.0 : 1.0;
   }
 
   ngOnDestroy() {

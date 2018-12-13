@@ -1,0 +1,86 @@
+<table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="badge">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="monthlyRankingHistory.ranking"> RANK </th>
+      <td mat-cell *matCellDef="let expert">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <img *ngIf="expert.monthlyRankingHistory.ranking >= 1 && expert.monthlyRankingHistory.ranking <= 3" src="./assets/img/Icon_W-{{expert.monthlyRankingHistory.ranking}}.png">
+          <span *ngIf="!(expert.monthlyRankingHistory.ranking >= 1 && expert.monthlyRankingHistory.ranking <= 3)">
+            {{expert.monthlyRankingHistory.ranking}}
+          </span>
+        </div>
+      </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="trader">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="name" class="text-left"> TRADERS ({{getTotalExperts()}}) </th>
+      <td mat-cell *matCellDef="let expert" class="text-left">
+        <expert-mini-card [expert]="expert"></expert-mini-card>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="ranking">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> RANKING </th>
+      <td mat-cell *matCellDef="let expert"> 
+        <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="4px">
+          <div class="expert-rating">
+            <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="expert.rating" [title]="expert.rating | number: '1.2-2'"></bar-rating>
+          </div>
+          <div class="small-text">#{{expert.ranking}} out of {{expert.totalAdvisors}}</div>
+        </div>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="successRate">
+      <th fxHide.lt-sm mat-header-cell *matHeaderCellDef mat-sort-header> SUCCESS RATE </th>
+      <td fxHide.lt-sm mat-cell *matCellDef="let expert"> 
+        <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="4px">
+          <div>{{expert.successRate | percentageDisplay: 0}}</div>
+          <div class="small-text">{{getNumberOfTradesDescription(expert)}}</div>      
+        </div>  
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="averageReturn">
+      <th fxHide.lt-sm mat-header-cell *matHeaderCellDef mat-sort-header> AVG. RETURN </th>
+      <td fxHide.lt-sm mat-cell *matCellDef="let expert"> 
+        <percentage-display [value]="expert.averageReturn"></percentage-display>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="PL">
+      <th fxHide.lt-sm mat-header-cell *matHeaderCellDef mat-sort-header="totalProfitPercentage"> P/L </th>
+      <td fxHide.lt-sm mat-cell *matCellDef="let expert">  
+        <percentage-display [value]="expert.totalProfitPercentage"></percentage-display>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="monthlyPL">
+      <th fxHide.lt-md mat-header-cell *matHeaderCellDef mat-sort-header="monthlyRankingHistory.profitPercentage"> P/L (% this month) </th>
+      <td fxHide.lt-md mat-cell *matCellDef="let expert">  
+        <ticker-percentage-field [startValue]="expert.monthlyRankingHistory.profitPercentage"></ticker-percentage-field>
+      </td>
+    </ng-container>
+  
+  
+    <ng-container matColumnDef="follow">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="numberOfFollowers" [disabled]="showViewMore"> 
+        <a *ngIf="showViewMore" routerLink="/top-traders" >
+          <div class="table-button gray">VIEW MORE</div>
+        </a>
+      </th>
+      <td mat-cell *matCellDef="let expert"> 
+        <follow-unfollow [(following)]="expert.following" [(numberOfFollowers)]="expert.numberOfFollowers" [(id)]="expert.userId" [type]="expertFollowUnfollowType"></follow-unfollow>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="footerRow">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="getDisplayedColumns().length">
+        Start following your favorite traders and quickly access here!
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();" class="mat-row {{getRowClass(row)}}"></tr>
+    <tr [class.hidden]="!experts || experts.length != 0" mat-footer-row *matFooterRowDef="['footerRow']" class="footer-row"></tr>
+  </table>
+  <mat-paginator [class.hidden]="!(experts && experts.length > 20)" [pageSize]="20" showFirstLastButtons></mat-paginator>

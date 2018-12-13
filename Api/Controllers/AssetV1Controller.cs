@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.DependencyInjection;
+using Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Api.Controllers
 {
@@ -17,8 +19,8 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class AssetV1Controller : AssetBaseController
     {
-        public AssetV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        public AssetV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         [HttpGet]
         [AllowAnonymous]
@@ -26,15 +28,6 @@ namespace Api.Controllers
         public new IActionResult ListAssets()
         {
             return base.ListAssets();
-        }
-
-        [HttpGet]
-        [Route("trending/{top?}")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListTrendingAssets(int top = 3)
-        {
-            return base.ListTrendingAssets(top);
         }
 
         [Route("reports")]
@@ -100,6 +93,15 @@ namespace Api.Controllers
             return base.ListAssetStatus(id);
         }
 
+        [Route("{id}/orders")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAssetOrders([FromRoute]int id)
+        {
+            return base.ListAssetOrders(id);
+        }
+
         [HttpGet]
         [Route("{id}/details")]
         [AllowAnonymous]
@@ -107,24 +109,6 @@ namespace Api.Controllers
         public new IActionResult GetAsset([FromRoute]int id)
         {
             return base.GetAsset(id);
-        }
-
-        [HttpGet]
-        [Route("{id}/ratings")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult GetAssetRatings(int id)
-        {
-            return base.GetAssetRatings(id);
-        }
-
-        [HttpGet]
-        [Route("{id}/recommendation_info")]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult GetAssetRecommendationInfo([FromRoute]int id)
-        {
-            return base.GetAssetRecommendationInfo(id);
         }
 
         [Route("{id}/followers")]

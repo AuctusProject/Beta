@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.5</RuntimeFrameworkVersion> 
+    <RuntimeFrameworkVersion>2.1.6</RuntimeFrameworkVersion> 
     <RootNamespace>Auctus.DataAccess</RootNamespace>
     <AssemblyName>DataAccess</AssemblyName>
   </PropertyGroup>
@@ -20,11 +20,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.1.1" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
-    <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.2" />
     <PackageReference Include="RestSharp" Version="106.5.4" />
     <PackageReference Include="Sendgrid" Version="9.10.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
-    <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
   <ItemGroup>

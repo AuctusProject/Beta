@@ -17,12 +17,14 @@ namespace Auctus.DataAccess.Email
         private readonly string WebSiteNewsLetterSendGridKey;
         private readonly string ForcedEmail;
         private readonly bool IsDevelopment;
+        public readonly List<String> EmailErrorList;
 
         public EmailResource(IConfigurationRoot configuration, bool isDevelopment)
         {
             SendGridKey = configuration.GetSection("Email:SendGridKey").Get<string>();
             WebSiteNewsLetterSendGridKey = configuration.GetSection("Email:WebSiteNewsLetterSendGridKey").Get<string>();
             ForcedEmail = configuration.GetSection("Email:ForcedEmail").Get<string>();
+            EmailErrorList = configuration.GetSection("Email:Error").Get<List<string>>();
             IsDevelopment = isDevelopment;
         }
 

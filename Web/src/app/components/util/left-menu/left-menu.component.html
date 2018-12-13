@@ -1,0 +1,21 @@
+<div fxLayout="column">
+  <user-info [advisor]="advisor"></user-info>
+  <menu-item link="/portfolio" name="Portfolio" icon="wallet" [disabled]="!isLogged()"></menu-item>
+  <menu-item link="/watchlist" name="Watchlist" icon="list"  [disabled]="!isLogged()"></menu-item>
+  <menu-item link="/invite" name="Invite Your Friends" icon="share-alt"  [disabled]="!isLogged()"></menu-item>
+  <div class="bottom-menu" fxLayout="column" fxLayoutAlign="space-between none">
+    <div class="discovery-menu">
+      <div class="discovery-menu-title">BROWSE</div>
+      <menu-item link="/trade-markets" name="Markets" icon="chart-line"></menu-item>
+      <menu-item link="/top-traders" name="Top Traders" icon="star"></menu-item>
+      <menu-item link="/trading-contest" name="Trading Contest" icon="award"></menu-item>
+      <menu-item externalLink="https://blog.auctus.org/auctus-trading-faq-243735fff735" name="FAQ" icon="question-circle"></menu-item>
+    </div>
+    <span *ngIf="isLogged()" class="signout" (click)="logout()" >
+      <fa-icon icon="sign-out-alt"></fa-icon>
+      LOGOUT
+    </span>  
+  </div>
+</div>
+
+

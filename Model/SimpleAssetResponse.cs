@@ -13,6 +13,7 @@ namespace Auctus.Model
         public int Type { get; set; }
         public bool ShortSellingEnabled { get; set; }
         public double? MarketCap { get; set; }
+        public double? CirculatingSupply { get; set; }
         public PairResponse Pair { get; set; }
 
     }

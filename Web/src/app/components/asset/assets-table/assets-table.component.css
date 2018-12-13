@@ -1,0 +1,22 @@
+:host{
+    display: block;
+    overflow: auto;
+}
+
+@media(min-width:601px) {
+    .mat-column-marketCap {
+        min-width: 150px;
+    }
+
+    .mat-column-lastPrice {
+        min-width: 120px;
+    }
+
+    .mat-column-change {
+        min-width: 120px;
+    }
+
+    .mat-column-trade {
+        width: 120px;
+    }
+}

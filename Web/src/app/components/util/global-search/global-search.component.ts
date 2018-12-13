@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { SearchResponse } from '../../../model/search/searchResponse';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
@@ -18,7 +18,7 @@ export class GlobalSearchComponent implements OnInit {
   showExperts: boolean = true;
   showAssets: boolean = true;
   searchControl: FormControl = new FormControl(); 
-
+  @ViewChild('SearchInput') searchInput: ElementRef;
   constructor(private accountService: AccountService,
     private navigationService: NavigationService) { }
 
@@ -65,5 +65,11 @@ export class GlobalSearchComponent implements OnInit {
 
   getAdvisorImgUrl(guid: string) {
     return CONFIG.profileImgUrl.replace("{id}", guid);
+  }
+
+  public focus(){
+    if(this.searchInput && this.searchInput.nativeElement){
+      this.searchInput.nativeElement.focus();
+    }
   }
 }

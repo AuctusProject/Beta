@@ -1,0 +1,80 @@
+:host{
+    padding-top: 10px;
+    padding-bottom: 20px;
+    display: block;
+    background-color: #242424;
+}
+
+expert-picture{
+    margin-left: 14px;
+    margin-right: 14px;
+}
+
+.user-name {
+    max-width: 128px;
+    font-size: 16px;
+    font-weight: 100;
+    letter-spacing: 0.4px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.expert-rating{
+    justify-content: start;
+    margin-bottom: 4px;
+    margin-top: 10px;
+}
+
+.ranking-and-return{
+    margin-left: 20px;
+    margin-top:20px;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.ranking-description {
+    font-weight: 500;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.edit-profile{
+    font-size: 10px;
+    font-weight: 100;
+    letter-spacing: 0.5px;
+    color: #979797;
+    text-decoration: underline;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+
+.signin {
+    font-size: 11px;
+    color: #07d1ff;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    padding-right: 15px;
+}
+
+.login-box{
+    text-align: left;
+    padding-top: 8px;
+    margin-left: 30px;
+    margin-right: 30px;
+    color: #cccccc;
+    font-size: 12px;
+}
+
+.join-now-title{
+    padding-bottom: 4px;
+    font-weight: bold;
+}
+
+.join-now-subtitle{
+    padding-bottom: 15px;
+}

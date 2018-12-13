@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.5</RuntimeFrameworkVersion> 
+    <RuntimeFrameworkVersion>2.1.6</RuntimeFrameworkVersion> 
     <RootNamespace>Auctus.DomainObjects</RootNamespace>
     <AssemblyName>DomainObjects</AssemblyName>
   </PropertyGroup>
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.2" />
   </ItemGroup>
 
   <ItemGroup>

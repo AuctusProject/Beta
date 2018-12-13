@@ -27,15 +27,13 @@ namespace Auctus.Business.Event
             return Data.ListAssetEventsWithPagination(null, assetsId, top, lastEventId, minimumReliablePercentage, true);
         }
 
-        public IEnumerable<FeedResponse> ListAssetEvents(int? top, int? lastEventId, int? assetId = null)
+        public IEnumerable<EventResponse> ListAssetEvents(int? top, int? lastEventId, int? assetId = null)
         {
             int[] assets = null;
             if (assetId.HasValue)
                 assets = new int[] { assetId.Value };
 
-            var events = Task.Factory.StartNew(() => List(assets, top, lastEventId));
-            var user = GetLoggedUser();
-            return UserBusiness.FillFeedList(null, null, events, user, top, null, null, lastEventId);
+            return List(assets, top, lastEventId).Select(c => ConvertToEventResponse(c));
         }
 
         public EventResponse ConvertToEventResponse(AssetEvent assetEvent)
@@ -66,7 +64,7 @@ namespace Auctus.Business.Event
             List<AssetEventCategory> categories = null;
             List<AssetEvent> assetEvents = null;
             List<Record> events = null;
-            Parallel.Invoke(() => assets = AssetBusiness.ListAssets(), 
+            Parallel.Invoke(() => assets = AssetBusiness.ListAssets(true), 
                 () => categories = AssetEventCategoryBusiness.ListCategories(), 
                 () => assetEvents = Data.ListAssetEventsWithPagination(startDate, null, null, null, null, null),
                 () => events = CoinMarketCalBusiness.ListEvents(startDate));

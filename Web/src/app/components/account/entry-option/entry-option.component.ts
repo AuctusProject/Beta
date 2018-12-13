@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AccountService } from '../../../services/account.service';
 import { NotificationsService } from 'angular2-notifications';
-import { AuthRedirect } from '../../../providers/authRedirect';
 import { SocialLoginRequest } from '../../../model/account/socialLoginRequest';
 import { FacebookLoginProvider, GoogleLoginProvider, AuthService } from 'angular5-social-login';
 import { FullscreenModalComponentInput } from '../../../model/modal/fullscreenModalComponentInput';
@@ -9,8 +8,6 @@ import { LoginComponent } from '../login/login.component';
 import { ModalComponent } from '../../../model/modal/modalComponent';
 import { LoginResult } from '../../../model/account/loginResult';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
-import { RegisterComponent } from '../register/register.component';
-import { ModalService } from '../../../services/modal.service';
 import { BecomeAdvisorComponent } from '../../advisor/become-advisor/become-advisor.component';
 import { LocalStorageService } from '../../../services/local-storage.service';
 
@@ -51,7 +48,7 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
         this.modalTitle = "Registration";
         this.emailButtonMessage = "Sign up with email";
         this.headerFirstMessage = "Registration";
-        this.headerSecondMessage = "Sign up to get exclusive market insights, as well as access to expert knowledge.";
+        this.headerSecondMessage = "Sign up to use our cryptocurrency trading simulator, learn, compete and share trading ideas.";
       }
     }
   }
@@ -115,15 +112,9 @@ export class EntryOptionComponent implements ModalComponent, OnInit {
       let modalData = new FullscreenModalComponentInput();
       modalData.component = LoginComponent;
       this.setNewModal.emit(modalData);
-     } else 
-    // if(this.isBecomeExpert()) 
-    {
+    } else {
       this.openBecomeAdvisorForm();
-    // } else {
-    //   let modalData = new FullscreenModalComponentInput();
-    //   modalData.component = RegisterComponent;
-    //   this.setNewModal.emit(modalData);
-     }
+    }
   }
 
   onSignUpClick() {

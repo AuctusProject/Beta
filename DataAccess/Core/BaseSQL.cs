@@ -16,6 +16,16 @@ namespace Auctus.DataAccess.Core
     public abstract class BaseSql<T> : DapperRepositoryBase, IBaseData<T>
     {
         protected BaseSql(IConfigurationRoot configuration) : base(configuration) { }
+        
+        public void SetTransaction(IDbConnection connection, IDbTransaction transaction)
+        {
+            base.SetDapperTransaction((SqlConnection)connection, transaction);
+        }
+
+        public void ClearTransaction()
+        {
+            base.ClearDapperTransaction();
+        }
 
         public IEnumerable<T> SelectByObject(T criteria)
         {
@@ -69,6 +79,14 @@ namespace Auctus.DataAccess.Core
         {
             if (dateTime.HasValue)
                 return "'" + dateTime.Value.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+            else
+                return "NULL";
+        }
+
+        protected string GetNullableValue(object value)
+        {
+            if (value != null)
+                return value.ToString();
             else
                 return "NULL";
         }

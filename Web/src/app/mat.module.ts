@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatCheckboxModule, MatButtonToggleModule, MatDatepickerModule, MatNativeDateModule, MatProgressBarModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatButtonToggleModule, MatDatepickerModule, MatNativeDateModule, MatProgressBarModule, MatSortModule } from '@angular/material';
 import { MatInputModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -15,6 +15,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from "@angular/material";
 import { MatDividerModule } from "@angular/material/divider";
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatRippleModule} from '@angular/material'
 
 @NgModule({
   imports: [
@@ -30,6 +33,7 @@ import { MatDividerModule } from "@angular/material/divider";
     MatGridListModule,
     MatTabsModule,
     MatTableModule,
+    MatSortModule,
     MatMenuModule,
     MatSelectModule,
     MatAutocompleteModule,
@@ -37,7 +41,9 @@ import { MatDividerModule } from "@angular/material/divider";
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatDividerModule
+    MatDividerModule,
+    MatSidenavModule,
+    MatRippleModule
   ],
   exports: [
     MatButtonModule, 
@@ -52,6 +58,7 @@ import { MatDividerModule } from "@angular/material/divider";
     MatGridListModule,
     MatTabsModule,
     MatTableModule,
+    MatSortModule,
     MatMenuModule,
     MatSelectModule,
     MatAutocompleteModule,
@@ -60,7 +67,10 @@ import { MatDividerModule } from "@angular/material/divider";
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatDividerModule
+    MatDividerModule,
+    MatListModule,
+    MatSidenavModule,
+    MatRippleModule
   ],
   declarations: []
 })
