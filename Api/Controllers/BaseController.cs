@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.SignalR;
 using Api.Hubs;
 using Auctus.Business.Exchange;
 using Auctus.Business.Trade;
+using Auctus.Business.Email;
 
 namespace Api.Controllers
 {
@@ -276,6 +277,7 @@ namespace Api.Controllers
         protected AssetValueBusiness AssetValueBusiness { get { return new AssetValueBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected ExchangeApiAccessBusiness ExchangeApiAccessBusiness { get { return new ExchangeApiAccessBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AssetCurrentValueBusiness AssetCurrentValueBusiness { get { return new AssetCurrentValueBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected EmailBusiness EmailBusiness { get { return new EmailBusiness(Startup.Configuration, ServiceProvider); } }
         protected EarlyAccessEmailBusiness EarlyAccessEmailBusiness { get { return new EarlyAccessEmailBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AgencyBusiness AgencyBusiness { get { return new AgencyBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AgencyRatingBusiness AgencyRatingBusiness { get { return new AgencyRatingBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
