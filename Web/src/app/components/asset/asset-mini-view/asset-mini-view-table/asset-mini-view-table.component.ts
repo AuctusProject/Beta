@@ -40,8 +40,13 @@ export class AssetMiniViewTableComponent implements OnInit {
   setDataSource(){
     this.dataSource.data = this.assets;
     if (this.dataSource.data != null && this.dataSource.data.length > 0) {
-      if(!this.dataSource.paginator) {
+      if (!this.dataSource.paginator) {
         this.dataSource.paginator = this.paginator;
+      } else {
+        if (this.paginator) {
+          this.paginator.firstPage();
+        }
+        this.dataSource.paginator.firstPage();
       }
     }
   }

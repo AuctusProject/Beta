@@ -24,4 +24,4 @@
     </ng-container>
     <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
   </table>
-  <mat-paginator [hidePageSize]="true" [class.hidden]="!(assets && assets.length > 5)" [pageSize]="5" showFirstLastButtons></mat-paginator>
+  <mat-paginator [hidePageSize]="true" [class.hidden]="!(assets && assets.length > 5)" [pageSize]="5" showFirstLastButtons #paginator></mat-paginator>
