@@ -44,7 +44,7 @@
 }
 
 ::ng-deep .mat-drawer-side {
-  border-right: unset !important;
+  border: unset !important;
 }
 
 .top-blue-bar{
@@ -82,8 +82,4 @@ balance-info{
     height: calc(100% - 47px);
     padding-top: 47px;
   }
-}
-
-.mini-view{
-  width: 320px;
 }

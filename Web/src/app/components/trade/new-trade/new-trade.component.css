@@ -1,37 +1,4 @@
-:host ::ng-deep .mat-tab-label-active {
-    background-color: #262626;
-    border-top: 1px solid #4c4c4c;
-    border-left: 1px solid #4c4c4c;
-    border-right: 1px solid #4c4c4c;
-    border-bottom: none !important;
-}
-
-:host ::ng-deep .mat-tab-label {
-    border-bottom: 1px solid #4c4c4c;
-}
-
-:host ::ng-deep .mat-tab-label-container .mat-ink-bar {
-    display: none !important;
-}
-
-:host ::ng-deep .mat-tab-header {
-    border-bottom: none !important;
-}
-
-:host ::ng-deep .mat-tab-label-content {
-    color: #ffffff !important;
-    font-size: 14px !important;
-    letter-spacing: 0.4px !important;
-}
-
-:host ::ng-deep .mat-tab-body-wrapper {
-    background-color: #262626;
-    border-bottom: 1px solid #4c4c4c;
-    border-left: 1px solid #4c4c4c;
-    border-right: 1px solid #4c4c4c;
-}
-
-:host ::ng-deep .mat-tab-label-container .mat-tab-label {
+.border-tabs ::ng-deep .mat-tab-label-container .mat-tab-label {
     min-width: 90px;
 }
 
