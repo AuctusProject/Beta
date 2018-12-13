@@ -1,0 +1,27 @@
+<table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="market">
+      <td mat-cell *matCellDef="let asset" class="text-left">
+        <div fxLayout="row" fxLayoutAlign="start center"  fxLayoutGap="20px">
+          <follow-unfollow (onFollowUnfollow)="onFollowUnfollow($event)" [(following)]="asset.following" [(id)]="asset.assetId" [type]="followUnfollowType" [showOnlyStar]="true"></follow-unfollow>
+          <span class="width100 pointer" (click)="openChart(asset)">{{asset.code}}</span>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="lastPrice">
+      <td mat-cell *matCellDef="let asset" (click)="openChart(asset)" class="pointer text-left">
+        <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair" (onNewValue)="onNewLastValue($event, asset)"></ticker-field>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="change">
+      <td mat-cell *matCellDef="let asset" (click)="openChart(asset)" class="pointer">
+        <ticker-percentage-field class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair" (onNewValue)="onNewVariation24h($event, asset)"> </ticker-percentage-field>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="trade">
+      <td mat-cell *matCellDef="let asset" (click)="goToAsset(asset.assetId)" class="pointer">
+        <fa-icon icon="external-link-alt"></fa-icon>
+      </td>
+    </ng-container>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+  </table>
+  <mat-paginator [hidePageSize]="true" [class.hidden]="!(assets && assets.length > 5)" [pageSize]="5" showFirstLastButtons></mat-paginator>
