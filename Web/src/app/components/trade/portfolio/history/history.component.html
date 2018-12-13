@@ -81,16 +81,13 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="PLValue">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="profitValue"> P/L($) </th>
-          <td mat-cell *matCellDef="let order" >
+      <ng-container matColumnDef="PL">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="profit"> P/L </th>
+        <td mat-cell *matCellDef="let order" >
+          <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
+            <percentage-display [value]="order.profit"></percentage-display>
             <span [class]="order.profitValue >= 0 ? 'green-label':'red-label'">{{order.profitValue | valueDisplay}}</span>
-          </td>
-        </ng-container>
-      <ng-container matColumnDef="PLPercentage">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="profit"> P/L(%) </th>
-        <td mat-cell *matCellDef="let order">
-          <percentage-display [value]="order.profit"></percentage-display>
+          </div>
         </td>
       </ng-container>
 

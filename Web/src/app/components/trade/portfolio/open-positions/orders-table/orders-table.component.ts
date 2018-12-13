@@ -18,8 +18,7 @@ export class OrdersTableComponent implements OnChanges {
     "units",
     "value",
     "open",
-    "PLValue",
-    "PLPercentage",
+    "PL",
     "SL",
     "TP",
     "close"

@@ -26,8 +26,7 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
     "units",    
     "value",
     "avgOpen",
-    "PLValue",
-    "PLPercentage",
+    "PL",
     "close"
   ];
 
