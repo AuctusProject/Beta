@@ -105,6 +105,8 @@ import { DailyPerformanceChartComponent } from './components/trade/portfolio/per
 import { NewTradeWindowComponent } from './components/trade/new-trade/new-trade-window/new-trade-window.component';
 import { PerfomanceOpenPositionsComponent } from './components/trade/portfolio/performance/perfomance-open-positions/perfomance-open-positions.component';
 import { MiniTradingViewChartComponent } from './components/util/mini-trading-view-chart/mini-trading-view-chart.component';
+import { AssetMiniViewComponent } from './components/asset/asset-mini-view/asset-mini-view.component';
+import { AssetMiniViewTableComponent } from './components/asset/asset-mini-view/asset-mini-view-table/asset-mini-view-table.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -199,7 +201,9 @@ export function getAuthServiceConfigs() {
     CountdownComponent,
     DailyPerformanceChartComponent,
     NewTradeWindowComponent,
-    PerfomanceOpenPositionsComponent
+    PerfomanceOpenPositionsComponent,
+    AssetMiniViewComponent,
+    AssetMiniViewTableComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),

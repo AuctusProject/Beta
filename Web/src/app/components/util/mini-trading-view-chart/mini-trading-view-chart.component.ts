@@ -65,6 +65,10 @@ export class MiniTradingViewChartComponent implements AfterViewInit, OnChanges {
     + "\"autosize\":true,"
     + "\"largeChartUrl\":\"" + CONFIG.webUrl + "/trade-markets/" + this.assetId + "\""
     + "}";
-    document.getElementById(this.uniqueIdentifier).appendChild(chartScript);
+    var chartElement = document.getElementById(this.uniqueIdentifier);
+    while (chartElement.firstChild) {
+      chartElement.removeChild(chartElement.firstChild);
+    }
+    chartElement.appendChild(chartScript);
   }
 }
