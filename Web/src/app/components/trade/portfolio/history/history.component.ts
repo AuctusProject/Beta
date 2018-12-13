@@ -24,8 +24,7 @@ export class HistoryComponent implements OnInit {
     "openTime",
     "close",
     "closeTime",
-    "PLValue",
-    "PLPercentage"
+    "PL"
   ];
   
   @ViewChild(MatSort) sort: MatSort;

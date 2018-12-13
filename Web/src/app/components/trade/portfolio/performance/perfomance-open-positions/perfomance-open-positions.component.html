@@ -30,18 +30,14 @@
         </td>
       </ng-container>
   
-      <ng-container matColumnDef="PLValue">
-        <th ngClass.lt-sm="hidden" mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.totalProfit">P/L ($)</th>
-        <td ngClass.lt-sm="hidden" mat-cell *matCellDef="let position">
-          <span [class]=" position.positionResponse.totalProfit >= 0 ? 'green-label' : 'red-label'">
-            {{ position.positionResponse.totalProfit | valueDisplay }}</span>
-        </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="PLPercentage">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.averageReturn">P/L (%)</th>
+      <ng-container matColumnDef="PL">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.averageReturn">P/L</th>
         <td mat-cell *matCellDef="let position">
-          <percentage-display [value]="position.positionResponse.averageReturn"></percentage-display>
+          <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">   
+            <percentage-display [value]="position.positionResponse.averageReturn"></percentage-display>
+            <span [class]=" position.positionResponse.totalProfit >= 0 ? 'green-label' : 'red-label'">
+                {{ position.positionResponse.totalProfit | valueDisplay }}</span>
+          </div>
         </td>
       </ng-container>
   

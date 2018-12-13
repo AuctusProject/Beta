@@ -17,8 +17,7 @@ export class PerfomanceOpenPositionsComponent implements OnInit {
     "units",    
     "value",
     "avgOpen",
-    "PLValue",
-    "PLPercentage"
+    "PL"
   ];
   utilProxy = Util;
   constantsProxy = Constants;
