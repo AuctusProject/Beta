@@ -41,10 +41,10 @@
         Ranked #{{info.ranking}} out of {{info.totalAdvisors}}
     </div>
     <div fxLayout="row" class="return-percentage" fxLayoutGap="3px">
-      <percentage-display [value]="info.totalProfitPercentage"></percentage-display> <span>(all time)</span>
+      <percentage-display [value]="info.totalProfitPercentage"></percentage-display> <span matTooltip="(Current Equity / 100,000USD) - 1">(all time)</span>
     </div>
     <div fxLayout="row" class="return-percentage" fxLayoutGap="3px">
-      <percentage-display [value]="info.profit24hPercentage"></percentage-display> <span>(last trading day)</span>
+      <percentage-display [value]="info.profit24hPercentage"></percentage-display> <span matTooltip="(Current Total Equity) / (Total Equity Last Day) - 1">(last trading day)</span>
     </div>
   </div>
 </ng-template>
