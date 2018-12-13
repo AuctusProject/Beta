@@ -86,9 +86,6 @@ table, th{
     }
 }
 
-
-
-
 .cdk-column-units{
     width: 11%;
 }
@@ -109,11 +106,7 @@ table, th{
     width: 11%;
 }
 
-.cdk-column-PLValue{
-    width: 11%;
-}
-
-.cdk-column-PLPercentage{
+.cdk-column-PL {
     width: 11%;
 }
 
@@ -135,11 +128,7 @@ table, th{
         width: 25% !important;
     }
 
-    .cdk-column-PLValue{
+    .cdk-column-PL{
         width: 25% !important;
-    }
-
-    .cdk-column-PLPercentage{
-        width: 25%;
     }
 }
