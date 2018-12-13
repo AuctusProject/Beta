@@ -116,6 +116,8 @@
     margin: -10px auto;
 }
 
+@media(min-width:960px){
 .positions-tab{
     width: calc(100% - 215px);
+}
 }
