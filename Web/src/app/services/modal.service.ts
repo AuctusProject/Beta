@@ -97,7 +97,7 @@ export class ModalService {
     var data = {
       asset: asset
     };
-    return this.dialog.open(NewTradeWindowComponent, {maxWidth: '350px', width:'calc(100% - 40px)', height: '450px', hasBackdrop: true, disableClose: true, panelClass:"confirm-dialog", data: data});
+    return this.dialog.open(NewTradeWindowComponent, {maxWidth: '270px', width:'calc(100% - 40px)', height: '450px', hasBackdrop: true, disableClose: true, panelClass:"confirm-dialog", data: data});
   }
 
   public setEditStopLossDialog(order: OrderResponse): MatDialogRef<EditTradeValueComponent, any> {

@@ -35,8 +35,10 @@ export class AppComponent implements OnInit, OnDestroy {
   hubStarted: boolean = false;
 
   mobileQuery: MediaQueryList;
+  miniViewQuery: MediaQueryList;
   @ViewChild("snav") sidenav: MatSidenav;
   private _mobileQueryListener: () => void;
+  private _miniViewQueryListener: () => void;
 
   constructor(private router: Router, 
     private navigationService : NavigationService,
@@ -56,6 +58,9 @@ export class AppComponent implements OnInit, OnDestroy {
       this.mobileQuery = media.matchMedia('(max-width: 959px)');
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener); 
+      this.miniViewQuery = media.matchMedia('(min-width: 1366px)');
+      this._miniViewQueryListener = () => changeDetectorRef.detectChanges();
+      this.miniViewQuery.addListener(this._miniViewQueryListener); 
       router.events
       .filter(event => event instanceof NavigationStart)
       .subscribe((event:NavigationStart) => {

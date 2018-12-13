@@ -115,3 +115,7 @@
 .recommendation-distribution-mobile {
     margin: -10px auto;
 }
+
+.positions-tab{
+    width: calc(100% - 215px);
+}
