@@ -1,16 +1,14 @@
 <table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="follow">
-      <td mat-cell *matCellDef="let asset" class="text-left">
-        <follow-unfollow [(following)]="asset.following" [(id)]="asset.assetId" [type]="followUnfollowType" [showOnlyStar]="true"></follow-unfollow>
-      </td>
-    </ng-container>
     <ng-container matColumnDef="market">
-      <td mat-cell *matCellDef="let asset" class="text-left pointer" (click)="openChart(asset)">
-        <span>{{asset.code}}</span>
+      <td mat-cell *matCellDef="let asset" class="text-left">
+        <div fxLayout="row" fxLayoutAlign="start center"  fxLayoutGap="20px">
+          <follow-unfollow [(following)]="asset.following" [(id)]="asset.assetId" [type]="followUnfollowType" [showOnlyStar]="true"></follow-unfollow>
+          <span class="width100 pointer" (click)="openChart(asset)">{{asset.code}}</span>
+        </div>
       </td>
     </ng-container>
     <ng-container matColumnDef="lastPrice">
-      <td mat-cell *matCellDef="let asset" (click)="openChart(asset)" class="pointer">
+      <td mat-cell *matCellDef="let asset" (click)="openChart(asset)" class="pointer text-left">
         <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair" (onNewValue)="onNewLastValue($event, asset)"></ticker-field>
       </td>
     </ng-container>

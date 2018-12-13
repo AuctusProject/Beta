@@ -16,7 +16,6 @@ export class AssetMiniViewTableComponent implements OnInit {
   dataSource = new MatTableDataSource<AssetResponse>(this.assets);
 
   displayedColumns: string[] = [
-    "follow",
     "market",
     "lastPrice",
     "change",
