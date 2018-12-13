@@ -19,7 +19,6 @@
 
 .border-tabs ::ng-deep .mat-tab-label-container .mat-tab-label {
     min-width: unset;
-    height: 30px;
     width: 50%;
 }
 
