@@ -22,7 +22,7 @@ export class ListAssetsComponent implements OnInit {
     private metaTagService: Meta) { }
 
   ngOnInit() {
-    this.titleService.setTitle("Auctus Experts - Markets");
+    this.titleService.setTitle("Auctus Trading - Markets");
     this.metaTagService.updateTag({name: 'description', content: "The most popular Cryptocurrencies. Follow your favorite coins and see what analysts are saying about them"});
     this.assetService.getAssetsDetails().subscribe(result => 
       {
