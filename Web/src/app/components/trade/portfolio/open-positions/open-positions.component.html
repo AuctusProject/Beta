@@ -16,7 +16,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.totalQuantity">UNITS</th>
       <td mat-cell *matCellDef="let position">
         {{ position.positionResponse.totalQuantity | valueDisplay:'' }}<br />
-        <span [class]=" position.positionResponse.type == constantsProxy.OrderType.Buy ? 'green-label' : 'red-label'">
+        <span [class]="position.positionResponse.type == constantsProxy.OrderType.Buy ? 'green-label' : 'red-label'">
           {{position.positionResponse.type == constantsProxy.OrderType.Buy ? "BUYING" : "SELLING"}}</span>
       </td>
     </ng-container>

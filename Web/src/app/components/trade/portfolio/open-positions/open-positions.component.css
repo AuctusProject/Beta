@@ -64,14 +64,11 @@ orders-table{
 .cdk-column-avgOpen {
   width: 10%;
 }
-.cdk-column-PLValue {
-  width: 12%;
-}
-.cdk-column-PLPercentage {
+.cdk-column-PL {
   width: 12%;
 }
 .cdk-column-close {
-  width: 27%;
+  width: 33%;
 }
 
 .cdk-column-expandedDetail{
