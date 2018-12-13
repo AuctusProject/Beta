@@ -1,6 +1,8 @@
-﻿using Api.Model.Account;
+﻿using Api.Hubs;
+using Api.Model.Account;
 using Auctus.Util;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,8 +14,8 @@ namespace Api.Controllers
 {
     public class WebsiteExternalBaseController : BaseController
     {
-        protected WebsiteExternalBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        protected WebsiteExternalBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         protected virtual async Task<IActionResult> IncludeSubscribedEmailFromWebsite(EarlyAccessRequest emailRequest)
         {

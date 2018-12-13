@@ -1,9 +1,11 @@
-﻿using Api.Model.Account;
+﻿using Api.Hubs;
+using Api.Model.Account;
 using Auctus.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -18,8 +20,8 @@ namespace Api.Controllers
     [EnableCors("AllowAll")]
     public class WebsiteExternalV1Controller : WebsiteExternalBaseController
     {
-        public WebsiteExternalV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        public WebsiteExternalV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         [Route("emails")]
         [HttpPost]
