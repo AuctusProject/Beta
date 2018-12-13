@@ -104,6 +104,7 @@ import { PercentageDisplayPipe } from './util/percentage-display.pipe';
 import { DailyPerformanceChartComponent } from './components/trade/portfolio/performance/daily-performance-chart/daily-performance-chart.component';
 import { NewTradeWindowComponent } from './components/trade/new-trade/new-trade-window/new-trade-window.component';
 import { PerfomanceOpenPositionsComponent } from './components/trade/portfolio/performance/perfomance-open-positions/perfomance-open-positions.component';
+import { MiniTradingViewChartComponent } from './components/util/mini-trading-view-chart/mini-trading-view-chart.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -178,6 +179,7 @@ export function getAuthServiceConfigs() {
     PrizeBoxComponent,
     TickerProfitFieldComponent,
     TradingViewChartComponent,
+    MiniTradingViewChartComponent,
     NewTradeComponent,
     SetTradeComponent,
     HallOfFameComponent,
