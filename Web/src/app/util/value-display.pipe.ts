@@ -13,12 +13,17 @@ export class ValueDisplayPipe implements PipeTransform {
     }
     var decimals = 1;
     var currentValue = 0;
-    while(currentValue <= 1 && decimals < 8){
+    while(Math.abs(currentValue) <= 1 &&  decimals < 8){
         decimals++; 
         currentValue = value * Math.pow(10, decimals - 3);
     }
-    return currencyPrefix + value.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+
+    var result = currencyPrefix + value.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    
+    if (currentValue < 0){
+        result = "-" + result.replace("-","");
+    }
+    
+    return result;
   }
-
-
 }

@@ -1,0 +1,43 @@
+:host{
+    width: 124px;
+    border-radius: 6px;
+    background-color: #2e2e2e;
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 12px;
+}
+
+:host.blue{
+    background-color: #4562fc;
+}
+
+.prize-rank{
+    font-size: 12px;
+    font-weight: 100;
+    letter-spacing: 0.3px;
+    color: #e6e6e6;
+    margin-top:3px;
+}
+
+.prize-value{
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #4d99fd;
+}
+
+.prize-currency{
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: #4d99fd;
+}
+
+:host.blue .prize-value,
+:host.blue .prize-currency{
+    color: white;
+}
+
+.box-3 .prize-rank{
+    margin-top: 10px;
+}

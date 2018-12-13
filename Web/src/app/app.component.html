@@ -1,10 +1,19 @@
-<div [class.hide-content]="!isBrowser()">
-    <header *ngIf="!showEmptyPage()"></header>
-    <ng-http-loader *ngIf="!showEmptyPage()" [entryComponent]="topLoading"></ng-http-loader>
-    <simple-notifications [options]="notificationOptions"></simple-notifications>
-    <router-outlet></router-outlet>
-    <button class="share-button" *ngIf="isLogged() && !showEmptyPage()" mat-fab color="primary" (click)="openSocialMediaModal()">
-        <mat-icon aria-label="Share with friends">share</mat-icon>
-    </button>
-    <footer *ngIf="!showEmptyPage()" class="global-container-min"></footer>
+<div *ngIf="!showEmptyPage()" class="app-container" [class.is-mobile]="mobileQuery.matches">
+  <header [advisor]="advisor" (menuClick)="snav.toggle()"></header>
+  <mat-sidenav-container #sidenavContainer [autosize]="true" class="sidenav-container">
+    <mat-sidenav class="menu-sidenav" [opened]="!mobileQuery.matches" #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <left-menu [(advisor)]="advisor"></left-menu>
+    </mat-sidenav>
+    <mat-sidenav-content #sidenavContent>
+      <div class="top-blue-bar"></div>
+      <ng-http-loader [entryComponent]="topLoading"></ng-http-loader>
+      <balance-info fxHide.gt-sm="true" *ngIf="isLogged() && advisor" [advisor]="advisor" ></balance-info>
+      <div fxHide.gt-sm="true" class="top-separator"></div>
+      <router-outlet *ngIf="!showEmptyPage()"></router-outlet>
+    </mat-sidenav-content>
+    <!-- <mat-sidenav class="mini-view" opened mode="side" position="end">Mini View</mat-sidenav> -->
+  </mat-sidenav-container>
 </div>
+<simple-notifications [options]="notificationOptions"></simple-notifications>
+<router-outlet *ngIf="showEmptyPage()"></router-outlet>

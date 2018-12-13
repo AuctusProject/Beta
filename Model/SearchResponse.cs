@@ -14,8 +14,8 @@ namespace Auctus.Model
             public int Id { get; set; }
             public string Code { get; set; }
             public string Name { get; set; }
-            public int Advices { get; set; }
-            public double MarketCap { get; set; }
+            public double? MarketCap { get; set; }
+            public double? CirculatingSupply { get; set; }
         }
 
         public class AdvisorResult
@@ -23,7 +23,6 @@ namespace Auctus.Model
             public int Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
-            public int Advices { get; set; }
             public string UrlGuid { get; set; }
         }
 

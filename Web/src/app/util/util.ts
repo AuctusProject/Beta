@@ -1,4 +1,30 @@
 export class Util {
+    public static SELL: number = 0;
+    public static BUY: number = 1;
+    public static CLOSE: number = 2;
+
+    static AssetModeType = class{
+        public static Neutral = 0;
+        public static ModerateBuy = 1;
+        public static StrongBuy = 2;
+        public static ModerateSell = 3;
+        public static StrongSell = 4;
+        public static Close = 5;
+    }
+
+    static AdviceModeType = class{
+        public static Initiate = 0;
+        public static Reiterate = 1;
+        public static Upgrade = 2;
+        public static Downgrade = 3;
+    }
+
+    static AdvicOperationType = class{
+        public static Manual = 0;
+        public static StopLoss = 1;
+        public static TargetPrice = 2;
+    }
+
     public static DiffDays(date1, date2) : number {
         var oneDay = 24 * 60 * 60 * 1000;
         var diffDays = Math.round(Math.abs((date1.getTime() - date2.getTime()) / (oneDay)));
@@ -66,7 +92,7 @@ export class Util {
             return "#3ed142";
         }
         else{
-            return "#999999";
+            return "#383838";
         }
     }
 
@@ -103,29 +129,38 @@ export class Util {
         }
     }
 
-    public static SELL: number = 0;
-    public static BUY: number = 1;
-    public static CLOSE: number = 2;
-
-    static AssetModeType = class{
-        public static Neutral = 0;
-        public static ModerateBuy = 1;
-        public static StrongBuy = 2;
-        public static ModerateSell = 3;
-        public static StrongSell = 4;
-        public static Close = 5;
+    public static GetOrderTypeText(type: number) {
+        return type == 0 ? "Sell" : "Buy";
     }
 
-    static AdviceModeType = class{
-        public static Initiate = 0;
-        public static Reiterate = 1;
-        public static Upgrade = 2;
-        public static Downgrade = 3;
+    public static CustomSortingData(data: any, sortHeaderId: string){
+        var property = sortHeaderId.split('.').reduce((o, p) => o && o[p], data)
+
+        if (typeof property === 'string') {
+          return property.toLocaleLowerCase();
+        }
+      
+        return property;
     }
 
-    static AdvicOperationType = class{
-        public static Manual = 0;
-        public static StopLoss = 1;
-        public static TargetPrice = 2;
+    public static GetNumberWithOrdinalSuffix(i) {
+        var j = i % 10,
+            k = i % 100;
+        if (j == 1 && k != 11) {
+            return i + "st";
+        }
+        if (j == 2 && k != 12) {
+            return i + "nd";
+        }
+        if (j == 3 && k != 13) {
+            return i + "rd";
+        }
+        return i + "th";
+    }
+
+    public static GetMonthName(monthNumber) {
+        var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December' ];
+        return monthNames[monthNumber - 1];
     }
 }

@@ -1,0 +1,51 @@
+<div class="header-content" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between center">
+    <div class="logo-container">
+        <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo" />
+    </div>
+    <span class="spacer"></span>
+    <a fxHide.lt-md="true" class="header-item" routerLink="/trading-contest" routerLinkActive="active">
+      TRADING CONTEST
+    </a>
+    <div fxHide.lt-md="true" class="separator"></div>
+    <a  fxHide.lt-md="true"class="header-item" href="https://blog.auctus.org" target="_blank">
+      BLOG
+    </a>
+    <div fxHide.lt-md="true" class="separator"></div>
+    <a fxHide.lt-md="true" class="header-item" href="https://auctus.org" target="_blank">
+      ABOUT US
+    </a>
+    <div fxHide.lt-md="true" class="buttons-wrapper" fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="center center">
+      <div class="table-button blue" (click)="signup()">SIGN UP</div>
+      <span class="table-button link" (click)="login()">LOGIN</span>
+    </div>
+    <span class="mobile-menu" fxHide.gt-sm="true" (click)="menuOpen = !menuOpen" [matMenuTriggerFor]="mobile">
+      <mat-icon>{{menuOpen ? 'close' : 'reorder'}}</mat-icon>
+      <mat-menu class="sub-menu" [overlapTrigger]="false" xPosition="before" #mobile="matMenu">
+          <button class="sub-menu-item" (click)="signup()" mat-menu-item>
+            <a class="header-item">
+              SIGN UP
+            </a>
+          </button>
+          <button class="sub-menu-item" (click)="login()" mat-menu-item>
+            <a class="header-item" >
+              LOGIN
+            </a>
+          </button>
+          <a class="header-item" routerLink="/trading-contest" routerLinkActive="active">
+            <button class="sub-menu-item" mat-menu-item>
+              TRADING CONTEST
+            </button>
+          </a>
+          <a class="header-item" href="https://blog.auctus.org" target="_blank">
+            <button class="sub-menu-item" mat-menu-item>
+                BLOG
+            </button>
+          </a>
+          <a class="header-item" href="https://auctus.org" target="_blank">
+            <button class="sub-menu-item" mat-menu-item>
+                ABOUT US
+            </button>
+          </a>
+      </mat-menu>
+    </span>
+</div>

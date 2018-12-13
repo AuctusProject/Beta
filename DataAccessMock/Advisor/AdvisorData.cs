@@ -33,16 +33,6 @@ namespace Auctus.DataAccessMock.Advisor
                     UserId = 1,
                     Address = "0x0000000000000000000000000000000000000000",
                     CreationDate = new DateTime(2018, 5, 3, 0, 0, 0)
-                },
-                RequestToBeAdvisor = new DomainObjects.Advisor.RequestToBeAdvisor()
-                {
-                    Id = 1,
-                    UserId = 1,
-                    Approved = true,
-                    CreationDate = new DateTime(2018, 5, 4, 0, 0, 0),
-                    Description = "Test Advisor description",
-                    Name = "Tester Advisor",
-                    PreviousExperience = ""
                 }
             });
             advisors.Add(new DomainObjects.Advisor.Advisor()
@@ -65,16 +55,6 @@ namespace Auctus.DataAccessMock.Advisor
                     UserId = 2,
                     Address = "0x0000000000000000000000000000000000000001",
                     CreationDate = new DateTime(2018, 5, 4, 0, 0, 0)
-                },
-                RequestToBeAdvisor = new DomainObjects.Advisor.RequestToBeAdvisor()
-                {
-                    Id = 2,
-                    UserId = 2,
-                    Approved = true,
-                    CreationDate = new DateTime(2018, 5, 5, 0, 0, 0),
-                    Description = "Test Advisor 2 description",
-                    Name = "Tester Advisor 2",
-                    PreviousExperience = ""
                 }
             });
             advisors.Add(new DomainObjects.Advisor.Advisor()
@@ -97,16 +77,6 @@ namespace Auctus.DataAccessMock.Advisor
                     UserId = 3,
                     Address = "0x0000000000000000000000000000000000000002",
                     CreationDate = new DateTime(2018, 5, 5, 0, 0, 0)
-                },
-                RequestToBeAdvisor = new DomainObjects.Advisor.RequestToBeAdvisor()
-                {
-                    Id = 3,
-                    UserId = 3,
-                    Approved = true,
-                    CreationDate = new DateTime(2018, 5, 6, 0, 0, 0),
-                    Description = "Test Advisor 3 description",
-                    Name = "Tester Advisor 3",
-                    PreviousExperience = ""
                 }
             });
             return advisors;

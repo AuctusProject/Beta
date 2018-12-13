@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { InheritanceInputOptions, InputType } from '../../../model/inheritanceInputOptions';
 import { FormControl, Validators } from '@angular/forms';
 
@@ -31,10 +31,19 @@ export class InheritanceInputComponent implements OnInit {
   public min: number = 0;
   public max: number = 99999;
   public step: number = 1;
+  public suffixText: string = null;
+  public formClass: string = "inheritance-input-form";
+  public labelClass: string = "";
+  public inputClass: string = "mat-input-element";
+  public suffixClass: string = "inheritance-input-suffix";
 
   public formControl: FormControl; 
   public passwordHide: boolean = false;
   public forcedError: string;
+
+  public enableCopy: boolean = false;
+  copied: boolean = false;
+  @ViewChild("Input") Input: ElementRef;
 
   constructor() { }
 
@@ -43,7 +52,7 @@ export class InheritanceInputComponent implements OnInit {
       this.inputType = this.setValue(this.inputType, this.options.inputType);
       this.darkLayout = this.setValue(this.darkLayout, this.options.darkLayout);
 
-      if (this.options.inputType == InputType.Password) {
+      if (this.inputType == InputType.Password) {
         this.autocomplete = "current-password";
         this.passwordHide = true;
       }
@@ -61,6 +70,7 @@ export class InheritanceInputComponent implements OnInit {
         this.maxlength = this.setValue(this.maxlength, this.options.textOptions.maxLength);
         this.minlength = this.setValue(this.minlength, this.options.textOptions.minLength);
         this.autocomplete = this.setValue(this.autocomplete, this.options.textOptions.browserAutocomplete);
+        this.enableCopy = this.setValue(this.enableCopy, this.options.textOptions.enableCopy);
       }
       if (!!this.options.textAreaOptions) {
         this.autosizeTextArea = this.setValue(this.autosizeTextArea, this.options.textAreaOptions.autosize);
@@ -72,6 +82,12 @@ export class InheritanceInputComponent implements OnInit {
         this.max = this.setValue(this.max, this.options.numberOptions.max);
         this.step = this.setValue(this.step, this.options.numberOptions.step);
       }
+      
+      this.suffixText = this.setValue(this.suffixText, this.options.suffixText);
+      this.formClass = this.setValueClass(this.formClass, this.options.formClass);
+      this.labelClass = this.setValueClass(this.labelClass, this.options.labelClass);
+      this.inputClass = this.setValueClass(this.inputClass, this.options.inputClass);
+      this.suffixClass = this.setValueClass(this.suffixClass, this.options.suffixClass);
     }
 
     let validators = [];
@@ -86,6 +102,12 @@ export class InheritanceInputComponent implements OnInit {
       }
     }
     this.formControl = new FormControl('', validators);
+  }
+
+  public onInputClick(){
+    if(this.enableCopy) {
+      this.Input.nativeElement.select();
+    }
   }
 
   public getInputType() : string {
@@ -120,6 +142,26 @@ export class InheritanceInputComponent implements OnInit {
     this.formControl.markAsTouched();
   }
 
+  public clear() {
+    this.value = null;
+    this.formControl.setErrors(null);
+    this.formControl.reset();
+  }
+
+  public forceValue(value: any) {
+    this.value = value;
+    this.formControl.markAsTouched();
+  }
+
+  public forceSuffixText(value: string) {
+    this.suffixText = value;
+  }
+
+  public forceHint(hint: string) {
+    this.specificHint = hint;
+    this.formControl.markAsTouched();
+  }
+
   public showTextAreaField() : boolean {
     return this.inputType == InputType.TextArea;
   }
@@ -128,9 +170,20 @@ export class InheritanceInputComponent implements OnInit {
     return this.inputType == InputType.Text || this.inputType == InputType.Email || this.inputType == InputType.Password || this.inputType == InputType.Search || this.inputType == InputType.Number;
   }
 
-  public setValue(defaultValue: any, optionValue?: any) : any {
+  private setValue(defaultValue: any, optionValue?: any) : any {
     if (optionValue === undefined || optionValue === null) return defaultValue;
     else return optionValue;
+  }
+
+  private setValueClass(defaultValue: any, optionValue?: any) : any {
+    let className = defaultValue;
+    if (this.disabled) className += " inheritance-input-disabled";
+    else {
+      if (this.darkLayout) className += " layout-theme-dark";
+      else className += " layout-theme-light"; 
+    }
+    if (optionValue === undefined || optionValue === null) return className;
+    else return optionValue + " " + className;
   }
 
   public onChangeInput() : void {
@@ -170,5 +223,12 @@ export class InheritanceInputComponent implements OnInit {
     if (!!this.specificHint) hint += this.specificHint;
     if (this.showHintSize) hint += (this.getLength() + ' / ' + this.maxlength);
     return hint;
+  }
+
+  copyClick() {
+    this.copied = true;
+    this.Input.nativeElement.select();
+    document.execCommand('copy');
+    this.Input.nativeElement.setSelectionRange(0, 0);
   }
 }

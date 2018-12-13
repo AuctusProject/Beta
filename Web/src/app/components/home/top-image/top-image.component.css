@@ -1,0 +1,125 @@
+:host {
+  text-align: center;
+  display: block;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-align-items: center;
+  align-items: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+img {
+  max-width: 1186px;
+  width: 100%;
+  pointer-events: none;
+  outline: none;
+  min-height: 230px;
+}
+  
+.top-platform-image img {
+  width: 100%;
+  opacity: 0.5;
+}
+
+.top-platform-text {
+  color: #e6e6e6;
+  letter-spacing: 0.5px;
+  font-size: 26px;
+  font-weight: 100;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+  display: flex;
+  place-content: center;
+  align-items: center;
+  position: absolute;
+  top: 12.5%;
+}
+
+.highlight-text {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 1.2px;
+}
+
+.top-platform-text span{
+  width: 472px;
+}
+
+@media (max-width: 1072px) {
+  .top-platform-text {
+    font-size: 18px;
+    top: 10%;
+  }
+
+  .highlight-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .top-platform-text span{
+    width: 320px;
+  }
+
+  .top-platform-text {
+    font-size: 14px;
+    top: 10%;
+  }
+
+  .highlight-text {
+    font-size: 12px;
+  }
+}
+
+.request-invite-box {
+  background-color: #f0f0f0;
+  height: 54%;
+  top: 46%;
+  width: 100%;
+  max-width: 1186px !important;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  font-size: 16px;
+  font-weight: 500;
+  color: #404040;
+}
+
+@media (min-width: 1280px) {
+  .request-invite-box > span:first-of-type {
+    font-size: 20px;
+  }
+}
+
+.link {
+  cursor: pointer;
+  color: #4562fc;
+}
+
+.auctus-blue-bar {
+  max-width: 1186px;
+  width: 100%;
+  height: 4px;
+  top: 100%;
+  position: absolute;
+  background-image: linear-gradient(to left, #56d0fe, #4562fc);
+}
+  
+.table-button{
+  height: 28px;
+  line-height: 28px;
+  font-size: 12px;
+  width: 215px;
+  letter-spacing: 2.4px;
+}
+

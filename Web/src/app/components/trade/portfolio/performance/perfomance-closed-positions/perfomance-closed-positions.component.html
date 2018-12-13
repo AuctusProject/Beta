@@ -1,0 +1,57 @@
+<table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="market">
+      <th mat-header-cell *matHeaderCellDef class="text-left chart-title" mat-sort-header="assetName">CLOSED POSITIONS</th>
+      <td mat-cell *matCellDef="let asset" class="text-left">
+        <asset-summary [assetId]="asset.assetId" [assetCode]="asset.assetCode" [assetName]="asset.assetName" [transferToDetailsPage]="true"></asset-summary>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="trades">
+        <th mat-header-cell *matHeaderCellDef class="text-left" mat-sort-header="positionResponse.orderCount">TRADES ({{totalTrades}})</th>
+        <td mat-cell *matCellDef="let asset">
+          <div fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <div>{{getOrderPercentage(asset.positionResponse.orderCount) | percentageDisplay: 1}}</div>
+            <div>({{asset.positionResponse.orderCount}} Trades)</div>
+          </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="return">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.averageReturn">AVG. RETURN</th>
+        <td mat-cell *matCellDef="let asset"><percentage-display [value]="asset.positionResponse.averageReturn"></percentage-display></td>
+    </ng-container>
+    <ng-container matColumnDef="tradetime">
+      <th ngClass.lt-md="hidden" mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.averageTradeMinutes">AVG. TRADE TIME</th>
+      <td ngClass.lt-md="hidden" mat-cell *matCellDef="let asset"><span *ngIf="asset.positionResponse.averageTradeMinutes">{{getAvgTradeMinutes(asset) | amTimeAgo:'true'}}</span></td>
+    </ng-container>
+    <ng-container matColumnDef="success">
+        <th ngClass.lt-md="hidden" mat-header-cell *matHeaderCellDef class="text-left" mat-sort-header="positionResponse.successRate">SUCCESS</th>
+        <td ngClass.lt-md="hidden" mat-cell *matCellDef="let asset">
+        <div fxLayout="column" fxLayoutAlign="start start">
+          <div>SUCCESS</div>
+          <div>{{asset.positionResponse.successCount}} out of {{asset.positionResponse.orderCount}} trades were profitable</div>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="chart">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let asset">
+        <div class="success-chart">
+          <svg viewBox="0 0 36 36" class="circular-chart green">
+              <path class="circle" d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831" [attr.stroke-dasharray]="asset.positionResponse.successRate * 100 +', 100'"></path>
+              <text x="18" y="22" class="percentage">{{asset.positionResponse.successRate | percentageDisplay: 0}}</text>
+            </svg>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="footerRow">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+        There is no trade completed yet.
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+    <tr [class.hidden]="dataSource && dataSource.data && dataSource.data.length > 0" mat-footer-row *matFooterRowDef="['footerRow']" class="footer-row"></tr>
+</table>

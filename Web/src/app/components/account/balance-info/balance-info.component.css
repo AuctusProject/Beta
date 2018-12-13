@@ -1,0 +1,44 @@
+.balance-item{
+    width: 120px;
+}
+
+.label{
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.value{
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-align: center;
+    color: #f2f2f2;
+}
+
+.separator{
+    width: 1px;
+    height: 44px;
+    text-align: center;
+    background-color: #4d4d4d;
+}
+
+
+@media(max-width:959px){
+    .label{
+        font-size: 10px;
+        font-weight: 100;
+        letter-spacing: 0.3px;
+        color: #8c8c8c;
+    }
+
+    .value{
+        font-size: 12px;
+    }
+
+    .separator{
+        height: 28px;
+    }
+}

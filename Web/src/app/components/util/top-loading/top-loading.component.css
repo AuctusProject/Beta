@@ -1,17 +1,16 @@
-#top-loading
-{
-    position: fixed;
+#top-loading{
     left: 0;
     width: 100%;
-    top: 0px;
+    top: 0;
+    height: 3px;
 }
 
 ::ng-deep .mat-progress-bar-fill::after {
-    background-color: #126efd;
+    background-color: #4878fc;
 }
 
 ::ng-deep .mat-progress-bar-buffer {
-    background: #07d1ff;
+    background: #51b1fd;
 }
 
 ::ng-deep .mat-progress-bar {

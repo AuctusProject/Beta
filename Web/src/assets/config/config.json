@@ -6,5 +6,6 @@
     "agencyImgUrl": "https://auctusplatform.azureedge.net/agencieslogo/{id}.png",
     "assetImgUrl": "https://auctusplatform.azureedge.net/assetsicons/{id}.png",
     "profileImgUrl": "https://auctusplatform.azureedge.net/userpicture/{id}.png",
-    "platformImgUrl": "https://auctusplatform.azureedge.net/platform/{id}.png"
+    "platformImgUrl": "https://auctusplatform.azureedge.net/platform/{id}.png",
+    "virtualMoney": 100000
 }

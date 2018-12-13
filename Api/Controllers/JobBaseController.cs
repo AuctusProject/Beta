@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Hubs;
+using Auctus.DomainObjects.Trade;
+using Auctus.Model;
 using Auctus.Util;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +18,25 @@ namespace Api.Controllers
 {
     public class JobBaseController : BaseController
     {
-        protected readonly IHubContext<AuctusHub> HubContext;
-        protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) : 
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory)  {
-            HubContext = hubContext;
+        protected JobBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
+
+        protected virtual IActionResult UpdateAdvisorsRankingAndProfit()
+        {
+            RunAsync(() => AdvisorRankingBusiness.SetAdvisorRankingAndProfit());
+            return Ok();
+        }
+
+        protected virtual IActionResult SetAdvisorsRankingAndProfitHistory()
+        {
+            RunAsync(() => AdvisorRankingHistoryBusiness.SetAdvisorRankingAndProfitHistory());
+            return Ok();
+        }
+
+        protected virtual IActionResult SetAdvisorsMonthlyRanking()
+        {
+            RunAsync(() => AdvisorMonthlyRankingBusiness.SetAdvisorsMonthlyRanking());
+            return Ok();
         }
 
         protected virtual IActionResult UpdateAssetsEvents()
@@ -32,7 +49,7 @@ namespace Api.Controllers
         {
             RunAsync(() => {
                 var news = NewsBusiness.UpdateLastNews();
-                HubContext.Clients.All.SendAsync("addLastNews", news);
+                HubContext.Clients.All.SendAsync("addLastNews", news).Wait();
             });
             return Ok();
         }
@@ -41,10 +58,29 @@ namespace Api.Controllers
         {
             RunAsync(() =>
             {
+                Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result;
                 if (api == "coingecko")
-                    AssetValueBusiness.UpdateCoingeckoAssetsValues();
+                    result = AssetValueBusiness.UpdateCoingeckoAssetsValues();
                 else
-                    AssetValueBusiness.UpdateBinanceAssetsValues();
+                    result = AssetValueBusiness.UpdateBinanceAssetsValues();
+
+                if (result != null && result.Any())
+                {
+                    foreach (var ordersType in result)
+                    {
+                        var advisor = AdvisorRankingBusiness.GetAdvisorFullData(ordersType.Key);
+                        if (advisor != null)
+                        {
+                            foreach (var orders in ordersType.Value)
+                            {
+                                var methodName = orders.Key == OrderActionType.StopLoss ? "onReachStopLoss" :
+                                    orders.Key == OrderActionType.TakeProfit ? "onReachTakeProfit" : "onReachOrderLimit";
+
+                                HubContext.Clients.User(advisor.Email).SendAsync(methodName, orders.Value);
+                            }
+                        }
+                    }
+                }
             });
             return Ok();
         }

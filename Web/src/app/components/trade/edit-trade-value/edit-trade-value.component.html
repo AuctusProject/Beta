@@ -1,0 +1,16 @@
+<div class="text-right">
+    <button *ngIf="!executing" class="modal-close" [mat-dialog-close]="false" mat-dialog-close>&times;</button>
+</div>
+<div fxLayout="column" fxLayoutAlign="start center" class="modal-container">
+    <mat-dialog-content class="modal-content">
+        <h2>{{getTitle()}}</h2>
+        <div class="input-wraper">
+            <inheritance-input #Field [options]="valueOptions" class="width100"
+            [value]="value" (onChange)="onEditValue($event)" darkLayout=true></inheritance-input>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="btn-actions" fxLayoutGap="20px">
+        <button class="table-button link" [mat-dialog-close]="false" mat-dialog-close [disabled]="executing">{{getCancelText()}}</button>
+        <button [promiseBtn]="promise" class="table-button blue" (click)="onConfirm()">{{getConfirmText()}}</button>
+    </mat-dialog-actions>
+</div>

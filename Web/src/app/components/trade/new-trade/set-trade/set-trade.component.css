@@ -1,0 +1,36 @@
+:host ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 11px;
+}
+
+.trade-btn {
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    letter-spacing: 1.8px;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 10px;
+    color: white;
+}
+
+.trade-btn.buy {
+    background-color: #3ed142;
+}
+
+.trade-btn.sell {
+    background-color: #b13a3a;
+}
+
+.trade-btn.disabled{
+    opacity:0.2;
+    cursor: default;
+}
+
+.set-trade-container {
+    padding: 10px;
+    width: 260px;
+}
+
+.gap-margin {
+    margin-right: 10px;
+}

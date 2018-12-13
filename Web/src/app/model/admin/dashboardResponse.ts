@@ -4,7 +4,6 @@ export class DashboardResponse {
     totalUsersStartedRegistrationFromReferral: number;
     totalUsersConfirmedFromReferral: number;
     totalAdvisors: number;
-    totalRequestToBeAdvisor: number;
     totalActiveUsers: number;
     totalActiveAdvisors: number;
     totalWalletsWithAuc: number;
@@ -13,26 +12,20 @@ export class DashboardResponse {
     aucRatioPerUserInProgress: number;
     aucHolded: number;
     aucHoldedInProgress: number;
-    totalAssetsAdviced: number;
-    totalRecentAdvices: number;
     totalUsersFollowing: number;
     totalAdvisorsFollowed: number;
-    totalAdvices: number;
     totalFollowing: number;
     referralStatus: DistributionData[];
     advices: DistributionData[];
     following: DistributionData[];
     advisorReferral: AdvisorData[];
-    advisorAdvices: AdvisorData[];
     advisorFollowers: AdvisorData[];
     usersStartedRegistration: RegistrationData[];
     usersConfirmed: RegistrationData[];
     advisors: RegistrationData[];
-    requestToBeAdvisor: RegistrationData[];
     usersStartedRegistrationLastSitutation: FlagData;
     usersConfirmedLastSitutation: FlagData;
     advisorsLastSitutation: FlagData;
-    requestToBeAdvisorLastSitutation: FlagData;
 }
 
 export class DistributionData {

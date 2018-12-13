@@ -1,0 +1,11 @@
+<div>
+    <button fxHide.gt-sm="true" mat-icon-button (click)="onMenuClick()"><mat-icon>menu</mat-icon></button>
+    <div [@fadeAnimation] *ngIf="!searchEnabled" class="logo-container">
+        <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo" />
+    </div>
+    <balance-info fxHide.lt-md="true" *ngIf="isLogged() && advisor" [advisor]="advisor" ></balance-info>
+    <span class="spacer"></span>
+    <global-search #GlobalSearch [@enterAnimation] *ngIf="!mobileQuery.matches || searchEnabled" class="search"></global-search>
+    <button *ngIf="!searchEnabled" fxHide.gt-sm="true" mat-icon-button (click)="onSearchClick()"><mat-icon>search</mat-icon></button>
+    <button *ngIf="searchEnabled" fxHide.gt-sm="true" mat-icon-button (click)="onSearchClick()"><mat-icon>close</mat-icon></button>
+</div>

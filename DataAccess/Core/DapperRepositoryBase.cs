@@ -17,6 +17,9 @@ namespace Auctus.DataAccess.Core
         private readonly string _connectionString;
         protected const int _defaultTimeout = 30;
         protected readonly IConfigurationRoot Configuration;
+        protected SqlConnection CurrentConnection { get; private set; }
+        protected IDbTransaction CurrentTransaction { get; private set; }
+        protected bool TransactionOn { get; private set; }
 
         public abstract string TableName { get; }
 
@@ -29,101 +32,186 @@ namespace Auctus.DataAccess.Core
         #endregion
 
         #region Connection
-        protected SqlConnection GetOpenConnection()
+        protected SqlConnection CreateConnection()
         {
             var connection = new SqlConnection(_connectionString);
             connection.Open();
             return connection;
         }
+
+        protected void SetDapperTransaction(SqlConnection connection, IDbTransaction transaction)
+        {
+            CurrentConnection = connection;
+            CurrentTransaction = transaction;
+            TransactionOn = true;
+        }
+
+        protected void ClearDapperTransaction()
+        {
+            TransactionOn = false;
+            CurrentConnection = null;
+            CurrentTransaction = null;
+        }
         #endregion
 
         #region Query
-        protected IEnumerable<T> Query<T>(string sql, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        protected IEnumerable<T> Query<T>(string sql, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
+                return SqlMapper.Query<T>(CurrentConnection, sql, param, CurrentTransaction, true, commandTimeout, CommandType.Text);
+            else
             {
-                return SqlMapper.Query<T>(connection, sql, param, transaction, true, commandTimeout, CommandType.Text);
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query<T>(connection, sql, param, null, true, commandTimeout, CommandType.Text);
+                }
             }
         }
 
-        protected IEnumerable<IDictionary<string, object>> Query(string sql, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        protected IEnumerable<IDictionary<string, object>> Query(string sql, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
+                return SqlMapper.Query(CurrentConnection, sql, param, CurrentTransaction, true, commandTimeout, CommandType.Text);
+            else
             {
-                return SqlMapper.Query(connection, sql, param, transaction, true, commandTimeout, CommandType.Text);
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query(connection, sql, param, null, true, commandTimeout, CommandType.Text);
+                }
             }
         }
 
         protected IEnumerable<TParent> QueryParentChild<TParent, TChild, TParentKey>(string sql, Func<TParent, TParentKey> parentKeySelector,
-            Func<TParent, IList<TChild>> childSelector, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+            Func<TParent, IList<TChild>> childSelector, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
             Dictionary<TParentKey, TParent> cache = new Dictionary<TParentKey, TParent>();
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
             {
-                connection.Query<TParent, TChild, TParent>(sql,
+                CurrentConnection.Query<TParent, TChild, TParent>(sql,
                 (parent, child) =>
                 {
-                    if (!cache.ContainsKey(parentKeySelector(parent)))
-                        cache.Add(parentKeySelector(parent), parent);
-
-                    TParent cachedParent = cache[parentKeySelector(parent)];
-                    if (child != null)
-                    {
-                        IList<TChild> children = childSelector(cachedParent);
-                        children.Add(child);
-                    }
-                    return cachedParent;
+                    return HandleQueryParentChild<TParent, TChild, TParentKey>(ref cache, parentKeySelector, childSelector, parent, child);
                 },
-                param as object, transaction, true, splitOn, commandTimeout, CommandType.Text);
+                param as object, CurrentTransaction, true, splitOn, commandTimeout, CommandType.Text);
+            }
+            else
+            {
+                using (var connection = CreateConnection())
+                {
+                    connection.Query<TParent, TChild, TParent>(sql,
+                    (parent, child) =>
+                    {
+                        return HandleQueryParentChild<TParent, TChild, TParentKey>(ref cache, parentKeySelector, childSelector, parent, child);
+                    },
+                    param as object, null, true, splitOn, commandTimeout, CommandType.Text);
+                }
             }
             return cache.Values;
         }
 
-        protected SqlMapper.GridReader QueryMultiple(string sql, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        private TParent HandleQueryParentChild<TParent, TChild, TParentKey>(ref Dictionary<TParentKey, TParent> cache, Func<TParent, TParentKey> parentKeySelector,
+            Func<TParent, IList<TChild>> childSelector, TParent parent, TChild child)
         {
-            using (var connection = GetOpenConnection())
+            if (!cache.ContainsKey(parentKeySelector(parent)))
+                cache.Add(parentKeySelector(parent), parent);
+
+            TParent cachedParent = cache[parentKeySelector(parent)];
+            if (child != null)
             {
-                return SqlMapper.QueryMultiple(connection, sql, param, transaction, commandTimeout, CommandType.Text);
+                IList<TChild> children = childSelector(cachedParent);
+                children.Add(child);
+            }
+            return cachedParent;
+        }
+
+        protected SqlMapper.GridReader QueryMultiple(string sql, dynamic param = null, int commandTimeout = _defaultTimeout)
+        {
+            if (TransactionOn)
+                return SqlMapper.QueryMultiple(CurrentConnection, sql, param, CurrentTransaction, commandTimeout, CommandType.Text);
+            else
+            {
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.QueryMultiple(connection, sql, param, null, commandTimeout, CommandType.Text);
+                }
             }
         }
 
-        protected IEnumerable<TReturn> Query<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        protected IEnumerable<TReturn> Query<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
+                return SqlMapper.Query<TFirst, TSecond, TReturn>(CurrentConnection, sql, map, param, CurrentTransaction, true, splitOn, commandTimeout, CommandType.Text);
+            else
             {
-                return SqlMapper.Query<TFirst, TSecond, TReturn>(connection, sql, map, param, transaction, true, splitOn, commandTimeout, CommandType.Text);
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query<TFirst, TSecond, TReturn>(connection, sql, map, param, null, true, splitOn, commandTimeout, CommandType.Text);
+                }
             }
         }
 
-        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
+                return SqlMapper.Query<TFirst, TSecond, TThird, TReturn>(CurrentConnection, sql, map, param, CurrentTransaction, true, splitOn, commandTimeout, CommandType.Text);
+            else
             {
-                return SqlMapper.Query<TFirst, TSecond, TThird, TReturn>(connection, sql, map, param, transaction, true, splitOn, commandTimeout, CommandType.Text);
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query<TFirst, TSecond, TThird, TReturn>(connection, sql, map, param, null, true, splitOn, commandTimeout, CommandType.Text);
+                }
             }
         }
 
-        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TReturn>(string sql, Func<TFirst, TSecond, TThird, TFourth, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TReturn>(string sql, Func<TFirst, TSecond, TThird, TFourth, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
+                return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TReturn>(CurrentConnection, sql, map, param, CurrentTransaction, true, splitOn, commandTimeout, CommandType.Text);
+            else
             {
-                return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TReturn>(connection, sql, map, param, transaction, true, splitOn, commandTimeout, CommandType.Text);
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TReturn>(connection, sql, map, param, null, true, splitOn, commandTimeout, CommandType.Text);
+                }
             }
         }
 
-        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TFifth, TReturn>(string sql, Func<TFirst, TSecond, TThird, TFourth, TFifth, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TFifth, TReturn>(string sql, Func<TFirst, TSecond, TThird, TFourth, TFifth, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
+                return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TReturn>(CurrentConnection, sql, map, param, CurrentTransaction, true, splitOn, commandTimeout, CommandType.Text);
+            else
             {
-                return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TReturn>(connection, sql, map, param, transaction, true, splitOn, commandTimeout, CommandType.Text);
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TReturn>(connection, sql, map, param, null, true, splitOn, commandTimeout, CommandType.Text);
+                }
             }
         }
 
-        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn>(string sql, Func<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
+        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn>(string sql, Func<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            using (var connection = GetOpenConnection())
+            if (TransactionOn)
+                return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn>(CurrentConnection, sql, map, param, CurrentTransaction, true, splitOn, commandTimeout, CommandType.Text);
+            else
             {
-                return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn>(connection, sql, map, param, transaction, true, splitOn, commandTimeout, CommandType.Text);
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TReturn>(connection, sql, map, param, null, true, splitOn, commandTimeout, CommandType.Text);
+                }
+            }
+        }
+
+        protected IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn>(string sql, Func<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn> map, string splitOn, dynamic param = null, int commandTimeout = _defaultTimeout)
+        {
+            if (TransactionOn)
+                return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn>(CurrentConnection, sql, map, param, CurrentTransaction, true, splitOn, commandTimeout, CommandType.Text);
+            else
+            {
+                using (var connection = CreateConnection())
+                {
+                    return SqlMapper.Query<TFirst, TSecond, TThird, TFourth, TFifth, TSixth, TSeventh, TReturn>(connection, sql, map, param, null, true, splitOn, commandTimeout, CommandType.Text);
+                }
             }
         }
         #endregion
@@ -131,7 +219,7 @@ namespace Auctus.DataAccess.Core
         #region Execute
         protected virtual int Execute(string sql, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
         {
-            using (var connection = GetOpenConnection())
+            using (var connection = CreateConnection())
             {
                 return SqlMapper.Execute(connection, sql, param, transaction, commandTimeout, CommandType.Text);
             }
@@ -139,7 +227,7 @@ namespace Auctus.DataAccess.Core
 
         protected virtual int ExecuteReturningIdentity(string sql, dynamic param = null, int commandTimeout = _defaultTimeout, IDbTransaction transaction = null)
         {
-            using (var connection = GetOpenConnection())
+            using (var connection = CreateConnection())
             {
                 return SqlMapper.ExecuteScalar<int>(connection, ParseIdentityCommandQuery(sql), param, transaction, commandTimeout, CommandType.Text);
             }

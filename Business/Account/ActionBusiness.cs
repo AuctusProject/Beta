@@ -89,21 +89,16 @@ namespace Auctus.Business.Account
         public DashboardResponse GetDashboardData()
         {
             var cutDayForActivity = Data.GetDateTimeNow().AddDays(-7);
-            var assets = AssetBusiness.ListAssets();
-            var advisors = AdvisorBusiness.GetAdvisors();
+            var advisors = AdvisorBusiness.ListAllAdvisors();
             var users = Task.Factory.StartNew(() => UserBusiness.ListAllUsersData());
-            var requestsToBeAdvisor = Task.Factory.StartNew(() => RequestToBeAdvisorBusiness.ListAll());
-            var advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
             var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
             var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
             var activities = Task.Factory.StartNew(() => Data.FilterActivity(cutDayForActivity, ActionType.NewAucVerification, ActionType.NewLogin));
-            Task.WaitAll(users, requestsToBeAdvisor, advices, advisorFollowers, assetFollowers, activities);
+            Task.WaitAll(users, advisorFollowers, assetFollowers, activities);
 
             var adminsId = users.Result.Where(c => Admins?.Any(a => a == c.Email) == true).Select(c => c.Id).ToHashSet();
             var consideredUsers = users.Result.Where(c => !adminsId.Contains(c.Id) && (!c.ReferredId.HasValue || !adminsId.Contains(c.ReferredId.Value))).ToList();
             var consideredAdvisors = advisors.Where(c => !adminsId.Contains(c.Id) && (!c.ReferredId.HasValue || !adminsId.Contains(c.ReferredId.Value))).ToList();
-            var consideredRequestsToBeAdvisor = requestsToBeAdvisor.Result.Where(c => consideredAdvisors.Any(a => a.Id == c.UserId)).ToList();
-            var consideredAdvices = advices.Result.Where(c => consideredAdvisors.Any(a => a.Id == c.AdvisorId)).ToList();
             var consideredAdvisorFollowers = advisorFollowers.Result.Where(c => consideredUsers.Any(u => u.Id == c.UserId)).ToList();
             var consideredAssetFollowers = assetFollowers.Result.Where(c => consideredUsers.Any(u => u.Id == c.UserId)).ToList();
             var consideredActivities = activities.Result.Where(c => consideredUsers.Any(u => u.Id == c.UserId)).ToList();
@@ -113,15 +108,10 @@ namespace Auctus.Business.Account
             result.TotalUsersConfirmedFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && c.Wallets.Any());
             result.TotalUsersStartedRegistration = consideredUsers.Count(c => !consideredAdvisors.Any(a => a.Id == c.Id) && !c.Wallets.Any());
             result.TotalUsersStartedRegistrationFromReferral = consideredUsers.Count(c => c.ReferredId.HasValue && !consideredAdvisors.Any(a => a.Id == c.Id) && !c.Wallets.Any());
-            result.TotalAdvisors = consideredAdvisors.Count();
-            result.TotalRequestToBeAdvisor = consideredRequestsToBeAdvisor.Any() ? consideredRequestsToBeAdvisor.Select(c => c.UserId).Distinct().Count() : 0;
+            result.TotalAdvisors = consideredAdvisors.Count;
             result.TotalActiveUsers = consideredActivities.Any() ? consideredActivities.Select(c => c.UserId).Distinct().Count(c => !consideredAdvisors.Any(a => a.Id == c) && consideredUsers.Any(u => u.Id == c && u.Wallets.Any())) : 0;
-            result.TotalActiveAdvisors = consideredAdvices.Any() ? consideredAdvices.Where(c => c.CreationDate >= cutDayForActivity).Count() > 0 ? consideredAdvices.Where(c => c.CreationDate >= cutDayForActivity).Select(c => c.AdvisorId).Distinct().Count() : 0 : 0;
             result.TotalWalletsInProgress = consideredUsers.Count(c => c.ReferralStatusType == ReferralStatusType.InProgress);
-            result.TotalAdvices = consideredAdvices.Count();
-            result.TotalAssetsAdviced = consideredAdvices .Any() ? consideredAdvices.Select(c => c.AssetId).Distinct().Count() : 0;
-            result.TotalRecentAdvices = consideredAdvices.Count(c => c.CreationDate >= cutDayForActivity);
-            result.TotalFollowing = consideredAdvisorFollowers.Count() + consideredAssetFollowers.Count();
+            result.TotalFollowing = consideredAdvisorFollowers.Count + consideredAssetFollowers.Count;
             result.TotalAdvisorsFollowed = consideredAdvisorFollowers.Any() ? consideredAdvisorFollowers.Select(c => c.AdvisorId).Distinct().Count() : 0;
             result.TotalUsersFollowing = consideredAdvisorFollowers.Any() || consideredAssetFollowers.Any() ? 
                 consideredAdvisorFollowers.Select(c => c.UserId).Concat(consideredAssetFollowers.Select(c => c.UserId)).Distinct().Count() : 0;
@@ -150,34 +140,25 @@ namespace Auctus.Business.Account
                 consideredUsers.Where(c => !consideredAdvisors.Any(a => a.Id == c.Id) && !c.Wallets.Any()).GroupBy(c => c.CreationDate.ToString("yyyy-MM-dd"))
                 .Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date);
 
-            var requestToBeAdvisorData = !consideredRequestsToBeAdvisor.Any() ? null : consideredRequestsToBeAdvisor.GroupBy(c => c.UserId).Select(g => new { Id = g.Key, Date = g.Min(c => c.CreationDate) })
-                .GroupBy(c => c.Date.ToString("yyyy-MM-dd")).Select(g => new DashboardResponse.RegistrationData() { Date = DateTime.Parse(g.Key), Value = g.Count() }).OrderBy(c => c.Date);
-
-            var minDate = GetMinDate(usersConfirmedData, advisorsData, usersStartedRegistrationData, requestToBeAdvisorData);
+            var minDate = GetMinDate(usersConfirmedData, advisorsData, usersStartedRegistrationData);
 
             result.UsersConfirmed = GetRegistrationData(usersConfirmedData, minDate);
             result.Advisors = GetRegistrationData(advisorsData, minDate);
             result.UsersStartedRegistration = GetRegistrationData(usersStartedRegistrationData, minDate);
-            result.RequestToBeAdvisor = GetRegistrationData(requestToBeAdvisorData, minDate);
             result.UsersConfirmedLastSitutation = GetFlagData(result.UsersConfirmed);
             result.AdvisorsLastSitutation = GetFlagData(result.Advisors);
             result.UsersStartedRegistrationLastSitutation = GetFlagData(result.UsersStartedRegistration);
-            result.RequestToBeAdvisorLastSitutation = GetFlagData(result.RequestToBeAdvisor);
 
             result.UsersConfirmed.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.UsersConfirmed.LastOrDefault()?.Value ?? 0 });
             result.Advisors.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.Advisors.LastOrDefault()?.Value ?? 0 });
             result.UsersStartedRegistration.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.UsersStartedRegistration.LastOrDefault()?.Value ?? 0 });
-            result.RequestToBeAdvisor.Add(new DashboardResponse.RegistrationData() { Date = Data.GetDateTimeNow().Date.AddDays(1), Value = result.RequestToBeAdvisor.LastOrDefault()?.Value ?? 0 });
-
+            
             result.Following.Add(new DashboardResponse.DistributionData() { Name = "Asset", Amount = consideredAssetFollowers.Count() });
             result.Following.Add(new DashboardResponse.DistributionData() { Name = "Expert", Amount = consideredAdvisorFollowers.Count() });
 
             var usersWithReferral = consideredUsers.Where(c => c.ReferralStatus.HasValue);
             result.ReferralStatus = !usersWithReferral.Any() ? new List<DashboardResponse.DistributionData>() : usersWithReferral.GroupBy(c => c.ReferralStatus.Value)
                 .Select(g => new DashboardResponse.DistributionData() { Name = ReferralStatusType.Get(g.Key).GetDescription(), Amount = g.Count() }).ToList();
-
-            result.Advices = !consideredAdvices.Any() ? new List<DashboardResponse.DistributionData>() : consideredAdvices.GroupBy(c => c.AssetId)
-                .Select(g => new DashboardResponse.DistributionData() { Name = assets.First(a => a.Id == g.Key).Code, Amount = g.Count() }).ToList();
 
             var groupedFollowers = !consideredAdvisorFollowers.Any() ? null : consideredAdvisorFollowers.GroupBy(c => c.AdvisorId).Select(g => new { Id = g.Key, Value = g.Count() }).OrderByDescending(c => c.Value);
             if (groupedFollowers?.Any() == true)
@@ -191,21 +172,6 @@ namespace Auctus.Business.Account
                     UrlGuid = consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString(),
                     Total = c.Value,
                     SubValue1 = consideredFollowers.Count(a => a.CreationDate >= cutDayForActivity && a.AdvisorId == c.Id)
-                }).ToList();
-            }
-
-            var groupedAdvices = !consideredAdvices.Any() ? null : consideredAdvices.GroupBy(c => c.AdvisorId).Select(g => new { Id = g.Key, Value = g.Count() }).OrderByDescending(c => c.Value);
-            if (groupedAdvices?.Any() == true)
-            {
-                groupedAdvices = groupedAdvices.Take(groupedAdvices.Count() > 10 ? 10 : groupedAdvices.Count()).OrderByDescending(c => c.Value);
-                var advisorAdvices = consideredAdvices.Where(c => groupedAdvices.Any(a => a.Id == c.AdvisorId));
-                result.AdvisorAdvices = groupedAdvices.Select(c => new DashboardResponse.AdvisorData()
-                {
-                    Id = c.Id,
-                    Name = consideredAdvisors.First(a => a.Id == c.Id).Name,
-                    UrlGuid = consideredAdvisors.First(a => a.Id == c.Id).UrlGuid.ToString(),
-                    Total = c.Value,
-                    SubValue1 = advisorAdvices.Count(a => a.CreationDate >= cutDayForActivity && a.AdvisorId == c.Id)
                 }).ToList();
             }
 

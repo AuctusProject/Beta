@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Auctus.Business.Advisor
@@ -24,6 +25,11 @@ namespace Auctus.Business.Advisor
         public FollowAdvisor GetLastByUser(int userId, int advisorId)
         {
             return Data.GetLastByUserForAdvisor(userId, advisorId);
+        }
+
+        public List<int> ListAdvisorsFollowed(int userId)
+        {
+            return Data.ListAdvisorsFollowed(userId).Select(c => c.AdvisorId).ToList();
         }
 
         public FollowAdvisor Create(int userId, int advisorId, FollowActionType actionType)

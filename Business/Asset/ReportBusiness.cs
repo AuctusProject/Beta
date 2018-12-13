@@ -1,6 +1,7 @@
 ﻿using Auctus.DataAccessInterfaces.Asset;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Trade;
 using Auctus.Model;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
@@ -38,42 +39,40 @@ namespace Auctus.Business.Asset
         public List<RecommendationDistributionResponse> GetReportRecommendationDistribution(List<Report> reports)
         {
             var distribution = new Dictionary<int, int>();
-            distribution[AdviceType.Buy.Value] = 0;
-            distribution[AdviceType.Sell.Value] = 0;
-            distribution[AdviceType.ClosePosition.Value] = 0;
+            distribution[OrderType.Buy.Value] = 0;
+            distribution[OrderType.Sell.Value] = 0;
+            distribution[2] = 0;
             foreach (var report in reports)
             {
                 if (report.AgencyRating != null)
                 {
                     if (report.AgencyRating.HexaColor == "#3ED142")
-                        distribution[AdviceType.Buy.Value]++;
+                        distribution[OrderType.Buy.Value]++;
                     else if (report.AgencyRating.HexaColor == "#D13E3E")
-                        distribution[AdviceType.Sell.Value]++;
+                        distribution[OrderType.Sell.Value]++;
                     else
-                        distribution[AdviceType.ClosePosition.Value]++;
+                        distribution[2]++;
                 }
                 else
                 {
                     if (report.Score >= 3.5)
-                        distribution[AdviceType.Buy.Value]++;
+                        distribution[OrderType.Buy.Value]++;
                     else if (report.Score >= 2.5)
-                        distribution[AdviceType.ClosePosition.Value]++;
+                        distribution[2]++;
                     else
-                        distribution[AdviceType.Sell.Value]++;
+                        distribution[OrderType.Sell.Value]++;
                 }
             }
             return distribution.Where(c => c.Value > 0).Select(c => new RecommendationDistributionResponse() { Type = c.Key, Total = c.Value }).ToList();
         }
 
-        public IEnumerable<FeedResponse> ListReports(int? top, int? lastReportId, int? assetId)
+        public IEnumerable<ReportResponse> ListReports(int? top, int? lastReportId, int? assetId)
         {
             IEnumerable<int> assetsId = null;
             if (assetId.HasValue)
                 assetsId = new int[] { assetId.Value };
 
-            var reports = Task.Factory.StartNew(() => List(assetsId, top, lastReportId));
-            var user = GetLoggedUser();
-            return UserBusiness.FillFeedList(null, reports, null, user, top, null, lastReportId, null);
+            return List(assetsId, top, lastReportId).Select(c => ConvertToReportResponse(c));
         }
 
         public ReportResponse ConvertToReportResponse(Report report)

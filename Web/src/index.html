@@ -20,24 +20,53 @@
     setTimeout(ldinsp, 0);
     })();
   </script>
+  <script>
+    ! function (a, b, c, d, t) {
+        var e, f = a.getElementsByTagName("head")[0];
+        if (!a.getElementById(c)) {
+            if (e = a.createElement(b), e.id = c, e.setAttribute("data-vrlps-ucid", d), e.setAttribute("data-vrlps-version", "2"), e.setAttribute("data-vrlps-template", t), e.src = "https://app.viral-loops.com/popup_assets/js/vl_load_v2.min.js", window.ub) {
+                jQuery = null, $ = null;
+                var g = a.createElement(b);
+                g.src = "https://code.jquery.com/jquery-2.2.4.min.js", f.appendChild(g)
+            }
+            f.appendChild(e);
+            var h = a.createElement("link");
+            h.rel = "stylesheet", h.type = "text/css", h.href = "https://app.viral-loops.com/static/vl-loader.css", f.appendChild(h);
+            var i = a.createElement("div");
+            i.id = "vl-overlay", i.style.display = "none";
+            var j = a.createElement("div");
+            j.id = "vl-loader", i.appendChild(j), a.addEventListener("DOMContentLoaded", function (b) {
+                a.body.appendChild(i);
+                for (var c = a.getElementsByClassName("vrlps-trigger"), d = 0; d < c.length; d++) c[d].removeAttribute("href"), c[d].onclick = function () {
+                    a.getElementById("vl-overlay").style.display = "block"
+                };
+                var e = a.querySelectorAll("[data-vl-widget='popupTrigger']");
+                [].forEach.call(e, function (b) {
+                    var c = a.createElement("div");
+                    c.className = "vl-embedded-cta-loader", b.appendChild(c)
+                })
+            })
+        }
+    }(document, "script", "vrlps-js", "FccycfJRYzV8nNOhnEVvGGDCgg0", "waitlist");
+  </script>
   <!-- End Inspectlet Asynchronous Code -->
   <meta charset="utf-8">
-  <title>Auctus Experts</title>
+  <title>Auctus Trading</title>
   <base href="/">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <meta property="og:site_name" content="Auctus Experts">
-  <meta property="og:title" content="Auctus Experts">
-  <meta property="og:description" content="Signals from experts and cryptocurrencies that you are following">
-  <meta property="og:image" content="https://dl.auctus.org/img/Img_Verify.png">
+  <meta property="og:site_name" content="Auctus Trading Simulator">
+  <meta property="og:title" content="Auctus Trading Simulator">
+  <meta name="description" content="Play our cryptocurrency trading simulator to learn, compete for real prizes, and share trading ideas. It’s free!">
+  <meta name="keywords" content="cryptocurrency trading simulator, paper trade,crypto trading simulator,bitcoin trading simulator, best cryptocurrency trading simulator, crypto paper trading">
+  <meta name="author" content="Auctus.org">
   <meta property="og:type" content="website">
+  <meta property="og:description" content="Play virtual crypto trading to learn, compete, and share trading ideas. It’s free!">
+  <meta property="og:image" content="https://auctus.azureedge.net/platform/Img_Laptop2.png">
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script src="https://widget-convert.bancor.network/v1"></script>
-  <script type="text/javascript" src="https://static.cryptowat.ch/assets/scripts/embed.bundle.js"></script>
-  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 </head>
 <body>
   <app-root></app-root>

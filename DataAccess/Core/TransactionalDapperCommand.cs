@@ -5,20 +5,29 @@ using System.Text;
 using System.Data;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Auctus.DataAccessInterfaces;
+using System.Linq;
 
 namespace Auctus.DataAccess.Core
 {
-    public class TransactionalDapperCommand : DapperRepositoryBase, IDisposable
+    public class TransactionalDapperCommand : DapperRepositoryBase, ITransactionalDapperCommand
     {
         public override string TableName => throw new NotImplementedException();
 
         private SqlConnection Connection { get; }
-        private SqlTransaction Transaction { get; }
+        private IDbTransaction DbTransaction { get; }
+        private List<ITransactionData> TransactionData { get; set; } = new List<ITransactionData>();
 
         public TransactionalDapperCommand(IConfigurationRoot configuration, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) : base(configuration)
         {
-            Connection = GetOpenConnection();
-            Transaction = Connection.BeginTransaction(isolationLevel);
+            Connection = CreateConnection();
+            DbTransaction = Connection.BeginTransaction(isolationLevel);
+        }
+
+        public void SetTransactionOnData(ITransactionData transactionData)
+        {
+            TransactionData.Add(transactionData);
+            transactionData.SetTransaction(Connection, DbTransaction);
         }
 
         public new void Delete<T>(T obj, string tableName = null)
@@ -43,38 +52,45 @@ namespace Auctus.DataAccess.Core
 
         public void Dispose()
         {
-            Transaction.Dispose();
+            DbTransaction.Dispose();
             Connection.Dispose();
             Connection.Close();
+            if (TransactionData != null && TransactionData.Any())
+            {
+                foreach(var transactionData in TransactionData)
+                    transactionData.ClearTransaction();
+
+                TransactionData = new List<ITransactionData>();
+            }
         }
 
         public void Commit()
         {
             try
             {
-                Transaction.Commit();
+                DbTransaction.Commit();
             }
             catch
             {
-                Transaction.Rollback();
+                DbTransaction.Rollback();
                 throw;
             }
         }
 
         public int Execute(string sql, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
-            return this.Execute(sql, param, commandTimeout, Transaction);
+            return this.Execute(sql, param, commandTimeout, DbTransaction);
         }
 
         public int ExecuteScalar<T>(string sql, dynamic param = null, int commandTimeout = _defaultTimeout)
         {
             try
             {
-                return SqlMapper.ExecuteScalar<T>(Connection, sql, param, Transaction, commandTimeout, CommandType.Text);
+                return SqlMapper.ExecuteScalar<T>(Connection, sql, param, DbTransaction, commandTimeout, CommandType.Text);
             }
             catch
             {
-                Transaction.Rollback();
+                DbTransaction.Rollback();
                 throw;
             }
         }
@@ -83,11 +99,11 @@ namespace Auctus.DataAccess.Core
         {
             try
             {
-                return SqlMapper.Execute(Connection, sql, param, Transaction, commandTimeout, CommandType.Text);
+                return SqlMapper.Execute(Connection, sql, param, DbTransaction, commandTimeout, CommandType.Text);
             }
             catch
             {
-                Transaction.Rollback();
+                DbTransaction.Rollback();
                 throw;
             }
         }
@@ -96,11 +112,11 @@ namespace Auctus.DataAccess.Core
         {
             try
             {
-                return SqlMapper.ExecuteScalar<int>(Connection, ParseIdentityCommandQuery(sql), param, Transaction, commandTimeout, CommandType.Text);
+                return SqlMapper.ExecuteScalar<int>(Connection, ParseIdentityCommandQuery(sql), param, DbTransaction, commandTimeout, CommandType.Text);
             }
             catch
             {
-                Transaction.Rollback();
+                DbTransaction.Rollback();
                 throw;
             }
         }

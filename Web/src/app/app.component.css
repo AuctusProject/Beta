@@ -1,8 +1,11 @@
-/deep/ #spinner{
+
+
+::ng-deep #spinner{
     height: unset !important;
     opacity: unset !important;
     background-color: unset !important;
     display: unset !important;
+    position: absolute !important;
   }
 
   .mat-fab {
@@ -23,3 +26,60 @@
   .hide-content{
     display: none;
   }
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.sidenav-container {
+  flex: 1;
+  background-color: unset;
+  color: white;
+}
+
+::ng-deep .mat-drawer-side {
+  border-right: unset !important;
+}
+
+.top-blue-bar{
+  width: 100%;
+  height: 3px;
+  background-image: linear-gradient(to left, #56d0fe, #4562fc);
+  position: absolute;
+  top: 0px;
+}
+
+balance-info{
+  position: absolute;
+  top: 3px;
+  width: 100%;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  background-color: #1f1f1f;
+}
+
+.mat-drawer-content{
+  padding-top: 3px;
+}
+
+.top-separator{
+  position: absolute;
+  top: 44px;
+  width: 100%;
+  height:1px;
+  box-shadow: 0px 1px 4px 0 rgba(255, 255, 255, 0.15), inset 0px 2px 3px 0 #000000;
+  background-color: #808080;
+}
+
+@media(max-width:959px){
+  .mat-drawer-content{
+    height: calc(100% - 47px);
+    padding-top: 47px;
+  }
+}

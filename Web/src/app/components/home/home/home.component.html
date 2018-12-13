@@ -1,4 +1,82 @@
-<top-image [subtitle]="getTopText1()" [subtitle2]="getTopText2()" [urlImage]="getTopImage()"></top-image>
-<recommendation-box-list></recommendation-box-list>
-<top-experts [resultsLimit]=4 [hideFilters]=true></top-experts>
-<trending-assets class="global-container-min inverted"></trending-assets>
+<home-header></home-header>
+<top-image></top-image>
+<section class="advantages">
+    <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="space-around start" fxLayoutAlign.lt-md="center center" fxLayoutGap="40px" >
+        <div class="advantage-itens" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
+            <div class="img-wrapper"><img [src]="getImageUrl('Icon_1')"/></div>
+            <div class="advantages-title">LEARN BY PRACTICE</div>
+            <div class="blue-separator"></div>
+            <div class="advantage-item">Keep track and learn from your past trades analytics</div>
+            <div class="advantage-item">Learn the methods used by top traders</div>
+            <div class="advantage-item">Try out strategies before putting real money on the line</div>
+        </div>
+        <div class="advantage-itens" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
+            <div class="img-wrapper"><img [src]="getImageUrl('Icon_2')"/></div>
+            <div class="advantages-title">SHARE TRADING IDEAS</div>
+            <div class="blue-separator"></div>
+            <div class="advantage-item">Share your trading strategies</div>
+            <div class="advantage-item">Follow the leading traders in our community</div>
+            <div class="advantage-item">Compare your trading performance</div>
+        </div>
+        <div class="advantage-itens" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px">
+            <div class="img-wrapper"><img [src]="getImageUrl('Icon_3')"/></div>
+            <div class="advantages-title">COMPETE AND EARN REAL PRIZES</div>
+            <div class="blue-separator"></div>
+            <div class="advantage-item">Compete in our monthly contests</div>
+            <div class="advantage-item">Be part of our Trader’s Hall Of Fame</div>
+            <div class="advantage-item">Earn real cryptocurrency to start live trading for free</div>
+        </div>
+    </div>
+</section>
+<section class="traders">
+    <div class="black-panel"></div>
+    <div class="traders-content" fxLayout="row" fxLayoutAlign="center center">
+        <div fxHide.lt-md="true" fxLayout="column" fxFlex.gt-sm="50">
+            <img class="laptop-img" [src]="getImageUrl('Img_Laptop2')">
+            <div class="table-button blue" (click)="signup()">JOIN NOW</div>
+        </div>
+        <div fxLayout="column" fxFlex.gt-sm="50" fxFlex.md="480px" fxFlex.sm="320px" fxFlex.xs="280px">
+            <div class="traders-title">Ideal for traders of every stage</div>
+            <div class="traders-descriptions" fxLayout="column" fxLayoutGap="16px">
+                <div class="traders-description">A paper trading account is a must-have tool for every serious trader who wants to survive and thrive in the cryptocurrency trading market. Auctus Trading helps you to sharpen your trading skills</div>
+                <div class="traders-description">Features that will help you become a more profitable trader</div>
+            </div>    
+            <ul>
+                <li>Professional trading journal</li>
+                <li>Charts powered by TradingView</li>
+                <li>Real time Cryptocurrency Trading Simulator</li>
+                <li>Market Sentiment tools</li>
+            </ul>
+            <div fxHide.gt-sm="true" class="table-button blue" (click)="signup()">JOIN NOW</div>
+        </div>
+    </div>
+</section>
+<section class="contest">
+    <div class="contest-details">
+        <div fxHide.lt-md="true" class="contest-title">Monthly Trading Contest</div>
+        <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutAlign.gt-sm="start end" fxLayoutAlign.lt-md="center center" fxLayoutGap="60px">
+            <div fxHide.gt-sm="true" class="contest-title">Monthly Trading Contest</div>
+            <div class="countdown-column" fxLayout="column">
+                <div class="countdown-black-title">The Trader with the Highest ROI Wins!</div>
+                <div class="countdown-blue-title">Winners share a total of 5,000 AUC in prizes!</div>
+                <countdown theme="dark"></countdown>
+            </div>
+            <div class="prizes-container" fxLayout="row" fxLayoutGap.gt-xs="30px" fxLayoutGap.lt-sm="10px" fxLayoutAlign="center center">
+                <prize-box class="blue" rank="1"></prize-box>
+                <prize-box class="blue" rank="2"></prize-box>
+                <prize-box class="blue" rank="3"></prize-box>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="footer">
+    <div class="footer-content" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>All rights reserved. Copyrights © 2018</div>
+        <a href="https://acutus.org" target="_blank">AUCTUS.ORG</a>
+        <div class="terms-privacy" fxLayoutGap="6px">
+            <a href="https://dl.auctus.org/Privacy_Policy.pdf" target="_blank">Privacy</a>
+            <span>|</span>
+            <a href="https://dl.auctus.org/Terms_of_Use.pdf" target="_blank">Terms</a>
+        </div>
+    </div>
+</section>

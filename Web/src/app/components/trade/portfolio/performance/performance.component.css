@@ -1,0 +1,25 @@
+.performance-tab-container {
+    background-color: #262626;
+}
+
+@media(max-width:599px){
+    .daily-performance-chart {
+        width: calc(100% - 5px) !important;
+    }
+}
+.daily-performance-chart {
+    display: block;
+    height: 260px;
+    width: calc(100% - 260px);
+}
+
+perfomance-closed-positions, 
+perfomance-open-postions {
+    height: calc(100% - 260px);
+}
+
+:host ::ng-deep .chart-title{
+    font-size: 15px;
+    font-weight: 500;
+}
+

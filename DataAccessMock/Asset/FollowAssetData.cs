@@ -4,6 +4,7 @@ using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Asset;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Auctus.DataAccessMock.Asset
@@ -43,6 +44,16 @@ namespace Auctus.DataAccessMock.Asset
                 ActionType = FollowActionType.Follow.Value,
                 CreationDate = DateTime.UtcNow
             };
+        }
+
+        public List<FollowAsset> ListAssetsFollowed(int userId)
+        {
+            return FollowAssetList.Where(c => c.UserId == userId).ToList();
+        }
+
+        public int CountAssetFollowers(int assetId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

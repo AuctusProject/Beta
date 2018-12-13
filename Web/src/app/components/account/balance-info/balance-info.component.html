@@ -1,0 +1,28 @@
+<div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign.gt-sm="center" fxLayoutAlign.lt-md="space-evenly center">
+  <div class="balance-item" fxLayout="column" fxLayoutGap.gt-sm="9px" fxLayoutGap.lt-md="6px">
+    <div class="label">
+      Equity
+    </div>
+    <div class="value">
+      <highlight-field prefix="$" [value]="advisor.equity"></highlight-field>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <div class="balance-item" fxLayout="column" fxLayoutGap.gt-sm="9px" fxLayoutGap.lt-md="6px">
+    <div class="label">
+      Balance
+    </div>
+    <div class="value">
+      <highlight-field prefix="$" [value]="advisor.totalBalance"></highlight-field>
+    </div>
+  </div>
+  <div class="separator"></div>
+  <div class="balance-item" fxLayout="column" fxLayoutGap.gt-sm="9px" fxLayoutGap.lt-md="6px">
+    <div class="label">
+      Available
+    </div>
+    <div class="value">
+      <highlight-field prefix="$" [value]="advisor.totalAvailable"></highlight-field>
+    </div>
+  </div>
+</div>

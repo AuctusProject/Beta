@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Auctus.Business.Asset
@@ -19,6 +20,16 @@ namespace Auctus.Business.Asset
         public List<FollowAsset> ListFollowers(IEnumerable<int> assetIds = null)
         {
             return Data.ListFollowers(assetIds);
+        }
+
+        public List<int> ListAssetsFollowed(int userId)
+        {
+            return Data.ListAssetsFollowed(userId).Select(c => c.AssetId).ToList();
+        }
+
+        public int GetTotalFollowers(int assetId)
+        {
+            return Data.CountAssetFollowers(assetId);
         }
 
         public FollowAsset Create(int userId, int AssetId, FollowActionType actionType)

@@ -6,6 +6,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,16 @@ namespace Auctus.DataAccess.Core
         }
 
         void IBaseData<T>.Update(T obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTransaction(IDbConnection connection, IDbTransaction transaction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearTransaction()
         {
             throw new NotImplementedException();
         }

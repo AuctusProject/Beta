@@ -2,11 +2,14 @@
 using Auctus.DataAccess.Advisor;
 using Auctus.DataAccess.Asset;
 using Auctus.DataAccess.Blockchain;
+using Auctus.DataAccess.Core;
 using Auctus.DataAccess.Email;
 using Auctus.DataAccess.Event;
 using Auctus.DataAccess.Exchange;
 using Auctus.DataAccess.News;
 using Auctus.DataAccess.Storage;
+using Auctus.DataAccess.Trade;
+using Auctus.DataAccessInterfaces;
 using Auctus.DataAccessInterfaces.Account;
 using Auctus.DataAccessInterfaces.Advisor;
 using Auctus.DataAccessInterfaces.Asset;
@@ -16,11 +19,13 @@ using Auctus.DataAccessInterfaces.Event;
 using Auctus.DataAccessInterfaces.Exchange;
 using Auctus.DataAccessInterfaces.News;
 using Auctus.DataAccessInterfaces.Storage;
+using Auctus.DataAccessInterfaces.Trade;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
 using Auctus.DomainObjects.Event;
 using Auctus.DomainObjects.Exchange;
+using Auctus.DomainObjects.Trade;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,14 +45,13 @@ namespace Auctus.Business
             services.AddSingleton<IGoogleApi, GoogleApi>(c => new GoogleApi(configuration));
             services.AddSingleton<IFacebookApi, FacebookApi>(c => new FacebookApi(configuration));
             services.AddSingleton<ICoinMarketCalApi, CoinMarketCalApi>(c => new CoinMarketCalApi(configuration, services.BuildServiceProvider().GetRequiredService<Cache>()));
+            services.AddTransient<ITransactionalDapperCommand>(c => new TransactionalDapperCommand(configuration));
             services.AddScoped<IActionData<DomainObjects.Account.Action>, ActionData>(c => new ActionData(configuration));
             services.AddScoped<IExchangeApiAccessData<ExchangeApiAccess>, ExchangeApiAccessData>(c => new ExchangeApiAccessData(configuration));
             services.AddScoped<IPasswordRecoveryData<PasswordRecovery>, PasswordRecoveryData>(c => new PasswordRecoveryData(configuration));
             services.AddScoped<IUserData<User>, UserData>(c => new UserData(configuration));
             services.AddScoped<IWalletData<Wallet>, WalletData>(c => new WalletData(configuration));
-            services.AddScoped<IAdviceData<Advice>, AdviceData>(c => new AdviceData(configuration));
             services.AddScoped<IAdvisorData<DomainObjects.Advisor.Advisor>, AdvisorData>(c => new AdvisorData(configuration));
-            services.AddScoped<IRequestToBeAdvisorData<RequestToBeAdvisor>, RequestToBeAdvisorData>(c => new RequestToBeAdvisorData(configuration));
             services.AddScoped<IAssetData<DomainObjects.Asset.Asset>, AssetData>(c => new AssetData(configuration));
             services.AddScoped<IAssetValueData<AssetValue>, AssetValueData>(c => new AssetValueData(configuration));
             services.AddScoped<IFollowAdvisorData<FollowAdvisor>, FollowAdvisorData>(c => new FollowAdvisorData(configuration));
@@ -67,6 +71,12 @@ namespace Auctus.Business
             services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
             services.AddScoped<IExchangeData<DomainObjects.Exchange.Exchange>, ExchangeData>(c => new ExchangeData(configuration));
             services.AddScoped<IPairData<Pair>, PairData>(c => new PairData(configuration));
+            services.AddScoped<IOrderData<Order>, OrderData>(c => new OrderData(configuration));
+            services.AddScoped<IAdvisorRankingData<AdvisorRanking>, AdvisorRankingData>(c => new AdvisorRankingData(configuration));
+            services.AddScoped<IAdvisorProfitData<AdvisorProfit>, AdvisorProfitData>(c => new AdvisorProfitData(configuration));
+            services.AddScoped<IAdvisorRankingHistoryData<AdvisorRankingHistory>, AdvisorRankingHistoryData>(c => new AdvisorRankingHistoryData(configuration));
+            services.AddScoped<IAdvisorProfitHistoryData<AdvisorProfitHistory>, AdvisorProfitHistoryData>(c => new AdvisorProfitHistoryData(configuration));
+            services.AddScoped<IAdvisorMonthlyRankingData<AdvisorMonthlyRanking>, AdvisorMonthlyRankingData>(c => new AdvisorMonthlyRankingData(configuration));
         }
     }
 }

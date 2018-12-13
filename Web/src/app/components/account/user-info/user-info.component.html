@@ -1,0 +1,50 @@
+<div *ngIf="!isLogged()" class="login-box" fxLayout="column">
+  <div class="join-now-title">Join now, it's FREE</div>
+  <div class="join-now-subtitle">Try new strategies, review past trades, share insights and compete for prizes!</div>
+  <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+    <div class="table-button blue" (click)="signUp()">
+      REGISTER
+    </div>  
+    <span class="table-button link" (click)="login()">
+      LOGIN
+    </span>
+  </div>
+</div>
+<div *ngIf="isLogged() && !advisor" class="blur">
+  <ng-container 
+    [ngTemplateOutlet]="content" 
+    [ngTemplateOutletContext]="{info: {ranking:0, name: 'Loading user', rating: 5,totalAdvisors: 0,totalProfitPercentage: 0, profit24hPercentage:0}}">
+  </ng-container>
+  </div>
+<div *ngIf="isLogged() && advisor">
+  <ng-container 
+    [ngTemplateOutlet]="content" 
+    [ngTemplateOutletContext]="{info: {urlGuid:advisor.urlGuid, ranking:advisor.ranking, name: advisor.name, rating: advisor.rating,totalAdvisors: advisor.totalAdvisors,totalProfitPercentage: advisor.totalProfitPercentage, profit24hPercentage: getProfit24hPercentage()}}">
+  </ng-container>
+</div>
+
+<ng-template #content let-info='info' >
+  <div fxLayout="row">
+    <expert-picture [urlGuid]="info.urlGuid" [ranking]="info.ranking"></expert-picture>
+    <div fxLayout="column" fxLayoutAlign="center start">
+      <div class="user-name truncate" title="{{info.name}}">
+        {{info.name}}
+      </div>
+      <a class="edit-profile" (click)="editAdvisor()">Edit profile</a>
+      <div class="expert-rating">
+        <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="info.rating" [title]="info.rating | number: '1.2-2'"></bar-rating>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="column" class="ranking-and-return">
+    <div class="ranking-description">
+        Ranked #{{info.ranking}} out of {{info.totalAdvisors}}
+    </div>
+    <div fxLayout="row" class="return-percentage" fxLayoutGap="3px">
+      <percentage-display [value]="info.totalProfitPercentage"></percentage-display> <span>(all time)</span>
+    </div>
+    <div fxLayout="row" class="return-percentage" fxLayoutGap="3px">
+      <percentage-display [value]="info.profit24hPercentage"></percentage-display> <span>(last trading day)</span>
+    </div>
+  </div>
+</ng-template>

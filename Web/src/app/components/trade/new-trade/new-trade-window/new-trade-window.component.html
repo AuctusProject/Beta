@@ -1,0 +1,9 @@
+<div class="text-right">
+    <button class="modal-close" [mat-dialog-close]="false" mat-dialog-close>&times;</button>
+</div>
+<div fxLayout="column" fxLayoutAlign="start center" class="modal-container">
+    <mat-dialog-content class="modal-content">
+        <h2>{{getTitle()}}</h2>
+        <new-trade class="width100" [asset]="asset" (orderCreated)="onOrderCreated()"></new-trade> 
+    </mat-dialog-content>
+</div>

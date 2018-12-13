@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, EventEmitter, Input, Output } from '@angular/core';
 import { AdvisorService } from '../../../services/advisor.service';
-import { ActivatedRoute } from '@angular/router';
 import { AdvisorRequest } from '../../../model/advisor/advisorRequest';
 import { Subscription } from 'rxjs';
 import { AccountService } from '../../../services/account.service';
@@ -13,6 +12,7 @@ import { ModalComponent } from '../../../model/modal/modalComponent';
 import { InheritanceInputComponent } from '../../util/inheritance-input/inheritance-input.component';
 import { InputType } from '../../../model/inheritanceInputOptions';
 import { MessageFullscreenModalComponent } from '../../util/message-fullscreen-modal/message-fullscreen-modal.component';
+import { ChangePasswordComponent } from '../../account/change-password/change-password.component';
 
 @Component({
   selector: 'advisor-edit',
@@ -31,8 +31,8 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
   @ViewChild("Name") Name: InheritanceInputComponent;
   @ViewChild("Description") Description: InheritanceInputComponent;
 
-  constructor(private route: ActivatedRoute, private advisorService: AdvisorService, 
-    private accountService: AccountService, private navigationService: NavigationService) { }
+  constructor(private advisorService: AdvisorService, private accountService: AccountService, 
+    private navigationService: NavigationService) { }
 
   ngOnInit() {
     if (!this.accountService.getLoginData().isAdvisor) {
@@ -51,7 +51,7 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
       }
     } else {
       this.setClose.emit();
-      this.navigationService.goToFeed();
+      this.navigationService.goToPortfolio();
     }
   }
 
@@ -72,6 +72,12 @@ export class AdvisorEditComponent implements ModalComponent, OnInit {
           this.setNewModal.emit(modalData);
         });
     }
+  }
+
+  onChangePasswordClick() {
+    let modalData = new FullscreenModalComponentInput();
+    modalData.component = ChangePasswordComponent;
+    this.setNewModal.emit(modalData);
   }
 
   updateLocalStorageAdvisorInfo(advisorName, profileUrlGuid){

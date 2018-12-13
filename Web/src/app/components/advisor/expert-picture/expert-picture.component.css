@@ -1,0 +1,41 @@
+.expert-picture{
+    position: relative;    
+    background-color: white;
+}
+
+.expert-picture,
+.expert-picture img{
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
+}
+
+.expert-picture.sm,
+.expert-picture.sm img{
+    width: 38px;
+    height: 38px;
+}
+
+
+.ranking{
+    border-radius: 2px;
+    background-color: #4771fc;
+    text-align: center;
+    color: #FFFFFF;
+    bottom: 2px;
+    position: absolute;
+    font-weight: 200;
+    font-size: 12px;
+    left: 42px;
+    padding: 2px;    
+    min-width: 18px;
+}
+
+.expert-picture.sm .ranking{
+    font-size: 10px;
+    left: 32px;
+}
+
+.expert-picture.sm{
+    margin-right: 16px;
+}

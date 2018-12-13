@@ -15,12 +15,32 @@ namespace Auctus.Util
 
         public static bool operator ==(IntType obj1, IntType obj2)
         {
-            return !object.ReferenceEquals(obj1, null) && !object.ReferenceEquals(obj2, null) && obj1.Value == obj2.Value;
+            return (object.ReferenceEquals(obj1, null) && object.ReferenceEquals(obj2, null)) || (!object.ReferenceEquals(obj1, null) && !object.ReferenceEquals(obj2, null) && obj1.Value == obj2.Value);
         }
         
         public static bool operator !=(IntType obj1, IntType obj2)
         {
             return !(obj1 == obj2);
+        }
+
+        public static bool operator >(IntType obj1, IntType obj2)
+        {
+            return !object.ReferenceEquals(obj1, null) && !object.ReferenceEquals(obj2, null) && obj1.Value > obj2.Value;
+        }
+
+        public static bool operator <(IntType obj1, IntType obj2)
+        {
+            return !object.ReferenceEquals(obj1, null) && !object.ReferenceEquals(obj2, null) && obj1.Value < obj2.Value;
+        }
+
+        public static bool operator >=(IntType obj1, IntType obj2)
+        {
+            return obj1 == obj2 || obj1 > obj2;
+        }
+
+        public static bool operator <=(IntType obj1, IntType obj2)
+        {
+            return obj1 == obj2 || obj1 < obj2;
         }
 
         public override bool Equals(object obj)

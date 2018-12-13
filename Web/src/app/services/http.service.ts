@@ -26,7 +26,7 @@ export class HttpService {
     return this.getAccessToken() != null;
   }
 
-  private getAccessToken(): string {
+  public getAccessToken(): string {
     return (this.localStorageService.getLocalStorage(this.jwt) as string);
   }
 

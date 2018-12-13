@@ -84,7 +84,7 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   getSubtitleText() : string {
-    return this.completeRegistration ? "Please fill your data and become an Expert." : "Sign up to get exclusive market insights, as well as access to expert knowledge.";
+    return this.completeRegistration ? "Please fill your data and start to use the cryptocurrency trading simulator." : "Sign up to use our cryptocurrency trading simulator, learn, compete and share trading ideas.";
   }
 
   onSubmit() {
@@ -139,11 +139,11 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
           this.Referral.setForcedError("");
           this.localStorageService.setLocalStorage("referralCode", value);
         } else {
-          this.setInvalidReferral("Invalid referral code");
+          this.setInvalidReferral("Invalid invitation code");
         }
       });
     } else {
-      this.setInvalidReferral("Invalid referral code");
+      this.setInvalidReferral("Invalid invitation code");
     }
   }
 
@@ -170,6 +170,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   getReferralOptions() {
-    return { textOptions: { outlineField: false, placeHolder: "Referral code (optional)", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
+    return { textOptions: { outlineField: false, placeHolder: "Invitation code", required: true, showHintSize: false, minLength: 7, maxLength: 7 } };
   }
 }

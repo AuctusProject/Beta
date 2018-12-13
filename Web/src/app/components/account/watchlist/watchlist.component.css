@@ -1,0 +1,4 @@
+assets-table, experts-table {
+    height: calc(50% - 24px);
+    min-height: 180px;
+}

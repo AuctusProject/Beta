@@ -1,0 +1,58 @@
+th.cdk-column-positions{
+    background-color: #3d3d3d !important;
+    text-align: left !important;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.4px;
+}
+
+.cdk-column-positions span:last-child{
+    font-size: 10px;
+    letter-spacing: 0.8px;
+}
+
+.dark-triangle{
+    position: absolute;
+    right: 0px;
+    top: 1px;
+    height: 0px;
+    width: 0px;
+    border-style: solid;
+    border-width: 18px 11px;
+    border-right-color: #262626;
+    border-left-color: transparent;
+    border-bottom-color: #262626;
+    border-top-color: transparent;
+}
+
+.editable-field {
+    text-decoration-line: underline;
+}
+
+
+.cdk-column-positions{width:150px;}
+.cdk-column-units{width:10%}
+.cdk-column-value{width:10%}
+.cdk-column-open{width:10%}
+.cdk-column-PLValue{width:12%}
+.cdk-column-PLPercentage{width:12%}
+.cdk-column-SL{width:10%}
+.cdk-column-TP{width:10%}
+.cdk-column-close{width: 7%;}
+
+@media (max-width: 600px){
+    td.mat-cell:first-of-type, 
+    th.mat-header-cell:first-of-type {
+        text-align: center !important;
+        padding-left: 0;
+    }   
+
+    .cdk-column-positions{
+        max-width:100px;
+    }
+
+    .dark-triangle{
+        border-width: 18px 6px;
+    }
+}

@@ -1,7 +1,4 @@
-.pie-chart{
-    width: 100px;
-    height: 100px;
-}
+
 
 :host{
     font-size: 14px;
@@ -19,9 +16,44 @@
 }
 
 .close{
-    color:#e6e6e6;
+    color:#383838;
 }
 
-.distribution-descripton{
-    margin-right: 22px;
+.outter{
+    display: block; 
+    width:40px; 
+    height: 40px;
+    margin: 10px auto;
+    position: relative;
+}
+
+.tooltip{
+    position: absolute;
+    border-radius: 4px;
+    width: 62px;
+    border: 1px solid #5a5a5a;
+    background:  #262626ba;
+    top: 0px;
+    opacity: 0;
+    transition: all 0.3s;
+    padding: 4px 0;
+    font-size: 12px;
+    text-align: center;
+}
+
+.show-right {
+    left: 35px;
+}
+
+.show-left {
+    left: -55px;
+}
+
+.tooltip.show{
+    opacity: 1;
+}
+
+.tooltip span{
+    color:white;
+    font-weight: 100;
 }

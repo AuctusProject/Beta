@@ -19,6 +19,7 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Auctus.Business;
 using Swashbuckle.AspNetCore.Swagger;
 using Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Api
 {
@@ -62,6 +63,22 @@ namespace Api
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(3),
                     RequireExpirationTime = true
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/api/auctusHub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = true;
@@ -109,6 +126,7 @@ namespace Api
             }
 
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, AuctusHubProvider>();
 
             services.AddApplicationInsightsTelemetry(Configuration.GetSection("ApplicationInsights:InstrumentationKey").Get<string>());
         }

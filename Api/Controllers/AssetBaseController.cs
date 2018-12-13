@@ -7,24 +7,20 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Auctus.DomainObjects.Account;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using Api.Hubs;
 
 namespace Api.Controllers
 {
     public class AssetBaseController : BaseController
     {
-        protected AssetBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        protected AssetBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         protected IActionResult ListAssets()
         {
             var assetResponse = AssetBusiness.ListAssetsOrderedByMarketCap();
             return Ok(assetResponse);            
-        }
-
-        protected IActionResult ListTrendingAssets(int top = 3)
-        {
-            var assetResponse = AssetBusiness.ListTrendingAssets(top);
-            return Ok(assetResponse);
         }
 
         protected IActionResult ListReports(int? top, int? lastReportId, int? assetId)
@@ -63,21 +59,16 @@ namespace Api.Controllers
             return Ok(AssetBusiness.ListAssetStatus(id));
         }
 
+        protected IActionResult ListAssetOrders(int id)
+        {
+            return Ok(OrderBusiness.ListLastAdvisorsOrdersForAsset(id));
+        }
+
         protected IActionResult GetAsset(int id)
         {
             return Ok(AssetBusiness.GetAssetData(id));
         }
 
-        protected IActionResult GetAssetRatings(int id)
-        {
-            return Ok(AssetBusiness.GetAssetRatings(id));
-        }
-
-        protected IActionResult GetAssetRecommendationInfo(int id)
-        {
-            return Ok(AssetBusiness.GetAssetRecommendationInfo(id));
-        }
-        
         protected IActionResult FollowAsset(int id)
         {
             return Ok(UserBusiness.FollowUnfollowAsset(id, FollowActionType.Follow));

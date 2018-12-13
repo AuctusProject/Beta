@@ -14,11 +14,8 @@ namespace Api.Controllers
 {
     public class NewsBaseController : BaseController
     {
-        protected readonly IHubContext<AuctusHub> HubContext;
         protected NewsBaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) {
-            HubContext = hubContext;
-        }
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         protected IActionResult ListNews(int? top, int? lastNewsId)
         {

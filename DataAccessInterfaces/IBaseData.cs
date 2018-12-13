@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Auctus.DataAccessInterfaces
 {
-    public interface IBaseData<T>
+    public interface IBaseData<T> : ITransactionData
     {
         IEnumerable<T> SelectByObject(T criteria);
         IEnumerable<T> SelectAll();

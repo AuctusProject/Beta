@@ -27,9 +27,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Auctus.Business.Event;
 using Auctus.Business.Storage;
 using Auctus.Business.News;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using Api.Hubs;
 using Auctus.Business.Exchange;
+using Auctus.Business.Trade;
 
 namespace Api.Controllers
 {
@@ -40,14 +41,16 @@ namespace Api.Controllers
         protected Cache MemoryCache { get; private set; }
         protected IServiceProvider ServiceProvider { get; private set; }
         protected IServiceScopeFactory ServiceScopeFactory { get; private set; }
+        protected readonly IHubContext<AuctusHub> HubContext;
 
-        protected BaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory)
+        protected BaseController(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext)
         {
             MemoryCache = cache;
             LoggerFactory = loggerFactory;
             Logger = loggerFactory.CreateLogger(GetType().Namespace);
             ServiceProvider = serviceProvider;
             ServiceScopeFactory = serviceScopeFactory;
+            HubContext = hubContext;
         }
 
         protected string GetUser()
@@ -139,9 +142,9 @@ namespace Api.Controllers
                     TelemetryClient telemetry = new TelemetryClient();
                     try
                     {
-                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} started ({DateTime.UtcNow.ToLongDateString()}).");
                         action();
-                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended ({DateTime.UtcNow.ToLongDateString()}).");
                     }
                     catch (Exception e)
                     {
@@ -165,9 +168,9 @@ namespace Api.Controllers
                     TelemetryClient telemetry = new TelemetryClient();
                     try
                     {
-                        telemetry.TrackEvent($"Job {action.Method.Name} started.");
+                        telemetry.TrackEvent($"Job {action.Method.Name} started ({DateTime.UtcNow.ToLongDateString()}).");
                         action().Wait();
-                        telemetry.TrackEvent($"Job {action.Method.Name} ended.");;
+                        telemetry.TrackEvent($"Job {action.Method.Name} ended ({DateTime.UtcNow.ToLongDateString()}).");;
                     }
                     catch (Exception e)
                     {
@@ -266,14 +269,12 @@ namespace Api.Controllers
         protected ActionBusiness ActionBusiness { get { return new ActionBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected PasswordRecoveryBusiness PasswordRecoveryBusiness { get { return new PasswordRecoveryBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AdvisorBusiness AdvisorBusiness { get { return new AdvisorBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected AdviceBusiness AdviceBusiness { get { return new AdviceBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected FollowBusiness FollowBusiness { get { return new FollowBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected FollowAssetBusiness FollowAssetBusiness { get { return new FollowAssetBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected FollowAdvisorBusiness FollowAdvisorBusiness { get { return new FollowAdvisorBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AssetBusiness AssetBusiness { get { return new AssetBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AssetValueBusiness AssetValueBusiness { get { return new AssetValueBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected ExchangeApiAccessBusiness ExchangeApiAccessBusiness { get { return new ExchangeApiAccessBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
-        protected RequestToBeAdvisorBusiness RequestToBeAdvisorBusiness { get { return new RequestToBeAdvisorBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AssetCurrentValueBusiness AssetCurrentValueBusiness { get { return new AssetCurrentValueBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected EarlyAccessEmailBusiness EarlyAccessEmailBusiness { get { return new EarlyAccessEmailBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected AgencyBusiness AgencyBusiness { get { return new AgencyBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
@@ -285,6 +286,12 @@ namespace Api.Controllers
         protected NewsBusiness NewsBusiness { get { return new NewsBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected ExchangeBusiness ExchangeBusiness { get { return new ExchangeBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
         protected PairBusiness PairBusiness { get { return new PairBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected OrderBusiness OrderBusiness { get { return new OrderBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdvisorRankingBusiness AdvisorRankingBusiness { get { return new AdvisorRankingBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdvisorProfitBusiness AdvisorProfitBusiness { get { return new AdvisorProfitBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdvisorRankingHistoryBusiness AdvisorRankingHistoryBusiness { get { return new AdvisorRankingHistoryBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdvisorProfitHistoryBusiness AdvisorProfitHistoryBusiness { get { return new AdvisorProfitHistoryBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
+        protected AdvisorMonthlyRankingBusiness AdvisorMonthlyRankingBusiness { get { return new AdvisorMonthlyRankingBusiness(Startup.Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, GetUser(), GetRequestIP()); } }
 
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
         protected class OnlyAdminAttribute : ActionFilterAttribute

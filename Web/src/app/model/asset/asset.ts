@@ -7,5 +7,6 @@ export class Asset {
   type: number;
   shortSellingEnabled: boolean;
   marketCap: number;
+  circulatingSupply: number;
   pair: PairResponse;
 }

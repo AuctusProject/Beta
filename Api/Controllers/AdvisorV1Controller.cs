@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using Api.Model.Advisor;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using Api.Hubs;
 
 namespace Api.Controllers
 {
@@ -19,8 +21,8 @@ namespace Api.Controllers
     [EnableCors("Default")]
     public class AdvisorV1Controller : AdvisorBaseController
     {
-        public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory) :
-            base(loggerFactory, cache, serviceProvider, serviceScopeFactory) { }
+        public AdvisorV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
+            base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
         [HttpGet]
         [AllowAnonymous]
@@ -48,6 +50,51 @@ namespace Api.Controllers
             return base.GetAdvisorDetails(id);
         }
 
+        [Route("{id}/performance")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAdvisorPeformance(int id)
+        {
+            return base.GetAdvisorPeformance(id);
+        }
+
+        [Route("me")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetLoggedAdvisor()
+        {
+            return base.GetLoggedAdvisor();
+        }
+
+        [Route("ranking/{year?}/{month?}")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListAdvisorsRanking([FromRoute]int? year, [FromRoute]int? month)
+        {
+            return base.ListAdvisorsRanking(year, month);
+        }
+
+        [Route("hall_of_fame")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListHallOfFame()
+        {
+            return base.ListHallOfFame();
+        }
+
+        [Route("{id}/orders")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult GetAdvisorOrders([FromRoute]int id, [FromQuery]int? assetId, [FromQuery]int[] status, [FromQuery]int? type)
+        {
+           return base.GetAdvisorOrders(id, assetId, status, type);
+        }
+
         [Route("{id}")]
         [HttpPost]
         [Authorize("Bearer")]
@@ -57,61 +104,12 @@ namespace Api.Controllers
             return await base.EditAdvisorAsync(id, advisorRequest);
         }
 
-        [Route("advices")]
-        [HttpPost]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult Advise([FromBody]AdviseRequest adviseRequest)
-        {
-            return base.Advise(adviseRequest);
-        }
-
-       
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public new async Task<IActionResult> RegisterAsync([FromForm]RegisterAdvisorRequest beAdvisorRequest)
         {
             return await base.RegisterAsync(beAdvisorRequest);
-        }
-
-        [Route("me/requests")]
-        [HttpGet]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult GetRequestToBe()
-        {
-            return base.GetRequestToBe();
-        }
-
-        [Route("requests")]
-        [HttpGet]
-        [OnlyAdmin]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListRequestToBe()
-        {
-            return base.ListRequestToBe();
-        }
-
-        [Route("requests/{id}/approve")]
-        [HttpPost]
-        [OnlyAdmin]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> ApproveRequestToBeAsync(int id)
-        {
-            return await base.ApproveRequestToBeAsync(id);
-        }
-
-        [Route("requests/{id}/reject")]
-        [HttpPost]
-        [OnlyAdmin]
-        [Authorize("Bearer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new async Task<IActionResult> RejectRequestToBeAsync(int id)
-        {
-            return await base.RejectRequestToBeAsync(id);
         }
 
         [Route("{id}/followers")]
@@ -130,15 +128,6 @@ namespace Api.Controllers
         public new IActionResult UnfollowAdvisor([FromRoute]int id)
         {
             return base.UnfollowAdvisor(id);
-        }
-
-        [Route("advices/latest_by_type")]
-        [HttpGet]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListLastAdvicesForAllTypes([FromQuery]int numberOfAdvicesOfEachType)
-        {
-            return base.ListLastAdvicesForAllTypes(numberOfAdvicesOfEachType);
         }
     }
 }

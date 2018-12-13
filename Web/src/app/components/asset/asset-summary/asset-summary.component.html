@@ -1,0 +1,17 @@
+<div *ngIf="transferToDetailsPage else content">
+  <a routerLink="/trade-markets/{{assetId}}">
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+  </a>
+</div>
+
+<ng-template #content>
+  <div  fxLayout="row">
+    <div class="img-container">
+      <img class="asset-image" [src]="getAssetImgUrl(assetId)" onerror="this.style.display='none'" onload="this.style.display='unset'" />
+    </div>
+    <div fxLayout="column" fxLayoutGap="4px" fxLayoutAlign="center stretch" >
+      <div class="asset-code">{{assetCode}}</div>
+      <div fxHide.lt-sm class="asset-name">{{assetName}}</div>
+    </div>
+  </div>
+</ng-template>

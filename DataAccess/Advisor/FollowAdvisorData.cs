@@ -50,6 +50,40 @@ namespace Auctus.DataAccess.Advisor
 			f.UserId = @UserId
 		    AND fa.AdvisorId = @AdvisorId";
 
+        private const string SQL_LIST_ADVISORS_FOLLOWED = @"
+		SELECT 
+			f.*, fa.AdvisorId 
+		FROM 
+		    [FollowAdvisor] fa WITH(NOLOCK)
+		    INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
+		    INNER JOIN (
+		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
+		    	FROM 
+		    		[FollowAdvisor] fa2 WITH(NOLOCK)
+		    		INNER JOIN [Follow] f2 WITH(NOLOCK) ON f2.Id = fa2.Id
+                WHERE f2.UserId = @UserId
+		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
+			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
+		WHERE 
+			f.ActionType = @ActionType AND f.UserId = @UserId";
+
+        private const string SQL_COUNT_ADVISOR_FOLLOWERS = @"
+		SELECT 
+			count(f.Id)
+        FROM 
+		    [FollowAdvisor] fa WITH(NOLOCK)
+		    INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
+		    INNER JOIN (
+		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
+		    	FROM 
+		    		[FollowAdvisor] fa2 WITH(NOLOCK)
+		    		INNER JOIN [Follow] f2 WITH(NOLOCK) ON f2.Id = fa2.Id
+                WHERE fa2.AdvisorId = @AdvisorId
+		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
+			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
+		WHERE 
+			f.ActionType = @ActionType AND fa.AdvisorId = @AdvisorId";
+
         public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds)
         {
             var complement = "";
@@ -69,8 +103,23 @@ namespace Auctus.DataAccess.Advisor
             var parameters = new DynamicParameters();
             parameters.Add("UserId", userId, DbType.Int32);
             parameters.Add("AdvisorId", advisorId, DbType.Int32);
-
             return Query<FollowAdvisor>(SQL_GET_LAST_BY_USER, parameters).SingleOrDefault();
+        }
+
+        public List<FollowAdvisor> ListAdvisorsFollowed(int userId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("UserId", userId, DbType.Int32);
+            parameters.Add("ActionType", FollowActionType.Follow.Value, DbType.Int32);
+            return Query<FollowAdvisor>(SQL_LIST_ADVISORS_FOLLOWED, parameters).ToList();
+        }
+
+        public int CountAdvisorFollowers(int advisorId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("ActionType", FollowActionType.Follow.Value, DbType.Int32);
+            parameters.Add("AdvisorId", advisorId, DbType.Int32);
+            return Query<int?>(SQL_COUNT_ADVISOR_FOLLOWERS, parameters).FirstOrDefault() ?? 0;
         }
     }
 }

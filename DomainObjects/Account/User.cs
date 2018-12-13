@@ -37,8 +37,9 @@ namespace Auctus.DomainObjects.Account
         public bool IsAdvisor { get; set; }
         public Wallet Wallet { get; set; }
         public User ReferredUser { get; set; }
-        public RequestToBeAdvisor RequestToBeAdvisor { get; set; }
         public ReferralStatusType ReferralStatusType { get { return ReferralStatusType.Get(ReferralStatus); } }
         public List<Wallet> Wallets { get; set; } = new List<Wallet>();
+        public List<int> FollowedAssets { get; set; }
+        public List<int> FollowedAdvisors { get; set; }
     }
 }

@@ -37,10 +37,15 @@ export class AuthRedirect implements CanActivate {
           if (!redirected) {
             var redirectUrl = this.localStorageService.getLocalStorage("redirectUrl");
             this.localStorageService.removeLocalStorage("redirectUrl");
-            if (redirectUrl) {
+            if (redirectUrl && !redirectUrl.includes("login=true")) {
               this.navigationService.goToUrl(redirectUrl);
             } else {
-              this.navigationService.goToFeed();
+              if(loginData.hasInvestment){
+                this.navigationService.goToPortfolio();
+              }
+              else{
+                this.navigationService.goToTradeMarkets();
+              }
             }
           }
         });
@@ -48,7 +53,7 @@ export class AuthRedirect implements CanActivate {
   }
 
   redirectToLogin(currentUrl?: string) {
-    if (currentUrl) {
+    if (currentUrl && !currentUrl.includes("login=true")) {
       this.localStorageService.setLocalStorage("redirectUrl", currentUrl);
     }
     this.navigationService.goToLogin();

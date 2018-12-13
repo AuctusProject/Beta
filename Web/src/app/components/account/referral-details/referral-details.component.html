@@ -1,39 +1,45 @@
-<div fxLayout="column" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
-  <p class="subtitle">
-    For each new user you can earn {{bonusAmount}}.<br/>
-    You can share the follow link to people register using your referral code
-  </p>
-  <mat-form-field appearance="outline" class="input-modal">
-    <mat-label>Referral Link</mat-label>
-    <input matInput #Link placeholder="Referral Link" type="text" [(ngModel)]="link" readonly />
-    <span matSuffix class="copy" (click)="copyClick()">Copy</span>
-    <mat-hint *ngIf="copied" align="start">Link copied</mat-hint>
-  </mat-form-field>
-</div>
-<div class="data-div" fxLayout="column" fxLayoutAlign="space-evenly center"  fxLayoutGap="15px">
-  <inheritance-input [options]="getReferralCodeOptions()" class="input-modal"
-    [value]="code"></inheritance-input>
-  
-  <div class="table-earned" fxLayout="column" fxLayoutAlign="center start">
-    <span class="table-header" fxFlex="100">Earned</span>
-    <div class="div-status border-bottom" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
-      <span class="table-status" fxFlex="50">Available</span>
-      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{available}}</div>
+<h2 class="page-title">Invite Your Friends</h2>
+<div fxLayout.gt-md="row" fxLayout.lt-md="column"  class="content" fxLayoutAlign="space-between center" >
+  <div>
+    <div fxLayout="column" fxFlex fxLayoutAlign="start center">
+    <div class="invite">
+      <div class="subtitle">
+        Invite your friends to Auctus and get 50 AUC for each friend that join Auctus Trading, and trade at least 10 times for three consecutive months.
+      </div>
+      <inheritance-input [options]="getReferralLinkOptions()" 
+        [value]="link"></inheritance-input>
+      <div class="subtitle">Share your referral link on your social media</div>
+      <div class="text-center" fxLayout="row" fxLayoutGap="18px" fxLayoutAlign="center center">  
+        <share-button [theme]="'outline'" [button]="'twitter'" [showText]="true" [size]="4" 
+          [url]="link" [description]="description + ' $AUC'" [autoSetMeta]="false"></share-button>
+        <share-button [theme]="'outline'" [button]="'facebook'" [showText]="true" [size]="4" 
+          [url]="link" [autoSetMeta]="false"></share-button>
+      </div>
     </div>
-    <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
-      <span class="table-status" fxFlex="50">Pending</span>
-      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{pending}}</div>
     </div>
   </div>
-  <div class="table-used" fxLayout="column" fxLayoutAlign="center start">
-    <span class="table-header" fxFlex="100">Used</span>
-    <div class="div-status border-bottom" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
-      <span class="table-status" fxFlex="50">Cashed Out</span>
-      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{cashedOut}}</div>
+  <div class="data-div" fxLayout="column" fxLayoutAlign="start center" fxFlex>
+    <div class="table-earned" fxLayout="column" fxLayoutAlign="center start">
+      <span class="table-header" fxFlex="100">Earned</span>
+      <div class="div-status border-bottom" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+        <span class="table-status" fxFlex="50">Available</span>
+        <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{available}}</div>
+      </div>
+      <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+        <span class="table-status" fxFlex="50">Pending</span>
+        <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{pending}}</div>
+      </div>
     </div>
-    <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
-      <span class="table-status" fxFlex="50">Canceled</span>
-      <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{canceled}}</div>
+    <div class="table-used" fxLayout="column" fxLayoutAlign="center start">
+      <span class="table-header" fxFlex="100">Used</span>
+      <div class="div-status border-bottom" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+        <span class="table-status" fxFlex="50">Cashed Out</span>
+        <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{cashedOut}}</div>
+      </div>
+      <div class="div-status" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+        <span class="table-status" fxFlex="50">Canceled</span>
+        <div class="div-value" fxFlex="50" fxLayout="row" fxLayoutAlign="end center">{{canceled}}</div>
+      </div>
     </div>
   </div>
 </div>

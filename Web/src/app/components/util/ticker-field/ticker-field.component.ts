@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges, EventEmitter, Output } from '@angular/core';
 import { TickerService } from '../../../services/ticker.service';
 import { Subscription } from 'rxjs';
 import { PairResponse } from '../../../model/asset/assetResponse';
@@ -13,6 +13,7 @@ export class TickerFieldComponent implements OnInit, OnDestroy, OnChanges {
   @Input() tickerProperty: string = "currentClosePrice";
   @Input() tickerToMultiplierProperty: string = "currentClosePrice";
   @Input() startValue?: number = null;
+  @Input() valueMultiplier?: number = null;
   @Input() blinkGray: boolean = false;
   value: number;
   mainTickerSubscription: Subscription;
@@ -20,6 +21,7 @@ export class TickerFieldComponent implements OnInit, OnDestroy, OnChanges {
   multiplierValue?: number = null;
   baseValue?: number = null;
   initialized: boolean = false;
+  @Output() onNewValue = new EventEmitter<number>();
 
   constructor(private tickerService: TickerService) { }
   
@@ -31,7 +33,7 @@ export class TickerFieldComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    if (this.startValue) {
+    if (this.startValue && !this.value) {
       this.value = this.startValue;
     }
     if (this.pair) {
@@ -39,11 +41,11 @@ export class TickerFieldComponent implements OnInit, OnDestroy, OnChanges {
       this.mainTickerSubscription = this.tickerService.binanceTicker(this.pair.symbol).subscribe(ret =>
         {
           if (!this.pair.multipliedSymbol) {
-            this.value = ret[this.tickerProperty];
+            this.setValue(ret[this.tickerProperty], 1);
           } else {
             this.baseValue = ret[this.tickerProperty];
             if (this.multiplierValue || this.multiplierValue == 0) {
-              this.value = this.baseValue * this.multiplierValue;
+              this.setValue(this.baseValue, this.multiplierValue);
             }
           }
         });
@@ -53,12 +55,17 @@ export class TickerFieldComponent implements OnInit, OnDestroy, OnChanges {
           {
             this.multiplierValue = ret[this.tickerToMultiplierProperty];
             if (this.baseValue || this.baseValue == 0) {
-              this.value = this.baseValue * this.multiplierValue;
+              this.setValue(this.baseValue, this.multiplierValue);
             }
           });
       }
     }
     this.initialized = true;
+  }
+
+  setValue(base: number, multiplier: number) {
+    this.value = base * multiplier * (this.valueMultiplier ? this.valueMultiplier : 1);
+    this.onNewValue.emit(this.value);
   }
 
   getPreffix(): string {

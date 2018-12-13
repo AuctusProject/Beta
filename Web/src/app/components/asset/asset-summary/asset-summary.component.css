@@ -1,0 +1,31 @@
+.img-container {
+    width:32px;
+    margin: 0 10px;
+}
+
+@media(max-width:599px) {
+    .img-container{
+        width:23px;
+        margin: 0 5px;
+    }
+    
+    img{
+        width: 23px;
+        height: 23px;
+    }
+}
+
+.asset-code {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.asset-name {
+    font-size: 10px;
+    font-weight: 200;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+ }

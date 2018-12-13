@@ -1,0 +1,50 @@
+
+.menu-item{
+    height: 42px;
+    border-top: 1px solid #141414;
+    border-bottom: 1px solid #141414;
+    margin-top: -1px;
+    background-color: #242424;
+}
+
+
+.menu-item div{
+    font-size: 14px;
+    font-weight: 100;
+    letter-spacing: 0.7px;
+    text-align: left;
+}
+
+.menu-item:not(.disabled):hover,
+.menu-item.active{
+    background-color: #2e2e2e !important;
+    border-left-color: #4562fc;
+}
+
+.menu-item.disabled{
+    color: #404040;
+    cursor: default;
+}
+
+.active-indicator{
+    border-left: 5px solid transparent;
+}
+
+.active-indicator .triangle
+{
+    width: 0;
+    height: 0;
+    border-top: 20px solid transparent;
+    border-left: 10px solid transparent;
+    border-bottom: 20px solid transparent;
+}
+
+.menu-item.active .active-indicator .triangle,
+.menu-item.active .active-indicator
+{
+    border-left-color: #4562fc;
+}
+
+fa-icon {
+    width: 16px;
+}

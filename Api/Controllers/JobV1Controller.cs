@@ -30,6 +30,27 @@ namespace Api.Controllers
         public JobV1Controller(ILoggerFactory loggerFactory, Cache cache, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, IHubContext<AuctusHub> hubContext) :
             base(loggerFactory, cache, serviceProvider, serviceScopeFactory, hubContext) { }
 
+        [Route("advisors")]
+        [HttpPost]
+        public new IActionResult UpdateAdvisorsRankingAndProfit()
+        {
+            return base.UpdateAdvisorsRankingAndProfit();
+        }
+
+        [Route("advisors/history")]
+        [HttpPost]
+        public new IActionResult SetAdvisorsRankingAndProfitHistory()
+        {
+            return base.SetAdvisorsRankingAndProfitHistory();
+        }
+
+        [Route("advisors/ranking")]
+        [HttpPost]
+        public new IActionResult SetAdvisorsMonthlyRanking()
+        {
+            return base.SetAdvisorsMonthlyRanking();
+        }
+
         [Route("events")]
         [HttpPost]
         public new IActionResult UpdateAssetsEvents()

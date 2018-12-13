@@ -7,6 +7,7 @@ using Auctus.Business.Event;
 using Auctus.Business.Exchange;
 using Auctus.Business.News;
 using Auctus.Business.Storage;
+using Auctus.Business.Trade;
 using Auctus.DataAccess.Core;
 using Auctus.DataAccessInterfaces;
 using Auctus.DomainObjects.Account;
@@ -49,14 +50,12 @@ namespace Auctus.Business
         private UserBusiness _userBusiness;
         private PasswordRecoveryBusiness _passwordRecoveryBusiness;
         private AdvisorBusiness _advisorBusiness;
-        private AdviceBusiness _adviceBusiness;
         private AssetBusiness _assetBusiness;
         private AssetValueBusiness _assetValueBusiness;
         private FollowBusiness _followBusiness;
         private FollowAssetBusiness _followAssetBusiness;
         private FollowAdvisorBusiness _followAdvisorBusiness;
         private ExchangeApiAccessBusiness _exchangeApiAccessBusiness;
-        private RequestToBeAdvisorBusiness _requestToBeAdvisorBusiness;
         private WalletBusiness _walletBusiness;
         private ActionBusiness _actionBusiness;
         private Web3Business _web3Business;
@@ -79,17 +78,23 @@ namespace Auctus.Business
         private ExchangeBusiness _exchangeBusiness;
         private PairBusiness _pairBusiness;
         private BinanceBusiness _binanceBusiness;
+        private OrderBusiness _orderBusiness;
+        private AdvisorRankingBusiness _advisorRankingBusiness;
+        private AdvisorProfitBusiness _advisorProfitBusiness;
+        private AdvisorRankingHistoryBusiness _advisorRankingHistoryBusiness;
+        private AdvisorProfitHistoryBusiness _advisorProfitHistoryBusiness;
+        private AdvisorMonthlyRankingBusiness _advisorMonthlyRankingBusiness;
 
         private string _apiUrl;
         private string _webUrl;
         private int? _minimumAucLogin;
         private int? _minimumDaysToKeepAuc;
-        private int? _minimumTimeInSecondsBetweenAdvices;
         private string _hashSecret;
         private double? _discountPercentageOnAuc;
         private int? _assetUSDId;
         private int? _assetBTCId;
         private int? _assetETHId;
+        private double? _virtualMoney;
         private List<string> _admins;
         private List<TerminalAssetConfig> _terminalAssets;
 
@@ -145,6 +150,13 @@ namespace Auctus.Business
             {
                 UserBusiness.EmailValidation(LoggedEmail);
                 user = UserBusiness.GetByEmail(LoggedEmail);
+
+                if (user != null)
+                {
+                    Parallel.Invoke(() => user.FollowedAdvisors = FollowAdvisorBusiness.ListAdvisorsFollowed(user.Id),
+                                    () => user.FollowedAssets = FollowAssetBusiness.ListAssetsFollowed(user.Id));
+                }
+                SetUserToCache(user);
             }
             else if (UserBusiness.IsValidAdvisor(user))
                 user = MemoryCache.Get<DomainObjects.Advisor.Advisor>(cacheKey);
@@ -162,10 +174,10 @@ namespace Auctus.Business
                 if (user == null)
                     throw new NotFoundException("User cannot be found.");
 
-                if (!UserBusiness.IsValidAdvisor(user))
-                    MemoryCache.Set<User>(cacheKey, user);
-                else
-                    MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
+                Parallel.Invoke(() => user.FollowedAdvisors = FollowAdvisorBusiness.ListAdvisorsFollowed(user.Id),
+                                () => user.FollowedAssets = FollowAssetBusiness.ListAssetsFollowed(user.Id));
+
+                SetUserToCache(user);
                 return user;
             }
             else
@@ -173,6 +185,18 @@ namespace Auctus.Business
                 if (UserBusiness.IsValidAdvisor(user))
                     user = MemoryCache.Get<DomainObjects.Advisor.Advisor>(cacheKey);
                 return user;
+            }
+        }
+
+        protected void SetUserToCache(User user)
+        {
+            if (user != null)
+            {
+                var cacheKey = GetUserCacheKey(LoggedEmail);
+                if (!UserBusiness.IsValidAdvisor(user))
+                    MemoryCache.Set<User>(cacheKey, user);
+                else
+                    MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
             }
         }
 
@@ -260,16 +284,6 @@ namespace Auctus.Business
             }
         }
 
-        protected int MinimumTimeInSecondsBetweenAdvices
-        {
-            get
-            {
-                if (_minimumTimeInSecondsBetweenAdvices == null)
-                    _minimumTimeInSecondsBetweenAdvices = Configuration.GetSection("MinimumTimeInSecondsBetweenAdvices").Get<int>();
-                return _minimumTimeInSecondsBetweenAdvices.Value;
-            }
-        }
-
         protected double DiscountPercentageOnAuc
         {
             get
@@ -310,6 +324,16 @@ namespace Auctus.Business
             }
         }
 
+        protected double VirtualMoney
+        {
+            get
+            {
+                if (_virtualMoney == null)
+                    _virtualMoney = Configuration.GetSection("VirtualMoney").Get<double>();
+                return _virtualMoney.Value;
+            }
+        }
+
         protected List<string> Admins
         {
             get
@@ -338,12 +362,17 @@ namespace Auctus.Business
             }
         }
 
-        protected TransactionalDapperCommand TransactionalDapperCommand
+        protected ITransactionalDapperCommand TransactionalDapperCommand
         {
             get
             {
-                return new TransactionalDapperCommand(Configuration);
+                return (ITransactionalDapperCommand)ServiceProvider.GetService(typeof(ITransactionalDapperCommand));
             }
+        }
+
+        internal void SetTransactionOnData(ITransactionalDapperCommand transactionalDapper)
+        {
+            transactionalDapper.SetTransactionOnData(Data);
         }
 
         protected UserBusiness UserBusiness
@@ -373,16 +402,6 @@ namespace Auctus.Business
                 if (_advisorBusiness == null)
                     _advisorBusiness = new AdvisorBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _advisorBusiness;
-            }
-        }
-
-        protected AdviceBusiness AdviceBusiness
-        {
-            get
-            {
-                if (_adviceBusiness == null)
-                    _adviceBusiness = new AdviceBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
-                return _adviceBusiness;
             }
         }
 
@@ -443,16 +462,6 @@ namespace Auctus.Business
                 if (_exchangeApiAccessBusiness == null)
                     _exchangeApiAccessBusiness = new ExchangeApiAccessBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _exchangeApiAccessBusiness;
-            }
-        }
-
-        protected RequestToBeAdvisorBusiness RequestToBeAdvisorBusiness
-        {
-            get
-            {
-                if (_requestToBeAdvisorBusiness == null)
-                    _requestToBeAdvisorBusiness = new RequestToBeAdvisorBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
-                return _requestToBeAdvisorBusiness;
             }
         }
 
@@ -673,6 +682,66 @@ namespace Auctus.Business
                 if (_binanceBusiness == null)
                     _binanceBusiness = new BinanceBusiness(Configuration, ServiceProvider);
                 return _binanceBusiness;
+            }
+        }
+
+        protected OrderBusiness OrderBusiness
+        {
+            get
+            {
+                if (_orderBusiness == null)
+                    _orderBusiness = new OrderBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _orderBusiness;
+            }
+        }
+
+        protected AdvisorRankingBusiness AdvisorRankingBusiness
+        {
+            get
+            {
+                if (_advisorRankingBusiness == null)
+                    _advisorRankingBusiness = new AdvisorRankingBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _advisorRankingBusiness;
+            }
+        }
+
+        protected AdvisorProfitBusiness AdvisorProfitBusiness
+        {
+            get
+            {
+                if (_advisorProfitBusiness == null)
+                    _advisorProfitBusiness = new AdvisorProfitBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _advisorProfitBusiness;
+            }
+        }
+
+        protected AdvisorRankingHistoryBusiness AdvisorRankingHistoryBusiness
+        {
+            get
+            {
+                if (_advisorRankingHistoryBusiness == null)
+                    _advisorRankingHistoryBusiness = new AdvisorRankingHistoryBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _advisorRankingHistoryBusiness;
+            }
+        }
+
+        protected AdvisorProfitHistoryBusiness AdvisorProfitHistoryBusiness
+        {
+            get
+            {
+                if (_advisorProfitHistoryBusiness == null)
+                    _advisorProfitHistoryBusiness = new AdvisorProfitHistoryBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _advisorProfitHistoryBusiness;
+            }
+        }
+
+        protected AdvisorMonthlyRankingBusiness AdvisorMonthlyRankingBusiness
+        {
+            get
+            {
+                if (_advisorMonthlyRankingBusiness == null)
+                    _advisorMonthlyRankingBusiness = new AdvisorMonthlyRankingBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _advisorMonthlyRankingBusiness;
             }
         }
     }

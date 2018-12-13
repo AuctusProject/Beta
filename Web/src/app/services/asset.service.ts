@@ -13,16 +13,13 @@ import { AssetRatingsResponse } from '../model/asset/assetRatingsResponse';
 @Injectable()
 export class AssetService {
   private getAssetsDetailsUrl = this.httpService.apiUrl("v1/assets/details");
-  private getTrendingAssetsUrl = this.httpService.apiUrl("v1/assets/trending");
   private getAssetDetailsUrl = this.httpService.apiUrl("v1/assets/{id}/details");
-  private getAssetRecommendationInfoUrl = this.httpService.apiUrl("v1/assets/{id}/recommendation_info");
   private getAssetsUrl = this.httpService.apiUrl("v1/assets/");
   private getAssetsReportsUrl = this.httpService.apiUrl("v1/assets/reports");
   private getAssetsEventsUrl = this.httpService.apiUrl("v1/assets/events");
   private followAssetUrl = this.httpService.apiUrl("v1/assets/{id}/followers");
   private getAssetValuesUrl = this.httpService.apiUrl("v1/assets/{id}/values");
   private getTerminalAssetsUrl = this.httpService.apiUrl("v1/assets/terminal");
-  private getAssetRatingsUrl = this.httpService.apiUrl("v1/assets/{id}/ratings");
   private getAssetBaseDataUrl = this.httpService.apiUrl("v1/assets/{id}/basedata");
   private getAssetStatusUrl = this.httpService.apiUrl("v1/assets/{id}/status");
   constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
@@ -71,10 +68,6 @@ export class AssetService {
     return this.httpService.get(this.getAssetValuesUrl.replace("{id}", id.toString()) + complement);
   }
 
-  getTrendingAssets(): Observable<AssetResponse[]> {
-    return this.localCache.requestWithCache(this.httpService.get(this.getTrendingAssetsUrl), this.getTrendingAssetsUrl);
-  }
-
   getAssets(): Observable<Asset[]> {
     return this.httpService.get(this.getAssetsUrl);
   }
@@ -85,13 +78,5 @@ export class AssetService {
 
   unfollowAsset(assetId:number):Observable<void>{
     return this.httpService.delete(this.followAssetUrl.replace("{id}", assetId.toString()));
-  }
-  
-  getAssetRecommendationInfo(assetId: number): Observable<AssetRecommendationInfoResponse> {
-    return this.httpService.get(this.getAssetRecommendationInfoUrl.replace("{id}", assetId.toString()));
-  }
-
-  getAssetRatings(assetId: number): Observable<AssetRatingsResponse[]> {
-    return this.httpService.get(this.getAssetRatingsUrl.replace("{id}", assetId.toString()));
   }
 }

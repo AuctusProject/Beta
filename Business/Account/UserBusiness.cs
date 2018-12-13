@@ -81,8 +81,8 @@ namespace Auctus.Business.Account
                 user.ConfirmationDate = Data.GetDateTimeNow();
                 Data.Update(user);
             }
-            bool hasInvestment = GetUserHasInvestment(user, out decimal? aucAmount);
-            ActionBusiness.InsertNewLogin(user.Id, aucAmount, socialNetworkType);
+            bool hasInvestment = GetUserHasInvestment(user);
+            ActionBusiness.InsertNewLogin(user.Id, null, socialNetworkType);
 
             return new LoginResponse()
             {
@@ -92,8 +92,7 @@ namespace Auctus.Business.Account
                 IsAdvisor = IsValidAdvisor(user),
                 AdvisorName = UserBusiness.GetAdvisorName(user),
                 ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
-                HasInvestment = hasInvestment,
-                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+                HasInvestment = hasInvestment
             };
         }
 
@@ -134,8 +133,8 @@ namespace Auctus.Business.Account
             if (user == null || user.Password != GetHashedPassword(password, user.Email, user.CreationDate))
                 throw new BusinessException("Invalid credentials.");
 
-            bool hasInvestment = GetUserHasInvestment(user, out decimal? aucAmount);
-            ActionBusiness.InsertNewLogin(user.Id, aucAmount, null);
+            bool hasInvestment = GetUserHasInvestment(user);
+            ActionBusiness.InsertNewLogin(user.Id, null, null);
             return new LoginResponse()
             {
                 Id = user.Id,
@@ -144,8 +143,7 @@ namespace Auctus.Business.Account
                 IsAdvisor = IsValidAdvisor(user),
                 AdvisorName = UserBusiness.GetAdvisorName(user),
                 ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
-                HasInvestment = hasInvestment,
-                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+                HasInvestment = hasInvestment
             };
         }
 
@@ -163,26 +161,13 @@ namespace Auctus.Business.Account
                 IsAdvisor = IsValidAdvisor(user),
                 AdvisorName = UserBusiness.GetAdvisorName(user),
                 ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
-                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
-                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+                HasInvestment = GetUserHasInvestment(user)
             };
         }
 
-        public bool GetUserHasInvestment(User user, out decimal? aucAmount)
-        {
-            aucAmount = null;
-            bool hasInvestment = true;
-            if (!IsValidAdvisor(user) && !IsAdmin)
-            {
-                if (user.Wallet == null)
-                    hasInvestment = false;
-                else
-                {
-                    aucAmount = WalletBusiness.GetAucAmount(user.Wallet.Address);
-                    hasInvestment = aucAmount >= GetMinimumAucAmountForUser(user);
-                }
-            }
-            return hasInvestment;
+        public bool GetUserHasInvestment(User user)
+        {   
+            return OrderBusiness.GetUserHasAnyOrder(user.Id);
         }
 
         public bool IsValidAdvisor(User user)
@@ -310,15 +295,20 @@ namespace Auctus.Business.Account
 
         public User GetReferredUser(string referralCode, bool throwException = true)
         {
-            if (!string.IsNullOrWhiteSpace(referralCode) && referralCode.Length == 7)
+            if (!string.IsNullOrWhiteSpace(referralCode))
             {
-                var user = Data.GetByReferralCode(referralCode.ToUpper());
-                if (user == null && throwException)
-                    throw new BusinessException("Invalid referral code");
+                if (referralCode.Length == 7)
+                {
+                    var user = Data.GetByReferralCode(referralCode.ToUpper());
+                    if (user == null && throwException)
+                        throw new BusinessException("Invalid invitation code");
 
-                return user;
+                    return user;
+                }
+                else
+                    throw new BusinessException("Invalid invitation code");
             }
-            return null;
+            throw new BusinessException("Invitation code must be filled.");
         }
 
         private string GetHashedPassword(string password, string email, DateTime creationDate)
@@ -347,8 +337,7 @@ namespace Auctus.Business.Account
                 IsAdvisor = IsValidAdvisor(user),
                 AdvisorName = UserBusiness.GetAdvisorName(user),
                 ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
-                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
-                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+                HasInvestment = GetUserHasInvestment(user)
             };
         }
 
@@ -371,8 +360,7 @@ namespace Auctus.Business.Account
                 IsAdvisor = IsValidAdvisor(user),
                 AdvisorName = UserBusiness.GetAdvisorName(user),
                 ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
-                HasInvestment = GetUserHasInvestment(user, out decimal? aucAmount),
-                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+                HasInvestment = GetUserHasInvestment(user)
             };
         }
 
@@ -425,12 +413,11 @@ namespace Auctus.Business.Account
             {
                 Id = user.Id,
                 Email = user.Email,
-                HasInvestment = true,
+                HasInvestment = false,
                 IsAdvisor = IsValidAdvisor(user),
                 AdvisorName = UserBusiness.GetAdvisorName(user),
                 ProfileUrlGuid = UserBusiness.GetProfileUrlGuid(user),
-                PendingConfirmation = !user.ConfirmationDate.HasValue,
-                RequestedToBeAdvisor = user.RequestToBeAdvisor != null
+                PendingConfirmation = !user.ConfirmationDate.HasValue
             };
         }
 
@@ -484,12 +471,11 @@ namespace Auctus.Business.Account
         public new void Update(User user)
         {
             Data.Update(user);
-            
-            var cacheKey = GetUserCacheKey(user.Email);
-            if (UserBusiness.IsValidAdvisor(user))
-                MemoryCache.Set<DomainObjects.Advisor.Advisor>(cacheKey, (DomainObjects.Advisor.Advisor)user);
-            else
-                MemoryCache.Set<User>(cacheKey, user);
+
+            Parallel.Invoke(() => user.FollowedAdvisors = FollowAdvisorBusiness.ListAdvisorsFollowed(user.Id),
+                            () => user.FollowedAssets = FollowAssetBusiness.ListAssetsFollowed(user.Id));
+
+            SetUserToCache(user);
         }
 
         public List<User> ListAllUsersData()
@@ -499,8 +485,8 @@ namespace Auctus.Business.Account
 
         public async Task SendEmailConfirmationAsync(string email, string code)
         {
-            await EmailBusiness.SendUsingTemplateAsync(new string[] { email }, "Verify your email address - Auctus Experts",
-                string.Format(@"<p>To activate your Auctus Experts account please <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.</p>
+            await EmailBusiness.SendUsingTemplateAsync(new string[] { email }, "Verify your email address - Auctus Trading",
+                string.Format(@"<p>To confirm your Auctus Trading account please <a href='{0}?confirmemail=true&c={1}' target='_blank'>click here</a>.</p>
                         <p style=""font-size: 12px; font-style: italic;"">If you didn’t ask to verify this address, you can ignore this email.</p>", WebUrl, code),
                 EmailTemplate.NotificationType.ConfirmEmail);
         }
@@ -536,13 +522,38 @@ namespace Auctus.Business.Account
         public FollowAdvisor FollowUnfollowAdvisor(int advisorId, FollowActionType followActionType)
         {
             var user = GetValidUser();
-            return FollowAdvisorBusiness.Create(user.Id, advisorId, followActionType);
+            var followAdvisor = FollowAdvisorBusiness.Create(user.Id, advisorId, followActionType);
+            if (user.FollowedAdvisors != null)
+            {
+                if (followActionType == FollowActionType.Follow)
+                    user.FollowedAdvisors.Add(advisorId);
+                else
+                    user.FollowedAdvisors.Remove(advisorId);
+
+                SetUserToCache(user);
+            }
+            return followAdvisor;
         }
 
-        public FollowAsset FollowUnfollowAsset(int AssetId, FollowActionType followActionType)
+        public FollowAsset FollowUnfollowAsset(int assetId, FollowActionType followActionType)
         {
             var user = GetValidUser();
-            return FollowAssetBusiness.Create(user.Id, AssetId, followActionType);
+
+            var asset = AssetBusiness.GetById(assetId);
+            if (!asset.Enabled)
+                throw new BusinessException("Invalid asset.");
+
+            var followAsset = FollowAssetBusiness.Create(user.Id, assetId, followActionType);
+            if (user.FollowedAssets != null)
+            {
+                if (followActionType == FollowActionType.Follow)
+                    user.FollowedAssets.Add(assetId);
+                else
+                    user.FollowedAssets.Remove(assetId);
+
+                SetUserToCache(user);
+            }
+            return followAsset;
         }
 
         public ReferralProgramInfoResponse GetReferralProgramInfo()
@@ -641,8 +652,6 @@ namespace Auctus.Business.Account
             if (!assets.Any() && !advisors.Any())
                 return new SearchResponse();
 
-            var advices = AdviceBusiness.ListAllCached();
-
             var response = new SearchResponse();
             foreach(DomainObjects.Advisor.Advisor advisor in advisors)
             {
@@ -651,7 +660,6 @@ namespace Auctus.Business.Account
                     Id = advisor.Id,
                     Description = advisor.Description,
                     Name = advisor.Name,
-                    Advices = advices.Count(c => c.AdvisorId == advisor.Id),
                     UrlGuid = advisor.UrlGuid.ToString()
                 });
             }
@@ -662,251 +670,18 @@ namespace Auctus.Business.Account
                     Id = asset.Id,
                     Code = asset.Code,
                     Name = asset.Name,
-                    Advices = advices.Count(c => c.AssetId == asset.Id),
-                    MarketCap = asset.MarketCap ?? 0
+                    MarketCap = asset.MarketCap,
+                    CirculatingSupply = asset.CirculatingSupply
                 });
             }
-            response.Advisors = response.Advisors.OrderByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
-            response.Assets = response.Assets.OrderByDescending(c => c.MarketCap).ThenByDescending(c => c.Advices).ThenBy(c => c.Name).ToList();
+            response.Advisors = response.Advisors.OrderBy(c => c.Name).ToList();
+            response.Assets = response.Assets.OrderByDescending(c => c.MarketCap).ThenBy(c => c.Name).ToList();
             return response;
         }
 
         public void ClearUserCache(string email)
         {
             MemoryCache.Set<User>(GetUserCacheKey(email), null);
-        }
-
-        public IEnumerable<FeedResponse> ListFeed(int? top, int? lastAdviceId, int? lastReportId, int? lastEventId)
-        {
-            var followingAssetsIds = AssetBusiness.ListFollowingAssets().Select(c => c.Id).Distinct().ToHashSet();
-            var advicesForFeed = Task.Factory.StartNew(() => AdviceBusiness.ListLastAdvicesForUserWithPagination(followingAssetsIds, top, lastAdviceId));
-            var reportForFeed = Task.Factory.StartNew(() => ReportBusiness.List(followingAssetsIds, top, lastReportId));
-            var eventForFeed = Task.Factory.StartNew(() => AssetEventBusiness.List(followingAssetsIds, top, lastEventId));
-            return FillFeedList(advicesForFeed, reportForFeed, eventForFeed, GetValidUser(), top, lastAdviceId, lastReportId, lastEventId);
-        }
-
-        public IEnumerable<FeedResponse> FillFeedList(Task<IEnumerable<Advice>> listAdvicesTask, Task<List<Report>> listReportsTask, Task<List<AssetEvent>> listEventsTask,
-            User loggedUser, int? top, int? lastAdviceId, int? lastReportId, int? lastEventId)
-        {
-            IEnumerable<Advice> feedAdvices = null;
-            IEnumerable<Report> feedReport = null;
-            IEnumerable<AssetEvent> feedEvent = null;
-
-            string advisorsCacheKey = "FeedAdvisorsResult" + LoggedEmail;
-            string assetsCacheKey = "FeedAssetsResult" + LoggedEmail;
-            var advisorsResult = MemoryCache.Get<List<AdvisorResponse>>(advisorsCacheKey);
-            var assetsResult = MemoryCache.Get<List<AssetResponse>>(assetsCacheKey);
-            if (advisorsResult == null || assetsResult == null || !lastAdviceId.HasValue || !lastReportId.HasValue || !lastEventId.HasValue)
-            {
-                List<DomainObjects.Advisor.Advisor> advisors = null;
-                if (listAdvicesTask != null)
-                    advisors = AdvisorBusiness.GetAdvisors();
-
-                Task<List<Advice>> advices = null;
-                Task<List<FollowAdvisor>> advisorFollowers = null;
-                if (advisors?.Any() == true)
-                {
-                    advices = Task.Factory.StartNew(() => AdviceBusiness.List(advisors.Select(c => c.Id).Distinct()));
-                    advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
-                }
-                var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
-
-                IEnumerable<int> selectAssetsIds = null;
-                if (advisors?.Any() == true)
-                    Task.WaitAll(advices, advisorFollowers, assetFollowers);
-                else
-                {
-                    if (listReportsTask != null && listEventsTask != null)
-                    {
-                        Task.WaitAll(assetFollowers, listReportsTask, listEventsTask);
-                        feedReport = listReportsTask.Result;
-                        feedEvent = listEventsTask.Result;
-                        selectAssetsIds = feedReport.Select(c => c.AssetId).Concat(feedEvent.SelectMany(c => c.LinkEventAsset.Select(a => a.AssetId))).Distinct().ToHashSet();
-                    }
-                    else if (listReportsTask != null)
-                    {
-                        Task.WaitAll(assetFollowers, listReportsTask);
-                        feedReport = listReportsTask.Result;
-                        selectAssetsIds = feedReport.Select(c => c.AssetId).Distinct().ToHashSet();
-                    }
-                    else if (listEventsTask != null)
-                    {
-                        Task.WaitAll(assetFollowers, listEventsTask);
-                        feedEvent = listEventsTask.Result;
-                        selectAssetsIds = feedEvent.SelectMany(c => c.LinkEventAsset.Select(a => a.AssetId)).Distinct().ToHashSet();
-                    }
-                    else
-                        Task.WaitAll(assetFollowers);
-                }
-
-                AdvisorBusiness.Calculation(CalculationMode.Feed, out advisorsResult, out assetsResult, loggedUser, advices?.Result, advisors, advisorFollowers?.Result, assetFollowers.Result, selectAssetsIds);
-
-                MemoryCache.Set(advisorsCacheKey, advisorsResult, 10);
-                MemoryCache.Set(assetsCacheKey, assetsResult, 10);
-            }
-
-            if (listAdvicesTask != null && listReportsTask != null && listEventsTask != null)
-            {
-                Task.WaitAll(listAdvicesTask, listReportsTask, listEventsTask);
-                feedAdvices = listAdvicesTask.Result;
-                feedReport = listReportsTask.Result;
-                feedEvent = listEventsTask.Result;
-            }
-            else if (listAdvicesTask != null)
-            {
-                Task.WaitAll(listAdvicesTask);
-                feedAdvices = listAdvicesTask.Result;
-            }
-            else if (listReportsTask != null && feedReport == null)
-            {
-                Task.WaitAll(listReportsTask);
-                feedReport = listReportsTask.Result;
-            }
-            else if (listEventsTask != null && feedEvent == null)
-            {
-                Task.WaitAll(listEventsTask);
-                feedEvent = listEventsTask.Result;
-            }
-            return ConvertToFeedResponse(top, assetsResult, advisorsResult, feedAdvices, feedReport, feedEvent);
-        }
-
-        private List<FeedResponse> ConvertToFeedResponse(int? top, List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, 
-            IEnumerable<Advice> advices, IEnumerable<Report> reports, IEnumerable<AssetEvent> events)
-        {
-            var feedResult = new List<FeedResponse>();
-            feedResult.AddRange(ConvertAdviceToFeedResponse(assetResult, advisorsResult, advices));
-            feedResult.AddRange(ConvertReportToFeedResponse(assetResult, reports));
-            feedResult.AddRange(ConvertEventToFeedResponse(assetResult, events));
-            return top.HasValue ? feedResult.OrderByDescending(c => c.Date).Take(top.Value).ToList() : feedResult.OrderByDescending(c => c.Date).ToList();
-        }
-
-        private List<FeedResponse> ConvertAdviceToFeedResponse(List<AssetResponse> assetResult, List<AdvisorResponse> advisorsResult, IEnumerable<Advice> advices)
-        {
-            var feedResult = new List<FeedResponse>();
-            if (advices != null)
-            {
-                foreach (var advice in advices)
-                {
-                    var advisorResponse = advisorsResult.First(c => c.UserId == advice.AdvisorId);
-                    var assetResponse = assetResult.First(c => c.AssetId == advice.AssetId);
-                    feedResult.Add(new FeedResponse()
-                    {
-                        AssetId = assetResponse.AssetId,
-                        AssetCode = assetResponse.Code,
-                        AssetName = assetResponse.Name,
-                        AssetMode = assetResponse.Mode,
-                        FollowingAsset = assetResponse.Following == true,
-                        Date = advice.CreationDate,
-                        Advice = new FeedResponse.AdviceResponse()
-                        {
-                            AdviceId = advice.Id,
-                            AdviceType = advice.Type,
-                            AssetValueAtAdviceTime = advice.AssetValue,
-                            TargetPrice = advice.TargetPrice,
-                            StopLoss = advice.StopLoss,
-                            OperationType = advice.OperationType,
-                            AdvisorId = advisorResponse.UserId,
-                            AdvisorName = advisorResponse.Name,
-                            AdvisorUrlGuid = advisorResponse.UrlGuid,
-                            AdvisorRanking = advisorResponse.Ranking,
-                            AdvisorRating = advisorResponse.Rating,
-                            FollowingAdvisor = advisorResponse.Following
-                        }
-                    });
-                }
-            }
-            return feedResult;
-        }
-
-        private List<FeedResponse> ConvertReportToFeedResponse(List<AssetResponse> assetResult, IEnumerable<Report> reports)
-        {
-            var feedResult = new List<FeedResponse>();
-            if (reports != null)
-            {
-                foreach (var report in reports)
-                {
-                    string code, name;
-                    bool following = true;
-                    int mode = AssetModeType.Neutral.Value;
-
-                    var assetResponse = assetResult.FirstOrDefault(c => c.AssetId == report.AssetId);
-                    if (assetResponse == null)
-                    {
-                        var asset = AssetBusiness.GetById(report.AssetId);
-                        code = asset.Code;
-                        name = asset.Name;
-                    }
-                    else
-                    {
-                        code = assetResponse.Code;
-                        name = assetResponse.Name;
-                        mode = assetResponse.Mode;
-                        following = assetResponse.Following == true;
-                    }
-
-                    feedResult.Add(new FeedResponse()
-                    {
-                        AssetId = report.AssetId,
-                        AssetCode = code,
-                        AssetName = name,
-                        AssetMode = mode,
-                        FollowingAsset = following,
-                        Date = report.ReportDate,
-                        Report = ReportBusiness.ConvertToReportResponse(report)
-                    });
-                }
-            }
-            return feedResult;
-        }
-
-        private List<FeedResponse> ConvertEventToFeedResponse(List<AssetResponse> assetResult, IEnumerable<AssetEvent> events)
-        {
-            var feedResult = new List<FeedResponse>();
-            if (events != null)
-            {
-                if (assetResult.Any())
-                    assetResult = assetResult.OrderByDescending(c => c.MarketCap).ToList();
-
-                foreach (var e in events)
-                {
-                    string code, name;
-                    int assetId;
-                    bool following = true;
-                    int mode = AssetModeType.Neutral.Value;
-
-                    var assetResponse = assetResult.FirstOrDefault(c => c.Following == true && e.LinkEventAsset.Any(a => a.AssetId == c.AssetId));
-                    if (assetResponse == null)
-                        assetResponse = assetResult.FirstOrDefault(c => e.LinkEventAsset.Any(a => a.AssetId == c.AssetId));
-
-                    if (assetResponse == null)
-                    {
-                        assetId = e.LinkEventAsset.First().AssetId;
-                        var asset = AssetBusiness.GetById(assetId);
-                        code = asset.Code;
-                        name = asset.Name;
-                    }
-                    else
-                    {
-                        assetId = assetResponse.AssetId;
-                        code = assetResponse.Code;
-                        name = assetResponse.Name;
-                        mode = assetResponse.Mode;
-                        following = assetResponse.Following == true;
-                    }
-
-                    feedResult.Add(new FeedResponse()
-                    {
-                        AssetId = assetId,
-                        AssetCode = code,
-                        AssetName = name,
-                        AssetMode = mode,
-                        FollowingAsset = following,
-                        Date = e.ExternalCreationDate,
-                        Event = AssetEventBusiness.ConvertToEventResponse(e)
-                    });
-                }
-            }
-            return feedResult;
         }
     }
 }

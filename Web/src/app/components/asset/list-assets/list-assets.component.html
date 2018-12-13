@@ -1,20 +1,2 @@
-<div class="top-assets-container global-container-min">
-    <div class="global-container">
-        <div class="section-title">
-            Top Assets
-        </div>
-        <div class="section-subtitle">
-            The most popular Cryptocurrencies. Follow your favorite assets and see what analysts are saying about them
-        </div>
-        <div fxLayout="row" fxLayout.xs="column" fxHide.lt-md fxLayoutAlign="center top" fxLayoutGap="16px">
-            <coin-search #CoinSearch [options]="getSearchOptions()"></coin-search>
-            <div class="blue-button action-button" *ngIf="showNewAdviceButton" (click)="onNewAdviceClick()">NEW SIGNAL</div>
-        </div>
-        <div fxLayout="column" fxLayoutAlign="center center">
-            <asset-card *ngFor="let asset of assets" [asset]="asset"></asset-card>
-            <button class="pagination-link" *ngIf="hasMoreAssets()" (click)="loadMoreAssets()">
-                LOAD MORE
-            </button>
-        </div>
-    </div>
-</div>
+<h2 class="page-title">Markets</h2>
+<assets-table [assets]="assets"></assets-table>

@@ -9,6 +9,8 @@ using Auctus.DataAccessInterfaces.Email;
 using Auctus.DataAccessInterfaces.Event;
 using Auctus.DataAccessInterfaces.Exchange;
 using Auctus.DataAccessInterfaces.Storage;
+using Auctus.DataAccessInterfaces.News;
+using Auctus.DataAccessInterfaces.Trade;
 using Auctus.DataAccessMock.Account;
 using Auctus.DataAccessMock.Advisor;
 using Auctus.DataAccessMock.Asset;
@@ -17,10 +19,13 @@ using Auctus.DataAccessMock.Email;
 using Auctus.DataAccessMock.Exchange;
 using Auctus.DataAccessMock.Storage;
 using Auctus.DataAccessMock.Event;
+using Auctus.DataAccessMock.Trade;
 using Auctus.DomainObjects.Account;
 using Auctus.DomainObjects.Advisor;
 using Auctus.DomainObjects.Asset;
+using Auctus.DomainObjects.Exchange;
 using Auctus.DomainObjects.Event;
+using Auctus.DomainObjects.Trade;
 using Auctus.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,8 +33,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection;
-using Auctus.DataAccessInterfaces.News;
-using Auctus.DomainObjects.Exchange;
+using Auctus.Business.Trade;
+using Auctus.DataAccessInterfaces;
+using Auctus.DataAccessMock;
 
 namespace Auctus.Test
 {
@@ -63,14 +69,13 @@ namespace Auctus.Test
             services.AddSingleton<ICoinGeckoApi, CoinGeckoApi>();
             services.AddSingleton<IBinanceApi, BinanceApi>();
             services.AddSingleton<ICoinMarketCalApi, CoinMarketCalApi>();
+            services.AddScoped<ITransactionalDapperCommand>(c => new TransactionalDapperCommand(services.BuildServiceProvider()));
             services.AddScoped<IActionData<DomainObjects.Account.Action>, ActionData>();
             services.AddScoped<IExchangeApiAccessData<ExchangeApiAccess>, ExchangeApiAccessData>();
             services.AddScoped<IPasswordRecoveryData<PasswordRecovery>, PasswordRecoveryData>();
             services.AddScoped<IUserData<User>, UserData>();
             services.AddScoped<IWalletData<Wallet>, WalletData>();
-            services.AddScoped<IAdviceData<Advice>, AdviceData>();
             services.AddScoped<IAdvisorData<DomainObjects.Advisor.Advisor>, AdvisorData>();
-            services.AddScoped<IRequestToBeAdvisorData<RequestToBeAdvisor>, RequestToBeAdvisorData>();
             services.AddScoped<IAssetData<DomainObjects.Asset.Asset>, AssetData>();
             services.AddScoped<IAssetValueData<AssetValue>, AssetValueData>();
             services.AddScoped<IFollowAdvisorData<FollowAdvisor>, FollowAdvisorData>();
@@ -89,6 +94,12 @@ namespace Auctus.Test
             services.AddScoped<INewsRss, NewsRss>(c => new NewsRss());
             services.AddScoped<IExchangeData<DomainObjects.Exchange.Exchange>, ExchangeData>();
             services.AddScoped<IPairData<Pair>, PairData>();
+            services.AddScoped<IOrderData<Order>, OrderData>();
+            services.AddScoped<IAdvisorRankingData<AdvisorRanking>, AdvisorRankingData>();
+            services.AddScoped<IAdvisorProfitData<AdvisorProfit>, AdvisorProfitData>();
+            services.AddScoped<IAdvisorRankingHistoryData<AdvisorRankingHistory>, AdvisorRankingHistoryData>();
+            services.AddScoped<IAdvisorProfitHistoryData<AdvisorProfitHistory>, AdvisorProfitHistoryData>();
+            services.AddScoped<IAdvisorMonthlyRankingData<AdvisorMonthlyRanking>, AdvisorMonthlyRankingData>();
 
             ServiceProvider = services.BuildServiceProvider();
             ServiceScopeFactory = new ServiceScopeFactory(ServiceProvider);
@@ -105,20 +116,20 @@ namespace Auctus.Test
         private UserBusiness _userBusiness;
         private PasswordRecoveryBusiness _passwordRecoveryBusiness;
         private AdvisorBusiness _advisorBusiness;
-        private AdviceBusiness _adviceBusiness;
+        private AdvisorProfitBusiness _advisorProfitBusiness;
         private AssetBusiness _assetBusiness;
         private AssetValueBusiness _assetValueBusiness;
         private FollowBusiness _followBusiness;
         private FollowAssetBusiness _followAssetBusiness;
         private FollowAdvisorBusiness _followAdvisorBusiness;
         private ExchangeApiAccessBusiness _exchangeApiAccessBusiness;
-        private RequestToBeAdvisorBusiness _requestToBeAdvisorBusiness;
         private WalletBusiness _walletBusiness;
         private ActionBusiness _actionBusiness;
         private AssetCurrentValueBusiness _assetCurrentValueBusiness;
         private AgencyBusiness _agencyBusiness;
         private AgencyRatingBusiness _agencyRatingBusiness;
         private ReportBusiness _reportBusiness;
+        private OrderBusiness _orderBusiness;
 
         protected UserBusiness UserBusiness
         {
@@ -150,13 +161,13 @@ namespace Auctus.Test
             }
         }
 
-        protected AdviceBusiness AdviceBusiness
+        protected AdvisorProfitBusiness AdvisorProfitBusiness
         {
             get
             {
-                if (_adviceBusiness == null)
-                    _adviceBusiness = new AdviceBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
-                return _adviceBusiness;
+                if (_advisorProfitBusiness == null)
+                    _advisorProfitBusiness = new AdvisorProfitBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _advisorProfitBusiness;
             }
         }
 
@@ -220,16 +231,6 @@ namespace Auctus.Test
             }
         }
 
-        protected RequestToBeAdvisorBusiness RequestToBeAdvisorBusiness
-        {
-            get
-            {
-                if (_requestToBeAdvisorBusiness == null)
-                    _requestToBeAdvisorBusiness = new RequestToBeAdvisorBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
-                return _requestToBeAdvisorBusiness;
-            }
-        }
-
         protected WalletBusiness WalletBusiness
         {
             get
@@ -287,6 +288,16 @@ namespace Auctus.Test
                 if (_reportBusiness == null)
                     _reportBusiness = new ReportBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
                 return _reportBusiness;
+            }
+        }
+
+        protected OrderBusiness OrderBusiness
+        {
+            get
+            {
+                if (_orderBusiness == null)
+                    _orderBusiness = new OrderBusiness(Configuration, ServiceProvider, ServiceScopeFactory, LoggerFactory, MemoryCache, LoggedEmail, LoggedIp);
+                return _orderBusiness;
             }
         }
     }

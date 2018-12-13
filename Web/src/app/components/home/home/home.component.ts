@@ -19,9 +19,7 @@ export class HomeComponent implements OnInit {
     private navigationService: NavigationService) { }
 
   ngOnInit() {
-    if (!!this.route.snapshot.queryParams['configuration']) {
-      this.modalService.setConfiguration();
-    } else if (!!this.route.snapshot.queryParams['confirmemail']) {
+    if (!!this.route.snapshot.queryParams['confirmemail']) {
       this.modalService.setConfirmEmail();
     } else if (!!this.route.snapshot.queryParams['resetpassword']) {
       this.modalService.setResetPassword();
@@ -34,23 +32,19 @@ export class HomeComponent implements OnInit {
     } else if (!!this.route.snapshot.queryParams['login']) {
       this.modalService.setLogin();
     } else if(this.isLoggedIn()) {
-      this.navigationService.goToFeed();
+      this.navigationService.goToPortfolio();
     }
+  }
+  
+  signup(){
+    this.modalService.setRegister();
   }
 
   isLoggedIn() {
     return this.accountService.isLoggedIn();
   }
 
-  getTopImage() : string {
-    return CONFIG.platformImgUrl.replace("{id}", "home1920px");
-  }
-
-  getTopText1() : string {
-    return "An investment platform made for the digital age.";
-  }
-
-  getTopText2() : string {
-    return "Follow your favourite expert, recognize trends early, stay in control.";
+  getImageUrl(name: string) : string {
+    return CONFIG.platformImgUrl.replace("{id}", name);
   }
 }

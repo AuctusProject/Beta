@@ -24,7 +24,9 @@ import { ValidReferralCodeResponse } from '../model/account/validReferralCodeRes
 import { SetReferralCodeReponse } from '../model/account/setReferralCodeReponse';
 import { WalletLoginInfoResponse } from '../model/account/walletLoginInfoResponse';
 import { EarlyAccessRequest } from '../model/account/earlyAccessRequest';
-
+import { EventsService } from 'angular-event-service/dist';
+import { AssetResponse } from "../model/asset/assetResponse";
+import { AdvisorResponse } from "../model/advisor/advisorResponse";
 
 @Injectable()
 export class AccountService {
@@ -36,7 +38,6 @@ export class AccountService {
   private recoverPasswordUrl = this.httpService.apiUrl("v1/accounts/passwords/recover");
   private changePasswordUrl = this.httpService.apiUrl("v1/accounts/me/passwords");
   private registerUrl = this.httpService.apiUrl("v1/accounts");
-  private listFeedUrl = this.httpService.apiUrl("v1/accounts/me/feed");
   private meReferralsUrl = this.httpService.apiUrl("v1/accounts/me/referrals");
   private meWalletLoginUrl = this.httpService.apiUrl("v1/accounts/me/wallet_login");
   private referralsUrl = this.httpService.apiUrl("v1/accounts/referrals");
@@ -44,9 +45,10 @@ export class AccountService {
   private configurationUrl = this.httpService.apiUrl("v1/accounts/me/configuration");
   private dashboardUrl = this.httpService.apiUrl("v1/accounts/dashboard");
   private searchUrl = this.httpService.apiUrl("v1/accounts/search");
-  private earlyAccessUrl = this.httpService.apiUrl("v1/accounts/early-access-emails");
+  private assetsFollowedUrl = this.httpService.apiUrl("v1/accounts/{id}/assets/following");
+  private expertsFollowedUrl = this.httpService.apiUrl("v1/accounts/{id}/advisors/following");
 
-  constructor(private httpService : HttpService, private navigationService: NavigationService) { }
+  constructor(private httpService : HttpService, private navigationService: NavigationService, private eventsService: EventsService) { }
 
   validateSignature(validateSignatureRequest: ValidateSignatureRequest): Observable<LoginResponse> {
     return this.httpService.post(this.validateSignatureUrl, validateSignatureRequest);
@@ -66,10 +68,15 @@ export class AccountService {
 
   setLoginData(loginData: LoginResponse): void {
     this.httpService.setLoginData(loginData);
+    this.eventsService.broadcast("onLogin", loginData);
   }
 
   getLoginData() : LoginResponse {
     return this.httpService.getLoginData();
+  }
+
+  getAccessToken() : string {
+    return this.httpService.getAccessToken();
   }
 
   getUserEmail() : string {
@@ -113,15 +120,6 @@ export class AccountService {
     return this.httpService.post(this.registerUrl, registerRequest)
   }
 
-  listFeed(top? : number, lastAdviceId? : number, lastReportId? : number, lastEventId? : number) : Observable<FeedResponse[]> {
-    var url = this.listFeedUrl + "?";
-    if(!!top) url += "top="+top;
-    if(!!lastAdviceId) url += "&lastAdviceId="+lastAdviceId;
-    if(!!lastReportId) url += "&lastReportId="+lastReportId;
-    if(!!lastEventId) url += "&lastEventId="+lastEventId;
-    return this.httpService.get(url);
-  }
-
   getReferralProgramInfo() : Observable<ReferralProgramInfoResponse> {
     return this.httpService.get(this.meReferralsUrl);
   }
@@ -160,10 +158,6 @@ export class AccountService {
     return this.httpService.get(this.searchUrl + "?term=" + searchTerm);
   }
   
-  postEarlyAccessRequest(earlyAccessRequest: EarlyAccessRequest) : Observable<void> {
-    return this.httpService.post(this.earlyAccessUrl, earlyAccessRequest)
-  }
-
   hasInvestmentToCallLoggedAction():boolean{
     let loginData = this.getLoginData();
     if(!loginData){
@@ -175,5 +169,13 @@ export class AccountService {
       return false;
     }
     return true;
+  }
+
+  getAssetsFollowedByUser(id: number): Observable<AssetResponse[]> {
+    return this.httpService.get(this.assetsFollowedUrl.replace("{id}", id.toString()));
+  }
+
+  getExpertsFollowedByUser(id: number): Observable<AdvisorResponse[]> {
+    return this.httpService.get(this.expertsFollowedUrl.replace("{id}", id.toString()));
   }
 }

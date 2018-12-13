@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { AssetResponse, AssetAdvisorResponse } from '../../../model/asset/assetResponse';
+import { AssetResponse } from '../../../model/asset/assetResponse';
 import { ActivatedRoute } from '@angular/router';
 import { AssetService } from '../../../services/asset.service';
-import { Util } from '../../../util/Util';
 import { CONFIG} from "../../../services/config.service";
-import { AccountService } from '../../../services/account.service';
+import { FollowUnfollowType } from '../../util/follow-unfollow/follow-unfollow.component';
 import { ModalService } from '../../../services/modal.service';
-import { AdvisorService } from '../../../services/advisor.service';
-import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
-import { Subscription } from 'rxjs';
-import { NavigationService } from '../../../services/navigation.service';
+import { AccountService } from '../../../services/account.service';
+import { OrderPositionTabComponent } from '../../trade/order-position-tab/order-position-tab.component';
 
 @Component({
   selector: 'asset-details',
@@ -19,14 +16,14 @@ import { NavigationService } from '../../../services/navigation.service';
 })
 export class AssetDetailsComponent implements OnInit {
   asset: AssetResponse;
-  promise: Subscription;
+  assetFollowUnfollowType = FollowUnfollowType.asset;
+  logged: boolean = false;
+  @ViewChild("OrderTab") OrderTab: OrderPositionTabComponent;
 
   constructor(private route: ActivatedRoute, 
     private assetService: AssetService,
-    private accountService: AccountService,
     private modalService: ModalService,
-    private advisorService: AdvisorService,
-    private navigationService:NavigationService,
+    private accountService: AccountService,
     private titleService: Title,
     private metaTagService: Meta) { }
 
@@ -35,60 +32,38 @@ export class AssetDetailsComponent implements OnInit {
       this.assetService.getAssetDetails(params['id']).subscribe(
         asset => {
           this.asset = asset;
-          this.titleService.setTitle("Auctus Experts - " + asset.name);
-          this.metaTagService.updateTag({name: 'description', content: "Expert ratings on " + asset.name + " (" + asset.code + ")" });
+          this.titleService.setTitle("Auctus Trading - " + asset.name);
+          this.metaTagService.updateTag({name: 'description', content: "Traders on " + asset.name + " (" + asset.code + ")" });
         })
-    )
+    );
+    this.logged = this.accountService.isLoggedIn();
   }
 
-  refreshDataSource(){
-    this.assetService.getAssetDetails(this.asset.assetId.toString()).subscribe(
-      asset => {
-        this.asset = asset;
-      })
-  }
-  
-  getAssetImgUrl(){
+  getAssetImgUrl() {
     return CONFIG.assetImgUrl.replace("{id}", this.asset.assetId.toString());
   }
 
-  onFollowAssetClick(){
-    if(this.accountService.hasInvestmentToCallLoggedAction()){
-      this.promise = this.assetService.followAsset(this.asset.assetId).subscribe(result =>
-      {
-        this.asset.following = true;
-        this.asset.numberOfFollowers = this.asset.numberOfFollowers + 1;
-      });
+  onNewTrade(asset: AssetResponse) {
+    this.modalService.setNewOrderDialog(asset);
+  }
+
+  showCancelOpenOrders() {
+    return this.OrderTab && this.OrderTab.showCancelOpenOrders();
+  }
+
+  showCloseOpenPositions() {
+    return this.OrderTab && this.OrderTab.showCloseOpenPositions();
+  }
+
+  closeAllOpenPositions(assetId: number, assetCode: string) {
+    if (this.OrderTab) {
+      this.OrderTab.closeAllOpenPositions(assetId, assetCode);
     }
   }
 
-  onUnfollowAssetClick(){
-    this.promise = this.assetService.unfollowAsset(this.asset.assetId).subscribe(result =>
-      {
-        this.asset.following = false;
-        this.asset.numberOfFollowers = this.asset.numberOfFollowers - 1;
-      });
-  }
-
-  getTotalAdvisorsSentence(){
-    var sentence = this.asset.totalAdvisors+" ";
-    if(this.asset.totalAdvisors == 1){
-      sentence += "expert signaled"
+  cancelAllOpenOrders() {
+    if (this.OrderTab) {
+      this.OrderTab.cancelAllOpenOrders();
     }
-    else{
-      sentence += "experts signaled"
-    }
-    return sentence;
-  }
-
-  getFollowersSentence(){
-    var sentence = this.asset.numberOfFollowers+" ";
-    if(this.asset.numberOfFollowers == 1){
-      sentence += "investor is following"
-    }
-    else{
-      sentence += "investors are following"
-    }
-    return sentence;
   }
 }
