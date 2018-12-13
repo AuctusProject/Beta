@@ -4,7 +4,7 @@
         <span class="market-label">MARKETS</span>
         <fa-icon *ngIf="!listOnlyWatchlist" (click)="toggleMarketsWatchlist()" [icon]="['far','star']"></fa-icon>
         <fa-icon *ngIf="listOnlyWatchlist" (click)="toggleMarketsWatchlist()" icon="star"></fa-icon></ng-template>
-      <asset-mini-view></asset-mini-view>
+      <asset-mini-view [listOnlyWatchlist]="listOnlyWatchlist"></asset-mini-view>
   </mat-tab>
   <mat-tab>  
       <ng-template mat-tab-label>PORTFOLIO</ng-template>

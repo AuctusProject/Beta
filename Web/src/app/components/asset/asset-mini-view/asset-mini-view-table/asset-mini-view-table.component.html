@@ -2,7 +2,7 @@
     <ng-container matColumnDef="market">
       <td mat-cell *matCellDef="let asset" class="text-left">
         <div fxLayout="row" fxLayoutAlign="start center"  fxLayoutGap="20px">
-          <follow-unfollow [(following)]="asset.following" [(id)]="asset.assetId" [type]="followUnfollowType" [showOnlyStar]="true"></follow-unfollow>
+          <follow-unfollow (onFollowUnfollow)="onFollowUnfollow($event)" [(following)]="asset.following" [(id)]="asset.assetId" [type]="followUnfollowType" [showOnlyStar]="true"></follow-unfollow>
           <span class="width100 pointer" (click)="openChart(asset)">{{asset.code}}</span>
         </div>
       </td>

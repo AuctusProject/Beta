@@ -3,6 +3,7 @@ import { AssetResponse } from '../../../../model/asset/assetResponse';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { FollowUnfollowType } from '../../../../components/util/follow-unfollow/follow-unfollow.component';
 import { NavigationService } from '../../../../services/navigation.service';
+import { FollowUnfollow } from '../../../../model/asset/followUnfollow';
 
 @Component({
   selector: 'asset-mini-view-table',
@@ -12,6 +13,7 @@ import { NavigationService } from '../../../../services/navigation.service';
 export class AssetMiniViewTableComponent implements OnInit {
   @Input() assets: AssetResponse[];
   @Output() openMiniChart = new EventEmitter<AssetResponse>();
+  @Output() setFollowUnfollow = new EventEmitter<FollowUnfollow>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataSource = new MatTableDataSource<AssetResponse>(this.assets);
 
@@ -58,5 +60,9 @@ export class AssetMiniViewTableComponent implements OnInit {
 
   openChart(asset: AssetResponse) {
     this.openMiniChart.emit(asset);
+  }
+
+  onFollowUnfollow(followUnfollow: FollowUnfollow) {
+    this.setFollowUnfollow.emit(followUnfollow);
   }
 }
