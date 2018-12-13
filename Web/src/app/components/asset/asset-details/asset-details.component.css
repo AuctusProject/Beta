@@ -73,10 +73,6 @@
     padding: 5px;
 }
 
-.bottom-tab {
-    min-height: 400px;
-}
-
 .asset-details {
     height:100%;
 }
@@ -118,6 +114,7 @@
 
 .positions-tab{
     width: calc(100% - 215px);
+    margin-bottom: 5px;
 }
 
 @media(max-width:959px){
