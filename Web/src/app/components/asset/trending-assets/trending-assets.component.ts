@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AssetResponse } from 'src/app/model/asset/assetResponse';
-import { AssetService } from 'src/app/services/asset.service';
+import { AssetResponse } from '../../../model/asset/assetResponse';
+import { AssetService } from '../../../services/asset.service';
 import { AssetsTableType } from '../assets-table/assets-table.component';
 
 @Component({
