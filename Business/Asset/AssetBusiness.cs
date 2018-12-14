@@ -344,5 +344,19 @@ namespace Auctus.Business.Asset
         {
             return ListAssets(true).Where(asset => asset.Name.ToUpper().StartsWith(searchTerm.ToUpper()) || asset.Code.ToUpper().StartsWith(searchTerm.ToUpper()));
         }
+
+        public IEnumerable<AssetResponse> ListTrendingAssets(int? listSize)
+        {
+            var numberOfRecordsInResult = listSize ?? 10;
+            var numberOfDays = 7;
+            var ids = OrderBusiness.ListTrendingAssetIdsBasedOnOrders(numberOfRecordsInResult, numberOfDays).ToList();
+
+            var assets = AssetCurrentValueBusiness.ListAllAssets(true, ids);
+
+            var advisors = AdvisorRankingBusiness.ListAdvisorsFullData();
+            var assetResponse = assets.Select(asset => GetAssetResponse(null, asset, null, advisors)).OrderBy(asset => ids.IndexOf(asset.AssetId));
+
+            return assetResponse;
+        }
     }
 }
