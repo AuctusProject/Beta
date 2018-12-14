@@ -15,7 +15,7 @@
 <mat-tab-group class="bottom-tab-group border-tabs">
   <mat-tab *ngIf="isLoggedIn()"> 
       <ng-template mat-tab-label>SIGNALS</ng-template>
-      <div>CONTEUDO 1</div>
+      <trade-signal (newSignal)="onNewSignal()"></trade-signal>
   </mat-tab>
   <mat-tab>  
       <ng-template mat-tab-label>TRENDING</ng-template>

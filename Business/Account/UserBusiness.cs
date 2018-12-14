@@ -473,6 +473,7 @@ namespace Auctus.Business.Account
             Data.Update(user);
 
             Parallel.Invoke(() => user.FollowedAdvisors = FollowAdvisorBusiness.ListAdvisorsFollowed(user.Id),
+                            () => user.FollowingUsers = FollowAdvisorBusiness.ListFollowers(new int[] { user.Id }, true).Select(c => c.User.Email).ToList(),
                             () => user.FollowedAssets = FollowAssetBusiness.ListAssetsFollowed(user.Id));
 
             SetUserToCache(user);
@@ -527,10 +528,23 @@ namespace Auctus.Business.Account
             {
                 if (followActionType == FollowActionType.Follow)
                     user.FollowedAdvisors.Add(advisorId);
-                else
+                else if(user.FollowedAdvisors.Contains(advisorId))
                     user.FollowedAdvisors.Remove(advisorId);
 
                 SetUserToCache(user);
+            }
+            if (user.FollowingUsers != null)
+            {
+                var advisorCache = GetUserFromCache(GetById(advisorId));
+                if (advisorCache != null)
+                {
+                    if (followActionType == FollowActionType.Follow)
+                        advisorCache.FollowingUsers.Add(user.Email);
+                    else if (advisorCache.FollowingUsers.Contains(user.Email))
+                        advisorCache.FollowingUsers.Remove(user.Email);
+
+                    SetUserToCache(advisorCache);
+                }
             }
             return followAdvisor;
         }

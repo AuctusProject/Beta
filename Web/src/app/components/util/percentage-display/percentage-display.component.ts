@@ -8,6 +8,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 export class PercentageDisplayComponent implements OnChanges {
   Math = Math;
   @Input() value: number;
+  @Input() showArrow: boolean = true;
   constructor() { }
 
   ngOnChanges() {

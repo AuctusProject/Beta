@@ -111,6 +111,7 @@ import { AssetMiniViewTableComponent } from './components/asset/asset-mini-view/
 import { PortfolioMiniViewComponent } from './components/trade/portfolio/portfolio-mini-view/portfolio-mini-view.component';
 import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
 import { NewsListComponent } from './components/util/mini-view/news-list/news-list.component';
+import { TradeSignalComponent } from './components/trade/trade-signal/trade-signal.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -211,7 +212,8 @@ export function getAuthServiceConfigs() {
     MiniViewComponent,
     PortfolioMiniViewComponent,
     TrendingAssetsComponent,
-    NewsListComponent
+    NewsListComponent,
+    TradeSignalComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),

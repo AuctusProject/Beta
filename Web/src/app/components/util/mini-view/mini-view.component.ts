@@ -20,7 +20,7 @@ export class MiniViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  toggleMarketsWatchlist(){
+  toggleMarketsWatchlist() {
     this.listOnlyWatchlist = !this.listOnlyWatchlist;
   }
 
@@ -30,5 +30,9 @@ export class MiniViewComponent implements OnInit {
 
   goToOpenPositions(){
     this.navigationService.goToPortfolio();
+  }
+
+  onNewSignal() {
+
   }
 }

@@ -41,5 +41,6 @@ namespace Auctus.DomainObjects.Account
         public List<Wallet> Wallets { get; set; } = new List<Wallet>();
         public List<int> FollowedAssets { get; set; }
         public List<int> FollowedAdvisors { get; set; }
+        public List<string> FollowingUsers { get; set; }
     }
 }
