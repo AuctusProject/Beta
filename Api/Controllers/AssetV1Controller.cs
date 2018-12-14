@@ -128,5 +128,14 @@ namespace Api.Controllers
         {
             return base.UnfollowAsset(id);
         }
+
+        [Route("trending")]
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListTrendingAssets()
+        {
+            return base.ListTrendingAssets();
+        }
     }
 }

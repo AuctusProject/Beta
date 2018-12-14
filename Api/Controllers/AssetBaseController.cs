@@ -78,5 +78,11 @@ namespace Api.Controllers
         {
             return Ok(UserBusiness.FollowUnfollowAsset(id, FollowActionType.Unfollow));
         }
+
+        protected IActionResult ListTrendingAssets()
+        {
+            var assetResponse = AssetBusiness.ListTrendingAssets();
+            return Ok(assetResponse);
+        }
     }
 }

@@ -770,5 +770,10 @@ namespace Auctus.Business.Trade
                     (order.OrderStatusType == OrderStatusType.Executed || (order.OrderStatusType == OrderStatusType.Open && !order.OrderId.HasValue))
             };
         }
+
+        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int resultSizeLimit, int numberOfDays)
+        {
+            return Data.ListTrendingAssetIdsBasedOnOrders(resultSizeLimit, numberOfDays);
+        }
     }
 }
