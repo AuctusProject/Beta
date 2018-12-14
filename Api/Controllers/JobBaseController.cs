@@ -78,6 +78,13 @@ namespace Api.Controllers
 
                                 HubContext.Clients.User(advisor.Email).SendAsync(methodName, orders.Value);
                             }
+                            var followers = UserBusiness.GetUserFromCache(advisor.Email)?.FollowingUsers;
+                            if (followers?.Any() == true)
+                            {
+                                var respectiveOrders = ordersType.Value.Values.SelectMany(c => c).ToList();
+                                foreach (var user in followers)
+                                    HubContext.Clients.User(user).SendAsync("onNewTradeSignal", respectiveOrders);
+                            }
                         }
                     }
                 }

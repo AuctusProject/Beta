@@ -32,6 +32,7 @@ using Api.Hubs;
 using Auctus.Business.Exchange;
 using Auctus.Business.Trade;
 using Auctus.Business.Email;
+using Auctus.Model;
 
 namespace Api.Controllers
 {
@@ -57,6 +58,19 @@ namespace Api.Controllers
         protected string GetUser()
         {
             return Request.HttpContext.User.Identity.IsAuthenticated ? Request.HttpContext.User.Identity.Name : null;
+        }
+
+        protected void SendOrderMessageToFollowers(IEnumerable<OrderResponse> orders)
+        {
+            if (orders?.Any() == true)
+            {
+                var loggedUser = UserBusiness.GetLoggedUser();
+                if (loggedUser != null && loggedUser?.FollowingUsers.Any() == true)
+                {
+                    foreach (var user in loggedUser.FollowingUsers)
+                        HubContext.Clients.User(user).SendAsync("onNewTradeSignal", orders);
+                }
+            }
         }
 
         protected string GetRequestIP(bool tryUseXForwardHeader = true)

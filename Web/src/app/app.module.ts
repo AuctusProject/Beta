@@ -108,6 +108,7 @@ import { MiniTradingViewChartComponent } from './components/util/mini-trading-vi
 import { MiniViewComponent } from './components/util/mini-view/mini-view.component';
 import { AssetMiniViewComponent } from './components/asset/asset-mini-view/asset-mini-view.component';
 import { AssetMiniViewTableComponent } from './components/asset/asset-mini-view/asset-mini-view-table/asset-mini-view-table.component';
+import { TradeSignalComponent } from './components/trade/trade-signal/trade-signal.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -205,7 +206,8 @@ export function getAuthServiceConfigs() {
     PerfomanceOpenPositionsComponent,
     AssetMiniViewComponent,
     AssetMiniViewTableComponent,
-    MiniViewComponent
+    MiniViewComponent,
+    TradeSignalComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),

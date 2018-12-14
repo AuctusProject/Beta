@@ -14,6 +14,7 @@ export class TradeService {
   private tradesEditTakeProfitUrl = this.httpService.apiUrl("v1/trades/{id}/take_profit");
   private tradesCancelAllUrl = this.httpService.apiUrl("v1/trades/cancel_all");
   private tradesCloseAllUrl = this.httpService.apiUrl("v1/trades/close_all");
+  private tradesFollowedUrl = this.httpService.apiUrl("v1/trades/followed_trades");
 
   constructor(private httpService : HttpService) { }
 
@@ -77,5 +78,9 @@ export class TradeService {
 
   closeAllOrders(assetId: number): Observable<OrderResponse[]> {
     return this.httpService.post(this.tradesCloseAllUrl, { assetId: assetId });
+  }
+
+  listFollowedTrades() : Observable<OrderResponse[]> {
+    return this.httpService.get(this.tradesFollowedUrl);
   }
 }

@@ -19,10 +19,11 @@ namespace Auctus.DataAccess.Advisor
 
         private const string SQL_LIST = @"
 		SELECT 
-			f.*, fa.AdvisorId 
+			f.*, fa.AdvisorId {0}
 		FROM 
 		    [FollowAdvisor] fa WITH(NOLOCK)
 		    INNER JOIN [Follow] f WITH(NOLOCK) ON f.Id = fa.Id
+            {1}
 		    INNER JOIN (
 		    	SELECT f2.UserId, MAX(f2.CreationDate) CreationDate, fa2.AdvisorId
 		    	FROM 
@@ -31,7 +32,7 @@ namespace Auctus.DataAccess.Advisor
 		    	GROUP BY f2.UserId, fa2.AdvisorId) b 
 			ON b.UserId = f.UserId AND f.CreationDate = b.CreationDate AND b.AdvisorId = fa.AdvisorId
 		WHERE 
-			f.ActionType = @ActionType AND ({0})";
+			f.ActionType = @ActionType AND ({2})";
 
         private const string SQL_GET_LAST_BY_USER = @"
 		SELECT 
@@ -84,7 +85,7 @@ namespace Auctus.DataAccess.Advisor
 		WHERE 
 			f.ActionType = @ActionType AND fa.AdvisorId = @AdvisorId";
 
-        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds)
+        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds, bool includeUserData)
         {
             var complement = "";
             DynamicParameters parameters = new DynamicParameters();
@@ -95,7 +96,17 @@ namespace Auctus.DataAccess.Advisor
                 for (int i = 0; i < advisorIds.Count(); ++i)
                     parameters.Add($"AdvisorId{i}", advisorIds.ElementAt(i), DbType.Int32);
             }
-            return Query<FollowAdvisor>(string.Format(SQL_LIST, complement), parameters).ToList();
+            if (includeUserData)
+            {
+                return Query<FollowAdvisor, User, FollowAdvisor>(string.Format(SQL_LIST, ", u.*", " INNER JOIN [User] u ON u.Id = f.UserId ", complement),
+                    (follow, user) =>
+                    {
+                        follow.User = user;
+                        return follow;
+                    }, "Id", parameters).ToList();
+            }
+            else
+                return Query<FollowAdvisor>(string.Format(SQL_LIST, "", "", complement), parameters).ToList();
         }
 
         public FollowAdvisor GetLastByUserForAdvisor(int userId, int advisorId)

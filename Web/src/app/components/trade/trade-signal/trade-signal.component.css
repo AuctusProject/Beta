@@ -1,0 +1,44 @@
+.text {
+    font-size: 11px;
+}
+
+.text-small {
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.text .bold {
+    font-weight: 500;
+}
+
+.text-name {
+    width: 78px;
+}
+
+.text-date {
+    width: 58px !important;
+}
+
+.trade {
+    margin-left: 2px;
+}
+
+:host td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+    padding-left: 4px !important;
+}
+
+:host td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
+    padding-right: 2px !important;
+}
+
+:host .expert-rating {
+    margin: 0px;
+}
+
+:host table tr.mat-header-row {
+    height: 25px !important;
+}
+
+:host tr.mat-row {
+    height: 39px !important;
+}

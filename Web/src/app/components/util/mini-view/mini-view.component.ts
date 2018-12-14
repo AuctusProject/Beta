@@ -12,7 +12,11 @@ export class MiniViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  toggleMarketsWatchlist(){
+  toggleMarketsWatchlist() {
     this.listOnlyWatchlist = !this.listOnlyWatchlist;
+  }
+
+  onNewSignal() {
+
   }
 }
