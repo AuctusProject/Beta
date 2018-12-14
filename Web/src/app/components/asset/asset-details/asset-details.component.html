@@ -69,10 +69,10 @@
       <trading-view-chart [pair]="asset.pair"></trading-view-chart>
     </div>
     <div fxLayout="row" fxLayoutGap="5px">
-      <div class="bottom-tab trade-tab" fxHide.lt-md>
+      <div class="trade-tab" fxHide.lt-md>
         <new-trade class="width100" [asset]="asset"></new-trade>
       </div>
-      <div class="bottom-tab positions-tab">
+      <div class="positions-tab">
         <order-position-tab #OrderTab class="width100" [asset]="asset"></order-position-tab>
       </div>
     </div>

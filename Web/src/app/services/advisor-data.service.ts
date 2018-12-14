@@ -124,11 +124,30 @@ export class AdvisorDataService {
   }
 
   private setAdvisorResponse(response: AdvisorResponse) : void {
+    let oldOpenAssetsId = null;
+    if (this.advisorData && response && this.advisorData.userId == response.userId && this.openAssetsId 
+      && this.openAssetsId.length > 0) {
+      oldOpenAssetsId = this.openAssetsId.slice(0);
+    }
     this.destroy();
     this.advisorData = response;
     this.openAssetsId = [];
     this.assetData = {};
     let openAssetsPair = this.setOpenAssetsData([this.advisorData]);
+    if (oldOpenAssetsId) {
+      for (let i = 0; i < oldOpenAssetsId.length; ++i) {
+        let found = false;
+        for (let j = 0; j < this.openAssetsId.length; ++j) {
+          if (oldOpenAssetsId[i] == this.openAssetsId[j]) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          this.openPositionAssetResponseSubject[oldOpenAssetsId[i]].next(null);
+        }
+      }
+    }
     this.setClosePositions(this.advisorData);
     this.refreshAllData(this.advisorData);
     for (let i = 0; i < openAssetsPair.length; ++i) {

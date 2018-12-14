@@ -115,6 +115,7 @@
 .positions-tab{
     width: calc(100% - 215px);
     margin-bottom: 5px;
+    min-height: 128px;
 }
 
 @media(max-width:959px){
@@ -122,4 +123,8 @@
         width: calc(100% - 10px);
         margin-left: 5px;
     }
+}
+
+.trade-tab {
+    min-height: 372px;
 }
