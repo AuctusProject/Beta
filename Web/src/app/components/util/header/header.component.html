@@ -1,5 +1,5 @@
 <div>
-    <button mat-icon-button (click)="onMenuClick()"><mat-icon>menu</mat-icon></button>
+    <button fxHide.gt-sm="true" mat-icon-button (click)="onMenuClick()"><mat-icon>menu</mat-icon></button>
     <div [@fadeAnimation] *ngIf="!searchEnabled" class="logo-container">
         <img [src]="getLogoImgUrl()" routerLink="" class="landing-logo" />
     </div>
