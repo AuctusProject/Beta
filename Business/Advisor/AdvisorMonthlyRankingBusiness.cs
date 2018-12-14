@@ -35,7 +35,7 @@ namespace Auctus.Business.Advisor
                 if (advisorsMonthlyRanking.Any())
                 {
                     var advisors = AdvisorRankingBusiness.ListAdvisorsFullData();
-                    var advisorsFollowers = FollowAdvisorBusiness.ListFollowers(advisorsMonthlyRanking.Select(c => c.UserId).Distinct());
+                    var advisorsFollowers = FollowAdvisorBusiness.ListFollowers(advisorsMonthlyRanking.Select(c => c.UserId).Distinct(), false);
                     var user = GetLoggedUser();
                     var groupedAdvisors = advisorsMonthlyRanking.GroupBy(c => new { c.Year, c.Month });
                     foreach(var data in groupedAdvisors)

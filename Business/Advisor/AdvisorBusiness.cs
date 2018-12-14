@@ -108,14 +108,39 @@ namespace Auctus.Business.Advisor
                 };
                 transaction.Insert(virtualDolar);
 
+                var rating = 2.5;
+                var ranking = advisorsCount + 1;
                 transaction.Insert(new AdvisorRanking()
                 {
                     Id = user.Id,
-                    Rating = 2.5,
                     UpdateDate = creationDate,
-                    Ranking = advisorsCount + 1
+                    Rating = rating,
+                    Ranking = ranking
                 });
-                transaction.Insert(AdvisorProfitBusiness.GetBaseUsdAdvisorProfit(user.Id, creationDate));
+                transaction.Insert(new AdvisorRankingHistory()
+                {
+                    UserId = user.Id,
+                    ReferenceDate = creationDate,
+                    Rating = rating,
+                    Ranking = ranking
+                });
+                var baseProfit = AdvisorProfitBusiness.GetBaseUsdAdvisorProfit(user.Id, creationDate);
+                transaction.Insert(baseProfit);
+                transaction.Insert(new AdvisorProfitHistory()
+                {
+                    AssetId = baseProfit.AssetId,
+                    OrderCount = baseProfit.OrderCount,
+                    ReferenceDate = baseProfit.UpdateDate,
+                    Status = baseProfit.Status,
+                    SuccessCount = baseProfit.SuccessCount,
+                    SummedProfitDollar = baseProfit.SummedProfitDollar,
+                    SummedProfitPercentage = baseProfit.SummedProfitPercentage,
+                    SummedTradeMinutes = baseProfit.SummedTradeMinutes,
+                    TotalDollar = baseProfit.TotalDollar,
+                    TotalQuantity = baseProfit.TotalQuantity,
+                    Type = baseProfit.Type,
+                    UserId = baseProfit.UserId
+                });
 
                 transaction.Commit();               
             }
@@ -262,7 +287,7 @@ namespace Auctus.Business.Advisor
         public IEnumerable<AdvisorResponse> ListAdvisorsData()
         {
             var advisors = AdvisorRankingBusiness.ListAdvisorsFullData();
-            var advisorsFollowers = FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct());
+            var advisorsFollowers = FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct(), false);
             var user = GetLoggedUser();
             return advisors.Select(c => AdvisorRankingBusiness.GetAdvisorResponse(c, advisors.Count, advisorsFollowers, user, null, null, null, null)).OrderBy(c => c.Ranking);
         }
@@ -271,7 +296,7 @@ namespace Auctus.Business.Advisor
         {
             var advisors = AdvisorRankingBusiness.ListAdvisorsFullData();
             var advisorsIds = advisors.Select(c => c.Id).Distinct().ToHashSet();
-            var advisorsFollowers = FollowAdvisorBusiness.ListFollowers(advisorsIds);
+            var advisorsFollowers = FollowAdvisorBusiness.ListFollowers(advisorsIds, false);
             var user = GetLoggedUser();
 
             List<AdvisorMonthlyRanking> ranking = null;
@@ -317,7 +342,7 @@ namespace Auctus.Business.Advisor
             AdvisorRankingHistory advisorHistory = null;
             Parallel.Invoke(() => advisor = AdvisorRankingBusiness.GetAdvisorFullData(advisorId),
                             () => assets = AssetBusiness.ListAssets(false),
-                            () => advisorsFollowers = FollowAdvisorBusiness.ListFollowers(new int[] { advisorId }),
+                            () => advisorsFollowers = FollowAdvisorBusiness.ListFollowers(new int[] { advisorId }, false),
                             () => advisorHistory = AdvisorRankingHistoryBusiness.GetLastAdvisorRankingAndProfit(advisorId));
 
             return AdvisorRankingBusiness.GetAdvisorResponse(advisor, advisor.TotalAdvisors, advisorsFollowers, GetLoggedUser(), assets, advisorHistory, null, null);

@@ -29,7 +29,7 @@ namespace Auctus.DataAccessMock.Advisor
             };
         }
 
-        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds)
+        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds, bool includeUserData)
         {
             return FollowAdvisorList;
         }

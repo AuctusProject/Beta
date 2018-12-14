@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Auctus.DomainObjects.Trade;
 using Api.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Auctus.Model;
 
 namespace Api.Controllers
 {
@@ -23,7 +24,10 @@ namespace Api.Controllers
             if (orderRequest == null)
                 return BadRequest();
 
-            return Ok(OrderBusiness.CreateOrder(orderRequest.AssetId, Auctus.DomainObjects.Trade.OrderType.Get(orderRequest.Type), orderRequest.Quantity, orderRequest.Price, orderRequest.TakeProfit, orderRequest.StopLoss));
+            var order = OrderBusiness.CreateOrder(orderRequest.AssetId, Auctus.DomainObjects.Trade.OrderType.Get(orderRequest.Type), orderRequest.Quantity, orderRequest.Price, orderRequest.TakeProfit, orderRequest.StopLoss);
+            if (order.ActionType != OrderActionType.Limit.Value)
+                SendOrderMessageToFollowers(new OrderResponse[] { order });
+            return Ok(order);
         }
 
         protected IActionResult CloseOrder(int orderId, OrderValueRequest orderValueRequest)
@@ -31,7 +35,9 @@ namespace Api.Controllers
             if (orderValueRequest == null)
                 return BadRequest();
 
-            return Ok(OrderBusiness.CloseOrder(orderId, orderValueRequest.Value));
+            var order = OrderBusiness.CloseOrder(orderId, orderValueRequest.Value);
+            SendOrderMessageToFollowers(new OrderResponse[] { order });
+            return Ok(order);
         }
 
         protected IActionResult CloseAll(CancelCloseAllOrderRequest closeAllOrderRequest)
@@ -39,7 +45,9 @@ namespace Api.Controllers
             if (closeAllOrderRequest == null)
                 return BadRequest();
 
-            return Ok(OrderBusiness.CloseAll(closeAllOrderRequest.AssetId));
+            var orders = OrderBusiness.CloseAll(closeAllOrderRequest.AssetId);
+            SendOrderMessageToFollowers(orders);
+            return Ok(orders);
         }
 
         protected IActionResult CancelOrder(int orderId)
@@ -74,6 +82,11 @@ namespace Api.Controllers
                 return BadRequest();
 
             return Ok(OrderBusiness.EditOrder(orderId, editOrderRequest.Quantity, editOrderRequest.Price, editOrderRequest.TakeProfit, editOrderRequest.StopLoss));
+        }
+
+        protected IActionResult ListFollowedTrades()
+        {
+            return Ok(OrderBusiness.ListFollowedTrades());
         }
     }
 }

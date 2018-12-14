@@ -22,6 +22,7 @@ export class AssetService {
   private getTerminalAssetsUrl = this.httpService.apiUrl("v1/assets/terminal");
   private getAssetBaseDataUrl = this.httpService.apiUrl("v1/assets/{id}/basedata");
   private getAssetStatusUrl = this.httpService.apiUrl("v1/assets/{id}/status");
+  private getTrendingAssetUrl = this.httpService.apiUrl("v1/assets/trending");
   constructor(private httpService : HttpService, private localCache: LocalCacheService) { }
 
   getAssetDetails(id: string): Observable<AssetResponse> {
@@ -78,5 +79,11 @@ export class AssetService {
 
   unfollowAsset(assetId:number):Observable<void>{
     return this.httpService.delete(this.followAssetUrl.replace("{id}", assetId.toString()));
+  }
+
+  getTrendingAssets(listSize?: number): Observable<AssetResponse[]> {
+    var url = this.getTrendingAssetUrl + "?";
+    if(listSize) url += "listSize=" + listSize;
+    return this.httpService.get(url);
   }
 }

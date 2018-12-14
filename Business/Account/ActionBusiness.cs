@@ -91,7 +91,7 @@ namespace Auctus.Business.Account
             var cutDayForActivity = Data.GetDateTimeNow().AddDays(-7);
             var advisors = AdvisorBusiness.ListAllAdvisors();
             var users = Task.Factory.StartNew(() => UserBusiness.ListAllUsersData());
-            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct()));
+            var advisorFollowers = Task.Factory.StartNew(() => FollowAdvisorBusiness.ListFollowers(advisors.Select(c => c.Id).Distinct(), false));
             var assetFollowers = Task.Factory.StartNew(() => FollowAssetBusiness.ListFollowers());
             var activities = Task.Factory.StartNew(() => Data.FilterActivity(cutDayForActivity, ActionType.NewAucVerification, ActionType.NewLogin));
             Task.WaitAll(users, advisorFollowers, assetFollowers, activities);

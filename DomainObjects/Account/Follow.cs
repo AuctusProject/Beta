@@ -18,5 +18,6 @@ namespace Auctus.DomainObjects.Account
         public int ActionType { get; set; }
 
         public FollowActionType FollowActionType { get { return FollowActionType.Get(ActionType); } }
+        public User User { get; set; }
     }
 }

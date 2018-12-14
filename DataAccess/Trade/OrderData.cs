@@ -53,6 +53,8 @@ namespace Auctus.DataAccess.Trade
 	    GROUP BY o.AssetId
 	    ORDER BY COUNT(*) DESC ";
 
+        private const string SQL_USERS_ORDERS_BY_DATE = "SELECT TOP {0} o.* FROM [Order] o WITH(NOLOCK) WHERE o.StatusDate >= @StatusDate AND AssetId <> @AssetId {1} ORDER BY StatusDate DESC";
+
         public OrderData(IConfigurationRoot configuration) : base(configuration) { }
 
         private void BuildListOrders(ref string sql, out DynamicParameters parameters, IEnumerable<int> usersId, IEnumerable<int> assetsId, IEnumerable<OrderStatusType> ordersStatusType, OrderType orderType)
@@ -143,6 +145,27 @@ namespace Auctus.DataAccess.Trade
                     parameters.Add($"Status{i}", orderStatusTypes.ElementAt(i).Value, DbType.Int32);
             }
             return Query<Order>(string.Format(SQL_LAST_ADVISORS_ORDERS_FOR_ASSET, complement), parameters).ToList();
+        }
+
+        public List<Order> ListUsersOrdersByDate(DateTime startStatusDate, IEnumerable<OrderStatusType> orderStatusTypes, IEnumerable<int> usersId, int top, int usdAssetId)
+        {
+            var complement = "";
+            var parameters = new DynamicParameters();
+            parameters.Add("StatusDate", startStatusDate, DbType.DateTime);
+            parameters.Add("AssetId", usdAssetId, DbType.Int32);
+            if (orderStatusTypes?.Any() == true)
+            {
+                complement += $" AND ({string.Join(" OR ", orderStatusTypes.Select((c, i) => $"o.Status = @Status{i}"))})";
+                for (int i = 0; i < orderStatusTypes.Count(); ++i)
+                    parameters.Add($"Status{i}", orderStatusTypes.ElementAt(i).Value, DbType.Int32);
+            }
+            if (usersId?.Any() == true)
+            {
+                complement += $" AND ({string.Join(" OR ", usersId.Select((c, i) => $"o.UserId = @UserId{i}"))})";
+                for (int i = 0; i < usersId.Count(); ++i)
+                    parameters.Add($"UserId{i}", usersId.ElementAt(i), DbType.Int32);
+            }
+            return Query<Order>(string.Format(SQL_USERS_ORDERS_BY_DATE, top, complement), parameters).ToList();
         }
 
         public Order Get(int orderId)

@@ -93,5 +93,14 @@ namespace Api.Controllers
         {
             return base.CloseAll(closeAllOrderRequest);
         }
+
+        [Route("followed_trades")]
+        [HttpGet]
+        [Authorize("Bearer")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public new IActionResult ListFollowedTrades()
+        {
+            return base.ListFollowedTrades();
+        }
     }
 }

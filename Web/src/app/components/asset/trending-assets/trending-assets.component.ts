@@ -15,9 +15,9 @@ export class TrendingAssetsComponent implements OnInit {
   constructor(private assetService: AssetService) { }
 
   ngOnInit() {
-    this.assetService.getAssetsDetails().subscribe(result => 
+    this.assetService.getTrendingAssets(10).subscribe(result => 
       {
-        this.assets = result.slice(0, 5);
+        this.assets = result;
       });
   }
 

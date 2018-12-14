@@ -7,7 +7,7 @@ namespace Auctus.DataAccessInterfaces.Advisor
 {
     public interface IFollowAdvisorData<T> : IBaseData<T>
     {
-        List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds);
+        List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds, bool includeUserData);
         FollowAdvisor GetLastByUserForAdvisor(int userId, int advisorId);
         List<FollowAdvisor> ListAdvisorsFollowed(int userId);
         int CountAdvisorFollowers(int advisorId);

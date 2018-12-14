@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { AssetResponse } from '../../../model/asset/assetResponse';
 import { AssetService } from '../../../services/asset.service';
 import { FollowUnfollow } from '../../../model/asset/followUnfollow';
@@ -8,7 +8,7 @@ import { FollowUnfollow } from '../../../model/asset/followUnfollow';
   templateUrl: './asset-mini-view.component.html',
   styleUrls: ['./asset-mini-view.component.css']
 })
-export class AssetMiniViewComponent implements OnInit, OnChanges {
+export class AssetMiniViewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() listOnlyWatchlist: boolean;
   allAssets : AssetResponse[];
   filteredAssets : AssetResponse[];
@@ -16,6 +16,10 @@ export class AssetMiniViewComponent implements OnInit, OnChanges {
   initialized: boolean = false;
 
   constructor(private assetService: AssetService) { }
+
+  ngOnDestroy() {
+    this.initialized = false;
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.initialized && changes.listOnlyWatchlist.previousValue != changes.listOnlyWatchlist.currentValue) {
