@@ -109,6 +109,7 @@ import { MiniViewComponent } from './components/util/mini-view/mini-view.compone
 import { AssetMiniViewComponent } from './components/asset/asset-mini-view/asset-mini-view.component';
 import { AssetMiniViewTableComponent } from './components/asset/asset-mini-view/asset-mini-view-table/asset-mini-view-table.component';
 import { PortfolioMiniViewComponent } from './components/trade/portfolio/portfolio-mini-view/portfolio-mini-view.component';
+import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -207,7 +208,8 @@ export function getAuthServiceConfigs() {
     AssetMiniViewComponent,
     AssetMiniViewTableComponent,
     MiniViewComponent,
-    PortfolioMiniViewComponent
+    PortfolioMiniViewComponent,
+    TrendingAssetsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),

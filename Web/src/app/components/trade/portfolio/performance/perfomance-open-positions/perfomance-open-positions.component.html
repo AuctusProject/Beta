@@ -1,4 +1,4 @@
-<div class="table-container">
+<div class="table-container" [class.type-mini-view]="isMiniView()">
     <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort >
       <ng-container matColumnDef="asset">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="assetName" class="text-left chart-title">OPEN POSITIONS</th>
@@ -54,8 +54,8 @@
   
       <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
       <tr (click)="onRowClick(element)" mat-row *matRowDef="let element; columns: getDisplayedColumns()"
-        class="position-row" [class.type-mini-view]="isMiniView()" ></tr>
-      <tr [class.hidden]="!initialized || (dataSource && dataSource.data && dataSource.data.length > 0)" mat-footer-row *matFooterRowDef="['footerRow']" class="footer-row"></tr>
+        class="position-row" ></tr>
+      <tr [class.hidden]="(dataSource && dataSource.data && dataSource.data.length > 0)" mat-footer-row *matFooterRowDef="['footerRow']" class="footer-row"></tr>
     </table>
   </div>
   
