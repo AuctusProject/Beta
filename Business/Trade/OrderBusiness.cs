@@ -771,9 +771,9 @@ namespace Auctus.Business.Trade
             };
         }
 
-        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int resultSizeLimit, int numberOfDays)
+        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int[] orderStatusList, int resultSizeLimit, int numberOfDays)
         {
-            return Data.ListTrendingAssetIdsBasedOnOrders(resultSizeLimit, numberOfDays);
+            return Data.ListTrendingAssetIdsBasedOnOrders(orderStatusList, resultSizeLimit, numberOfDays);
         }
     }
 }
