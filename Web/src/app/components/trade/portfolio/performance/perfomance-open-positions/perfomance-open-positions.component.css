@@ -2,12 +2,34 @@
     background-color: #2e2e2e;
     display: block;
     overflow: auto;
+    height: 100%;
 }
 
 .mat-column-assetCode{
     font-weight: 500;
+    width: 65px;
 }
 
-.type-mini-view{
+.mat-column-value {
+    width: 75px;
+}
+
+.mat-column-PL {
+    width: 75px;
+}
+
+.type-mini-view .position-row{
     cursor: pointer;
+}
+
+.type-mini-view td.mat-cell:first-of-type, 
+.type-mini-view td.mat-footer-cell:first-of-type, 
+.type-mini-view th.mat-header-cell:first-of-type {
+    padding-left: 5px !important;
+}
+
+.type-mini-view td.mat-cell:last-of-type,
+.type-mini-view td.mat-footer-cell:last-of-type,
+.type-mini-view th.mat-header-cell:last-of-type {
+    padding-right: 5px !important;
 }

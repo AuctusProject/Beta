@@ -20,3 +20,8 @@
         width: 120px;
     }
 }
+
+.trending-layout td.mat-cell:first-of-type,
+.trending-layout td.mat-footer-cell:first-of-type {
+    padding-left: 14px !important;
+}
