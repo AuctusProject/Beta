@@ -101,6 +101,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.connection.on("onReachStopLoss", (data) => this.onHubDataReceive(Constants.OrderActionType.StopLoss, data, this));
       this.connection.on("onReachTakeProfit", (data) => this.onHubDataReceive(Constants.OrderActionType.TakeProfit, data, this));
       this.connection.on("onReachOrderLimit", (data) => this.onHubDataReceive(Constants.OrderActionType.Limit, data, this));
+      this.connection.on("addLastNews", (data) => this.eventsService.broadcast("addLastNews", data));
       this.startHubConnection(this);
     }
   }
