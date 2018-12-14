@@ -133,9 +133,9 @@ namespace Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public new IActionResult ListTrendingAssets()
+        public new IActionResult ListTrendingAssets([FromQuery]int? listSize)
         {
-            return base.ListTrendingAssets();
+            return base.ListTrendingAssets(listSize);
         }
     }
 }
