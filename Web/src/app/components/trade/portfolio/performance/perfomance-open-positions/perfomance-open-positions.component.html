@@ -6,7 +6,12 @@
           <asset-summary [assetId]=position.assetId [assetCode]=position.assetCode [assetName]=position.assetName [transferToDetailsPage]="true"></asset-summary>
         </td>
       </ng-container>
-  
+      <ng-container matColumnDef="assetCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="assetCode" class="text-left">MARKET</th>
+        <td mat-cell *matCellDef="let position,  let i = index" class="text-left">
+          {{position.assetCode}}
+        </td>
+      </ng-container>
       <ng-container matColumnDef="units">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.totalQuantity">UNITS</th>
         <td mat-cell *matCellDef="let position">
@@ -42,14 +47,14 @@
       </ng-container>
   
       <ng-container matColumnDef="footerRow">
-          <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+          <td mat-footer-cell *matFooterCellDef [attr.colspan]="getDisplayedColumns().length">
               No open positions at the moment!
           </td>
       </ng-container>
   
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let element; columns: displayedColumns"
-        class="position-row" ></tr>
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
+      <tr (click)="onRowClick(element)" mat-row *matRowDef="let element; columns: getDisplayedColumns()"
+        class="position-row" [class.type-mini-view]="isMiniView()" ></tr>
       <tr [class.hidden]="!initialized || (dataSource && dataSource.data && dataSource.data.length > 0)" mat-footer-row *matFooterRowDef="['footerRow']" class="footer-row"></tr>
     </table>
   </div>

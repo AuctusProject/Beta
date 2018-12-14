@@ -1,18 +1,19 @@
 <mat-tab-group class="top-tab-group border-tabs">
   <mat-tab> 
       <ng-template mat-tab-label>
-        <span class="market-label">MARKETS</span>
+        <span class="margin-label">MARKETS</span>
         <fa-icon *ngIf="!listOnlyWatchlist" (click)="toggleMarketsWatchlist()" [icon]="['far','star']"></fa-icon>
         <fa-icon *ngIf="listOnlyWatchlist" (click)="toggleMarketsWatchlist()" icon="star"></fa-icon></ng-template>
       <asset-mini-view [listOnlyWatchlist]="listOnlyWatchlist"></asset-mini-view>
   </mat-tab>
-  <mat-tab>  
-      <ng-template mat-tab-label>PORTFOLIO</ng-template>
-      <div>CONTEUDO 2</div>
+  <mat-tab *ngIf="isLoggedIn()">  
+      <ng-template mat-tab-label><span class="margin-label">PORTFOLIO</span>
+        <fa-icon (click)="goToOpenPositions()" icon="external-link-alt"></fa-icon></ng-template>
+      <portfolio-mini-view></portfolio-mini-view>
   </mat-tab>
 </mat-tab-group>
 <mat-tab-group class="bottom-tab-group border-tabs">
-  <mat-tab> 
+  <mat-tab *ngIf="isLoggedIn()"> 
       <ng-template mat-tab-label>SIGNALS</ng-template>
       <div>CONTEUDO 1</div>
   </mat-tab>

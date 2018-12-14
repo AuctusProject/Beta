@@ -3,3 +3,11 @@
     display: block;
     overflow: auto;
 }
+
+.mat-column-assetCode{
+    font-weight: 500;
+}
+
+.type-mini-view{
+    cursor: pointer;
+}
