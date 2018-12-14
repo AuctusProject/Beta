@@ -26,11 +26,11 @@ td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:la
     padding-right: 5px !important;
 }
 
-.mat-column-title {
+.mat-column-title a{
     font-size: 11px;
 }
 
-.mat-column-source {
+.mat-column-source span {
     font-size: 10px;
 }
 
