@@ -27,7 +27,7 @@
       <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center" class="trade">
         <div fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center start">
           <span class="text bold">{{order.assetCode}}</span>
-          <span class="text" [class]="getNormalizedType(order) ? 'red-label' : 'green-label'">{{getOrderDescription(order)}}</span>
+          <span class="text" [class]="getNormalizedType(order) ? 'green-label' : 'red-label'">{{getOrderDescription(order)}}</span>
         </div>
         <div fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center start">
           <div fxLayout="row" fxLayoutGap="3px" fxLayoutAlign="start center" class="text-small">
