@@ -349,12 +349,14 @@ namespace Auctus.Business.Asset
         {
             var numberOfRecordsInResult = listSize ?? 10;
             var numberOfDays = 7;
-            var ids = OrderBusiness.ListTrendingAssetIdsBasedOnOrders(numberOfRecordsInResult, numberOfDays).ToList();
+            var statusList = new int[3] { OrderStatusType.Executed.Value, OrderStatusType.Close.Value, OrderStatusType.Finished.Value };
+
+            var ids = OrderBusiness.ListTrendingAssetIdsBasedOnOrders(statusList, numberOfRecordsInResult, numberOfDays).ToList();
 
             var assets = AssetCurrentValueBusiness.ListAllAssets(true, ids);
 
-            var advisors = AdvisorRankingBusiness.ListAdvisorsFullData();
-            var assetResponse = assets.Select(asset => GetAssetResponse(null, asset, null, advisors)).OrderBy(asset => ids.IndexOf(asset.AssetId));
+            var loggedUser = GetLoggedUser();
+            var assetResponse = assets.Select(asset => GetAssetResponse(loggedUser, asset, null, null)).OrderBy(asset => ids.IndexOf(asset.AssetId));
 
             return assetResponse;
         }

@@ -17,7 +17,7 @@ namespace Auctus.DataAccessInterfaces.Trade
         List<Order> ListLastAdvisorsOrdersForAsset(int assetId, IEnumerable<OrderStatusType> orderStatusTypes);
         List<Order> ListOrdersWithRelated(IEnumerable<int> usersId, IEnumerable<int> assetsId, IEnumerable<OrderStatusType> ordersStatusType, OrderType orderType);
         Order GetAnyOrderCreatedByUser(int userId, int usdAssetId);
-        IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int limit = 10, int numberOfDays = 7);
         List<Order> ListUsersOrdersByDate(DateTime startStatusDate, IEnumerable<OrderStatusType> orderStatusTypes, IEnumerable<int> usersId, int top, int usdAssetId);
+        IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int[] orderStatusList, int limit = 10, int numberOfDays = 7);
     }
 }

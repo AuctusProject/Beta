@@ -84,7 +84,7 @@ namespace Auctus.DataAccessMock.Trade
             throw new NotImplementedException();
         }
 
-        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int limit = 10, int numberOfDays = 7)
+        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int[] orderStatusList, int limit = 10, int numberOfDays = 7)
         {
             throw new NotImplementedException();
         }

@@ -47,8 +47,8 @@ namespace Auctus.DataAccess.Trade
 		    dbo.[Order] o
 		    INNER JOIN dbo.[Asset] a ON o.AssetId = a.Id
 	    WHERE 
-		    (o.Status = 1 OR o.Status = 3 OR o.Status = 4)
-		    AND o.StatusDate > dateadd(day, -{1}, getdate())
+		    ({1})
+		    AND o.StatusDate > dateadd(day, -{2}, getdate())
 		    AND a.Enabled = 1
 	    GROUP BY o.AssetId
 	    ORDER BY COUNT(*) DESC ";
@@ -219,11 +219,17 @@ namespace Auctus.DataAccess.Trade
             return Query<Order>(SQL_ANY_ORDER_CREATED_BY_USER, parameters).FirstOrDefault();
         }
 
-        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int limit = 10, int numberOfDays = 7)
+        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int[] orderStatusList, int limit = 10, int numberOfDays = 7)
         {
-            var query = string.Format(SQL_LIST_RECENT_ORDERS_FOR_TRENDING_ASSETS, limit, numberOfDays);
+            var parameters = new DynamicParameters();
+            var statusCondition = $" {string.Join(" OR ", orderStatusList.Select((c, i) => $"o.Status = @Status{i}"))} "; ;
 
-            return Query<int>(query);
+            for (int i = 0; i < orderStatusList.Count(); ++i)
+                parameters.Add($"Status{i}", orderStatusList.ElementAt(i), DbType.Int32);
+
+            var query = string.Format(SQL_LIST_RECENT_ORDERS_FOR_TRENDING_ASSETS, limit, statusCondition, numberOfDays);
+
+            return Query<int>(query, parameters);
         }
     }
 }
