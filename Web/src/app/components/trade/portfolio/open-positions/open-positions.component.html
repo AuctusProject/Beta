@@ -7,7 +7,7 @@
           <span *ngIf="!assetId">
             <fa-icon [icon]="'chevron-down'" ></fa-icon>
           </span>
-          <asset-summary [assetId]=position.assetId [assetCode]=position.assetCode [assetName]=position.assetName [transferToDetailsPage]="false"></asset-summary>
+          <asset-summary [assetId]=position.assetId [assetCode]=position.assetCode [assetName]=position.assetName [transferToDetailsPage]="true" (click)="onAssetSummaryClick($event)"></asset-summary>
         </div>
       </td>
     </ng-container>

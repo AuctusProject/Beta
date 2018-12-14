@@ -19,3 +19,7 @@
 .circle {
     stroke-width: 3px;
   }
+
+  .mat-column-success{
+      width:17%;
+  }

@@ -183,4 +183,8 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
   hasOpenPositions() {
     return this.dataSource && this.dataSource.data && this.dataSource.data.length > 0;
   }
+
+  onAssetSummaryClick($event: Event){
+    $event.stopPropagation();
+  }
 }

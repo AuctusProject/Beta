@@ -40,6 +40,19 @@ namespace Auctus.DataAccess.Trade
 
         private const string SQL_ANY_ORDER_CREATED_BY_USER = "SELECT TOP 1 o.* FROM [Order] o WITH(NOLOCK) WHERE o.UserId = @UserId AND o.AssetId <> @AssetId";
 
+        private const string SQL_LIST_RECENT_ORDERS_FOR_TRENDING_ASSETS = @"	
+	    SELECT TOP {0}
+		    o.AssetId
+	    FROM 
+		    dbo.[Order] o
+		    INNER JOIN dbo.[Asset] a ON o.AssetId = a.Id
+	    WHERE 
+		    (o.Status = 1 OR o.Status = 3 OR o.Status = 4)
+		    AND o.StatusDate > dateadd(day, -{1}, getdate())
+		    AND a.Enabled = 1
+	    GROUP BY o.AssetId
+	    ORDER BY COUNT(*) DESC ";
+
         private const string SQL_USERS_ORDERS_BY_DATE = "SELECT TOP {0} o.* FROM [Order] o WITH(NOLOCK) WHERE o.StatusDate >= @StatusDate AND AssetId <> @AssetId {1} ORDER BY StatusDate DESC";
 
         public OrderData(IConfigurationRoot configuration) : base(configuration) { }
@@ -204,6 +217,13 @@ namespace Auctus.DataAccess.Trade
             parameters.Add("UserId", userId, DbType.Int32);
             parameters.Add("AssetId", usdAssetId, DbType.Int32);
             return Query<Order>(SQL_ANY_ORDER_CREATED_BY_USER, parameters).FirstOrDefault();
+        }
+
+        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int limit = 10, int numberOfDays = 7)
+        {
+            var query = string.Format(SQL_LIST_RECENT_ORDERS_FOR_TRENDING_ASSETS, limit, numberOfDays);
+
+            return Query<int>(query);
         }
     }
 }

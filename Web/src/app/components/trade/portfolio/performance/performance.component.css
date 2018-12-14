@@ -18,8 +18,20 @@ perfomance-open-postions {
     height: calc(100% - 260px);
 }
 
-:host ::ng-deep .chart-title{
-    font-size: 15px;
-    font-weight: 500;
+
+
+:host ::ng-deep .mat-cell{
+    padding: 0 0;
 }
 
+
+@media(min-width:600px){
+    :host ::ng-deep .mat-column-market{
+        width: 184px;
+    }
+
+    :host ::ng-deep .chart-title{
+        font-size: 15px;
+        font-weight: 500;
+    }
+}

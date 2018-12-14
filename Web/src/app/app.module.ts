@@ -108,6 +108,9 @@ import { MiniTradingViewChartComponent } from './components/util/mini-trading-vi
 import { MiniViewComponent } from './components/util/mini-view/mini-view.component';
 import { AssetMiniViewComponent } from './components/asset/asset-mini-view/asset-mini-view.component';
 import { AssetMiniViewTableComponent } from './components/asset/asset-mini-view/asset-mini-view-table/asset-mini-view-table.component';
+import { PortfolioMiniViewComponent } from './components/trade/portfolio/portfolio-mini-view/portfolio-mini-view.component';
+import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
+import { NewsListComponent } from './components/util/mini-view/news-list/news-list.component';
 import { TradeSignalComponent } from './components/trade/trade-signal/trade-signal.component';
 
 export function loadConfigService(configService: ConfigService): Function
@@ -207,6 +210,9 @@ export function getAuthServiceConfigs() {
     AssetMiniViewComponent,
     AssetMiniViewTableComponent,
     MiniViewComponent,
+    PortfolioMiniViewComponent,
+    TrendingAssetsComponent,
+    NewsListComponent,
     TradeSignalComponent
   ],
   imports: [

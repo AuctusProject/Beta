@@ -4,12 +4,18 @@ import { FollowUnfollowType } from '../../util/follow-unfollow/follow-unfollow.c
 import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 import { Util } from '../../../util/util';
 
+export enum AssetsTableType {
+  default=0,
+  trending=1
+}
+
 @Component({
   selector: 'assets-table',
   templateUrl: './assets-table.component.html',
   styleUrls: ['./assets-table.component.css']
 })
 export class AssetsTableComponent implements OnInit {
+  @Input() type : AssetsTableType;
   @Input() assets : AssetResponse[];
   @Input() showViewMore : boolean;
 
@@ -17,14 +23,7 @@ export class AssetsTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource= new MatTableDataSource<AssetResponse>(this.assets);
 
-  displayedColumns: string[] = [
-    "market",
-    "sentiment",
-    "marketCap",
-    "lastPrice",
-    "change",
-    "trade"
-  ];
+  
   expertFollowUnfollowType = FollowUnfollowType.asset;
 
   constructor() { }
@@ -61,5 +60,28 @@ export class AssetsTableComponent implements OnInit {
 
   onNewMarketCap($event, asset: AssetResponse){
     asset.marketCap = $event;
+  }
+
+  getDisplayedColumns(){
+    if(this.isTrendingLayout()){
+      return [
+        "market",
+        "lastPrice"
+      ];
+    }
+    else{
+      return [
+        "market",
+        "sentiment",
+        "marketCap",
+        "lastPrice",
+        "change",
+        "trade"
+      ];
+    }
+  }
+
+  isTrendingLayout(){
+    return this.type == AssetsTableType.trending;
   }
 }

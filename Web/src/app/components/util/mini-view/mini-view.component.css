@@ -22,11 +22,15 @@
     width: 50%;
 }
 
+.bottom-tab-group ::ng-deep .mat-tab-header-pagination {
+    display: none !important;
+}
+
 .border-tabs ::ng-deep .mat-tab-body-wrapper{
     height: calc(100% - 30px);
 }
 
-.market-label{
+.margin-label{
     margin-right: 5px;
 }
 
