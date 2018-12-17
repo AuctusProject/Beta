@@ -9,7 +9,7 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="sentiment">
-    <th mat-header-cell *matHeaderCellDef><span fxHide.lt-md matTooltip="Open Positions % (Long and Short)">SENTIMENT</span></th>
+    <th mat-header-cell *matHeaderCellDef><span fxHide.lt-md matTooltip="Open Positions % (Long and Short)" #tooltipSentiment="matTooltip" (click)="tooltipSentiment.toggle()">SENTIMENT</span></th>
     <td mat-cell *matCellDef="let asset">
       <recommendation-distribution fxHide.lt-md [data]="asset.recommendationDistribution"></recommendation-distribution>
     </td>

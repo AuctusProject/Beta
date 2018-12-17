@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign.gt-sm="center" fxLayoutAlign.lt-md="space-evenly center">
   <div class="balance-item" fxLayout="column" fxLayoutGap.gt-sm="9px" fxLayoutGap.lt-md="6px" fxLayoutAlign="center center">
-    <div matTooltip="Total value of all your assets" class="label">
+    <div matTooltip="Total value of all your assets" class="label" #tooltipEquity="matTooltip" (click)="tooltipEquity.toggle()">
       Equity
     </div>
     <div class="value">
@@ -9,7 +9,7 @@
   </div>
   <div class="separator"></div>
   <div class="balance-item" fxLayout="column" fxLayoutGap.gt-sm="9px" fxLayoutGap.lt-md="6px" fxLayoutAlign="center center">
-    <div matTooltip="USD balance" class="label">
+    <div matTooltip="USD balance" class="label" #tooltipBalance="matTooltip" (click)="tooltipBalance.toggle()">
       Balance
     </div>
     <div class="value">
@@ -18,7 +18,7 @@
   </div>
   <div class="separator"></div>
   <div class="balance-item" fxLayout="column" fxLayoutGap.gt-sm="9px" fxLayoutGap.lt-md="6px" fxLayoutAlign="center center">
-    <div matTooltip="USD balance - USD allocated to open orders" class="label">
+    <div matTooltip="USD balance - USD allocated to open orders" class="label" #tooltipAvailable="matTooltip" (click)="tooltipAvailable.toggle()">
       Available
     </div>
     <div class="value">
