@@ -65,9 +65,8 @@ namespace Api.Controllers
             return base.UpdateLastNews();
         }
 
-        [Route("assets/{api}/values")]
+        [Route("assets/binance/values")]
         [HttpPost]
-        [ValidApi]
         public new IActionResult UpdateAssetsValues([FromRoute]string api)
         {
             return base.UpdateAssetsValues(api);

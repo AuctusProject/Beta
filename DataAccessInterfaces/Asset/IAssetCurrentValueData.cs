@@ -11,7 +11,6 @@ namespace Auctus.DataAccessInterfaces.Asset
         List<AssetCurrentValue> ListAllAssets(bool enabled, IEnumerable<int> ids);
         List<AssetCurrentValue> ListAssetsFollowedByUser(int userId);
         void UpdateAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues);
-        void UpdateFullAssetValue(IEnumerable<AssetCurrentValue> assetCurrentValues);
         void UpdateAssetValue7And30Days(IEnumerable<AssetCurrentValue> assetCurrentValues);
     }
 }

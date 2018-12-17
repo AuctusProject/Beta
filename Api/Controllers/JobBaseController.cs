@@ -58,12 +58,7 @@ namespace Api.Controllers
         {
             RunAsync(() =>
             {
-                Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result;
-                if (api == "coingecko")
-                    result = AssetValueBusiness.UpdateCoingeckoAssetsValues();
-                else
-                    result = AssetValueBusiness.UpdateBinanceAssetsValues();
-
+                Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result = AssetValueBusiness.UpdateBinanceAssetsValues();
                 if (result != null && result.Any())
                 {
                     foreach (var ordersType in result)
