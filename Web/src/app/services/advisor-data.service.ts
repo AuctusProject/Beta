@@ -25,7 +25,7 @@ export class AdvisorDataService {
   private allAssetsOpenPositionAssetResponseSubject = new Subject<AssetPositionResponse[]>();
   private allAssetsClosePositionAssetResponseSubject = new Subject<AssetPositionResponse[]>();
   private binanceTickers: Subscription[] = [];
-  private pairPrice: { [pair: string]: number; } = {};
+  private pairPrice: { [pair: string]: { [type: number]: number }; } = {};
   private openPositionAssetResponse: { [advisorId: number]: { [assetId: number]: PositionResponse[] } } = {};
 
   public constructor(private advisorService : AdvisorService, private tickerService: TickerService) { }
@@ -264,14 +264,18 @@ export class AdvisorDataService {
     if (pair.symbol) {
       this.binanceTickers.push(this.tickerService.binanceTicker(pair.symbol).subscribe(ret => 
       {
-        this.pairPrice[ret.pair] = ret.currentClosePrice;
+        this.pairPrice[ret.pair] = {};
+        this.pairPrice[ret.pair][Constants.OrderType.Buy] = ret.bestAskPrice;
+        this.pairPrice[ret.pair][Constants.OrderType.Sell] = ret.bestBidPrice;
         this.internalRefresh();
       }));
     }
     if (pair.multipliedSymbol) {
       this.binanceTickers.push(this.tickerService.binanceTicker(pair.multipliedSymbol).subscribe(ret => 
       {
-        this.pairPrice[ret.pair] = ret.currentClosePrice;
+        this.pairPrice[ret.pair] = {};
+        this.pairPrice[ret.pair][Constants.OrderType.Buy] = ret.bestAskPrice;
+        this.pairPrice[ret.pair][Constants.OrderType.Sell] = ret.bestBidPrice;
         this.internalRefresh();
       }));
     }
@@ -329,10 +333,16 @@ export class AdvisorDataService {
         let openPosition = response.openPositions[i];
         let averageReturn = openPosition.averageReturn;
         if (this.pairPrice[openPosition.pair.symbol.toUpperCase()]) {
-          if (!openPosition.pair.multipliedSymbol) {
-            averageReturn = (openPosition.type == Constants.OrderType.Buy ? 1 : -1) * (this.pairPrice[openPosition.pair.symbol.toUpperCase()] / openPosition.averagePrice - 1);
-          } else if (this.pairPrice[openPosition.pair.multipliedSymbol.toUpperCase()]) {
-            averageReturn = (openPosition.type == Constants.OrderType.Buy ? 1 : -1) * ((this.pairPrice[openPosition.pair.symbol.toUpperCase()] * this.pairPrice[openPosition.pair.multipliedSymbol.toUpperCase()]) / openPosition.averagePrice - 1);
+          let basePrice = this.pairPrice[openPosition.pair.symbol.toUpperCase()][openPosition.type];
+          if (basePrice) {
+            if (!openPosition.pair.multipliedSymbol) {
+              averageReturn = (openPosition.type == Constants.OrderType.Buy ? 1 : -1) * (basePrice / openPosition.averagePrice - 1);
+            } else if (this.pairPrice[openPosition.pair.multipliedSymbol.toUpperCase()]) {
+              let relatedPrice = this.pairPrice[openPosition.pair.multipliedSymbol.toUpperCase()][openPosition.type];
+              if (relatedPrice) {
+                averageReturn = (openPosition.type == Constants.OrderType.Buy ? 1 : -1) * ((basePrice * relatedPrice) / openPosition.averagePrice - 1);
+              }
+            }
           }
         }
         if (!this.openPositionAssetResponse[response.userId][openPosition.assetId]) {
