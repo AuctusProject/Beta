@@ -7,7 +7,7 @@
         <div class="asset-name">{{asset.name}}</div>
       </div>
     </div>
-    <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
+    <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair" (onNewValue)="onNewLastValue($event, asset)"></ticker-field>
     <ticker-percentage-field class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
     <div class="market-cap" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
       <label class="asset-header-label">Market Cap</label>
