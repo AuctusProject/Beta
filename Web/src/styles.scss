@@ -9,7 +9,7 @@
 @font-face {
   font-family: "Gilroy";
   src: url("/assets/fonts/Gilroy-Thin.ttf");
-  font-weight: 100;
+  font-weight: 300;
 }
 
 @font-face {
@@ -160,7 +160,7 @@ h2{
 button .btn-spinner,
 div .btn-spinner {
   font-family: sans-serif;
-  font-weight: 100;
+  font-weight: 300;
   -webkit-animation: three-quarters 1250ms infinite linear;
   -moz-animation: three-quarters 1250ms infinite linear;
   -ms-animation: three-quarters 1250ms infinite linear;
@@ -351,7 +351,7 @@ textarea:read-only {
     opacity: 1 !important;
     .mat-tab-label-content{
       color: #ffffff;
-      font-weight: 100;
+      font-weight: 300;
       letter-spacing: 0.3px;
       font-size: 12px;
       fa-icon{
@@ -985,7 +985,7 @@ portfolio button, open-positions button, orders button {
   padding: 0 10px;
   letter-spacing: 1.8px;
   font-size: 9px;
-  font-weight: 100;
+  font-weight: 300;
   border-radius: 4px;
   outline: none;
   text-transform: uppercase;

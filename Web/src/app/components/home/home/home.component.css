@@ -21,7 +21,7 @@
 
 .advantage-item{
     font-size: 13px;
-    font-weight: 100;
+    font-weight: 300;
     letter-spacing: 0.3px;
     color: #e6e6e6;
     text-align: center;
@@ -150,7 +150,7 @@ section.traders{
 
 .traders-description{
     font-size: 13px;
-    font-weight: 100;
+    font-weight: 300;
     letter-spacing: 0.3px;
     text-align: left;
     color: #e6e6e6;
@@ -158,7 +158,7 @@ section.traders{
 
 .traders li{
     font-size: 18px;
-    font-weight: 100;
+    font-weight: 300;
     letter-spacing: 0.5px;
     color: #e6e6e6;
     margin-top:10px;

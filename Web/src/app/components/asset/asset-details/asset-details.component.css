@@ -22,14 +22,14 @@
 
 .asset-name {
     font-size: 10px;
-    font-weight: 100;
+    font-weight: 300;
     letter-spacing: 0.5px;
 }
 
 .asset-header-label {
     font-size: 11px;
     color: #bfbfbf;
-    font-weight: 100;
+    font-weight: 300;
     letter-spacing: 0.3px;
 }
 
@@ -97,7 +97,7 @@
     padding: 0 15px;
     letter-spacing: 1.8px;
     font-size: 9px;
-    font-weight: 100;
+    font-weight: 300;
     border-radius: 4px;
     outline: none;
     text-transform: uppercase;
