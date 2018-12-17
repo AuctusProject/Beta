@@ -126,6 +126,8 @@ namespace Auctus.Business.Asset
                 TotalAdvisors = totalAdvisors != null && totalAdvisors.Any() ? totalAdvisors.Select(c => c.Id).Distinct().Count() : 0,
                 TotalRatings = ratingAdvisors != null && ratingAdvisors.Any() ? ratingAdvisors.Sum(c => c.OrderCount) : 0,
                 LastValue = assetCurrentValue.CurrentValue,
+                AskValue = assetCurrentValue.AskValue,
+                BidValue = assetCurrentValue.BidValue,
                 MarketCap = assetCurrentValue.MarketCap,
                 CirculatingSupply = assetCurrentValue.CirculatingSupply,
                 Variation24h = assetCurrentValue.Variation24Hours,

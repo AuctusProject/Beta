@@ -13,6 +13,8 @@ export class AssetResponse {
   marketCap?: number;
   circulatingSupply?: number;
   lastValue?: number;
+  askValue?: number;
+  bidValue?: number;
   variation24h?: number;
   variation7d?: number;
   variation30d?: number;
