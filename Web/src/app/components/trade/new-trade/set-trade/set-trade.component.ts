@@ -198,7 +198,6 @@ export class SetTradeComponent implements OnInit, OnDestroy {
   private setCurrentPrice(price: number) {
     this.currentValue = price; 
     if (!this.limit && this.currentValue) {
-      this.Price.forceValue(new ValueDisplayPipe().transform(this.currentValue, ''));
       if (this.amountValue) {
         this.Amount.forceHint("≈ " + new ValueDisplayPipe().transform(this.amountValue * this.currentValue));
       }
@@ -292,16 +291,18 @@ export class SetTradeComponent implements OnInit, OnDestroy {
 
   private validTrade(orderType: number) : boolean {
     this.limitOrderExecutedMarket = false;
-    let isValid = this.Price.isValid();
+    let isValid = !this.Price || this.Price.isValid();
     isValid = this.Amount.isValid() && isValid;
     isValid = this.StopLoss.isValid() && isValid;
     isValid = this.TakeProfit.isValid() && isValid;
     if (isValid) {
-      if (this.priceValue === 0) {
-        this.Price.setForcedError("Invalid price value");
-          return false;
-      } else {
-        this.Price.setForcedError(null);
+      if (this.Price) {
+        if (this.priceValue === 0) {
+          this.Price.setForcedError("Invalid price value");
+            return false;
+        } else {
+          this.Price.setForcedError(null);
+        }
       }
       if (this.amountValue === 0) {
         this.Amount.setForcedError("Invalid amount value");

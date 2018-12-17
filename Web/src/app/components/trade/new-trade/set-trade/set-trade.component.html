@@ -1,5 +1,5 @@
 <div fxLayout="column" class="set-trade-container">
-    <inheritance-input *ngIf="priceOptions" #Price [options]="priceOptions" class="width100"
+    <inheritance-input *ngIf="priceOptions && (limit || edition)" #Price [options]="priceOptions" class="width100"
         [value]="priceValue" (onChange)="onPrice($event)" darkLayout=true></inheritance-input>
     <inheritance-input *ngIf="amountOptions" #Amount [options]="amountOptions" class="width100" 
         [value]="amountValue" (onChange)="onAmount($event)" darkLayout=true></inheritance-input>
