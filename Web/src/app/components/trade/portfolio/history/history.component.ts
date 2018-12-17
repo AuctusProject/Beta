@@ -73,7 +73,16 @@ export class HistoryComponent implements OnInit {
   }
 
   getOrderDescription(order: OrderResponse){
-    return Util.GetOrderTypeText(!order.type ? Constants.OrderType.Buy : Constants.OrderType.Sell).toUpperCase()
+    return Util.GetOrderTypeText(!order.type ? Constants.OrderType.Buy : Constants.OrderType.Sell).toUpperCase();
+  }
+
+  getCloseReasonDescription(type?: number){
+    if (type == Constants.OrderActionType.TakeProfit) {
+      return "TAKE PROFIT";
+    } else if (type == Constants.OrderActionType.StopLoss) {
+      return "STOP LOSS";
+    }
+    return "";
   }
 
   private setBestWorstTrade(){
