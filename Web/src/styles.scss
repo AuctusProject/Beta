@@ -365,6 +365,7 @@ textarea:read-only {
   div[aria-selected="true"]{
     .mat-tab-label-content{
       color: #4fa9fd;
+      font-weight: 300;
     }
   }
 }
@@ -1058,4 +1059,8 @@ button.mat-menu-item:hover a{
   border-bottom: 1px solid #4c4c4c;
   border-left: 1px solid #4c4c4c;
   border-right: 1px solid #4c4c4c;
+}
+
+.mat-tab-header-pagination-chevron{
+  border-color: #bdbdbd;
 }
