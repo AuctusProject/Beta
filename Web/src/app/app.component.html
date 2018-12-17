@@ -2,7 +2,7 @@
   <header [advisor]="advisor" (menuClick)="snav.toggle()"></header>
   <mat-sidenav-container #sidenavContainer [autosize]="true" class="sidenav-container">
     <mat-sidenav class="menu-sidenav" [opened]="!mobileQuery.matches" #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="62">
       <left-menu [(advisor)]="advisor"></left-menu>
     </mat-sidenav>
     <mat-sidenav-content #sidenavContent>
