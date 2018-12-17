@@ -23,7 +23,7 @@
     font-size: 13px;
     font-weight: 100;
     letter-spacing: 0.3px;
-    color: #979797;
+    color: #e6e6e6;
     text-align: center;
 }
 
@@ -153,7 +153,7 @@ section.traders{
     font-weight: 100;
     letter-spacing: 0.3px;
     text-align: left;
-    color: #979797;
+    color: #e6e6e6;
 }
 
 .traders li{
