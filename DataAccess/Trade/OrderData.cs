@@ -23,7 +23,7 @@ namespace Auctus.DataAccess.Trade
                                                         AND {0}";
 
         private const string SQL_LIST_EXECUTED_WITH_STOP_LOSS_AND_OPEN = @"SELECT o.*, ro.* FROM [Order] o WITH(NOLOCK) LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.Id = o.OrderId
-                                                                           WHERE o.Status = @OpenStatus AND {0}
+                                                                           WHERE o.Status = @OpenStatus AND (ro.Id IS NULL OR ro.Status = @ExecutedStatus) AND {0}
                                                                            UNION
                                                                            SELECT o.*, ro.* FROM [Order] o WITH(NOLOCK) LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.OrderId = o.Id
                                                                            WHERE o.Status = @ExecutedStatus AND o.StopLoss IS NOT NULL AND {0}";
