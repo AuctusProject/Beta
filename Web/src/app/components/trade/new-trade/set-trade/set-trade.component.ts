@@ -35,6 +35,12 @@ export class SetTradeComponent implements OnInit, OnDestroy {
   mainTickerSubscription: Subscription;
   multiplierTickerSubscription: Subscription;
   currentValue?: number = null;
+  currentBid?: number = null;
+  currentAsk?: number = null;
+  baseBestBid?: number = null;
+  baseBestAsk?: number = null;
+  multiplierBestBid?: number = null;
+  multiplierBestAsk?: number = null;
   multiplierValue?: number = null;
   baseValue?: number = null;
   initialized: boolean = false;
@@ -110,11 +116,17 @@ export class SetTradeComponent implements OnInit, OnDestroy {
       if (this.assetPair.symbol) {
         this.mainTickerSubscription = this.tickerService.binanceTicker(this.assetPair.symbol).subscribe(ret =>
           {
+            this.baseBestBid = ret.bestBidPrice;
+            this.baseBestAsk = ret.bestAskPrice;
             if (!this.assetPair.multipliedSymbol) {
+              this.currentBid = this.baseBestBid;
+              this.currentAsk = this.baseBestAsk;
               this.setCurrentPrice(this.getConsideredPrice(ret));
             } else {
               this.baseValue = this.getConsideredPrice(ret);
               if (this.multiplierValue || this.multiplierValue == 0) {
+                this.currentBid = this.baseBestBid * this.multiplierBestBid;
+                this.currentAsk = this.baseBestAsk * this.multiplierBestAsk;
                 this.setCurrentPrice(this.baseValue * this.multiplierValue);
               }
             }
@@ -123,8 +135,12 @@ export class SetTradeComponent implements OnInit, OnDestroy {
       if (this.assetPair.multipliedSymbol) {
         this.multiplierTickerSubscription = this.tickerService.binanceTicker(this.assetPair.multipliedSymbol).subscribe(ret =>
           {
+            this.multiplierBestBid = ret.bestBidPrice;
+            this.multiplierBestAsk = ret.bestAskPrice;
             this.multiplierValue = this.getConsideredPrice(ret);
             if (this.baseValue || this.baseValue == 0) {
+              this.currentBid = this.baseBestBid * this.multiplierBestBid;
+              this.currentAsk = this.baseBestAsk * this.multiplierBestAsk;
               this.setCurrentPrice(this.baseValue * this.multiplierValue);
             }
           });
@@ -138,6 +154,12 @@ export class SetTradeComponent implements OnInit, OnDestroy {
     this.baseValue = null;
     this.multiplierValue = null;
     this.currentValue = null;
+    this.baseBestAsk = null;
+    this.baseBestBid = null;
+    this.multiplierBestBid = null;
+    this.multiplierBestAsk = null;
+    this.currentBid = null;
+    this.currentAsk = null;
     if (this.mainTickerSubscription) {
       this.mainTickerSubscription.unsubscribe();
     }
@@ -299,11 +321,11 @@ export class SetTradeComponent implements OnInit, OnDestroy {
         this.notificationsService.error(null, "Invalid short operation for this market.");
         return false;
       }
-      if (this.currentValue) {
+      if (this.currentAsk && this.currentBid) {
         if (Constants.OrderType.Buy == orderType) {
-          this.limitOrderExecutedMarket = this.limit && this.priceValue >= this.currentValue;
+          this.limitOrderExecutedMarket = this.limit && this.priceValue >= this.currentAsk;
           if (this.takeProfitValue) {
-            if (this.takeProfitValue <= this.currentValue && !this.limit) {
+            if (this.takeProfitValue <= this.currentBid && !this.limit) {
               this.TakeProfit.setForcedError("Invalid take profit for current value");
               return false;
             } else if (this.takeProfitValue <= this.priceValue) {
@@ -314,7 +336,7 @@ export class SetTradeComponent implements OnInit, OnDestroy {
             }
           }
           if (this.stopLossValue) {
-            if (this.stopLossValue >= this.currentValue && !this.limit) {
+            if (this.stopLossValue >= this.currentBid && !this.limit) {
               this.StopLoss.setForcedError("Invalid stop loss for current value");
               return false;
             } else if (this.stopLossValue >= this.priceValue) {
@@ -325,9 +347,9 @@ export class SetTradeComponent implements OnInit, OnDestroy {
             }
           }
         } else {
-          this.limitOrderExecutedMarket = this.limit && this.priceValue <= this.currentValue;
+          this.limitOrderExecutedMarket = this.limit && this.priceValue <= this.currentBid;
           if (this.takeProfitValue) {
-            if (this.takeProfitValue >= this.currentValue && !this.limit) {
+            if (this.takeProfitValue >= this.currentAsk && !this.limit) {
               this.TakeProfit.setForcedError("Invalid take profit for current value");
               return false;
             } else if (this.takeProfitValue >= this.priceValue) {
@@ -338,7 +360,7 @@ export class SetTradeComponent implements OnInit, OnDestroy {
             }
           }
           if (this.stopLossValue) {
-            if (!this.limit && (this.stopLossValue <= this.currentValue || this.stopLossValue > (this.currentValue * 2))) {
+            if (!this.limit && (this.stopLossValue <= this.currentAsk || this.stopLossValue > (this.currentAsk * 2))) {
               this.StopLoss.setForcedError("Invalid stop loss for current value");
               return false;
             } else if (this.stopLossValue <= this.priceValue || this.stopLossValue > (this.priceValue * 2)) {
