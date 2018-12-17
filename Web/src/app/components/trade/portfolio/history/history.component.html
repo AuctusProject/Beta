@@ -47,7 +47,7 @@
                   <span [class]="order.type == 1 ? 'red-label' : 'green-label'">{{getOrderDescription(order)}}</span>
                   <span fxHide.lt-sm> - </span>{{order.assetCode}}
               </div>
-              <span *ngIf="order.actionType" class="action-type">triggered by {{utilProxy.GetCloseReasonDescription(order.actionType)}}</span>
+              <span *ngIf="order.actionType == 3 || order.actionType == 4" class="action-type">triggered by {{getCloseReasonDescription(order.actionType)}}</span>
             </div>
           </div>
         </td>

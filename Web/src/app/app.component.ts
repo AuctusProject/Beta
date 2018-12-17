@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, OnDestroy, ChangeDetectorRef, ViewChild, NgZone } from '@angular/core';
 import { TopLoadingComponent } from './components/util/top-loading/top-loading.component';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { NavigationService } from './services/navigation.service';
@@ -48,6 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private advisorDataService: AdvisorDataService,
     private eventsService: EventsService,
     private notificationsService: NotificationsService,
+    private zone : NgZone,
     changeDetectorRef: ChangeDetectorRef, 
     media: MediaMatcher,
     @Inject(PLATFORM_ID) private platformId: Object

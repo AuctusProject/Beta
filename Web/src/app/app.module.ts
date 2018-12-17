@@ -54,7 +54,6 @@ import { IconsModule } from './icons.module';
 import { InheritanceInputComponent } from './components/util/inheritance-input/inheritance-input.component';
 import { NewsletterComponent } from './components/util/newsletter/newsletter.component';
 import { CoinSearchComponent } from './components/util/coin-search/coin-search.component';
-import { GeneralRecommendationTagComponent } from './components/util/general-recommendation-tag/general-recommendation-tag.component';
 import { EntryOptionComponent } from './components/account/entry-option/entry-option.component';
 import { ModalService } from './services/modal.service';
 import { LocalCacheService } from './services/local-cache.service';
@@ -164,7 +163,6 @@ export function getAuthServiceConfigs() {
     NewsletterComponent,
     CoinSearchComponent,
     EntryOptionComponent,
-    GeneralRecommendationTagComponent,
     ValueDisplayPipe,
     HighlightFieldComponent,
     TickerFieldComponent,
