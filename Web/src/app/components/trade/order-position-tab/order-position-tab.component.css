@@ -8,6 +8,7 @@
 
 :host ::ng-deep .mat-tab-label {
     border-bottom: 1px solid #4c4c4c;
+    width: 50%;
 }
 
 :host ::ng-deep .mat-tab-label-container .mat-ink-bar {

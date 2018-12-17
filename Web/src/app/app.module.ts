@@ -104,6 +104,14 @@ import { PercentageDisplayPipe } from './util/percentage-display.pipe';
 import { DailyPerformanceChartComponent } from './components/trade/portfolio/performance/daily-performance-chart/daily-performance-chart.component';
 import { NewTradeWindowComponent } from './components/trade/new-trade/new-trade-window/new-trade-window.component';
 import { PerfomanceOpenPositionsComponent } from './components/trade/portfolio/performance/perfomance-open-positions/perfomance-open-positions.component';
+import { MiniTradingViewChartComponent } from './components/util/mini-trading-view-chart/mini-trading-view-chart.component';
+import { MiniViewComponent } from './components/util/mini-view/mini-view.component';
+import { AssetMiniViewComponent } from './components/asset/asset-mini-view/asset-mini-view.component';
+import { AssetMiniViewTableComponent } from './components/asset/asset-mini-view/asset-mini-view-table/asset-mini-view-table.component';
+import { PortfolioMiniViewComponent } from './components/trade/portfolio/portfolio-mini-view/portfolio-mini-view.component';
+import { TrendingAssetsComponent } from './components/asset/trending-assets/trending-assets.component';
+import { NewsListComponent } from './components/util/mini-view/news-list/news-list.component';
+import { TradeSignalComponent } from './components/trade/trade-signal/trade-signal.component';
 
 export function loadConfigService(configService: ConfigService): Function
 {
@@ -178,6 +186,7 @@ export function getAuthServiceConfigs() {
     PrizeBoxComponent,
     TickerProfitFieldComponent,
     TradingViewChartComponent,
+    MiniTradingViewChartComponent,
     NewTradeComponent,
     SetTradeComponent,
     HallOfFameComponent,
@@ -197,7 +206,14 @@ export function getAuthServiceConfigs() {
     CountdownComponent,
     DailyPerformanceChartComponent,
     NewTradeWindowComponent,
-    PerfomanceOpenPositionsComponent
+    PerfomanceOpenPositionsComponent,
+    AssetMiniViewComponent,
+    AssetMiniViewTableComponent,
+    MiniViewComponent,
+    PortfolioMiniViewComponent,
+    TrendingAssetsComponent,
+    NewsListComponent,
+    TradeSignalComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'Web' }),

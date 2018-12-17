@@ -32,8 +32,8 @@ export class ConfigService
     if(!isPlatformBrowser(this.platformId)){
       var t = new Config();
       CONFIG = Object.assign(t, {
-        apiUrl: "https://auctusplatformapi.azurewebsites.net/api/",
-        webUrl: "https://experts.auctus.org",
+        apiUrl: "https://auctustradingapi.azurewebsites.net/api/",
+        webUrl: "https://trading.auctus.org",
         reportUrl: "https://auctus.azureedge.net/assetsreport/{id}.pdf",
         eventUrl: "https://auctus.azureedge.net/assetsevent/{id}.png",
         agencyImgUrl: "https://auctus.azureedge.net/agencieslogo/{id}.png",

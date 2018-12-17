@@ -23,7 +23,7 @@ namespace Auctus.DataAccess.Trade
                                                         AND {0}";
 
         private const string SQL_LIST_EXECUTED_WITH_STOP_LOSS_AND_OPEN = @"SELECT o.*, ro.* FROM [Order] o WITH(NOLOCK) LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.Id = o.OrderId
-                                                                           WHERE o.Status = @OpenStatus AND {0}
+                                                                           WHERE o.Status = @OpenStatus AND (ro.Id IS NULL OR ro.Status = @ExecutedStatus) AND {0}
                                                                            UNION
                                                                            SELECT o.*, ro.* FROM [Order] o WITH(NOLOCK) LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.OrderId = o.Id
                                                                            WHERE o.Status = @ExecutedStatus AND o.StopLoss IS NOT NULL AND {0}";
@@ -39,6 +39,21 @@ namespace Auctus.DataAccess.Trade
         private const string SQL_GET_WITH_RELATED = "SELECT o.*, ro.* FROM [Order] o WITH(NOLOCK) LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.OrderId = o.Id WHERE o.Id = @Id";
 
         private const string SQL_ANY_ORDER_CREATED_BY_USER = "SELECT TOP 1 o.* FROM [Order] o WITH(NOLOCK) WHERE o.UserId = @UserId AND o.AssetId <> @AssetId";
+
+        private const string SQL_LIST_RECENT_ORDERS_FOR_TRENDING_ASSETS = @"	
+	    SELECT TOP {0}
+		    o.AssetId
+	    FROM 
+		    dbo.[Order] o
+		    INNER JOIN dbo.[Asset] a ON o.AssetId = a.Id
+	    WHERE 
+		    ({1})
+		    AND o.StatusDate > dateadd(day, -{2}, getdate())
+		    AND a.Enabled = 1
+	    GROUP BY o.AssetId
+	    ORDER BY COUNT(*) DESC ";
+
+        private const string SQL_USERS_ORDERS_BY_DATE = "SELECT TOP {0} o.* FROM [Order] o WITH(NOLOCK) WHERE o.StatusDate >= @StatusDate AND AssetId <> @AssetId {1} ORDER BY StatusDate DESC";
 
         public OrderData(IConfigurationRoot configuration) : base(configuration) { }
 
@@ -132,6 +147,27 @@ namespace Auctus.DataAccess.Trade
             return Query<Order>(string.Format(SQL_LAST_ADVISORS_ORDERS_FOR_ASSET, complement), parameters).ToList();
         }
 
+        public List<Order> ListUsersOrdersByDate(DateTime startStatusDate, IEnumerable<OrderStatusType> orderStatusTypes, IEnumerable<int> usersId, int top, int usdAssetId)
+        {
+            var complement = "";
+            var parameters = new DynamicParameters();
+            parameters.Add("StatusDate", startStatusDate, DbType.DateTime);
+            parameters.Add("AssetId", usdAssetId, DbType.Int32);
+            if (orderStatusTypes?.Any() == true)
+            {
+                complement += $" AND ({string.Join(" OR ", orderStatusTypes.Select((c, i) => $"o.Status = @Status{i}"))})";
+                for (int i = 0; i < orderStatusTypes.Count(); ++i)
+                    parameters.Add($"Status{i}", orderStatusTypes.ElementAt(i).Value, DbType.Int32);
+            }
+            if (usersId?.Any() == true)
+            {
+                complement += $" AND ({string.Join(" OR ", usersId.Select((c, i) => $"o.UserId = @UserId{i}"))})";
+                for (int i = 0; i < usersId.Count(); ++i)
+                    parameters.Add($"UserId{i}", usersId.ElementAt(i), DbType.Int32);
+            }
+            return Query<Order>(string.Format(SQL_USERS_ORDERS_BY_DATE, top, complement), parameters).ToList();
+        }
+
         public Order Get(int orderId)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -181,6 +217,19 @@ namespace Auctus.DataAccess.Trade
             parameters.Add("UserId", userId, DbType.Int32);
             parameters.Add("AssetId", usdAssetId, DbType.Int32);
             return Query<Order>(SQL_ANY_ORDER_CREATED_BY_USER, parameters).FirstOrDefault();
+        }
+
+        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int[] orderStatusList, int limit = 10, int numberOfDays = 7)
+        {
+            var parameters = new DynamicParameters();
+            var statusCondition = $" {string.Join(" OR ", orderStatusList.Select((c, i) => $"o.Status = @Status{i}"))} "; ;
+
+            for (int i = 0; i < orderStatusList.Count(); ++i)
+                parameters.Add($"Status{i}", orderStatusList.ElementAt(i), DbType.Int32);
+
+            var query = string.Format(SQL_LIST_RECENT_ORDERS_FOR_TRENDING_ASSETS, limit, statusCondition, numberOfDays);
+
+            return Query<int>(query, parameters);
         }
     }
 }

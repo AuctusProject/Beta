@@ -43,7 +43,7 @@ export class OrderPositionTabComponent implements OnInit, OnDestroy {
       this.advisorDataService.initialize(this.loginData.id);
       this.openPositionResponseSubscription = this.advisorDataService.openPosition(this.asset.assetId).subscribe(
         ret => {
-          this.Position.setDataSource([ret]);
+          this.Position.setDataSource(ret ? [ret] : []);
         }
       );
       this.initialized = true;

@@ -35,8 +35,10 @@ export class AppComponent implements OnInit, OnDestroy {
   hubStarted: boolean = false;
 
   mobileQuery: MediaQueryList;
+  miniViewQuery: MediaQueryList;
   @ViewChild("snav") sidenav: MatSidenav;
   private _mobileQueryListener: () => void;
+  private _miniViewQueryListener: () => void;
 
   constructor(private router: Router, 
     private navigationService : NavigationService,
@@ -56,6 +58,9 @@ export class AppComponent implements OnInit, OnDestroy {
       this.mobileQuery = media.matchMedia('(max-width: 959px)');
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener); 
+      this.miniViewQuery = media.matchMedia('(min-width: 1366px)');
+      this._miniViewQueryListener = () => changeDetectorRef.detectChanges();
+      this.miniViewQuery.addListener(this._miniViewQueryListener); 
       router.events
       .filter(event => event instanceof NavigationStart)
       .subscribe((event:NavigationStart) => {
@@ -89,13 +94,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   initializeHubConnection() {
-    if(!this.hubStarted && isPlatformBrowser(this.platformId)) {
+    if (!this.hubStarted && isPlatformBrowser(this.platformId)) {
+      this.hubStarted = true;
       this.connection = new HubConnectionBuilder().withUrl(CONFIG.apiUrl + "auctusHub", { accessTokenFactory: () => this.accountService.getAccessToken() }).build();
       this.connection.serverTimeoutInMilliseconds = 40000;
       this.connection.onclose(() => this.startHubConnection(this));
       this.connection.on("onReachStopLoss", (data) => this.onHubDataReceive(Constants.OrderActionType.StopLoss, data, this));
       this.connection.on("onReachTakeProfit", (data) => this.onHubDataReceive(Constants.OrderActionType.TakeProfit, data, this));
       this.connection.on("onReachOrderLimit", (data) => this.onHubDataReceive(Constants.OrderActionType.Limit, data, this));
+      this.connection.on("addLastNews", (data) => this.eventsService.broadcast("addLastNews", data));
+      this.connection.on("onNewTradeSignal", (data) => this.eventsService.broadcast("onTradeSignal", data));
       this.startHubConnection(this);
     }
   }
@@ -108,6 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log('Connection started!');
     })
     .catch(err => {
+      _this.hubStarted = false;
       console.log('Error while establishing connection :('); 
       setTimeout(() => _this.zone.run(() => _this.startConnection(_this), 5000));
     });
@@ -115,18 +124,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onHubDataReceive(actionType: number, data: OrderResponse[], _this) {
     if (data && data.length > 0) {
-      this.eventsService.broadcast("onUpdateAdvisor", data);
+      _this.eventsService.broadcast("onUpdateAdvisor", data);
       for (let i = 0; i < data.length; ++i) {
         let message = " for <b>" + new ValueDisplayPipe().transform(data[i].quantity, '') + " " + data[i].assetCode + "</b> was executed at <i>" + new ValueDisplayPipe().transform(data[i].price) + "</i>.";
         if (actionType == Constants.OrderActionType.Limit) {
           message = "An order limit" + message;
-          this.notificationsService.warn(null, message, this.orderNotificationOptions);
+          _this.notificationsService.warn(null, message, _this.orderNotificationOptions);
         } else if (actionType == Constants.OrderActionType.StopLoss) {
           message = "A stop loss order" + message;
-          this.notificationsService.error(null, message, this.orderNotificationOptions);
+          _this.notificationsService.error(null, message, _this.orderNotificationOptions);
         } else if (actionType == Constants.OrderActionType.TakeProfit) {
           message = "A take profit order" + message;
-          this.notificationsService.success(null, message, this.orderNotificationOptions);
+          _this.notificationsService.success(null, message, _this.orderNotificationOptions);
         }
       }
     }

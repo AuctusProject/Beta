@@ -4,7 +4,7 @@
 
 .trade-btn {
     border-radius: 4px;
-    padding: 10px;
+    padding: 10px 0;
     cursor: pointer;
     letter-spacing: 1.8px;
     text-align: center;
@@ -28,9 +28,9 @@
 
 .set-trade-container {
     padding: 10px;
-    width: 260px;
+    width: 190px;
 }
 
 .gap-margin {
-    margin-right: 10px;
+    margin-right: 5px;
 }

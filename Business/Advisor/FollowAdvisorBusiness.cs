@@ -17,9 +17,9 @@ namespace Auctus.Business.Advisor
     {
         public FollowAdvisorBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
-        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds = null)
+        public List<FollowAdvisor> ListFollowers(IEnumerable<int> advisorIds, bool includeUserData)
         {
-            return Data.ListFollowers(advisorIds);
+            return Data.ListFollowers(advisorIds, includeUserData);
         }
 
         public FollowAdvisor GetLastByUser(int userId, int advisorId)

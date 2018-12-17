@@ -1,0 +1,52 @@
+<table mat-table [dataSource]="dataSource" matSort>
+  <ng-container matColumnDef="trader">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="advisorName">TRADERS</th>
+    <td mat-cell *matCellDef="let order">
+      <a routerLink="/top-traders/{{order.advisorId}}">
+        <div fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="start center">
+          <expert-picture size="xs" [urlGuid]="order.advisorGuid" [ranking]="order.advisorRanking"></expert-picture>
+          <div fxLayout="column" fxLayoutGap="4px" fxLayoutAlign="center start">
+            <div class="text-left text text-name truncate" [title]="order.advisorName">{{order.advisorName}}</div>
+            <div class="expert-rating">
+              <bar-rating [theme]="'fontawesome-o'" [readOnly]="'true'" [rate]="order.advisorRating" [title]="order.advisorRating | number: '1.2-2'"></bar-rating>
+            </div>
+          </div>
+        </div>
+      </a>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="statusDate" class="text-left text-date">TIME</th>
+    <td mat-cell *matCellDef="let order" class="text-left text-date">
+      <div class="text text-date truncate">{{order.statusDate | amTimeAgo:'true'}}</div>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="trade">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="assetCode">TRADE</th>
+    <td mat-cell *matCellDef="let order">
+      <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center" class="trade">
+        <div fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center start">
+          <span class="text bold">{{order.assetCode}}</span>
+          <span class="text" [class]="getNormalizedType(order) ? 'green-label' : 'red-label'">{{getOrderDescription(order)}}</span>
+        </div>
+        <div fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center start">
+          <div fxLayout="row" fxLayoutGap="3px" fxLayoutAlign="start center" class="text-small">
+            <span [title]="getOrderTypeHint(order)">{{getOrderTypeText(order)}}</span>
+            <percentage-display [showArrow]="false" *ngIf="order.status == 3" [value]="order.profit"></percentage-display>
+          </div>
+          <span class="text-small">{{order.price | valueDisplay}}</span>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="footerRow">
+    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+      Start following your favorite traders and quickly access their last trades here!
+    </td>
+  </ng-container>
+  
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+  <tr [class.hidden]="dataSource && dataSource.data && dataSource.data.length > 0" mat-footer-row *matFooterRowDef="['footerRow']" class="footer-row"></tr>
+</table>

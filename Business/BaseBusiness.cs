@@ -141,26 +141,43 @@ namespace Auctus.Business
 
         public User GetLoggedUser()
         {
-            if (string.IsNullOrEmpty(LoggedEmail))
+            return GetUserFromCache(LoggedEmail);
+        }
+
+        public User GetUserFromCache(string email)
+        {
+            if (string.IsNullOrEmpty(email))
                 return null;
 
-            var cacheKey = GetUserCacheKey(LoggedEmail);
+            var cacheKey = GetUserCacheKey(email);
             var user = MemoryCache.Get<User>(cacheKey);
             if (user == null)
             {
-                UserBusiness.EmailValidation(LoggedEmail);
-                user = UserBusiness.GetByEmail(LoggedEmail);
+                UserBusiness.EmailValidation(email);
+                user = UserBusiness.GetByEmail(email);
 
                 if (user != null)
                 {
                     Parallel.Invoke(() => user.FollowedAdvisors = FollowAdvisorBusiness.ListAdvisorsFollowed(user.Id),
+                                    () => user.FollowingUsers = FollowAdvisorBusiness.ListFollowers(new int[] { user.Id }, true).Select(c => c.User.Email).ToList(),
                                     () => user.FollowedAssets = FollowAssetBusiness.ListAssetsFollowed(user.Id));
                 }
                 SetUserToCache(user);
             }
             else if (UserBusiness.IsValidAdvisor(user))
                 user = MemoryCache.Get<DomainObjects.Advisor.Advisor>(cacheKey);
+
             return user;
+        }
+
+        protected User GetUserFromCache(User user)
+        {
+            if (user != null)
+            {
+                var cacheKey = GetUserCacheKey(user.Email);
+                return MemoryCache.Get<User>(cacheKey);
+            }
+            return null;
         }
 
         public User GetValidUser()
@@ -175,6 +192,7 @@ namespace Auctus.Business
                     throw new NotFoundException("User cannot be found.");
 
                 Parallel.Invoke(() => user.FollowedAdvisors = FollowAdvisorBusiness.ListAdvisorsFollowed(user.Id),
+                                () => user.FollowingUsers = FollowAdvisorBusiness.ListFollowers(new int[] { user.Id }, true).Select(c => c.User.Email).ToList(),
                                 () => user.FollowedAssets = FollowAssetBusiness.ListAssetsFollowed(user.Id));
 
                 SetUserToCache(user);

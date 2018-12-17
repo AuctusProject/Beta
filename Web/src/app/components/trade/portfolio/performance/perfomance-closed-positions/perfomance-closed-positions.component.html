@@ -6,9 +6,9 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="trades">
-        <th mat-header-cell *matHeaderCellDef class="text-left" mat-sort-header="positionResponse.orderCount">TRADES ({{totalTrades}})</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="positionResponse.orderCount">TRADES ({{totalTrades}})</th>
         <td mat-cell *matCellDef="let asset">
-          <div fxLayout.lt-md="column" fxLayout.gt-sm="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+          <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
             <div>{{getOrderPercentage(asset.positionResponse.orderCount) | percentageDisplay: 1}}</div>
             <div>({{asset.positionResponse.orderCount}} Trades)</div>
           </div>
@@ -25,7 +25,7 @@
     <ng-container matColumnDef="success">
         <th ngClass.lt-md="hidden" mat-header-cell *matHeaderCellDef class="text-left" mat-sort-header="positionResponse.successRate">SUCCESS</th>
         <td ngClass.lt-md="hidden" mat-cell *matCellDef="let asset">
-        <div fxLayout="column" fxLayoutAlign="start start">
+        <div class="text-left" fxLayout="column" fxLayoutAlign="start start">
           <div>SUCCESS</div>
           <div>{{asset.positionResponse.successCount}} out of {{asset.positionResponse.orderCount}} trades were profitable</div>
         </div>

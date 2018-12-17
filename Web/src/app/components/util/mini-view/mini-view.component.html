@@ -1,0 +1,28 @@
+<mat-tab-group class="top-tab-group border-tabs">
+  <mat-tab> 
+      <ng-template mat-tab-label>
+        <span class="margin-label">MARKETS</span>
+        <fa-icon *ngIf="!listOnlyWatchlist" (click)="toggleMarketsWatchlist()" [icon]="['far','star']"></fa-icon>
+        <fa-icon *ngIf="listOnlyWatchlist" (click)="toggleMarketsWatchlist()" icon="star"></fa-icon></ng-template>
+      <asset-mini-view [listOnlyWatchlist]="listOnlyWatchlist"></asset-mini-view>
+  </mat-tab>
+  <mat-tab *ngIf="isLoggedIn()">  
+      <ng-template mat-tab-label><span class="margin-label">PORTFOLIO</span>
+        <fa-icon (click)="goToOpenPositions()" icon="external-link-alt"></fa-icon></ng-template>
+      <portfolio-mini-view></portfolio-mini-view>
+  </mat-tab>
+</mat-tab-group>
+<mat-tab-group class="bottom-tab-group border-tabs">
+  <mat-tab *ngIf="isLoggedIn()"> 
+      <ng-template mat-tab-label>SIGNALS</ng-template>
+      <trade-signal (newSignal)="onNewSignal()"></trade-signal>
+  </mat-tab>
+  <mat-tab>  
+      <ng-template mat-tab-label>TRENDING</ng-template>
+      <trending-assets></trending-assets>
+  </mat-tab>
+  <mat-tab>
+        <ng-template mat-tab-label>NEWS</ng-template>
+        <news-list></news-list>
+  </mat-tab>
+</mat-tab-group>

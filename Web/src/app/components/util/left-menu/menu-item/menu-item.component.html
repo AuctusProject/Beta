@@ -1,14 +1,14 @@
-<a *ngIf="!externalLink && !disabled" class="menu-item" [routerLink]="link" routerLinkActive="active" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+<a *ngIf="!externalLink && !disabled" class="menu-item" [routerLink]="link" routerLinkActive="active" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
   <ng-container 
     *ngTemplateOutlet="itemTemplate">
   </ng-container>
 </a>
-<a *ngIf="!externalLink && disabled" class="menu-item disabled" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+<a *ngIf="!externalLink && disabled" class="menu-item disabled" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
   <ng-container 
     *ngTemplateOutlet="itemTemplate">
   </ng-container>
 </a>
-<a *ngIf="externalLink" [href]="externalLink" target="_blank" class="menu-item" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+<a *ngIf="externalLink" [href]="externalLink" target="_blank" class="menu-item" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
   <ng-container 
     *ngTemplateOutlet="itemTemplate">
   </ng-container>

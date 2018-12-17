@@ -1,0 +1,40 @@
+:host{
+    width: 320px;
+    min-height: calc(100% - 10px);
+    background-color: #1c1c1c;
+    display: block;
+    color: #ffffff;
+    padding: 5px;
+}
+
+.top-tab-group{
+    height: 386px;
+    margin-bottom: 5px;
+}
+
+.bottom-tab-group{
+    height: calc(100vh - 463px);
+    min-height: 230px;
+}
+
+.border-tabs ::ng-deep .mat-tab-label-container .mat-tab-label {
+    min-width: unset;
+    width: 50%;
+}
+
+.bottom-tab-group ::ng-deep .mat-tab-header-pagination {
+    display: none !important;
+}
+
+.border-tabs ::ng-deep .mat-tab-body-wrapper{
+    height: calc(100% - 30px);
+}
+
+.margin-label{
+    margin-right: 5px;
+}
+
+.border-tabs ::ng-deep fa-icon{
+    color:#4c8ffc;
+    margin-right: unset !important;
+}

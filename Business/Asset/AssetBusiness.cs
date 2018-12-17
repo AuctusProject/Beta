@@ -344,5 +344,21 @@ namespace Auctus.Business.Asset
         {
             return ListAssets(true).Where(asset => asset.Name.ToUpper().StartsWith(searchTerm.ToUpper()) || asset.Code.ToUpper().StartsWith(searchTerm.ToUpper()));
         }
+
+        public IEnumerable<AssetResponse> ListTrendingAssets(int? listSize)
+        {
+            var numberOfRecordsInResult = listSize ?? 10;
+            var numberOfDays = 7;
+            var statusList = new int[3] { OrderStatusType.Executed.Value, OrderStatusType.Close.Value, OrderStatusType.Finished.Value };
+
+            var ids = OrderBusiness.ListTrendingAssetIdsBasedOnOrders(statusList, numberOfRecordsInResult, numberOfDays).ToList();
+
+            var assets = AssetCurrentValueBusiness.ListAllAssets(true, ids);
+
+            var loggedUser = GetLoggedUser();
+            var assetResponse = assets.Select(asset => GetAssetResponse(loggedUser, asset, null, null)).OrderBy(asset => ids.IndexOf(asset.AssetId));
+
+            return assetResponse;
+        }
     }
 }

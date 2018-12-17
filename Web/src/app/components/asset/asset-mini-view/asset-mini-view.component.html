@@ -1,0 +1,4 @@
+<div fxLayout="column" fxLayoutAlign="start start" >
+  <mini-trading-view-chart *ngIf="selectedAsset" [pair]="selectedAsset.pair" [assetId]="selectedAsset.assetId" class="chart"></mini-trading-view-chart>
+  <asset-mini-view-table *ngIf="filteredAssets" [assets]="filteredAssets" class="grid" (openMiniChart)="openMiniChart($event)" (setFollowUnfollow)="setFollowUnfollow($event)"></asset-mini-view-table>
+</div>

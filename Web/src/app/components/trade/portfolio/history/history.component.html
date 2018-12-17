@@ -1,38 +1,36 @@
 <div *ngIf='positionResponse' class="header" fxLayout.gt-sm="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
   <div fxLayout="row" class="boxes-wrapper" >
     <div fxLayout="row" class="boxes">
-      <div>{{dataSource.data.length}}
-        <br>
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
+        <div>{{dataSource.data.length}}</div>
         <span>Trades</span>
       </div>
-      <div>{{positionResponse.successRate | percentageDisplay: 1}}
-        <br>
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
+        <div>{{positionResponse.successRate | percentageDisplay: 1}}</div>
         <span>Profitable</span>
       </div>
-      <div>
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
         <percentage-display [value]="positionResponse.averageReturn"></percentage-display>
-        <br>
         <span>Avg.Returns</span>
       </div>
     </div>
-    <div class="returns">{{positionResponse.totalProfit | valueDisplay}}
-      <br>
+    <div class="returns" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
+      <div>{{positionResponse.totalProfit | valueDisplay}}</div>
       <span>Total Return</span>
     </div>
   </div>
   <div class="trades" fxLayout="row">
-    <div>{{bestTrade | percentageDisplay}}
-      <br>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
+      <div>{{bestTrade | percentageDisplay}}</div>
       <span>Best Trade</span>
     </div>
-    <div>{{worstTrade | percentageDisplay}}
-      <br>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
+      <div>{{worstTrade | percentageDisplay}}</div>
       <span>Worst Trade</span>
     </div>
-    <div>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
       <span *ngIf="positionResponse && positionResponse.averageTradeMinutes">{{getAvgTradeMinutes() | amTimeAgo:'true'}}</span>
       <span *ngIf="!positionResponse || !positionResponse.averageTradeMinutes">-</span>
-      <br>
       <span>Avg. Trade Time</span>
     </div>
   </div>
@@ -42,10 +40,14 @@
       <ng-container matColumnDef="asset">
         <th  mat-header-cell *matHeaderCellDef mat-sort-header="assetCode"> ACTIONS({{dataSource.data.length}}) </th>
         <td mat-cell *matCellDef="let order" (click)="onAssetClick(order.assetId)" class="pointer">
-          <div fxLayout="row" fxLayoutAlign.gt-sm="start center" fxLayoutAlign.lt-sm="center">
+          <div fxLayout="row" fxLayoutAlign="start center">
             <div><img class="asset-image" [src]="getAssetImgUrl(order.assetId)" onerror="this.style.display='none'" onload="this.style.display='unset'" /></div>
-            <div class="asset">
-              <span [class]="order.type == 1 ? 'red-label' : 'green-label'">{{getOrderDescription(order)}}</span><span ngClass.lt-sm="hidden"> - </span><br ngClass.gt-sm="hidden"/>{{order.assetCode}}
+            <div fxLayout="column" fxLayoutGap.gt-sm="6px">
+              <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start start" class="asset">
+                  <span [class]="order.type == 1 ? 'red-label' : 'green-label'">{{getOrderDescription(order)}}</span>
+                  <span fxHide.lt-sm> - </span>{{order.assetCode}}
+              </div>
+              <span *ngIf="order.actionType" class="action-type">triggered by {{utilProxy.GetCloseReasonDescription(order.actionType)}}</span>
             </div>
           </div>
         </td>
@@ -81,16 +83,13 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="PLValue">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="profitValue"> P/L($) </th>
-          <td mat-cell *matCellDef="let order" >
+      <ng-container matColumnDef="PL">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="profit"> P/L </th>
+        <td mat-cell *matCellDef="let order" >
+          <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
+            <percentage-display [value]="order.profit"></percentage-display>
             <span [class]="order.profitValue >= 0 ? 'green-label':'red-label'">{{order.profitValue | valueDisplay}}</span>
-          </td>
-        </ng-container>
-      <ng-container matColumnDef="PLPercentage">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="profit"> P/L(%) </th>
-        <td mat-cell *matCellDef="let order">
-          <percentage-display [value]="order.profit"></percentage-display>
+          </div>
         </td>
       </ng-container>
 

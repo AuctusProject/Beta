@@ -140,7 +140,7 @@ namespace Auctus.Business.Trade
             if (!currentValue.HasValue)
                 throw new InvalidOperationException("Asset doesn't have current value");
 
-            return InternalCloseOrder(order, null, order.RelatedOrders, quantity, loggedUser, currentValue.Value, Data.GetDateTimeNow(), false);
+            return InternalCloseOrder(order, null, order.RelatedOrders, quantity, loggedUser, currentValue.Value, Data.GetDateTimeNow());
         }
 
         private void BaseValidationOnPositionUpdate(Order order, User loggedUser)
@@ -250,7 +250,7 @@ namespace Auctus.Business.Trade
         }
 
         private OrderResponse InternalCloseOrder(Order order, OrderActionType actionType, List<Order> relatedOrders, double? quantity, User loggedUser, double assetCurrentValue, 
-            DateTime dateTime, bool responseForClosedOrder)
+            DateTime dateTime)
         {
             Order closedOrder, takeProfitOrder;
             double closedDollar;
@@ -263,7 +263,7 @@ namespace Auctus.Business.Trade
             orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, null), new Tuple<Order, Order>(closedOrder, takeProfitOrder) };
             SaveOrdersAndPositions(loggedUser.Id, dateTime.Date, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, assetCurrentValue } }, null);
 
-            return GetOrderResponse(loggedUser, responseForClosedOrder ? closedOrder : order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(order.AssetId) });
+            return GetOrderResponse(loggedUser, closedOrder, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(order.AssetId) });
         }
 
         private void InternalCloseOrder(out Order closeOrder, out Order takeProfitOrder, out double closedDollar, Order order, OrderActionType actionType, List<Order> relatedOrders, double? quantity, 
@@ -487,7 +487,7 @@ namespace Auctus.Business.Trade
                 if ((order.OrderType == OrderType.Buy && assetCurrentPrice <= order.StopLoss.Value) ||
                     (order.OrderType == OrderType.Sell && assetCurrentPrice >= order.StopLoss.Value))
                 {
-                    return InternalCloseOrder(order, OrderActionType.StopLoss, order.RelatedOrders, null, user, order.StopLoss.Value, currentDate, true);
+                    return InternalCloseOrder(order, OrderActionType.StopLoss, order.RelatedOrders, null, user, order.StopLoss.Value, currentDate);
                 }
             }
             else if (order.OrderStatusType == OrderStatusType.Open && 
@@ -715,6 +715,20 @@ namespace Auctus.Business.Trade
             return result;
         }
 
+        public List<OrderResponse> ListFollowedTrades()
+        {
+            var loggedUser = GetValidUser();
+
+            List<Order> orders = null;
+            List<DomainObjects.Asset.Asset> assets = null;
+            List<AdvisorRanking> advisors = null;
+            Parallel.Invoke(() => orders = Data.ListUsersOrdersByDate(Data.GetDateTimeNow().AddDays(-14), new OrderStatusType[] { OrderStatusType.Executed, OrderStatusType.Close }, loggedUser.FollowedAdvisors, 5, AssetUSDId),
+                            () => assets = assets = AssetBusiness.ListAssets(false),
+                            () => advisors = AdvisorRankingBusiness.ListAdvisorsFullData());
+
+            return orders.Select(c => GetOrderResponse(loggedUser, c, advisors.FirstOrDefault(a => a.Id == c.UserId), assets)).ToList();
+        }
+
         private double? GetOpenPrice(Order order)
         {
             if (OrderStatusType.Executed == order.OrderStatusType)
@@ -769,6 +783,11 @@ namespace Auctus.Business.Trade
                 CanBeEdited = loggedUser != null && loggedUser.Id == order.UserId && 
                     (order.OrderStatusType == OrderStatusType.Executed || (order.OrderStatusType == OrderStatusType.Open && !order.OrderId.HasValue))
             };
+        }
+
+        public IEnumerable<int> ListTrendingAssetIdsBasedOnOrders(int[] orderStatusList, int resultSizeLimit, int numberOfDays)
+        {
+            return Data.ListTrendingAssetIdsBasedOnOrders(orderStatusList, resultSizeLimit, numberOfDays);
         }
     }
 }

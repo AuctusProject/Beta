@@ -16,6 +16,11 @@
     height: 38px;
 }
 
+.expert-picture.xs,
+.expert-picture.xs img{
+    width: 29px;
+    height: 29px;
+}
 
 .ranking{
     border-radius: 2px;
@@ -36,6 +41,16 @@
     left: 32px;
 }
 
-.expert-picture.sm{
+.expert-picture.xs .ranking{
+    font-size: 10px;
+    left: 20px;
+    padding: 0px;
+}
+
+.expert-picture.sm {
     margin-right: 16px;
+}
+
+.expert-picture.xs {
+    margin-right: 10px;
 }

@@ -1,36 +1,36 @@
-<table mat-table [dataSource]="dataSource" matSort>
+<table [class.trending-layout]="isTrendingLayout()" mat-table [dataSource]="dataSource" matSort>
   <ng-container matColumnDef="market">
     <th mat-header-cell *matHeaderCellDef class="text-left" mat-sort-header="name"> MARKET</th>
     <td mat-cell *matCellDef="let asset" class="text-left">
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="9px" fxLayoutGap.lt-md="4px">
-        <follow-unfollow [(following)]="asset.following" [(id)]="asset.assetId" [type]="expertFollowUnfollowType" [showOnlyStar]=true></follow-unfollow>
+        <follow-unfollow *ngIf="!isTrendingLayout()" [(following)]="asset.following" [(id)]="asset.assetId" [type]="expertFollowUnfollowType" [showOnlyStar]=true></follow-unfollow>
         <asset-summary [assetId]=asset.assetId [assetCode]=asset.code [assetName]=asset.name [transferToDetailsPage]="true"></asset-summary>
       </div>
     </td>
   </ng-container>
   <ng-container matColumnDef="sentiment">
-    <th fxHide.lt-md mat-header-cell *matHeaderCellDef>SENTIMENT</th>
-    <td fxHide.lt-md mat-cell *matCellDef="let asset">
-      <recommendation-distribution [data]="asset.recommendationDistribution"></recommendation-distribution>
+    <th mat-header-cell *matHeaderCellDef><span fxHide.lt-md matTooltip="Open Positions % (Long and Short)">SENTIMENT</span></th>
+    <td mat-cell *matCellDef="let asset">
+      <recommendation-distribution fxHide.lt-md [data]="asset.recommendationDistribution"></recommendation-distribution>
     </td>
   </ng-container>
   <ng-container matColumnDef="marketCap">
-    <th fxHide.lt-md mat-header-cell *matHeaderCellDef mat-sort-header="marketCap"> MARKET CAP</th>
-    <td fxHide.lt-md mat-cell *matCellDef="let asset">
-      <ticker-field class="price" [startValue]="asset.marketCap" [valueMultiplier]="asset.circulatingSupply" [blinkGray]="'true'" [pair]="asset.pair" (onNewValue)="onNewMarketCap($event, asset)"></ticker-field>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="marketCap"><span fxHide.lt-md>MARKET CAP</span></th>
+    <td mat-cell *matCellDef="let asset">
+      <ticker-field fxHide.lt-md class="price" [startValue]="asset.marketCap" [valueMultiplier]="asset.circulatingSupply" [blinkGray]="'true'" [pair]="asset.pair" (onNewValue)="onNewMarketCap($event, asset)"></ticker-field>
     </td>
   </ng-container>
   <ng-container matColumnDef="lastPrice">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header="lastValue"> LAST PRICE</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="lastValue">LAST PRICE</th>
     <td mat-cell *matCellDef="let asset">
       <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair" (onNewValue)="onNewLastValue($event, asset)"></ticker-field>
-      <ticker-percentage-field fxHide.gt-xs class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair" (onNewValue)="onNewVariation24h($event, asset)"> </ticker-percentage-field>
+      <ticker-percentage-field [fxHide.gt-xs]="!isTrendingLayout()" class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair" (onNewValue)="onNewVariation24h($event, asset)"> </ticker-percentage-field>
     </td>
   </ng-container>
   <ng-container matColumnDef="change">
-    <th fxHide.lt-sm mat-header-cell *matHeaderCellDef mat-sort-header="variation24h"> CHANGE</th>
-    <td fxHide.lt-sm mat-cell *matCellDef="let asset; let i = index;">
-      <ticker-percentage-field class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair" (onNewValue)="onNewVariation24h($event, asset)"> </ticker-percentage-field>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="variation24h"><span fxHide.lt-sm>CHANGE</span></th>
+    <td mat-cell *matCellDef="let asset; let i = index;">
+      <ticker-percentage-field fxHide.lt-sm class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair" (onNewValue)="onNewVariation24h($event, asset)"> </ticker-percentage-field>
     </td>
   </ng-container>
   <ng-container matColumnDef="trade">
@@ -46,12 +46,12 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="footerRow">
-    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+    <td mat-footer-cell *matFooterCellDef [attr.colspan]="getDisplayedColumns().length">
       Start following your favorite trade markets and quickly access here!
     </td>
   </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(); let i = index"></tr>
   <tr [class.hidden]="!(assets && assets.length == 0)" mat-footer-row *matFooterRowDef="['footerRow']" class="footer-row"></tr>
 </table>
 <mat-paginator [class.hidden]="!(assets && assets.length > 20)" [pageSize]="20" showFirstLastButtons></mat-paginator>

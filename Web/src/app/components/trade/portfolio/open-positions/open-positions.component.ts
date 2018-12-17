@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, EventEmitter, ViewChild, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, EventEmitter, ViewChild, Output, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { NotificationsService } from 'angular2-notifications';
 import { CONFIG } from "../../../../services/config.service";
 import { Util } from "../../../../util/util";
@@ -26,8 +26,7 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
     "units",    
     "value",
     "avgOpen",
-    "PLValue",
-    "PLPercentage",
+    "PL",
     "close"
   ];
 
@@ -38,7 +37,6 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
   constantsProxy = Constants;
   expandedAssetId: number;
   orders: OrderResponse[] = [];
-  promise: Subscription;
   @ViewChild("Orders") Orders: OrdersTableComponent;
   @Input() userId: number;
   @Input() assetId?: number = null;
@@ -169,13 +167,14 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
   }
 
   closeAllOpenPositions(assetId: number, assetCode: string) {
+    let self = this;
     this.modalService.setConfirmDialog("Close all " + assetCode + " open positions", "Are you sure that you want to close all open positions?", "DON'T CLOSE", "OK").afterClosed().subscribe((ret) => 
     {
       if (ret)
       {
-        this.promise = this.tradeService.closeAllOrders(assetId).subscribe(result => {
-          this.eventsService.broadcast("onUpdateAdvisor", result);
-          this.notificationsService.success(null, "Positions were closed.");
+        self.tradeService.closeAllOrders(assetId).subscribe(result => {
+          self.eventsService.broadcast("onUpdateAdvisor", result);
+          self.notificationsService.success(null, "Positions were closed.");
         });
       }
     });
@@ -183,5 +182,9 @@ export class OpenPositionsComponent implements OnInit, OnChanges {
 
   hasOpenPositions() {
     return this.dataSource && this.dataSource.data && this.dataSource.data.length > 0;
+  }
+
+  onAssetSummaryClick($event: Event){
+    $event.stopPropagation();
   }
 }

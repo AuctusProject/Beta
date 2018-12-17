@@ -20,3 +20,17 @@ fa-icon{
     letter-spacing: 0.5px;
     margin-top: 2px;
 }
+
+.follow-link.only-star ::ng-deep .btn-spinner {
+  margin-left: -16px;
+  margin-top: -4px;
+}
+
+.follow-link.only-star ::ng-deep .btn-spinner{
+    width: 16px;
+    height: 16px;
+}
+
+.follow-link.only-star.is-loading fa-icon{
+    opacity: 0;
+}
