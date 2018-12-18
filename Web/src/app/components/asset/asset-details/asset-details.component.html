@@ -7,7 +7,15 @@
         <div class="asset-name">{{asset.name}}</div>
       </div>
     </div>
-    <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
+    <div fxLayout="column" fxLayoutGap="4px" fxLayoutAlign="center center">
+      <ticker-field class="price" [startValue]="asset.lastValue" [pair]="asset.pair" (onNewValue)="onNewLastValue($event, asset)"></ticker-field>
+      <div fxLayout="row">
+        <label class="bid-ask-label">Bid/Ask:</label>
+        <ticker-field class="bid-ask-price" tickerProperty="bestBidPrice" tickerToMultiplierProperty="bestBidPrice" [startValue]="asset.bidValue" [pair]="asset.pair"></ticker-field>
+        <span class="bid-ask-price">/</span>
+        <ticker-field class="bid-ask-price" tickerProperty="bestAskPrice" tickerToMultiplierProperty="bestAskPrice" [startValue]="asset.askValue" [pair]="asset.pair"></ticker-field>
+      </div>
+    </div>
     <ticker-percentage-field class="percentage" [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
     <div class="market-cap" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
       <label class="asset-header-label">Market Cap</label>
@@ -35,8 +43,14 @@
         </div>
       </div>
       <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="3px">
-        <ticker-field class="mobile-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
-        <ticker-percentage-field class="percentage mobile-value" [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
+          <ticker-field class="mobile-price" [startValue]="asset.lastValue" [pair]="asset.pair"></ticker-field>
+          <ticker-percentage-field class="percentage mobile-value" [startValue]="asset.variation24h" [pair]="asset.pair"></ticker-percentage-field>
+        <div fxLayout="row" fxLayoutGap="3px">
+          <label class="bid-ask-label">Bid/Ask:</label>
+          <ticker-field class="bid-ask-price" tickerProperty="bestBidPrice" tickerToMultiplierProperty="bestBidPrice" [startValue]="asset.bidValue" [pair]="asset.pair"></ticker-field>
+          <span class="bid-ask-price">/</span>
+          <ticker-field class="bid-ask-price" tickerProperty="bestAskPrice" tickerToMultiplierProperty="bestAskPrice" [startValue]="asset.askValue" [pair]="asset.pair"></ticker-field>
+        </div>
       </div>
       <follow-unfollow [(following)]="asset.following" [numberOfFollowers]="asset.numberOfFollowers" [(id)]="asset.assetId" [type]="assetFollowUnfollowType"></follow-unfollow>
     </div>

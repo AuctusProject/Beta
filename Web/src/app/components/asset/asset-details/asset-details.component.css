@@ -33,6 +33,19 @@
     letter-spacing: 0.3px;
 }
 
+.bid-ask-label{
+    font-size: 10px;
+    color: #bfbfbf;
+    margin-right: 2px;
+}
+
+.bid-ask-price{
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #f2f2f2;
+}
+
 .mobile-asset-header-label {
     font-size: 10px;
     color: #bfbfbf;
@@ -87,7 +100,7 @@
 }
 
 .asset-content-mobile {
-    height: calc(100% - 138px);
+    height: calc(100% - 151px);
 }
 
 .cancel-close-action {

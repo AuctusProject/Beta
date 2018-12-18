@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
 import { PairResponse } from '../../../model/asset/assetResponse';
 import { ValueDisplayPipe } from '../../../util/value-display.pipe';
+import { Constants } from '../../../util/constants';
 
 @Component({
   selector: 'ticker-profit-field',
@@ -65,16 +66,16 @@ export class TickerProfitFieldComponent implements OnInit, OnDestroy, OnChanges 
   setValue(ticker: BinanceTickerPayload, isMainPair: boolean) {
     if (!this.pair.multipliedSymbol) {
       if (this.priceValue && this.quantityValue) {
-        this.value = this.priceValue * this.quantityValue * (this.getReferenceValueMultiplier() * ((ticker.currentClosePrice / parseFloat(this.priceValue)) - 1));
+        this.value = this.priceValue * this.quantityValue * (this.getReferenceValueMultiplier() * ((this.getConsideredPrice(ticker) / parseFloat(this.priceValue)) - 1));
       } else {
-        this.value = ticker.currentClosePrice * ticker.priceChangePercentage / 100;
+        this.value = this.getConsideredPrice(ticker) * ticker.priceChangePercentage / 100;
       }
     } else {
       if (isMainPair) {
-        this.baseValue = ticker.currentClosePrice;
+        this.baseValue = this.getConsideredPrice(ticker);
         this.baseVariation = ticker.priceChangePercentage;
       } else {
-        this.quoteValue = ticker.currentClosePrice;
+        this.quoteValue = this.getConsideredPrice(ticker);
         this.quoteVariation = ticker.priceChangePercentage;
       }
       if (this.priceValue && this.quantityValue) {
@@ -83,8 +84,8 @@ export class TickerProfitFieldComponent implements OnInit, OnDestroy, OnChanges 
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {
-          let previousBase = this.baseValue * (1 + (this.baseVariation / 100));
-          let previousQuote = this.quoteValue * (1 + (this.quoteVariation / 100));
+          let previousBase = this.baseValue / (1 + (this.baseVariation / 100));
+          let previousQuote = this.quoteValue / (1 + (this.quoteVariation / 100));
           this.value = this.baseValue * this.quoteValue * (((this.baseValue * this.quoteValue) / (previousBase * previousQuote)) - 1);
       }
     }
@@ -94,7 +95,11 @@ export class TickerProfitFieldComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   getReferenceValueMultiplier() : number {
-    return this.orderType === 0 ? -1.0 : 1.0;
+    return this.orderType === Constants.OrderType.Sell ? -1.0 : 1.0;
+  }
+
+  getConsideredPrice(ticker: BinanceTickerPayload) : number {
+    return this.priceValue && this.quantityValue ? this.orderType === Constants.OrderType.Sell ? ticker.bestAskPrice : ticker.bestBidPrice : ticker.currentClosePrice;
   }
 
   getValue(): string {

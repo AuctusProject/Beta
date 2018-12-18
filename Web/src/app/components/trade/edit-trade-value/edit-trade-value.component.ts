@@ -11,6 +11,7 @@ import { ValueDisplayPipe } from '../../../util/value-display.pipe';
 import { NotificationsService } from 'angular2-notifications';
 import { EventsService } from 'angular-event-service/dist';
 import { ConfirmationDialogComponent } from '../../util/confirmation-dialog/confirmation-dialog.component';
+import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
 
 @Component({
   selector: 'edit-trade-value',
@@ -66,9 +67,9 @@ export class EditTradeValueComponent implements OnInit, OnDestroy {
         this.mainTickerSubscription = this.tickerService.binanceTicker(this.order.pair.symbol).subscribe(ret =>
           {
             if (!this.order.pair.multipliedSymbol) {
-              this.setCurrentPrice(ret.currentClosePrice);
+              this.setCurrentPrice(this.getConsideredPrice(ret));
             } else {
-              this.baseValue = ret.currentClosePrice;
+              this.baseValue = this.getConsideredPrice(ret);
               if (this.multiplierValue || this.multiplierValue == 0) {
                 this.setCurrentPrice(this.baseValue * this.multiplierValue);
               }
@@ -78,7 +79,7 @@ export class EditTradeValueComponent implements OnInit, OnDestroy {
       if (this.order.pair.multipliedSymbol) {
         this.multiplierTickerSubscription = this.tickerService.binanceTicker(this.order.pair.multipliedSymbol).subscribe(ret =>
           {
-            this.multiplierValue = ret.currentClosePrice;
+            this.multiplierValue = this.getConsideredPrice(ret);
             if (this.baseValue || this.baseValue == 0) {
               this.setCurrentPrice(this.baseValue * this.multiplierValue);
             }
@@ -86,6 +87,10 @@ export class EditTradeValueComponent implements OnInit, OnDestroy {
       }
       this.initialized = true;
     }
+  }
+
+  private getConsideredPrice(ticker: BinanceTickerPayload) : number {
+    return this.order.type === Constants.OrderType.Sell ? ticker.bestAskPrice : ticker.bestBidPrice;
   }
 
   ngOnDestroy() {

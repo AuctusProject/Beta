@@ -8,6 +8,7 @@ import { FollowUnfollowType } from '../../util/follow-unfollow/follow-unfollow.c
 import { ModalService } from '../../../services/modal.service';
 import { AccountService } from '../../../services/account.service';
 import { OrderPositionTabComponent } from '../../trade/order-position-tab/order-position-tab.component';
+import { ValueDisplayPipe } from '../../../util/value-display.pipe';
 
 @Component({
   selector: 'asset-details',
@@ -32,7 +33,7 @@ export class AssetDetailsComponent implements OnInit {
       this.assetService.getAssetDetails(params['id']).subscribe(
         asset => {
           this.asset = asset;
-          this.titleService.setTitle("Auctus Trading - " + asset.name);
+          this.setTitle(asset);
           this.metaTagService.updateTag({name: 'description', content: "Traders on " + asset.name + " (" + asset.code + ")" });
         })
     );
@@ -65,5 +66,14 @@ export class AssetDetailsComponent implements OnInit {
     if (this.OrderTab) {
       this.OrderTab.cancelAllOpenOrders();
     }
+  }
+
+  onNewLastValue($event, asset: AssetResponse) {
+    asset.lastValue = $event;
+    this.setTitle(asset);
+  }
+
+  setTitle(asset: AssetResponse) {
+    this.titleService.setTitle(new ValueDisplayPipe().transform(asset.lastValue, "$")  + " " + asset.code + " - Auctus Trading");
   }
 }

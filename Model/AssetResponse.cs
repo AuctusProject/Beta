@@ -13,6 +13,8 @@ namespace Auctus.Model
         public int TotalAdvisors { get; set; }
         public int Mode { get; set; }
         public double LastValue { get; set; }
+        public double BidValue { get; set; }
+        public double AskValue { get; set; }
         public bool ShortSellingEnabled { get; set; }
         public double? Variation24h { get; set; }
         public double? Variation7d { get; set; }
