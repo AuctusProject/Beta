@@ -138,13 +138,14 @@ namespace Api
 
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseMvcWithDefaultRoute();
-            
+            app.UseCors("AllowAll");
             app.UseWebSockets();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<AuctusHub>("/api/auctusHub");
             });
+
+            app.UseMvcWithDefaultRoute();
 
             if (env.IsDevelopment())
             {
