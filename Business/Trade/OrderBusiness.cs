@@ -62,7 +62,7 @@ namespace Auctus.Business.Trade
             if (price.HasValue)
             {
                 var currentAssetValue = AssetCurrentValueBusiness.GetRealCurrentValue(order.AssetId);
-                if ((price.Value <= 0) || (order.OrderType == OrderType.Buy && currentAssetValue.BidValue <= price.Value) || (order.OrderType == OrderType.Sell && currentAssetValue.AskValue >= price.Value))
+                if ((price.Value <= 0) || (order.OrderType == OrderType.Buy && currentAssetValue.BidValue >= price.Value) || (order.OrderType == OrderType.Sell && currentAssetValue.AskValue <= price.Value))
                     throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(order.OrderType == OrderType.Buy ? currentAssetValue.BidValue : currentAssetValue.AskValue)}.");
             }
             var now = Data.GetDateTimeNow();
