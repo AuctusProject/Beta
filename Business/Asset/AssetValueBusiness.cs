@@ -106,7 +106,7 @@ namespace Auctus.Business.Asset
 
         public double GetVariation24h(double assetCurrentValue, double assetVariantion24h, double btcCurrentValue, double btcVariation24h)
         {
-            return (assetCurrentValue * btcCurrentValue) / ((assetCurrentValue * (1 + (-1 * assetVariantion24h))) * (btcCurrentValue * (1 + (-1 * btcVariation24h)))) - 1;
+            return (assetCurrentValue * btcCurrentValue) / ((assetCurrentValue / (1 + assetVariantion24h)) * (btcCurrentValue / (1 + btcVariation24h))) - 1;
         }
 
         public void UpdateBinanceAssetsValues7dAnd30d()

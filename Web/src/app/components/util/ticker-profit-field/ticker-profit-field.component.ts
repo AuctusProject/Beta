@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
 import { PairResponse } from '../../../model/asset/assetResponse';
 import { ValueDisplayPipe } from '../../../util/value-display.pipe';
+import { Constants } from '../../../util/constants';
 
 @Component({
   selector: 'ticker-profit-field',
@@ -94,11 +95,11 @@ export class TickerProfitFieldComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   getReferenceValueMultiplier() : number {
-    return this.orderType === 0 ? -1.0 : 1.0;
+    return this.orderType === Constants.OrderType.Sell ? -1.0 : 1.0;
   }
 
   getConsideredPrice(ticker: BinanceTickerPayload) : number {
-    return this.priceValue && this.quantityValue ? this.orderType === 0 ? ticker.bestBidPrice : ticker.bestAskPrice : ticker.currentClosePrice;
+    return this.priceValue && this.quantityValue ? this.orderType === Constants.OrderType.Sell ? ticker.bestAskPrice : ticker.bestBidPrice : ticker.currentClosePrice;
   }
 
   getValue(): string {

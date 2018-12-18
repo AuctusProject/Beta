@@ -333,12 +333,12 @@ export class AdvisorDataService {
         let openPosition = response.openPositions[i];
         let averageReturn = openPosition.averageReturn;
         if (this.pairPrice[openPosition.pair.symbol.toUpperCase()]) {
-          let basePrice = this.pairPrice[openPosition.pair.symbol.toUpperCase()][openPosition.type];
+          let basePrice = this.pairPrice[openPosition.pair.symbol.toUpperCase()][!!openPosition.type ? Constants.OrderType.Sell : Constants.OrderType.Buy];
           if (basePrice) {
             if (!openPosition.pair.multipliedSymbol) {
               averageReturn = (openPosition.type == Constants.OrderType.Buy ? 1 : -1) * (basePrice / openPosition.averagePrice - 1);
             } else if (this.pairPrice[openPosition.pair.multipliedSymbol.toUpperCase()]) {
-              let relatedPrice = this.pairPrice[openPosition.pair.multipliedSymbol.toUpperCase()][openPosition.type];
+              let relatedPrice = this.pairPrice[openPosition.pair.multipliedSymbol.toUpperCase()][!!openPosition.type ? Constants.OrderType.Sell : Constants.OrderType.Buy];
               if (relatedPrice) {
                 averageReturn = (openPosition.type == Constants.OrderType.Buy ? 1 : -1) * ((basePrice * relatedPrice) / openPosition.averagePrice - 1);
               }

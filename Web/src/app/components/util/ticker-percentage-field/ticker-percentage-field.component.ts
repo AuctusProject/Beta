@@ -3,6 +3,7 @@ import { TickerService } from '../../../services/ticker.service';
 import { Subscription } from 'rxjs';
 import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
 import { PairResponse } from '../../../model/asset/assetResponse';
+import { Constants } from '../../../util/constants';
 
 @Component({
   selector: 'ticker-percentage-field',
@@ -87,11 +88,11 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   }
 
   getReferenceValueMultiplier() : number {
-    return this.orderType === 0 ? -1.0 : 1.0;
+    return this.orderType === Constants.OrderType.Sell ? -1.0 : 1.0;
   }
 
   getConsideredPrice(ticker: BinanceTickerPayload) : number {
-    return this.referenceValue ? this.orderType === 0 ? ticker.bestBidPrice : ticker.bestAskPrice : ticker.currentClosePrice;
+    return this.referenceValue ? this.orderType === Constants.OrderType.Sell ? ticker.bestAskPrice : ticker.bestBidPrice : ticker.currentClosePrice;
   }
 
   ngOnDestroy() {

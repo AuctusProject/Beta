@@ -115,7 +115,8 @@ namespace Auctus.Business.Trade
 
             var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
             orderData[assetId] = tupleForOrderAndTakeProfitOrder;
-            SaveOrdersAndPositions(loggedUser.Id, closeDate, orderData, usdPosition, new Dictionary<int, double> { { assetId, currentValue.CurrentValue } }, null);
+            SaveOrdersAndPositions(loggedUser.Id, closeDate, orderData, usdPosition, new Dictionary<int, double> { { assetId, currentValue.BidValue } }, 
+                new Dictionary<int, double> { { assetId, currentValue.AskValue } }, null);
 
             var advisor = AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id);
             var assets = new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(assetId) };
@@ -141,8 +142,7 @@ namespace Auctus.Business.Trade
             if (currentValue == null)
                 throw new InvalidOperationException("Asset doesn't have current value");
 
-            var consideredPrice = order.OrderType == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue;
-            return InternalCloseOrder(order, null, order.RelatedOrders, quantity, loggedUser, consideredPrice, Data.GetDateTimeNow());
+            return InternalCloseOrder(order, null, order.RelatedOrders, quantity, loggedUser, currentValue.BidValue, currentValue.AskValue, Data.GetDateTimeNow());
         }
 
         private void BaseValidationOnPositionUpdate(Order order, User loggedUser)
@@ -193,10 +193,11 @@ namespace Auctus.Business.Trade
                 usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
                 SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedDollar, dateTime);
             }
-            var currentValue = AssetCurrentValueBusiness.ListAllAssets(true, new int[] { order.AssetId }).First().CurrentValue;
+            var currentValue = AssetCurrentValueBusiness.ListAllAssets(true, new int[] { order.AssetId }).First();
             var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
             orderData[order.AssetId] = canceledOrders;
-            SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue } }, null);
+            SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } }, 
+                new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, null);
 
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(order.AssetId) });
         }
@@ -237,8 +238,9 @@ namespace Auctus.Business.Trade
                 orderData[cancelled.Item1.AssetId].Add(cancelled);
             }
 
-            var assetsCurrentValues = AssetCurrentValueBusiness.ListAllAssets(true, orderData.Keys.Select(c => c)).ToDictionary(c => c.Id, c => c.CurrentValue);
-            SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, assetsCurrentValues, null);
+            var assetsCurrentValues = AssetCurrentValueBusiness.ListAllAssets(true, orderData.Keys.Select(c => c));
+            SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, assetsCurrentValues.ToDictionary(c => c.Id, c => c.BidValue), 
+                assetsCurrentValues.ToDictionary(c => c.Id, c => c.AskValue), null);
 
             var advisor = AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id);
             var assets = AssetBusiness.ListAssets(false, orders.Select(c => c.AssetId).Distinct());
@@ -251,19 +253,26 @@ namespace Auctus.Business.Trade
             return result;
         }
 
-        private OrderResponse InternalCloseOrder(Order order, OrderActionType actionType, List<Order> relatedOrders, double? quantity, User loggedUser, double assetCurrentValue, 
-            DateTime dateTime)
+        private OrderResponse InternalCloseOrder(Order order, OrderActionType actionType, List<Order> relatedOrders, double? quantity, User loggedUser, double assetBidValue,
+            double assetAskValue, DateTime dateTime)
         {
             Order closedOrder, takeProfitOrder;
             double closedDollar;
-            InternalCloseOrder(out closedOrder, out takeProfitOrder, out closedDollar, order, actionType, relatedOrders, quantity, loggedUser.Id, assetCurrentValue, dateTime);
+            double consideredPrice;
+            if (actionType == OrderActionType.StopLoss)
+                consideredPrice = order.StopLoss.Value;
+            else
+                consideredPrice = order.OrderType == OrderType.Buy ? assetBidValue : assetAskValue;
+
+            InternalCloseOrder(out closedOrder, out takeProfitOrder, out closedDollar, order, actionType, relatedOrders, quantity, loggedUser.Id, consideredPrice, dateTime);
 
             var usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
             SetUsdPosition(usdPosition, OrderStatusType.Close, closedDollar, dateTime);
 
             var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
             orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, null), new Tuple<Order, Order>(closedOrder, takeProfitOrder) };
-            SaveOrdersAndPositions(loggedUser.Id, dateTime.Date, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, assetCurrentValue } }, null);
+            SaveOrdersAndPositions(loggedUser.Id, dateTime.Date, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, assetBidValue } }, 
+                new Dictionary<int, double> { { order.AssetId, assetAskValue } }, null);
 
             return GetOrderResponse(loggedUser, closedOrder, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(order.AssetId) });
         }
@@ -406,7 +415,8 @@ namespace Auctus.Business.Trade
 
             var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
             orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, newTakeProfitOrder) };
-            SaveOrdersAndPositions(loggedUser.Id, now, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, consideredPrice } }, oldTakeProfitOrder);
+            SaveOrdersAndPositions(loggedUser.Id, now, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } }, 
+                new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, oldTakeProfitOrder);
 
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { asset });
         }
@@ -478,7 +488,8 @@ namespace Auctus.Business.Trade
 
             var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
             orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, takeProfitOrder) };
-            SaveOrdersAndPositions(loggedUser.Id, creationDate, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, consideredPrice } }, null);
+            SaveOrdersAndPositions(loggedUser.Id, creationDate, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } }, 
+                new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, null);
 
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { asset });
         }
@@ -491,17 +502,12 @@ namespace Auctus.Business.Trade
                 if ((order.OrderType == OrderType.Buy && assetCurrentPrice.BidValue <= order.StopLoss.Value) ||
                     (order.OrderType == OrderType.Sell && assetCurrentPrice.AskValue >= order.StopLoss.Value))
                 {
-                    return InternalCloseOrder(order, OrderActionType.StopLoss, order.RelatedOrders, null, user, order.StopLoss.Value, currentDate);
+                    return InternalCloseOrder(order, OrderActionType.StopLoss, order.RelatedOrders, null, user, assetCurrentPrice.BidValue, assetCurrentPrice.AskValue, currentDate);
                 }
             }
             else if (order.OrderStatusType == OrderStatusType.Open)
             {
-                double price;
-                if (!order.OrderId.HasValue)
-                    price = order.OrderType == OrderType.Buy ? assetCurrentPrice.AskValue : assetCurrentPrice.BidValue;
-                else
-                    price = order.OrderType == OrderType.Buy ? assetCurrentPrice.BidValue : assetCurrentPrice.AskValue;
-
+                double price = order.OrderType == OrderType.Buy ? assetCurrentPrice.AskValue : assetCurrentPrice.BidValue;
                 if ((order.OrderType == OrderType.Buy && price <= order.Price) || (order.OrderType == OrderType.Sell && price >= order.Price))
                 {
                     AdvisorProfit usdPosition = null;
@@ -527,7 +533,8 @@ namespace Auctus.Business.Trade
                         SetUsdPosition(usdPosition, OrderStatusType.Close, order.Quantity * order.Price, currentDate);
                         orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(parentOrder, order) };
                     }
-                    SaveOrdersAndPositions(order.UserId, currentDate, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, price } }, null);
+                    SaveOrdersAndPositions(order.UserId, currentDate, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, assetCurrentPrice.BidValue } }, 
+                        new Dictionary<int, double> { { order.AssetId, assetCurrentPrice.AskValue } }, null);
                     return GetOrderResponse(user, order, AdvisorRankingBusiness.GetAdvisorSimpleData(user.Id), new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(order.AssetId) });
                 }
             }
@@ -586,7 +593,7 @@ namespace Auctus.Business.Trade
         }
 
         private void SaveOrdersAndPositions(int userId, DateTime baseDatetime, Dictionary<int, List<Tuple<Order, Order>>> assetTupleForOrderAndTakeProfitOrderForUser, 
-            AdvisorProfit usdAdvisorProfit, Dictionary<int, double> assetsCurrentValue, Order orderToDelete)
+            AdvisorProfit usdAdvisorProfit, Dictionary<int, double> assetsBidValues, Dictionary<int, double> assetsAskValues, Order orderToDelete)
         {
             var newAdvisorAssetProfit = new Dictionary<int, List<AdvisorProfit>>();
             using (var transaction = TransactionalDapperCommand)
@@ -616,7 +623,7 @@ namespace Auctus.Business.Trade
                     }
                     SetTransactionOnData(transaction);
                     var orders = Data.ListOrdersForRankingProfitCalculation(new int[] { userId }, new int[] { assetData.Key });
-                    newAdvisorAssetProfit[assetData.Key] = AdvisorRankingBusiness.GetAdvisorRankingAndProfitData(userId, assetData.Key, baseDatetime, orders.Where(c => c.AssetId == assetData.Key).ToList(), assetsCurrentValue[assetData.Key]);
+                    newAdvisorAssetProfit[assetData.Key] = AdvisorRankingBusiness.GetAdvisorRankingAndProfitData(userId, assetData.Key, baseDatetime, orders.Where(c => c.AssetId == assetData.Key).ToList(), assetsBidValues[assetData.Key], assetsAskValues[assetData.Key]);
 
                     transaction.Execute($"DELETE FROM [AdvisorProfit] WHERE UserId = {userId} AND AssetId = {assetData.Key}", null);
                     foreach (var advisorProfit in newAdvisorAssetProfit.Values.First())

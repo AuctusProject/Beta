@@ -110,12 +110,15 @@ namespace Auctus.Business.Advisor
             };
         }
 
-        public List<AdvisorProfit> GetAdvisorRankingAndProfitData(int advisorId, int assetId, DateTime now, List<Order> advisorAssetOrders, double? assetCurrentValue)
+        public List<AdvisorProfit> GetAdvisorRankingAndProfitData(int advisorId, int assetId, DateTime now, List<Order> advisorAssetOrders, double? assetBidValue, double? assetAskValue)
         {
-            var assetsCurrentValue = new Dictionary<int, double>();
-            if (assetCurrentValue.HasValue)
-                assetsCurrentValue[assetId] = assetCurrentValue.Value;
-            return BuildAdvisorsProfit(advisorId, now, GetAdvisorRankingAndProfitData(now, advisorAssetOrders, assetsCurrentValue).AssetProfitData);
+            var assetsBidValue = new Dictionary<int, double>();
+            if (assetBidValue.HasValue)
+                assetsBidValue[assetId] = assetBidValue.Value;
+            var assetsAskValue = new Dictionary<int, double>();
+            if (assetAskValue.HasValue)
+                assetsAskValue[assetId] = assetAskValue.Value;
+            return BuildAdvisorsProfit(advisorId, now, GetAdvisorRankingAndProfitData(now, advisorAssetOrders, assetsBidValue, assetsAskValue).AssetProfitData);
         }
 
         public AdvisorResponse GetAdvisorResponse(AdvisorRanking advisorRanking, int totalAdvisors, IEnumerable<FollowAdvisor> advisorFollowers, User loggedUser, 
@@ -269,18 +272,20 @@ namespace Auctus.Business.Advisor
         {
             var advisors = AdvisorBusiness.ListAllAdvisors().Select(c => c.Id).Distinct().ToList();
             List<Order> orders = null;
-            Dictionary<int, double> assetsCurrentValues = null;
+            List<AssetCurrentValue> assetsCurrentValues = null;
             List<Order> finishedOrders = null;
             Parallel.Invoke(() => orders = OrderBusiness.ListOrdersForRankingProfitCalculation(advisors),
-                            () => assetsCurrentValues = AssetCurrentValueBusiness.ListAllAssets(true).ToDictionary(c => c.Id, c => c.CurrentValue),
+                            () => assetsCurrentValues = AssetCurrentValueBusiness.ListAllAssets(true),
                             () => finishedOrders = OrderBusiness.ListOrders(advisors, null, new OrderStatusType[] { OrderStatusType.Finished }));
 
             var now = Data.GetDateTimeNow();
+            var assetsBidValues = assetsCurrentValues.ToDictionary(c => c.Id, c => c.BidValue);
+            var assetsAskValues = assetsCurrentValues.ToDictionary(c => c.Id, c => c.AskValue);
             var groupedOrders = orders.GroupBy(c => c.UserId).ToDictionary(c => c.Key, c => c.ToList());
             var advisorRankingAndProfitData = new Dictionary<int, AdvisorRankingAndProfitData>();
             foreach (var advisorOrders in groupedOrders)
-                advisorRankingAndProfitData[advisorOrders.Key] = GetAdvisorRankingAndProfitData(now, advisorOrders.Value, assetsCurrentValues);
-
+                advisorRankingAndProfitData[advisorOrders.Key] = GetAdvisorRankingAndProfitData(now, advisorOrders.Value, assetsBidValues, assetsAskValues);
+           
             var totalCount = advisorRankingAndProfitData.Sum(c => c.Value.OrderCount);
             if (totalCount == 0)
                 return;
@@ -422,7 +427,8 @@ namespace Auctus.Business.Advisor
             }
         }
 
-        private AdvisorRankingAndProfitData GetAdvisorRankingAndProfitData(DateTime now, List<Order> advisorClosedOpenAndRunningOrders, Dictionary<int, double> assetsCurrentValues)
+        private AdvisorRankingAndProfitData GetAdvisorRankingAndProfitData(DateTime now, List<Order> advisorClosedOpenAndRunningOrders, Dictionary<int, double> assetsBidValues,
+            Dictionary<int, double> assetsAskValues)
         {
             var result = new AdvisorRankingAndProfitData();
             var advisorClosedOrders = advisorClosedOpenAndRunningOrders.Where(c => c.OrderStatusType == OrderStatusType.Close);
@@ -449,7 +455,8 @@ namespace Auctus.Business.Advisor
                 foreach (var avgPrice in assetsAvgPrice)
                 {
                     var price = (avgPrice.TotalUSD / avgPrice.TotalQuantity);
-                    var currentValue = assetsCurrentValues.ContainsKey(avgPrice.AssetId) ? assetsCurrentValues[avgPrice.AssetId] : price;
+                    var dictionaryPrice = avgPrice.OrderType == OrderType.Buy ? assetsBidValues : assetsAskValues;
+                    var currentValue = dictionaryPrice.ContainsKey(avgPrice.AssetId) ? dictionaryPrice[avgPrice.AssetId] : price;
                     var profit = (avgPrice.OrderType == OrderType.Buy ? 1.0 : -1.0) * (currentValue / price - 1);
                     var totalDollar = avgPrice.TotalUSD + (profit * avgPrice.TotalUSD);
                     SetAdvisorRankingAndProfitData(ref result, OrderStatusType.Executed, avgPrice.OrderType, avgPrice.AssetId, profit, avgPrice.TotalQuantity, totalDollar, now, now, null);

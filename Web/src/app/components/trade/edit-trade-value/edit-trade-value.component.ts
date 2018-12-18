@@ -90,7 +90,7 @@ export class EditTradeValueComponent implements OnInit, OnDestroy {
   }
 
   private getConsideredPrice(ticker: BinanceTickerPayload) : number {
-    return this.takeProfitField || this.stopLossField ? this.order.type === 0 ? ticker.bestAskPrice : ticker.bestBidPrice : this.order.type === 0 ? ticker.bestBidPrice : ticker.bestAskPrice;
+    return this.order.type === Constants.OrderType.Sell ? ticker.bestAskPrice : ticker.bestBidPrice;
   }
 
   ngOnDestroy() {
