@@ -293,10 +293,10 @@ namespace Auctus.Business.Advisor
             var totalWeight = advisorRankingAndProfitData.Sum(c => c.Value.RankingWeight);
             var generalAvg = totalWeight != 0 ? advisorRankingAndProfitData.Sum(c => c.Value.RankingWeightedProfit) / totalWeight : 0;
             var weightedStdDivisor = totalWeight * (totalCount - 1) / totalCount;
-            var weightedStd = Math.Sqrt(advisorRankingAndProfitData.Where(c => c.Value.RankingWeight != 0 && c.Value.OrderCount > 0)
+            var consideredAdvisors = advisorRankingAndProfitData.Where(c => c.Value.RankingWeight != 0 && c.Value.OrderCount > 0);
+            var weightedStd = Math.Sqrt(consideredAdvisors
                 .Sum(c => (Math.Pow((c.Value.RankingWeightedProfit / c.Value.RankingWeight) - generalAvg, 2) * c.Value.RankingWeight) / weightedStdDivisor));
 
-            var consideredAdvisors = advisorRankingAndProfitData.Where(c => c.Value.RankingWeight != 0 && c.Value.OrderCount > 0);
             var z = new Dictionary<int, double>();
             var minZ = 0.0;
             var normalizationDivisor = 1.0;
@@ -471,9 +471,10 @@ namespace Auctus.Business.Advisor
             if (statusType != OrderStatusType.Open)
             {
                 var days = now.Subtract(closeDate).TotalDays;
-                advisorRankingAndProfitData.RankingWeight += (days <= 30 ? 1.0 : Math.Max((Math.Log(days) / -2.5100067169575757) + 2.3550550915595987, 0.0));
-                advisorRankingAndProfitData.RankingWeightedProfit += profit * advisorRankingAndProfitData.RankingWeight;
-                if (advisorRankingAndProfitData.RankingWeight > 0)
+                var weight = (days <= 30 ? 1.0 : Math.Max((Math.Log(days) / -2.5100067169575757) + 2.3550550915595987, 0.0)) * (totalUSD / (1 + profit));
+                advisorRankingAndProfitData.RankingWeight += weight;
+                advisorRankingAndProfitData.RankingWeightedProfit += profit * weight;
+                if (weight > 0)
                     ++advisorRankingAndProfitData.OrderCount;
             }
             
