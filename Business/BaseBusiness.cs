@@ -95,6 +95,8 @@ namespace Auctus.Business
         private int? _assetBTCId;
         private int? _assetETHId;
         private double? _virtualMoney;
+        private double? _makerFee;
+        private double? _takerFee;
         private List<string> _admins;
         private List<TerminalAssetConfig> _terminalAssets;
 
@@ -349,6 +351,26 @@ namespace Auctus.Business
                 if (_virtualMoney == null)
                     _virtualMoney = Configuration.GetSection("VirtualMoney").Get<double>();
                 return _virtualMoney.Value;
+            }
+        }
+
+        protected double MakerFee
+        {
+            get
+            {
+                if (_makerFee == null)
+                    _makerFee = Configuration.GetSection("MakerFee").Get<double>();
+                return _makerFee.Value;
+            }
+        }
+
+        protected double TakerFee
+        {
+            get
+            {
+                if (_takerFee == null)
+                    _takerFee = Configuration.GetSection("TakerFee").Get<double>();
+                return _takerFee.Value;
             }
         }
 

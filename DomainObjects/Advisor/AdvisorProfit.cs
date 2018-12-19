@@ -36,7 +36,9 @@ namespace Auctus.DomainObjects.Advisor
         public int SuccessCount { get; set; }
         [DapperType(System.Data.DbType.Int32)]
         public int? SummedTradeMinutes { get; set; }
-        
+        [DapperType(System.Data.DbType.Double)]
+        public double? TotalFee { get; set; }
+
         public OrderStatusType OrderStatusType { get { return OrderStatusType.Get(Status); } }
         public OrderType OrderType { get { return OrderType.Get(Type); } }
     }
