@@ -366,9 +366,6 @@ namespace Auctus.Business.Trade
             if (!price.HasValue || IsOrderPriceLowerThanMarket(order.OrderType, price.Value, consideredPrice))
                 price = consideredPrice;
 
-            if (usdPosition.TotalDollar < (quantity * price))
-                throw new BusinessException("Insufficient funds.");
-
             if (order.OrderType == OrderType.Sell)
             {
                 var forcedStopLoss = price.Value * 2;
@@ -398,7 +395,10 @@ namespace Auctus.Business.Trade
             var releasedAmount = !order.OrderId.HasValue ? order.Price * order.Quantity : 0.0;
             if (releasedAmount > 0)
                 SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedAmount, now);
-           
+
+            if (usdPosition.TotalDollar < (quantity * price))
+                throw new BusinessException("Insufficient funds.");
+
             if (price == consideredPrice)
             {
                 order.Status = OrderStatusType.Executed.Value;
