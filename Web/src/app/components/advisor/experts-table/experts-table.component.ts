@@ -73,8 +73,12 @@ export class ExpertsTableComponent implements OnInit, OnChanges, OnDestroy {
       return 0;
   }
 
+  isMonthlyContest(){
+    return this.type == ExpertsTableType.monthlyContest;
+  }
+
   getDisplayedColumns(){
-    if(this.type == ExpertsTableType.monthlyContest){
+    if(this.isMonthlyContest()){
       return [
         "badge",
         "trader",
@@ -95,7 +99,7 @@ export class ExpertsTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getDefaultSorting(){
-    if(this.type == ExpertsTableType.monthlyContest){
+    if(this.isMonthlyContest()){
       return "monthlyRankingHistory.ranking";
     }
     else{
