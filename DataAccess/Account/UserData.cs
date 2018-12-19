@@ -20,7 +20,7 @@ namespace Auctus.DataAccess.Account
         private const string SQL_FOR_LOGIN = @"SELECT u.*, a.*, w.* 
                                                 FROM 
                                                 [User] u WITH(NOLOCK)
-                                                INNER JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
+                                                LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
                                                 LEFT JOIN [Wallet] w WITH(NOLOCK) ON w.UserId = u.Id AND w.CreationDate = (SELECT MAX(w2.CreationDate) FROM [Wallet] w2 WITH(NOLOCK) WHERE w2.UserId = u.Id)
                                                 WHERE 
                                                 u.Email = @Email";
@@ -51,7 +51,7 @@ namespace Auctus.DataAccess.Account
         private const string SQL_BY_EMAIL = @"SELECT u.*, a.*
                                                 FROM 
                                                 [User] u WITH(NOLOCK)
-                                                INNER JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
+                                                LEFT JOIN [Advisor] a WITH(NOLOCK) ON a.Id = u.Id
                                                 WHERE 
                                                 u.Email = @Email";
 
