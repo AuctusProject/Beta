@@ -1,6 +1,8 @@
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { DailyPerformanceResponse } from '../../../../../model/advisor/advisorPerformanceResponse';
 import { CONFIG } from '../../../../../services/config.service';
+import { ValueDisplayPipe } from '../../../../../util/value-display.pipe';
+import { DateFormatPipe } from 'ngx-moment';
 
 @Component({
   selector: 'daily-performance-chart',
@@ -47,6 +49,16 @@ export class DailyPerformanceChartComponent implements OnInit, OnChanges {
           unit: 'day'
         }
       }]
+    },
+    tooltips: {
+      callbacks: {
+        title: function(tooltipItems, data) {
+            return new DateFormatPipe().transform(tooltipItems[0].xLabel, "MMM D");
+        },
+          label: function(tooltipItem, data) {
+              return new ValueDisplayPipe().transform(tooltipItem.yLabel);
+          }
+      }
     }
   };
   public lineChartColors:Array<any> = [
