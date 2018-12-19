@@ -119,7 +119,7 @@ export class AppComponent implements OnInit, OnDestroy {
     .catch(err => {
       _this.hubStarted = false;
       console.log('Error while establishing connection :('); 
-      setTimeout(() => _this.zone.run(() => _this.startConnection(_this), 5000));
+      setTimeout(() => _this.zone.run(() => _this.startHubConnection(_this), 5000));
     });
   }
 
