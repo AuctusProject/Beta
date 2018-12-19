@@ -55,7 +55,8 @@ namespace Auctus.Business.Advisor
                 TotalQuantity = VirtualMoney,
                 Type = OrderType.Buy.Value,
                 UpdateDate = dateTime,
-                UserId = advisorId
+                UserId = advisorId,
+                TotalFee = 0
             };
         }
     }

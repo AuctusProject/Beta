@@ -289,9 +289,10 @@ namespace Auctus.Business.Trade
             if (order.RemainingQuantity < quantity)
                 throw new BusinessException("Insufficient funds.");
 
-            var profit = (order.OrderType == OrderType.Buy ? 1.0 : -1.0) * (assetCurrentValue / order.Price - 1);
-            closedDollar = (1 + profit) * quantity.Value * order.Price;
-            closeOrder = CreateNewOrder(loggedUserId, order.AssetId, order.OrderType.GetOppositeType(), OrderStatusType.Close, actionType ?? order.OrderActionType, quantity.Value, assetCurrentValue, dateTime, null, null, profit, order.Id, order.StatusDate, 0);
+            double profitWithoutFee, profit, fee, totalTradeFee;
+            GetCloseData(out profitWithoutFee, out profit, out fee, out totalTradeFee, out closedDollar, order.OrderType, order.Price, assetCurrentValue, quantity.Value, order.Quantity, order.Fee.Value);
+
+            closeOrder = CreateNewOrder(loggedUserId, order.AssetId, order.OrderType.GetOppositeType(), OrderStatusType.Close, actionType ?? order.OrderActionType, quantity.Value, assetCurrentValue, dateTime, null, null, profit, order.Id, order.StatusDate, 0, profitWithoutFee, fee, totalTradeFee);
             takeProfitOrder = relatedOrders.SingleOrDefault(o => o.OrderStatusType == OrderStatusType.Open);
             if (takeProfitOrder != null)
             {
@@ -312,7 +313,9 @@ namespace Auctus.Business.Trade
             order.RemainingQuantity -= quantity.Value;
         }
 
-        private Order CreateNewOrder(int loggedUserId, int assetId, OrderType type, OrderStatusType orderStatus, OrderActionType actionType, double quantity, double price, DateTime creationDate, double? takeProfit, double? stopLoss, double? profit, int? orderId, DateTime? openDate, double remainingQuantity)
+        private Order CreateNewOrder(int loggedUserId, int assetId, OrderType type, OrderStatusType orderStatus, OrderActionType actionType, double quantity, 
+            double price, DateTime creationDate, double? takeProfit, double? stopLoss, double? profit, int? orderId, DateTime? openDate, double remainingQuantity,
+            double? profitWithoutFee, double? fee, double? totalTradeFee)
         {
             return new Order()
             {
@@ -330,7 +333,10 @@ namespace Auctus.Business.Trade
                 Profit = profit,
                 OrderId = orderId,
                 ActionType = actionType.Value,
-                OpenDate = openDate
+                OpenDate = openDate,
+                Fee = fee,
+                TotalTradeFee = totalTradeFee,
+                ProfitWithoutFee = profitWithoutFee
             };
         }
 
@@ -404,10 +410,14 @@ namespace Auctus.Business.Trade
                 order.Status = OrderStatusType.Executed.Value;
                 order.ActionType = OrderActionType.Market.Value;
                 order.StatusDate = now;
+                order.Fee = quantity * price * OrderFee;
+                order.Quantity = quantity * (1 - OrderFee);
             }
+            else
+                order.Quantity = quantity;
+
+            order.RemainingQuantity = order.Quantity;
             order.Price = price.Value;
-            order.Quantity = quantity;
-            order.RemainingQuantity = quantity;
             order.StopLoss = stopLoss;
             order.TakeProfit = takeProfit;
             var newTakeProfitOrder = CreateTakeProfitOrderIfNecessary(loggedUser.Id, order.AssetId, order, now);
@@ -471,10 +481,14 @@ namespace Auctus.Business.Trade
 
             OrderStatusType orderStatusType;
             OrderActionType orderActionType;
+            double? fee = null;
+            var orderQuantity = quantity;
             if (price == consideredPrice)
             {
                 orderStatusType = OrderStatusType.Executed;
                 orderActionType = OrderActionType.Market;
+                fee = quantity * price * OrderFee;
+                orderQuantity = quantity * (1 - OrderFee);
             }
             else
             {
@@ -483,7 +497,7 @@ namespace Auctus.Business.Trade
             }
             var creationDate = Data.GetDateTimeNow();
             SetUsdPosition(usdPosition, orderStatusType, quantity * price.Value, creationDate);
-            var order = CreateNewOrder(loggedUser.Id, assetId, type, orderStatusType, orderActionType, quantity, price.Value, creationDate, takeProfit, stopLoss, null, null, null, quantity);
+            var order = CreateNewOrder(loggedUser.Id, assetId, type, orderStatusType, orderActionType, orderQuantity, price.Value, creationDate, takeProfit, stopLoss, null, null, null, orderQuantity, null, fee, null);
             var takeProfitOrder = CreateTakeProfitOrderIfNecessary(loggedUser.Id, assetId, order, creationDate);
 
             var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
@@ -516,6 +530,8 @@ namespace Auctus.Business.Trade
                     {
                         order.Status = OrderStatusType.Executed.Value;
                         order.StatusDate = currentDate;
+                        order.Fee = order.Quantity * order.Price * OrderFee;
+                        order.Quantity = order.Quantity * (1 - OrderFee);
                         orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, null) };
                     }
                     else
@@ -529,8 +545,15 @@ namespace Auctus.Business.Trade
                         order.StatusDate = currentDate;
                         order.RemainingQuantity = 0;
 
+                        double profitWithoutFee, profit, fee, totalTradeFee, closedDollar;
+                        GetCloseData(out profitWithoutFee, out profit, out fee, out totalTradeFee, out closedDollar, parentOrder.OrderType, parentOrder.Price, order.Price, order.Quantity, parentOrder.Quantity, parentOrder.Fee.Value);
+                        order.ProfitWithoutFee = profitWithoutFee;
+                        order.Fee = fee;
+                        order.Profit = profit;
+                        order.TotalTradeFee = totalTradeFee;
+
                         usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(order.UserId, new List<int>() { AssetUSDId }).First();
-                        SetUsdPosition(usdPosition, OrderStatusType.Close, order.Quantity * order.Price, currentDate);
+                        SetUsdPosition(usdPosition, OrderStatusType.Close, closedDollar, currentDate);
                         orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(parentOrder, order) };
                     }
                     SaveOrdersAndPositions(order.UserId, currentDate, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, assetCurrentPrice.BidValue } }, 
@@ -539,6 +562,32 @@ namespace Auctus.Business.Trade
                 }
             }
             return null;
+        }
+
+        private void GetCloseData(out double profitWithoutFee, out double profit, out double fee, out double totalTradeFee, out double closedDollar, 
+            OrderType parentOrderType, double parentPrice, double closePrice, double quantity, double parentQuantity, double parentFee)
+        {
+            var expectedValue = GetExpectedCloseValue(parentOrderType, parentPrice, closePrice, quantity);
+            profitWithoutFee = GetProfitValue(parentOrderType, parentPrice, closePrice);
+            fee = expectedValue * OrderFee;
+            closedDollar = expectedValue - fee;
+            totalTradeFee = fee + (parentFee * quantity / parentQuantity);
+            profit = GetProfitValue(closedDollar, parentPrice, quantity);
+        }
+
+        public double GetProfitValue(double closedDollar, double parentPrice, double quantity)
+        {
+            return closedDollar / (parentPrice * quantity / (1 - OrderFee)) - 1;
+        }
+
+        public double GetExpectedCloseValue(OrderType parentOrderType, double? parentPrice, double closePrice, double quantity)
+        {
+            return parentOrderType == OrderType.Buy ? closePrice * quantity : quantity * (2 * parentPrice.Value - closePrice);
+        }
+
+        public double GetProfitValue(OrderType orderType, double startPrice, double closePrice)
+        {
+            return (orderType == OrderType.Buy ? 1.0 : -1.0) * (closePrice / startPrice - 1);
         }
 
         private void SetUsdPosition(AdvisorProfit usdPosition, OrderStatusType orderStatusType, double value, DateTime dateTime)
@@ -557,8 +606,7 @@ namespace Auctus.Business.Trade
             if (order.TakeProfit.HasValue)
             {
                 var profitOrderType = order.OrderType.GetOppositeType();
-                var profit = (order.OrderType == OrderType.Buy ? 1.0 : -1.0) * (order.TakeProfit.Value / order.Price - 1);
-                return CreateNewOrder(loggedUserId, assetId, profitOrderType, OrderStatusType.Open, OrderActionType.Automated, order.Quantity, order.TakeProfit.Value, creationDate, null, null, profit, null, null, order.Quantity);
+                return CreateNewOrder(loggedUserId, assetId, profitOrderType, OrderStatusType.Open, OrderActionType.Automated, order.Quantity, order.TakeProfit.Value, creationDate, null, null, null, null, null, order.Quantity, null, null, null);
             }
             return null;
         }
@@ -747,16 +795,16 @@ namespace Auctus.Business.Trade
             return orders.Select(c => GetOrderResponse(loggedUser, c, advisors.FirstOrDefault(a => a.Id == c.UserId), assets)).ToList();
         }
 
-        private double? GetOpenPrice(Order order)
+        public double? GetOpenPrice(Order order)
         {
             if (OrderStatusType.Executed == order.OrderStatusType)
                 return order.Price;
             else if (OrderStatusType.Close == order.OrderStatusType)
             {
                 if (OrderType.Buy == order.OrderType.GetOppositeType())
-                    return order.Price / (1 + order.Profit);
+                    return order.Price / (1 + order.ProfitWithoutFee);
                 else
-                    return order.Price / (1 - order.Profit);
+                    return order.Price / (1 - order.ProfitWithoutFee);
             }
             else
                 return null;
@@ -790,6 +838,9 @@ namespace Auctus.Business.Trade
                 ActionType = order.ActionType,
                 Profit = order.Profit,
                 ProfitValue = !order.Profit.HasValue ? (double?)null : order.Profit.Value * openPrice * (order.OrderStatusType == OrderStatusType.Executed ? order.RemainingQuantity : order.Quantity),
+                Fee = order.Fee,
+                ProfitWithoutFee = order.ProfitWithoutFee,
+                ProfitWithoutFeeValue = !order.ProfitWithoutFee.HasValue ? (double?)null : order.ProfitWithoutFee.Value * openPrice * (order.OrderStatusType == OrderStatusType.Executed ? order.RemainingQuantity : order.Quantity),
                 AdvisorId = order.UserId,
                 AdvisorName = advisorRanking?.Name,
                 AdvisorDescription = advisorRanking?.Description,

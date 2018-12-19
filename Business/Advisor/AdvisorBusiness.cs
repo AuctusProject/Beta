@@ -104,7 +104,8 @@ namespace Auctus.Business.Advisor
                     StatusDate = creationDate,
                     Type = OrderType.Buy.Value,
                     UserId = user.Id,
-                    ActionType = OrderActionType.Automated.Value
+                    ActionType = OrderActionType.Automated.Value,
+                    Fee = 0
                 };
                 transaction.Insert(virtualDolar);
 
@@ -139,7 +140,8 @@ namespace Auctus.Business.Advisor
                     TotalDollar = baseProfit.TotalDollar,
                     TotalQuantity = baseProfit.TotalQuantity,
                     Type = baseProfit.Type,
-                    UserId = baseProfit.UserId
+                    UserId = baseProfit.UserId,
+                    TotalFee = baseProfit.TotalFee
                 });
 
                 transaction.Commit();               
