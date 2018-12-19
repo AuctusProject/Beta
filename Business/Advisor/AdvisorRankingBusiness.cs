@@ -462,7 +462,8 @@ namespace Auctus.Business.Advisor
                     var expectedCloseValue = OrderBusiness.GetExpectedCloseValue(avgPrice.OrderType, price, currentValue, avgPrice.TotalQuantity);
                     var closedFee = expectedCloseValue * OrderFee;
                     var totalDollar = expectedCloseValue - closedFee;
-                    var profit = OrderBusiness.GetProfitValue(totalDollar, price, avgPrice.TotalQuantity);
+                    var feePercentage = avgPrice.TotalFee / (price * avgPrice.TotalQuantity);
+                    var profit = OrderBusiness.GetProfitValue(totalDollar, price, avgPrice.TotalQuantity, feePercentage);
                     SetAdvisorRankingAndProfitData(ref result, OrderStatusType.Executed, avgPrice.OrderType, avgPrice.AssetId, profit, avgPrice.TotalQuantity, totalDollar, now, now, null, avgPrice.TotalFee);
                 }
             }

@@ -572,12 +572,12 @@ namespace Auctus.Business.Trade
             fee = expectedValue * OrderFee;
             closedDollar = expectedValue - fee;
             totalTradeFee = fee + (parentFee * quantity / parentQuantity);
-            profit = GetProfitValue(closedDollar, parentPrice, quantity);
+            profit = GetProfitValue(closedDollar, parentPrice, quantity, OrderFee);
         }
 
-        public double GetProfitValue(double closedDollar, double parentPrice, double quantity)
+        public double GetProfitValue(double closedDollar, double parentPrice, double quantity, double parentFeePercentage)
         {
-            return closedDollar / (parentPrice * quantity / (1 - OrderFee)) - 1;
+            return closedDollar / (parentPrice * quantity / (1 - parentFeePercentage)) - 1;
         }
 
         public double GetExpectedCloseValue(OrderType parentOrderType, double? parentPrice, double closePrice, double quantity)
