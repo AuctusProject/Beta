@@ -53,7 +53,7 @@ export class DailyPerformanceChartComponent implements OnInit, OnChanges {
     tooltips: {
       callbacks: {
         title: function(tooltipItems, data) {
-            return new DateFormatPipe().transform(tooltipItems[0].xLabel, "MMM D");
+            return new DateFormatPipe().transform(tooltipItems[0].xLabel, "MMM D HH:mm");
         },
           label: function(tooltipItem, data) {
               return new ValueDisplayPipe().transform(tooltipItem.yLabel);
