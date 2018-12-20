@@ -405,7 +405,8 @@ namespace Auctus.Business.Advisor
                             TotalQuantity = data.Value.TotalQuantity,
                             SummedProfitDollar = data.Value.SummedProfitDollar,
                             SuccessCount = data.Value.SuccessCount,
-                            SummedTradeMinutes = data.Value.SummedTradeMinutes
+                            SummedTradeMinutes = data.Value.SummedTradeMinutes,
+                            TotalFee = data.Value.TotalFee
                         });
                     }
                 }
