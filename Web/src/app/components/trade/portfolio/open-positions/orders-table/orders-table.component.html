@@ -27,7 +27,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header="profit"> P/L </th>
         <td mat-cell *matCellDef="let order">
           <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">     
-            <ticker-percentage-field [startValue]="order.profit" [orderType]="order.type" [referenceValue]="order.price" [pair]="order.pair" (onNewValue)="onNewPercentageProfit($event, order)"></ticker-percentage-field>
+            <ticker-percentage-field [startValue]="order.profit" [orderType]="order.type" [priceValue]="order.price" [quantityValue]="order.remainingQuantity" [pair]="order.pair" (onNewValue)="onNewPercentageProfit($event, order)"></ticker-percentage-field>
             <ticker-profit-field [startValue]="order.profitValue" [orderType]="order.type" [priceValue]="order.price" [quantityValue]="order.remainingQuantity" [pair]="order.pair"(onNewValue)="onNewProfit($event, order)"></ticker-profit-field>
           </div>
         </td>

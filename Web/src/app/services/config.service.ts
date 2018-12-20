@@ -15,6 +15,7 @@ export class Config
   readonly profileImgUrl: string;
   readonly platformImgUrl: string;
   readonly virtualMoney: number;
+  readonly orderFee: number;
 }
 
 export let CONFIG: Config;
@@ -40,7 +41,8 @@ export class ConfigService
         assetImgUrl: "https://auctus.azureedge.net/assetsicons/{id}.png",
         profileImgUrl: "https://auctus.azureedge.net/userpicture/{id}.png",
         platformImgUrl: "https://auctus.azureedge.net/platform/{id}.png",
-        virtualMoney: 100000
+        virtualMoney: 100000,
+        orderFee: 0.001
       });
     }
     else{

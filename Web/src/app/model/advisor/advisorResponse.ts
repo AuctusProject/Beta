@@ -83,6 +83,7 @@ export class PositionResponse {
   averagePrice: number;
   orderCount: number;
   successCount: number;
+  totalFee: number;
   averageTradeMinutes?: number;
   type?: number;
 }

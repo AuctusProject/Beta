@@ -5,6 +5,8 @@ import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
 import { PairResponse } from '../../../model/asset/assetResponse';
 import { ValueDisplayPipe } from '../../../util/value-display.pipe';
 import { Constants } from '../../../util/constants';
+import { Util } from '../../../util/util';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'ticker-profit-field',
@@ -66,7 +68,7 @@ export class TickerProfitFieldComponent implements OnInit, OnDestroy, OnChanges 
   setValue(ticker: BinanceTickerPayload, isMainPair: boolean) {
     if (!this.pair.multipliedSymbol) {
       if (this.priceValue && this.quantityValue) {
-        this.value = this.priceValue * this.quantityValue * (this.getReferenceValueMultiplier() * ((this.getConsideredPrice(ticker) / parseFloat(this.priceValue)) - 1));
+        this.value = this.priceValue * this.quantityValue * Util.GetProfit(this.orderType, this.priceValue, this.priceValue * this.quantityValue * CONFIG.orderFee, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
       } else {
         this.value = this.getConsideredPrice(ticker) * ticker.priceChangePercentage / 100;
       }
@@ -80,7 +82,7 @@ export class TickerProfitFieldComponent implements OnInit, OnDestroy, OnChanges 
       }
       if (this.priceValue && this.quantityValue) {
         if (this.baseValue && this.quoteValue) {
-          this.value = this.priceValue * this.quantityValue * (this.getReferenceValueMultiplier() * (((this.baseValue * this.quoteValue) / parseFloat(this.priceValue)) - 1));
+          this.value = this.priceValue * this.quantityValue * Util.GetProfit(this.orderType, this.priceValue, this.priceValue * this.quantityValue * CONFIG.orderFee, this.quantityValue, this.quantityValue, (this.baseValue * this.quoteValue));
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {

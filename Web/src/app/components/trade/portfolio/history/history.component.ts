@@ -10,6 +10,8 @@ import { Moment } from 'moment';
 import { MomentModule } from 'ngx-moment';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { NavigationService } from '../../../../services/navigation.service';
+import { PercentageDisplayPipe } from '../../../../util/percentage-display.pipe';
+import { ValueDisplayPipe } from '../../../../util/value-display.pipe';
 
 @Component({
   selector: 'history',
@@ -24,7 +26,8 @@ export class HistoryComponent implements OnInit {
     "openTime",
     "close",
     "closeTime",
-    "PL"
+    "PL",
+    "fee"
   ];
   
   @ViewChild(MatSort) sort: MatSort;
@@ -70,6 +73,12 @@ export class HistoryComponent implements OnInit {
     var ret = new Date()
     ret.setMinutes( ret.getMinutes() - this.positionResponse.averageTradeMinutes);
     return ret;
+  }
+
+  getProfitTooltip(order: OrderResponse) {
+    let profit = new PercentageDisplayPipe().transform(order.profitWithoutFee);
+    let profitValue = new ValueDisplayPipe().transform(order.profitWithoutFeeValue);
+    return "Profit without fee: " + profit + " / " + profitValue;
   }
 
   getOrderDescription(order: OrderResponse){
