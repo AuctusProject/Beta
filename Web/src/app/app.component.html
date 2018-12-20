@@ -3,7 +3,7 @@
   <mat-sidenav-container #sidenavContainer [autosize]="true" class="sidenav-container">
     <mat-sidenav class="menu-sidenav" [opened]="!mobileQuery.matches" #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
                   [fixedInViewport]="mobileQuery.matches" fixedTopGap="62">
-      <left-menu [(advisor)]="advisor"></left-menu>
+      <left-menu [(advisor)]="advisor" (onLogout)="onLogout()"></left-menu>
     </mat-sidenav>
     <mat-sidenav-content #sidenavContent>
       <div class="top-blue-bar"></div>

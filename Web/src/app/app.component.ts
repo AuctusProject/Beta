@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private eventsService: EventsService,
     private notificationsService: NotificationsService,
     private zone : NgZone,
-    changeDetectorRef: ChangeDetectorRef, 
+    private changeDetectorRef: ChangeDetectorRef, 
     media: MediaMatcher,
     @Inject(PLATFORM_ID) private platformId: Object
     ) {
@@ -161,6 +161,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.advisorDataService.initialize();    
         this.advisorResponseSubscription = this.advisorDataService.advisorResponse().subscribe(ret => {
           this.advisor = ret;
+          this.changeDetectorRef.detectChanges();
         });
       } else {
         this.advisorDataService.refresh();

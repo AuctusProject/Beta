@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { LoginResponse } from '../../../model/account/loginResponse';
 import { AccountService } from '../../../services/account.service';
 import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
+
 
 @Component({
   selector: 'left-menu',
@@ -11,8 +12,9 @@ import { AdvisorResponse } from '../../../model/advisor/advisorResponse';
 export class LeftMenuComponent implements OnInit {
   loginData: LoginResponse;
   @Input() advisor: AdvisorResponse;
+  @Output() onLogout = new EventEmitter<void>();
   
-  constructor(private accountService : AccountService) { }
+  constructor(private accountService : AccountService, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -24,5 +26,7 @@ export class LeftMenuComponent implements OnInit {
   logout(){
     this.accountService.logout();
     this.advisor = null;
+    this.onLogout.emit();
+    this.changeDetectorRef.detectChanges();
   }
 }

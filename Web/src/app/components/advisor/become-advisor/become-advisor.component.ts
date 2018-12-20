@@ -170,6 +170,6 @@ export class BecomeAdvisorComponent implements ModalComponent, OnInit {
   }
 
   getReferralOptions() {
-    return { textOptions: { outlineField: false, placeHolder: "Invitation code", required: true, showHintSize: false, minLength: 7, maxLength: 7 } };
+    return { textOptions: { outlineField: false, placeHolder: "Invitation code", required: false, showHintSize: false, minLength: 7, maxLength: 7 } };
   }
 }

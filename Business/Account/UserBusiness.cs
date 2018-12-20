@@ -295,20 +295,15 @@ namespace Auctus.Business.Account
 
         public User GetReferredUser(string referralCode, bool throwException = true)
         {
-            if (!string.IsNullOrWhiteSpace(referralCode))
+            if (!string.IsNullOrWhiteSpace(referralCode) && referralCode.Length == 7)
             {
-                if (referralCode.Length == 7)
-                {
-                    var user = Data.GetByReferralCode(referralCode.ToUpper());
-                    if (user == null && throwException)
-                        throw new BusinessException("Invalid invitation code");
-
-                    return user;
-                }
-                else
+                var user = Data.GetByReferralCode(referralCode.ToUpper());
+                if (user == null && throwException)
                     throw new BusinessException("Invalid invitation code");
+
+                return user;
             }
-            throw new BusinessException("Invitation code must be filled.");
+            return null;
         }
 
         private string GetHashedPassword(string password, string email, DateTime creationDate)
