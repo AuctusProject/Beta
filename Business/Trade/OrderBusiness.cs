@@ -532,7 +532,15 @@ namespace Auctus.Business.Trade
                         order.StatusDate = currentDate;
                         order.Fee = order.Quantity * order.Price * OrderFee;
                         order.Quantity = order.Quantity * (1 - OrderFee);
-                        orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, null) };
+                        order.RemainingQuantity = order.Quantity;
+
+                        var takeProfitOrder = order.RelatedOrders.FirstOrDefault();
+                        if (takeProfitOrder != null)
+                        {
+                            takeProfitOrder.Quantity = order.Quantity;
+                            takeProfitOrder.RemainingQuantity = order.Quantity;
+                        }
+                        orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, takeProfitOrder) };
                     }
                     else
                     {
