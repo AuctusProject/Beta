@@ -294,8 +294,13 @@ namespace Auctus.Business.Advisor
             var generalAvg = totalWeight != 0 ? advisorRankingAndProfitData.Sum(c => c.Value.RankingWeightedProfit) / totalWeight : 0;
             var weightedStdDivisor = totalWeight * (totalCount - 1) / totalCount;
             var consideredAdvisors = advisorRankingAndProfitData.Where(c => c.Value.RankingWeight != 0 && c.Value.OrderCount > 0);
-            var weightedStd = Math.Sqrt(consideredAdvisors
-                .Sum(c => (Math.Pow((c.Value.RankingWeightedProfit / c.Value.RankingWeight) - generalAvg, 2) * c.Value.RankingWeight) / weightedStdDivisor));
+
+            double weightedStd = 0;
+            if (weightedStdDivisor != 0)
+            {
+                weightedStd = Math.Sqrt(consideredAdvisors
+                    .Sum(c => (Math.Pow((c.Value.RankingWeightedProfit / c.Value.RankingWeight) - generalAvg, 2) * c.Value.RankingWeight) / weightedStdDivisor));
+            }
 
             var z = new Dictionary<int, double>();
             var minZ = 0.0;
