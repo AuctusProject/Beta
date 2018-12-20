@@ -56,12 +56,8 @@ img {
 
 @media (max-width: 1072px) {
   .top-platform-text {
-    font-size: 18px;
+    font-size: 22px;
     top: 10%;
-  }
-
-  .highlight-text {
-    font-size: 14px;
   }
 }
 
@@ -78,32 +74,6 @@ img {
   .highlight-text {
     font-size: 12px;
   }
-}
-
-.request-invite-box {
-  background-color: #f0f0f0;
-  height: 54%;
-  top: 46%;
-  width: 100%;
-  max-width: 1186px !important;
-  flex-direction: column;
-  display: flex;
-  align-items: center;
-  position: absolute;
-  font-size: 16px;
-  font-weight: 500;
-  color: #404040;
-}
-
-@media (min-width: 1280px) {
-  .request-invite-box > span:first-of-type {
-    font-size: 20px;
-  }
-}
-
-.link {
-  cursor: pointer;
-  color: #4562fc;
 }
 
 .auctus-blue-bar {
