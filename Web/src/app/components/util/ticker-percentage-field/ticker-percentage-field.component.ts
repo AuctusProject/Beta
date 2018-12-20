@@ -17,6 +17,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   @Input() pair: PairResponse;
   @Input() priceValue?: any = null;
   @Input() quantityValue?: any = null;
+  @Input() feeValue?: any = null;
   @Input() orderType?: number = null;
   @Input() startValue?: number = null;
   value: number;
@@ -45,6 +46,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
     if (this.priceValue && this.quantityValue) {
       this.priceValue = parseFloat(this.priceValue);
       this.quantityValue = parseFloat(this.quantityValue);
+      this.feeValue = parseFloat(this.feeValue);
     }
     if (this.pair) {
       if (this.pair.symbol) {
@@ -66,7 +68,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   setValue(ticker: BinanceTickerPayload, isMainPair: boolean) {
     if (!this.pair.multipliedSymbol) {
       if (this.priceValue && this.quantityValue) {
-        this.value = Util.GetProfit(this.orderType, this.priceValue, this.priceValue * this.quantityValue * CONFIG.orderFee, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
+        this.value = Util.GetProfit(this.orderType, this.priceValue, this.feeValue, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
       } else {
         this.value = ticker.priceChangePercentage / 100;
       }
@@ -80,7 +82,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
       }
       if (this.priceValue && this.quantityValue) {
         if (this.baseValue && this.quoteValue) {
-          this.value = Util.GetProfit(this.orderType, this.priceValue, this.priceValue * this.quantityValue * CONFIG.orderFee, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
+          this.value = Util.GetProfit(this.orderType, this.priceValue, this.feeValue, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {

@@ -578,9 +578,10 @@ namespace Auctus.Business.Trade
             var expectedValue = GetExpectedCloseValue(parentOrderType, parentPrice, closePrice, quantity);
             profitWithoutFee = GetProfitValue(parentOrderType, parentPrice, closePrice);
             fee = expectedValue * OrderFee;
-            closedDollar = expectedValue - fee;
             totalTradeFee = fee + (parentFee * quantity / parentQuantity);
-            profit = GetProfitValue(closedDollar, parentPrice, quantity, parentFee / (parentQuantity * parentPrice));
+            var parentFeePercentage = parentFee / (parentQuantity * parentPrice + parentFee);
+            profit = GetProfitValue(expectedValue - fee, parentPrice, quantity, parentFeePercentage);
+            closedDollar = expectedValue - fee;
         }
 
         public double GetProfitValue(double closedDollar, double parentPrice, double quantity, double parentFeePercentage)
@@ -822,6 +823,13 @@ namespace Auctus.Business.Trade
         {
             var asset = assets.FirstOrDefault(c => c.Id == order.AssetId);
             var openPrice = GetOpenPrice(order);
+            double? profitValue = null, profitWithoutFeeValue = null;
+            if (order.OrderStatusType == OrderStatusType.Close)
+            {
+                var expectedClosedValue = GetExpectedCloseValue(order.OrderType.GetOppositeType(), openPrice, order.Price, order.Quantity);
+                profitValue = GetProfitValue(expectedClosedValue - order.Fee.Value, openPrice.Value, order.Quantity, OrderFee);
+                profitWithoutFeeValue = order.ProfitWithoutFee.Value * openPrice * order.Quantity / (1 - OrderFee);
+            }
             return new OrderResponse()
             {
                 AssetId = order.AssetId,
@@ -837,7 +845,7 @@ namespace Auctus.Business.Trade
                 RemainingQuantity = order.RemainingQuantity,
                 OpenDate = order.OpenDate,
                 OpenPrice = openPrice,
-                Invested = order.Price * order.Quantity,
+                Invested = order.Price * (order.OrderStatusType == OrderStatusType.Close ? order.Quantity : order.RemainingQuantity) + order.Fee ?? 0,
                 Status = order.Status,
                 StatusDate = order.StatusDate,
                 StopLoss = order.StopLoss,
@@ -845,10 +853,10 @@ namespace Auctus.Business.Trade
                 Type = order.Type,
                 ActionType = order.ActionType,
                 Profit = order.Profit,
-                ProfitValue = !order.Profit.HasValue ? (double?)null : order.Profit.Value * openPrice * (order.OrderStatusType == OrderStatusType.Executed ? order.RemainingQuantity : order.Quantity),
+                ProfitValue = profitValue,
                 Fee = order.Fee,
                 ProfitWithoutFee = order.ProfitWithoutFee,
-                ProfitWithoutFeeValue = !order.ProfitWithoutFee.HasValue ? (double?)null : order.ProfitWithoutFee.Value * openPrice * (order.OrderStatusType == OrderStatusType.Executed ? order.RemainingQuantity : order.Quantity),
+                ProfitWithoutFeeValue = profitWithoutFeeValue,
                 AdvisorId = order.UserId,
                 AdvisorName = advisorRanking?.Name,
                 AdvisorDescription = advisorRanking?.Description,

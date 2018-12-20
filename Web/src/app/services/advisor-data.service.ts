@@ -244,7 +244,7 @@ export class AdvisorDataService {
       if (response.closedPositions.length > 0) {
         this.closePosition[response.userId].successRate = this.closePosition[response.userId].successCount / this.closePosition[response.userId].orderCount;
         this.closePosition[response.userId].averageReturn = this.closePosition[response.userId].totalProfit / this.closePosition[response.userId].totalInvested;
-        this.closePosition[response.userId].averagePrice = this.closePosition[response.userId].totalInvested / this.closePosition[response.userId].totalQuantity;
+        this.closePosition[response.userId].averagePrice = (this.closePosition[response.userId].totalInvested - this.closePosition[response.userId].totalFee) / this.closePosition[response.userId].totalQuantity;
         if (totalTradeMinutes > 0) {
           this.closePosition[response.userId].averageTradeMinutes = totalTradeMinutes / this.closePosition[response.userId].orderCount;
         } 
@@ -252,7 +252,7 @@ export class AdvisorDataService {
       for (let i = 0; i < closedAssetsId.length; ++i) {
         closedAssetData[closedAssetsId[i]].positionResponse.successRate = closedAssetData[closedAssetsId[i]].positionResponse.successCount / closedAssetData[closedAssetsId[i]].positionResponse.orderCount;
         closedAssetData[closedAssetsId[i]].positionResponse.averageReturn = closedAssetData[closedAssetsId[i]].positionResponse.totalProfit / closedAssetData[closedAssetsId[i]].positionResponse.totalInvested;
-        closedAssetData[closedAssetsId[i]].positionResponse.averagePrice = closedAssetData[closedAssetsId[i]].positionResponse.totalInvested / closedAssetData[closedAssetsId[i]].positionResponse.totalQuantity;
+        closedAssetData[closedAssetsId[i]].positionResponse.averagePrice = (closedAssetData[closedAssetsId[i]].positionResponse.totalInvested - closedAssetData[closedAssetsId[i]].positionResponse.totalFee) / closedAssetData[closedAssetsId[i]].positionResponse.totalQuantity;
         if (totalAssetTradeMinutes[closedAssetsId[i]] > 0) {
           closedAssetData[closedAssetsId[i]].positionResponse.averageTradeMinutes = totalAssetTradeMinutes[closedAssetsId[i]] / closedAssetData[closedAssetsId[i]].positionResponse.orderCount;
         }
@@ -419,7 +419,7 @@ export class AdvisorDataService {
         position.totalFee = totalFee;
         position.totalQuantity = Math.abs(typeRelatedQuantity);
         position.averageReturn = totalProfit / totalInvested;
-        position.averagePrice = totalInvested / totalQuantity;
+        position.averagePrice = (totalInvested - totalFee) / totalQuantity;
         let assetPosition = new AssetPositionResponse();
         assetPosition.assetId = this.openAssetsId[i];
         assetPosition.positionResponse = position;
@@ -438,7 +438,7 @@ export class AdvisorDataService {
     if (openPositionResponse.orderCount > 0) {
       openPositionResponse.successRate = openPositionResponse.successCount / openPositionResponse.orderCount;
       openPositionResponse.averageReturn = openPositionResponse.totalProfit / openPositionResponse.totalInvested;
-      openPositionResponse.averagePrice = openPositionResponse.totalInvested / totalOverallQuantity;
+      openPositionResponse.averagePrice = (openPositionResponse.totalInvested - openPositionResponse.totalFee) / totalOverallQuantity;
       openPositionResponse.type = totalTypeRelatedQuantity >= 0 ? Constants.OrderType.Buy : Constants.OrderType.Sell;
     }
     if (!this.advisorListData) {

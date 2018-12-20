@@ -27,7 +27,7 @@ export class Util {
     }
 
     public static GetBaseFeePercentage(basePrice: number, baseFee: number, baseQuantity: number) {
-        return baseFee / (baseQuantity * basePrice);
+        return baseFee / (baseQuantity * basePrice + baseFee);
     }
 
     public static GetClosedDollar(baseOrderType: number, basePrice: number, quantity: number, currentPrice: number) {

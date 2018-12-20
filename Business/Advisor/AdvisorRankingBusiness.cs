@@ -256,7 +256,7 @@ namespace Auctus.Business.Advisor
                     TotalQuantity = advisorProfit.TotalQuantity,
                     TotalProfit = advisorProfit.SummedProfitDollar,
                     TotalFee = advisorProfit.TotalFee,
-                    AveragePrice = (advisorProfit.TotalDollar - advisorProfit.SummedProfitDollar) / advisorProfit.TotalQuantity,
+                    AveragePrice = (advisorProfit.TotalDollar - advisorProfit.SummedProfitDollar - advisorProfit.TotalFee ?? 0) / advisorProfit.TotalQuantity,
                     SuccessRate = (double)advisorProfit.SuccessCount / advisorProfit.OrderCount,
                     AverageReturn = advisorProfit.SummedProfitDollar / (advisorProfit.TotalDollar - advisorProfit.SummedProfitDollar),
                     TotalVirtual = advisorProfit.TotalDollar,
@@ -354,15 +354,19 @@ namespace Auctus.Business.Advisor
                     {
                         var closedPositions = groupedOrders[id].Where(c => c.OrderStatusType == OrderStatusType.Close);
                         if (closedPositions.Any())
-                            usdPosition.TotalDollar += closedPositions.Sum(c => GetCloseOrderTotalDollar(c));
+                            usdPosition.TotalDollar += closedPositions.Sum(c => GetExpectedCloseValue(c) - c.Fee.Value);
                         
-                        var openOrdersPositions = groupedOrders[id].Where(c => c.AssetId != AssetUSDId && (c.OrderStatusType == OrderStatusType.Open || c.OrderStatusType == OrderStatusType.Executed));
-                        if (openOrdersPositions.Any())
-                            usdPosition.TotalDollar -= openOrdersPositions.Sum(c => c.Price * c.Quantity);
+                        var openOrders = groupedOrders[id].Where(c => c.AssetId != AssetUSDId && (c.OrderStatusType == OrderStatusType.Open));
+                        if (openOrders.Any())
+                            usdPosition.TotalDollar -= openOrders.Sum(c => c.Price * c.Quantity);
+
+                        var openPositions = groupedOrders[id].Where(c => c.AssetId != AssetUSDId && (c.OrderStatusType == OrderStatusType.Executed));
+                        if (openPositions.Any())
+                            usdPosition.TotalDollar -= openPositions.Sum(c => c.Price * c.Quantity + c.Fee.Value);
 
                         var userFinishedOrders = finishedOrders.Where(c => c.UserId == id);
                         if (userFinishedOrders.Any())
-                            usdPosition.TotalDollar -= userFinishedOrders.Sum(c => c.Price * c.Quantity);
+                            usdPosition.TotalDollar -= userFinishedOrders.Sum(c => c.Price * c.Quantity + c.Fee.Value);
 
                         usdPosition.TotalQuantity = usdPosition.TotalDollar;
                         advisorsProfit.AddRange(advisorProfit);
@@ -377,10 +381,10 @@ namespace Auctus.Business.Advisor
             UpdateAdvisorsFullDataCache(Data.ListAdvisorsRankingAndProfit(null, null));
         }
 
-        private double GetCloseOrderTotalDollar(Order order)
+        private double GetExpectedCloseValue(Order order)
         {
             var openPrice = OrderBusiness.GetOpenPrice(order);
-            return OrderBusiness.GetExpectedCloseValue(order.OrderType.GetOppositeType(), openPrice, order.Price, order.Quantity) - order.Fee.Value;
+            return OrderBusiness.GetExpectedCloseValue(order.OrderType.GetOppositeType(), openPrice, order.Price, order.Quantity);
         }
 
         private List<AdvisorProfit> BuildAdvisorsProfit(int advisorId, DateTime now, Dictionary<int, Dictionary<OrderStatusType, Dictionary<OrderType, ProfitData>>> advisorAssetProfitData)
@@ -442,7 +446,7 @@ namespace Auctus.Business.Advisor
             foreach (var order in advisorClosedOrders)
             {
                 var tradeMinutes = Convert.ToInt32(Math.Round(order.StatusDate.Subtract(order.OpenDate.Value).TotalMinutes, 0));
-                SetAdvisorRankingAndProfitData(ref result, order.OrderStatusType, order.OrderType, order.AssetId, order.Profit.Value, order.Quantity, GetCloseOrderTotalDollar(order), now, order.StatusDate, tradeMinutes, order.TotalTradeFee);
+                SetAdvisorRankingAndProfitData(ref result, order.OrderStatusType, order.OrderType, order.AssetId, order.Profit.Value, order.Quantity, GetExpectedCloseValue(order) - order.Fee.Value, now, order.StatusDate, tradeMinutes, order.TotalTradeFee);
             }
 
             var advisorOpenOrders = advisorClosedOpenAndRunningOrders.Where(c => c.OrderStatusType == OrderStatusType.Open);
@@ -468,7 +472,7 @@ namespace Auctus.Business.Advisor
                     var expectedCloseValue = OrderBusiness.GetExpectedCloseValue(avgPrice.OrderType, price, currentValue, avgPrice.TotalQuantity);
                     var closedFee = expectedCloseValue * OrderFee;
                     var totalDollar = expectedCloseValue - closedFee;
-                    var feePercentage = avgPrice.TotalFee / (price * avgPrice.TotalQuantity);
+                    var feePercentage = avgPrice.TotalFee / (price * avgPrice.TotalQuantity + avgPrice.TotalFee);
                     var profit = OrderBusiness.GetProfitValue(totalDollar, price, avgPrice.TotalQuantity, feePercentage);
                     SetAdvisorRankingAndProfitData(ref result, OrderStatusType.Executed, avgPrice.OrderType, avgPrice.AssetId, profit, avgPrice.TotalQuantity, totalDollar, now, now, null, avgPrice.TotalFee);
                 }

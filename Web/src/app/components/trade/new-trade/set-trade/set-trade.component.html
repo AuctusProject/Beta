@@ -2,7 +2,7 @@
     <inheritance-input *ngIf="priceOptions && (limit || edition)" #Price [options]="priceOptions" class="width100"
         [value]="priceValue" (onChange)="onPrice($event)" darkLayout=true></inheritance-input>
     <inheritance-input *ngIf="amountOptions" #Amount [options]="amountOptions" class="width100" 
-        [value]="amountValue" (onChange)="onAmount($event)" darkLayout=true [matTooltip]="getAmountTooltip()" #tooltipAmount="matTooltip" (click)="tooltipAmount.toggle()"></inheritance-input>
+        [value]="amountValue" (onChange)="onAmount($event)" darkLayout=true></inheritance-input>
     <inheritance-input #StopLoss [options]="stopLossOptions" class="width100" 
         [value]="stopLossValue" (onChange)="onStopLoss($event)" darkLayout=true></inheritance-input>
     <inheritance-input #TakeProfit [options]="takeProfitOptions" class="width100"
