@@ -468,10 +468,11 @@ namespace Auctus.Business.Advisor
         private void SetAdvisorRankingAndProfitData(ref AdvisorRankingAndProfitData advisorRankingAndProfitData, OrderStatusType statusType, OrderType orderType, 
             int assetId, double profit, double quantity, double totalUSD, DateTime now, DateTime closeDate, int? tradeMinutes)
         {
+            var investedDollar = profit != -1 ? (totalUSD / (1 + profit)) : totalUSD;
             if (statusType != OrderStatusType.Open)
             {
                 var days = now.Subtract(closeDate).TotalDays;
-                var weight = (days <= 30 ? 1.0 : Math.Max((Math.Log(days) / -2.5100067169575757) + 2.3550550915595987, 0.0)) * (totalUSD / (1 + profit));
+                var weight = (days <= 30 ? 1.0 : Math.Max((Math.Log(days) / -2.5100067169575757) + 2.3550550915595987, 0.0)) * investedDollar;
                 advisorRankingAndProfitData.RankingWeight += weight;
                 advisorRankingAndProfitData.RankingWeightedProfit += profit * weight;
                 if (weight > 0)
@@ -488,7 +489,7 @@ namespace Auctus.Business.Advisor
             advisorRankingAndProfitData.AssetProfitData[assetId][statusType][orderType].SummedProfitPercentage += profit;
             advisorRankingAndProfitData.AssetProfitData[assetId][statusType][orderType].TotalDollar += totalUSD;
             advisorRankingAndProfitData.AssetProfitData[assetId][statusType][orderType].TotalQuantity += quantity;
-            advisorRankingAndProfitData.AssetProfitData[assetId][statusType][orderType].SummedProfitDollar += totalUSD - (totalUSD / (1 + profit));
+            advisorRankingAndProfitData.AssetProfitData[assetId][statusType][orderType].SummedProfitDollar += totalUSD - investedDollar;
             ++advisorRankingAndProfitData.AssetProfitData[assetId][statusType][orderType].OrderCount;
             if (profit > 0)
                 ++advisorRankingAndProfitData.AssetProfitData[assetId][statusType][orderType].SuccessCount;
