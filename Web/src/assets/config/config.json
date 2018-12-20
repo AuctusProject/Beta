@@ -7,5 +7,6 @@
     "assetImgUrl": "https://auctusplatform.azureedge.net/assetsicons/{id}.png",
     "profileImgUrl": "https://auctusplatform.azureedge.net/userpicture/{id}.png",
     "platformImgUrl": "https://auctusplatform.azureedge.net/platform/{id}.png",
-    "virtualMoney": 100000
+    "virtualMoney": 100000,
+    "orderFee": 0.001
 }

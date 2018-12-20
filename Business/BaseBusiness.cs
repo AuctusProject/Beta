@@ -95,6 +95,7 @@ namespace Auctus.Business
         private int? _assetBTCId;
         private int? _assetETHId;
         private double? _virtualMoney;
+        private double? _orderFee;
         private List<string> _admins;
         private List<TerminalAssetConfig> _terminalAssets;
 
@@ -349,6 +350,16 @@ namespace Auctus.Business
                 if (_virtualMoney == null)
                     _virtualMoney = Configuration.GetSection("VirtualMoney").Get<double>();
                 return _virtualMoney.Value;
+            }
+        }
+
+        protected double OrderFee
+        {
+            get
+            {
+                if (_orderFee == null)
+                    _orderFee = Configuration.GetSection("OrderFee").Get<double>();
+                return _orderFee.Value;
             }
         }
 

@@ -33,6 +33,7 @@ namespace Auctus.Model
         public double? LastPortfolioValue { get; set; }
         public double? Profit24hValue { get; set; }
         public double? Profit24hPercentage { get; set; }
+        public double TotalFee { get; set; }
         public MonthlyRankingHistoryResponse MonthlyRankingHistory { get; set; }
         public List<AdvisorAssetHistoryResponse> AdvisorAsset24hHistory { get; set; } = new List<AdvisorAssetHistoryResponse>();
         public List<RecommendationDistributionResponse> RecommendationDistribution { get; set; } = new List<RecommendationDistributionResponse>();
@@ -54,6 +55,7 @@ namespace Auctus.Model
             public double TotalInvested { get; set; }
             public double TotalProfit { get; set; }
             public double TotalVirtual { get; set; }
+            public double? TotalFee { get; set; }
             public int OrderCount { get; set; }
             public int SuccessCount { get; set; }
             public int? SummedTradeMinutes { get; set; }

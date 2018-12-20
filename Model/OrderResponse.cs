@@ -33,6 +33,9 @@ namespace Auctus.Model
         public double? StopLoss { get; set; }
         public double? Profit { get; set; }
         public double? ProfitValue { get; set; }
+        public double? ProfitWithoutFee { get; set; }
+        public double? ProfitWithoutFeeValue { get; set; }
+        public double? Fee { get; set; }
         public int? OrderId { get; set; }
         public DateTime? OpenDate { get; set; }
         public double? OpenPrice { get; set; }

@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
 import { PairResponse } from '../../../model/asset/assetResponse';
 import { Constants } from '../../../util/constants';
+import { CONFIG } from '../../../services/config.service';
+import { Util } from '../../../util/util';
 
 @Component({
   selector: 'ticker-percentage-field',
@@ -13,7 +15,9 @@ import { Constants } from '../../../util/constants';
 export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChanges {
   Math = Math;
   @Input() pair: PairResponse;
-  @Input() referenceValue?: any = null;
+  @Input() priceValue?: any = null;
+  @Input() quantityValue?: any = null;
+  @Input() feeValue?: any = null;
   @Input() orderType?: number = null;
   @Input() startValue?: number = null;
   value: number;
@@ -39,6 +43,11 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
     if (this.startValue != undefined) {
       this.value = this.startValue;
     }
+    if (this.priceValue && this.quantityValue) {
+      this.priceValue = parseFloat(this.priceValue);
+      this.quantityValue = parseFloat(this.quantityValue);
+      this.feeValue = parseFloat(this.feeValue);
+    }
     if (this.pair) {
       if (this.pair.symbol) {
       this.mainTickerSubscription = this.tickerService.binanceTicker(this.pair.symbol).subscribe(ret =>
@@ -58,8 +67,8 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
 
   setValue(ticker: BinanceTickerPayload, isMainPair: boolean) {
     if (!this.pair.multipliedSymbol) {
-      if (this.referenceValue) {
-        this.value = this.getReferenceValueMultiplier() * ((this.getConsideredPrice(ticker) / parseFloat(this.referenceValue)) - 1);
+      if (this.priceValue && this.quantityValue) {
+        this.value = Util.GetProfit(this.orderType, this.priceValue, this.feeValue, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
       } else {
         this.value = ticker.priceChangePercentage / 100;
       }
@@ -71,9 +80,9 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
         this.quoteValue = this.getConsideredPrice(ticker);
         this.quoteVariation = ticker.priceChangePercentage;
       }
-      if (this.referenceValue) {
+      if (this.priceValue && this.quantityValue) {
         if (this.baseValue && this.quoteValue) {
-          this.value = this.getReferenceValueMultiplier() * ((this.baseValue * this.quoteValue) / parseFloat(this.referenceValue) - 1);
+          this.value = Util.GetProfit(this.orderType, this.priceValue, this.feeValue, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {
@@ -92,7 +101,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
   }
 
   getConsideredPrice(ticker: BinanceTickerPayload) : number {
-    return this.referenceValue ? this.orderType === Constants.OrderType.Sell ? ticker.bestAskPrice : ticker.bestBidPrice : ticker.currentClosePrice;
+    return this.priceValue && this.quantityValue ? this.orderType === Constants.OrderType.Sell ? ticker.bestAskPrice : ticker.bestBidPrice : ticker.currentClosePrice;
   }
 
   ngOnDestroy() {

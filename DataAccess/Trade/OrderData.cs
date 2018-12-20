@@ -22,10 +22,14 @@ namespace Auctus.DataAccess.Trade
                                                         WHERE (o.Status = @CloseStatus OR o.Status = @ExecutedStatus OR (o.Status = @OpenStatus AND o.OrderId IS NULL)) 
                                                         AND {0}";
 
-        private const string SQL_LIST_EXECUTED_WITH_STOP_LOSS_AND_OPEN = @"SELECT o.*, ro.* FROM [Order] o WITH(NOLOCK) LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.Id = o.OrderId
-                                                                           WHERE o.Status = @OpenStatus AND (ro.Id IS NULL OR ro.Status = @ExecutedStatus) AND {0}
+        private const string SQL_LIST_EXECUTED_WITH_STOP_LOSS_AND_OPEN = @"SELECT o.*, ro1.*, ro2.* FROM [Order] o WITH(NOLOCK) 
+                                                                           LEFT JOIN [Order] ro1 WITH(NOLOCK) ON ro1.Id = o.OrderId
+                                                                           LEFT JOIN [Order] ro2 WITH(NOLOCK) ON ro2.OrderId = o.Id
+                                                                           WHERE o.Status = @OpenStatus AND (ro1.Id IS NULL OR ro1.Status = @ExecutedStatus)
+                                                                           AND (ro2.Id IS NULL OR ro2.Status = @OpenStatus) AND {0}
                                                                            UNION
-                                                                           SELECT o.*, ro.* FROM [Order] o WITH(NOLOCK) LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.OrderId = o.Id
+                                                                           SELECT o.*, ro.*, ro.* FROM [Order] o WITH(NOLOCK) 
+                                                                           LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.OrderId = o.Id
                                                                            WHERE o.Status = @ExecutedStatus AND o.StopLoss IS NOT NULL AND {0}";
 
         private const string SQL_LAST_ADVISORS_ORDERS_FOR_ASSET = @"SELECT o.* FROM 
@@ -130,7 +134,22 @@ namespace Auctus.DataAccess.Trade
             for (int i = 0; i < assetsIds.Count(); ++i)
                 parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
 
-            return QueryParentChild<Order, Order, int>(string.Format(SQL_LIST_EXECUTED_WITH_STOP_LOSS_AND_OPEN, complement), c => c.Id, c => c.RelatedOrders, "Id", parameters).ToList();
+            Dictionary<int, Order> cache = new Dictionary<int, Order>();
+            Query<Order, Order, Order, Order>(string.Format(SQL_LIST_EXECUTED_WITH_STOP_LOSS_AND_OPEN, complement),
+                (order, related1, related2) =>
+                {
+                    if (!cache.ContainsKey(order.Id))
+                        cache.Add(order.Id, order);
+
+                    var cachedParent = cache[order.Id];
+                    if (related1 != null)
+                        cachedParent.RelatedOrders.Add(related1);
+                    else if (related2 != null)
+                        cachedParent.RelatedOrders.Add(related2);
+
+                    return cachedParent;
+                }, "Id,Id", parameters);
+            return cache.Values.ToList();
         }
 
         public List<Order> ListLastAdvisorsOrdersForAsset(int assetId, IEnumerable<OrderStatusType> orderStatusTypes)

@@ -28,6 +28,7 @@ export class AdvisorResponse {
   lastPortfolioValue?: number;
   profit24hValue?: number;
   profit24hPercentage?: number;
+  totalFee: number;
   monthlyRankingHistory: MonthlyRankingHistoryResponse;
   recommendationDistribution: RecommendationDistributionResponse[];
   openPositions?: AdvisorAssetResponse[];
@@ -55,6 +56,7 @@ export class AdvisorAssetResponse {
   totalInvested: number;
   totalProfit: number;
   totalVirtual: number;
+  totalFee?: number;
   orderCount: number;
   successCount: number;
   summedTradeMinutes?: number;
@@ -81,6 +83,7 @@ export class PositionResponse {
   averagePrice: number;
   orderCount: number;
   successCount: number;
+  totalFee: number;
   averageTradeMinutes?: number;
   type?: number;
 }

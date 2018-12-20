@@ -1,3 +1,6 @@
+import { Constants } from "./constants";
+import { CONFIG } from "../services/config.service";
+
 export class Util {
     public static SELL: number = 0;
     public static BUY: number = 1;
@@ -11,6 +14,30 @@ export class Util {
 
     public static ConvertUTCDateStringToLocalDate(date) {
         return this.ConvertUTCDateToLocalDate(new Date(date));
+    }
+
+    public static GetProfit(baseOrderType: number, basePrice: number, baseFee: number, baseQuantity: number, quantity: number, currentPrice: number) {
+        var closedDollar = this.GetClosedDollar(baseOrderType, basePrice, quantity, currentPrice);
+        var baseFeePercentage = this.GetBaseFeePercentage(basePrice, baseFee, baseQuantity);
+        return this.GetProfitValue(closedDollar, basePrice, quantity, baseFeePercentage);
+    }
+
+    public static GetProfitValue(closedDollar: number, basePrice: number, quantity: number, baseFeePercentage: number) {
+        return closedDollar / (basePrice * quantity / (1 - baseFeePercentage)) - 1;
+    }
+
+    public static GetBaseFeePercentage(basePrice: number, baseFee: number, baseQuantity: number) {
+        return baseFee / (baseQuantity * basePrice + baseFee);
+    }
+
+    public static GetClosedDollar(baseOrderType: number, basePrice: number, quantity: number, currentPrice: number) {
+        var expectedCloseValue = this.GetExpectedCloseValue(baseOrderType, basePrice, quantity, currentPrice);
+        var fee = expectedCloseValue * CONFIG.orderFee;
+        return expectedCloseValue - fee;
+    }
+
+    public static GetExpectedCloseValue(baseOrderType: number, basePrice: number, quantity: number, currentPrice: number) {
+        return (baseOrderType == Constants.OrderType.Buy ? currentPrice * quantity : quantity * (2 * basePrice - currentPrice));
     }
 
     public static ConvertUTCDateToLocalDate(date) {

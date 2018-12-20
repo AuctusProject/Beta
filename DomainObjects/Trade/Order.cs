@@ -40,6 +40,12 @@ namespace Auctus.DomainObjects.Trade
         public DateTime? OpenDate { get; set; }
         [DapperType(System.Data.DbType.Double)]
         public double RemainingQuantity { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double? ProfitWithoutFee { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double? Fee { get; set; }
+        [DapperType(System.Data.DbType.Double)]
+        public double? TotalTradeFee { get; set; }
 
         public OrderType OrderType { get { return OrderType.Get(Type); } }
         public OrderActionType OrderActionType { get { return OrderActionType.Get(ActionType); } }

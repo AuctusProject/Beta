@@ -28,6 +28,9 @@ export class OrderResponse {
     stopLoss?: number;
     profit?: number;
     profitValue?: number;
+    profitWithoutFee?: number;
+    profitWithoutFeeValue?: number;
+    fee?: number;
     orderId?: number;
     openDate?: Date;
     openPrice?: number;

@@ -12,6 +12,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { EventsService } from 'angular-event-service/dist';
 import { ConfirmationDialogComponent } from '../../util/confirmation-dialog/confirmation-dialog.component';
 import { BinanceTickerPayload } from '../../../model/binanceTickerPayload';
+import { CONFIG } from '../../../services/config.service';
 
 @Component({
   selector: 'edit-trade-value',
@@ -113,7 +114,7 @@ export class EditTradeValueComponent implements OnInit, OnDestroy {
       if (!this.value || !this.currentValue) {
         this.Field.forceHint(null);
       } else {
-        this.Field.forceHint("≈ " + new ValueDisplayPipe().transform(this.value * this.currentValue));
+        this.setAmountField();
       }
     } 
   }
@@ -215,8 +216,13 @@ export class EditTradeValueComponent implements OnInit, OnDestroy {
   private setCurrentPrice(price: number) {
     this.currentValue = price; 
     if (this.amountField && this.value) {
-      this.Field.forceHint("≈ " + new ValueDisplayPipe().transform(this.value * this.currentValue));
+      this.setAmountField();
     }
+  }
+
+  private setAmountField() {
+    let fee = this.value * this.currentValue * CONFIG.orderFee;
+    this.Field.forceHint("≈ " + new ValueDisplayPipe().transform(this.value * this.currentValue - fee) + "   /   ≈ " + new ValueDisplayPipe().transform(fee) + " fee");
   }
 
   private getBaseOptions() : any {

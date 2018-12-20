@@ -11,6 +11,8 @@ import { NotificationsService } from 'angular2-notifications';
 import { EventsService } from 'angular-event-service/dist';
 import { OrderResponse } from '../../../../model/trade/orderResponse';
 import { BinanceTickerPayload } from '../../../../model/binanceTickerPayload';
+import { CONFIG } from '../../../../services/config.service';
+import { PercentageDisplayPipe } from '../../../../util/percentage-display.pipe';
 
 @Component({
   selector: 'set-trade',
@@ -199,9 +201,18 @@ export class SetTradeComponent implements OnInit, OnDestroy {
     this.currentValue = price; 
     if (!this.limit && this.currentValue) {
       if (this.amountValue) {
-        this.Amount.forceHint("≈ " + new ValueDisplayPipe().transform(this.amountValue * this.currentValue));
+        this.setAmountHint(this.currentValue, "≈");
       }
     }
+  }
+
+  public getAmountTooltip() {
+    return new PercentageDisplayPipe().transform(CONFIG.orderFee) + " is deducted as fee";
+  }
+
+  private setAmountHint(price: number, prefix: string) {
+    let appendPrefix = prefix ? prefix + " " : "";
+    this.Amount.forceHint(appendPrefix + new ValueDisplayPipe().transform(this.amountValue * price) + "   /   " + appendPrefix + new ValueDisplayPipe().transform(this.amountValue * price * CONFIG.orderFee) + " fee");
   }
 
   public onTakeProfit(newValue?: any) {
@@ -221,7 +232,7 @@ export class SetTradeComponent implements OnInit, OnDestroy {
       if (!this.amountValue || !this.priceValue) {
         this.Amount.forceHint(null);
       } else {
-        this.Amount.forceHint(new ValueDisplayPipe().transform(this.amountValue * this.priceValue));
+        this.setAmountHint(this.priceValue, "");
       }
     }
   }
@@ -232,10 +243,10 @@ export class SetTradeComponent implements OnInit, OnDestroy {
     if (!this.amountValue || (!this.currentValue && !this.priceValue)) {
       this.Amount.forceHint(null);
     } else if (!this.limit && this.currentValue) {
-      this.Amount.forceHint("≈ " + new ValueDisplayPipe().transform(this.amountValue * this.currentValue));
-    } else if (this.limit && this.priceValue) {
-      this.Amount.forceHint(new ValueDisplayPipe().transform(this.amountValue * this.priceValue));
-    }
+      this.setAmountHint(this.currentValue, "≈");
+     } else if (this.limit && this.priceValue) {
+      this.setAmountHint(this.priceValue, "");
+     }
   }
 
   private getFormattedNumber(value?: any) : number {

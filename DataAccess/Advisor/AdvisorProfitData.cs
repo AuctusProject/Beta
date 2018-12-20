@@ -75,8 +75,8 @@ namespace Auctus.DataAccess.Advisor
 
         private string GetInsertScript(AdvisorProfit advisorProfit)
         {
-            var baseInsert = "INSERT INTO [AdvisorProfit] (UserId, AssetId, Status, Type, UpdateDate, SummedProfitPercentage, SummedProfitDollar, TotalDollar, TotalQuantity, OrderCount, SuccessCount) VALUES ({0});";
-            return string.Format(baseInsert, $"{advisorProfit.UserId}, {advisorProfit.AssetId}, {advisorProfit.Status}, {advisorProfit.Type}, {GetDateTimeSqlFormattedValue(advisorProfit.UpdateDate)}, {GetDoubleSqlFormattedValue(advisorProfit.SummedProfitPercentage)}, {GetDoubleSqlFormattedValue(advisorProfit.SummedProfitDollar)}, {GetDoubleSqlFormattedValue(advisorProfit.TotalDollar)}, {GetDoubleSqlFormattedValue(advisorProfit.TotalQuantity)}, {advisorProfit.OrderCount}, {advisorProfit.SuccessCount}");
+            var baseInsert = "INSERT INTO [AdvisorProfit] (UserId, AssetId, Status, Type, UpdateDate, SummedProfitPercentage, SummedProfitDollar, TotalDollar, TotalQuantity, OrderCount, SuccessCount, SummedTradeMinutes, TotalFee) VALUES ({0});";
+            return string.Format(baseInsert, $"{advisorProfit.UserId}, {advisorProfit.AssetId}, {advisorProfit.Status}, {advisorProfit.Type}, {GetDateTimeSqlFormattedValue(advisorProfit.UpdateDate)}, {GetDoubleSqlFormattedValue(advisorProfit.SummedProfitPercentage)}, {GetDoubleSqlFormattedValue(advisorProfit.SummedProfitDollar)}, {GetDoubleSqlFormattedValue(advisorProfit.TotalDollar)}, {GetDoubleSqlFormattedValue(advisorProfit.TotalQuantity)}, {advisorProfit.OrderCount}, {advisorProfit.SuccessCount}, {GetNullableValue(advisorProfit.SummedTradeMinutes)}, {GetDoubleSqlFormattedValue(advisorProfit.TotalFee)}");
         }
 
         private string GetDeleteScript(AdvisorProfit advisorProfit)
@@ -99,6 +99,10 @@ namespace Auctus.DataAccess.Advisor
                 update.Add($"OrderCount = {newAdvisorProfit.OrderCount}");
             if (newAdvisorProfit.SuccessCount != oldAdvisorProfit.SuccessCount)
                 update.Add($"SuccessCount = {newAdvisorProfit.SuccessCount}");
+            if (newAdvisorProfit.SummedTradeMinutes != oldAdvisorProfit.SummedTradeMinutes)
+                update.Add($"SummedTradeMinutes = {GetNullableValue(newAdvisorProfit.SummedTradeMinutes)}");
+            if (newAdvisorProfit.TotalFee != oldAdvisorProfit.TotalFee)
+                update.Add($"TotalFee = {GetDoubleSqlFormattedValue(newAdvisorProfit.TotalFee)}");
 
             return update.Count == 0 ? "" : $"UPDATE [AdvisorProfit] SET UpdateDate = {GetDateTimeSqlFormattedValue(newAdvisorProfit.UpdateDate)},{string.Join(',', update)} WHERE UserId = {newAdvisorProfit.UserId} AND AssetId = {newAdvisorProfit.AssetId} AND Status = {newAdvisorProfit.Status} AND Type = {newAdvisorProfit.Type};";
         }

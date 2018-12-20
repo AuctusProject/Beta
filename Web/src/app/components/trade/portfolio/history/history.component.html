@@ -13,6 +13,10 @@
         <percentage-display [value]="positionResponse.averageReturn"></percentage-display>
         <span>Avg. Return</span>
       </div>
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
+        <div>{{positionResponse.totalFee | valueDisplay}}</div>
+        <span>Total Fees</span>
+      </div>
     </div>
     <div class="returns" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
       <div>{{positionResponse.totalProfit | valueDisplay}}</div>
@@ -86,10 +90,17 @@
       <ng-container matColumnDef="PL">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="profit"> P/L </th>
         <td mat-cell *matCellDef="let order" >
-          <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px">
+          <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="4px" [matTooltip]="getProfitTooltip(order)" #tooltipProfit="matTooltip" (click)="tooltipProfit.toggle()">
             <percentage-display [value]="order.profit"></percentage-display>
             <span [class]="order.profitValue >= 0 ? 'green-label':'red-label'">{{order.profitValue | valueDisplay}}</span>
           </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fee">
+        <th ngClass.lt-sm="hidden" mat-header-cell *matHeaderCellDef mat-sort-header="fee"> FEE </th>
+        <td ngClass.lt-sm="hidden" mat-cell *matCellDef="let order">
+            {{order.fee | valueDisplay}}
         </td>
       </ng-container>
 
