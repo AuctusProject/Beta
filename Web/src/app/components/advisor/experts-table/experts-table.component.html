@@ -55,20 +55,20 @@
     </ng-container>
 
     <ng-container matColumnDef="monthlyPL">
-      <th fxHide.lt-md mat-header-cell *matHeaderCellDef mat-sort-header="monthlyRankingHistory.profitPercentage"> P/L (% this month) </th>
-      <td fxHide.lt-md mat-cell *matCellDef="let expert">  
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="monthlyRankingHistory.profitPercentage"> P/L (% this month) </th>
+      <td mat-cell *matCellDef="let expert">  
         <ticker-percentage-field [startValue]="expert.monthlyRankingHistory.profitPercentage"></ticker-percentage-field>
       </td>
     </ng-container>
   
   
     <ng-container matColumnDef="follow">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="numberOfFollowers" [disabled]="showViewMore"> 
+      <th [fxHide.lt-sm]="isMonthlyContest()" mat-header-cell *matHeaderCellDef mat-sort-header="numberOfFollowers" [disabled]="showViewMore"> 
         <a *ngIf="showViewMore" routerLink="/top-traders" >
           <div class="table-button gray">VIEW MORE</div>
         </a>
       </th>
-      <td mat-cell *matCellDef="let expert"> 
+      <td [fxHide.lt-sm]="isMonthlyContest()" mat-cell *matCellDef="let expert"> 
         <follow-unfollow [(following)]="expert.following" [(numberOfFollowers)]="expert.numberOfFollowers" [(id)]="expert.userId" [type]="expertFollowUnfollowType"></follow-unfollow>
       </td>
     </ng-container>

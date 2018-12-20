@@ -15,7 +15,7 @@
 
       <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="invested"> Value </th>
-        <td mat-cell *matCellDef="let order"> {{order.invested | valueDisplay}} </td>
+        <td mat-cell *matCellDef="let order"> {{order.invested + order.profitValue | valueDisplay}} </td>
       </ng-container>
       
       <ng-container matColumnDef="open">
