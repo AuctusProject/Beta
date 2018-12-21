@@ -276,11 +276,11 @@ namespace Auctus.Business.Advisor
             List<Order> orders = null;
             List<AssetCurrentValue> assetsCurrentValues = null;
             List<Order> finishedOrders = null;
+            var now = Data.GetDateTimeNow();
             Parallel.Invoke(() => orders = OrderBusiness.ListOrdersForRankingProfitCalculation(advisors),
                             () => assetsCurrentValues = AssetCurrentValueBusiness.ListAllAssets(true),
                             () => finishedOrders = OrderBusiness.ListOrders(advisors, null, new OrderStatusType[] { OrderStatusType.Finished }));
 
-            var now = Data.GetDateTimeNow();
             var assetsBidValues = assetsCurrentValues.ToDictionary(c => c.Id, c => c.BidValue);
             var assetsAskValues = assetsCurrentValues.ToDictionary(c => c.Id, c => c.AskValue);
             var groupedOrders = orders.GroupBy(c => c.UserId).ToDictionary(c => c.Key, c => c.ToList());

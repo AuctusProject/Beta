@@ -20,6 +20,7 @@ namespace Auctus.DomainObjects.Trade
         public int Type { get; set; }
         [DapperType(System.Data.DbType.Int32)]
         public int Status { get; set; }
+        [DapperCriticalRestrictionAttribute(DapperCriticalRestrictionAttribute.Operation.PreviousValueIsLesserOrEqual)]
         [DapperType(System.Data.DbType.DateTime)]
         public DateTime StatusDate { get; set; }
         [DapperType(System.Data.DbType.Double)]

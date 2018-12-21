@@ -225,6 +225,12 @@ namespace Auctus.Business
             return userEmail.ToLower().Trim();
         }
 
+        protected object GetLock()
+        {
+            var userId = GetValidUser().Id;
+            return LockManager.GetLock(userId);
+        }
+
         protected void RunAsync(System.Action action)
         {
             Task.Factory.StartNew(() =>

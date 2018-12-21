@@ -45,7 +45,7 @@ namespace Auctus.DataAccess.Core
         }
 
         #region IBaseData implementation
-        void IBaseData<T>.Delete(T obj)
+        int IBaseData<T>.Delete(T obj)
         {
             throw new NotImplementedException();
         }
@@ -60,12 +60,7 @@ namespace Auctus.DataAccess.Core
             throw new NotImplementedException();
         }
 
-        IEnumerable<T> IBaseData<T>.SelectByObject(T criteria)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IBaseData<T>.Update(T obj)
+        int IBaseData<T>.Update(T obj)
         {
             throw new NotImplementedException();
         }

@@ -27,9 +27,10 @@ namespace Auctus.DataAccessMock.Trade
             throw new NotImplementedException();
         }
 
-        public override void Delete(Order obj)
+        public override int Delete(Order obj)
         {
             orders.Remove(obj);
+            return 1;
         }
 
         public override void Insert(Order obj)
@@ -41,9 +42,10 @@ namespace Auctus.DataAccessMock.Trade
             orders.Add(obj);
         }
 
-        public override void Update(Order obj)
+        public override int Update(Order obj)
         {
             //Do nothing
+            return 1;
         }
 
         public Order Get(int orderId)

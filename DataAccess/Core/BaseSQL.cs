@@ -27,11 +27,6 @@ namespace Auctus.DataAccess.Core
             base.ClearDapperTransaction();
         }
 
-        public IEnumerable<T> SelectByObject(T criteria)
-        {
-            return base.SelectByObject<T>(criteria);
-        }
-
         public virtual DateTime GetDateTimeNow()
         {
             return DateTime.UtcNow;
@@ -47,14 +42,14 @@ namespace Auctus.DataAccess.Core
             base.Insert<T>(obj);
         }
 
-        public void Update(T obj)
+        public int Update(T obj)
         {
-            base.Update(obj);
+            return base.Update(obj);
         }
 
-        public void Delete(T obj)
+        public int Delete(T obj)
         {
-            base.Delete<T>(obj);
+            return base.Delete<T>(obj);
         }
 
         public Task InsertOneAsync(T obj)

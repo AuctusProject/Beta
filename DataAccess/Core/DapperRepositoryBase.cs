@@ -245,18 +245,6 @@ namespace Auctus.DataAccess.Core
             return Select<T>(null, null);
         }
 
-        protected IEnumerable<T> SelectByObject<T>(T criteria)
-        {
-            string pairs = null;
-            PropertyContainer properties = null;
-            if (criteria != null)
-            {
-                properties = ParseProperties(criteria);
-                pairs = GetSqlPairs(properties.AllNames, " AND ");
-            }
-            return Select<T>(pairs, properties?.AllParameters);
-        }
-
         public IEnumerable<T> SelectByParameters<T>(DynamicParameters criteria, String orderBy = "")
         {
             string pairs = null;
@@ -297,21 +285,41 @@ namespace Auctus.DataAccess.Core
                 Execute(sql, propertyContainer.AllParameters);
         }
 
-        protected void Update<T>(T obj, string tableName = null)
+        protected int Update<T>(T obj, string tableName = null, bool isTransactional = false)
         {
             PropertyContainer propertyContainer = ParseProperties(obj);
             string sqlKeyPairs = GetSqlPairs(propertyContainer.KeyNames, " AND ");
             string sqlValuePairs = GetSqlPairs(propertyContainer.ValueNames, ", ");
+
+            string sqlCriticalRestrictionPairs = GetSqlCriticalRestrictionPairs(propertyContainer.CriticalRestrictions);
+            if (!string.IsNullOrEmpty(sqlCriticalRestrictionPairs))
+                sqlKeyPairs += " AND " + sqlCriticalRestrictionPairs;
+
             string sql = string.Format("UPDATE [{0}] SET {1} WHERE {2} ", tableName ?? TableName, sqlValuePairs, sqlKeyPairs);
-            Execute(sql, propertyContainer.AllParameters);
+            int rowsAffected = Execute(sql, propertyContainer.AllParameters);
+
+            if (isTransactional && rowsAffected == 0 && !string.IsNullOrEmpty(sqlCriticalRestrictionPairs))
+                throw new InvalidOperationException($"Invalid update on [{tableName}] with critical restriction and 0 rows affected.");
+
+            return rowsAffected;
         }
 
-        protected void Delete<T>(T obj, string tableName = null)
+        protected int Delete<T>(T obj, string tableName = null, bool isTransactional = false)
         {
             PropertyContainer propertyContainer = ParseProperties(obj);
             string sqlKeyPairs = GetSqlPairs(propertyContainer.KeyNames, " AND ");
+
+            string sqlCriticalRestrictionPairs = GetSqlCriticalRestrictionPairs(propertyContainer.CriticalRestrictions);
+            if (!string.IsNullOrEmpty(sqlCriticalRestrictionPairs))
+                sqlKeyPairs += " AND " + sqlCriticalRestrictionPairs;
+
             string sql = string.Format("DELETE FROM [{0}] WHERE {1} ", tableName ?? TableName, sqlKeyPairs);
-            Execute(sql, propertyContainer.KeyParameters);
+            int rowsAffected = Execute(sql, propertyContainer.KeyWithCriticalsParameters);
+
+            if (isTransactional && rowsAffected == 0 && !string.IsNullOrEmpty(sqlCriticalRestrictionPairs))
+                throw new InvalidOperationException($"Invalid delete on [{tableName}] with critical restriction and 0 rows affected.");
+
+            return rowsAffected;
         }
 
         private static PropertyContainer ParseProperties<T>(T obj)
@@ -334,10 +342,19 @@ namespace Auctus.DataAccess.Core
 
                 object value = typeof(T).GetProperty(property.Name).GetValue(obj, null);
                 DbType dbType = ((DapperTypeAttribute)property.GetCustomAttribute(typeof(DapperTypeAttribute))).DbType;
-                if (property.IsDefined(typeof(DapperKeyAttribute), false))
+                bool isKey = property.IsDefined(typeof(DapperKeyAttribute), false);
+                bool isCriticalCommand = property.IsDefined(typeof(DapperCriticalRestrictionAttribute), false);
+
+                if (isKey && isCriticalCommand)
+                    throw new InvalidOperationException("Critical restriction cannot be set on Key.");
+
+                if (isKey)
                     propertyContainer.AddKey(property.Name, value, dbType, ((DapperKeyAttribute)property.GetCustomAttribute(typeof(DapperKeyAttribute))).Identity);
                 else
-                    propertyContainer.AddValue(property.Name, value, dbType);
+                    propertyContainer.AddValue(property.Name, value, dbType, isCriticalCommand);
+
+                if (isCriticalCommand)
+                    propertyContainer.AddCriticalRestriction(property.Name, ((DapperCriticalRestrictionAttribute)property.GetCustomAttribute(typeof(DapperCriticalRestrictionAttribute))).SqlOperation);
             }
             return propertyContainer;
         }
@@ -345,6 +362,14 @@ namespace Auctus.DataAccess.Core
         private static string GetSqlPairs(IEnumerable<string> keys, string separator)
         {
             return string.Join(separator, keys.Select(key => string.Format("[{0}]=@{0}", key)));
+        }
+
+        private static string GetSqlCriticalRestrictionPairs(Dictionary<string, string> criticalRestrictions)
+        {
+            string sql = "";
+            foreach (var pair in criticalRestrictions)
+                sql += string.Format("[{0}]{1}@{0}", pair.Key, pair.Value);
+            return sql;
         }
 
         private void SetIdentity<T>(T obj, int id, string identity)
@@ -365,12 +390,16 @@ namespace Auctus.DataAccess.Core
             private readonly DynamicParameters _keyParameters;
             private readonly DynamicParameters _valueParameters;
             private readonly DynamicParameters _allParameters;
+            private readonly DynamicParameters _keyWithCriticalsParameters;
+            private readonly Dictionary<string, string> _criticalRestrictions;
 
             internal PropertyContainer()
             {
                 _keyParameters = new DynamicParameters();
                 _valueParameters = new DynamicParameters();
                 _allParameters = new DynamicParameters();
+                _keyWithCriticalsParameters = new DynamicParameters();
+                _criticalRestrictions = new Dictionary<string, string>();
             }
 
             internal string Identity
@@ -408,6 +437,16 @@ namespace Auctus.DataAccess.Core
                 get { return _allParameters; }
             }
 
+            internal DynamicParameters KeyWithCriticalsParameters
+            {
+                get { return _keyWithCriticalsParameters; }
+            }
+
+            internal Dictionary<string, string> CriticalRestrictions
+            {
+                get { return _criticalRestrictions; }
+            }
+
             internal void AddKey(string name, object value, DbType type, bool identity)
             {
                 ulong id;
@@ -419,12 +458,22 @@ namespace Auctus.DataAccess.Core
                 }
                 Add(_keyParameters, name, value, type);
                 Add(_allParameters, name, value, type);
+                Add(_keyWithCriticalsParameters, name, value, type);
             }
 
-            internal void AddValue(string name, object value, DbType type)
+            internal void AddValue(string name, object value, DbType type, bool isCriticalRestriction)
             {
                 Add(_valueParameters, name, value, type);
                 Add(_allParameters, name, value, type);
+                if (isCriticalRestriction)
+                    Add(_keyWithCriticalsParameters, name, value, type);
+            }
+
+            internal void AddCriticalRestriction(string name, string commandOperantion)
+            {
+                if (_criticalRestrictions.ContainsKey(name))
+                    throw new InvalidOperationException($"Duplicate critical restriction on {name}.");
+                _criticalRestrictions.Add(name, commandOperantion);
             }
 
             private void Add(DynamicParameters param, string name, object value, DbType type)
