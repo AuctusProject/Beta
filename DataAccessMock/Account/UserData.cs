@@ -224,12 +224,13 @@ namespace Auctus.DataAccessMock.Account
             users.Add(obj);
         }
 
-        public override void Update(User obj)
+        public override int Update(User obj)
         {
             var user = users.FirstOrDefault(c => c.Id == obj.Id);
             var index = users.IndexOf(user);
             users.RemoveAt(index);
             users.Add(obj);
+            return 1;
         }
 
         public List<User> ListAllUsersData()

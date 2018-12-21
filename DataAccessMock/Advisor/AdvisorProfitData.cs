@@ -37,9 +37,10 @@ namespace Auctus.DataAccessMock.Advisor
             throw new NotImplementedException();
         }
 
-        public override void Delete(AdvisorProfit obj)
+        public override int Delete(AdvisorProfit obj)
         {
             advisorProfit.Remove(obj);
+            return 1;
         }
 
         public override void Insert(AdvisorProfit obj)
@@ -47,9 +48,10 @@ namespace Auctus.DataAccessMock.Advisor
             advisorProfit.Add(obj);
         }
 
-        public override void Update(AdvisorProfit obj)
+        public override int Update(AdvisorProfit obj)
         {
             //Do nothing
+            return 1;
         }
 
         public List<AdvisorProfit> ListAdvisorProfit(IEnumerable<int> advisorIds, IEnumerable<int> assetIds)

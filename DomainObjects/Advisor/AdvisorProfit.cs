@@ -20,6 +20,7 @@ namespace Auctus.DomainObjects.Advisor
         [DapperKey]
         [DapperType(System.Data.DbType.Int32)]
         public int Type { get; set; }
+        [DapperCriticalRestrictionAttribute(DapperCriticalRestrictionAttribute.Operation.PreviousValueIsLesserOrEqual)]
         [DapperType(System.Data.DbType.DateTime)]
         public DateTime UpdateDate { get; set; }
         [DapperType(System.Data.DbType.Double)]

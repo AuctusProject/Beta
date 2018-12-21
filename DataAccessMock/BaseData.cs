@@ -14,7 +14,7 @@ namespace Auctus.DataAccessMock
             return new DateTime(2018, 6, 30, 23, 55, 0);
         }
 
-        public virtual void Delete(T obj)
+        public virtual int Delete(T obj)
         {
             throw new NotImplementedException();
         }
@@ -44,7 +44,7 @@ namespace Auctus.DataAccessMock
             throw new NotImplementedException();
         }
 
-        public virtual void Update(T obj)
+        public virtual int Update(T obj)
         {
             throw new NotImplementedException();
         }

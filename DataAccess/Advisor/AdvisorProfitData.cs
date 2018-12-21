@@ -81,7 +81,7 @@ namespace Auctus.DataAccess.Advisor
 
         private string GetDeleteScript(AdvisorProfit advisorProfit)
         {
-            return $"DELETE FROM [AdvisorProfit] WHERE UserId = {advisorProfit.UserId} AND AssetId = {advisorProfit.AssetId} AND Status = {advisorProfit.Status} AND Type = {advisorProfit.Type};";
+            return $"DELETE FROM [AdvisorProfit] WHERE UserId = {advisorProfit.UserId} AND AssetId = {advisorProfit.AssetId} AND Status = {advisorProfit.Status} AND Type = {advisorProfit.Type} AND UpdateDate < {GetDateTimeSqlFormattedValue(advisorProfit.UpdateDate)};";
         }
 
         private string GetUpdateScript(AdvisorProfit newAdvisorProfit, AdvisorProfit oldAdvisorProfit)
@@ -101,10 +101,11 @@ namespace Auctus.DataAccess.Advisor
                 update.Add($"SuccessCount = {newAdvisorProfit.SuccessCount}");
             if (newAdvisorProfit.SummedTradeMinutes != oldAdvisorProfit.SummedTradeMinutes)
                 update.Add($"SummedTradeMinutes = {GetNullableValue(newAdvisorProfit.SummedTradeMinutes)}");
-            if (newAdvisorProfit.TotalFee != oldAdvisorProfit.TotalFee)
+            if ((newAdvisorProfit.TotalFee.HasValue && !oldAdvisorProfit.TotalFee.HasValue) || (!newAdvisorProfit.TotalFee.HasValue && oldAdvisorProfit.TotalFee.HasValue)
+                || (newAdvisorProfit.TotalFee.HasValue && oldAdvisorProfit.TotalFee.HasValue && !newAdvisorProfit.TotalFee.Value.Equals6DigitPrecision(oldAdvisorProfit.TotalFee.Value)))
                 update.Add($"TotalFee = {GetDoubleSqlFormattedValue(newAdvisorProfit.TotalFee)}");
 
-            return update.Count == 0 ? "" : $"UPDATE [AdvisorProfit] SET UpdateDate = {GetDateTimeSqlFormattedValue(newAdvisorProfit.UpdateDate)},{string.Join(',', update)} WHERE UserId = {newAdvisorProfit.UserId} AND AssetId = {newAdvisorProfit.AssetId} AND Status = {newAdvisorProfit.Status} AND Type = {newAdvisorProfit.Type};";
+            return update.Count == 0 ? "" : $"UPDATE [AdvisorProfit] SET UpdateDate = {GetDateTimeSqlFormattedValue(newAdvisorProfit.UpdateDate)},{string.Join(',', update)} WHERE UserId = {newAdvisorProfit.UserId} AND AssetId = {newAdvisorProfit.AssetId} AND Status = {newAdvisorProfit.Status} AND Type = {newAdvisorProfit.Type} AND UpdateDate < {GetDateTimeSqlFormattedValue(newAdvisorProfit.UpdateDate)};";
         }
 
         public List<AdvisorProfit> ListAdvisorProfit(IEnumerable<int> advisorIds, IEnumerable<int> assetIds)

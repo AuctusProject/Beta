@@ -87,37 +87,39 @@ namespace Auctus.Business.Trade
         public List<OrderResponse> CloseAll(int assetId)
         {
             var loggedUser = GetValidUser();
-            var orders = Data.ListOrdersWithRelated(new int[] { loggedUser.Id }, new int[] { assetId }, new OrderStatusType[] { OrderStatusType.Executed }, null);
-            if (!orders.Any())
-                return new List<OrderResponse>();
-
-            var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(assetId);
-            if (currentValue == null)
-                throw new InvalidOperationException("Asset doesn't have current value");
-
-            var usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
-            var closeDate = Data.GetDateTimeNow();
-            var tupleForOrderAndTakeProfitOrder = new List<Tuple<Order, Order>>();
-            var valueClosed = 0.0;
             var closedOrders = new List<Order>();
-            foreach (var order in orders)
+            lock (GetLock())
             {
-                Order closeOrder = null, takeProfitOrder = null;
-                double closedDollar;
-                var consideredPrice = order.OrderType == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue;
-                InternalCloseOrder(out closeOrder, out takeProfitOrder, out closedDollar, order, null, order.RelatedOrders, null, loggedUser.Id, consideredPrice, closeDate);
-                valueClosed += closedDollar;
-                tupleForOrderAndTakeProfitOrder.Add(new Tuple<Order, Order>(order, null));
-                tupleForOrderAndTakeProfitOrder.Add(new Tuple<Order, Order>(closeOrder, takeProfitOrder));
-                closedOrders.Add(closeOrder);
+                var orders = Data.ListOrdersWithRelated(new int[] { loggedUser.Id }, new int[] { assetId }, new OrderStatusType[] { OrderStatusType.Executed }, null);
+                if (!orders.Any())
+                    return new List<OrderResponse>();
+
+                var usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
+                var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(assetId);
+                if (currentValue == null)
+                    throw new InvalidOperationException("Asset doesn't have current value");
+
+                var closeDate = Data.GetDateTimeNow();
+                var tupleForOrderAndTakeProfitOrder = new List<Tuple<Order, Order>>();
+                var valueClosed = 0.0;
+                foreach (var order in orders)
+                {
+                    Order closeOrder = null, takeProfitOrder = null;
+                    double closedDollar;
+                    var consideredPrice = order.OrderType == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue;
+                    InternalCloseOrder(out closeOrder, out takeProfitOrder, out closedDollar, order, null, order.RelatedOrders, null, loggedUser.Id, consideredPrice, closeDate);
+                    valueClosed += closedDollar;
+                    tupleForOrderAndTakeProfitOrder.Add(new Tuple<Order, Order>(order, null));
+                    tupleForOrderAndTakeProfitOrder.Add(new Tuple<Order, Order>(closeOrder, takeProfitOrder));
+                    closedOrders.Add(closeOrder);
+                }
+                SetUsdPosition(usdPosition, OrderStatusType.Close, valueClosed, closeDate);
+
+                var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
+                orderData[assetId] = tupleForOrderAndTakeProfitOrder;
+                SaveOrdersAndPositions(loggedUser.Id, closeDate, orderData, usdPosition, new Dictionary<int, double> { { assetId, currentValue.BidValue } },
+                    new Dictionary<int, double> { { assetId, currentValue.AskValue } }, null);
             }
-            SetUsdPosition(usdPosition, OrderStatusType.Close, valueClosed, closeDate);
-
-            var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
-            orderData[assetId] = tupleForOrderAndTakeProfitOrder;
-            SaveOrdersAndPositions(loggedUser.Id, closeDate, orderData, usdPosition, new Dictionary<int, double> { { assetId, currentValue.BidValue } }, 
-                new Dictionary<int, double> { { assetId, currentValue.AskValue } }, null);
-
             var advisor = AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id);
             var assets = new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(assetId) };
             var result = new List<OrderResponse>();
@@ -135,14 +137,18 @@ namespace Auctus.Business.Trade
         public OrderResponse CloseOrder(int orderId, double? quantity)
         {
             var loggedUser = GetValidUser();
-            var order = Data.GetWithRelated(orderId);
-            BaseValidationOnPositionUpdate(order, loggedUser);
+            OrderResponse response;
+            lock (GetLock())
+            {
+                var order = Data.GetWithRelated(orderId);
+                BaseValidationOnPositionUpdate(order, loggedUser);
+                var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(order.AssetId);
+                if (currentValue == null)
+                    throw new InvalidOperationException("Asset doesn't have current value");
 
-            var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(order.AssetId);
-            if (currentValue == null)
-                throw new InvalidOperationException("Asset doesn't have current value");
-
-            return InternalCloseOrder(order, null, order.RelatedOrders, quantity, loggedUser, currentValue.BidValue, currentValue.AskValue, Data.GetDateTimeNow());
+                response = InternalCloseOrder(order, null, order.RelatedOrders, quantity, loggedUser, currentValue.BidValue, currentValue.AskValue, Data.GetDateTimeNow());
+            }
+            return response;
         }
 
         private void BaseValidationOnPositionUpdate(Order order, User loggedUser)
@@ -170,78 +176,85 @@ namespace Auctus.Business.Trade
         public OrderResponse CancelOrder(int orderId)
         {
             var loggedUser = GetValidUser();
-            var order = Data.GetWithRelated(orderId);
-            BaseValidationOnOpenOrderUpdate(order, loggedUser);
-
-            var dateTime = Data.GetDateTimeNow();
-            order.Status = OrderStatusType.Canceled.Value;
-            order.StatusDate = dateTime;
-            var canceledOrders = new List<Tuple<Order, Order>>();
-            canceledOrders.Add(new Tuple<Order, Order>(order, null));
-            foreach (var related in order.RelatedOrders)
+            Order order;
+            lock (GetLock())
             {
-                related.Status = OrderStatusType.Canceled.Value;
-                related.StatusDate = dateTime;
-                canceledOrders.Add(new Tuple<Order, Order>(related, null));
-            }
+                order = Data.GetWithRelated(orderId);
+                BaseValidationOnOpenOrderUpdate(order, loggedUser);
 
-            var openOrders = canceledOrders.Where(c => !c.Item1.OrderId.HasValue);
-            var releasedDollar = openOrders.Any() ? openOrders.Sum(c => c.Item1.Price * c.Item1.Quantity) : 0.0;
-            AdvisorProfit usdPosition = null;
-            if (releasedDollar > 0)
-            {
-                usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
-                SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedDollar, dateTime);
-            }
-            var currentValue = AssetCurrentValueBusiness.ListAllAssets(true, new int[] { order.AssetId }).First();
-            var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
-            orderData[order.AssetId] = canceledOrders;
-            SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } }, 
-                new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, null);
+                var dateTime = Data.GetDateTimeNow();
+                order.Status = OrderStatusType.Canceled.Value;
+                order.StatusDate = dateTime;
+                var canceledOrders = new List<Tuple<Order, Order>>();
+                canceledOrders.Add(new Tuple<Order, Order>(order, null));
+                foreach (var related in order.RelatedOrders)
+                {
+                    related.Status = OrderStatusType.Canceled.Value;
+                    related.StatusDate = dateTime;
+                    canceledOrders.Add(new Tuple<Order, Order>(related, null));
+                }
 
+                var openOrders = canceledOrders.Where(c => !c.Item1.OrderId.HasValue);
+                var releasedDollar = openOrders.Any() ? openOrders.Sum(c => c.Item1.Price * c.Item1.Quantity) : 0.0;
+                AdvisorProfit usdPosition = null;
+                if (releasedDollar > 0)
+                {
+                    usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
+                    SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedDollar, dateTime);
+                }
+                var currentValue = AssetCurrentValueBusiness.ListAllAssets(true, new int[] { order.AssetId }).First();
+                var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
+                orderData[order.AssetId] = canceledOrders;
+                SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } },
+                    new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, null);
+            }
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { AssetBusiness.GetById(order.AssetId) });
         }
 
         public List<OrderResponse> CancelAllOpen(int? assetId)
         {
             var loggedUser = GetValidUser();
-            var assetFilter = assetId.HasValue ? new int[] { assetId.Value } : null; 
-            var orders = ListOrders(new int[] { loggedUser.Id }, assetFilter, new OrderStatusType[] { OrderStatusType.Open }, null);
-            if (!orders.Any(c => !c.OrderId.HasValue))
-                return new List<OrderResponse>();
+            var assetFilter = assetId.HasValue ? new int[] { assetId.Value } : null;
 
-            var dateTime = Data.GetDateTimeNow();
+            List<Order> orders;
             var canceledOrders = new List<Tuple<Order, Order>>();
-            foreach (var order in orders)
+            lock (GetLock())
             {
-                if (!order.OrderId.HasValue || orders.Any(c => c.Id == order.OrderId.Value))
+                orders = ListOrders(new int[] { loggedUser.Id }, assetFilter, new OrderStatusType[] { OrderStatusType.Open }, null);
+                if (!orders.Any(c => !c.OrderId.HasValue))
+                    return new List<OrderResponse>();
+
+                var dateTime = Data.GetDateTimeNow();
+                foreach (var order in orders)
                 {
-                    order.Status = OrderStatusType.Canceled.Value;
-                    order.StatusDate = dateTime;
-                    canceledOrders.Add(new Tuple<Order, Order>(order, null));
+                    if (!order.OrderId.HasValue || orders.Any(c => c.Id == order.OrderId.Value))
+                    {
+                        order.Status = OrderStatusType.Canceled.Value;
+                        order.StatusDate = dateTime;
+                        canceledOrders.Add(new Tuple<Order, Order>(order, null));
+                    }
                 }
-            }
 
-            var openOrders = orders.Where(c => !c.OrderId.HasValue);
-            var releasedDollar = openOrders.Any() ? openOrders.Sum(c => c.Price * c.Quantity) : 0.0;
-            AdvisorProfit usdPosition = null;
-            if (releasedDollar > 0)
-            {
-                usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
-                SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedDollar, dateTime);
-            }
-            var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
-            foreach (var cancelled in canceledOrders)
-            {
-                if (!orderData.ContainsKey(cancelled.Item1.AssetId))
-                    orderData[cancelled.Item1.AssetId] = new List<Tuple<Order, Order>>();
-                orderData[cancelled.Item1.AssetId].Add(cancelled);
-            }
+                var openOrders = orders.Where(c => !c.OrderId.HasValue);
+                var releasedDollar = openOrders.Any() ? openOrders.Sum(c => c.Price * c.Quantity) : 0.0;
+                AdvisorProfit usdPosition = null;
+                if (releasedDollar > 0)
+                {
+                    usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
+                    SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedDollar, dateTime);
+                }
+                var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
+                foreach (var cancelled in canceledOrders)
+                {
+                    if (!orderData.ContainsKey(cancelled.Item1.AssetId))
+                        orderData[cancelled.Item1.AssetId] = new List<Tuple<Order, Order>>();
+                    orderData[cancelled.Item1.AssetId].Add(cancelled);
+                }
 
-            var assetsCurrentValues = AssetCurrentValueBusiness.ListAllAssets(true, orderData.Keys.Select(c => c));
-            SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, assetsCurrentValues.ToDictionary(c => c.Id, c => c.BidValue), 
-                assetsCurrentValues.ToDictionary(c => c.Id, c => c.AskValue), null);
-
+                var assetsCurrentValues = AssetCurrentValueBusiness.ListAllAssets(true, orderData.Keys.Select(c => c));
+                SaveOrdersAndPositions(loggedUser.Id, dateTime, orderData, usdPosition, assetsCurrentValues.ToDictionary(c => c.Id, c => c.BidValue),
+                    assetsCurrentValues.ToDictionary(c => c.Id, c => c.AskValue), null);
+            }
             var advisor = AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id);
             var assets = AssetBusiness.ListAssets(false, orders.Select(c => c.AssetId).Distinct());
             var result = new List<OrderResponse>();
@@ -355,79 +368,83 @@ namespace Auctus.Business.Trade
         public OrderResponse EditOrder(int orderId, double quantity, double? price, double? takeProfit, double? stopLoss)
         {
             var loggedUser = GetValidUser();
-            var order = Data.GetWithRelated(orderId);
-            BaseValidationOnOpenOrderUpdate(order, loggedUser);
-            BaseValidationForOrderValues(quantity, price, takeProfit, stopLoss);
-
-            var asset = AssetBusiness.GetById(order.AssetId);
-            if (!asset.Enabled)
-                throw new BusinessException("Invalid asset.");
-
-            var usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
-            var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(order.AssetId);
-            if (currentValue == null)
-                throw new InvalidOperationException($"Asset {order.AssetId} value cannot be found.");
-
-            var consideredPrice = order.OrderType == OrderType.Buy ? currentValue.AskValue : currentValue.BidValue;
-            if (!price.HasValue || IsOrderPriceLowerThanMarket(order.OrderType, price.Value, consideredPrice))
-                price = consideredPrice;
-
-            if (order.OrderType == OrderType.Sell)
+            Order order;
+            DomainObjects.Asset.Asset asset;
+            lock (GetLock())
             {
-                var forcedStopLoss = price.Value * 2;
-                if (!stopLoss.HasValue)
-                    stopLoss = forcedStopLoss;
-                else if (stopLoss.Value > forcedStopLoss)
-                    throw new BusinessException($"The maximum stop loss value is {Util.Util.GetFormattedValue(forcedStopLoss)}.");
+                order = Data.GetWithRelated(orderId);
+                BaseValidationOnOpenOrderUpdate(order, loggedUser);
+                BaseValidationForOrderValues(quantity, price, takeProfit, stopLoss);
+
+                asset = AssetBusiness.GetById(order.AssetId);
+                if (!asset.Enabled)
+                    throw new BusinessException("Invalid asset.");
+
+                var usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
+                var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(order.AssetId);
+                if (currentValue == null)
+                    throw new InvalidOperationException($"Asset {order.AssetId} value cannot be found.");
+
+                var consideredPrice = order.OrderType == OrderType.Buy ? currentValue.AskValue : currentValue.BidValue;
+                if (!price.HasValue || IsOrderPriceLowerThanMarket(order.OrderType, price.Value, consideredPrice))
+                    price = consideredPrice;
+
+                if (order.OrderType == OrderType.Sell)
+                {
+                    var forcedStopLoss = price.Value * 2;
+                    if (!stopLoss.HasValue)
+                        stopLoss = forcedStopLoss;
+                    else if (stopLoss.Value > forcedStopLoss)
+                        throw new BusinessException($"The maximum stop loss value is {Util.Util.GetFormattedValue(forcedStopLoss)}.");
+                }
+
+                if (stopLoss.HasValue)
+                {
+                    if (price == consideredPrice && ((order.OrderType == OrderType.Buy && currentValue.BidValue <= stopLoss.Value) || (order.OrderType == OrderType.Sell && currentValue.AskValue >= stopLoss.Value)))
+                        throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(order.OrderType == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
+                    else if ((order.OrderType == OrderType.Buy && price <= stopLoss.Value) || (order.OrderType == OrderType.Sell && price >= stopLoss.Value))
+                        throw new BusinessException($"Invalid stop loss value for the price {Util.Util.GetFormattedValue(price.Value)}.");
+                }
+                if (takeProfit.HasValue)
+                {
+                    if (price == consideredPrice && ((order.OrderType == OrderType.Buy && currentValue.BidValue >= takeProfit.Value) || (order.OrderType == OrderType.Sell && currentValue.AskValue <= takeProfit.Value)))
+                        throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(order.OrderType == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
+                    else if ((order.OrderType == OrderType.Buy && price >= takeProfit.Value) || (order.OrderType == OrderType.Sell && price <= takeProfit.Value))
+                        throw new BusinessException($"Invalid take profit value for the price {Util.Util.GetFormattedValue(price.Value)}.");
+                }
+
+                var now = Data.GetDateTimeNow();
+                var oldTakeProfitOrder = order.RelatedOrders.FirstOrDefault(c => c.OrderStatusType == OrderStatusType.Open);
+                var releasedAmount = !order.OrderId.HasValue ? order.Price * order.Quantity : 0.0;
+                if (releasedAmount > 0)
+                    SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedAmount, now);
+
+                if (usdPosition.TotalDollar < (quantity * price))
+                    throw new BusinessException("Insufficient funds.");
+
+                if (price == consideredPrice)
+                {
+                    order.Status = OrderStatusType.Executed.Value;
+                    order.ActionType = OrderActionType.Market.Value;
+                    order.StatusDate = now;
+                    order.Fee = quantity * price * OrderFee;
+                    order.Quantity = quantity * (1 - OrderFee);
+                }
+                else
+                    order.Quantity = quantity;
+
+                order.RemainingQuantity = order.Quantity;
+                order.Price = price.Value;
+                order.StopLoss = stopLoss;
+                order.TakeProfit = takeProfit;
+                var newTakeProfitOrder = CreateTakeProfitOrderIfNecessary(loggedUser.Id, order.AssetId, order, now);
+                SetUsdPosition(usdPosition, order.OrderStatusType, quantity * price.Value, now);
+
+                var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
+                orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, newTakeProfitOrder) };
+                SaveOrdersAndPositions(loggedUser.Id, now, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } },
+                    new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, oldTakeProfitOrder);
             }
-
-            if (stopLoss.HasValue)
-            {
-                if (price == consideredPrice && ((order.OrderType == OrderType.Buy && currentValue.BidValue <= stopLoss.Value) || (order.OrderType == OrderType.Sell && currentValue.AskValue >= stopLoss.Value)))
-                    throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(order.OrderType == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
-                else if ((order.OrderType == OrderType.Buy && price <= stopLoss.Value) || (order.OrderType == OrderType.Sell && price >= stopLoss.Value))
-                    throw new BusinessException($"Invalid stop loss value for the price {Util.Util.GetFormattedValue(price.Value)}.");
-            }
-            if (takeProfit.HasValue)
-            {
-                if (price == consideredPrice && ((order.OrderType == OrderType.Buy && currentValue.BidValue >= takeProfit.Value) || (order.OrderType == OrderType.Sell && currentValue.AskValue <= takeProfit.Value)))
-                    throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(order.OrderType == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
-                else if ((order.OrderType == OrderType.Buy && price >= takeProfit.Value) || (order.OrderType == OrderType.Sell && price <= takeProfit.Value))
-                    throw new BusinessException($"Invalid take profit value for the price {Util.Util.GetFormattedValue(price.Value)}.");
-            }
-            
-            var now = Data.GetDateTimeNow();
-            var oldTakeProfitOrder = order.RelatedOrders.FirstOrDefault(c => c.OrderStatusType == OrderStatusType.Open);
-            var releasedAmount = !order.OrderId.HasValue ? order.Price * order.Quantity : 0.0;
-            if (releasedAmount > 0)
-                SetUsdPosition(usdPosition, OrderStatusType.Canceled, releasedAmount, now);
-
-            if (usdPosition.TotalDollar < (quantity * price))
-                throw new BusinessException("Insufficient funds.");
-
-            if (price == consideredPrice)
-            {
-                order.Status = OrderStatusType.Executed.Value;
-                order.ActionType = OrderActionType.Market.Value;
-                order.StatusDate = now;
-                order.Fee = quantity * price * OrderFee;
-                order.Quantity = quantity * (1 - OrderFee);
-            }
-            else
-                order.Quantity = quantity;
-
-            order.RemainingQuantity = order.Quantity;
-            order.Price = price.Value;
-            order.StopLoss = stopLoss;
-            order.TakeProfit = takeProfit;
-            var newTakeProfitOrder = CreateTakeProfitOrderIfNecessary(loggedUser.Id, order.AssetId, order, now);
-            SetUsdPosition(usdPosition, order.OrderStatusType, quantity * price.Value, now);
-
-            var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
-            orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, newTakeProfitOrder) };
-            SaveOrdersAndPositions(loggedUser.Id, now, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } }, 
-                new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, oldTakeProfitOrder);
-
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { asset });
         }
 
@@ -442,69 +459,72 @@ namespace Auctus.Business.Trade
             if (!asset.ShortSellingEnabled && type == OrderType.Sell)
                 throw new BusinessException("Invalid short operation for this market.");
 
-            var usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
-
-            var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(assetId);
-            if (currentValue == null)
-                throw new InvalidOperationException($"Asset {assetId} value cannot be found.");
-
-            var consideredPrice = type == OrderType.Buy ? currentValue.AskValue : currentValue.BidValue;
-            if (!price.HasValue || IsOrderPriceLowerThanMarket(type, price.Value, consideredPrice))
-                price = consideredPrice;
-
-            if (usdPosition.TotalDollar < (quantity * price))
-                throw new BusinessException("Insufficient funds.");
-
-            if (type == OrderType.Sell)
+            Order order;
+            lock (GetLock())
             {
-                var forcedStopLoss = price.Value * 2;
-                if (!stopLoss.HasValue)
-                    stopLoss = forcedStopLoss;
-                else if (stopLoss.Value > forcedStopLoss)
-                    throw new BusinessException($"The maximum stop loss value is {Util.Util.GetFormattedValue(forcedStopLoss)}.");
-            }
+                var usdPosition = AdvisorProfitBusiness.ListAdvisorProfit(loggedUser.Id, new List<int>() { AssetUSDId }).First();
 
-            if (stopLoss.HasValue)
-            {
-                if (price == consideredPrice && ((type == OrderType.Buy && currentValue.BidValue <= stopLoss.Value) || (type == OrderType.Sell && currentValue.AskValue >= stopLoss.Value)))
-                    throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(type == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
-                else if ((type == OrderType.Buy && price <= stopLoss.Value) || (type == OrderType.Sell && price >= stopLoss.Value))
-                    throw new BusinessException($"Invalid stop loss value for the price {Util.Util.GetFormattedValue(price.Value)}.");
-            }
-            if (takeProfit.HasValue)
-            {
-                if (price == consideredPrice && ((type == OrderType.Buy && currentValue.BidValue >= takeProfit.Value) || (type == OrderType.Sell && currentValue.AskValue <= takeProfit.Value)))
-                    throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(type == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
-                else if ((type == OrderType.Buy && price >= takeProfit.Value) || (type == OrderType.Sell && price <= takeProfit.Value))
-                    throw new BusinessException($"Invalid take profit value for the price {Util.Util.GetFormattedValue(price.Value)}.");
-            }
+                var currentValue = AssetCurrentValueBusiness.GetRealCurrentValue(assetId);
+                if (currentValue == null)
+                    throw new InvalidOperationException($"Asset {assetId} value cannot be found.");
 
-            OrderStatusType orderStatusType;
-            OrderActionType orderActionType;
-            double? fee = null;
-            var orderQuantity = quantity;
-            if (price == consideredPrice)
-            {
-                orderStatusType = OrderStatusType.Executed;
-                orderActionType = OrderActionType.Market;
-                fee = quantity * price * OrderFee;
-                orderQuantity = quantity * (1 - OrderFee);
-            }
-            else
-            {
-                orderStatusType = OrderStatusType.Open;
-                orderActionType = OrderActionType.Limit;
-            }
-            var creationDate = Data.GetDateTimeNow();
-            SetUsdPosition(usdPosition, orderStatusType, quantity * price.Value, creationDate);
-            var order = CreateNewOrder(loggedUser.Id, assetId, type, orderStatusType, orderActionType, orderQuantity, price.Value, creationDate, takeProfit, stopLoss, null, null, null, orderQuantity, null, fee, null);
-            var takeProfitOrder = CreateTakeProfitOrderIfNecessary(loggedUser.Id, assetId, order, creationDate);
+                var consideredPrice = type == OrderType.Buy ? currentValue.AskValue : currentValue.BidValue;
+                if (!price.HasValue || IsOrderPriceLowerThanMarket(type, price.Value, consideredPrice))
+                    price = consideredPrice;
 
-            var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
-            orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, takeProfitOrder) };
-            SaveOrdersAndPositions(loggedUser.Id, creationDate, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } }, 
-                new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, null);
+                if (usdPosition.TotalDollar < (quantity * price))
+                    throw new BusinessException("Insufficient funds.");
 
+                if (type == OrderType.Sell)
+                {
+                    var forcedStopLoss = price.Value * 2;
+                    if (!stopLoss.HasValue)
+                        stopLoss = forcedStopLoss;
+                    else if (stopLoss.Value > forcedStopLoss)
+                        throw new BusinessException($"The maximum stop loss value is {Util.Util.GetFormattedValue(forcedStopLoss)}.");
+                }
+
+                if (stopLoss.HasValue)
+                {
+                    if (price == consideredPrice && ((type == OrderType.Buy && currentValue.BidValue <= stopLoss.Value) || (type == OrderType.Sell && currentValue.AskValue >= stopLoss.Value)))
+                        throw new BusinessException($"Invalid stop loss value for current price {Util.Util.GetFormattedValue(type == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
+                    else if ((type == OrderType.Buy && price <= stopLoss.Value) || (type == OrderType.Sell && price >= stopLoss.Value))
+                        throw new BusinessException($"Invalid stop loss value for the price {Util.Util.GetFormattedValue(price.Value)}.");
+                }
+                if (takeProfit.HasValue)
+                {
+                    if (price == consideredPrice && ((type == OrderType.Buy && currentValue.BidValue >= takeProfit.Value) || (type == OrderType.Sell && currentValue.AskValue <= takeProfit.Value)))
+                        throw new BusinessException($"Invalid take profit value for current price {Util.Util.GetFormattedValue(type == OrderType.Buy ? currentValue.BidValue : currentValue.AskValue)}.");
+                    else if ((type == OrderType.Buy && price >= takeProfit.Value) || (type == OrderType.Sell && price <= takeProfit.Value))
+                        throw new BusinessException($"Invalid take profit value for the price {Util.Util.GetFormattedValue(price.Value)}.");
+                }
+
+                OrderStatusType orderStatusType;
+                OrderActionType orderActionType;
+                double? fee = null;
+                var orderQuantity = quantity;
+                if (price == consideredPrice)
+                {
+                    orderStatusType = OrderStatusType.Executed;
+                    orderActionType = OrderActionType.Market;
+                    fee = quantity * price * OrderFee;
+                    orderQuantity = quantity * (1 - OrderFee);
+                }
+                else
+                {
+                    orderStatusType = OrderStatusType.Open;
+                    orderActionType = OrderActionType.Limit;
+                }
+                var creationDate = Data.GetDateTimeNow();
+                SetUsdPosition(usdPosition, orderStatusType, quantity * price.Value, creationDate);
+                order = CreateNewOrder(loggedUser.Id, assetId, type, orderStatusType, orderActionType, orderQuantity, price.Value, creationDate, takeProfit, stopLoss, null, null, null, orderQuantity, null, fee, null);
+                var takeProfitOrder = CreateTakeProfitOrderIfNecessary(loggedUser.Id, assetId, order, creationDate);
+
+                var orderData = new Dictionary<int, List<Tuple<Order, Order>>>();
+                orderData[order.AssetId] = new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(order, takeProfitOrder) };
+                SaveOrdersAndPositions(loggedUser.Id, creationDate, orderData, usdPosition, new Dictionary<int, double> { { order.AssetId, currentValue.BidValue } },
+                    new Dictionary<int, double> { { order.AssetId, currentValue.AskValue } }, null);
+            }
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { asset });
         }
 

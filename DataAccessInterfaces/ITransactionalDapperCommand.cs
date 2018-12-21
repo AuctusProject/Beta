@@ -9,8 +9,8 @@ namespace Auctus.DataAccessInterfaces
     {
         void SetTransactionOnData(ITransactionData transactionData);
 
-        void Delete<T>(T obj, string tableName = null);
-        void Update<T>(T obj, string tableName = null);
+        int Delete<T>(T obj, string tableName = null);
+        int Update<T>(T obj, string tableName = null);
         void Insert<T>(T obj, string tableName = null);
         void Commit();
         int Execute(string sql, dynamic param, int commandTimeout = 30);

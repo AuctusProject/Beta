@@ -30,14 +30,14 @@ namespace Auctus.DataAccess.Core
             transactionData.SetTransaction(Connection, DbTransaction);
         }
 
-        public new void Delete<T>(T obj, string tableName = null)
+        public new int Delete<T>(T obj, string tableName = null)
         {
-            base.Delete<T>(obj, GetTableName<T>(tableName));
+            return base.Delete<T>(obj, GetTableName<T>(tableName), true);
         }
 
-        public new void Update<T>(T obj, string tableName = null)
+        public new int Update<T>(T obj, string tableName = null)
         {
-            base.Update<T>(obj, GetTableName<T>(tableName));
+            return base.Update<T>(obj, GetTableName<T>(tableName), true);
         }
 
         public new void Insert<T>(T obj, string tableName = null)

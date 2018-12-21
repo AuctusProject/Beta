@@ -34,14 +34,14 @@ namespace Auctus.DataAccessMock
             throw new NotImplementedException();
         }
 
-        public new void Delete<T>(T obj, string tableName = null)
+        public new int Delete<T>(T obj, string tableName = null)
         {
-            GetData(obj).Delete(obj);
+            return GetData(obj).Delete(obj);
         }
 
-        public new void Update<T>(T obj, string tableName = null)
+        public new int Update<T>(T obj, string tableName = null)
         {
-            GetData(obj).Update(obj);
+            return GetData(obj).Update(obj);
         }
 
         public new void Insert<T>(T obj, string tableName = null)
