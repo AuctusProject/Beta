@@ -209,9 +209,9 @@ namespace Auctus.Business
 
         protected void SetUserToCache(User user)
         {
-            if (user != null && !string.IsNullOrEmpty(LoggedEmail))
+            if (user != null && !string.IsNullOrEmpty(user.Email))
             {
-                var cacheKey = GetUserCacheKey(LoggedEmail);
+                var cacheKey = GetUserCacheKey(user.Email);
                 if (!UserBusiness.IsValidAdvisor(user))
                     MemoryCache.Set<User>(cacheKey, user);
                 else
