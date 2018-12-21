@@ -823,13 +823,19 @@ namespace Auctus.Business.Trade
         {
             var asset = assets.FirstOrDefault(c => c.Id == order.AssetId);
             var openPrice = GetOpenPrice(order);
-            double? profitValue = null, profitWithoutFeeValue = null;
-            var totalInvested = order.Price * (order.OrderStatusType == OrderStatusType.Close ? order.Quantity : order.RemainingQuantity) + order.Fee ?? 0;
+            double? profitValue = null, profitWithoutFeeValue = null, totalInvested = null;            
+
             if (order.OrderStatusType == OrderStatusType.Close)
             {
+                var openFee = openPrice * order.Quantity * OrderFee / (1 - OrderFee);
+                totalInvested = (openPrice.Value * order.Quantity + openFee.Value);
                 var expectedClosedValue = GetExpectedCloseValue(order.OrderType.GetOppositeType(), openPrice, order.Price, order.Quantity);
                 profitValue = GetProfitValue(expectedClosedValue - order.Fee.Value, openPrice.Value, order.Quantity, OrderFee) * totalInvested;
                 profitWithoutFeeValue = order.ProfitWithoutFee.Value * openPrice * order.Quantity / (1 - OrderFee);
+            }
+            else
+            {
+                totalInvested = order.Price * order.RemainingQuantity + (order.Fee ?? 0);
             }
             return new OrderResponse()
             {
@@ -846,7 +852,7 @@ namespace Auctus.Business.Trade
                 RemainingQuantity = order.RemainingQuantity,
                 OpenDate = order.OpenDate,
                 OpenPrice = openPrice,
-                Invested = totalInvested,
+                Invested = totalInvested ?? 0,
                 Status = order.Status,
                 StatusDate = order.StatusDate,
                 StopLoss = order.StopLoss,
