@@ -82,7 +82,7 @@ export class TickerPercentageFieldComponent implements OnInit, OnDestroy, OnChan
       }
       if (this.priceValue && this.quantityValue) {
         if (this.baseValue && this.quoteValue) {
-          this.value = Util.GetProfit(this.orderType, this.priceValue, this.feeValue, this.quantityValue, this.quantityValue, this.getConsideredPrice(ticker));
+          this.value = Util.GetProfit(this.orderType, this.priceValue, this.feeValue, this.quantityValue, this.quantityValue, (this.baseValue * this.quoteValue));
         }
       } else if (this.baseValue && this.quoteValue && (this.baseVariation || this.baseVariation == 0) 
         && (this.quoteVariation || this.quoteVariation == 0)) {
