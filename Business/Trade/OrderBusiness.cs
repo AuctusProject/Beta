@@ -615,7 +615,7 @@ namespace Auctus.Business.Trade
             if (order.TakeProfit.HasValue)
             {
                 var profitOrderType = order.OrderType.GetOppositeType();
-                return CreateNewOrder(loggedUserId, assetId, profitOrderType, OrderStatusType.Open, OrderActionType.Automated, order.Quantity, order.TakeProfit.Value, creationDate, null, null, null, null, null, order.Quantity, null, null, null);
+                return CreateNewOrder(loggedUserId, assetId, profitOrderType, OrderStatusType.Open, OrderActionType.Automated, order.RemainingQuantity, order.TakeProfit.Value, creationDate, null, null, null, null, null, order.RemainingQuantity, null, null, null);
             }
             return null;
         }
