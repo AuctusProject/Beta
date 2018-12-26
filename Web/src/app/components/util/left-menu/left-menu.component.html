@@ -10,7 +10,7 @@
       <menu-item link="/trading-contest" name="Trading Contest" icon="award"></menu-item>
       <menu-item externalLink="https://blog.auctus.org/auctus-trading-faq-243735fff735" name="FAQ" icon="question-circle"></menu-item>
       <menu-item externalLink="https://discord.gg/jz7WgJR" name="Discord" [icon]="['fab','discord']"></menu-item>
-      <menu-item *ngIf="isLogged()" (click)="logout()" noLink="'true'" name="LOGOUT" icon="sign-out-alt"></menu-item>
+      <menu-item *ngIf="isLogged()" (click)="logout()" signout="'true'" name="LOGOUT" icon="sign-out-alt"></menu-item>
     </div> 
   </div>
 </div>
