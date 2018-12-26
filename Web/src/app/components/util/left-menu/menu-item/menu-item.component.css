@@ -49,6 +49,11 @@ fa-icon {
     width: 16px;
 }
 
-.menu-item.larger {
+.menu-item.signout {
     height: 84px;
+    border-bottom: 0;
+}
+
+.menu-item.signout:hover {
+    background-color: unset !important;
 }

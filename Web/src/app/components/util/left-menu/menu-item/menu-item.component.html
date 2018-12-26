@@ -1,4 +1,4 @@
-<a *ngIf="!externalLink && !disabled && !noLink" class="menu-item" [routerLink]="link" routerLinkActive="active" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+<a *ngIf="!externalLink && !disabled && !signout" class="menu-item" [routerLink]="link" routerLinkActive="active" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
   <ng-container 
     *ngTemplateOutlet="itemTemplate">
   </ng-container>
@@ -13,14 +13,14 @@
     *ngTemplateOutlet="itemTemplate">
   </ng-container>
 </a>
-<a *ngIf="noLink" class="menu-item larger" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+<a *ngIf="signout" class="menu-item signout" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
   <ng-container 
     *ngTemplateOutlet="itemTemplate">
   </ng-container>
 </a>
 
 <ng-template #itemTemplate>
-  <div *ngIf="!noLink" class="active-indicator">
+  <div *ngIf="!signout" class="active-indicator">
     <div class="triangle"></div>
   </div>
   <fa-icon [icon]="icon"></fa-icon>
