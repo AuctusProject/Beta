@@ -7,4 +7,8 @@
         <ng-template mat-tab-label>OPEN ORDERS</ng-template>
         <orders *ngIf="!!asset" #Order [userId]="loginData.id" [assetId]="asset.assetId" [assetCode]="asset.code" [isOwner]="true"></orders>
     </mat-tab>
+    <mat-tab >  
+        <ng-template mat-tab-label>HISTORY</ng-template>
+        <history #History *ngIf="!!asset" [userId]="loginData.id" [assetId]="asset.assetId"></history> 
+    </mat-tab>
 </mat-tab-group>

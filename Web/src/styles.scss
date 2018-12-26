@@ -972,13 +972,13 @@ input[type="number"] {
   letter-spacing: 0.6;
 }
 
-portfolio .header, open-positions .header , orders .header {
+portfolio .header, open-positions .header, orders .header, history .header {
   background: #1f1f1f;
   height: 55px;    
-  padding: 0 25px;
+  padding: 0 15px;
 }
 
-portfolio button, open-positions button, orders button {
+portfolio button, open-positions button, orders button, history button {
   background-color: #999999;
   border: 0;
   height: 23px;
@@ -991,6 +991,21 @@ portfolio button, open-positions button, orders button {
   text-transform: uppercase;
   cursor: pointer;
 }
+
+portfolio .boxes > div, open-positions  .boxes > div, orders  .boxes > div, history .boxes > div {
+  background: #2f2f2f;
+  padding: 3px;
+  margin-right: 7px;
+  width: 88px;
+  border-radius: 4px;
+  place-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 40px;
+  font-size: 14px;
+}
+
 .mat-sort-header-button{
   text-transform: unset;
 }

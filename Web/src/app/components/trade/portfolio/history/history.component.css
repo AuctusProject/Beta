@@ -16,10 +16,11 @@
 .returns{
     padding: 3px;
     padding-left: 7px;
+    font-size: 14px;
     border-left: solid 1px #252525;
 }
 
-.trades > div{
+.trades > div {
     padding: 10px 15px;
     font-size: 12px;
     color: #737373;
@@ -35,8 +36,8 @@ table, th{
     text-align: center !important ;
 }
 
-.asset{
-    font-size: 14px;
+.asset {
+    font-size: 13px;
     font-weight: 500;
     display: inline-block;
     margin: 0 5px 2px 5px;
@@ -122,9 +123,6 @@ table, th{
 }
 
 @media(max-width:599px){
-    
-   
-
     .cdk-column-asset{
         width: 25% !important;
     }

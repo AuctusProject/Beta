@@ -6,9 +6,10 @@ import { AdvisorDataService } from '../../../services/advisor-data.service';
 import { LoginResponse } from '../../../model/account/loginResponse';
 import { AccountService } from '../../../services/account.service';
 import { Subscription } from 'rxjs';
-import { AssetPositionResponse } from '../../../model/advisor/advisorResponse';
+import { AssetPositionResponse, PositionResponse } from '../../../model/advisor/advisorResponse';
 import { EventsService } from 'angular-event-service/dist';
 import { MatTabGroup } from '@angular/material';
+import { HistoryComponent } from '../portfolio/history/history.component';
 
 @Component({
   selector: 'order-position-tab',
@@ -20,10 +21,12 @@ export class OrderPositionTabComponent implements OnInit, OnDestroy {
   @Input() asset: AssetResponse;
   @ViewChild("Position") Position: OpenPositionsComponent;
   @ViewChild("Order") Order: OrdersComponent;
+  @ViewChild("History") History: HistoryComponent;
   @ViewChild("OrdersTabs") OrdersTabs: MatTabGroup;
 
   loginData: LoginResponse;
   openPositionResponseSubscription: Subscription;
+  closedPositionSubscription: Subscription; 
   initialized: boolean = false;
 
   constructor(private advisorDataService: AdvisorDataService,
@@ -46,6 +49,23 @@ export class OrderPositionTabComponent implements OnInit, OnDestroy {
           this.Position.setDataSource(ret ? [ret] : []);
         }
       );
+      this.closedPositionSubscription = this.advisorDataService.closePosition(this.asset.assetId).subscribe(
+        ret => {
+          let response = new PositionResponse();
+          response.averagePrice = ret.positionResponse.averagePrice;
+          response.totalInvested = ret.positionResponse.totalInvested;
+          response.totalProfit = ret.positionResponse.totalProfit;
+          response.totalVirtual = ret.positionResponse.totalVirtual;
+          response.totalQuantity = ret.positionResponse.totalQuantity;
+          response.averageReturn = ret.positionResponse.averageReturn;
+          response.successRate = ret.positionResponse.successRate;
+          response.orderCount = ret.positionResponse.orderCount;
+          response.successCount = ret.positionResponse.successCount;
+          response.totalFee = ret.positionResponse.totalFee;
+          response.averageTradeMinutes = ret.positionResponse.averageTradeMinutes;
+          response.type = ret.positionResponse.type;
+          this.History.setPosition(response);
+        });
       this.initialized = true;
     }
   }
@@ -66,6 +86,7 @@ export class OrderPositionTabComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     if (this.openPositionResponseSubscription) this.openPositionResponseSubscription.unsubscribe();
+    if (this.closedPositionSubscription) this.closedPositionSubscription.unsubscribe();
     if (this.advisorDataService) this.advisorDataService.destroy();
     this.initialized = false;
   }

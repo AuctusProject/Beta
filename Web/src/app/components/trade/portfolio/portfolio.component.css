@@ -86,19 +86,6 @@ mat-tab-group{
     overflow: auto
 }
 
-:host ::ng-deep .boxes > div{
-    background: #2f2f2f;
-    padding: 3px;
-    margin-right: 7px;
-    width: 88px;
-    border-radius: 4px;
-    place-content: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 40px;
-}
-
 @media(max-width:600px){
     :host ::ng-deep .mat-tab-label-container fa-icon{
         display: none;

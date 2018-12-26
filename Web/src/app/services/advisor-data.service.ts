@@ -12,7 +12,7 @@ import { Util } from "../util/util";
 export class AdvisorDataService {
   private advisorData:  AdvisorResponse;
   private advisorListData:  AdvisorResponse[];
-  private closePosition: { [advisorId: number]: PositionResponse; } = {};
+  private closePositionResponse: { [advisorId: number]: PositionResponse; } = {};
   private closeAssetPosition: { [advisorId: number]: AssetPositionResponse[] } = {};
   private openAssetsId: number[];
   private assetData: { [assetId: number]: {name, code}; } = {};
@@ -22,6 +22,7 @@ export class AdvisorDataService {
   private advisorResponseSubject = new Subject<AdvisorResponse>(); 
   private openPositionResponseSubject = new Subject<PositionResponse>(); 
   private closePositionResponseSubject = new Subject<PositionResponse>(); 
+  private closePositionAssetResponseSubject: { [assetId: number]: Subject<AssetPositionResponse>; } = {};
   private openPositionAssetResponseSubject: { [assetId: number]: Subject<AssetPositionResponse>; } = {};
   private allAssetsOpenPositionAssetResponseSubject = new Subject<AssetPositionResponse[]>();
   private allAssetsClosePositionAssetResponseSubject = new Subject<AssetPositionResponse[]>();
@@ -113,6 +114,13 @@ export class AdvisorDataService {
     return this.closePositionResponseSubject.asObservable();
   }
 
+  public closePosition(assetId: number) : Observable<AssetPositionResponse> {
+    if (!this.closePositionAssetResponseSubject[assetId]) {
+      this.closePositionAssetResponseSubject[assetId] = new Subject<AssetPositionResponse>();
+    } 
+    return this.closePositionAssetResponseSubject[assetId].asObservable();
+  }
+
   public openPosition(assetId: number) : Observable<AssetPositionResponse> {
     if (!this.openPositionAssetResponseSubject[assetId]) {
       this.openPositionAssetResponseSubject[assetId] = new Subject<AssetPositionResponse>();
@@ -184,16 +192,16 @@ export class AdvisorDataService {
   }
 
   private setClosePositions(response: AdvisorResponse) : void {
-    this.closePosition[response.userId] = new PositionResponse();
-    this.closePosition[response.userId].orderCount = 0;
-    this.closePosition[response.userId].successCount = 0;
-    this.closePosition[response.userId].totalInvested = 0;
-    this.closePosition[response.userId].totalProfit = 0;
-    this.closePosition[response.userId].totalVirtual = 0;
-    this.closePosition[response.userId].totalQuantity = 0;
-    this.closePosition[response.userId].successRate = 0;
-    this.closePosition[response.userId].averagePrice = 0;
-    this.closePosition[response.userId].totalFee = 0;
+    this.closePositionResponse[response.userId] = new PositionResponse();
+    this.closePositionResponse[response.userId].orderCount = 0;
+    this.closePositionResponse[response.userId].successCount = 0;
+    this.closePositionResponse[response.userId].totalInvested = 0;
+    this.closePositionResponse[response.userId].totalProfit = 0;
+    this.closePositionResponse[response.userId].totalVirtual = 0;
+    this.closePositionResponse[response.userId].totalQuantity = 0;
+    this.closePositionResponse[response.userId].successRate = 0;
+    this.closePositionResponse[response.userId].averagePrice = 0;
+    this.closePositionResponse[response.userId].totalFee = 0;
     this.closeAssetPosition[response.userId] = [];
     let totalTradeMinutes = 0;
     let totalAssetTradeMinutes: { [assetId: number]: number } = {};
@@ -229,24 +237,24 @@ export class AdvisorDataService {
         closedAssetData[response.closedPositions[i].assetId].positionResponse.totalVirtual += response.closedPositions[i].totalVirtual;
         closedAssetData[response.closedPositions[i].assetId].positionResponse.totalFee += response.closedPositions[i].totalFee;
 
-        this.closePosition[response.userId].orderCount += response.closedPositions[i].orderCount;
-        this.closePosition[response.userId].successCount += response.closedPositions[i].successCount;
-        this.closePosition[response.userId].totalInvested += response.closedPositions[i].totalInvested;
-        this.closePosition[response.userId].totalProfit += response.closedPositions[i].totalProfit;
-        this.closePosition[response.userId].totalQuantity += response.closedPositions[i].totalQuantity;
-        this.closePosition[response.userId].totalVirtual += response.closedPositions[i].totalVirtual;
-        this.closePosition[response.userId].totalFee += response.closedPositions[i].totalFee;
+        this.closePositionResponse[response.userId].orderCount += response.closedPositions[i].orderCount;
+        this.closePositionResponse[response.userId].successCount += response.closedPositions[i].successCount;
+        this.closePositionResponse[response.userId].totalInvested += response.closedPositions[i].totalInvested;
+        this.closePositionResponse[response.userId].totalProfit += response.closedPositions[i].totalProfit;
+        this.closePositionResponse[response.userId].totalQuantity += response.closedPositions[i].totalQuantity;
+        this.closePositionResponse[response.userId].totalVirtual += response.closedPositions[i].totalVirtual;
+        this.closePositionResponse[response.userId].totalFee += response.closedPositions[i].totalFee;
         if (response.closedPositions[i].summedTradeMinutes) {
           totalTradeMinutes += response.closedPositions[i].summedTradeMinutes;
           totalAssetTradeMinutes[response.closedPositions[i].assetId] += response.closedPositions[i].summedTradeMinutes;
         }
       }
       if (response.closedPositions.length > 0) {
-        this.closePosition[response.userId].successRate = this.closePosition[response.userId].successCount / this.closePosition[response.userId].orderCount;
-        this.closePosition[response.userId].averageReturn = this.closePosition[response.userId].totalProfit / this.closePosition[response.userId].totalInvested;
-        this.closePosition[response.userId].averagePrice = (this.closePosition[response.userId].totalInvested - this.closePosition[response.userId].totalFee) / this.closePosition[response.userId].totalQuantity;
+        this.closePositionResponse[response.userId].successRate = this.closePositionResponse[response.userId].successCount / this.closePositionResponse[response.userId].orderCount;
+        this.closePositionResponse[response.userId].averageReturn = this.closePositionResponse[response.userId].totalProfit / this.closePositionResponse[response.userId].totalInvested;
+        this.closePositionResponse[response.userId].averagePrice = (this.closePositionResponse[response.userId].totalInvested - this.closePositionResponse[response.userId].totalFee) / this.closePositionResponse[response.userId].totalQuantity;
         if (totalTradeMinutes > 0) {
-          this.closePosition[response.userId].averageTradeMinutes = totalTradeMinutes / this.closePosition[response.userId].orderCount;
+          this.closePositionResponse[response.userId].averageTradeMinutes = totalTradeMinutes / this.closePositionResponse[response.userId].orderCount;
         } 
       }
       for (let i = 0; i < closedAssetsId.length; ++i) {
@@ -257,10 +265,14 @@ export class AdvisorDataService {
           closedAssetData[closedAssetsId[i]].positionResponse.averageTradeMinutes = totalAssetTradeMinutes[closedAssetsId[i]] / closedAssetData[closedAssetsId[i]].positionResponse.orderCount;
         }
         this.closeAssetPosition[response.userId].push(closedAssetData[closedAssetsId[i]]);
+        if (!this.closePositionAssetResponseSubject[closedAssetsId[i]]) {
+          this.closePositionAssetResponseSubject[closedAssetsId[i]] = new Subject<AssetPositionResponse>();
+        } 
+        this.closePositionAssetResponseSubject[closedAssetsId[i]].next(closedAssetData[closedAssetsId[i]]);
       }
     }
     if (!this.advisorListData) {
-      this.closePositionResponseSubject.next(this.closePosition[response.userId]);
+      this.closePositionResponseSubject.next(this.closePositionResponse[response.userId]);
       this.allAssetsClosePositionAssetResponseSubject.next(this.closeAssetPosition[response.userId]);
     }
   }
@@ -312,8 +324,8 @@ export class AdvisorDataService {
     this.setOpenPositionAssetResponse(response);
     this.setOpenPositions(response.userId, openPositionResponse);
 
-    let totalProfit = openPositionResponse.totalProfit + this.closePosition[response.userId].totalProfit;
-    let totalInvested = openPositionResponse.totalInvested + this.closePosition[response.userId].totalInvested;
+    let totalProfit = openPositionResponse.totalProfit + this.closePositionResponse[response.userId].totalProfit;
+    let totalInvested = openPositionResponse.totalInvested + this.closePositionResponse[response.userId].totalInvested;
     if (totalInvested > 0) {
       response.averageReturn = totalProfit / totalInvested;
     }

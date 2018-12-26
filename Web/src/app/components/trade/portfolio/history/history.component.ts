@@ -18,7 +18,7 @@ import { ValueDisplayPipe } from '../../../../util/value-display.pipe';
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css']
 })
-export class HistoryComponent implements OnInit {
+export class HistoryComponent implements OnInit, OnChanges {
   displayedColumns: string[] = [
     "asset",
     "units",
@@ -38,21 +38,46 @@ export class HistoryComponent implements OnInit {
   worstTrade: number = 0;
   
   @Input() userId: number;
+  @Input() assetId?: number = null;
+
   positionResponse : PositionResponse;
+
   constructor(public advisorService: AdvisorService, 
     public notificationsService: NotificationsService,
     public navigationService: NavigationService) { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes.assetId && changes.assetId.previousValue != changes.assetId.currentValue) {  
+      this.positionResponse = new PositionResponse();
+      this.positionResponse.averagePrice = 0;
+      this.positionResponse.totalInvested = 0;
+      this.positionResponse.totalProfit = 0;
+      this.positionResponse.totalVirtual = 0;
+      this.positionResponse.totalQuantity = 0;
+      this.positionResponse.averageReturn = 0;
+      this.positionResponse.successRate = 0;
+      this.positionResponse.orderCount = 0;
+      this.positionResponse.successCount = 0;
+      this.positionResponse.totalFee = 0;
+      this.positionResponse.averageTradeMinutes = null;
+      this.positionResponse.type = null;
+      this.refresh();
+    }
+  }
 
   ngOnInit() {
     this.refresh();
   }
   
   setPosition(positionResponse: PositionResponse) {
+    if (this.assetId && this.positionResponse && positionResponse && this.positionResponse.orderCount != positionResponse.orderCount) {
+      this.refresh();
+    }
     this.positionResponse = positionResponse;
   }
 
   refresh() {
-    this.advisorService.getAdvisorOrders(this.userId, [Constants.OrderStatus.Close]).subscribe(result => {
+    this.advisorService.getAdvisorOrders(this.userId, [Constants.OrderStatus.Close], this.assetId).subscribe(result => {
       this.dataSource.data = result;
       if (!this.dataSource.sort) {
         this.dataSource.sort = this.sort;
@@ -62,7 +87,9 @@ export class HistoryComponent implements OnInit {
   }
 
   onAssetClick(assetId: number) {
-    this.navigationService.goToAssetDetails(assetId);
+    if (!this.assetId) {
+      this.navigationService.goToAssetDetails(assetId);
+    }
   }
 
   getAssetImgUrl(id: number) {

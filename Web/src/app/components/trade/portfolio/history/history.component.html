@@ -13,7 +13,7 @@
         <percentage-display [value]="positionResponse.averageReturn"></percentage-display>
         <span>Avg. Return</span>
       </div>
-      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
+      <div *ngIf="!assetId" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2px">
         <div>{{positionResponse.totalFee | valueDisplay}}</div>
         <span>Total Fees</span>
       </div>
