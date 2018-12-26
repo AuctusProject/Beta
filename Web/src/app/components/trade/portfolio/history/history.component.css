@@ -135,3 +135,43 @@ table, th{
         width: 25% !important;
     }
 }
+
+.search-coin {
+    text-align: left !important;
+    width: 68px !important;
+    font-size: 11px !important;
+    color: white !important;
+    letter-spacing: 0.7px;
+    margin-left: 6px;
+}
+
+:host ::ng-deep .mat-form-field-label-wrapper {
+    display: none;
+}
+
+:host ::ng-deep .mat-select-value-text {
+    color: white;
+    font-weight: 300;
+    display: flex;
+}
+
+:host ::ng-deep .mat-select-arrow-wrapper .mat-select-arrow {
+    color: white;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: white;
+}
+
+:host ::ng-deep  .mat-select-placeholder {
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+    color: #4c8ffc;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+    background-color: #4c8ffc;
+}

@@ -99,6 +99,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       this.allClosedPositionResponseSubscription = this.advisorDataService.listAllClosePositions().subscribe(
         ret => {
           this.Performance.setAllClosedPosition(ret);
+          this.History.setAssetPositions(ret);
         });
 
       this.eventsService.on("onUpdateAdvisor", () => this.refreshAll());

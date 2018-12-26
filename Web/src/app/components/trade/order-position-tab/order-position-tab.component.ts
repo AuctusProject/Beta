@@ -51,20 +51,7 @@ export class OrderPositionTabComponent implements OnInit, OnDestroy {
       );
       this.closedPositionSubscription = this.advisorDataService.closePosition(this.asset.assetId).subscribe(
         ret => {
-          let response = new PositionResponse();
-          response.averagePrice = ret.positionResponse.averagePrice;
-          response.totalInvested = ret.positionResponse.totalInvested;
-          response.totalProfit = ret.positionResponse.totalProfit;
-          response.totalVirtual = ret.positionResponse.totalVirtual;
-          response.totalQuantity = ret.positionResponse.totalQuantity;
-          response.averageReturn = ret.positionResponse.averageReturn;
-          response.successRate = ret.positionResponse.successRate;
-          response.orderCount = ret.positionResponse.orderCount;
-          response.successCount = ret.positionResponse.successCount;
-          response.totalFee = ret.positionResponse.totalFee;
-          response.averageTradeMinutes = ret.positionResponse.averageTradeMinutes;
-          response.type = ret.positionResponse.type;
-          this.History.setPosition(response);
+          this.History.setPosition(ret.positionResponse);
         });
       this.initialized = true;
     }

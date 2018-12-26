@@ -42,7 +42,14 @@
 <div class="table-container">
     <table mat-table [dataSource]="dataSource" class="fixed-header" matSort>
       <ng-container matColumnDef="asset">
-        <th  mat-header-cell *matHeaderCellDef mat-sort-header="assetCode"> ACTIONS({{dataSource.data.length}}) </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="assetCode">ACTIONS({{dataSource.data.length}}) 
+          <mat-form-field (click)="onClickSearchCoin($event)" *ngIf="!assetId && assetPositionsResponse && assetPositionsResponse.length > 0" class="search-coin">
+            <mat-select placeholder="Filter" [(value)]="filteredAssetId" (selectionChange)="onFilterCoin($event.value)">
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let asset of assetPositionsResponse" [value]="asset.assetId">{{asset.assetCode}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </th>
         <td mat-cell *matCellDef="let order" (click)="onAssetClick(order.assetId)" class="pointer">
           <div fxLayout="row" fxLayoutAlign="start center">
             <div><img class="asset-image" [src]="getAssetImgUrl(order.assetId)" onerror="this.style.display='none'" onload="this.style.display='unset'" /></div>

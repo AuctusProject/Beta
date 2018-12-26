@@ -5,7 +5,7 @@ import { CONFIG } from "../../../../services/config.service";
 import { Util } from "../../../../util/util";
 import { Constants } from "../../../../util/constants";
 import { AdvisorService } from "../../../../services/advisor.service";
-import { AdvisorResponse, PositionResponse } from '../../../../model/advisor/advisorResponse';
+import { AdvisorResponse, PositionResponse, AssetPositionResponse } from '../../../../model/advisor/advisorResponse';
 import { Moment } from 'moment';
 import { MomentModule } from 'ngx-moment';
 import { MatSort, MatTableDataSource } from '@angular/material';
@@ -40,7 +40,12 @@ export class HistoryComponent implements OnInit, OnChanges {
   @Input() userId: number;
   @Input() assetId?: number = null;
 
-  positionResponse : PositionResponse;
+  filteredAssetId: number;
+  positionResponse: PositionResponse;
+  
+  allPositionsResponse: PositionResponse;
+  assetPositionsResponse: AssetPositionResponse[];
+  orders: OrderResponse[];
 
   constructor(public advisorService: AdvisorService, 
     public notificationsService: NotificationsService,
@@ -73,23 +78,61 @@ export class HistoryComponent implements OnInit, OnChanges {
     if (this.assetId && this.positionResponse && positionResponse && this.positionResponse.orderCount != positionResponse.orderCount) {
       this.refresh();
     }
+    this.allPositionsResponse = positionResponse;
     this.positionResponse = positionResponse;
+  }
+
+  setAssetPositions(assetPositionResponse: AssetPositionResponse[]) {
+    this.assetPositionsResponse = assetPositionResponse;
+  }
+
+  onFilterCoin(assetId: any) {
+    if (assetId) {
+      assetId = parseInt(assetId);
+      for (let i = 0; i < this.assetPositionsResponse.length; ++i) {
+        if (this.assetPositionsResponse[i].assetId == assetId) {
+          this.setFilteredAsset(this.assetPositionsResponse[i]);
+          break;
+        }
+      }
+    } else {
+      this.setFilteredAsset(null);
+    }
+  }
+
+  setFilteredAsset(position: AssetPositionResponse) {
+    if (position) {
+      this.positionResponse = position.positionResponse;
+      this.setDataSource(this.orders.filter(option => option.assetId == position.assetId));
+    } else {
+      this.positionResponse = this.allPositionsResponse;
+      this.setDataSource(this.orders);
+    }
   }
 
   refresh() {
     this.advisorService.getAdvisorOrders(this.userId, [Constants.OrderStatus.Close], this.assetId).subscribe(result => {
-      this.dataSource.data = result;
+      this.orders = result;
+      this.setDataSource(this.orders);
+    });
+  }
+
+  setDataSource(orders: OrderResponse[]) {
+    this.dataSource.data = orders;
       if (!this.dataSource.sort) {
         this.dataSource.sort = this.sort;
       }
-      this.setBestWorstTrade();
-    });
+      this.setBestWorstTrade(orders);
   }
 
   onAssetClick(assetId: number) {
     if (!this.assetId) {
       this.navigationService.goToAssetDetails(assetId);
     }
+  }
+
+  onClickSearchCoin(event: any) {
+    event.stopPropagation();
   }
 
   getAssetImgUrl(id: number) {
@@ -121,10 +164,10 @@ export class HistoryComponent implements OnInit, OnChanges {
     return "";
   }
 
-  private setBestWorstTrade(){
+  private setBestWorstTrade(orders: OrderResponse[]){
     let best = -10000000;
     let worst = 10000000;
-    this.dataSource.data.forEach(o => 
+    orders.forEach(o => 
       {
         if (o.profit > best) {
           best = o.profit;

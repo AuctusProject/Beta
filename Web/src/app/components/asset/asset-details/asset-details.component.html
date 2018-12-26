@@ -55,23 +55,6 @@
       <follow-unfollow [(following)]="asset.following" [numberOfFollowers]="asset.numberOfFollowers" [(id)]="asset.assetId" [type]="assetFollowUnfollowType"></follow-unfollow>
     </div>
     <div class="header-separator"></div>
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="width100 header-mobile-row">
-      <div class="market-cap" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
-        <label class="mobile-asset-header-label">Market Cap</label>
-        <span *ngIf="!asset.circulatingSupply">-</span>
-        <ticker-field *ngIf="asset.circulatingSupply" [valueMultiplier]="asset.circulatingSupply" [startValue]="asset.lastValue * asset.circulatingSupply" [pair]="asset.pair" class="mobile-value"></ticker-field>
-      </div>
-      <div class="high-low" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="1px">
-          <label class="mobile-asset-header-label">24h High / Low</label>
-          <div fxLayout="row" fxLayoutGap="3px">
-            <ticker-field tickerProperty="highPrice" [pair]="asset.pair" class="mobile-value"></ticker-field>
-            <span class="mobile-value">/</span>
-            <ticker-field tickerProperty="lowPrice" [pair]="asset.pair" class="mobile-value"></ticker-field>
-          </div>
-      </div>        
-      <recommendation-distribution [showRight]="false" [data]="asset.recommendationDistribution" class="recommendation-distribution-mobile"></recommendation-distribution>
-    </div>
-    <div class="header-separator"></div>
   </div>
   <div fxLayout="row" fxLayoutAlign="space-between center" class="header-mobile-row" fxLayoutGap="10px" *ngIf="logged" fxHide.gt-sm>
     <div matRipple class="table-button blue" (click)="onNewTrade(asset)">TRADE</div>
