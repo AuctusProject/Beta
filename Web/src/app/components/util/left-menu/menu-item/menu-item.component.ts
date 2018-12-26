@@ -11,6 +11,7 @@ export class MenuItemComponent implements OnInit {
   @Input() name: string;
   @Input() disabled: boolean = false;
   @Input() externalLink: string;
+  @Input() noLink: boolean = false;
 
   constructor() { }
 

@@ -48,3 +48,7 @@
 fa-icon {
     width: 16px;
 }
+
+.menu-item.larger {
+    height: 84px;
+}

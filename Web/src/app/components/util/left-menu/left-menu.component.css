@@ -31,12 +31,7 @@
 }
 
 .bottom-menu{
-    min-height: 260px;
+    background-color: #1c1c1c;
+    min-height: 300px;
     height: calc(100vh - 360px);
-}
-
-.signout{
-    text-align: center;
-    margin-bottom: 20px;
-    cursor: pointer;
 }
