@@ -12,6 +12,7 @@ namespace Auctus.DataAccess.Core
 {
     public abstract class ApiBase
     {
+        protected string BearerToken { get; set; }
         protected string BaseAddress { get; private set; }
 
         protected ApiBase(string baseAddress)
@@ -78,6 +79,8 @@ namespace Auctus.DataAccess.Core
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if(!String.IsNullOrWhiteSpace(BearerToken))
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
         }
     }
 }

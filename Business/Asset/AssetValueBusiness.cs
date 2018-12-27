@@ -50,16 +50,25 @@ namespace Auctus.Business.Asset
             return values;
         }
 
-        public Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> UpdateBinanceAssetsValues()
+        public void UpdateBinanceAssetsValues()
         {
             Dictionary<int, TickerDataModel> currentValues = GetAssetsCurrentValuesAndVariationFromBinanceTicker();
             
             var currentDate = Data.GetDateTimeNow();
             currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
 
-            Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result = null;
-            Parallel.Invoke(() => UpdateAssetCurrentValues(currentDate, currentValues),
-                            () => result = OrderBusiness.ClosePositionForStopLossAndTargetPriceReached(currentDate, currentValues));
+            UpdateAssetCurrentValues(currentDate, currentValues);
+        }
+
+        public Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> ExecuteOrdersWithPriceReached(BinanceTicker[] ticker)
+        {
+            Dictionary<int, TickerDataModel> currentValues = GetAssetsCurrentValuesAndVariationFromBinanceTicker(ticker);
+
+            var currentDate = Data.GetDateTimeNow();
+            currentDate = currentDate.AddMilliseconds(-currentDate.Millisecond);
+
+            Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result = 
+                OrderBusiness.ClosePositionForStopLossAndTargetPriceReached(currentDate, currentValues);
 
             return result;
         }
@@ -67,6 +76,11 @@ namespace Auctus.Business.Asset
         private Dictionary<int, TickerDataModel> GetAssetsCurrentValuesAndVariationFromBinanceTicker()
         {
             var ticker = BinanceBusiness.GetTicker24h();
+            return GetAssetsCurrentValuesAndVariationFromBinanceTicker(ticker);
+        }
+
+        private Dictionary<int, TickerDataModel> GetAssetsCurrentValuesAndVariationFromBinanceTicker(BinanceTicker[] ticker)
+        {
             var pairs = PairBusiness.ListPairs();
             var usdtPairs = pairs.Where(p => p.QuoteAssetId == AssetUSDId);
             var btcPairs = pairs.Where(p => !usdtPairs.Any(usdtPair => usdtPair.BaseAssetId == p.BaseAssetId) && p.QuoteAssetId == AssetBTCId);

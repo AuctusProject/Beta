@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessMock", "DataAccessMock\DataAccessMock.csproj", "{E57F5409-82CF-4DCB-B100-CC3DB18B6398}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketClient", "WebSocketClient\WebSocketClient.csproj", "{0ABAE679-3C1F-4B69-96A1-31B8B2FA94F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{E57F5409-82CF-4DCB-B100-CC3DB18B6398}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E57F5409-82CF-4DCB-B100-CC3DB18B6398}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E57F5409-82CF-4DCB-B100-CC3DB18B6398}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ABAE679-3C1F-4B69-96A1-31B8B2FA94F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ABAE679-3C1F-4B69-96A1-31B8B2FA94F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ABAE679-3C1F-4B69-96A1-31B8B2FA94F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ABAE679-3C1F-4B69-96A1-31B8B2FA94F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

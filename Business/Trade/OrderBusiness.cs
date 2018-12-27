@@ -17,6 +17,8 @@ namespace Auctus.Business.Trade
 {
     public class OrderBusiness : BaseBusiness<Order, IOrderData<Order>>
     {
+        private const string OPEN_ORDERS_AND_EXECUTED_WITH_STOP_LOSS_CACHE_KEY = "OpenOrdersAndExecutedWithStopLoss";
+
         public OrderBusiness(IConfigurationRoot configuration, IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory, ILoggerFactory loggerFactory, Cache cache, string email, string ip) : base(configuration, serviceProvider, serviceScopeFactory, loggerFactory, cache, email, ip) { }
 
         public OrderResponse EditStopLoss(int orderId, double? price)
@@ -640,10 +642,98 @@ namespace Auctus.Business.Trade
             return null;
         }
 
+        internal List<Order> ListOpenOrdersAndExecutedWithStopLoss(IEnumerable<int> assetsIds) {
+            var orders = MemoryCache.Get<List<Order>>(OPEN_ORDERS_AND_EXECUTED_WITH_STOP_LOSS_CACHE_KEY);
+            if (orders == null)
+            {
+                orders = Data.ListOpenOrdersAndExecutedWithStopLoss(null);
+                MemoryCache.Set(OPEN_ORDERS_AND_EXECUTED_WITH_STOP_LOSS_CACHE_KEY, orders, 10);
+            }
+
+            return orders.Where(o => assetsIds == null || assetsIds.Contains(o.AssetId)).ToList();
+        }
+
+        internal void UpdateOpenOrdersAndExecutedWithStopLossCache(Dictionary<int, List<Tuple<Order, Order>>> assetTupleForOrderAndTakeProfitOrderForUser, Order orderToDelete)
+        {
+            var orders = MemoryCache.Get<List<Order>>(OPEN_ORDERS_AND_EXECUTED_WITH_STOP_LOSS_CACHE_KEY);
+            if (orders != null)
+            {
+                if (orderToDelete != null)
+                {
+                    orders.RemoveAll(o => o.Id == orderToDelete.Id);
+                }
+
+                foreach(var orderTupleList in assetTupleForOrderAndTakeProfitOrderForUser.Values)
+                {
+                    foreach (var orderTuple in orderTupleList)
+                    {
+                        if (orderTuple.Item1.OrderStatusType == OrderStatusType.Open || (orderTuple.Item1.OrderStatusType == OrderStatusType.Executed && orderTuple.Item1.StopLoss.HasValue))
+                        {
+                            UpdateOrderCache(orders, orderTuple.Item1, orderTuple.Item2);
+                        }
+                        else
+                        {
+                            orders.RemoveAll(o => o.Id == orderTuple.Item1.Id);
+                        }
+
+                        if (orderTuple.Item1.OrderStatusType == OrderStatusType.Executed && orderTuple.Item2?.OrderStatusType == OrderStatusType.Open)
+                        {
+                            UpdateOrderCache(orders, orderTuple.Item2, orderTuple.Item1);
+                        }
+                        else
+                        {
+                            orders.RemoveAll(o => o.Id == orderTuple.Item2?.Id);
+                        }
+                    }
+                }
+            }
+        }
+
+        internal void UpdateOrderCache(List<Order> cacheList, Order orderToUpdate, Order relatedOrder)
+        {
+            var orderToUpdateCache = cacheList.FirstOrDefault(o => o.Id == orderToUpdate?.Id);
+            if (orderToUpdateCache == null)
+            {
+                orderToUpdateCache = new Order();
+                cacheList.Add(orderToUpdateCache);
+            }
+
+            orderToUpdate.RelatedOrders = new List<Order>();
+            if (relatedOrder != null)
+            {
+                orderToUpdate.RelatedOrders.Add(relatedOrder);
+            }
+            CopyOrders(orderToUpdate, orderToUpdateCache);
+        }
+
+        internal void CopyOrders(Order from, Order to)
+        {
+            to.Id = from.Id;
+            to.CreationDate = from.CreationDate;
+            to.UserId = from.UserId;
+            to.AssetId = from.AssetId;
+            to.Type = from.Type;
+            to.Status = from.Status;
+            to.StatusDate = from.StatusDate;
+            to.Quantity = from.Quantity;
+            to.Price = from.Price;
+            to.TakeProfit = from.TakeProfit;
+            to.StopLoss = from.StopLoss;
+            to.Profit = from.Profit;
+            to.OrderId = from.OrderId;
+            to.ActionType = from.ActionType;
+            to.OpenDate = from.OpenDate;
+            to.RemainingQuantity = from.RemainingQuantity;
+            to.ProfitWithoutFee = from.ProfitWithoutFee;
+            to.Fee = from.Fee;
+            to.TotalTradeFee = from.TotalTradeFee;
+            to.RelatedOrders = from.RelatedOrders;
+        }
+
         internal Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> ClosePositionForStopLossAndTargetPriceReached(DateTime currentDate, Dictionary<int, TickerDataModel> values)
         {
             var result = new Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>>();
-            var orders = Data.ListOpenOrdersAndExecutedWithStopLoss(values.Keys);
+            var orders = ListOpenOrdersAndExecutedWithStopLoss(values.Keys);
             foreach (var order in orders)
             {
                 OrderResponse response = null;
@@ -728,6 +818,8 @@ namespace Auctus.Business.Trade
                     advisor.AdvisorProfit.AddRange(assetsToUpdate);
                 }
             }
+
+            UpdateOpenOrdersAndExecutedWithStopLossCache(assetTupleForOrderAndTakeProfitOrderForUser, orderToDelete);
         }
 
         private bool IsOrderPriceLowerThanMarket(OrderType type, double price, double currentValue)

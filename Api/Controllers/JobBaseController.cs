@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Hubs;
+using Auctus.DomainObjects.Exchange;
 using Auctus.DomainObjects.Trade;
 using Auctus.Model;
 using Auctus.Util;
@@ -58,33 +59,37 @@ namespace Api.Controllers
         {
             RunAsync(() =>
             {
-                Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result = AssetValueBusiness.UpdateBinanceAssetsValues();
-                if (result != null && result.Any())
-                {
-                    foreach (var ordersType in result)
-                    {
-                        var advisor = AdvisorRankingBusiness.GetAdvisorFullData(ordersType.Key);
-                        if (advisor != null)
-                        {
-                            foreach (var orders in ordersType.Value)
-                            {
-                                var methodName = orders.Key == OrderActionType.StopLoss ? "onReachStopLoss" :
-                                    orders.Key == OrderActionType.TakeProfit ? "onReachTakeProfit" : "onReachOrderLimit";
+                AssetValueBusiness.UpdateBinanceAssetsValues();
+            });
+            return Ok();
+        }
 
-                                HubContext.Clients.User(advisor.Email).SendAsync(methodName, orders.Value);
-                            }
-                            var followers = UserBusiness.GetUserFromCache(advisor.Email)?.FollowingUsers;
-                            if (followers?.Any() == true)
-                            {
-                                var respectiveOrders = ordersType.Value.Values.SelectMany(c => c).ToList();
-                                foreach (var user in followers)
-                                    HubContext.Clients.User(user).SendAsync("onNewTradeSignal", respectiveOrders);
-                            }
+        private void SendSignalRNotificatications(Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result)
+        {
+            if (result != null && result.Any())
+            {
+                foreach (var ordersType in result)
+                {
+                    var advisor = AdvisorRankingBusiness.GetAdvisorFullData(ordersType.Key);
+                    if (advisor != null)
+                    {
+                        foreach (var orders in ordersType.Value)
+                        {
+                            var methodName = orders.Key == OrderActionType.StopLoss ? "onReachStopLoss" :
+                                orders.Key == OrderActionType.TakeProfit ? "onReachTakeProfit" : "onReachOrderLimit";
+
+                            HubContext.Clients.User(advisor.Email).SendAsync(methodName, orders.Value);
+                        }
+                        var followers = UserBusiness.GetUserFromCache(advisor.Email)?.FollowingUsers;
+                        if (followers?.Any() == true)
+                        {
+                            var respectiveOrders = ordersType.Value.Values.SelectMany(c => c).ToList();
+                            foreach (var user in followers)
+                                HubContext.Clients.User(user).SendAsync("onNewTradeSignal", respectiveOrders);
                         }
                     }
                 }
-            });
-            return Ok();
+            }
         }
 
         protected virtual IActionResult UpdateAssetsValues7dAnd30d(string api)
@@ -117,6 +122,13 @@ namespace Api.Controllers
         protected virtual IActionResult SetUsersAuc()
         {
             RunAsync(() => UserBusiness.SetUsersAucSituation());
+            return Ok();
+        }
+
+        protected virtual IActionResult ExecuteOrders(BinanceWebSocketTicker[] ticker)
+        {
+            Dictionary<int, Dictionary<OrderActionType, List<OrderResponse>>> result = AssetValueBusiness.ExecuteOrdersWithPriceReached(ticker);
+            SendSignalRNotificatications(result);
             return Ok();
         }
 

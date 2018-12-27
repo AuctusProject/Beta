@@ -1,6 +1,7 @@
 ﻿using Api.Hubs;
 using Api.Model.Account;
 using Auctus.DomainObjects.Account;
+using Auctus.DomainObjects.Exchange;
 using Auctus.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -70,6 +71,13 @@ namespace Api.Controllers
         public new IActionResult UpdateAssetsValues([FromRoute]string api)
         {
             return base.UpdateAssetsValues(api);
+        }
+
+        [Route("assets/binance/executeOrders")]
+        [HttpPost]
+        public new IActionResult ExecuteOrders([FromBody] BinanceWebSocketTicker[] ticker)
+        {
+            return base.ExecuteOrders(ticker);
         }
 
         [Route("assets/{api}/values/7dAnd30d")]

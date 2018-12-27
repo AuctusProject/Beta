@@ -8,42 +8,42 @@ namespace Auctus.DomainObjects.Exchange
     public class BinanceTicker
     {
         [JsonProperty("symbol")]
-        public string Symbol { get; set; }
+        public virtual string Symbol { get; set; }
         [JsonProperty("priceChange")]
-        public double PriceChange { get; set; }
+        public virtual double PriceChange { get; set; }
         [JsonProperty("priceChangePercent")]
-        public double PriceChangePercent { get; set; }
+        public virtual double PriceChangePercent { get; set; }
         [JsonProperty("weightedAvgPrice")]
-        public double WeightedAvgPrice { get; set; }
+        public virtual double WeightedAvgPrice { get; set; }
         [JsonProperty("prevClosePrice")]
-        public double PrevClosePrice { get; set; }
+        public virtual double PrevClosePrice { get; set; }
         [JsonProperty("lastPrice")]
-        public double LastPrice { get; set; }
+        public virtual double LastPrice { get; set; }
         [JsonProperty("lastQty")]
-        public double LastQty { get; set; }
+        public virtual double LastQty { get; set; }
         [JsonProperty("bidPrice")]
-        public double BidPrice { get; set; }
+        public virtual double BidPrice { get; set; }
         [JsonProperty("askPrice")]
-        public double AskPrice { get; set; }
+        public virtual double AskPrice { get; set; }
         [JsonProperty("openPrice")]
-        public double OpenPrice { get; set; }
+        public virtual double OpenPrice { get; set; }
         [JsonProperty("highPrice")]
-        public double HighPrice { get; set; }
+        public virtual double HighPrice { get; set; }
         [JsonProperty("lowPrice")]
-        public double LowPrice { get; set; }
+        public virtual double LowPrice { get; set; }
         [JsonProperty("volume")]
-        public double Volume { get; set; }
+        public virtual double Volume { get; set; }
         [JsonProperty("quoteVolume")]
-        public double QuoteVolume { get; set; }
+        public virtual double QuoteVolume { get; set; }
         [JsonProperty("openTime")]
-        public double OpenTime { get; set; }
+        public virtual double OpenTime { get; set; }
         [JsonProperty("closeTime")]
-        public double CloseTime { get; set; }
+        public virtual double CloseTime { get; set; }
         [JsonProperty("firstId")]
-        public double FirstId { get; set; }
+        public virtual double FirstId { get; set; }
         [JsonProperty("lastId")]
-        public double LastId { get; set; }
+        public virtual double LastId { get; set; }
         [JsonProperty("count")]
-        public double Count { get; set; }
+        public virtual double Count { get; set; }
     }
 }

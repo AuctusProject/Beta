@@ -26,11 +26,11 @@ namespace Auctus.DataAccess.Trade
                                                                            LEFT JOIN [Order] ro1 WITH(NOLOCK) ON ro1.Id = o.OrderId
                                                                            LEFT JOIN [Order] ro2 WITH(NOLOCK) ON ro2.OrderId = o.Id
                                                                            WHERE o.Status = @OpenStatus AND (ro1.Id IS NULL OR ro1.Status = @ExecutedStatus)
-                                                                           AND (ro2.Id IS NULL OR ro2.Status = @OpenStatus) AND {0}
+                                                                           AND (ro2.Id IS NULL OR ro2.Status = @OpenStatus) {0}
                                                                            UNION
                                                                            SELECT o.*, ro.*, ro.* FROM [Order] o WITH(NOLOCK) 
                                                                            LEFT JOIN [Order] ro WITH(NOLOCK) ON ro.OrderId = o.Id
-                                                                           WHERE o.Status = @ExecutedStatus AND o.StopLoss IS NOT NULL AND {0}";
+                                                                           WHERE o.Status = @ExecutedStatus AND o.StopLoss IS NOT NULL {0} ";
 
         private const string SQL_LAST_ADVISORS_ORDERS_FOR_ASSET = @"SELECT o.* FROM 
                                                                     [Order] o WITH(NOLOCK) 
@@ -124,15 +124,17 @@ namespace Auctus.DataAccess.Trade
 
         public List<Order> ListOpenOrdersAndExecutedWithStopLoss(IEnumerable<int> assetsIds)
         {
-            if (assetsIds == null || !assetsIds.Any())
-                return new List<Order>();
-
             var parameters = new DynamicParameters();
-            var complement = $"({string.Join(" OR ", assetsIds.Select((c, i) => $"o.AssetId = @AssetId{i}"))})";
+            var complement = "";
+            
             parameters.Add("OpenStatus", OrderStatusType.Open.Value, DbType.Int32);
             parameters.Add("ExecutedStatus", OrderStatusType.Executed.Value, DbType.Int32);
-            for (int i = 0; i < assetsIds.Count(); ++i)
-                parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
+            if (assetsIds != null && assetsIds.Any())
+            {
+                complement = $" AND ({string.Join(" OR ", assetsIds.Select((c, i) => $"o.AssetId = @AssetId{i}"))})";
+                for (int i = 0; i < assetsIds.Count(); ++i)
+                    parameters.Add($"AssetId{i}", assetsIds.ElementAt(i), DbType.Int32);
+            }
 
             Dictionary<int, Order> cache = new Dictionary<int, Order>();
             Query<Order, Order, Order, Order>(string.Format(SQL_LIST_EXECUTED_WITH_STOP_LOSS_AND_OPEN, complement),
