@@ -76,4 +76,8 @@ export class AssetDetailsComponent implements OnInit {
   setTitle(asset: AssetResponse) {
     this.titleService.setTitle(new ValueDisplayPipe().transform(asset.lastValue, "$")  + " " + asset.code + " - Auctus Trading");
   }
+
+  showChartPriceAlert() {
+    return this.asset && this.asset.pair && this.asset.pair.multipliedSymbol;
+  }
 }

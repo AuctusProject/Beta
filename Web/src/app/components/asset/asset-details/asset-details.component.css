@@ -141,3 +141,11 @@
 .trade-tab {
     min-height: 372px;
 }
+
+.alert-chart-price {
+    padding: 5px 15px;
+    font-size: 11px;
+    font-weight: 300;
+    color: #bfbfbf;
+    letter-spacing: 0.5px;
+}

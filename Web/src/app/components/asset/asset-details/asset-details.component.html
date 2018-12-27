@@ -62,6 +62,9 @@
     <button matRipple *ngIf="showCloseOpenPositions()" (click)="closeAllOpenPositions(asset.assetId, asset.code)" class="cancel-close-action">CLOSE ALL {{asset.code}} POSITIONS</button>
   </div>
   <div class="asset-content" ngClass.gt-sm="asset-content-web" ngClass.lt-md="asset-content-mobile">
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="showChartPriceAlert()" class="alert-chart-price">
+      <span matTooltip="Some currencies are not available for trading directly through a USD pair on Binance, so the price is calculated. TradingView uses a different BTC/USD price than the respective Binance price, so the final price shown is slightly different.">[!] The rates displayed on TradingView chart are using a different conversion rate</span>
+    </div>
     <div class="asset-chart">
       <trading-view-chart [pair]="asset.pair"></trading-view-chart>
     </div>
