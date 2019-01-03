@@ -93,3 +93,4 @@ orleans.codegen.cs
 /Web/wwwroot
 Node/.env
 Node/config/environments/
+/WebSocketClient/Properties/PublishProfiles
