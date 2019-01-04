@@ -70,8 +70,8 @@ namespace WebSocketClient
             
             var configuration = builder.Build();
 
-            AuctusApiAuthToken = configuration.GetSection("AuctusApiAuthToken").Get<string>();
-            AuctusApiUrl = configuration.GetSection("AuctusApiUrl").Get<string>();
+            AuctusApiAuthToken = configuration.GetSection("WebJob:AuctusApiAuthToken").Get<string>();
+            AuctusApiUrl = configuration.GetSection("WebJob:AuctusApiUrl").Get<string>();
 
             Console.WriteLine("Auth:");
             Console.WriteLine(AuctusApiAuthToken);
