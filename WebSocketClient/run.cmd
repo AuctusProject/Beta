@@ -1,1 +1,1 @@
-dornet WebSocketClient.dll
+dotnet WebSocketClient.dll

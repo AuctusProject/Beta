@@ -48,6 +48,7 @@ namespace Auctus.Business.Trade
             
             order.StopLoss = price;
             Data.Update(order);
+            UpdateOpenOrdersAndExecutedWithStopLossCache(order);
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { asset });
         }
 
@@ -83,6 +84,12 @@ namespace Auctus.Business.Trade
                 }
                 transaction.Commit();
             }
+            order.RelatedOrders = new List<Order>();
+            if (newTakeProfitOrder != null)
+            {
+                order.RelatedOrders.Add(newTakeProfitOrder);
+            }
+            UpdateOpenOrdersAndExecutedWithStopLossCache(order, oldTakeProfitOrder);
             return GetOrderResponse(loggedUser, order, AdvisorRankingBusiness.GetAdvisorSimpleData(loggedUser.Id), new List<DomainObjects.Asset.Asset>() { asset });
         }
 
@@ -651,6 +658,18 @@ namespace Auctus.Business.Trade
             }
 
             return orders.Where(o => assetsIds == null || assetsIds.Contains(o.AssetId)).ToList();
+        }
+
+        internal void UpdateOpenOrdersAndExecutedWithStopLossCache(Order updatedOrder)
+        {
+            UpdateOpenOrdersAndExecutedWithStopLossCache(updatedOrder, null);
+        }
+
+        internal void UpdateOpenOrdersAndExecutedWithStopLossCache(Order updatedOrder, Order orderToDelete)
+        {
+            var dictionary = new Dictionary<int, List<Tuple<Order, Order>>>();
+            dictionary.Add(updatedOrder.AssetId, new List<Tuple<Order, Order>>() { new Tuple<Order, Order>(updatedOrder, updatedOrder.RelatedOrders?.FirstOrDefault()) });
+            UpdateOpenOrdersAndExecutedWithStopLossCache(dictionary, orderToDelete);
         }
 
         internal void UpdateOpenOrdersAndExecutedWithStopLossCache(Dictionary<int, List<Tuple<Order, Order>>> assetTupleForOrderAndTakeProfitOrderForUser, Order orderToDelete)

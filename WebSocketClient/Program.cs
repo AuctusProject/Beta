@@ -15,18 +15,39 @@ namespace WebSocketClient
     {
         static string AuctusApiAuthToken;
         static string AuctusApiUrl;
+        static bool ShouldRestart = false;
         static void Main(string[] args)
         {
             Configure();
+            while (true)
+            {
+                CreateWSConnection();
+            }
+        }
+
+        private static void CreateWSConnection()
+        {
+            ShouldRestart = false;
             using (var ws = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr"))
             {
-                ws.OnMessage += (sender, e) => ReceiveData(e.Data);
+                ws.OnMessage += (sender, e) => {
+                    if (e != null)
+                        ReceiveData(e.Data);
+                };
+                ws.OnClose += (sender, e) => OnConnectionClosedOrError();
+                ws.OnError += (sender, e) => OnConnectionClosedOrError();
                 ws.Connect();
-                while (true)
+                while (!ShouldRestart)
                 {
+                    
                     Thread.Sleep(15000);
                 }
             }
+        }
+
+        private static void OnConnectionClosedOrError()
+        {
+            ShouldRestart = true;
         }
 
         private static void ReceiveData(string JSONdata)
@@ -38,7 +59,10 @@ namespace WebSocketClient
         private static void Configure()
         {
             string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
+            Console.WriteLine("Environment:");
+            Console.WriteLine(environment);
+            Console.WriteLine("Path:");
+            Console.WriteLine(Path.Combine(AppContext.BaseDirectory));
             var builder = new ConfigurationBuilder()
                             .SetBasePath(Path.Combine(AppContext.BaseDirectory))
                             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -48,6 +72,11 @@ namespace WebSocketClient
 
             AuctusApiAuthToken = configuration.GetSection("AuctusApiAuthToken").Get<string>();
             AuctusApiUrl = configuration.GetSection("AuctusApiUrl").Get<string>();
+
+            Console.WriteLine("Auth:");
+            Console.WriteLine(AuctusApiAuthToken);
+            Console.WriteLine("AuctusApiUrl:");
+            Console.WriteLine(AuctusApiUrl);
         }
     }
 }
